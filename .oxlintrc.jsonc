@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y"],
+  "categories": {
+    "correctness": "error",
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/aria-props": "error",
+    "jsx-a11y/aria-proptypes": "error",
+    "jsx-a11y/aria-unsupported-elements": "error",
+    "jsx-a11y/role-has-required-aria-props": "error",
+    "jsx-a11y/label-has-associated-control": "error",
+    // Toast is a live status announcement, not the result of a form calculation.
+    "jsx-a11y/prefer-tag-over-role": "off",
+  },
+  "ignorePatterns": ["dist/**", "demo-dist/**", "node_modules/**", ".husky/_/**"],
+}

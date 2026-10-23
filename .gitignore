@@ -1,0 +1,9 @@
+node_modules/
+dist/
+demo-dist/
+.husky/_/
+coverage/
+playwright-report/
+test-results/
+*.tgz
+.DS_Store
