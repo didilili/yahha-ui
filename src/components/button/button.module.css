@@ -1,0 +1,133 @@
+.button {
+  box-sizing: border-box;
+  font-family: inherit;
+  color: var(--chi-ink, #462e31);
+}
+
+.button {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--chi-ink, #462e31);
+  color: #fffdfb;
+  font-size: 14px;
+  line-height: 1.25;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease,
+    opacity 150ms ease;
+}
+
+.button:not(:disabled):hover {
+  background: #67464b;
+}
+.button:not(:disabled):active {
+  transform: translateY(1px);
+}
+.button[data-variant='secondary'] {
+  background: var(--chi-accent, #f8dbe2);
+  border-color: var(--chi-line, #d7c3c0);
+  color: var(--chi-ink, #462e31);
+}
+.button[data-variant='secondary']:not(:disabled):hover {
+  background: var(--chi-accent-hover, #f2c9d4);
+  border-color: #ac8c8d;
+}
+.button[data-variant='ghost'] {
+  background: transparent;
+  color: var(--chi-ink, #462e31);
+}
+.button[data-variant='ghost']:not(:disabled):hover {
+  background: var(--chi-accent-soft, #fff6f7);
+}
+.button[data-size='sm'] {
+  min-height: 34px;
+  padding: 7px 14px;
+  font-size: 12px;
+}
+.button[data-size='lg'] {
+  min-height: 50px;
+  padding: 13px 26px;
+  font-size: 15px;
+}
+.button:disabled {
+  opacity: 0.43;
+  cursor: not-allowed;
+}
+.button[aria-busy='true'] {
+  cursor: progress;
+  opacity: 0.72;
+}
+.button:focus-visible {
+  outline: 3px solid var(--chi-focus, #ad6179);
+  outline-offset: 3px;
+}
+
+.buttonIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.buttonIcon > svg {
+  width: 17px;
+  height: 17px;
+}
+.iconButton {
+  aspect-ratio: 1;
+  width: 42px;
+  min-width: 42px;
+  padding: 10px;
+}
+.iconButton[data-size='sm'] {
+  width: 34px;
+  min-width: 34px;
+  padding: 7px;
+}
+.iconButton[data-size='lg'] {
+  width: 50px;
+  min-width: 50px;
+  padding: 13px;
+}
+.iconButton > svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+.spinner {
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 750ms linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+  .spinner {
+    animation: none;
+  }
+}

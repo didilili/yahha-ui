@@ -1,0 +1,9 @@
+.surface {
+  box-sizing: border-box;
+  font-family: inherit;
+  color: var(--chi-ink, #462e31);
+  border: 1px solid var(--chi-line, #d7c3c0);
+  border-radius: 20px;
+  background: var(--chi-surface, #fffefa);
+  padding: 24px;
+}
