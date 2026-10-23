@@ -1,0 +1,37 @@
+.theme {
+  --chi-ink: #462e31;
+  --chi-muted: #79656a;
+  --chi-accent: #f8dbe2;
+  --chi-accent-hover: #f2c9d4;
+  --chi-accent-soft: #fff6f7;
+  --chi-line: #d7c3c0;
+  --chi-focus: #ad6179;
+  --chi-surface: #fffefa;
+  --chi-field-background: #fffefd;
+  --chi-error: #a33e4f;
+  --cki-ink: var(--chi-ink);
+  --cki-muted: var(--chi-muted);
+  --cki-accent: var(--chi-accent);
+  --cki-accent-soft: var(--chi-accent-soft);
+  --cki-border: var(--chi-line);
+  --cki-focus: var(--chi-focus);
+  color: var(--chi-ink);
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+.theme[data-chiikawa-theme='hachiware'] {
+  --chi-accent: #d7eaf5;
+  --chi-accent-hover: #c3dfee;
+  --chi-accent-soft: #f2f8fc;
+  --chi-line: #b9cedb;
+  --chi-focus: #386d93;
+}
+
+.theme[data-chiikawa-theme='usagi'] {
+  --chi-accent: #f8e5a7;
+  --chi-accent-hover: #f3da89;
+  --chi-accent-soft: #fffaf0;
+  --chi-line: #daca9f;
+  --chi-focus: #896329;
+}
