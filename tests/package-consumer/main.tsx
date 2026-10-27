@@ -6,6 +6,7 @@ import {
   Dialog,
   IconButton,
   SegmentedControl,
+  Skeleton,
   Surface,
   TextField,
   ThemeProvider,
@@ -15,6 +16,10 @@ import {
   type SurfaceProps,
 } from 'yahha-ui';
 import 'yahha-ui/style.css';
+import { EdgeCases } from './EdgeCases.js';
+import { Basics } from './Basics.js';
+import { DesignContract } from './DesignContract.js';
+import { OverlayLifecycle } from './OverlayLifecycle.js';
 
 function Consumer() {
   const [theme, setTheme] = useState<ThemeName>('chiikawa');
@@ -33,6 +38,7 @@ function Consumer() {
   const [customAccent, setCustomAccent] = useState('#b9dcca');
   const customTokens: ThemeTokens = {
     accent: customAccent,
+    line: '#846973',
     surface: '#faf5e8',
     fieldBackground: '#fff4fa',
     error: '#923b53',
@@ -117,6 +123,7 @@ function Consumer() {
             <Badge ref={badgeRef} data-testid="consumer-badge">
               Consumer badge
             </Badge>
+            <Skeleton data-testid="consumer-line-skeleton" />
             <TextField
               label="Custom themed input"
               className="consumer-field-root"
@@ -164,4 +171,16 @@ function Consumer() {
   );
 }
 
-createRoot(document.getElementById('root')!).render(<Consumer />);
+createRoot(document.getElementById('root')!).render(
+  new URLSearchParams(location.search).has('overlay-lifecycle') ? (
+    <OverlayLifecycle />
+  ) : new URLSearchParams(location.search).has('design-contract') ? (
+    <DesignContract />
+  ) : new URLSearchParams(location.search).has('basics') ? (
+    <Basics />
+  ) : new URLSearchParams(location.search).has('edge-cases') ? (
+    <EdgeCases />
+  ) : (
+    <Consumer />
+  ),
+);

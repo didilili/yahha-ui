@@ -1,0 +1,26 @@
+.edge-cases {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+}
+
+.edge-cases h1 {
+  font-size: 20px;
+}
+
+.edge-cases > section,
+.edge-cases > form {
+  margin-block: 16px;
+}
+
+.forced-states {
+  display: grid;
+  gap: 16px;
+}
+
+.forced-state-pair {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}

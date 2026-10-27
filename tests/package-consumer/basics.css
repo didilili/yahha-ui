@@ -1,0 +1,33 @@
+.basics {
+  box-sizing: border-box;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  gap: 24px;
+  font-family: sans-serif;
+}
+.basics-form,
+.basics-content {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.basics fieldset {
+  min-width: 0;
+}
+.basics output {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.basics-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.basics input:not([type]),
+.basics select {
+  max-width: 100%;
+  box-sizing: border-box;
+}

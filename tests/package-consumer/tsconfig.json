@@ -9,5 +9,5 @@
     "noEmit": true,
     "types": ["vite/client"]
   },
-  "include": ["main.tsx", "doc-examples/*.tsx"]
+  "include": ["main.tsx", "doc-examples/**/*.tsx"]
 }

@@ -18,6 +18,14 @@ import { tmpdir } from 'node:os';
 import { basename, extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { verifyConsumer } from '../tests/package-consumer/browser.mjs';
+import {
+  verifyEdgeCases,
+  verifyReviewRegressions,
+} from '../tests/package-consumer/edge-checks.mjs';
+import { verifyBasics } from '../tests/package-consumer/basics-checks.mjs';
+import { verifyDesignContract } from '../tests/package-consumer/design-checks.mjs';
+import { createExampleEntry } from '../playground/src/docs/example-source.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const require = createRequire(new URL('../package.json', import.meta.url));
@@ -91,6 +99,69 @@ try {
       exampleCount++;
     }
   }
+  // Compile the exact TSX modules shown by the documentation site against the
+  // installed tarball too, so development aliases cannot hide missing exports.
+  let siteExampleCount = 0;
+  const artworkCopies = [];
+  const fullExamplesDirectory = join(consumer, 'full-examples');
+  await mkdir(fullExamplesDirectory);
+  async function copySiteExamples(directory, prefix = 'site', relativeDirectory = '') {
+    const entries = await readdir(directory, { withFileTypes: true });
+    const siteDirectory = join(examplesDirectory, 'site', relativeDirectory);
+    await mkdir(siteDirectory, { recursive: true });
+    const hasArtwork = entries.some((entry) => entry.isDirectory() && entry.name === 'artwork');
+    for (const entry of entries) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name === 'artwork') {
+          await cp(path, join(siteDirectory, entry.name), { recursive: true });
+        } else {
+          await copySiteExamples(
+            path,
+            `${prefix}-${entry.name}`,
+            join(relativeDirectory, entry.name),
+          );
+        }
+      } else if (entry.name.endsWith('.tsx')) {
+        const source = await readFile(path);
+        await writeFile(join(siteDirectory, entry.name), source);
+        // Keep Example.tsx byte-for-byte intact. Separate entry modules cover both
+        // provider ownership modes without parsing names or rewriting imports.
+        const setupDirectory = join(
+          fullExamplesDirectory,
+          `${prefix}-${basename(entry.name, '.tsx')}`,
+        );
+        await mkdir(setupDirectory);
+        await writeFile(join(setupDirectory, 'Example.tsx'), source);
+        await writeFile(join(setupDirectory, 'App.tsx'), createExampleEntry('inherited'));
+        await writeFile(join(setupDirectory, 'ExplicitApp.tsx'), createExampleEntry('explicit'));
+        if (hasArtwork) {
+          await cp(join(directory, 'artwork'), join(setupDirectory, 'artwork'), {
+            recursive: true,
+          });
+        }
+        for (const [, assetImport] of source
+          .toString()
+          .matchAll(/from\s+['"](\.\/artwork\/[^'"]+)['"]/g)) {
+          // Vite's ?no-inline keeps downloadable SVGs as files; it is not part of the filename.
+          const asset = assetImport.split('?')[0];
+          artworkCopies.push([
+            join(directory, asset),
+            join(siteDirectory, asset),
+            join(setupDirectory, asset),
+          ]);
+        }
+        siteExampleCount++;
+      }
+    }
+  }
+  await copySiteExamples(join(root, 'playground/src/examples'));
+  for (const [originalPath, ...copies] of artworkCopies) {
+    const original = await readFile(originalPath);
+    for (const copy of copies) {
+      assert.deepEqual(await readFile(copy), original, `${copy} must retain the imported artwork.`);
+    }
+  }
   assert(exampleCount > 0, 'Component documentation must include typed usage examples.');
   const installedVersion = (name) => require(`${name}/package.json`).version;
   const dependencies = Object.fromEntries(
@@ -162,7 +233,7 @@ try {
     );
   }
   console.log(
-    `Checking published declarations, ${exampleCount} documentation examples, and the standalone consumer.`,
+    `Checking published declarations, ${exampleCount} Markdown examples, ${siteExampleCount} live documentation examples, and the standalone consumer.`,
   );
   await run(process.execPath, [join(consumer, 'node_modules/typescript/bin/tsc'), '--noEmit']);
   await run(process.execPath, [
@@ -173,6 +244,25 @@ try {
     '--moduleResolution',
     'NodeNext',
   ]);
+  // The displayed App.tsx uses bundler-style ./Example imports. Compile it with
+  // its documented mode while retaining NodeNext checks for the original sources.
+  await writeFile(
+    join(consumer, 'tsconfig.full-examples.json'),
+    JSON.stringify({
+      extends: './tsconfig.json',
+      compilerOptions: { module: 'ESNext', moduleResolution: 'Bundler' },
+      include: ['full-examples/**/*.tsx'],
+    }),
+  );
+  await run(process.execPath, [
+    join(consumer, 'node_modules/typescript/bin/tsc'),
+    '--project',
+    'tsconfig.full-examples.json',
+    '--noEmit',
+  ]);
+  console.log(
+    `Compiled ${siteExampleCount} unchanged examples with both complete setup entry modes.`,
+  );
   await run(process.execPath, [join(consumer, 'node_modules/vite/bin/vite.js'), 'build']);
 
   const output = join(consumer, 'dist');
@@ -202,168 +292,18 @@ try {
   await once(server, 'listening');
   const { chromium } = await import('playwright');
   browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({ reducedMotion: 'reduce' });
-  page.setDefaultTimeout(10_000);
-  const errors = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
-  await page.goto(`http://127.0.0.1:${server.address().port}/`);
-  await page.getByRole('heading', { name: 'Standalone package consumer' }).waitFor();
-  for (const [testId, tag] of [
-    ['dialog-trigger', 'BUTTON'],
-    ['ref-icon', 'BUTTON'],
-    ['ref-input', 'INPUT'],
-    ['consumer-badge', 'SPAN'],
-    ['consumer-surface', 'DIV'],
-  ]) {
-    assert.equal(
-      await page.getByTestId(testId).getAttribute('data-ref-checked'),
-      tag,
-      `${testId} ref must reach its DOM node.`,
-    );
+  const url = `http://127.0.0.1:${server.address().port}/`;
+  if (!process.argv.includes('--design-only')) {
+    await verifyConsumer(browser, url);
+    await verifyEdgeCases(browser, url);
+    await verifyReviewRegressions(browser, url);
+    await verifyBasics(browser, url);
   }
-  await page.getByTestId('ref-icon').click();
-  assert(
-    await page.getByTestId('ref-input').evaluate((node) => document.activeElement === node),
-    'The input ref must support imperative focus.',
-  );
-
-  const themes = [
-    ['chiikawa', 'rgb(248, 219, 226)', 'rgb(215, 195, 192)'],
-    ['hachiware', 'rgb(215, 234, 245)', 'rgb(185, 206, 219)'],
-    ['usagi', 'rgb(248, 229, 167)', 'rgb(218, 202, 159)'],
-  ];
-  const trigger = page.getByTestId('dialog-trigger');
-  const dialog = page.getByRole('dialog', { name: 'Package consumer dialog' });
-  for (const [theme, background, border] of themes) {
-    await page.getByRole('radio', { name: theme, exact: true }).check();
-    await page.mouse.move(0, 0);
-    assert.deepEqual(
-      await trigger.evaluate((node) => {
-        const style = getComputedStyle(node);
-        return [style.backgroundColor, style.minHeight, style.borderRadius];
-      }),
-      [background, '42px', '999px'],
-      `${theme}: imported package CSS must style the button.`,
-    );
-    await trigger.click();
-    await dialog.waitFor({ state: 'visible' });
-    assert.deepEqual(
-      await dialog.evaluate((node) => {
-        const style = getComputedStyle(node);
-        return [
-          node.closest('[data-chiikawa-theme]')?.getAttribute('data-chiikawa-theme'),
-          style.position,
-          style.borderColor,
-        ];
-      }),
-      [theme, 'fixed', border],
-      `${theme}: the portalled dialog must retain its theme and CSS.`,
-    );
-    await page.getByRole('button', { name: '关闭弹窗', exact: true }).click();
-    await dialog.waitFor({ state: 'hidden' });
-    assert(
-      await trigger.evaluate((node) => document.activeElement === node),
-      'Closing must restore trigger focus.',
-    );
-    await trigger.click();
-    await dialog.waitFor({ state: 'visible' });
-    await page.keyboard.press('Escape');
-    await dialog.waitFor({ state: 'hidden' });
-    assert(
-      await trigger.evaluate((node) => document.activeElement === node),
-      'Escape must restore trigger focus.',
-    );
-    console.log(`Browser: ${theme} CSS, dialog close/Escape, and focus restoration passed.`);
-  }
-  const form = page.getByTestId('consumer-form');
-  assert.equal(
-    await form.evaluate((node) => node.checkValidity()),
-    false,
-    'A required empty radio group must be invalid.',
-  );
-  await page.getByRole('radio', { name: 'One source', exact: true }).check();
-  await page.getByRole('button', { name: 'Submit scope', exact: true }).click();
-  assert.equal(await page.getByRole('status', { name: 'Submitted scope' }).textContent(), 'one');
-  await page.getByRole('button', { name: 'Toggle scope disabled', exact: true }).click();
-  assert.equal(
-    await form.evaluate((node) => new FormData(node).has('scope')),
-    false,
-    'Disabled group must not submit a value.',
-  );
-  assert.equal(
-    await page.getByRole('radio', { name: 'One source', exact: true }).isDisabled(),
-    true,
-  );
-
-  const customField = page.getByRole('textbox', { name: 'Custom themed input', exact: true });
-  assert.equal(
-    await customField.evaluate((node) => getComputedStyle(node).backgroundColor),
-    'rgb(255, 244, 250)',
-  );
-  assert.equal(
-    await page.locator('.consumer-field-error').evaluate((node) => getComputedStyle(node).color),
-    'rgb(146, 59, 83)',
-  );
-  assert.equal(
-    await page
-      .locator('.consumer-error-toast > span > svg')
-      .evaluate((node) => getComputedStyle(node).color),
-    'rgb(146, 59, 83)',
-  );
-  assert.equal(
-    await page
-      .getByTestId('consumer-surface')
-      .evaluate((node) => getComputedStyle(node).backgroundColor),
-    'rgb(250, 245, 232)',
-  );
-  await page.getByRole('button', { name: 'Open custom dialog', exact: true }).click();
-  const customDialog = page.getByRole('dialog', { name: 'Custom themed dialog', exact: true });
-  await customDialog.waitFor({ state: 'visible' });
-  assert.equal(await customDialog.getAttribute('data-ref-checked'), 'DIV');
-  assert.equal(await page.getByTestId('consumer-portal').getByRole('dialog').count(), 1);
-  // Popup visibility precedes Base UI's scheduled initial focus.
-  await page.waitForFunction(
-    (node) => document.activeElement === node,
-    await customDialog.getByRole('textbox', { name: 'Dialog input', exact: true }).elementHandle(),
-  );
-  assert.deepEqual(
-    await customDialog.evaluate((node) => {
-      const style = getComputedStyle(node);
-      return [
-        style.backgroundColor,
-        style.width,
-        style.getPropertyValue('--chi-accent').trim(),
-        node.closest('.custom-theme-root') === null,
-      ];
-    }),
-    ['rgb(250, 245, 232)', '360px', '#b9dcca', true],
-  );
-  await page.getByRole('button', { name: 'Update custom tokens', exact: true }).click();
-  assert.equal(
-    await customDialog.evaluate((node) =>
-      getComputedStyle(node).getPropertyValue('--chi-accent').trim(),
-    ),
-    '#e0c9f2',
-  );
-  await page.mouse.click(0, 0);
-  assert.equal(await customDialog.isVisible(), true, 'Pointer dismissal must be disabled.');
-  await page.getByRole('button', { name: 'Close custom dialog', exact: true }).click();
-  await customDialog.waitFor({ state: 'hidden' });
-  assert.equal(
-    await page
-      .getByRole('button', { name: 'Open custom dialog', exact: true })
-      .evaluate((node) => document.activeElement === node),
-    true,
-  );
+  await verifyDesignContract(browser, url);
   console.log(
-    'Browser: native form submission, new refs, custom theme/portal, focus and dismissal contracts passed.',
-  );
-  assert.deepEqual(errors, [], 'Standalone consumer emitted browser errors.');
-  console.log(
-    'Package consumer passed: tarball contents, independent install, shared React, types, build, themes, dialogs, and refs.',
+    process.argv.includes('--design-only')
+      ? 'Package design contract passed: independent install, types, docs compilation, dimensions, and forced colors.'
+      : 'Package consumer passed: independent install, types, docs, CSS, refs, keyboard, and edge cases.',
   );
 } finally {
   try {
