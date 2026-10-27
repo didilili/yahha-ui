@@ -1,0 +1,343 @@
+/* The public site shell is separate from the component library's own tokens. */
+.docs-site {
+  --site-paper: #fffef9;
+  --site-cream: #fffaf0;
+  --site-sky: #e9f4fa;
+  --site-grass: #edf3df;
+  --site-pink: #f8dbe2;
+  --site-ink: #503b3b;
+  --site-line: #72534c;
+  --site-soft-line: #e3d8cb;
+  background: #f7f8ef;
+}
+
+.docs-site .docs-header {
+  gap: 20px;
+  background: var(--site-paper);
+  border-bottom-color: var(--site-soft-line);
+}
+
+.docs-site .docs-brand {
+  gap: 11px;
+  color: var(--site-ink);
+}
+
+.docs-site .brand-friends {
+  display: block;
+  width: 65px;
+  height: 49px;
+  object-fit: contain;
+}
+
+.docs-site .docs-brand > .brand-name {
+  color: var(--site-ink);
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.docs-site .brand-name b {
+  color: #b76b83;
+  font-weight: inherit;
+}
+
+.docs-site .brand-name small {
+  display: block;
+  margin-top: 5px;
+  color: #7b665c;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+  font-size: 10px;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.docs-site .header-divider {
+  background: var(--site-soft-line);
+}
+
+.docs-site .header-caption {
+  color: #806d62;
+}
+
+.docs-site .version {
+  background: #f5eee3;
+}
+
+.docs-site .header-links {
+  gap: 22px;
+}
+
+.docs-site .header-link {
+  color: var(--site-ink);
+}
+
+.docs-site .header-link[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-color: #cf90a3;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 7px;
+}
+
+.docs-site .docs-sidebar {
+  background: var(--site-paper);
+  border-color: var(--site-soft-line);
+}
+
+.docs-site .nav-group > p {
+  color: #8b7664;
+}
+
+.docs-site .sidebar-home {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 7px 12px;
+  border: 1px dashed var(--site-soft-line);
+  border-radius: 12px;
+  color: var(--site-ink);
+  font-family: WenKai, sans-serif;
+  font-size: 16px;
+}
+
+.docs-site .sidebar-home:hover,
+.docs-site .sidebar-home[aria-current='page'] {
+  background: var(--site-pink);
+}
+
+.docs-site .nav-group a {
+  border-radius: 12px 15px 12px 14px;
+}
+
+.docs-site .nav-group a:hover {
+  background: #faf0e4;
+}
+
+.docs-site .nav-group a[aria-current='page'] {
+  border-left-color: transparent;
+  background: var(--site-pink);
+  color: var(--site-ink);
+}
+
+.docs-site .sidebar-foot {
+  border-top-style: dashed;
+  border-top-color: #d7c4ac;
+  color: #7b6e58;
+}
+
+.docs-site .sidebar-foot > svg {
+  color: #7d9472;
+}
+
+.docs-site .docs-content:not(.is-home) {
+  background: var(--site-paper);
+}
+
+.docs-site .doc-heading {
+  padding-bottom: 10px;
+  border-bottom: 0;
+}
+
+.docs-site .doc-title-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-height: 194px;
+  margin-bottom: 22px;
+  padding: 25px 26px;
+  background: var(--site-sky);
+  border-radius: 18px 23px 26px 19px;
+}
+
+.docs-site .doc-title-copy {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.docs-site .doc-title-row .doc-eyebrow {
+  color: #6c7f85;
+}
+
+.docs-site .doc-title-row .doc-title {
+  color: var(--site-ink);
+}
+
+.docs-site .doc-title-row .doc-description {
+  margin-bottom: 0;
+  color: #6f6460;
+}
+
+.docs-site .doc-friends-art {
+  flex: 0 0 164px;
+  display: block;
+  width: 164px;
+  max-width: 33%;
+  height: auto;
+  align-self: flex-end;
+  object-fit: contain;
+}
+
+.docs-site .doc-friends-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.docs-site .doc-heading > .source-code {
+  border-color: var(--site-soft-line);
+}
+
+.docs-site .example-block {
+  border-color: var(--site-soft-line);
+  background: #fff;
+}
+
+.docs-site .example-description {
+  background: #fffcf6;
+  border-color: var(--site-soft-line);
+}
+
+.docs-site .page-pagination {
+  border-top-color: var(--site-soft-line);
+}
+
+.docs-site .docs-toc nav {
+  border-left-color: var(--site-soft-line);
+}
+
+.docs-site .docs-toc a[aria-current='location'] {
+  border-color: #ba7c91;
+  color: #885769;
+}
+
+.docs-site .docs-footer {
+  position: relative;
+  margin-top: 44px;
+  padding: 25px 20px;
+  border-top-color: #d5dfc4;
+  border-radius: 19px 25px 0 0;
+  background: var(--site-grass);
+  color: #697358;
+}
+
+.docs-site .docs-layout.is-home {
+  display: block;
+  max-width: none;
+}
+
+.docs-site .docs-layout.is-home > .docs-sidebar {
+  display: none;
+}
+
+.docs-site .docs-content.is-home {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.docs-site .docs-content.is-home .docs-footer {
+  margin: 0;
+  padding-inline: max(24px, calc((100vw - 1200px) / 2));
+  border-radius: 0;
+}
+
+@media (min-width: 961px) {
+  .docs-site .docs-sidebar {
+    top: calc(var(--docs-header-height) + 20px);
+    height: calc(100dvh - var(--docs-header-height) - 20px);
+    margin: 20px 12px 0 8px;
+    padding: 22px 13px 20px;
+    border: 1px solid var(--site-soft-line);
+    border-bottom: 0;
+    border-radius: 20px 23px 0 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .docs-site .doc-title-row {
+    gap: 18px;
+    padding-inline: 23px;
+  }
+
+  .docs-site .doc-friends-art {
+    flex-basis: 145px;
+    width: 145px;
+  }
+}
+
+@media (max-width: 960px) {
+  .docs-site .docs-header {
+    gap: 16px;
+  }
+
+  .docs-site .docs-sidebar.is-open {
+    background: var(--site-paper);
+    border-radius: 0 22px 0 0;
+  }
+
+  .docs-site .docs-layout.is-home > .docs-sidebar.is-open {
+    display: block;
+  }
+}
+
+@media (forced-colors: active) {
+  .docs-site .nav-group a[aria-current='page'],
+  .docs-site .sidebar-home[aria-current='page'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
+@media (max-width: 600px) {
+  .docs-site .docs-header {
+    gap: 10px;
+  }
+
+  .docs-site .docs-brand {
+    gap: 8px;
+  }
+
+  .docs-site .brand-friends {
+    width: 54px;
+    height: 42px;
+  }
+
+  .docs-site .docs-brand > .brand-name {
+    font-size: 21px;
+  }
+
+  .docs-site .brand-name small {
+    margin-top: 4px;
+    font-size: 9px;
+    letter-spacing: 0.7px;
+  }
+
+  .docs-site .doc-title-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    padding: 22px 20px 18px;
+    border-radius: 15px 19px 24px 16px;
+  }
+
+  .docs-site .doc-friends-art {
+    flex-basis: auto;
+    align-self: flex-end;
+    width: 145px;
+    max-width: 65%;
+  }
+
+  .docs-site .docs-footer {
+    padding-inline: 17px;
+  }
+
+  .docs-site .docs-content.is-home .docs-footer {
+    padding-inline: 20px;
+  }
+}

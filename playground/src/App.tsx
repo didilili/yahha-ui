@@ -1,256 +1,746 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowUpRight, Heart, Leaf, Sparkles, Sun } from 'lucide-react';
-import { SegmentedControl, ThemeProvider, Toast, type ThemeName } from '../../src/index';
-import lounge from './assets/lounge.png';
-import { navigation, themeNames, themes, type Notice } from './data';
-import { Art } from './shared';
-import { ButtonsDemo } from './demos/ButtonsDemo';
-import { FieldsDemo } from './demos/FieldsDemo';
-import { ChoicesDemo } from './demos/ChoicesDemo';
-import { DialogDemo } from './demos/DialogDemo';
-import { EmptyDemo } from './demos/EmptyDemo';
-import { FeedbackDemo } from './demos/FeedbackDemo';
+import { ArrowUpRight, BookOpen, ChevronLeft, ChevronRight, Menu, Search, X } from 'lucide-react';
+import {
+  Alert,
+  Button,
+  EmptyState,
+  Heading,
+  IconButton,
+  Link,
+  Spinner,
+  Text,
+  TextField,
+  ThemeProvider,
+} from 'yahha-ui';
+import { CodeBlock } from './docs/CodeBlock';
+import { ExampleSource } from './docs/ExampleSource';
+import { guidePages } from './docs/guides';
+import { loadComponentPage } from './docs/component-pages';
+import { componentCatalog, componentGroups, configurationGroups } from './docs/component-catalog';
+import type { DocPage } from './docs/types';
+import friendsPeek from './examples/scenes/artwork/friends-preview/friends-peek.svg';
+import NotFoundScene from './examples/scenes/NotFoundScene';
+import HomePage from './site/HomePage';
+import { blogHref } from './site/site-links';
+
+/* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- API tables need keyboard focus for horizontal scrolling on narrow screens. */
+
+const overviewSummary = {
+  id: 'component-overview',
+  name: '组件总览',
+  chinese: '',
+  group: '开始使用',
+  description: '按分类看看真实组件，从喜欢的小样进入示例与 API。',
+} as const;
+const pages = [...guidePages, overviewSummary, ...componentCatalog];
+const groups = ['开始使用', ...componentGroups, ...configurationGroups] as const;
+const componentAliases = new Map(componentCatalog.map((page) => [page.id, page.aliases ?? []]));
+const legacy: Record<string, string> = {
+  buttons: 'button',
+  fields: 'text-field',
+  choices: 'segmented-control',
+  dialog: 'dialog',
+  empty: 'empty-state',
+  feedback: 'toast',
+};
+const pathFor = (page: Pick<DocPage, 'id' | 'group'>) =>
+  page.id === overviewSummary.id
+    ? '#/components'
+    : `#/${page.group === '开始使用' ? 'guides' : 'components'}/${page.id}`;
+function currentRoute() {
+  const hash = window.location.hash;
+  if (legacy[hash.slice(1)]) return { path: `/components/${legacy[hash.slice(1)]}`, section: '' };
+  const [path, query] = (hash.slice(1) || '/').split('?');
+  return { path, section: new URLSearchParams(query).get('section') ?? '' };
+}
+function titleFor(page: Pick<DocPage, 'name' | 'chinese'>) {
+  return [page.name, page.chinese].filter(Boolean).join(' ');
+}
+
+function focusSection(id: string) {
+  const target = document.getElementById(id);
+  target?.focus({ preventScroll: true });
+  target?.scrollIntoView();
+}
+
+type ComponentPageLoad =
+  | { id: string; attempt: number; status: 'error' }
+  | { id: string; attempt: number; status: 'ready'; page: DocPage };
+type OverviewPage = (typeof import('./site/ComponentOverview'))['default'];
 
 export default function App() {
-  const [theme, setTheme] = useState<ThemeName>('hachiware');
-  const [active, setActive] = useState('buttons');
-  const [notice, setNotice] = useState<Notice | null>(null);
-  const noticeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(
-    () => () => {
-      if (noticeTimer.current) clearTimeout(noticeTimer.current);
-    },
-    [],
+  const [route, setRoute] = useState(currentRoute);
+  const [query, setQuery] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState({ pageId: '', id: '' });
+  const [componentLoad, setComponentLoad] = useState<ComponentPageLoad>();
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const [Overview, setOverview] = useState<OverviewPage>();
+  const [failedOverviewAttempt, setFailedOverviewAttempt] = useState<number | null>(null);
+  const overviewFailed = failedOverviewAttempt === loadAttempt;
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const sidebar = useRef<HTMLElement>(null);
+  const shortcuts = useRef<HTMLElement>(null);
+  const tocRef = useRef<HTMLElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const firstRender = useRef(true);
+  const allowRouteFocus = useRef(true);
+  const isHome = route.path === '/';
+  const isOverview = route.path === '/components';
+  const pageSummary = pages.find((item) => pathFor(item).slice(1) === route.path);
+  const componentId = pageSummary?.group === '开始使用' ? undefined : pageSummary?.id;
+  const currentComponentLoad =
+    componentLoad && componentLoad.id === componentId && componentLoad.attempt === loadAttempt
+      ? componentLoad
+      : undefined;
+  const page = componentId
+    ? currentComponentLoad?.status === 'ready'
+      ? currentComponentLoad.page
+      : undefined
+    : guidePages.find((item) => pathFor(item).slice(1) === route.path);
+  const loadFailed = isOverview ? overviewFailed : currentComponentLoad?.status === 'error';
+  const contentReady = isOverview
+    ? !!Overview || overviewFailed
+    : !!page || !pageSummary || loadFailed;
+  const pageIndex = pageSummary ? pages.findIndex((item) => item.id === pageSummary.id) : -1;
+  const filtered = pages.filter((item) =>
+    `${item.name} ${item.chinese} ${item.description} ${item.group} ${(componentAliases.get(item.id) ?? []).join(' ')}`
+      .toLowerCase()
+      .includes(query.trim().toLowerCase()),
   );
+  const toc =
+    page?.sections.flatMap((section) => [
+      { id: section.id, title: section.title, nested: false },
+      ...(section.examples ?? []).map((example) => ({
+        id: example.id,
+        title: example.title,
+        nested: true,
+      })),
+    ]) ?? [];
+
   useEffect(() => {
+    function onHashChange() {
+      allowRouteFocus.current = true;
+      setRoute(currentRoute());
+      setMenuOpen(false);
+      setQuery('');
+    }
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+  useEffect(() => {
+    if (!isOverview || Overview || overviewFailed) return;
+    let cancelled = false;
+    import('./site/ComponentOverview').then(
+      (module) => {
+        if (!cancelled) setOverview(() => module.default);
+      },
+      () => {
+        if (!cancelled) setFailedOverviewAttempt(loadAttempt);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [isOverview, loadAttempt, Overview, overviewFailed]);
+  useEffect(() => {
+    if (!componentId) return;
+    let cancelled = false;
+    loadComponentPage(componentId).then(
+      (loadedPage) => {
+        if (!cancelled)
+          setComponentLoad({
+            id: componentId,
+            attempt: loadAttempt,
+            status: 'ready',
+            page: loadedPage,
+          });
+      },
+      () => {
+        if (!cancelled)
+          setComponentLoad({ id: componentId, attempt: loadAttempt, status: 'error' });
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [componentId, loadAttempt]);
+  useEffect(() => {
+    if (!contentReady) return;
+    const wasFirst = firstRender.current;
+    firstRender.current = false;
+    const frame = requestAnimationFrame(() => {
+      if (!allowRouteFocus.current) return;
+      if (route.section) focusSection(route.section);
+      else {
+        window.scrollTo({ top: 0 });
+        if (!wasFirst) headingRef.current?.focus({ preventScroll: true });
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [route.path, route.section, page, contentReady]);
+  useEffect(() => {
+    if (!page) return;
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]) setActive(visible[0].target.id);
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActiveSection({ pageId: page?.id ?? '', id: visible[0].target.id });
       },
-      { rootMargin: '-100px 0px -40% 0px', threshold: [0, 0.25, 0.5] },
+      { rootMargin: '-80px 0px -65% 0px' },
     );
-    document.querySelectorAll('.demo-section').forEach((section) => observer.observe(section));
+    document.querySelectorAll('[data-doc-heading]').forEach((element) => observer.observe(element));
     return () => observer.disconnect();
+  }, [page]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    searchRef.current?.focus();
+    function handleKey(event: KeyboardEvent) {
+      if (event.defaultPrevented) return;
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        menuButton.current?.focus();
+      }
+      if (event.key === 'Tab') {
+        const controls = [
+          menuButton.current,
+          ...Array.from(sidebar.current?.querySelectorAll<HTMLElement>('a, input, button') ?? []),
+        ].filter(
+          (element): element is HTMLElement => !!element && element.getClientRects().length > 0,
+        );
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [menuOpen]);
+  useEffect(() => {
+    const media = matchMedia('(min-width: 961px)');
+    const tocDesktop = matchMedia('(min-width: 1201px)');
+    const inCollapsibleNavigation = (target: EventTarget | null) =>
+      target instanceof Node &&
+      (!!sidebar.current?.contains(target) || !!shortcuts.current?.contains(target));
+    let navigationHadFocus = inCollapsibleNavigation(document.activeElement);
+    const inToc = (target: EventTarget | null) =>
+      target instanceof Node && !!tocRef.current?.contains(target);
+    let tocHadFocus = inToc(document.activeElement);
+    let menuHadFocus = document.activeElement === menuButton.current;
+    function rememberFocus(event: FocusEvent) {
+      allowRouteFocus.current = false;
+      navigationHadFocus = inCollapsibleNavigation(event.target);
+      tocHadFocus = inToc(event.target);
+      menuHadFocus = event.target === menuButton.current;
+    }
+    function rememberPointer(event: PointerEvent) {
+      allowRouteFocus.current = false;
+      if (!inCollapsibleNavigation(event.target)) navigationHadFocus = false;
+      if (!inToc(event.target)) tocHadFocus = false;
+      if (
+        event.target !== menuButton.current &&
+        (!(event.target instanceof Node) || !menuButton.current?.contains(event.target))
+      )
+        menuHadFocus = false;
+    }
+    function handleBreakpointChange() {
+      const active = document.activeElement;
+      if (media.matches) {
+        setMenuOpen(false);
+        const directoryHidden = !sidebar.current?.getClientRects().length;
+        const lostDirectoryFocus =
+          directoryHidden &&
+          (sidebar.current?.contains(active) || (navigationHadFocus && active === document.body));
+        if (
+          active === menuButton.current ||
+          (menuHadFocus && active === document.body) ||
+          lostDirectoryFocus
+        )
+          (directoryHidden ? headingRef.current : searchRef.current)?.focus({
+            preventScroll: true,
+          });
+        else if (
+          !tocDesktop.matches &&
+          (inToc(active) || (tocHadFocus && active === document.body))
+        ) {
+          const currentLink = sidebar.current?.querySelector<HTMLElement>('a[aria-current="page"]');
+          (currentLink ?? searchRef.current)?.focus();
+        }
+      } else if (
+        inCollapsibleNavigation(active) ||
+        inToc(active) ||
+        ((navigationHadFocus || tocHadFocus) && active === document.body)
+      ) {
+        menuButton.current?.focus({ preventScroll: true });
+      }
+    }
+    function cancelPendingRouteFocus() {
+      allowRouteFocus.current = false;
+    }
+    document.addEventListener('focusin', rememberFocus);
+    document.addEventListener('pointerdown', rememberPointer);
+    document.addEventListener('keydown', cancelPendingRouteFocus);
+    media.addEventListener('change', handleBreakpointChange);
+    tocDesktop.addEventListener('change', handleBreakpointChange);
+    return () => {
+      document.removeEventListener('focusin', rememberFocus);
+      document.removeEventListener('pointerdown', rememberPointer);
+      document.removeEventListener('keydown', cancelPendingRouteFocus);
+      media.removeEventListener('change', handleBreakpointChange);
+      tocDesktop.removeEventListener('change', handleBreakpointChange);
+    };
   }, []);
 
-  function notify(next: Notice) {
-    if (noticeTimer.current) clearTimeout(noticeTimer.current);
-    setNotice(next);
-    noticeTimer.current = setTimeout(() => setNotice(null), 7000);
-  }
-
   return (
-    <ThemeProvider theme={theme} className="playground">
-      <a className="skip-link" href="#components">
-        跳到组件展示
+    <ThemeProvider theme="chiikawa" className="docs-app docs-site">
+      <title>
+        {isHome
+          ? 'Yahha UI · 朋友们的组件小屋'
+          : `${pageSummary ? titleFor(pageSummary) : '文档未找到'} · Yahha UI`}
+      </title>
+      <a
+        className="skip-link"
+        href="#doc-content"
+        onClick={(event) => {
+          event.preventDefault();
+          headingRef.current?.focus();
+        }}
+      >
+        跳到文档正文
       </a>
-      <header className="site-header">
-        <div className="header-inner">
-          <a className="brand" href="#top" aria-label="Chiikawa UI 首页">
-            <span className="brand-dots" aria-hidden="true">
-              <i />
-              <i />
-              <i />
-            </span>
-            Chiikawa <span>UI</span>
-          </a>
-          <nav aria-label="页面导航">
-            <a href="#components">组件一览</a>
-            <a href="#choices">场景试用</a>
-            <a href="#references">
-              设计参考
-              <ArrowUpRight size={13} />
-            </a>
-          </nav>
-          <span className="preview-label">
-            <span />
-            本地样张
+      <header className="docs-header">
+        <a className="docs-brand" href="#/" aria-label="Yahha UI 首页" inert={menuOpen}>
+          <img className="brand-friends" src={friendsPeek} width="440" height="170" alt="" />
+          <span className="brand-name">
+            Yahha <b>UI</b>
+            <small>朋友们的组件小屋</small>
           </span>
-        </div>
-      </header>
-
-      <section className="welcome" id="top">
-        <div className="welcome-inner">
-          <div className="welcome-copy">
-            <p className="welcome-note">
-              <span />
-              ちいかわ · React 组件样张
-            </p>
-            <h1>
-              Chiikawa <span>UI</span>
-            </h1>
-            <p className="welcome-description">
-              按钮、输入框、弹窗，
-              <br />
-              还有一点小小的陪伴。
-            </p>
-            <div className="welcome-actions">
-              <a className="browse-link" href="#components">
-                开始逛逛
-                <ArrowDown size={16} />
-              </a>
-              <span>每个组件，都可以试一试。</span>
-            </div>
-          </div>
-          <div className="welcome-art">
-            <span className="speech-bubble">
-              一起试试看？
-              <Heart size={13} />
-            </span>
-            <Art src={lounge} />
-            <span className="art-caption">吉伊 · 小八 · 乌萨奇</span>
-          </div>
-        </div>
-        <svg
-          className="welcome-wave"
-          viewBox="0 0 1440 34"
-          preserveAspectRatio="none"
-          aria-hidden="true"
+        </a>
+        <span className="header-divider" />
+        <span className="header-caption">
+          {isHome ? 'React 组件库' : '组件文档'} <span className="version">0.0.1</span>
+        </span>
+        <nav ref={shortcuts} className="header-links" aria-label="快捷导航" inert={menuOpen}>
+          <Link href="#/" className="header-link" aria-current={isHome ? 'page' : undefined}>
+            首页
+          </Link>
+          <Link href="#/guides/getting-started" className="header-link">
+            开始使用
+          </Link>
+          <Link
+            href="#/components"
+            className="header-link"
+            aria-current={isOverview ? 'page' : undefined}
+          >
+            组件
+          </Link>
+          <Link href="#/guides/styling" className="header-link">
+            设计与组合
+          </Link>
+          <Link href={blogHref} className="header-link" target="_blank" rel="noopener noreferrer">
+            示例网站 <ArrowUpRight size={16} aria-hidden="true" />
+            <span className="sr-only">（新标签页打开）</span>
+          </Link>
+        </nav>
+        <IconButton
+          ref={menuButton}
+          className="mobile-menu"
+          variant="secondary"
+          aria-label={menuOpen ? '关闭文档目录' : '打开文档目录'}
+          aria-expanded={menuOpen}
+          aria-controls="docs-directory"
+          onClick={() => setMenuOpen(!menuOpen)}
         >
-          <path d="M0 11C180 43 300-9 480 11s300 20 480 0 300 20 480 0v23H0Z" fill="currentColor" />
-        </svg>
-      </section>
-
-      <div className="theme-strip">
-        <div>
-          <span className="theme-label">
-            <Sun size={16} />
-            今天和谁一起？
-          </span>
-          <SegmentedControl<ThemeName>
-            className="theme-picker"
-            classNames={{ options: 'theme-picker-options', option: 'theme-picker-option' }}
-            label="选择角色主题"
-            value={theme}
-            onValueChange={setTheme}
-            options={themes.map((item) => ({
-              ...item,
-              label: (
-                <>
-                  <i className={`theme-dot ${item.value}`} />
-                  {item.label}
-                </>
-              ),
-            }))}
+          {menuOpen ? <X size={21} aria-hidden="true" /> : <Menu size={21} aria-hidden="true" />}
+        </IconButton>
+      </header>
+      <div className={`docs-layout${isHome ? ' is-home' : isOverview ? ' is-overview' : ''}`}>
+        {menuOpen && (
+          <button
+            type="button"
+            className="sidebar-backdrop"
+            aria-label="关闭文档目录遮罩"
+            tabIndex={-1}
+            onClick={() => {
+              setMenuOpen(false);
+              menuButton.current?.focus();
+            }}
           />
-          <span className="theme-current">
-            现在是 <strong>{themeNames[theme]}</strong>
-          </span>
-        </div>
-      </div>
-
-      <main id="components" className="workspace">
-        <aside className="component-directory">
-          <p>组件小屋</p>
-          <nav aria-label="组件目录">
-            {navigation.map(({ id, label, Icon }) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                className={active === id ? 'active' : ''}
-                aria-current={active === id ? 'location' : undefined}
-                onClick={() => setActive(id)}
+        )}
+        <aside
+          ref={sidebar}
+          id="docs-directory"
+          className={`docs-sidebar ${menuOpen ? 'is-open' : ''}`}
+          inert={isHome && !menuOpen}
+        >
+          <div className={`doc-search${query ? ' has-query' : ''}`}>
+            <TextField
+              ref={searchRef}
+              label="搜索文档"
+              leading={<Search size={17} />}
+              type="search"
+              placeholder="搜索组件或指南…"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              classNames={{
+                label: 'sr-only',
+                inputWrapper: 'doc-search-control',
+                input: 'doc-search-input',
+              }}
+            />
+            {query && (
+              <IconButton
+                variant="ghost"
+                className="search-clear"
+                aria-label="清空搜索"
+                onClick={() => {
+                  setQuery('');
+                  searchRef.current?.focus();
+                }}
               >
-                <Icon size={17} />
-                <span>{label}</span>
-                {active === id && <span className="nav-dot" />}
-              </a>
-            ))}
+                <X size={17} aria-hidden="true" />
+              </IconButton>
+            )}
+          </div>
+          <nav aria-label="文档目录">
+            <a
+              className="sidebar-home"
+              href="#/"
+              aria-current={isHome ? 'page' : undefined}
+              onClick={() => {
+                setMenuOpen(false);
+                setQuery('');
+                if (isHome) requestAnimationFrame(() => headingRef.current?.focus());
+              }}
+            >
+              朋友们的组件小屋
+            </a>
+            <Link
+              href={blogHref}
+              className="sidebar-blog"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              示例网站 <ArrowUpRight size={16} aria-hidden="true" />
+              <span className="sr-only">（新标签页打开）</span>
+            </Link>
+            {groups.map((group) => {
+              const items = filtered.filter((item) => item.group === group);
+              return items.length ? (
+                <div className="nav-group" key={group}>
+                  <p>{group}</p>
+                  {items.map((item) => (
+                    <a
+                      key={item.id}
+                      href={pathFor(item)}
+                      aria-current={pageSummary?.id === item.id ? 'page' : undefined}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setQuery('');
+                        if (menuOpen && item.id === pageSummary?.id)
+                          requestAnimationFrame(() => headingRef.current?.focus());
+                      }}
+                    >
+                      <span>{item.name}</span>
+                      {item.chinese && <span className="nav-chinese">{item.chinese}</span>}
+                    </a>
+                  ))}
+                </div>
+              ) : null;
+            })}
           </nav>
-          <div className="directory-note">
-            <Leaf size={18} />
+          {filtered.length === 0 && (
+            <div role="status" className="search-empty">
+              <EmptyState
+                title="没有匹配的文档"
+                description="试试组件英文名或中文名，也可以清空搜索。"
+                action={
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setQuery('');
+                      searchRef.current?.focus();
+                    }}
+                  >
+                    显示全部文档
+                  </Button>
+                }
+              />
+            </div>
+          )}
+          <div className="sidebar-foot">
+            <BookOpen size={17} />
             <p>
-              慢慢逛，
+              小小的组件，
               <br />
-              喜欢的带回去。
+              也可以认真做好。
             </p>
+            <span>React · 非官方同人项目</span>
           </div>
         </aside>
-
-        <div className="component-content">
-          <div className="content-intro">
-            <div>
-              <h2>从一次点击开始。</h2>
-              <p>六种常用组件，放在同一个小世界里。</p>
-            </div>
-            <span className="content-flower" aria-hidden="true">
-              <Sparkles size={23} />
-            </span>
-          </div>
-
-          <ButtonsDemo notify={notify} />
-
-          <FieldsDemo notify={notify} />
-
-          <ChoicesDemo />
-
-          <DialogDemo notify={notify} />
-
-          <EmptyDemo />
-
-          <FeedbackDemo notify={notify} />
-
-          <section id="references" className="references">
-            <div>
-              <Leaf size={19} />
-              <h2>这个小世界，从哪里来？</h2>
-            </div>
-            <p>参考官方站点里的配色、留白和角色场景，也参考同人作品里有回应的小动作。</p>
-            <div className="reference-links">
-              <a href="https://chiikawabakery.jp/" target="_blank" rel="noreferrer">
-                Bakery <ArrowUpRight size={13} />
-              </a>
-              <a href="https://jp.chiikawa-pocket.com/ja/" target="_blank" rel="noreferrer">
-                Pocket <ArrowUpRight size={13} />
-              </a>
-              <a href="https://chiikawapark-tokyo.jp/" target="_blank" rel="noreferrer">
-                Park <ArrowUpRight size={13} />
-              </a>
-              <a href="https://chiikawamarket.jp/" target="_blank" rel="noreferrer">
-                Market <ArrowUpRight size={13} />
-              </a>
-              <a href="https://www.anime-chiikawa.jp/" target="_blank" rel="noreferrer">
-                动画官网 <ArrowUpRight size={13} />
-              </a>
-              <a href="https://chiikawa-flex.vercel.app/" target="_blank" rel="noreferrer">
-                Chiikawa-Flex <ArrowUpRight size={13} />
-              </a>
-              <a
-                href="https://phuahjinwei.github.io/Chiikawa-Hidamari/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Hidamari <ArrowUpRight size={13} />
-              </a>
-            </div>
-            <small>独立同人组件样张 · 非官方项目</small>
-          </section>
-        </div>
-      </main>
-
-      <footer className="site-footer">
-        <a href="#top" className="brand">
-          Chiikawa <span>UI</span>
-        </a>
-        <p>让每一次小小的操作，多一点陪伴。</p>
-        <span>React 组件样张 · 本地预览</span>
-      </footer>
-      {notice && (
-        <div className="toast-viewport">
-          <Toast
-            open
-            onClose={() => {
-              if (noticeTimer.current) clearTimeout(noticeTimer.current);
-              setNotice(null);
-            }}
-            {...notice}
-          />
-        </div>
-      )}
+        <main
+          id="doc-content"
+          className={`docs-content${isHome ? ' is-home' : isOverview ? ' is-overview' : ''}`}
+          inert={menuOpen}
+        >
+          {isHome ? (
+            <HomePage headingRef={headingRef} />
+          ) : isOverview && Overview ? (
+            <Overview headingRef={headingRef} />
+          ) : page ? (
+            <article key={page.id}>
+              <header className="doc-heading">
+                <div className="doc-title-row">
+                  <div className="doc-title-copy">
+                    <p className="doc-eyebrow">
+                      {page.group === '开始使用' ? 'GUIDE / 使用指南' : `${page.group} / COMPONENT`}
+                    </p>
+                    <Heading level={1} tabIndex={-1} ref={headingRef} className="doc-title">
+                      {titleFor(page)}
+                    </Heading>
+                    <Text className="doc-description">{page.description}</Text>
+                  </div>
+                  <img
+                    className="doc-friends-art"
+                    src={friendsPeek}
+                    alt=""
+                    width="440"
+                    height="170"
+                  />
+                </div>
+                {page.importCode && <CodeBlock source={page.importCode} compact />}
+              </header>
+              {page.sections.map((section) => (
+                <section className="doc-section" key={section.id}>
+                  <Heading
+                    level={2}
+                    className="section-title"
+                    id={section.id}
+                    data-doc-heading
+                    tabIndex={-1}
+                  >
+                    {section.title}
+                    <a
+                      className="heading-anchor"
+                      href={`${pathFor(page)}?section=${section.id}`}
+                      aria-label={`链接到${section.title}`}
+                      onClick={() => {
+                        if (route.section === section.id) focusSection(section.id);
+                      }}
+                    >
+                      #
+                    </a>
+                  </Heading>
+                  {section.content && <div className="doc-prose">{section.content}</div>}
+                  {section.examples?.map(
+                    ({
+                      id,
+                      title,
+                      description,
+                      component: Example,
+                      source,
+                      themeScope,
+                      assets,
+                    }) => (
+                      <section
+                        id={id}
+                        data-doc-heading
+                        tabIndex={-1}
+                        className="example-block"
+                        key={id}
+                        aria-labelledby={`${id}-label`}
+                      >
+                        <div className="example-preview">
+                          <Example />
+                        </div>
+                        <div className="example-description">
+                          <Heading level={3} className="example-title">
+                            <span id={`${id}-label`}>{title}</span>
+                            <a
+                              className="heading-anchor"
+                              href={`${pathFor(page)}?section=${id}`}
+                              aria-label={`链接到${title}`}
+                              onClick={() => {
+                                if (route.section === id) focusSection(id);
+                              }}
+                            >
+                              #
+                            </a>
+                          </Heading>
+                          <Text className="example-caption">{description}</Text>
+                        </div>
+                        <ExampleSource source={source} themeScope={themeScope} assets={assets} />
+                      </section>
+                    ),
+                  )}
+                  {section.api?.map((api) => (
+                    <div className="api-group" key={api.name}>
+                      <Heading level={3} className="api-title">
+                        {api.name}
+                      </Heading>
+                      <Text size="sm" tone="muted" className="api-scroll-hint">
+                        左右滑动查看完整表格；键盘聚焦后可用左右方向键。
+                      </Text>
+                      <div
+                        className="table-scroll"
+                        tabIndex={0}
+                        role="region"
+                        aria-label={`${api.name} API 表格`}
+                      >
+                        <table className="api-table">
+                          <thead>
+                            <tr>
+                              <th scope="col">参数</th>
+                              <th scope="col">说明</th>
+                              <th scope="col">类型</th>
+                              <th scope="col">默认值</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {api.rows.map((row) => (
+                              <tr key={row.name}>
+                                <th scope="row">
+                                  <code>{row.name}</code>
+                                  {row.required && <span className="required-tag">必填</span>}
+                                </th>
+                                <td>{row.description}</td>
+                                <td>
+                                  <code>{row.type}</code>
+                                </td>
+                                <td>
+                                  <code>{row.defaultValue ?? '—'}</code>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ))}
+                </section>
+              ))}
+              <nav className="page-pagination" aria-label="相邻文档">
+                {pageIndex > 0 ? (
+                  <a href={pathFor(pages[pageIndex - 1])}>
+                    <span>
+                      <ChevronLeft size={14} />
+                      上一篇
+                    </span>
+                    <strong>{titleFor(pages[pageIndex - 1])}</strong>
+                  </a>
+                ) : (
+                  <span />
+                )}
+                {pageIndex < pages.length - 1 && (
+                  <a href={pathFor(pages[pageIndex + 1])}>
+                    <span>
+                      下一篇
+                      <ChevronRight size={14} />
+                    </span>
+                    <strong>{titleFor(pages[pageIndex + 1])}</strong>
+                  </a>
+                )}
+              </nav>
+            </article>
+          ) : pageSummary ? (
+            <article key={pageSummary.id}>
+              <header className="doc-heading">
+                <div className="doc-title-row">
+                  <div className="doc-title-copy">
+                    <p className="doc-eyebrow">
+                      {isOverview ? 'CATALOG / 组件小屋' : `${pageSummary.group} / COMPONENT`}
+                    </p>
+                    <Heading level={1} tabIndex={-1} ref={headingRef} className="doc-title">
+                      {titleFor(pageSummary)}
+                    </Heading>
+                    <Text className="doc-description">{pageSummary.description}</Text>
+                  </div>
+                  <img
+                    className="doc-friends-art"
+                    src={friendsPeek}
+                    alt=""
+                    width="440"
+                    height="170"
+                  />
+                </div>
+              </header>
+              {loadFailed ? (
+                <Alert
+                  tone="error"
+                  role="alert"
+                  title={isOverview ? '组件总览暂时未能加载' : '组件文档暂时未能加载'}
+                  className="doc-load-error"
+                >
+                  <Text>请重试，或刷新页面后再试。</Text>
+                  <Button
+                    variant="secondary"
+                    className="doc-retry"
+                    onClick={() => {
+                      allowRouteFocus.current = true;
+                      setLoadAttempt((attempt) => attempt + 1);
+                    }}
+                  >
+                    {isOverview ? '重新加载总览' : '重新加载文档'}
+                  </Button>
+                </Alert>
+              ) : (
+                <div className="doc-loading">
+                  <Spinner label={isOverview ? '正在加载组件总览' : '正在加载组件文档'} />
+                  <span aria-hidden="true">
+                    {isOverview ? '正在加载组件总览…' : '正在加载组件文档…'}
+                  </span>
+                </div>
+              )}
+            </article>
+          ) : (
+            <article className="not-found">
+              <NotFoundScene asPage headingRef={headingRef} />
+            </article>
+          )}
+          <footer className="docs-footer">
+            <span>Yahha UI · 让内容慢慢被看见。</span>
+            <span>本地预览 / 尚未发布 npm</span>
+          </footer>
+        </main>
+        {page && (
+          <aside ref={tocRef} className="docs-toc" inert={menuOpen}>
+            <p>本页内容</p>
+            <nav aria-label="本页内容">
+              {toc.map((item) => (
+                <a
+                  key={item.id}
+                  className={item.nested ? 'toc-nested' : ''}
+                  aria-current={
+                    (activeSection.pageId === page.id ? activeSection.id : page.sections[0]?.id) ===
+                    item.id
+                      ? 'location'
+                      : undefined
+                  }
+                  href={`${pathFor(page)}?section=${item.id}`}
+                  onClick={() => {
+                    if (route.section === item.id) focusSection(item.id);
+                  }}
+                >
+                  {item.title}
+                </a>
+              ))}
+            </nav>
+          </aside>
+        )}
+      </div>
     </ThemeProvider>
   );
 }

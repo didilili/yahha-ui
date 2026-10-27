@@ -1,54 +1,57 @@
 import { useState } from 'react';
 import { ArrowRight, ArrowUpRight, Heart } from 'lucide-react';
-import { Button, IconButton } from '../../../src/index';
+import { Badge, Button, IconButton, Surface } from '../../../src/index';
 import type { Notify } from '../data';
 import { DemoSection } from '../shared';
 
 export function ButtonsDemo({ notify }: { notify: Notify }) {
-  const [likes, setLikes] = useState(0);
-  const [hearted, setHearted] = useState(false);
+  const [notes, setNotes] = useState(0);
+  const [saved, setSaved] = useState(false);
   return (
     <DemoSection
       id="buttons"
-      title="点一下，出发！"
-      component="Button"
-      description="轻轻按下，就有回应。主要、次要和文字按钮，各有自己的分工。"
+      title="从一篇手记开始。"
+      component="Button · Badge · Surface"
+      description="平静的阅读面，清楚的文字和一点按压反馈。没有角色插画，也能放下一段日常。"
       code={
-        '<Button onClick={onClick} endIcon={<ArrowRight />}>出发！</Button>\n<Button variant="secondary">慢慢来</Button>\n<Button loading>努力加载中</Button>'
+        '<Surface>\n  <Badge tone="accent">散步</Badge>\n  <h3>周末在河边走了一会儿</h3>\n  <Button onClick={onClick}>记一笔</Button>\n  <Button variant="secondary" aria-pressed={saved}>留着再读</Button>\n</Surface>'
       }
     >
-      <div className="button-stage">
+      <Surface className="button-stage">
+        <div className="foundation-meta">
+          <Badge tone="accent">散步</Badge>
+          <span>2026.10.23 · 约6分钟</span>
+          <Badge tone={saved ? 'success' : 'neutral'}>{saved ? '已收藏' : '随手记'}</Badge>
+        </div>
+        <h3 className="foundation-title">周末在河边走了一会儿</h3>
+        <p className="foundation-description">
+          沿着熟悉的路往前走，没有特别的目的。记下水声、落叶，还有桥下那只不着急的猫。
+        </p>
         <div className="button-main-row">
-          <Button
-            className="button-demo-action"
-            onClick={() => setLikes((value) => value + 1)}
-            endIcon={<ArrowRight size={17} />}
-          >
-            出发！
+          <Button onClick={() => setNotes((value) => value + 1)} endIcon={<ArrowRight size={17} />}>
+            记一笔
           </Button>
           <Button
-            className="button-demo-action"
             variant="secondary"
-            onClick={() => notify({ title: '慢慢来，也没关系。', tone: 'info' })}
+            aria-pressed={saved}
+            onClick={() => setSaved((value) => !value)}
           >
-            慢慢来
+            {saved ? '已经收好' : '留着再读'}
           </Button>
           <Button
-            className="button-demo-action"
             variant="ghost"
-            onClick={() => notify({ title: '再看看，喜欢的就在前面。', tone: 'info' })}
+            onClick={() => notify({ title: '这是一篇用于展示阅读排版的示例手记。', tone: 'info' })}
           >
-            再看看
+            查看说明
             <ArrowUpRight size={15} />
           </Button>
           <IconButton
-            className="button-demo-action button-demo-like"
-            aria-label={hearted ? '取消喜欢' : '喜欢这个组件'}
-            aria-pressed={hearted}
+            aria-label={saved ? '取消收藏手记' : '收藏这篇手记'}
+            aria-pressed={saved}
             variant="secondary"
-            onClick={() => setHearted((value) => !value)}
+            onClick={() => setSaved((value) => !value)}
           >
-            <Heart size={19} fill={hearted ? 'currentColor' : 'none'} />
+            <Heart size={19} fill={saved ? 'currentColor' : 'none'} />
           </IconButton>
         </div>
         <div className="button-state-row">
@@ -61,15 +64,15 @@ export function ButtonsDemo({ notify }: { notify: Notify }) {
           </Button>
         </div>
         <p className="click-response" aria-live="polite">
-          {likes ? (
+          {notes ? (
             <>
-              收到你的第 <strong>{likes}</strong> 次点击啦。
+              已经记下第 <strong>{notes}</strong> 笔。
             </>
           ) : (
-            '试着点一下「出发」，看看会发生什么。'
+            '点一下「记一笔」，或把这篇手记留着再读。'
           )}
         </p>
-      </div>
+      </Surface>
     </DemoSection>
   );
 }

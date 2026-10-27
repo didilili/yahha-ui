@@ -1,0 +1,499 @@
+.docs-site .docs-layout.is-overview {
+  grid-template-columns: 252px minmax(0, 1fr);
+}
+
+.component-overview-page {
+  max-width: 1180px;
+  min-width: 0;
+  margin-inline: auto;
+  padding-bottom: 32px;
+  color: var(--site-ink, #503b3b);
+}
+
+.component-overview-page
+  :where(
+    .overview-eyebrow,
+    .overview-hero h1,
+    .overview-introduction,
+    .overview-description,
+    .overview-search-hint,
+    .overview-filter-label,
+    .overview-results,
+    .overview-preview-note,
+    .overview-group-heading h2,
+    .overview-group-heading p,
+    .overview-card-copy h3,
+    .overview-card-copy > p,
+    .overview-next h2,
+    .overview-next p
+  ) {
+  margin: 0;
+}
+
+.component-overview-page .overview-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 240px);
+  align-items: end;
+  gap: 24px;
+  padding: 26px 30px 28px;
+  border: 1px solid var(--site-soft-line, #e3d8cb);
+  border-radius: 20px 28px 24px 18px;
+  background: var(--site-sky, #e9f4fa);
+}
+
+.component-overview-page .overview-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 9px;
+  font-size: 13px;
+}
+
+.component-overview-page .overview-eyebrow > svg {
+  width: 29px;
+  height: 29px;
+}
+
+.component-overview-page .overview-hero h1 {
+  width: fit-content;
+  font-family: WenKai, sans-serif;
+  font-size: clamp(32px, 3vw, 40px);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.component-overview-page .overview-introduction {
+  margin-top: 10px;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.component-overview-page .overview-description {
+  max-width: 43ch;
+  margin-top: 5px;
+  color: var(--chi-muted, #79656a);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.component-overview-page .overview-hero-notes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 18px;
+}
+
+.component-overview-page .overview-hero-notes > span:last-child {
+  color: var(--chi-muted, #79656a);
+  font-size: 12px;
+}
+
+.component-overview-page .overview-friends {
+  display: grid;
+  justify-items: center;
+  min-width: 0;
+  padding-bottom: 4px;
+}
+
+.component-overview-page .overview-friends img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.component-overview-page .overview-friends > span {
+  margin-top: 9px;
+  color: var(--site-line, #72534c);
+  font-family: WenKai, sans-serif;
+  font-size: 14px;
+}
+
+.component-overview-page .overview-find {
+  margin-top: 30px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--site-soft-line, #e3d8cb);
+}
+
+.component-overview-page .overview-filterbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 360px) minmax(0, 1fr);
+  align-items: start;
+  gap: 20px 28px;
+}
+
+.component-overview-page .overview-search,
+.component-overview-page .overview-categories {
+  min-width: 0;
+}
+
+.component-overview-page .overview-search-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.component-overview-page .overview-search-control {
+  flex: 1;
+  min-width: 0;
+}
+
+.component-overview-page .overview-search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.component-overview-page .overview-search-hint {
+  margin-top: 7px;
+  padding-inline: 4px;
+  color: var(--chi-muted, #79656a);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.component-overview-page .overview-filter-label {
+  margin-bottom: 8px;
+  padding-inline: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.component-overview-page .overview-result-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px 16px;
+  margin-top: 16px;
+  color: var(--chi-muted, #79656a);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.component-overview-page .overview-results strong {
+  color: var(--site-ink, #503b3b);
+  font-weight: 600;
+}
+
+.component-overview-page .overview-groups {
+  display: grid;
+  gap: 38px;
+  margin-top: 28px;
+}
+
+.component-overview-page .overview-group-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 17px;
+}
+
+.component-overview-page .overview-configuration {
+  padding-top: 24px;
+  border-top: 1px solid var(--site-soft-line, #e3d8cb);
+}
+
+.component-overview-page .overview-group-heading > svg {
+  width: 34px;
+  height: 34px;
+}
+
+.component-overview-page .overview-group-heading h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.component-overview-page .overview-group-heading h2 > span {
+  color: var(--chi-muted, #79656a);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.component-overview-page .overview-group-heading p {
+  margin-top: 2px;
+  color: var(--chi-muted, #79656a);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.component-overview-page .overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.component-overview-page .overview-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--site-soft-line, #e3d8cb);
+  border-radius: 14px 18px 16px 13px;
+  background: var(--chi-field-background, #fffefd);
+}
+
+.component-overview-page .overview-preview {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 184px;
+  padding: 20px 16px;
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+  background: var(--site-cream, #fffaf0);
+}
+
+.component-overview-page .overview-card-copy {
+  flex: 1;
+  min-width: 0;
+  padding: 18px 18px 20px;
+  border-top: 1px solid var(--site-soft-line, #e3d8cb);
+}
+
+.component-overview-page .overview-card-copy h3 {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.component-overview-page .overview-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+}
+
+/* One real anchor opens the card, including its non-interactive visual sample. */
+.component-overview-page .overview-card-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.component-overview-page .overview-card-link > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.component-overview-page .overview-card-link strong {
+  font-weight: 650;
+}
+
+.component-overview-page .overview-card-chinese {
+  display: block;
+  margin-top: 2px;
+  color: var(--chi-muted, #79656a);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.component-overview-page .overview-card-copy > p {
+  margin-top: 10px;
+  color: var(--chi-muted, #79656a);
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.component-overview-page .overview-next {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-top: 42px;
+  padding: 24px;
+  border: 1px solid var(--site-soft-line, #e3d8cb);
+  border-radius: 16px 22px 18px 15px;
+  background: var(--site-grass, #edf3df);
+}
+
+.component-overview-page .overview-next > svg {
+  width: 46px;
+  height: 46px;
+}
+
+.component-overview-page .overview-next > div {
+  min-width: 0;
+}
+
+.component-overview-page .overview-next h2 {
+  font-family: WenKai, sans-serif;
+  font-size: 24px;
+  line-height: 1.5;
+}
+
+.component-overview-page .overview-next p {
+  margin-top: 7px;
+  color: var(--chi-muted, #79656a);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.component-overview-page .overview-next nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 14px;
+}
+
+.component-overview-page .overview-next nav > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 14px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .component-overview-page .overview-card:has(.overview-card-link:hover) {
+    border-color: var(--site-line, #72534c);
+  }
+}
+
+@media (max-width: 1180px) {
+  .component-overview-page .overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .component-overview-page .overview-filterbar {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .component-overview-page .overview-search {
+    max-width: 440px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .docs-site .docs-layout.is-overview {
+    grid-template-columns: 232px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .component-overview-page .overview-hero {
+    grid-template-columns: minmax(0, 1fr) 156px;
+    gap: 16px;
+    padding: 22px;
+  }
+
+  .component-overview-page .overview-description {
+    max-width: none;
+  }
+
+  .component-overview-page .overview-friends > span {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 580px) {
+  .component-overview-page .overview-hero {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+
+  .component-overview-page .overview-eyebrow {
+    margin-bottom: 5px;
+  }
+
+  .component-overview-page .overview-introduction {
+    margin-top: 8px;
+  }
+
+  .component-overview-page .overview-hero-notes {
+    margin-top: 12px;
+  }
+
+  .component-overview-page .overview-inventory-note {
+    display: none;
+  }
+
+  .component-overview-page .overview-friends {
+    position: absolute;
+    top: 54px;
+    inset-inline-end: 16px;
+    width: clamp(70px, 24vw, 100px);
+    padding: 0;
+  }
+
+  .component-overview-page .overview-friends > span {
+    display: none;
+  }
+
+  .component-overview-page .overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .component-overview-page .overview-find {
+    margin-top: 20px;
+    padding-bottom: 12px;
+  }
+
+  .component-overview-page .overview-filterbar {
+    gap: 12px;
+  }
+
+  .component-overview-page .overview-filter-label,
+  .component-overview-page .overview-preview-note {
+    display: none;
+  }
+
+  .component-overview-page .overview-result-row {
+    margin-top: 10px;
+  }
+
+  .component-overview-page .overview-groups {
+    gap: 30px;
+    margin-top: 20px;
+  }
+
+  .component-overview-page .overview-group-heading {
+    margin-bottom: 12px;
+  }
+
+  .component-overview-page .overview-group-heading h2 {
+    font-size: 20px;
+  }
+
+  .component-overview-page .overview-preview {
+    min-height: 144px;
+  }
+
+  .component-overview-page .overview-next {
+    gap: 12px;
+    padding: 20px 16px;
+  }
+
+  .component-overview-page .overview-next > svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .component-overview-page .overview-next h2 {
+    font-size: 20px;
+  }
+
+  .component-overview-page .overview-next nav {
+    display: grid;
+    gap: 4px;
+  }
+}
+
+@media (forced-colors: active) {
+  .component-overview-page .overview-hero,
+  .component-overview-page .overview-card,
+  .component-overview-page .overview-next {
+    border-color: CanvasText;
+  }
+}
