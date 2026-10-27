@@ -1,125 +1,130 @@
-# Chiikawa UI · 组件小屋
+# Yahha UI · 朋友们的组件小屋
 
-独立的本地 React 组件库与展示页。组件源码在 `src/`，可以构建为带类型声明的 ESM 本地安装包；展示页位于 `playground/` 并单独构建。当前尚未发布 npm 包，也未接入社群看板。
+给个人博客、个人主页和小型内容站点，一点轻盈、温柔的交互。
 
-[组件文档](docs/README.md) · [协作说明](CONTRIBUTING.md) · [代理协作规则](AGENTS.md)
+[开始使用](#构建与本地安装) · [组件文档](docs/README.md) · [完整博客示例](examples/blog/README.md) · [设计语言](docs/design-language.md) · [静态部署](docs/deployment.md)
 
-## 本地开发
+**0.0.1 本地试用中** · React / React DOM `^19.3.1` · 29 个 UI 组件与 ThemeProvider · 尚未发布 npm
 
-开发基线为 Node.js **22.22.3**、npm **10.9.8**。使用 npm 与仓库内的 `package-lock.json`，首次使用先安装依赖：
+![Yahha UI 文档站首页：朋友们一起搭建小小的网站](docs/images/yahha-home.png)
 
-```sh
-npm ci
-```
+## 朋友们一起搭建、使用的小站
 
-双击 `启动组件小屋.command`，或执行：
+奶白、暖墨和轻粉，组成漫画手账的轮廓。饱满按钮、白底字段、分类纸签、栏目墨线与便笺浮层各有用途；人物、天空和草地在入口与小场景里陪伴阅读。
 
-```sh
-npm run dev
-```
+- **为内容网站准备**：阅读、分类、搜索、收藏与轻量表单可以组合成完整小站。[博客示例](examples/blog/README.md)提供库米的首页、手记归档与文章详情。
+- **组件本身也完整**：组件继承使用方字体，常规控件为 44px，Button / IconButton 有 36 / 44 / 52px 三档；键盘、原生表单、焦点与减少动效按实际组件能力处理。
+- **按需加入小场景**：静态 SVG、状态动效和可暂停的欢迎场景独立提供。基础组件不依赖角色图片，组件安装包不包含网站、字体或场景素材。
 
-访问 [http://127.0.0.1:4175/](http://127.0.0.1:4175/) 。开发服务只监听本机地址。
+## 从真实小样找到组件
 
-## 已实现
+文档站的组件总览位于 `#/components`，按七类展示现有 29 个 UI 组件，并单列 ThemeProvider 主题配置，共 30 个文档入口。小样进入对应文档后，可操作完整示例、展开代码并查阅 API；当前共 86 个同源 TSX 示例。
 
-- 吉伊、小八、乌萨奇三套主题，主题变量也传入弹窗 Portal。
-- Button / IconButton：主要、次要、文字、禁用、加载与点击状态。
-- TextField：标签、提示、错误关联、受控输入。
-- SegmentedControl：原生单选，支持方向键。
-- Dialog：复用 Base UI 的焦点管理、Escape 和关闭行为。
-- EmptyState、Toast，以及 Badge、Surface。
-- 独立组件源码在 `src/components/`，角色通过插槽传入；看板数据与业务逻辑未搬入。
+![组件视觉总览：真实按钮、字段、排版与容器小样](docs/images/yahha-components.png)
 
-展示页里的心愿、消息与空态内容均为演示数据，不读取或保存聊天记录。
+- **通用**：Button、IconButton。
+- **排版**：Text、Heading、Link。
+- **布局**：Surface、Divider。
+- **表单**：TextField、Textarea、Select、Checkbox、RadioGroup、Switch、SegmentedControl。
+- **内容展示**：Badge、Avatar、Image、Accordion。
+- **导航**：Tabs、Pagination、DropdownMenu。
+- **浮层与反馈**：Dialog、Popover、Tooltip、Alert、Toast、EmptyState、Spinner、Skeleton。
+- **主题配置**：ThemeProvider。
 
-## 目录约定
-
-- `src/index.ts`：统一公共入口，只导出组件和公开类型。
-- `src/components/<组件名>/`：按组件族放置实现、CSS Modules、单元测试和局部导出入口。
-- `src/theme/`：主题 Provider、内部 Context 与主题变量样式。
-- `src/internal/`：库内部共用工具和图标，不作为公共 API 导出。
-- `playground/src/`：展示页、分组件演示、图片与字体，不被库源码引用。
-- `docs/components/`：已实现组件的 API、样式入口、示例和键盘约定。
-- `tests/package-consumer/`：通过真实安装包验证类型、样式和交互的独立使用方。
-- `scripts/`：工程验收脚本；根目录配置分别负责库构建、展示页构建和单元测试。
-
-组件内部直接引用所需模块，不从公共入口回引。库内相对模块路径使用 `.js` 扩展名，使生成的多文件声明可被 Bundler 和 NodeNext 模式解析。
+[查阅组件示例与 API](docs/README.md) · [查看设计规则和尺寸规范](docs/design-language.md)
 
 ## 构建与本地安装
 
-```sh
-npm run build
-```
+当前通过本地 `.tgz` 安装。使用方需要已有的 React / React DOM `^19.3.1` 浏览器应用，以及支持 CSS 导入的构建工具。仓库开发基线为 Node.js ≥22.22.3、npm 10.9.8。
 
-这会先检查类型，再分别生成组件库与展示页：
-
-- `dist/index.js`：组件库的 ESM 入口。
-- `dist/index.d.ts`：公共类型入口。
-- `dist/style.css`：组件样式，通过 `yahha-ui/style.css` 导入。
-- `demo-dist/`：独立展示页，不作为组件库分发内容。
-
-预览构建后的展示页：
+**1. 在组件库根目录生成安装包**（已有 `.tgz` 时直接进行第 2 步）：
 
 ```sh
-npm run preview
-```
-
-访问 [http://127.0.0.1:4176/](http://127.0.0.1:4176/) 。`preview` 读取 `demo-dist/`，需要先执行 `npm run build:demo` 或 `npm run build`。
-
-在本地 React 19 项目中试用安装包：
-
-```sh
-# 在组件库目录中执行
+npm ci
 npm run build:lib
 npm pack
-
-# 在使用组件的项目中执行，替换为实际生成的文件路径
-npm install /path/to/chiikawa-ui/yahha-ui-0.0.1.tgz
 ```
 
-React 与 React DOM 由使用组件的项目提供，当前两者的 peer 范围均为 `^19.3.1`。示例：
+**2. 切换到自己的 React 项目安装**，替换成刚生成文件的实际位置：
+
+```sh
+npm install /absolute/path/yahha-ui-0.0.1.tgz
+```
+
+**3. 保存下面的 `App.tsx`**，由现有应用入口渲染：
 
 ```tsx
+import { useState } from 'react';
 import { Button, ThemeProvider } from 'yahha-ui';
 import 'yahha-ui/style.css';
 
-export function App() {
+export default function App() {
+  const [saved, setSaved] = useState(false);
+
   return (
     <ThemeProvider theme="chiikawa">
-      <Button onClick={() => console.log('出发啦')}>一起出发</Button>
+      <Button aria-pressed={saved} onClick={() => setSaved(!saved)}>
+        {saved ? '已收藏' : '收藏这篇文章'}
+      </Button>
     </ThemeProvider>
   );
 }
 ```
 
-`theme` 支持 `chiikawa`、`hachiware`、`usagi`。角色插画通过组件插槽传入；展示页的角色素材、字体和业务演示不应成为使用组件库的前提。
+启动应用后，点击或用 Space 操作按钮，可在“收藏这篇文章”和“已收藏”之间切换。
 
-## 检查命令
+样式只需在应用入口导入一次；`ThemeProvider` 的 `theme` 必填。默认使用 `chiikawa`，另有 `hachiware`、`usagi` 可选预设，保持同一套尺寸、排版和交互规则。
 
-- `npm run typecheck`：类型检查。
-- `npm test -- src/components/button/Button.test.tsx`：针对某个组件运行行为测试。
-- `npm run check`：格式、lint、类型、组件测试、构建与真实安装包验证的完整检查。
+其他示例按文档站的“完整接入”保存原样 `Example.tsx` 与独立 `App.tsx`；有素材清单时，单独下载并保留 `artwork/` 相对路径。完整素材示例按 Vite 8 / TypeScript 7 验证，`?raw`、`?no-inline` 导入需要相应构建工具支持。
 
-其他检查命令、Chromium 安装和 Git hooks 说明见[协作说明](CONTRIBUTING.md#验证)。按改动影响范围选择验证，不默认对小改动运行完整检查。
+安装包只分发组件、类型、样式与包说明。本文的图片和相对文档链接供源码仓库阅读，不表示它们进入 `.tgz`；只有安装包时，可直接使用本节的 `App.tsx`。
 
-工具选择参考了 [Radix Primitives 的 Oxlint 配置路线](https://github.com/radix-ui/primitives/blob/main/package.json)，本项目保留 TypeScript 7，格式化使用 Prettier。
+## 本地开发
 
-## 本轮设计参考（2026-10-23）
+在本仓库完成 `npm ci` 后，可以分别运行文档站和博客：
 
-- [Chiikawa Bakery](https://chiikawabakery.jp/)：白底、浅粉分区、清楚的文字和行动按钮。
-- [Chiikawa Pocket](https://jp.chiikawa-pocket.com/ja/)：角色参与情境，标准交互融入同一世界。
-- [Chiikawa Park](https://chiikawapark-tokyo.jp/)：粉白留白、细线、栏目招牌。
-- [Chiikawa Market](https://chiikawamarket.jp/)：清楚的输入、筛选与信息密度。
-- [动画官网](https://www.anime-chiikawa.jp/)：功能图标与角色插画分工，暖棕线稿。
-- [Chiikawa-Flex](https://chiikawa-flex.vercel.app/)：角色随操作变化，成为状态结果。
-- [Chiikawa-Hidamari](https://phuahjinwei.github.io/Chiikawa-Hidamari/)：一次一个反馈，短暂回应。
-- [Usagi Clock](https://shao.fun/usagi-clock/)：功能进入角色场景，首帧优先显示。
-- [saya-themes](https://github.com/Heoooooon/saya-themes)：共享语义结构的三角色主题。
+```sh
+npm run dev
+```
 
-这些是设计观察，并非官方组件规范。
+打开终端输出的文档站地址，从首页进入组件总览与指南。站内路由包括 `#/components`、`#/guides/getting-started` 和 `#/guides/artwork`。
+
+```sh
+npm run dev:blog
+```
+
+打开终端输出的博客地址，体验搜索、分类、分页、收藏与阅读返回。示例位于同仓库的 `examples/blog/`，共用根目录工具链；没有另一份 package.json 或 workspace。所有文章均为虚构示例，收藏保存在当前浏览器，不连接后台。
+
+![小小日常博客：首页、朋友群像和最近的手记](docs/images/yahha-blog.png)
+
+[博客运行与改站说明](examples/blog/README.md) · [手机阅读实拍](docs/images/yahha-mobile-reading.png) · [截图来源与更新方式](docs/images/README.md)
+
+## 构建与静态部署
+
+```sh
+npm run build:demo
+npm run build:blog
+```
+
+文档站输出至 `demo-dist/`，博客输出至 `examples/blog/dist/`；两者使用相对资源和 hash 路由。可以分别托管，也可以放在同一静态目录的根路径与 `blog/` 子目录。
+
+[部署说明](docs/deployment.md)提供构建、保留字体声明、合并副本及本地预览的完整步骤。当前提供本地构建与预览流程，尚未提供线上预览地址。
+
+## 当前能力与边界
+
+- 组件以 ESM、类型声明和独立 CSS 入口分发；React / React DOM 是 peer dependencies，`@base-ui/react` 是运行时依赖。展示工具与素材不进入组件安装包。
+- 当前验证范围是 React 19 浏览器应用。React 18、SSR 和其他构建工具兼容性尚未验证；素材示例的构建工具范围见上文。
+- Select 当前为单值选择，不包含搜索与多选；Pagination 由调用方更新列表与路由；Tooltip 是视觉文字补充，触发器需要自身可访问名称。具体 API 和键盘约定以[组件文档](docs/README.md)为准。
+- 版本为 `0.0.1`，`private: true`，尚未发布 npm。本文不提供未经验证的 npm 公开安装命令或线上文档地址。
 
 ## 素材与范围
 
-三张角色插画沿用本地社群看板已生成的同人素材；本轮没有抓取网站图片。字体沿用本地 LXGW Marker / WenKai Web 字体，原 OFL 说明保留在 `playground/src/assets/`。这是非官方同人样张，代码、字体和角色素材的许可范围应分别记录。
+这是非官方同人项目。组件代码、人物 SVG、道具、PNG、字体和页面截图分别记录来源与分发位置；代码的最终许可证与角色素材的完整许可清单尚未确定。已有字体 OFL 声明仅对应相应字体。
 
-当前 package 名称为 `yahha-ui`，仍设置为 `private: true`，可在本地打包安装，不进行 npm 发布。项目代码的最终许可证及第三方素材的完整许可清单尚未确定；现有字体 OFL 声明不代表角色素材或全部代码已获同等许可。当前仅以 React 19 浏览器使用方为验证范围，React 18 与 SSR 兼容性尚未验证。
+[素材与分发范围](docs/assets-and-distribution.md)汇总实际目录、原始记录、派生关系与当前许可状态。[小日常 SVG](playground/src/examples/scenes/artwork/little-days/README.md)说明静态、动效及欢迎控制器的使用区别。
+
+## 参与开发
+
+源码目录、依赖边界、Git hooks 和验证方式见[协作说明](CONTRIBUTING.md)；[AGENTS.md](AGENTS.md)记录仓库协作约定。[设计语言](docs/design-language.md)保留设计依据。
+
+小改动按影响范围选择检查；公共 API、构建或依赖边界变化使用完整 `npm run check`。
