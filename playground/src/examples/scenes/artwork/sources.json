@@ -1,0 +1,15 @@
+{
+  "created": "2026-10-24",
+  "tool": "Codex built-in image_gen",
+  "type": "Non-official fan illustration generated from the approved research concept sheet",
+  "rights_status": "Character redistribution and commercial rights have not been verified; not included in the default library package.",
+  "assets": [
+    {
+      "file": "empty.png",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 713773,
+      "sha256": "baf7c805f90221ae0b6d162a86f1a1e4d8876ec4960b5dcc9019352e50669be1"
+    }
+  ]
+}

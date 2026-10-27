@@ -1,0 +1,251 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 760 530"
+  fill="none"
+  role="img"
+  aria-labelledby="title"
+>
+  <title id="title">吉伊、小八与乌萨奇一起搭建内容小站的候选插画</title>
+  <defs>
+    <g
+      id="chi"
+      fill-rule="evenodd"
+      stroke="#614841"
+      stroke-width="3.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        fill="#fffdf7"
+        d="M-53 66C-69 84-66 113-52 122c-7 5-5 16 5 17 10 2 16-3 19-8 17 6 42 7 59 0 4 7 10 10 18 8 11-3 10-12 4-17C69 110 68 82 52 65Z"
+      />
+      <path
+        fill="#fffdf7"
+        d="M-66-47c-11-5-13-22-1-29 12-8 25 1 24 12 29-12 58-12 85 0 0-12 14-20 25-12 11 8 10 23 1 28C84-32 89-7 84 18c-5 33-30 57-60 61-21 4-53 2-70-6-29-12-44-34-42-61 0-22 7-43 22-59Z"
+      />
+      <g fill="#f6b9ba" stroke="none">
+        <ellipse cx="-55" cy="35" rx="17" ry="12" />
+        <ellipse cx="55" cy="35" rx="17" ry="12" />
+      </g>
+      <g stroke-width="2.3">
+        <path d="M-63 31l-3 8m12-8-3 8m12-8-3 8M47 31l-3 8m12-8-3 8m12-8-3 8" />
+      </g>
+      <g fill="#614841" stroke="none">
+        <ellipse cx="-29" cy="14" rx="5.2" ry="6.5" />
+        <ellipse cx="29" cy="14" rx="5.2" ry="6.5" />
+      </g>
+      <g fill="white" stroke="none">
+        <ellipse cx="-30.2" cy="12" rx="1.7" ry="2" />
+        <ellipse cx="27.8" cy="12" rx="1.7" ry="2" />
+      </g>
+      <g fill="none" stroke-width="3.3">
+        <path d="M-41-11l8-3m66 0 8 3M-9 37c3 7 9 7 10-1 1 8 7 8 10 1" />
+      </g>
+      <path
+        fill="#fffdf7"
+        d="M-57 80c-17-4-24 10-17 20 6 7 14 3 22-4m108-16c17-4 24 10 17 20-6 7-14 3-22-4"
+      />
+    </g>
+    <g
+      id="cat"
+      fill-rule="evenodd"
+      stroke="#614841"
+      stroke-width="3.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path fill="#8bb7ce" d="M-52 107c-26 13-46-3-50-16-4-12 7-17 14-10 8 9 16 7 24 6Z" />
+      <path
+        fill="#fffdf7"
+        d="M-54 65C-68 87-64 113-50 125c-9 5-7 16 4 17 9 2 16-3 20-8 16 5 37 5 54-1 5 6 12 11 21 8 11-3 10-12 3-17C68 106 68 81 53 65Z"
+      />
+      <path
+        fill="#fffdf7"
+        d="M-85-13c-3-22 2-49 7-79 2-6 6-7 11-4l32 20c22-8 48-8 68 0l31-24c5-4 10-2 12 4l13 73c8 18 8 38 1 56C78 68 42 84 2 82c-42 1-75-15-87-43-7-18-7-35 0-52Z"
+      />
+      <path
+        fill="#8bb7ce"
+        d="M-85-13c-3-22 2-49 7-79 2-6 6-7 11-4l32 20c22-8 48-8 68 0l31-24c5-4 10-2 12 4l11 60C65-8 39-1 11-21-9 3-49 15-85-13Z"
+      />
+      <g fill="#f6b9ba" stroke="none">
+        <ellipse cx="-55" cy="35" rx="17" ry="12" />
+        <ellipse cx="55" cy="35" rx="17" ry="12" />
+      </g>
+      <g stroke-width="2.3">
+        <path d="M-63 31l-3 8m12-8-3 8m12-8-3 8M47 31l-3 8m12-8-3 8m12-8-3 8" />
+      </g>
+      <g fill="#614841" stroke="none">
+        <ellipse cx="-29" cy="14" rx="5.2" ry="6.5" />
+        <ellipse cx="29" cy="14" rx="5.2" ry="6.5" />
+      </g>
+      <g fill="white" stroke="none">
+        <ellipse cx="-30.2" cy="12" rx="1.7" ry="2" />
+        <ellipse cx="27.8" cy="12" rx="1.7" ry="2" />
+      </g>
+      <g fill="none" stroke-width="3.1">
+        <path d="M-42-9l7-3m69 0 8 3" />
+        <path fill="#f7c1c4" d="M-8 38c0 15 5 23 12 23s12-10 12-23" />
+        <path d="M-12 36c4 8 13 6 13-2 0 8 10 10 15 3" />
+      </g>
+      <path
+        fill="#fffdf7"
+        d="M-56 80c-18-4-24 10-17 20 5 7 15 3 21-4m107-16c18-4 24 10 17 20-5 7-15 3-21-4"
+      />
+    </g>
+    <g
+      id="bunny"
+      fill-rule="evenodd"
+      stroke="#614841"
+      stroke-width="3.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        fill="#fff0b9"
+        d="M-47 67c-10 21-11 44-1 56-10 3-14 13-6 18 8 6 21 1 27-5 17 6 38 5 55-1 8 7 19 10 25 4 8-7 4-14-4-17 12-14 11-37-1-57Z"
+      />
+      <path fill="#fffdf7" d="M54 105c14-14 26-3 23 8 11 6 8 20-3 22-10 4-20-1-24-10" />
+      <path
+        fill="#fff0b9"
+        d="M-60-45c-7-37-6-103 11-129 8-13 23-12 26 2 6 24-4 70-6 105 8-3 19-3 27-1 9-36 15-92 35-108 12-10 26-4 25 12-1 29-24 83-32 108C57-47 82-22 84 9c5 35-18 65-53 73-27 8-58 5-82-7-24-13-35-32-35-56 0-28 8-48 26-64Z"
+      />
+      <g fill="#f6b9ba" stroke="none">
+        <path d="M-44-81c-4-26-3-72 4-83 4-6 8-2 7 9-2 22-8 53-11 74Z" />
+        <path d="M10-80c8-30 17-68 26-78 6-6 9-3 5 9-6 20-21 53-31 69Z" />
+      </g>
+      <g fill="#f6b9ba" stroke="none">
+        <ellipse cx="-55" cy="35" rx="17" ry="12" />
+        <ellipse cx="55" cy="35" rx="17" ry="12" />
+      </g>
+      <g stroke-width="2.3">
+        <path d="M-63 31l-3 8m12-8-3 8m12-8-3 8M47 31l-3 8m12-8-3 8m12-8-3 8" />
+      </g>
+      <g fill="#614841" stroke="none">
+        <ellipse cx="-29" cy="14" rx="5.2" ry="6.5" />
+        <ellipse cx="29" cy="14" rx="5.2" ry="6.5" />
+      </g>
+      <g fill="white" stroke="none">
+        <ellipse cx="-30.2" cy="12" rx="1.7" ry="2" />
+        <ellipse cx="27.8" cy="12" rx="1.7" ry="2" />
+      </g>
+      <g fill="none" stroke-width="3.1">
+        <path d="M-49-17c6-10 15-14 24-12m49 0c10 4 16 11 20 22" />
+        <path fill="#f7c1c4" d="M-6 39c-1 15 5 22 11 20s10-12 8-20" />
+        <path d="M-12 36c3 8 12 7 13-1 0 8 10 11 15 3" />
+      </g>
+      <path
+        fill="#fff0b9"
+        d="M-53 80c-17-5-26 7-21 18 4 9 15 6 23 0m106-18c17-5 26 7 21 18-4 9-15 6-23 0"
+      />
+    </g>
+    <g id="flower">
+      <g stroke="#614841" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+        <path
+          fill="none"
+          d="M0 4v27m0-5c-9-1-12-7-12-7 9-2 11 2 12 7m0-9c8 1 11-5 11-5-8-1-11 3-11 5"
+        />
+        <path
+          fill="#f7ced8"
+          d="M0-10c-12-14-23 1-11 8-16 5-6 22 5 12 1 16 20 12 14-1 15 1 17-17 2-16 2-13-13-17-10-3Z"
+        />
+        <circle fill="#ffe292" cx="0" cy="0" r="5" />
+      </g>
+    </g>
+    <g id="star">
+      <path
+        fill="#ffe292"
+        stroke="#614841"
+        stroke-width="2.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m0-19 6 12 14 2-10 10 2 14-12-7-13 7 3-14-10-10 14-2Z"
+      />
+    </g>
+    <g id="cloud">
+      <path
+        fill="#fffdf7"
+        stroke="#614841"
+        stroke-width="2.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M-35 13c-21-2-18-26-2-27 1-24 32-27 40-8 18-7 31 5 29 19 21 1 21 24 3 25Z"
+      />
+    </g>
+  </defs>
+  <path
+    fill="#d9e7bd"
+    d="M64 437c18-29 83-41 135-35 38-35 140-41 198-19 67-29 170-18 193 17 67-4 103 17 103 38-1 26-75 48-165 46-51 21-149 22-201 9-66 14-160 5-175-12-61 4-108-12-88-44Z"
+  />
+  <g opacity=".8">
+    <use href="#cloud" x="91" y="96" transform="rotate(-8 91 96)" />
+    <use href="#cloud" x="647" y="167" transform="scale(.7) translate(277 100)" />
+  </g>
+  <g stroke="#614841" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#fffdf7" d="m270 91 62-10 8 73-62 10Z" />
+    <path stroke="#91b9ca" d="m283 106 29-5m-27 17 35-6m-33 17 22-4" />
+    <path fill="#f6c6d1" d="m280 82 15-3 2 12-15 2Z" />
+  </g>
+  <use href="#star" x="372" y="77" transform="rotate(12 372 77)" />
+  <g stroke="#614841" stroke-width="2.5" stroke-linecap="round">
+    <path d="m408 112 8 3m-4-8-2 10M132 176l7-6m-8-3 9 8" />
+  </g>
+  <use href="#cat" transform="translate(202 291) rotate(-9) scale(1.05)" />
+  <use href="#bunny" transform="translate(563 281) rotate(10) scale(1.02)" />
+  <use href="#chi" transform="translate(373 278) scale(1.12)" />
+  <!-- A small web page becomes the shared prop, not an unrelated background sticker. -->
+  <g
+    stroke="#614841"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform="rotate(-2 374 400)"
+  >
+    <path fill="#d7b18c" d="M245 451h260l-14 20H259Z" />
+    <rect x="245" y="337" width="260" height="124" rx="16" fill="#fffdf7" />
+    <path fill="#f9d6dc" d="M261 337h228c9 0 16 7 16 16v13H245v-13c0-9 7-16 16-16Z" />
+    <g fill="#614841" stroke="none">
+      <circle cx="262" cy="352" r="2.7" />
+      <circle cx="272" cy="352" r="2.7" />
+      <circle cx="282" cy="352" r="2.7" />
+    </g>
+    <rect x="263" y="383" width="57" height="57" rx="9" fill="#e3eecf" />
+    <path
+      fill="#fffdf7"
+      stroke-width="2.5"
+      d="m289 392 6 12 14 2-10 10 2 13-12-6-12 6 2-13-10-10 14-2Z"
+    />
+    <path stroke-width="4" d="M338 389h137m-137 14h107" />
+    <rect x="338" y="419" width="76" height="22" rx="11" fill="#b5d4e1" stroke-width="2.5" />
+    <path stroke-width="2.5" d="m366 426-5 4 5 4m21-8 5 4-5 4m-12-11-3 15" />
+  </g>
+  <!-- Paws overlap the page edge to make the friends part of the same action. -->
+  <g
+    fill="#fffdf7"
+    stroke="#614841"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M277 354c-17 1-25-5-24-15 1-10 13-15 21-7 5 5 8 15 3 22Z" />
+    <path d="M329 340c-2-11 3-19 13-18 10 1 15 9 13 18Z" />
+    <path d="M393 338c-1-12 5-20 15-18 10 2 14 10 11 18Z" />
+  </g>
+  <g stroke="#614841" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m669 430 23-97" />
+    <path fill="#f5bdd0" d="m691 337 49 13-18 15 7 17-48-13Z" />
+  </g>
+  <use href="#flower" transform="translate(97 411) rotate(-9) scale(.9)" />
+  <use href="#flower" transform="translate(663 438) rotate(12) scale(.75)" />
+  <use href="#flower" transform="translate(591 465) rotate(-7) scale(.48)" />
+  <g stroke="#80985f" stroke-width="2.5" stroke-linecap="round">
+    <path
+      d="m146 458-4-10m4 10 5-12m-5 12 10-4m350 30-5-11m5 11 4-14m-4 14 11-7M68 462l-4-7m4 7 4-9"
+    />
+  </g>
+  <g fill="#fffdf7">
+    <ellipse cx="206" cy="471" rx="5" ry="3" />
+    <ellipse cx="222" cy="477" rx="5" ry="3" />
+    <ellipse cx="541" cy="452" rx="5" ry="3" />
+    <ellipse cx="557" cy="458" rx="5" ry="3" />
+  </g>
+</svg>

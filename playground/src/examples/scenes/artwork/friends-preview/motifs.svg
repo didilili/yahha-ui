@@ -1,0 +1,107 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 800 240"
+  fill="none"
+  role="img"
+  aria-labelledby="title"
+>
+  <title id="title">花、嫩芽、云、星光、信封、小旗、脚印与杯子的 SVG 图案样张</title>
+  <defs>
+    <g id="flower">
+      <g stroke="#614841" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+        <path
+          fill="none"
+          d="M0 4v27m0-5c-9-1-12-7-12-7 9-2 11 2 12 7m0-9c8 1 11-5 11-5-8-1-11 3-11 5"
+        />
+        <path
+          fill="#f7ced8"
+          d="M0-10c-12-14-23 1-11 8-16 5-6 22 5 12 1 16 20 12 14-1 15 1 17-17 2-16 2-13-13-17-10-3Z"
+        />
+        <circle fill="#ffe292" cx="0" cy="0" r="5" />
+      </g>
+    </g>
+    <g id="star">
+      <path
+        fill="#ffe292"
+        stroke="#614841"
+        stroke-width="2.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m0-19 6 12 14 2-10 10 2 14-12-7-13 7 3-14-10-10 14-2Z"
+      />
+    </g>
+    <g id="cloud">
+      <path
+        fill="#fffdf7"
+        stroke="#614841"
+        stroke-width="2.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M-35 13c-21-2-18-26-2-27 1-24 32-27 40-8 18-7 31 5 29 19 21 1 21 24 3 25Z"
+      />
+    </g>
+  </defs>
+  <use href="#flower" transform="translate(100 64) scale(1.25)" />
+  <g
+    stroke="#614841"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform="translate(300 66)"
+  >
+    <path d="M0 37V-1" />
+    <path fill="#bed69f" d="M0 19C-29 22-40 6-35-10-12-12 2 0 0 19Z" />
+    <path fill="#d7e7b9" d="M0 8C-2-15 13-29 37-25c1 19-16 33-37 33Z" />
+    <path d="M0 18-22 1M0 8l24-20" />
+  </g>
+  <use href="#cloud" transform="translate(500 72) scale(1.1)" />
+  <use href="#star" transform="translate(700 65) scale(1.6) rotate(9)" />
+  <g
+    stroke="#614841"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform="translate(100 185) rotate(-8)"
+  >
+    <rect x="-36" y="-23" width="72" height="48" rx="6" fill="#fffdf7" />
+    <path d="m-32-18 32 24 32-24m-64 37 22-18m42 18L10 1" />
+    <path fill="#f6c5d1" d="M0-1c-8-10-20 1-11 9L0 18 11 8C20 0 8-11 0-1Z" />
+  </g>
+  <g
+    stroke="#614841"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform="translate(300 183) rotate(8)"
+  >
+    <path d="M-25 37v-76" />
+    <path fill="#b6d7e6" d="M-25-34h67L30-17 42 0h-67Z" />
+    <path fill="#ffe292" stroke-width="2.2" d="m6-27 4 8 9 1-6 6 1 9-8-4-8 4 2-9-7-6 9-1Z" />
+  </g>
+  <g fill="#d7b18c" stroke="#614841" stroke-width="2.3" transform="translate(500 181) rotate(14)">
+    <ellipse cx="-18" cy="17" rx="12" ry="17" />
+    <ellipse cx="19" cy="-7" rx="12" ry="17" />
+    <g stroke="none">
+      <ellipse cx="-32" cy="-1" rx="4" ry="5" />
+      <ellipse cx="-23" cy="-8" rx="4" ry="5" />
+      <ellipse cx="-13" cy="-9" rx="4" ry="5" />
+      <ellipse cx="-5" cy="-2" rx="4" ry="5" />
+      <ellipse cx="5" cy="-25" rx="4" ry="5" />
+      <ellipse cx="15" cy="-32" rx="4" ry="5" />
+      <ellipse cx="25" cy="-33" rx="4" ry="5" />
+      <ellipse cx="33" cy="-26" rx="4" ry="5" />
+    </g>
+  </g>
+  <g
+    stroke="#614841"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform="translate(700 182)"
+  >
+    <path fill="#fffdf7" d="M-28-17h49l-4 42c-1 14-38 14-40 0Z" />
+    <path fill="#fff0b9" d="M21-9c29-6 26 30-3 29Z" />
+    <path fill="#f6c5d1" d="M-2-4c-7-8-15 1-8 7l8 7 8-7C13-4 5-12-2-4Z" />
+    <path d="M-15-29c-9-9 5-12-1-21m19 21c-9-9 5-12-1-21" />
+  </g>
+</svg>

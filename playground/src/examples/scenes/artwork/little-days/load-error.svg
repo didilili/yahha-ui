@@ -1,0 +1,89 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 240 180"
+  data-artwork="load-error"
+  data-motion="off"
+  fill="none"
+  stroke="#644744"
+  stroke-width="2.4"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <style>
+    svg[data-artwork='load-error'] .ld-state-loose-corner {
+      transform-origin: 161px 55px;
+    }
+    svg[data-artwork='load-error'][data-motion='on'] .ld-state-loose-corner {
+      animation: ld-state-paper-settle 0.48s ease-out both;
+    }
+    @keyframes ld-state-paper-settle {
+      0% {
+        transform: rotate(-8deg);
+      }
+      52% {
+        transform: rotate(3deg);
+      }
+      78% {
+        transform: rotate(-1.5deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      svg[data-artwork='load-error'][data-motion='on'] .ld-state-loose-corner {
+        animation: none;
+      }
+    }
+  </style>
+  <ellipse cx="119" cy="152" rx="77" ry="7" fill="#ecedd9" stroke="none" />
+  <path
+    d="m96.8 38.6 67.2 7.5c3.3.4 4.5 2.4 4 5.7l-10.4 83.8c-.4 3.5-2.3 5-5.6 4.5l-68.1-8.9c-3.4-.4-4.6-2.4-4.1-5.7L91.3 43c.5-3.4 2.1-4.8 5.5-4.4Z"
+    fill="#e8efd9"
+    stroke="#819369"
+    stroke-width="1.8"
+  />
+  <path
+    d="m65.8 59.7 95.2-4.8 11.1 16.8-1.9 69.5c-.1 4.3-2.3 6.4-6.5 6.1l-93.5-4.8c-4-.2-6.1-2.3-6.1-6.3l-3.4-69.4c-.2-4.7.9-6.9 5.1-7.1Z"
+    fill="#fffefa"
+  />
+  <path
+    d="m101.5 48.2 33.3-1.6 3 18.4-33.1 2.2Z"
+    fill="#f8dbe2"
+    stroke="#b58a89"
+    stroke-width="1.5"
+  />
+  <path d="m111.2 51.6.5 9.1m11.2-9.6.5 9" stroke="#e8bdc6" stroke-width="1.2" />
+  <path
+    d="M84.5 86.5c15.3-1.5 31.9-2 46.3-1m-45.1 12.2c9.6-.5 19.7-.2 28.9.6"
+    stroke="#d4c6b8"
+    stroke-width="1.8"
+  />
+  <path
+    d="M85.9 120.9c-2.2-3.7-7-.9-4.2 2.2-4.5.8-3.4 5.9 1 5.2-1.6 4.3 3.7 6 5.2 1.9 3.3 3.2 7.5-.4 4.2-3.4 4.2-1.4 1.7-6.2-2.2-4.4-.1-4.5-5.3-4.8-4-1.5Z"
+    fill="#ffe6a2"
+    stroke-width="1.6"
+  />
+  <circle cx="86.1" cy="125.1" r="2.1" fill="#fffefa" stroke="none" />
+  <path d="m151 127.6 5.6.4m-8.7 5.5 7.3.5" stroke="#e4d7cb" stroke-width="1.5" />
+  <g class="ld-state-loose-corner">
+    <path
+      d="m161 54.9 14.4 17.2-21 2.4c4.8-5.9 6.2-12.1 6.6-19.6Z"
+      fill="#f8dbe2"
+      stroke-width="2"
+    />
+    <path d="m162.1 58.4 8.3 10.2" stroke="#dfb9bf" stroke-width="1.5" />
+  </g>
+  <path d="M53.9 111.8c-1.1 6.8-3.1 12.8-6.4 17.5" stroke="#819369" stroke-width="1.8" />
+  <path
+    d="M51.9 121.5c-8.6-2.1-11-7.4-8.1-13.1 7.1 1.1 10.6 6.1 8.1 13.1Z"
+    fill="#bfd6a4"
+    stroke="#819369"
+    stroke-width="1.6"
+  />
+  <path
+    d="M184.1 98.3c2.4-1.1 4.4-2.7 6-4.6m-3.1 13.1c2.5-.1 4.9-.7 7-1.8"
+    stroke="#bba296"
+    stroke-width="1.6"
+  />
+</svg>
