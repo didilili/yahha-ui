@@ -36,6 +36,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Check design contract
+        run: npm run check:design
+
       - name: Check types
         run: npm run typecheck
 
@@ -56,3 +59,9 @@ jobs:
 
       - name: Test installed package
         run: npm run test:package
+
+      - name: Test documentation site
+        run: npm run test:docs
+
+      - name: Test blog example with installed package
+        run: npm run test:blog

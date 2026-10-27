@@ -36,8 +36,16 @@
     "test": "vitest run",
     "lint:package": "publint --strict",
     "test:package": "node scripts/test-package.mjs",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build:lib && npm run build:demo && npm run lint:package && npm run test:package",
-    "prepare": "husky"
+    "test:docs": "node scripts/test-docs.mjs",
+    "check": "npm run format:check && npm run lint && npm run check:design && npm run typecheck && npm test && npm run build:lib && npm run build:demo && npm run lint:package && npm run test:package && npm run test:docs && npm run test:blog",
+    "prepare": "husky",
+    "check:design": "node --test tests/design-contract.test.mjs && node scripts/check-design.mjs && npm run check:artwork",
+    "sync:artwork": "node scripts/sync-little-days-artwork.mjs",
+    "check:artwork": "node scripts/sync-little-days-artwork.mjs --check",
+    "dev:blog": "npm run build:lib && vite --config examples/blog/vite.config.ts --host 127.0.0.1 --port 4186 --strictPort",
+    "build:blog": "npm run build:lib && tsc --noEmit -p examples/blog/tsconfig.json && vite build --config examples/blog/vite.config.ts",
+    "preview:blog": "vite preview --config examples/blog/vite.config.ts --host 127.0.0.1 --port 4187 --strictPort",
+    "test:blog": "node scripts/test-blog.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0"

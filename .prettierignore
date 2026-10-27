@@ -7,3 +7,4 @@ playwright-report/
 test-results/
 package-lock.json
 playground/src/assets/
+examples/blog/src/assets/
