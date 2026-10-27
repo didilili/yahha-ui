@@ -17,8 +17,8 @@
 
 ```tsx
 import { useState } from 'react';
-import { Button, IconButton, ThemeProvider } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Button, IconButton, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 export function ButtonExample() {
   const [saved, setSaved] = useState(false);

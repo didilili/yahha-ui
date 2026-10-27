@@ -17,8 +17,8 @@
 
 ```tsx
 import { useState } from 'react';
-import { Button, ThemeProvider, Toast } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Button, ThemeProvider, Toast } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 export function ToastExample() {
   const [open, setOpen] = useState(false);

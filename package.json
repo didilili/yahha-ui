@@ -1,7 +1,7 @@
 {
-  "name": "chiikawa-ui",
+  "name": "yahha-ui",
   "version": "0.0.1",
-  "description": "A themed React component library with an independent local playground.",
+  "description": "Yahha UI: a playful React component library with an independent local playground.",
   "private": true,
   "type": "module",
   "files": [

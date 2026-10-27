@@ -24,7 +24,7 @@ const require = createRequire(new URL('../package.json', import.meta.url));
 const exec = promisify(execFile);
 const npmEntry = process.env.npm_execpath;
 assert(npmEntry, 'Run this acceptance script with npm run test:package.');
-const temporary = await realpath(await mkdtemp(join(tmpdir(), 'chiikawa-ui-consumer-')));
+const temporary = await realpath(await mkdtemp(join(tmpdir(), 'yahha-ui-consumer-')));
 const consumer = join(temporary, 'consumer');
 let browser;
 let server;
@@ -64,7 +64,7 @@ try {
   for (const entry of ['dist/index.js', 'dist/index.d.ts', 'dist/style.css']) {
     assert(files.includes(entry), `Package is missing ${entry}; run npm run build:lib first.`);
   }
-  assert.equal(packed.name, 'chiikawa-ui');
+  assert.equal(packed.name, 'yahha-ui');
   const unexpected = files.filter(
     (path) => !/^(?:dist\/|package\.json$|(?:readme|licen[sc]e|changelog)(?:\.|$))/i.test(path),
   );
@@ -118,12 +118,12 @@ try {
     join(consumer, 'package.json'),
     JSON.stringify(
       {
-        name: 'chiikawa-ui-package-consumer',
+        name: 'yahha-ui-package-consumer',
         private: true,
         type: 'module',
         dependencies: {
           ...dependencies,
-          'chiikawa-ui': `file:${join(temporary, packed.filename)}`,
+          'yahha-ui': `file:${join(temporary, packed.filename)}`,
         },
         devDependencies,
       },
@@ -135,7 +135,7 @@ try {
     'Installing the tarball and exact React 19 / Vite 8 / TypeScript 7 versions independently.',
   );
   await runNpm(['install', '--ignore-scripts', '--no-audit', '--no-fund']);
-  const installedPackage = join(consumer, 'node_modules/chiikawa-ui');
+  const installedPackage = join(consumer, 'node_modules/yahha-ui');
   assert.equal(
     (await lstat(installedPackage)).isSymbolicLink(),
     false,

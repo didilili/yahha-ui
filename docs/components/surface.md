@@ -11,8 +11,8 @@
 ## 示例
 
 ```tsx
-import { Surface, ThemeProvider } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Surface, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 export function SurfaceExample() {
   return (

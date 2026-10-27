@@ -32,8 +32,8 @@ Provider 没有内部切换状态；如需切换主题，由调用方更新 `the
 
 ```tsx
 import { useState } from 'react';
-import { Button, Dialog, Surface, ThemeProvider, type ThemeTokens } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Button, Dialog, Surface, ThemeProvider, type ThemeTokens } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 const tokens: ThemeTokens = {
   accent: '#d7eaf5',

@@ -18,8 +18,8 @@
 
 ```tsx
 import { useRef, useState } from 'react';
-import { Button, TextField, ThemeProvider } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Button, TextField, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 export function TextFieldExample() {
   const [name, setName] = useState('');

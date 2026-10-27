@@ -55,7 +55,7 @@ npm run build
 
 - `dist/index.js`：组件库的 ESM 入口。
 - `dist/index.d.ts`：公共类型入口。
-- `dist/style.css`：组件样式，通过 `chiikawa-ui/style.css` 导入。
+- `dist/style.css`：组件样式，通过 `yahha-ui/style.css` 导入。
 - `demo-dist/`：独立展示页，不作为组件库分发内容。
 
 预览构建后的展示页：
@@ -74,14 +74,14 @@ npm run build:lib
 npm pack
 
 # 在使用组件的项目中执行，替换为实际生成的文件路径
-npm install /path/to/chiikawa-ui/chiikawa-ui-0.0.1.tgz
+npm install /path/to/chiikawa-ui/yahha-ui-0.0.1.tgz
 ```
 
 React 与 React DOM 由使用组件的项目提供，当前两者的 peer 范围均为 `^19.3.1`。示例：
 
 ```tsx
-import { Button, ThemeProvider } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Button, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 export function App() {
   return (
@@ -122,4 +122,4 @@ export function App() {
 
 三张角色插画沿用本地社群看板已生成的同人素材；本轮没有抓取网站图片。字体沿用本地 LXGW Marker / WenKai Web 字体，原 OFL 说明保留在 `playground/src/assets/`。这是非官方同人样张，代码、字体和角色素材的许可范围应分别记录。
 
-当前 package 名称为 `chiikawa-ui`，仍设置为 `private: true`，可在本地打包安装，不进行 npm 发布。项目代码的最终许可证及第三方素材的完整许可清单尚未确定；现有字体 OFL 声明不代表角色素材或全部代码已获同等许可。当前仅以 React 19 浏览器使用方为验证范围，React 18 与 SSR 兼容性尚未验证。
+当前 package 名称为 `yahha-ui`，仍设置为 `private: true`，可在本地打包安装，不进行 npm 发布。项目代码的最终许可证及第三方素材的完整许可清单尚未确定；现有字体 OFL 声明不代表角色素材或全部代码已获同等许可。当前仅以 React 19 浏览器使用方为验证范围，React 18 与 SSR 兼容性尚未验证。

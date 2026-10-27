@@ -13,8 +13,8 @@ import {
   type ThemeName,
   type ThemeTokens,
   type SurfaceProps,
-} from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+} from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 function Consumer() {
   const [theme, setTheme] = useState<ThemeName>('chiikawa');

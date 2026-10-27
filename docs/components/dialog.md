@@ -20,8 +20,8 @@
 
 ```tsx
 import { useRef, useState } from 'react';
-import { Button, Dialog, TextField, ThemeProvider } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Button, Dialog, TextField, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 export function DialogExample() {
   const [open, setOpen] = useState(false);

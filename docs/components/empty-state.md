@@ -16,8 +16,8 @@
 
 ```tsx
 import { useState } from 'react';
-import { Button, EmptyState, ThemeProvider } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Button, EmptyState, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 export function EmptyStateExample() {
   const [created, setCreated] = useState(false);

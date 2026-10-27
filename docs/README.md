@@ -1,6 +1,6 @@
 # 组件文档
 
-组件从 `chiikawa-ui` 导入，样式从 `chiikawa-ui/style.css` 导入。建议在应用入口加载一次样式，并用 `ThemeProvider` 包住需要主题的区域。每页示例均包含完整导入，可以作为独立组件复制使用。
+组件从 `yahha-ui` 导入，样式从 `yahha-ui/style.css` 导入。建议在应用入口加载一次样式，并用 `ThemeProvider` 包住需要主题的区域。每页示例均包含完整导入，可以作为独立组件复制使用。
 
 - [Button / IconButton](components/button.md)：文字按钮、图标按钮、加载状态。
 - [TextField](components/text-field.md)：标签、提示、错误与原生输入属性。

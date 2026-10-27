@@ -18,8 +18,8 @@
 
 ```tsx
 import { useState } from 'react';
-import { Button, SegmentedControl, ThemeProvider } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Button, SegmentedControl, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 type Scope = 'all' | 'one' | 'two';
 

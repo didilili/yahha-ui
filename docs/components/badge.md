@@ -13,8 +13,8 @@
 ## 示例
 
 ```tsx
-import { Badge, ThemeProvider } from 'chiikawa-ui';
-import 'chiikawa-ui/style.css';
+import { Badge, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
 
 export function BadgeExample() {
   return (
