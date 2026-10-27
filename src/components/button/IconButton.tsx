@@ -7,6 +7,10 @@ export type IconButtonProps = Omit<ButtonProps, 'startIcon' | 'endIcon'> & {
   'aria-label': string;
 };
 
-export function IconButton({ className, ...props }: IconButtonProps) {
-  return <Button {...props} className={cx(styles.iconButton, className)} />;
+export function IconButton({ className, loading, children, ...props }: IconButtonProps) {
+  return (
+    <Button {...props} loading={loading} className={cx(styles.iconButton, className)}>
+      {loading ? null : children}
+    </Button>
+  );
 }

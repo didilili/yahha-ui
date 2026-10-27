@@ -25,19 +25,15 @@ function StatusMark({ tone }: { tone: NonNullable<ToastProps['tone']> }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.7"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <circle cx="12" cy="12" r="9" />
       {tone === 'success' ? (
-        <path d="m8 12 2.5 2.5L16 9" />
+        <path d="m6 12 4 4 8-9" />
       ) : tone === 'error' ? (
-        <>
-          <path d="M12 7v6" />
-          <path d="M12 17h.01" />
-        </>
+        <path d="m7 7 10 10m0-10L7 17" />
       ) : (
         <>
           <path d="M12 11v6" />
@@ -65,8 +61,12 @@ export function Toast({
       </span>
       <div className={styles.toastContent}>
         <p className={styles.toastTitle}>{title}</p>
-        {description && <p className={styles.toastDescription}>{description}</p>}
-        {action && <div className={styles.toastAction}>{action}</div>}
+        {description != null && typeof description !== 'boolean' && description !== '' && (
+          <p className={styles.toastDescription}>{description}</p>
+        )}
+        {action != null && typeof action !== 'boolean' && action !== '' && (
+          <div className={styles.toastAction}>{action}</div>
+        )}
       </div>
       <IconButton
         aria-label="关闭提示"

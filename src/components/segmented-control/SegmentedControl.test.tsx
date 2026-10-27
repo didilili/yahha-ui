@@ -7,6 +7,29 @@ import { SegmentedControl } from './SegmentedControl.js';
 afterEach(cleanup);
 
 describe('SegmentedControl', () => {
+  it('keeps caller-provided guidance directly associated with each focused radio', () => {
+    render(
+      <>
+        <p id="choice-help">请选择文章排序方式。</p>
+        <SegmentedControl
+          label="文章排序"
+          value="latest"
+          onValueChange={() => {}}
+          aria-describedby="choice-help"
+          options={[
+            { value: 'latest', label: '最新' },
+            { value: 'oldest', label: '最早' },
+          ]}
+        />
+      </>,
+    );
+    for (const radio of screen.getAllByRole('radio')) {
+      expect(radio.getAttribute('aria-describedby')).toBe('choice-help');
+      expect(document.getElementById(radio.getAttribute('aria-describedby')!)?.textContent).toBe(
+        '请选择文章排序方式。',
+      );
+    }
+  });
   it('changes a native single-choice group while preserving disabled options', async () => {
     const user = userEvent.setup();
     function Example() {
@@ -30,6 +53,40 @@ describe('SegmentedControl', () => {
     expect((screen.getByRole('radio', { name: '全部' }) as HTMLInputElement).checked).toBe(false);
     await user.click(screen.getByRole('radio', { name: '二所' }));
     expect((screen.getByRole('radio', { name: '一所' }) as HTMLInputElement).checked).toBe(true);
+  });
+
+  it('only changes the selection when the caller updates the controlled value', async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    const options = [
+      { value: 'all', label: '全部' },
+      { value: 'one', label: '一所' },
+    ];
+    const example = (value: string) => (
+      <form aria-label="筛选">
+        <SegmentedControl
+          label="群聊范围"
+          name="audience"
+          value={value}
+          onValueChange={onValueChange}
+          options={options}
+        />
+      </form>
+    );
+    const { rerender } = render(example('all'));
+    const all = screen.getByRole('radio', { name: '全部' }) as HTMLInputElement;
+    const one = screen.getByRole('radio', { name: '一所' }) as HTMLInputElement;
+    await user.click(one);
+    expect(onValueChange).toHaveBeenCalledExactlyOnceWith('one');
+    expect(all.checked).toBe(true);
+    expect(one.checked).toBe(false);
+    rerender(example('one'));
+    expect(all.checked).toBe(false);
+    expect(one.checked).toBe(true);
+    expect(one.parentElement?.hasAttribute('data-checked')).toBe(true);
+    expect([
+      ...new FormData(screen.getByRole('form', { name: '筛选' }) as HTMLFormElement),
+    ]).toEqual([['audience', 'one']]);
   });
 
   it('applies custom classes to the segmented root, options and each option', () => {

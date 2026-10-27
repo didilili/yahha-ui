@@ -34,21 +34,24 @@ export function TextField({
 }: TextFieldProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
-  const hintId = hint ? `${inputId}-hint` : undefined;
-  const errorId = error ? `${inputId}-error` : undefined;
+  const hasHint = hint != null && hint !== '' && typeof hint !== 'boolean';
+  const hasError = error != null && error !== '' && typeof error !== 'boolean';
+  const hasLeading = leading != null && leading !== '' && typeof leading !== 'boolean';
+  const hintId = hasHint ? `${inputId}-hint` : undefined;
+  const errorId = hasError ? `${inputId}-error` : undefined;
   const describedBy =
     [props['aria-describedby'], hintId, errorId].filter(Boolean).join(' ') || undefined;
   return (
     <div
       className={cx(styles.field, className)}
-      data-invalid={error ? '' : undefined}
+      data-invalid={hasError ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
     >
       <label className={cx(styles.fieldLabel, classNames?.label)} htmlFor={inputId}>
         {label}
       </label>
       <div className={cx(styles.inputWrap, classNames?.inputWrapper)}>
-        {leading && (
+        {hasLeading && (
           <span className={cx(styles.leading, classNames?.leading)} aria-hidden="true">
             {leading}
           </span>
@@ -58,16 +61,16 @@ export function TextField({
           id={inputId}
           disabled={disabled}
           className={cx(styles.input, classNames?.input)}
-          aria-invalid={error ? true : props['aria-invalid']}
+          aria-invalid={hasError ? true : props['aria-invalid']}
           aria-describedby={describedBy}
         />
       </div>
-      {hint && (
+      {hasHint && (
         <div className={cx(styles.hint, classNames?.hint)} id={hintId}>
           {hint}
         </div>
       )}
-      {error && (
+      {hasError && (
         <div className={cx(styles.error, classNames?.error)} id={errorId}>
           {error}
         </div>

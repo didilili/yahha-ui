@@ -1,0 +1,53 @@
+.avatar {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: 0 0 auto;
+  vertical-align: middle;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border: var(--chi-border-width, 1px) solid var(--chi-contour, #644744);
+  border-radius: var(--chi-radius-avatar, 40% 45% 42% 38%);
+  background: var(--chi-accent, #f8dbe2);
+  color: var(--chi-ink, #462e31);
+  font-family: inherit;
+  font-size: var(--chi-font-size-md, 14px);
+  line-height: var(--chi-leading-control, 20px);
+  font-weight: 650;
+}
+.avatar[hidden]:not([hidden='until-found']) {
+  display: none;
+}
+.avatar[data-size='sm'] {
+  width: 32px;
+  height: 32px;
+  font-size: var(--chi-font-size-sm, 12px);
+  line-height: var(--chi-leading-control-sm, 16px);
+}
+.avatar[data-size='lg'] {
+  width: 64px;
+  height: 64px;
+  font-size: var(--chi-font-size-heading-3, 20px);
+  line-height: var(--chi-leading-control-lg, 24px);
+}
+.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+}
+.image[data-loaded] {
+  opacity: 1;
+}

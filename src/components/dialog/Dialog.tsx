@@ -2,6 +2,7 @@ import { useContext, type ComponentPropsWithRef, type ReactElement, type ReactNo
 import { Dialog as BaseDialog } from '@base-ui/react/dialog';
 import { IconButton } from '../button/IconButton.js';
 import { CloseMark } from '../../internal/CloseMark.js';
+import { renderInteractivePopup } from '../../internal/InteractivePopup.js';
 import { ThemeContext } from '../../theme/theme-context.js';
 import { cx } from '../../internal/cx.js';
 import themeStyles from '../../theme/theme.module.css';
@@ -63,6 +64,7 @@ export function Dialog({
         <div className={themeStyles.theme} data-chiikawa-theme={theme} style={themeStyle}>
           <BaseDialog.Backdrop className={styles.dialogBackdrop} />
           <BaseDialog.Popup
+            render={renderInteractivePopup}
             ref={ref}
             className={cx(styles.dialog, className)}
             style={style}
@@ -81,19 +83,23 @@ export function Dialog({
                 </IconButton>
               }
             />
-            {illustration && (
+            {illustration != null && typeof illustration !== 'boolean' && illustration !== '' && (
               <div className={styles.dialogIllustration} aria-hidden="true">
                 {illustration}
               </div>
             )}
             <BaseDialog.Title className={styles.dialogTitle}>{title}</BaseDialog.Title>
-            {description && (
+            {description != null && typeof description !== 'boolean' && description !== '' && (
               <BaseDialog.Description className={styles.dialogDescription}>
                 {description}
               </BaseDialog.Description>
             )}
-            {children && <div className={styles.dialogBody}>{children}</div>}
-            {footer && <div className={styles.dialogFooter}>{footer}</div>}
+            {children != null && typeof children !== 'boolean' && children !== '' && (
+              <div className={styles.dialogBody}>{children}</div>
+            )}
+            {footer != null && typeof footer !== 'boolean' && footer !== '' && (
+              <div className={styles.dialogFooter}>{footer}</div>
+            )}
           </BaseDialog.Popup>
         </div>
       </BaseDialog.Portal>

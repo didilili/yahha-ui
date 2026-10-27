@@ -1,0 +1,100 @@
+.root {
+  min-width: 0;
+  max-width: 100%;
+  color: var(--chi-ink, #462e31);
+  font-family: inherit;
+}
+.list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--chi-space-2, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.list > li {
+  min-width: 0;
+  max-width: 100%;
+}
+.pageGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--chi-space-2, 8px);
+}
+.button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--chi-control-height, 44px);
+  max-width: 100%;
+  min-height: var(--chi-control-height, 44px);
+  padding: calc(
+      (var(--chi-control-height, 44px) - var(--chi-leading-control, 20px)) / 2 -
+        var(--chi-control-border-width, 2px)
+    )
+    var(--chi-space-3, 12px);
+  border: var(--chi-control-border-width, 2px) solid transparent;
+  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--chi-font-size-md, 14px);
+  font-weight: 600;
+  line-height: var(--chi-leading-control, 20px);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
+    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+}
+.pageGroup .button {
+  padding-inline: calc(var(--chi-space-3, 12px) - var(--chi-control-border-width, 2px));
+  border-color: var(--chi-paper-line, #e4d9d3);
+  background: var(--chi-surface, #fffefa);
+  font-variant-numeric: tabular-nums;
+}
+.button[aria-current='page'] {
+  border-color: var(--chi-contour, #644744);
+  border-radius: 48% 52% 50% 46%;
+  background: var(--chi-accent, #f8dbe2);
+}
+.button:focus-visible {
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline-offset: var(--chi-focus-offset, 2px);
+}
+.button:disabled {
+  border-color: transparent;
+  background: transparent;
+  color: var(--chi-muted, #79656a);
+  cursor: not-allowed;
+}
+.ellipsis {
+  padding-inline: 1px;
+  color: var(--chi-muted, #79656a);
+}
+@media (hover: hover) {
+  .button:not(:disabled):not([aria-current='page']):hover {
+    border-color: var(--chi-contour, #644744);
+    background: var(--chi-accent-soft, #fff6f7);
+  }
+  .button[aria-current='page']:hover {
+    background: var(--chi-accent-hover, #f2c9d4);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .button[aria-current='page'] {
+    border-color: Highlight;
+  }
+  .button:disabled {
+    color: GrayText;
+  }
+}

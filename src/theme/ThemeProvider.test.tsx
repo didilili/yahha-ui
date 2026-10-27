@@ -35,6 +35,9 @@ describe('ThemeProvider', () => {
     expect(root.style.getPropertyValue('--chi-accent-hover')).toBe('#444444');
     expect(root.style.getPropertyValue('--chi-accent-soft')).toBe('#555555');
     expect(root.style.getPropertyValue('--chi-line')).toBe('#666666');
+    expect(root.style.getPropertyValue('--chi-contour')).toBe('#666666');
+    expect(root.style.getPropertyValue('--chi-paper-line')).toBe('#666666');
+    expect(root.style.getPropertyValue('--chi-neutral-line')).toBe('');
     expect(root.style.getPropertyValue('--chi-focus')).toBe('#777777');
     expect(root.style.getPropertyValue('--chi-surface')).toBe('#888888');
     expect(root.style.getPropertyValue('--chi-field-background')).toBe('#999999');
@@ -43,12 +46,15 @@ describe('ThemeProvider', () => {
 
   it('removes a token override when it is no longer supplied', () => {
     const view = render(
-      <ThemeProvider theme="chiikawa" tokens={{ accent: 'salmon' }}>
+      <ThemeProvider theme="chiikawa" tokens={{ accent: 'salmon', line: '#846973' }}>
         <span>主题内容</span>
       </ThemeProvider>,
     );
     const root = screen.getByText('主题内容').parentElement!;
     expect(root.style.getPropertyValue('--chi-accent')).toBe('salmon');
+    expect(root.style.getPropertyValue('--chi-contour')).toBe('#846973');
+    expect(root.style.getPropertyValue('--chi-paper-line')).toBe('#846973');
+    expect(root.style.getPropertyValue('--chi-neutral-line')).toBe('');
 
     view.rerender(
       <ThemeProvider theme="chiikawa">
@@ -56,5 +62,7 @@ describe('ThemeProvider', () => {
       </ThemeProvider>,
     );
     expect(root.style.getPropertyValue('--chi-accent')).toBe('');
+    expect(root.style.getPropertyValue('--chi-contour')).toBe('');
+    expect(root.style.getPropertyValue('--chi-paper-line')).toBe('');
   });
 });

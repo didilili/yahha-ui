@@ -10,6 +10,36 @@ import { Dialog, type DialogProps } from './Dialog.js';
 afterEach(cleanup);
 
 describe('Dialog', () => {
+  it('associates a numeric zero description and hides decorative zero content', () => {
+    render(
+      <Dialog open onOpenChange={() => {}} title="零值说明" description={0} illustration={0} />,
+    );
+    const dialog = screen.getByRole('dialog', { name: '零值说明' });
+    const descriptionId = dialog.getAttribute('aria-describedby');
+    expect(descriptionId).toBeTruthy();
+    expect(document.getElementById(descriptionId!)?.textContent).toBe('0');
+    expect(screen.getAllByText('0').some((node) => node.closest('[aria-hidden="true"]'))).toBe(
+      true,
+    );
+  });
+
+  it('keeps an empty dialog usable and removes a cleared description association', async () => {
+    const user = userEvent.setup();
+    const view = render(
+      <Dialog open onOpenChange={() => {}} title="空内容" description="即将清除的说明" />,
+    );
+    const dialog = screen.getByRole('dialog', { name: '空内容' });
+    expect(dialog.getAttribute('aria-describedby')).toBeTruthy();
+    view.rerender(<Dialog open onOpenChange={() => {}} title="空内容" />);
+    expect(screen.queryByText('即将清除的说明')).toBeNull();
+    expect(dialog.getAttribute('aria-describedby')).toBeNull();
+    const close = screen.getByRole('button', { name: '关闭弹窗' });
+    close.focus();
+    await user.keyboard('{Enter}');
+    // A controlled caller can decline the close request without losing the popup.
+    expect(screen.getByRole('dialog', { name: '空内容' })).toBe(dialog);
+  });
+
   it('preserves the Base UI focus and portal option types', () => {
     expectTypeOf<DialogProps['initialFocus']>().toEqualTypeOf<
       BaseDialog.Popup.Props['initialFocus']

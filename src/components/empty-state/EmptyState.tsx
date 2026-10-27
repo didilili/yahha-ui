@@ -22,16 +22,24 @@ export function EmptyState({
   action,
   className,
 }: EmptyStateProps) {
+  const hasIllustration =
+    illustration != null && typeof illustration !== 'boolean' && illustration !== '';
   return (
     <div className={cx(styles.emptyState, className)}>
-      {illustration && (
+      {hasIllustration ? (
         <div className={styles.emptyIllustration} aria-hidden="true">
           {illustration}
         </div>
+      ) : (
+        <span className={styles.emptyMotif} aria-hidden="true" />
       )}
       <h3 className={styles.emptyTitle}>{title}</h3>
-      {description && <p className={styles.emptyDescription}>{description}</p>}
-      {action && <div className={styles.emptyAction}>{action}</div>}
+      {description != null && typeof description !== 'boolean' && description !== '' && (
+        <p className={styles.emptyDescription}>{description}</p>
+      )}
+      {action != null && typeof action !== 'boolean' && action !== '' && (
+        <div className={styles.emptyAction}>{action}</div>
+      )}
     </div>
   );
 }

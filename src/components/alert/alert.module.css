@@ -1,0 +1,61 @@
+.alert {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--chi-space-3, 12px);
+  max-width: 100%;
+  padding: var(--chi-space-4, 16px) var(--chi-space-5, 20px);
+  border: var(--chi-border-width, 1px) solid var(--chi-info-line, #bbd0df);
+  border-radius: var(--chi-radius-note, 14px 20px 17px 12px);
+  background: var(--chi-info-surface, #f4f9fd);
+  color: var(--chi-ink, #462e31);
+  font-family: inherit;
+  font-size: var(--chi-font-size-body-sm, 14px);
+  line-height: var(--chi-leading-body, 1.8);
+  overflow-wrap: anywhere;
+}
+.alert[hidden]:not([hidden='until-found']) {
+  display: none;
+}
+.icon {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  color: var(--chi-info-ink, #426f90);
+}
+.body {
+  flex: 1;
+  min-width: 0;
+}
+.title {
+  margin: 0 0 var(--chi-space-1, 4px);
+  font-weight: 600;
+}
+.title:last-child {
+  margin-bottom: 0;
+}
+.content {
+  font-size: inherit;
+}
+.alert[data-tone='success'] {
+  background: var(--chi-success-surface, #f3f8ed);
+  border-color: var(--chi-success-line, #c6d8b8);
+}
+.alert[data-tone='success'] .icon {
+  color: var(--chi-success-ink, #506a3b);
+}
+.alert[data-tone='warning'] {
+  background: var(--chi-warning-surface, #fff8e8);
+  border-color: var(--chi-warning-line, #daca9f);
+}
+.alert[data-tone='warning'] .icon {
+  color: var(--chi-warning-ink, #896329);
+}
+.alert[data-tone='error'] {
+  background: var(--chi-error-surface, #fff4f5);
+  border-color: var(--chi-error, #a33e4f);
+}
+.alert[data-tone='error'] .icon {
+  color: var(--chi-error, #a33e4f);
+}

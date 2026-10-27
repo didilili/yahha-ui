@@ -7,13 +7,14 @@ export interface ThemeTokens {
   accent?: string;
   accentHover?: string;
   accentSoft?: string;
+  /** Overrides control contours, content paper edges and action bases together. */
   line?: string;
   focus?: string;
   /** Surface background. @default '#fffefa' */
   surface?: string;
   /** Text field background. @default '#fffefd' */
   fieldBackground?: string;
-  /** Text field error text and Toast error icon color. @default '#a33e4f' */
+  /** Text field error border, focus outline, text and Toast error icon color. @default '#a33e4f' */
   error?: string;
 }
 
@@ -37,6 +38,11 @@ export function getTokenStyle(tokens?: ThemeTokens): CSSProperties | undefined {
     if (tokens[key] !== undefined) {
       style[tokenVariables[key]] = tokens[key];
     }
+  }
+  // One explicit line override covers both ink controls and quieter content paper.
+  if (tokens.line !== undefined) {
+    style['--chi-contour'] = tokens.line;
+    style['--chi-paper-line'] = tokens.line;
   }
   return style;
 }

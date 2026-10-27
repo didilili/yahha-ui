@@ -1,0 +1,93 @@
+.positioner {
+  z-index: 130;
+  max-width: calc(100vw - var(--chi-space-6, 24px));
+}
+.positioner[data-anchor-hidden] {
+  visibility: hidden;
+}
+.popup {
+  box-sizing: border-box;
+  position: relative;
+  max-width: min(260px, var(--available-width), calc(100vw - var(--chi-space-6, 24px)));
+  max-height: var(--available-height);
+  padding: var(--chi-space-2, 8px) var(--chi-space-3, 12px);
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border-radius: var(--chi-radius-bubble, 12px 16px 14px 8px);
+  background: var(--chi-surface, #fffefa);
+  color: var(--chi-ink, #462e31);
+  font: inherit;
+  font-size: var(--chi-font-size-body-sm, 14px);
+  line-height: var(--chi-leading-caption, 1.6);
+  box-shadow: var(--chi-shadow-popup, 0 3px 0 #d7c3c0, 0 8px 20px rgb(70 46 49 / 8%));
+  outline: none;
+  transform-origin: var(--transform-origin);
+  transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
+}
+.arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
+}
+.arrow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  background: var(--chi-surface, #fffefa);
+  transform: rotate(45deg);
+}
+.arrow[data-side='top'] {
+  bottom: -6px;
+}
+.arrow[data-side='top']::before {
+  border-top: 0;
+  border-left: 0;
+}
+.arrow[data-side='bottom'] {
+  top: -6px;
+}
+.arrow[data-side='bottom']::before {
+  border-right: 0;
+  border-bottom: 0;
+}
+.arrow[data-side='left'],
+.arrow[data-side='inline-start']:dir(ltr),
+.arrow[data-side='inline-end']:dir(rtl) {
+  right: -6px;
+}
+.arrow[data-side='left']::before,
+.arrow[data-side='inline-start']:dir(ltr)::before,
+.arrow[data-side='inline-end']:dir(rtl)::before {
+  border-bottom: 0;
+  border-left: 0;
+}
+.arrow[data-side='right'],
+.arrow[data-side='inline-end']:dir(ltr),
+.arrow[data-side='inline-start']:dir(rtl) {
+  left: -6px;
+}
+.arrow[data-side='right']::before,
+.arrow[data-side='inline-end']:dir(ltr)::before,
+.arrow[data-side='inline-start']:dir(rtl)::before {
+  border-top: 0;
+  border-right: 0;
+}
+.arrow[data-uncentered] {
+  display: none;
+}
+.popup[data-starting-style],
+.popup[data-ending-style],
+.popup[data-starting-style] + .arrow,
+.popup[data-ending-style] + .arrow {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .popup,
+  .arrow {
+    transition: none;
+  }
+}

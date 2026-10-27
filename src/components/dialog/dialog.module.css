@@ -1,55 +1,68 @@
-.dialog {
-  box-sizing: border-box;
-  font-family: inherit;
-  color: var(--chi-ink, #462e31);
-}
-
 .dialogBackdrop {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgb(52 35 36 / 32%);
-  backdrop-filter: blur(3px);
-  transition: opacity 180ms ease;
+  background: var(--chi-overlay, rgb(70 46 49 / 24%));
+  transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
 }
 .dialog {
+  --dialog-close-top: calc(
+    var(--chi-space-8, 32px) +
+      (
+        var(--chi-font-size-heading-2, 24px) * var(--chi-leading-heading, 1.45) -
+          var(--chi-control-height, 44px)
+      ) /
+      2
+  );
+  box-sizing: border-box;
   position: fixed;
   top: 50%;
   left: 50%;
   z-index: 101;
-  width: min(440px, calc(100vw - 32px));
-  max-height: calc(100dvh - 48px);
-  padding: 32px;
+  width: min(440px, calc(100vw - var(--chi-space-8, 32px)));
+  max-height: calc(100dvh - var(--chi-space-6, 24px) * 2);
+  padding: var(--chi-space-8, 32px) var(--chi-space-7, 28px) var(--chi-space-7, 28px);
   overflow-y: auto;
-  border: 1px solid var(--chi-line, #d7c3c0);
-  border-radius: 24px;
+  overflow-wrap: anywhere;
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border-radius: var(--chi-radius-dialog, 32px 42px 35px 28px / 28px 35px 32px 25px);
   background: var(--chi-surface, #fffefa);
-  box-shadow: 0 16px 60px rgb(65 40 40 / 13%);
+  color: var(--chi-ink, #462e31);
+  font-family: inherit;
+  box-shadow: var(--chi-shadow-dialog, 0 4px 0 #d7c3c0, 0 12px 32px rgb(70 46 49 / 10%));
   transform: translate(-50%, -50%);
   transition:
-    opacity 180ms ease,
-    scale 180ms ease;
+    opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease),
+    scale var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
+}
+.dialog:has(> .dialogIllustration) {
+  --dialog-close-top: 10px;
+}
+.dialog:focus-visible {
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline-offset: var(--chi-focus-offset-outer, 3px);
 }
 .dialog[data-starting-style],
 .dialog[data-ending-style] {
   opacity: 0;
-  scale: 0.97;
+  scale: 0.98;
 }
 .dialogBackdrop[data-starting-style],
 .dialogBackdrop[data-ending-style] {
   opacity: 0;
 }
 .dialogClose {
+  --chi-control-height-sm: var(--chi-control-height, 44px);
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: var(--dialog-close-top);
+  inset-inline-end: 10px;
 }
 .dialogIllustration {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 124px;
-  margin: 0 0 18px;
+  margin: 0 0 var(--chi-space-4, 16px);
 }
 .dialogIllustration > img,
 .dialogIllustration > svg {
@@ -62,22 +75,24 @@
 }
 .dialogTitle {
   margin: 0;
-  padding-right: 12px;
-  font-size: 22px;
-  line-height: 1.4;
+  padding-inline-end: calc(var(--chi-control-height, 44px) - var(--chi-space-2, 8px));
+  padding-bottom: var(--chi-space-4, 16px);
+  border-bottom: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
+  font-size: var(--chi-font-size-heading-2, 24px);
+  line-height: var(--chi-leading-heading, 1.45);
   font-weight: 650;
   letter-spacing: -0.02em;
 }
 .dialogDescription {
-  margin: 10px 0 0;
+  margin: var(--chi-space-3, 12px) 0 0;
   color: var(--chi-muted, #79656a);
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: var(--chi-font-size-body-sm, 14px);
+  line-height: var(--chi-leading-body, 1.8);
 }
 .dialogBody {
-  margin-top: 20px;
-  font-size: 14px;
-  line-height: 1.7;
+  margin-top: var(--chi-space-5, 20px);
+  font-size: var(--chi-font-size-body, 16px);
+  line-height: var(--chi-leading-body, 1.8);
 }
 .dialogBody > :first-child {
   margin-top: 0;
@@ -89,16 +104,29 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 26px;
+  gap: var(--chi-space-2, 8px);
+  margin-top: var(--chi-space-6, 24px);
+  padding-top: var(--chi-space-4, 16px);
+  border-top: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
 }
 
 @media (max-width: 480px) {
   .dialog {
-    padding: 28px 24px;
+    --dialog-close-top: calc(
+      var(--chi-space-6, 24px) +
+        (
+          var(--chi-font-size-heading-3, 20px) * var(--chi-leading-heading, 1.45) -
+            var(--chi-control-height, 44px)
+        ) /
+        2
+    );
+    padding: var(--chi-space-6, 24px);
   }
   .dialogTitle {
-    font-size: 20px;
+    font-size: var(--chi-font-size-heading-3, 20px);
+  }
+  .dialogFooter {
+    flex-direction: column;
   }
 }
 

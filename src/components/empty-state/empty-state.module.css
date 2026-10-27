@@ -1,19 +1,50 @@
 .emptyState {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 20px;
+  min-width: 0;
+  padding: calc(var(--chi-space-5, 20px) * 2) var(--chi-space-6, 24px);
   color: var(--chi-ink, #462e31);
   text-align: center;
+  overflow-wrap: anywhere;
+}
+.emptyMotif {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 52px;
+  margin-bottom: var(--chi-space-6, 24px);
+}
+.emptyMotif::before {
+  content: '';
+  position: absolute;
+  inset: 5px 8px 3px 7px;
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border-radius: 6px 9px 7px 5px;
+  background: var(--chi-surface, #fffefa);
+  box-shadow: 3px 3px 0 var(--chi-accent, #f8dbe2);
+  transform: rotate(-6deg);
+}
+.emptyMotif::after {
+  content: '';
+  position: absolute;
+  top: 19px;
+  inset-inline-start: 15px;
+  width: 16px;
+  height: 8px;
+  border-block: var(--chi-control-border-width, 2px) solid var(--chi-line, #d7c3c0);
+  transform: rotate(-6deg);
 }
 .emptyIllustration {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 220px;
-  height: 150px;
-  margin-bottom: 18px;
+  max-width: 200px;
+  height: 132px;
+  margin-bottom: var(--chi-space-6, 24px);
 }
 .emptyIllustration > img,
 .emptyIllustration > svg {
@@ -21,26 +52,33 @@
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: 150px;
+  max-height: 132px;
   object-fit: contain;
 }
 .emptyTitle {
   margin: 0;
-  font-size: 17px;
-  line-height: 1.5;
+  max-width: 100%;
+  font-size: var(--chi-font-size-heading-3, 20px);
+  line-height: var(--chi-leading-heading, 1.45);
   font-weight: 600;
 }
 .emptyDescription {
-  max-width: 32ch;
-  margin: 8px 0 0;
+  max-width: 38ch;
+  margin: var(--chi-space-2, 8px) 0 0;
   color: var(--chi-muted, #79656a);
-  font-size: 13px;
-  line-height: 1.7;
+  font-size: var(--chi-font-size-body, 16px);
+  line-height: var(--chi-leading-body, 1.8);
 }
 .emptyAction {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
+  max-width: 100%;
+  gap: var(--chi-space-2, 8px);
+  margin-top: var(--chi-space-5, 20px);
+}
+@media (max-width: 480px) {
+  .emptyState {
+    padding: var(--chi-space-6, 24px) var(--chi-space-4, 16px);
+  }
 }

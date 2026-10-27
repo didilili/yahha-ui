@@ -1,0 +1,52 @@
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12%;
+  inline-size: 100%;
+  block-size: 100%;
+  flex: 0 0 auto;
+  color: inherit;
+}
+
+.dot {
+  flex: 0 0 20%;
+  aspect-ratio: 1;
+  border-radius: 48% 55% 46% 52%;
+  background: currentColor;
+  animation: ink-beat 1.2s var(--chi-ease, ease-in-out) infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 160ms;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+@keyframes ink-beat {
+  0%,
+  65%,
+  100% {
+    opacity: 0.45;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+    opacity: 0.75;
+  }
+}
+
+@media (forced-colors: active) {
+  .dot {
+    box-sizing: border-box;
+    border: 1px solid currentColor;
+    background: transparent;
+  }
+}

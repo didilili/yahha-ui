@@ -1,14 +1,3 @@
-.segment {
-  box-sizing: border-box;
-  font-family: inherit;
-  color: var(--chi-ink, #462e31);
-}
-
-.segment:has(input:focus-visible) {
-  outline: 3px solid var(--chi-focus, #ad6179);
-  outline-offset: 3px;
-}
-
 .segmented {
   display: inline-flex;
   min-inline-size: 0;
@@ -17,47 +6,93 @@
   margin: 0;
   padding: 0;
 }
+.segmented[hidden]:not([hidden='until-found']) {
+  display: none;
+}
 .segmentedOptions {
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--chi-space-1, 4px);
+  min-width: 0;
   max-width: 100%;
-  padding: 4px;
-  border: 1px solid var(--chi-line, #d7c3c0);
-  border-radius: 999px;
-  background: #fffdf9;
+  padding: var(--chi-space-1, 4px);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-paper-line, #e4d9d3);
+  border-radius: var(--chi-radius-field, 12px 16px 14px 11px);
+  background: var(--chi-neutral-surface, #f9f5f1);
 }
 .segment {
+  box-sizing: border-box;
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
-  padding: 7px 18px;
-  border-radius: 999px;
-  font-size: 13px;
-  line-height: 1.4;
-  font-weight: 500;
-  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--chi-control-height, 44px);
+  padding: max(
+      0px,
+      calc(
+        (
+            var(--chi-control-height, 44px) - var(--chi-leading-control, 20px) - 2 *
+              var(--chi-control-border-width, 2px)
+          ) /
+          2
+      )
+    )
+    var(--chi-space-4, 16px);
+  border: var(--chi-control-border-width, 2px) solid transparent;
+  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
+  font-family: inherit;
+  color: var(--chi-ink, #462e31);
+  font-size: var(--chi-font-size-md, 14px);
+  line-height: var(--chi-leading-control, 20px);
+  font-weight: 600;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
   cursor: pointer;
-  transition: background-color 150ms ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
+    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
+    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
-.segment:hover:not([data-disabled]) {
-  background: var(--chi-accent-soft, #fff6f7);
+.segment > span {
+  min-width: 0;
+  max-width: 100%;
 }
 .segment[data-checked] {
   background: var(--chi-accent, #f8dbe2);
-  font-weight: 600;
+  border-color: var(--chi-contour, #644744);
+  box-shadow: var(--chi-shadow-selected, inset 0 2px 0 rgb(70 46 49 / 8%));
 }
-.segment[data-disabled] {
-  opacity: 0.4;
+.segment:has(input:focus-visible) {
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline-offset: var(--chi-focus-offset, 2px);
+}
+.segment[data-disabled],
+.segment:has(input:disabled) {
+  color: var(--chi-muted, #79656a);
+  opacity: 1;
   cursor: not-allowed;
+  transition: none;
+}
+.segment[data-disabled][data-checked],
+.segment[data-checked]:has(input:disabled) {
+  background: var(--chi-disabled-surface, #f2eeea);
+  border-color: var(--chi-line, #d7c3c0);
+  box-shadow: none;
 }
 .segment input {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
   opacity: 0;
+  cursor: inherit;
 }
 .srOnly {
   position: absolute;
@@ -70,14 +105,47 @@
   border: 0;
 }
 
+@media (hover: hover) {
+  .segment:not([data-disabled]):not(:has(input:disabled)):not([data-checked]):hover {
+    background: var(--chi-accent-soft, #fff6f7);
+  }
+  .segment[data-checked]:not([data-disabled]):not(:has(input:disabled)):hover {
+    background: var(--chi-accent-hover, #f2c9d4);
+  }
+}
+
 @media (max-width: 480px) {
   .segment {
-    padding-inline: 14px;
+    padding-inline: var(--chi-space-3, 12px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .segment {
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .segment {
+    transition: none;
+  }
+  .segment[data-checked],
+  .segment[data-checked]:not([data-disabled]):not(:has(input:disabled)):hover {
+    border-color: Highlight;
+    border-style: dashed;
+    background: Canvas;
+    color: CanvasText;
+  }
+  .segment[data-disabled],
+  .segment:has(input:disabled) {
+    border-color: GrayText;
+    color: GrayText;
+  }
+  .segment[data-disabled][data-checked],
+  .segment[data-checked]:has(input:disabled) {
+    border-style: dashed;
+    background: Canvas;
+    color: GrayText;
   }
 }

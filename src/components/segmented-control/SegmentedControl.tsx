@@ -67,6 +67,7 @@ export function SegmentedControl<T extends string>({
               checked={value === option.value}
               disabled={disabled || option.disabled}
               required={required}
+              aria-describedby={props['aria-describedby']}
               onChange={() => onValueChange(option.value)}
             />
             <span>{option.label}</span>

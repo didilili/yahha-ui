@@ -1,5 +1,6 @@
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 import { cx } from '../../internal/cx.js';
+import { LoadingMark } from '../../internal/LoadingMark.js';
 import styles from './button.module.css';
 
 export interface ButtonProps extends ComponentPropsWithRef<'button'> {
@@ -28,6 +29,8 @@ export function Button({
   type = 'button',
   ...props
 }: ButtonProps) {
+  const hasStartIcon = startIcon != null && typeof startIcon !== 'boolean' && startIcon !== '';
+
   return (
     <button
       {...props}
@@ -38,15 +41,18 @@ export function Button({
       data-variant={variant}
       data-size={size}
     >
-      {loading ? (
-        <span className={styles.spinner} aria-hidden="true" />
-      ) : startIcon ? (
-        <span className={styles.buttonIcon} aria-hidden="true">
-          {startIcon}
+      {hasStartIcon ? (
+        <span className={styles.buttonIcon} data-loading={loading || undefined} aria-hidden="true">
+          <span className={styles.startIcon} aria-hidden="true">
+            {startIcon}
+          </span>
+          {loading && <LoadingMark className={styles.inlineLoading} />}
         </span>
+      ) : loading ? (
+        <LoadingMark className={styles.loadingWithoutIcon} />
       ) : null}
       {children}
-      {endIcon && (
+      {endIcon != null && typeof endIcon !== 'boolean' && endIcon !== '' && (
         <span className={styles.buttonIcon} aria-hidden="true">
           {endIcon}
         </span>
