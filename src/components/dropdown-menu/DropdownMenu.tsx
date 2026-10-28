@@ -1,8 +1,10 @@
 import { useId, type ComponentPropsWithRef, type ReactElement } from 'react';
 import { Menu as BaseMenu } from '@base-ui/react/menu';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { cx } from '../../internal/cx.js';
 import { renderInteractivePopup } from '../../internal/InteractivePopup.js';
 import { PortalTheme } from '../../internal/PortalTheme.js';
+import { useTriggerDirection } from '../../internal/useTriggerDirection.js';
 import styles from './dropdown-menu.module.css';
 
 export interface DropdownMenuItem {
@@ -54,46 +56,49 @@ export function DropdownMenu({
   ref,
 }: DropdownMenuProps) {
   const triggerId = useId();
+  const { direction, triggerRef } = useTriggerDirection();
   return (
-    <BaseMenu.Root
-      open={open}
-      defaultOpen={defaultOpen}
-      onOpenChange={onOpenChange}
-      disabled={disabled}
-      triggerId={triggerId}
-      modal={false}
-    >
-      <BaseMenu.Trigger id={triggerId} render={trigger} disabled={disabled} />
-      <BaseMenu.Portal container={portalContainer}>
-        <PortalTheme>
-          <BaseMenu.Positioner
-            side={side}
-            align={align}
-            sideOffset={sideOffset}
-            collisionPadding={12}
-            className={styles.positioner}
-          >
-            <BaseMenu.Popup
-              render={renderInteractivePopup}
-              ref={ref}
-              className={cx(styles.popup, className)}
-              style={style}
+    <DirectionProvider direction={direction}>
+      <BaseMenu.Root
+        open={open}
+        defaultOpen={defaultOpen}
+        onOpenChange={onOpenChange}
+        disabled={disabled}
+        triggerId={triggerId}
+        modal={false}
+      >
+        <BaseMenu.Trigger id={triggerId} ref={triggerRef} render={trigger} disabled={disabled} />
+        <BaseMenu.Portal container={portalContainer}>
+          <PortalTheme dir={direction}>
+            <BaseMenu.Positioner
+              side={side}
+              align={align}
+              sideOffset={sideOffset}
+              collisionPadding={12}
+              className={styles.positioner}
             >
-              {items.map((item) => (
-                <BaseMenu.Item
-                  key={item.id}
-                  label={item.label}
-                  disabled={item.disabled}
-                  onClick={item.onSelect}
-                  className={cx(styles.item, item.destructive && styles.destructive)}
-                >
-                  {item.label}
-                </BaseMenu.Item>
-              ))}
-            </BaseMenu.Popup>
-          </BaseMenu.Positioner>
-        </PortalTheme>
-      </BaseMenu.Portal>
-    </BaseMenu.Root>
+              <BaseMenu.Popup
+                render={renderInteractivePopup}
+                ref={ref}
+                className={cx(styles.popup, className)}
+                style={style}
+              >
+                {items.map((item) => (
+                  <BaseMenu.Item
+                    key={item.id}
+                    label={item.label}
+                    disabled={item.disabled}
+                    onClick={item.onSelect}
+                    className={cx(styles.item, item.destructive && styles.destructive)}
+                  >
+                    {item.label}
+                  </BaseMenu.Item>
+                ))}
+              </BaseMenu.Popup>
+            </BaseMenu.Positioner>
+          </PortalTheme>
+        </BaseMenu.Portal>
+      </BaseMenu.Root>
+    </DirectionProvider>
   );
 }

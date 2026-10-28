@@ -55,4 +55,6 @@
 .frame[data-framed] .fallback {
   position: absolute;
   inset: 0;
+  min-height: 0;
+  padding: min(var(--chi-space-6, 24px), 7.5%);
 }

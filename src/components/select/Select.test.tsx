@@ -1,7 +1,8 @@
 import { createRef, useState } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { Select } from './Select.js';
 import { ThemeProvider } from '../../theme/ThemeProvider.js';
 
@@ -13,6 +14,161 @@ const options = [
 ];
 
 describe('Select', () => {
+  it.each<{
+    source: string;
+    provider?: 'ltr' | 'rtl';
+    outer?: 'ltr' | 'rtl';
+    native?: 'ltr' | 'rtl';
+    explicit?: string;
+    expected: 'ltr' | 'rtl';
+  }>([
+    { source: 'native RTL container', native: 'rtl', expected: 'rtl' },
+    { source: 'upstream RTL provider', provider: 'rtl', expected: 'rtl' },
+    {
+      source: 'explicit LTR over native and provider RTL',
+      provider: 'rtl',
+      native: 'rtl',
+      explicit: 'ltr',
+      expected: 'ltr',
+    },
+    { source: 'nearest native LTR container', outer: 'rtl', native: 'ltr', expected: 'ltr' },
+    { source: 'uppercase explicit RTL', explicit: 'RTL', expected: 'rtl' },
+    {
+      source: 'uppercase explicit RTL over native and provider LTR',
+      provider: 'ltr',
+      native: 'ltr',
+      explicit: 'RTL',
+      expected: 'rtl',
+    },
+    {
+      source: 'mixed-case explicit LTR over native and provider RTL',
+      provider: 'rtl',
+      native: 'rtl',
+      explicit: 'LtR',
+      expected: 'ltr',
+    },
+  ])('keeps trigger and portaled options in the same direction from $source', async (fixture) => {
+    const user = userEvent.setup();
+    render(
+      <DirectionProvider direction={fixture.provider}>
+        <div dir={fixture.outer}>
+          <div dir={fixture.native}>
+            <Select label="分类" dir={fixture.explicit} options={options} defaultValue="notes" />
+          </div>
+        </div>
+      </DirectionProvider>,
+    );
+    const trigger = screen.getByRole('combobox', { name: '分类' });
+    await user.click(trigger);
+    const photo = await screen.findByRole('option', { name: '相册' });
+    expect(trigger.parentElement?.dir).toBe(fixture.expected);
+    expect(trigger.closest<HTMLElement>('[dir="ltr"], [dir="rtl"]')?.dir).toBe(fixture.expected);
+    expect(photo.closest('[dir="ltr"], [dir="rtl"]')?.getAttribute('dir')).toBe(fixture.expected);
+    await user.keyboard('{End}{Enter}');
+    await waitFor(() => expect(trigger.textContent).toContain('相册'));
+    await waitFor(() => expect(document.activeElement).toBe(trigger));
+  });
+
+  it('follows native direction changes while its portaled options remain open', async () => {
+    const user = userEvent.setup();
+    const select = <Select label="分类" options={options} defaultValue="notes" />;
+    const { rerender } = render(<div dir="rtl">{select}</div>);
+    const trigger = screen.getByRole('combobox', { name: '分类' });
+    await user.click(trigger);
+    const photo = await screen.findByRole('option', { name: '相册' });
+    expect(photo.closest('[dir="ltr"], [dir="rtl"]')?.getAttribute('dir')).toBe('rtl');
+    rerender(<div dir="ltr">{select}</div>);
+    await waitFor(() =>
+      expect(photo.closest('[dir="ltr"], [dir="rtl"]')?.getAttribute('dir')).toBe('ltr'),
+    );
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    expect(trigger.closest('[dir="ltr"], [dir="rtl"]')?.getAttribute('dir')).toBe('ltr');
+    expect(trigger.textContent).toContain('手记');
+    await user.keyboard('{End}{Enter}');
+    await waitFor(() => expect(trigger.textContent).toContain('相册'));
+    await waitFor(() => expect(document.activeElement).toBe(trigger));
+  });
+
+  it('follows a stable child reassigned to another slot and observes its new direction ancestors', async () => {
+    const user = userEvent.setup();
+    const ref = createRef<HTMLButtonElement>();
+    const host = document.body.appendChild(document.createElement('div'));
+    const shadowRoot = host.attachShadow({ mode: 'open' });
+    const sections = ['ltr', 'rtl'].map((direction, index) => {
+      const section = shadowRoot.appendChild(document.createElement('section'));
+      section.dir = direction;
+      section.appendChild(document.createElement('slot')).name = `slot-${index}`;
+      return section;
+    });
+    const select = <Select ref={ref} label="分类" options={options} defaultValue="notes" />;
+    const view = render(<div slot="slot-0">{select}</div>, { container: host });
+    try {
+      const trigger = screen.getByRole('combobox', { name: '分类' });
+      await user.click(trigger);
+      const photo = await screen.findByRole('option', { name: '相册' });
+      expect(trigger.parentElement?.dir).toBe('ltr');
+      expect(photo.closest<HTMLElement>('[dir]')?.dir).toBe('ltr');
+
+      view.rerender(<div slot="slot-1">{select}</div>);
+      expect(trigger.parentElement?.parentElement?.assignedSlot?.name).toBe('slot-1');
+      await waitFor(() => expect(trigger.parentElement?.dir).toBe('rtl'));
+      await waitFor(() => expect(photo.closest<HTMLElement>('[dir]')?.dir).toBe('rtl'));
+
+      await act(async () => {
+        sections[1]!.dir = 'ltr';
+      });
+      await waitFor(() => expect(trigger.parentElement?.dir).toBe('ltr'));
+      await waitFor(() => expect(photo.closest<HTMLElement>('[dir]')?.dir).toBe('ltr'));
+      expect(screen.getByRole('option', { name: '相册' })).toBe(photo);
+      expect(trigger.getAttribute('aria-expanded')).toBe('true');
+      expect(ref.current).toBe(trigger);
+      expect(trigger.textContent).toContain('手记');
+      await user.click(photo);
+      await waitFor(() => expect(trigger.textContent).toContain('相册'));
+      await waitFor(() => expect(document.activeElement).toBe(trigger));
+    } finally {
+      view.unmount();
+      host.remove();
+    }
+  });
+
+  it('inherits and follows its shadow host direction while retaining ref, selection and reset', async () => {
+    const user = userEvent.setup();
+    const ref = createRef<HTMLButtonElement>();
+    const host = document.body.appendChild(document.createElement('div'));
+    host.dir = 'rtl';
+    const shadowRoot = host.attachShadow({ mode: 'open' });
+    try {
+      const { getByRole } = render(
+        <form aria-label="文章">
+          <Select ref={ref} label="分类" name="category" defaultValue="notes" options={options} />
+          <button type="reset">重置</button>
+        </form>,
+        { container: shadowRoot },
+      );
+      const trigger = getByRole('combobox');
+      const form = getByRole('form') as HTMLFormElement;
+      expect(ref.current).toBe(trigger);
+      await user.click(trigger);
+      const photo = await screen.findByRole('option', { name: '相册' });
+      expect(photo.closest('[dir="ltr"], [dir="rtl"]')?.getAttribute('dir')).toBe('rtl');
+      host.dir = 'ltr';
+      await waitFor(() =>
+        expect(photo.closest('[dir="ltr"], [dir="rtl"]')?.getAttribute('dir')).toBe('ltr'),
+      );
+      expect(trigger.getAttribute('aria-expanded')).toBe('true');
+      expect(ref.current).toBe(trigger);
+      await user.click(photo);
+      await waitFor(() => expect(new FormData(form).get('category')).toBe('photos'));
+      await waitFor(() => expect(shadowRoot.activeElement).toBe(trigger));
+      await user.click(getByRole('button', { name: '重置' }));
+      await waitFor(() => expect(new FormData(form).get('category')).toBe('notes'));
+      expect(trigger.textContent).toContain('手记');
+    } finally {
+      host.remove();
+    }
+  });
+
   it('labels the trigger and associates errors while forwarding ref and style to the button', () => {
     const ref = createRef<HTMLButtonElement>();
     render(

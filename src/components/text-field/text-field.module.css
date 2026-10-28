@@ -56,6 +56,10 @@
 .input[hidden]:not([hidden='until-found']) {
   display: none;
 }
+/* Native date editors have intrinsic sizes that vary between browsers. */
+.input:is([type='date'], [type='time'], [type='datetime-local'], [type='month'], [type='week']) {
+  block-size: var(--chi-control-height, 44px);
+}
 .input::placeholder {
   color: var(--chi-muted, #79656a);
   opacity: 1;

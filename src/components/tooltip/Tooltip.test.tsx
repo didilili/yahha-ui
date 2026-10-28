@@ -1,6 +1,7 @@
 import { createRef, useState } from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import userEvent from '@testing-library/user-event';
 import { IconButton } from '../button/IconButton.js';
 import { ThemeProvider } from '../../theme/ThemeProvider.js';
@@ -9,6 +10,42 @@ import { Tooltip } from './Tooltip.js';
 afterEach(cleanup);
 
 describe('Tooltip', () => {
+  it('keeps portal direction in sync with its native ancestor without remounting trigger refs', async () => {
+    const release = vi.fn();
+    const triggerRef = vi.fn((node: HTMLButtonElement | null) => (node ? release : undefined));
+    const { unmount } = render(
+      <div dir="RTL" data-testid="reading-direction">
+        <Tooltip
+          defaultOpen
+          content="文字方向提示"
+          trigger={<button ref={triggerRef}>方向提示</button>}
+        />
+      </div>,
+    );
+    const popup = await screen.findByText('文字方向提示');
+    const portal = popup.closest<HTMLElement>('[data-chiikawa-theme]')!;
+    await waitFor(() => expect(portal.dir).toBe('rtl'));
+    await act(async () => {
+      screen.getByTestId('reading-direction').dir = 'ltr';
+    });
+    await waitFor(() => expect(portal.dir).toBe('ltr'));
+    expect(triggerRef).toHaveBeenCalledTimes(1);
+    expect(triggerRef).toHaveBeenCalledWith(screen.getByRole('button', { name: '方向提示' }));
+    expect(release).not.toHaveBeenCalled();
+    unmount();
+    expect(release).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses the trigger native direction before an upstream direction provider', async () => {
+    render(
+      <DirectionProvider direction="rtl">
+        <Tooltip defaultOpen content="本地文字提示" trigger={<button dir="ltr">本地提示</button>} />
+      </DirectionProvider>,
+    );
+    const popup = await screen.findByText('本地文字提示');
+    expect(popup.closest<HTMLElement>('[data-chiikawa-theme]')?.dir).toBe('ltr');
+  });
+
   it('opens on keyboard focus and closes on Escape without changing the trigger name', async () => {
     const user = userEvent.setup();
     render(

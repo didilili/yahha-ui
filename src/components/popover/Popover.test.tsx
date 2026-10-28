@@ -1,6 +1,7 @@
 import { createRef, useState } from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import userEvent from '@testing-library/user-event';
 import { Button } from '../button/Button.js';
 import { ThemeProvider } from '../../theme/ThemeProvider.js';
@@ -9,6 +10,58 @@ import { Popover } from './Popover.js';
 afterEach(cleanup);
 
 describe('Popover', () => {
+  it('keeps portal direction in sync with its native ancestor without remounting trigger refs', async () => {
+    const user = userEvent.setup();
+    const release = vi.fn();
+    const triggerRef = vi.fn((node: HTMLButtonElement | null) => (node ? release : undefined));
+    const { unmount } = render(
+      <div dir="RTL" data-testid="reading-direction">
+        <Popover title="阅读设置" trigger={<button ref={triggerRef}>方向设置</button>} />
+      </div>,
+    );
+    const trigger = screen.getByRole('button', { name: '方向设置' });
+    await user.click(trigger);
+    const popup = await screen.findByRole('dialog', { name: '阅读设置' });
+    const portal = popup.closest<HTMLElement>('[data-chiikawa-theme]')!;
+    await waitFor(() => expect(portal.dir).toBe('rtl'));
+    await act(async () => {
+      screen.getByTestId('reading-direction').dir = 'ltr';
+    });
+    await waitFor(() => expect(portal.dir).toBe('ltr'));
+    expect(triggerRef).toHaveBeenCalledTimes(1);
+    expect(triggerRef).toHaveBeenCalledWith(trigger);
+    expect(release).not.toHaveBeenCalled();
+    unmount();
+    expect(release).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses the trigger native direction before an upstream direction provider', async () => {
+    const user = userEvent.setup();
+    render(
+      <DirectionProvider direction="rtl">
+        <Popover title="本地说明" trigger={<button dir="ltr">本地设置</button>} />
+      </DirectionProvider>,
+    );
+    await user.click(screen.getByRole('button', { name: '本地设置' }));
+    const popup = await screen.findByRole('dialog', { name: '本地说明' });
+    expect(popup.closest<HTMLElement>('[data-chiikawa-theme]')?.dir).toBe('ltr');
+  });
+
+  it('reads direction from a replacement trigger while its controlled popup stays open', async () => {
+    const { rerender } = render(
+      <Popover open title="阅读选项" trigger={<Button dir="rtl">阅读选项入口</Button>} />,
+    );
+    const popup = await screen.findByRole('dialog', { name: '阅读选项' });
+    await waitFor(() =>
+      expect(popup.closest<HTMLElement>('[data-chiikawa-theme]')?.dir).toBe('rtl'),
+    );
+    rerender(<Popover open title="阅读选项" trigger={<button dir="ltr">阅读选项入口</button>} />);
+    await waitFor(() =>
+      expect(popup.closest<HTMLElement>('[data-chiikawa-theme]')?.dir).toBe('ltr'),
+    );
+    expect(screen.getByRole('dialog', { name: '阅读选项' })).toBe(popup);
+  });
+
   it('labels the popup, focuses its form and returns focus on Escape', async () => {
     const user = userEvent.setup();
     const inputRef = createRef<HTMLInputElement>();

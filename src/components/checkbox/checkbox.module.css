@@ -58,19 +58,21 @@
   left: 6px;
   top: 7px;
   width: 10px;
-  rotate: -47deg;
 }
 .input:checked:not(:indeterminate):not([aria-checked='mixed'])::before,
 .input:checked:not(:indeterminate):not([aria-checked='mixed'])::after {
   opacity: 1;
   transform: scaleX(1);
 }
+/* Keep the checked angle scoped to checked; optimizers may drop a zero-angle reset. */
+.input:checked:not(:indeterminate):not([aria-checked='mixed'])::after {
+  rotate: -47deg;
+}
 .input:is(:indeterminate, [aria-checked='mixed'])::after {
   left: 3px;
   top: 8px;
   width: 12px;
   opacity: 1;
-  rotate: none;
   transform: scaleX(1);
 }
 .input:focus-visible {

@@ -1,6 +1,6 @@
 import { createRef, useState } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { Tabs } from './Tabs.js';
@@ -18,6 +18,54 @@ const directionItems = ['A', 'B', 'C'].map((label) => ({
 }));
 
 describe('Tabs', () => {
+  it.each([false, true])(
+    'follows stable child slot reassignment and new ancestors with activateOnFocus=%s',
+    async (activateOnFocus) => {
+      const user = userEvent.setup();
+      const host = document.body.appendChild(document.createElement('div'));
+      const shadow = host.attachShadow({ mode: 'open' });
+      const sections = ['ltr', 'rtl'].map((direction, index) => {
+        const section = shadow.appendChild(document.createElement('section'));
+        section.dir = direction;
+        section.appendChild(document.createElement('slot')).name = `slot-${index}`;
+        return section;
+      });
+      const tabs = (
+        <Tabs
+          label="Slotted tabs"
+          items={directionItems}
+          defaultValue="B"
+          activateOnFocus={activateOnFocus}
+        />
+      );
+      const view = render(<div slot="slot-0">{tabs}</div>, { container: host });
+      try {
+        const middle = screen.getByRole('tab', { name: 'B' });
+        await user.click(middle);
+        await act(async () => {
+          view.rerender(<div slot="slot-1">{tabs}</div>);
+        });
+        expect(middle.closest('[slot]')?.assignedSlot?.name).toBe('slot-1');
+        await user.keyboard('{ArrowLeft}');
+        expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'C' }));
+        expect(
+          screen
+            .getByRole('tab', { name: activateOnFocus ? 'C' : 'B' })
+            .getAttribute('aria-selected'),
+        ).toBe('true');
+        await act(async () => {
+          sections[1]!.dir = 'ltr';
+        });
+        await user.keyboard('{ArrowLeft}');
+        expect(document.activeElement).toBe(middle);
+        expect(middle.getAttribute('aria-selected')).toBe('true');
+      } finally {
+        view.unmount();
+        host.remove();
+      }
+    },
+  );
+
   it.each([false, true])(
     'uses explicit RTL arrows with activateOnFocus=%s',
     async (activateOnFocus) => {
@@ -103,6 +151,98 @@ describe('Tabs', () => {
     );
     await user.tab();
     await user.keyboard('{ArrowRight}');
+    expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'C' }));
+  });
+
+  it.each([false, true])(
+    'inherits and follows its shadow host direction with activateOnFocus=%s',
+    async (activateOnFocus) => {
+      const user = userEvent.setup();
+      const host = document.body.appendChild(document.createElement('div'));
+      host.dir = 'rtl';
+      const shadowRoot = host.attachShadow({ mode: 'open' });
+      try {
+        const { getByRole } = render(
+          <Tabs
+            label="Shadow tabs"
+            items={directionItems}
+            defaultValue="B"
+            activateOnFocus={activateOnFocus}
+          />,
+          { container: shadowRoot },
+        );
+        await user.click(getByRole('tab', { name: 'B' }));
+        await user.keyboard('{ArrowLeft}');
+        expect(shadowRoot.activeElement).toBe(getByRole('tab', { name: 'C' }));
+        expect(
+          getByRole('tab', { name: activateOnFocus ? 'C' : 'B' }).getAttribute('aria-selected'),
+        ).toBe('true');
+        await act(async () => {
+          host.dir = 'ltr';
+        });
+        await user.keyboard('{ArrowLeft}');
+        expect(shadowRoot.activeElement).toBe(getByRole('tab', { name: 'B' }));
+      } finally {
+        host.remove();
+      }
+    },
+  );
+
+  it('lets explicit root direction override an RTL shadow host', async () => {
+    const user = userEvent.setup();
+    const host = document.body.appendChild(document.createElement('div'));
+    host.dir = 'rtl';
+    const shadowRoot = host.attachShadow({ mode: 'open' });
+    try {
+      const { getByRole } = render(
+        <Tabs dir="ltr" label="Shadow override" items={directionItems} defaultValue="B" />,
+        { container: shadowRoot },
+      );
+      await user.click(getByRole('tab', { name: 'B' }));
+      await user.keyboard('{ArrowRight}');
+      expect(shadowRoot.activeElement).toBe(getByRole('tab', { name: 'C' }));
+    } finally {
+      host.remove();
+    }
+  });
+
+  it('uses and follows the nearest slotted ancestor direction before its light DOM host', async () => {
+    const user = userEvent.setup();
+    const host = document.body.appendChild(document.createElement('div'));
+    host.dir = 'ltr';
+    const shadowRoot = host.attachShadow({ mode: 'open' });
+    const slotContainer = document.createElement('section');
+    slotContainer.dir = 'rtl';
+    slotContainer.appendChild(document.createElement('slot'));
+    shadowRoot.appendChild(slotContainer);
+    const container = host.appendChild(document.createElement('div'));
+    try {
+      const { getByRole } = render(
+        <Tabs label="Slotted tabs" items={directionItems} defaultValue="B" />,
+        { container },
+      );
+      await user.click(getByRole('tab', { name: 'B' }));
+      await user.keyboard('{ArrowLeft}');
+      expect(document.activeElement).toBe(getByRole('tab', { name: 'C' }));
+      await act(async () => {
+        slotContainer.dir = 'ltr';
+      });
+      await user.keyboard('{ArrowLeft}');
+      expect(document.activeElement).toBe(getByRole('tab', { name: 'B' }));
+    } finally {
+      host.remove();
+    }
+  });
+
+  it('normalizes a native container direction attribute', async () => {
+    const user = userEvent.setup();
+    render(
+      <div dir="RTL">
+        <Tabs label="Native direction" items={directionItems} defaultValue="B" />
+      </div>,
+    );
+    await user.tab();
+    await user.keyboard('{ArrowLeft}');
     expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'C' }));
   });
 

@@ -12,6 +12,7 @@ import {
   type TextDirection,
 } from '@base-ui/react/direction-provider';
 import { cx } from '../../internal/cx.js';
+import { observeNativeDirection } from '../../internal/observeNativeDirection.js';
 import styles from './tabs.module.css';
 
 export interface TabItem {
@@ -58,16 +59,7 @@ export function Tabs({
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    function updateDirection() {
-      const direction = root?.closest('[dir="ltr"], [dir="rtl"]')?.getAttribute('dir');
-      setDomDirection(direction === 'rtl' || direction === 'ltr' ? direction : undefined);
-    }
-    updateDirection();
-    const observer = new MutationObserver(updateDirection);
-    for (let element: HTMLElement | null = root; element; element = element.parentElement) {
-      observer.observe(element, { attributes: true, attributeFilter: ['dir'] });
-    }
-    return () => observer.disconnect();
+    return observeNativeDirection(root, setDomDirection);
   }, []);
   const direction =
     props.dir === 'rtl' || props.dir === 'ltr' ? props.dir : (domDirection ?? inheritedDirection);

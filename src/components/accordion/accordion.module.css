@@ -81,7 +81,8 @@
   display: none;
 }
 .content {
-  padding: 0 calc(28px + var(--chi-space-4, 16px)) var(--chi-space-5, 20px) var(--chi-space-1, 4px);
+  padding-block: 0 var(--chi-space-5, 20px);
+  padding-inline: var(--chi-space-1, 4px) calc(28px + var(--chi-space-4, 16px));
   font-size: var(--chi-font-size-body, 16px);
   line-height: var(--chi-leading-body, 1.8);
   overflow-wrap: anywhere;
