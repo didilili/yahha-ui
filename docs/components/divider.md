@@ -1,28 +1,34 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # Divider 分隔线
 
 用细线区分内容，支持水平、垂直和纯装饰模式。
 
-本页示例按[入门指南](../../README.md#构建与本地安装)（站内路由 `#/guides/getting-started`）在应用入口导入一次 `yahha-ui/style.css` 并包裹 ThemeProvider。交互示例和更多状态见[文档站](../../README.md#本地开发)（站内路由 `#/components/divider`）。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
-默认使用 1px 轻纸线；水平分隔组织章节，垂直分隔组织元信息。可通过 `tokens.line` 覆盖线条颜色。
+```tsx
+import { Divider } from 'yahha-ui';
+```
 
-## API
+<a id="usage"></a>
 
-| 参数                | 类型                               | 默认值       | 说明                                                                        |
-| ------------------- | ---------------------------------- | ------------ | --------------------------------------------------------------------------- |
-| orientation         | 'horizontal' \| 'vertical'         | 'horizontal' | 方向，垂直默认高度 1.5em。                                                  |
-| decorative          | boolean                            | false        | true 时 role=presentation、aria-hidden=true。                               |
-| className / style   | string / CSSProperties             | —            | 作用于根 hr 元素。                                                          |
-| ref                 | ComponentPropsWithRef<'hr'>['ref'] | —            | 指向真实 hr 元素。                                                          |
-| 其他原生属性 / 事件 | ComponentPropsWithRef<'hr'>        | —            | 沿用对应原生元素的事件、`aria-*`、`data-*` 等属性；下表列出的组件属性优先。 |
+## 何时使用
 
-## 使用约定
+用于标出内容主题的转折，或在并列元信息之间作视觉分隔。前者保留默认 hr 语义，后者设置 decorative。
 
-- 不接收 children，不获取焦点，没有键盘操作。
-- 水平默认宽度 100%，上下间距 20px；垂直布局可通过 style 调整高度与间距。
-- 完整阅读示例在后记与收藏反馈之间使用装饰分隔，保留阅读顺序；其他工具栏边线由各自布局负责。
+<a id="examples"></a>
 
-## 示例
+## 代码演示
+
+<a id="divider-directions"></a>
+
+### 水平与垂直
+
+正文使用语义分隔；元信息使用隐藏于辅助技术的装饰分隔。
+
+[查看示例文件](../../playground/src/examples/content/DividerExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/DividerExample.tsx -->
 
 ```tsx
 import { Divider, Text } from 'yahha-ui';
@@ -30,7 +36,7 @@ import { Divider, Text } from 'yahha-ui';
 export default function DividerExample() {
   return (
     <div>
-      <Text>正文结束，下面是相关阅读。</Text>
+      <Text>正文结束，下面是本篇手记的阅读信息。</Text>
       <Divider />
       <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <span>阅读约 3 分钟</span>
@@ -41,3 +47,36 @@ export default function DividerExample() {
   );
 }
 ```
+
+<a id="design"></a>
+
+## 分隔线与分组留白
+
+轻纸线支持水平和垂直方向。水平线自带上下留白；放进已有 gap 的布局时，应协调外层间距，避免重复留白。垂直分隔适合短元信息，具体高度可按所在行调整。
+
+<a id="api"></a>
+
+## API
+
+### DividerProps
+
+| 参数                  | 说明                                                                      | 类型                                 | 默认值         |
+| --------------------- | ------------------------------------------------------------------------- | ------------------------------------ | -------------- |
+| `orientation`         | 方向，垂直默认高度 1.5em。                                                | `'horizontal' \| 'vertical'`         | `'horizontal'` |
+| `decorative`          | true 时 role=presentation、aria-hidden=true。                             | `boolean`                            | `false`        |
+| `className / style`   | 作用于根 hr 元素。                                                        | `string / CSSProperties`             | —              |
+| `ref`                 | 指向真实 hr 元素。                                                        | `ComponentPropsWithRef<'hr'>['ref']` | —              |
+| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。 | `ComponentPropsWithRef<'hr'>`        | —              |
+
+<a id="behavior"></a>
+
+## 主题分隔还是装饰
+
+默认分隔会进入辅助技术的阅读结构，适合正文主题的变化。作者、日期等信息之间的线条通常只是装饰，使用 decorative 隐藏其分隔语义。orientation 只决定方向；垂直线也需要按内容判断是否保留语义。Divider 不接收 children，需要分组标题时单独使用标题元素。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [Surface 内容容器](surface.md)：提供背景、边框、圆角与内边距的平面容器，用于组织轻量内容。
+- [Heading 标题](heading.md)：通过真实 h1–h6 元素建立清楚的文档层级。

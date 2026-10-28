@@ -10,6 +10,8 @@ export interface DocExample {
   assets?: { name: string; href: string }[];
   /** Explicit examples own their provider; other examples use the default theme in full setup. */
   themeScope?: 'inherited' | 'explicit';
+  /** Sparse control demonstrations can use a centered canvas; reading/form layouts stay fluid. */
+  previewAlign?: 'center';
 }
 
 export interface ApiRow {
@@ -28,7 +30,8 @@ export interface DocSection {
   api?: { name: string; rows: ApiRow[] }[];
 }
 
-export type ComponentGroup = '通用' | '排版' | '布局' | '表单' | '内容展示' | '导航' | '浮层与反馈';
+export type ComponentGroup =
+  '通用' | '排版' | '布局' | '表单' | '内容展示' | '导航' | '浮层' | '反馈';
 export type ConfigurationGroup = '主题配置';
 export type ComponentCatalogGroup = ComponentGroup | ConfigurationGroup;
 

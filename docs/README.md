@@ -2,9 +2,9 @@
 
 首次了解这套组件库，可先看[项目介绍与实际界面](../README.md)；[完整博客](../examples/blog/README.md)、[静态部署](deployment.md)与[素材分发范围](assets-and-distribution.md)分别说明场景接入、网站输出和素材来源。
 
-组件视觉总览（站内路由 `#/components`）将 29 个 UI 组件按通用、排版、布局、表单、内容展示、导航、浮层与反馈分为七组；ThemeProvider 作为独立的主题配置入口。先看真实样式小样，再进入对应示例与 API；搜索和分类保留在总览 URL，浏览器返回后可以接着查看。页面复用 `component-catalog.ts` 的目录与分类，不维护另一份组件清单。
+组件视觉总览（站内路由 `#/components`）将 29 个 UI 组件按通用、排版、布局、表单、内容展示、导航、浮层、反馈分为八组；ThemeProvider 作为独立的主题配置入口。先看真实样式小样，再进入对应示例与 API；搜索和分类保留在总览 URL，浏览器返回后可以接着查看。页面复用 `component-catalog.ts` 的目录与分类，不维护另一份组件清单。
 
-在仓库根目录完成 `npm ci` 后运行 `npm run dev`，打开终端输出的本地地址。将本文的 `#/...` 追加在该地址后即可访问相应交互页面；Markdown 链接直接指向仓库文件，便于在 GitHub 阅读。站内提供 30 个独立组件文档入口（29 个 UI 组件与 ThemeProvider）、86 个实时 TSX 示例、API 表格、入门、样式与状态场景指南。本文索引覆盖 29 份组件 Markdown；Button / IconButton 共用一份。组合示例包括[文章编辑与管理源码](../playground/src/examples/scenes/ArticleActions.tsx)（`#/guides/states?section=article-actions`）和[个人博客归档源码](../playground/src/examples/scenes/BlogArchive.tsx)（`#/guides/states?section=archive`）。
+在仓库根目录完成 `npm ci` 后运行 `npm run dev`，打开终端输出的本地地址。将本文的 `#/...` 追加在该地址后即可访问相应交互页面；Markdown 链接直接指向仓库文件，便于在 GitHub 阅读。站内提供 30 个独立组件文档入口（29 个 UI 组件与 ThemeProvider）、95 个实时 TSX 示例、API 表格、入门、样式与状态场景指南。本文索引覆盖 30 份组件 Markdown，每个文档入口都有对应文件。组合示例包括[文章编辑与管理源码](../playground/src/examples/scenes/ArticleActions.tsx)（`#/guides/states?section=article-actions`）和[个人博客归档源码](../playground/src/examples/scenes/BlogArchive.tsx)（`#/guides/states?section=archive`）。
 
 [设计语言](design-language.md) 说明漫画手账的深墨轮廓，以及按钮、白底字段、纸签、栏目和便笺浮层的结构差异。文档站统一呈现奶白、暖墨与轻粉的默认语言；三套角色配色在 ThemeProvider 文档中作为可选预设展示。
 
@@ -12,9 +12,9 @@
 
 状态与场景（`#/guides/states`，见[指南源码](../playground/src/docs/guides.tsx)）提供个人博客归档、文章编辑与管理、加载恢复、空态与 404 的同源 TSX 组合示例；它们复用已有组件，不新增公共状态组件。
 
-组件的公开 Props、实现中的默认值与原生属性作用目标是 API 契约依据。`playground/src/docs/` 维护站内详细说明与 API；`docs/components/` 提供适合仓库阅读的 Markdown 说明。两处正文和 API 目前分别维护，修改组件能力时需同步核对属性名、类型、必填项、默认值和行为边界；示例同源不代表整篇文档自动同步。
+组件的公开 Props、实现中的默认值与原生属性作用目标是 API 契约依据。`playground/src/docs/components/` 是组件说明、API 和示例组织的唯一维护位置；`docs/components/` 由 `npm run sync:docs` 生成。官网与仓库文档共用说明、API、锚点和原始示例，`npm run check:docs` 检查同步、有效结构与示例来源。更新属性时仍须核对实际实现，生成器不会推断运行时默认值。
 
-实时示例在 `playground/src/examples/`，站内预览和展示源码使用同一个 TSX 文件。Markdown 中的入门示例单独维护；真实安装包验收分别编译这两类示例，站内示例还检查 Bundler / NodeNext 类型。`component-catalog.ts` 提供轻量搜索与导航目录，`component-pages.ts` 按文档组加载正文和示例，页面元信息变更时同步目录。
+实时示例在 `playground/src/examples/`，站内预览和展示源码使用同一个 TSX 文件。Markdown 保留同一份 TSX 源码和相对导入；真实安装包验收编译 Markdown 和站内示例，并检查 Bundler / NodeNext 类型。`component-catalog.ts` 提供轻量搜索与导航目录，`component-pages.ts` 按组件加载正文和示例，页面元信息只在目录中维护。
 
 组件从 `yahha-ui` 导入，样式从 `yahha-ui/style.css` 导入。在应用入口加载一次样式，并用 `ThemeProvider` 包住需要主题的区域。示例的 `Example.tsx` 保留实际渲染模块的完整源码；完整接入另给出 `App.tsx`，显示样式导入、示例导入和必要的主题包裹。含素材的示例还需下载对应 artwork 文件，并放在 `Example.tsx` 同级的 `artwork/` 目录，保留文件名与相对路径。
 
@@ -26,7 +26,8 @@
 
 ## 通用
 
-- [Button / IconButton](components/button.md)：文字按钮、图标按钮、加载状态与原生按钮行为。
+- [Button](components/button.md)：触发动作、提交、加载与切换状态。
+- [IconButton](components/icon-button.md)：仅有图标的操作与可访问名称。
 
 ## 排版
 
@@ -60,13 +61,17 @@
 
 - [Tabs](components/tabs.md)：标签与对应内容面板。
 - [Pagination](components/pagination.md)：按钮模式分页，由调用方更新列表，不生成路由链接。
-- [DropdownMenu](components/dropdown-menu.md)：可通过键盘操作的单层动作菜单，不承担值选择。
 
-## 浮层与反馈
+## 浮层
+
+- [DropdownMenu](components/dropdown-menu.md)：可通过键盘操作的单层动作菜单，不承担值选择。
 
 - [Dialog](components/dialog.md)：受控模态弹窗、焦点和 Portal。
 - [Popover](components/popover.md)：带标题的非模态补充面板和短表单。
 - [Tooltip](components/tooltip.md)：视觉文字补充；沿用 Base UI 1.9 约定，触发器须有自身可访问名称。
+
+## 反馈
+
 - [Alert](components/alert.md)：留在页面内的说明、结果与错误提示。
 - [Toast](components/toast.md)：由调用方管理显示状态的提示消息。
 - [EmptyState](components/empty-state.md)：空内容、说明与操作插槽。
@@ -86,3 +91,15 @@
 文档站浏览器验收先执行 `npm run build:demo`，再执行 `npm run test:docs`；它使用构建后的页面和子目录资源路径。状态场景检查失败时，会额外输出 `State scene diagnostics`，记录当时的加载阶段、状态文字、页面可见性、焦点及被隐藏或设为 inert 的祖先节点，随后保留原始错误。单独复验通过不能代替完整验收通过。
 
 试用反馈请保留组件包版本、React / React DOM 版本及构建工具。交互问题再附具体示例或页面、操作顺序、预期与实际结果，以及是否开启减少动效；这样可以先判断问题来自安装、资源接入还是组件交互。
+
+## 站内指南
+
+启动文档站后，按以下路由继续查看组合与完整接入；相关源文件链接可直接在仓库阅读。
+
+- `#/guides/getting-started`：安装、样式与第一个组件。
+- `#/guides/styling`：样式定制与阅读组合。
+- `#/guides/design-baseline`：[设计语言](design-language.md)与默认组件组合。
+- `#/guides/states`：[文章编辑](../playground/src/examples/scenes/ArticleActions.tsx)、[博客归档](../playground/src/examples/scenes/BlogArchive.tsx)、等待与恢复。
+- `#/guides/artwork`：[素材与分发范围](assets-and-distribution.md)。
+
+维护组件页面请遵循[组件文档规范](documentation.md)，修改后运行 `npm run sync:docs` 与 `npm run check:docs`。

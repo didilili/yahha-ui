@@ -1,27 +1,52 @@
-import { componentCatalog, type ComponentPageModule } from './component-catalog';
 import type { DocPage } from './types';
 
-const loaders: Record<ComponentPageModule, () => Promise<DocPage[]>> = {
-  foundations: () => import('./foundations').then((module) => module.foundationPages),
-  forms: () => import('./forms').then((module) => module.formPages),
-  'new-forms': () => import('./new-forms').then((module) => module.newFormPages),
-  content: () => import('./content').then((module) => module.contentPages),
-  navigation: () => import('./navigation').then((module) => module.navigationPages),
-  floating: () => import('./floating').then((module) => module.floatingPages),
-  feedback: () => import('./feedback').then((module) => module.feedbackPages),
+const loaders: Record<string, () => Promise<{ default: DocPage }>> = {
+  button: () => import('./components/button'),
+  'icon-button': () => import('./components/icon-button'),
+  badge: () => import('./components/badge'),
+  surface: () => import('./components/surface'),
+  'theme-provider': () => import('./components/theme-provider'),
+  'text-field': () => import('./components/text-field'),
+  'segmented-control': () => import('./components/segmented-control'),
+  select: () => import('./components/select'),
+  textarea: () => import('./components/textarea'),
+  checkbox: () => import('./components/checkbox'),
+  'radio-group': () => import('./components/radio-group'),
+  switch: () => import('./components/switch'),
+  text: () => import('./components/text'),
+  heading: () => import('./components/heading'),
+  link: () => import('./components/link'),
+  divider: () => import('./components/divider'),
+  avatar: () => import('./components/avatar'),
+  image: () => import('./components/image'),
+  skeleton: () => import('./components/skeleton'),
+  spinner: () => import('./components/spinner'),
+  alert: () => import('./components/alert'),
+  tabs: () => import('./components/tabs'),
+  pagination: () => import('./components/pagination'),
+  accordion: () => import('./components/accordion'),
+  'dropdown-menu': () => import('./components/dropdown-menu'),
+  popover: () => import('./components/popover'),
+  tooltip: () => import('./components/tooltip'),
+  dialog: () => import('./components/dialog'),
+  'empty-state': () => import('./components/empty-state'),
+  toast: () => import('./components/toast'),
 };
+const loadedPages = new Map<string, Promise<DocPage>>();
 
-const loadedPages = new Map<string, DocPage>();
-
-/** Load examples and API content only for the requested component's documentation group. */
+/** Load only the requested component page and its unchanged examples. */
 export async function loadComponentPage(id: string): Promise<DocPage> {
-  const cached = loadedPages.get(id);
-  if (cached) return cached;
-  const summary = componentCatalog.find((page) => page.id === id);
-  if (!summary) throw new Error(`Unknown component documentation: ${id}`);
-  const pages = await loaders[summary.module]();
-  for (const page of pages) loadedPages.set(page.id, page);
-  const page = loadedPages.get(id);
-  if (!page) throw new Error(`Missing component documentation: ${id}`);
-  return page;
+  const loader = Object.hasOwn(loaders, id) ? loaders[id] : undefined;
+  if (!loader) throw new Error(`Unknown component documentation: ${id}`);
+  let pending = loadedPages.get(id);
+  if (!pending) {
+    pending = loader()
+      .then((module) => module.default)
+      .catch((error) => {
+        loadedPages.delete(id);
+        throw error;
+      });
+    loadedPages.set(id, pending);
+  }
+  return pending;
 }

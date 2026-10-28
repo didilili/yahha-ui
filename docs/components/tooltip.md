@@ -1,71 +1,170 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # Tooltip 文字提示
 
-为已有操作提供简短的视觉文字标签，鼠标悬停或键盘聚焦时显示。不是重要说明的唯一入口，也不能包含链接、按钮和输入框。
+悬停或聚焦时，为已有操作补充简短的视觉文字标签。
+
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+
+```tsx
+import { Tooltip } from 'yahha-ui';
+```
+
+<a id="usage"></a>
+
+## 何时使用
+
+用于给图标操作补充简短的视觉文字。trigger 必须自带可访问名称，用户应能直接理解并执行操作；悬停提示只作补充。content 仅接受纯文字。
+
+重要说明直接显示在页面中，需要链接、按钮或表单的内容使用 [Popover](popover.md)。操作结果用可见状态文字或 Toast 表达。
+
+<a id="examples"></a>
+
+## 代码演示
+
+<a id="basic"></a>
+
+### 图标操作的文字标签
+
+content 与 IconButton 的名称一致且保持稳定，收藏状态由 aria-pressed 与相邻文字表达。点击直接操作，不依赖悬停。
+
+[查看示例文件](../../playground/src/examples/floating/TooltipBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/floating/TooltipBasic.tsx -->
 
 ```tsx
 import { useState } from 'react';
-import { IconButton, Tooltip } from 'yahha-ui';
+import { IconButton, Text, Tooltip } from 'yahha-ui';
 
-export default function Example() {
+export default function TooltipBasic() {
   const [saved, setSaved] = useState(false);
   const label = '收藏文章';
   return (
-    <div>
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
       <Tooltip
         content={label}
         trigger={
           <IconButton
+            variant="secondary"
             aria-label={label}
             aria-pressed={saved}
-            variant="secondary"
             onClick={() => setSaved((value) => !value)}
           >
             <span aria-hidden="true">{saved ? '★' : '☆'}</span>
           </IconButton>
         }
       />
-      <p role="status">{saved ? '文章已收藏' : '文章尚未收藏'}</p>
-      <p>点击星星切换收藏；操作和结果都不依赖悬停提示。</p>
+      <Text size="sm" tone="muted" role="status">
+        {saved ? '文章已收藏' : '文章尚未收藏'}
+      </Text>
     </div>
   );
 }
 ```
 
-短提示采用小对白轮廓和指向触发器的墨线箭头，带深墨边、纸边与轻投影。内容保持简短；需要点击和轻交互的补充面板使用 [Popover](popover.md)，需要遮罩并集中完成的模态任务使用 [Dialog](dialog.md)。
+<a id="options"></a>
 
-提示在视口边缘自动避让，长文字可在可用高度内滚动。箭头不随内容滚动；无法居中指向触发器时隐藏，以避免错误指向。
+### 延迟、方向与禁用提示
+
+悬停“加入稍后阅读” 0.8 秒后在下方显示提示，键盘聚焦立即显示；关闭提示后仍可点击按钮并查看回调结果，不维护阅读列表。
+
+[查看示例文件](../../playground/src/examples/floating/TooltipOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/floating/TooltipOptions.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Button, Text, Tooltip } from 'yahha-ui';
+
+export default function TooltipOptions() {
+  const [disabled, setDisabled] = useState(false);
+  const [message, setMessage] = useState('尚未触发操作。');
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
+      <div>
+        <Tooltip
+          disabled={disabled}
+          delay={800}
+          side="bottom"
+          content="加入稍后阅读"
+          trigger={
+            <Button variant="secondary" onClick={() => setMessage('已触发“加入稍后阅读”操作。')}>
+              加入稍后阅读
+            </Button>
+          }
+        />
+      </div>
+      <Button
+        variant="ghost"
+        aria-pressed={disabled}
+        onClick={() => setDisabled((value) => !value)}
+      >
+        关闭文字提示
+      </Button>
+      <Text size="sm" tone="muted" role="status">
+        {message}
+      </Text>
+      <Text size="sm" tone="muted">
+        当前文字提示：{disabled ? '已关闭' : '已开启'}。
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="design"></a>
+
+## 显示与关闭
+
+默认悬停 400ms 后显示，键盘聚焦时立即显示。鼠标可以移入提示阅读文字，离开触发器与提示后收起。disabled 只关闭提示，不改变原按钮的可用状态。
+
+每个 Tooltip 独立计算悬停延迟。从一个触发器移动到另一个时，仍按后者的 delay 等待， 当前没有跨实例共用的延迟分组。
+
+<a id="api"></a>
 
 ## API
 
-| 属性              | 类型                            | 默认值   | 说明                                                                 |
-| ----------------- | ------------------------------- | -------- | -------------------------------------------------------------------- |
-| trigger           | ReactElement                    | 必填     | 可聚焦的按钮，例如 Button 或 IconButton；须有自身可访问名称。        |
-| content           | string                          | 必填     | 简短纯文字，与触发器名称一致或紧密对应；类型不接受交互节点。         |
-| open              | boolean                         | —        | 受控展开状态；同时响应 onOpenChange。                                |
-| defaultOpen       | boolean                         | false    | 非受控初始展开状态；与 open 二选一。                                 |
-| onOpenChange      | (open: boolean) => void         | —        | 悬停、聚焦、Escape 等引起的展开或关闭请求。                          |
-| disabled          | boolean                         | false    | 禁用提示本身，原按钮是否禁用由 trigger 决定。                        |
-| delay             | number                          | 400      | 鼠标悬停等待时间，单位 ms；键盘聚焦立即展示。                        |
-| side              | TooltipProps['side']            | 'top'    | top、bottom、left、right、inline-start、inline-end；空间不足时避让。 |
-| align             | 'start' \| 'center' \| 'end'    | 'center' | 相对触发器对齐。                                                     |
-| sideOffset        | number                          | 8        | 提示与触发器的间距，单位 px。                                        |
-| portalContainer   | TooltipProps['portalContainer'] | body     | Base UI Portal 容器；元素、ShadowRoot、对应 ref 或 null。            |
-| className / style | string / CSSProperties          | —        | 指向提示 Popup div，不作用于触发器、定位层或 Portal。                |
-| ref               | Ref<HTMLDivElement>             | —        | 提示 Popup div，收起卸载后为 null。                                  |
+仅支持下列属性，不透传其余 div 原生属性。
 
-## 可访问性与边界
+### TooltipProps
 
-- 本组件遵循 Base UI 1.9 的视觉标签约定，不自动用提示代替触发器名称，也不自动建立 aria-describedby。图标按钮必须自行提供 aria-label，且与 content 紧密对应。
-- 收藏这类使用 aria-pressed 的切换按钮保持名称稳定，用 pressed 表示当前选中状态；相邻可见的 status 说明操作结果，不把“收藏/取消收藏”的名称变化与 pressed 状态混用。
-- 触屏没有可靠的悬停入口。重要信息直接放在页面，或使用可点击、带标题并支持交互的 Popover；不能只藏在 Tooltip 内。
-- 延迟与禁用示例中的“关闭文字提示”是切换按钮，pressed 为 true 表示提示已关闭。页面始终显示开关状态，触屏直接点击原按钮仍可执行加入稍后阅读的操作。
-- 键盘 Tab 聚焦触发器时立即出现；Escape 收起，焦点仍在触发器。鼠标离开触发器和提示后关闭，点击触发器也会收起。
-- Tooltip 使用 Base UI Provider 管理悬停延迟；每个封装独立管理，不提供跨实例的分组延迟配置。
-- content 只接受 string；不放按钮、链接、表单或必须完成的任务，不承担 Toast 状态播报。
-- 原生 disabled 按钮无法正常获得键盘焦点。不要依赖它的 Tooltip 解释禁用原因，应提供可见文字说明。
-- trigger 保留调用方自己的事件、原生属性和 ref。组件不透传任意 div 原生属性，样式与 ref 作用于 Popup。
-- Portal 同步最近的 ThemeProvider 与 tokens，内置碰撞留白、长文字换行和窄屏最大宽度；不复制页面布局 className。
+| 参数                | 说明                                                                              | 类型                              | 默认值     |
+| ------------------- | --------------------------------------------------------------------------------- | --------------------------------- | ---------- |
+| `trigger` **必填**  | 可聚焦按钮。必须有自身可访问名称，通常使用 Button 或带 aria-label 的 IconButton。 | `ReactElement`                    | —          |
+| `content` **必填**  | 简短纯文字，与 trigger 名称一致或紧密对应。不能包含链接、按钮和表单。             | `string`                          | —          |
+| `open`              | 受控展开状态；同时响应 onOpenChange。                                             | `boolean`                         | —          |
+| `defaultOpen`       | 非受控初始状态，与 open 二选一。                                                  | `boolean`                         | `false`    |
+| `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                           | `(open: boolean) => void`         | —          |
+| `disabled`          | 禁用提示，不改变 trigger 元素本身的 disabled。                                    | `boolean`                         | `false`    |
+| `delay`             | 鼠标悬停等待时间，单位 ms；聚焦时立即展示。                                       | `number`                          | `400`      |
+| `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。          | `TooltipProps['side']`            | `"top"`    |
+| `align`             | 相对触发器的对齐方向。                                                            | `"start" \| "center" \| "end"`    | `"center"` |
+| `sideOffset`        | 提示外框与触发器的间距，单位 px；默认给尖角和按钮焦点圈留出空间。                 | `number`                          | `12`       |
+| `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                         | `TooltipProps['portalContainer']` | `body`     |
+| `className / style` | 作用于 Popup div，不作用于触发器、定位层或 Portal 外层。                          | `string / CSSProperties`          | —          |
+| `ref`               | 指向 Popup div，关闭卸载后为 null。                                               | `Ref<HTMLDivElement>`             | —          |
 
-“文章编辑与管理”（ArticleActions）示例展示 Tooltip 与文章操作的组合。操作名称和结果由触发器及可见文字表达，提示用于补充简短标签。
+<a id="keyboard"></a>
 
-语义依据：[Base UI 1.9 Tooltip 使用说明](<https://github.com/mui/base-ui/blob/v1.9.0/docs/src/app/(docs)/react/components/tooltip/page.mdx>)。
+## 可访问性与键盘
+
+- Tab 聚焦触发器时立即显示；Escape 或点击触发器收起，焦点保留在触发器。
+- 提示不自动通过 aria-describedby 关联到触发器，也不替代触发器自身的可访问名称。 图标按钮仍须提供 aria-label，切换状态通过 aria-pressed 表达并保持名称稳定。
+- 触屏没有可靠的悬停入口。原生 disabled 按钮也无法聚焦，禁用原因和重要说明应直接显示在页面中。
+
+<a id="styling"></a>
+
+## 定位与 Portal
+
+默认显示在触发器上方，外框与触发器间距 12px，空间不足时自动避让，距视口边缘保留 12px；箭头避开气泡圆角，无法准确指向时隐藏。 文字可换行，但提示应保持简短；需要滚动阅读的说明更适合放在页面或 Popover 中。
+
+提示跟随触发器自身或最近容器的显式 dir，使文字、逻辑定位和箭头朝向保持一致；未指定时继承 Base UI DirectionProvider。仅设置 CSS direction 或 dir="auto" 时，请在触发器上同时设置明确的 dir。
+
+Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，不复制页面布局类。 自定义 portalContainer 时，需检查容器的层叠与裁切，避免提示被遮住。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [Popover 浮层](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
+- [IconButton 图标按钮](icon-button.md)：为关闭、收藏等仅用图标表达的操作提供方形点击区域与明确的可访问名称。

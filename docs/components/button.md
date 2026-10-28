@@ -1,66 +1,397 @@
-# Button / IconButton
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
 
-`Button` 渲染原生 `<button>`；`IconButton` 使用同一个按钮实现，适合仅有图标的操作。
+# Button 按钮
 
-## Props 与默认值
+触发提交、收藏或其他操作的原生按钮，提供三种强调程度与完整的交互状态。
 
-- `ButtonProps` 继承原生 button 属性，含 `ref`、`disabled`、`onClick`、`name`、`form` 等；`type` 默认为 `"button"`，表单提交需显式写 `type="submit"`。
-- `variant`：`"primary" | "secondary" | "ghost"`，默认 `"primary"`。
-- `size`：`"sm" | "md" | "lg"`，默认 `"md"`。
-- `loading` 默认 `false`；为 `true` 时禁用按钮、设置 `aria-busy`，并用三墨点在视觉上替换 `startIcon`。前图标隐藏后保留图标空间，按钮文字和 `endIcon` 继续显示；没有前图标时墨点放在已有内边距中，加载切换不增加按钮宽高。
-- `startIcon`、`endIcon` 接收 `ReactNode`，包装元素对辅助技术隐藏；操作含义由按钮文字说明。
-- `IconButtonProps` 不含 `startIcon` / `endIcon`，必须传入 `aria-label`，图标放在 `children` 中。
-- `IconButton` 加载时用同一组三墨点替换原图标，保留固定点击区和 `aria-label`；普通 Button 加载时继续保留文字。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
-`ref` 指向原生 button；`className` 与 `style` 也作用于该 button。组件没有内部业务状态，`loading` 和 `disabled` 由调用方控制。
+```tsx
+import { Button } from 'yahha-ui';
+```
 
-## 默认视觉与状态
+<a id="usage"></a>
 
-- `primary` 使用主题浅色面、2px 深墨轮廓、细亮边与 3px 硬底边，按下时底边收短；`secondary` 为奶白平面描边；`ghost` 保持轻量。
-- 按钮采用圆钝轮廓，三种尺寸的最小高度依次为 `sm` 36px、`md` 44px、`lg` 52px；IconButton 使用相同尺寸的方形点击区域。相应控件字阶为 12 / 14 / 16px、行框为 16 / 20 / 24px；长文字可增高。
-- 文字按钮的前后 SVG 图标按 `sm / md / lg` 使用 16 / 18 / 20px 图框；IconButton 的直接 SVG 图标使用 18 / 20 / 22px 图框。图框在原点击区域内居中，不撑高按钮；保留 SVG 的 `viewBox` 与长宽比。自定义文字、表情或其他插槽内容不按 SVG 尺寸强制缩放。
-- 通过原生 `aria-pressed` 表达收藏等切换状态时，按钮会显示选中提示；状态仍由调用方维护。
-- 选中状态保留浅色面与内侧墨线，三种变体在悬停时使用同一档强调色。悬停只表示可以操作，不撤回收藏状态；键盘焦点另用外侧 2px 轮廓表示。
-- 按下时用 60ms 压低 1px 并收短底边，松手用 150ms 回位；不额外缩放或弹跳。选中按钮按住时仍保留内侧墨线，不临时出现外侧底边。
-- 普通禁用按钮保留可读文字，并移除底边阴影。加载按钮保留原有视觉层次和文字或可访问名称，同时拦截激活。
-- 加载墨点与 Spinner 使用一致的三墨点图形和透明度节拍，不移动文字或点击区域。悬停反馈只在支持悬停的设备上生效；减少动效时取消按压位移，并显示静止墨点。
+## 何时使用
 
-## 使用与排版
+用于触发动作，例如提交表单、保存草稿和切换收藏。页面或地址跳转使用 [Link](link.md)；只有图标的操作使用 [IconButton](icon-button.md)。
 
-- 同一组任务保留一个主要操作，例如“发表留言”；保存草稿等并列操作使用 `secondary`，暂缓或次要操作使用 `ghost`。三个变体的文字与点击尺度相同，层次来自填色、轮廓和按压底边。
-- `sm` 用于正文附近的紧凑操作，`md` 用于常规表单和文章动作，`lg` 用于需要更明显的入口。36 / 44 / 52px 是短文字的最小高度；长名称在容器内完整换行，按钮自然增高，前后图标保留自己的空间。
-- 图标辅助辨认动作，文字应独立说明含义；没有文字的操作改用带 `aria-label` 的 `IconButton`。不要只用星形或颜色表示收藏是否成功。
-- 加载期间保持按钮名称稳定，例如一直使用“保存草稿”，在按钮外用 `role="status"` 提供“正在保存”与完成结果。更改文字也会更改固有宽度，组件不会替业务文案预留宽度；有前图标时，三墨点替换它并保留图标空间。
-- `style={{ width: '100%' }}` 可以适配窄栏；保留组件自身的 padding、行框与轮廓。按钮不截断操作名称，也不需要通过缩小字号来适配手机。
+<a id="examples"></a>
 
-## 示例
+## 代码演示
+
+<a id="button-basic"></a>
+
+### 基本使用
+
+点击按钮，更新相邻文字中的问候次数。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonBasic.tsx -->
 
 ```tsx
 import { useState } from 'react';
-import { Button, IconButton, ThemeProvider } from 'yahha-ui';
-import 'yahha-ui/style.css';
+import { Button, Text } from 'yahha-ui';
 
-export function ButtonExample() {
-  const [saved, setSaved] = useState(false);
+export default function ButtonBasic() {
+  const [count, setCount] = useState(0);
 
   return (
-    <ThemeProvider theme="chiikawa">
-      <Button aria-pressed={saved} onClick={() => setSaved(!saved)}>
-        {saved ? '已收藏' : '收藏这篇文章'}
-      </Button>
-      <IconButton
-        aria-label="取消文章收藏"
-        variant="ghost"
-        disabled={!saved}
-        onClick={() => setSaved(false)}
-      >
-        <span aria-hidden="true">×</span>
-      </IconButton>
-    </ThemeProvider>
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
+      <Button onClick={() => setCount((value) => value + 1)}>打个招呼</Button>
+      <Text size="sm" tone="muted" role="status">
+        已收到 {count} 次问候
+      </Text>
+    </div>
   );
 }
 ```
 
-## 键盘约定
+<a id="button-variants"></a>
 
-保留原生按钮的 Tab 聚焦和 Enter / Space 激活行为。禁用与加载按钮不能聚焦或点击。图标按钮的 `aria-label` 应描述动作，例如“关闭提示”。
+### 强调程度
+
+比较主要、次要与文字按钮的外观，三者依次降低视觉强调；本例为静态对照。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonVariants.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonVariants() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+        {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
+          <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+            <span>
+              {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}
+            </span>
+            <Button variant={variant}>保存草稿</Button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="button-sizes"></a>
+
+### 三种尺寸
+
+比较同一按钮的三档尺寸：sm、md、lg 的常规单行高度为 36、44、52px，默认 md；另展示窄栏长文案换行。本例为静态对照。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonSizes.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonSizes() {
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
+        {(
+          [
+            ['sm', '小号'],
+            ['md', '中号'],
+            ['lg', '大号'],
+          ] as const
+        ).map(([size, label]) => (
+          <div key={size} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+            <span>
+              {label} {size}
+            </span>
+            <Button size={size}>保存草稿</Button>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'grid', gap: 12, width: 'min(100%, 240px)' }}>
+        <span>长文案换行</span>
+        <Button
+          variant="secondary"
+          startIcon={
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+            </svg>
+          }
+          endIcon={
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          }
+          style={{ width: '100%' }}
+        >
+          将这篇周末散步记录加入稍后阅读
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="button-icons"></a>
+
+### 前后图标
+
+比较同一按钮的前置与后置装饰图标；按钮文字应能独立描述动作。本例为静态对照。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonIcons.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonIcons.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonIcons() {
+  const icon = (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+    </svg>
+  );
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>前置图标</span>
+          <Button startIcon={icon}>添加收藏</Button>
+        </div>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>后置图标</span>
+          <Button endIcon={icon}>添加收藏</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="button-states"></a>
+
+### 禁用与异步加载
+
+上方对比三种禁用外观；下方可点击保存，体验有无前置图标时的 1.5 秒模拟加载与完成提示。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonStates.tsx -->
+
+```tsx
+import { useEffect, useId, useState } from 'react';
+import { Button, Text } from 'yahha-ui';
+
+function AsyncAction({ withIcon = false }: { withIcon?: boolean }) {
+  const statusId = useId();
+  const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (!loading) return;
+    // 演示异步完成；实际项目在请求结束后更新状态。
+    const timer = window.setTimeout(() => {
+      setLoading(false);
+      setSaved(true);
+    }, 1500);
+    return () => window.clearTimeout(timer);
+  }, [loading]);
+
+  return (
+    <div
+      role="group"
+      aria-label={withIcon ? '带前图标的异步加载' : '无前图标的异步加载'}
+      style={{ display: 'grid', justifyItems: 'start', gap: 8 }}
+    >
+      <span>{withIcon ? '带前置图标' : '不带图标'}</span>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
+        <Button
+          loading={loading}
+          aria-describedby={statusId}
+          startIcon={
+            withIcon ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M5 3h12l3 3v15H4V3h1Z" strokeWidth="1.8" strokeLinejoin="round" />
+                <path d="M8 3v6h8V3M8 21v-8h8v8" strokeWidth="1.8" strokeLinejoin="round" />
+              </svg>
+            ) : undefined
+          }
+          onClick={() => {
+            setSaved(false);
+            setLoading(true);
+          }}
+        >
+          保存草稿
+        </Button>
+        <Text id={statusId} size="sm" tone="muted" role="status">
+          {loading ? '正在保存…' : saved ? '草稿已保存' : '尚未保存'}
+        </Text>
+      </div>
+    </div>
+  );
+}
+
+export default function ButtonStates() {
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+        {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
+          <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+            <span>
+              {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'} · 禁用
+            </span>
+            <Button variant={variant} disabled>
+              保存草稿
+            </Button>
+          </div>
+        ))}
+      </div>
+      <AsyncAction />
+      <AsyncAction withIcon />
+    </div>
+  );
+}
+```
+
+<a id="button-toggle"></a>
+
+### 切换状态
+
+使用 aria-pressed 表达收藏状态，保持操作名称稳定，选中状态由调用方控制。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonToggle.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonToggle.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Button, Text } from 'yahha-ui';
+
+export default function ButtonToggle() {
+  const [saved, setSaved] = useState(false);
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
+      <Button
+        variant="secondary"
+        aria-pressed={saved}
+        startIcon={
+          <svg
+            viewBox="0 0 24 24"
+            fill={saved ? 'currentColor' : 'none'}
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
+            <path
+              d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        }
+        onClick={() => setSaved((value) => !value)}
+      >
+        收藏文章
+      </Button>
+      <Text size="sm" tone="muted" role="status">
+        {saved ? '已加入收藏' : '尚未收藏'}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="button-form"></a>
+
+### 原生表单提交
+
+填写称呼后提交，在本页显示问候，不发送请求。默认 type 为 button，提交需显式写 type="submit"；必填校验使用浏览器行为。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonForm.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Button, Text, TextField } from 'yahha-ui';
+
+export default function ButtonForm() {
+  const [message, setMessage] = useState('尚未提交');
+
+  return (
+    <form
+      style={{ display: 'grid', justifyItems: 'start', gap: 16, maxWidth: 400 }}
+      onSubmit={(event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        setMessage(`你好，${String(data.get('nickname'))}！`);
+      }}
+    >
+      <TextField label="怎么称呼你" name="nickname" required autoComplete="nickname" />
+      <Button type="submit">提交表单</Button>
+      <Text size="sm" tone="muted" role="status">
+        {message}
+      </Text>
+    </form>
+  );
+}
+```
+
+<a id="design"></a>
+
+## 布局与定制
+
+全宽按钮可设置 `style={{ width: '100%' }}`，长名称会换行并撑高按钮。 多个按钮之间的间距和换行放在外层 flex / grid 容器中设置。需要统一配色时，使用 [ThemeProvider](theme.md) 的主题配置。
+
+<a id="api"></a>
+
+## API
+
+### ButtonProps
+
+| 参数                  | 说明                                                                                     | 类型                                      | 默认值      |
+| --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----------- |
+| `variant`             | 主要、次要或文字按钮。                                                                   | `'primary' \| 'secondary' \| 'ghost'`     | `'primary'` |
+| `size`                | 最小高度依次为 36、44、52px；IconButton 对应为方形点击区域。                             | `'sm' \| 'md' \| 'lg'`                    | `'md'`      |
+| `loading`             | 显示加载图标并禁用按钮，设置 aria-busy。请求与完成状态由调用方管理。                     | `boolean`                                 | `false`     |
+| `startIcon / endIcon` | 装饰内容。加载时 spinner 替换 startIcon，endIcon 与 children 仍保留。                    | `ReactNode`                               | —           |
+| `children`            | 按钮内容。普通 Button 应包含可读的操作名称。                                             | `ReactNode`                               | —           |
+| `type`                | 原生按钮类型。提交表单时显式传入 submit。                                                | `'button' \| 'submit' \| 'reset'`         | `'button'`  |
+| `disabled`            | 禁用按钮。loading 为 true 时也会禁用，不可通过 disabled={false} 覆盖。                   | `boolean`                                 | `false`     |
+| `onClick`             | 原生点击事件；键盘 Enter / Space 激活同样触发。                                          | `MouseEventHandler<HTMLButtonElement>`    | —           |
+| `aria-pressed`        | 用于切换按钮，状态由调用方维护。true 时提供选中视觉。                                    | `boolean \| 'true' \| 'false' \| 'mixed'` | —           |
+| `className / style`   | 作用于根 button，可局部定制尺寸与布局。                                                  | `string / CSSProperties`                  | —           |
+| `ref`                 | 指向原生 button，可用于聚焦。                                                            | `Ref<HTMLButtonElement>`                  | —           |
+| `其余原生属性`        | 支持 name、value、form、title、aria-\*、data-\* 等 button 属性，不支持 href 或 asChild。 | `ComponentPropsWithRef<'button'>`         | —           |
+
+<a id="accessibility"></a>
+
+## 可访问性与键盘
+
+按 Tab 聚焦，Enter / Space 激活。切换操作用 aria-pressed 表达状态，并保持操作名称稳定， 例如用“收藏文章”同时表示收藏和取消收藏。
+
+disabled 或 loading 为真时都会设置原生 disabled，按钮不可聚焦、不可激活。loading 保留文案并设置 aria-busy；请求执行、加载结束和成功或失败提示由调用方处理，结果应在按钮之外清楚呈现。 系统启用减少动效时，按压位移和加载动画停止。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [IconButton 图标按钮](icon-button.md)：为关闭、收藏等仅用图标表达的操作提供方形点击区域与明确的可访问名称。
+- [Link 链接](link.md)：保留原生链接行为，统一下划线与键盘焦点。

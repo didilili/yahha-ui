@@ -1,66 +1,232 @@
-# Dialog
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
 
-基于 Base UI 的受控模态弹窗，包含标题、关闭按钮、可选说明与内容插槽。简短且不含交互的文字提示使用 [Tooltip](tooltip.md)；锚定到触发器的非模态轻交互使用 [Popover](popover.md)。
+# Dialog 弹窗
 
-关闭期间显示信笺退场效果，内容立即停止接收交互；取消后快速按 Enter / Space 不会提交已取消的草稿。调用方需更新 `open` 才会关闭；保持 `open=true` 时弹窗仍可操作。
+需要用户暂时集中注意力时，显示一段独立内容或简短表单。
 
-弹窗采用饱满的信笺轮廓、2px 深墨线、4px 纸边与较宽的轻投影，结合遮罩集中当前任务。它与便笺式锚定浮层区分；减少动效时取消淡入与缩放过渡。
-
-标题与页脚使用轻纸分隔线。关闭按钮的操作区域为 44×44px：无 `illustration` 时对齐标题第一行，有插画时位于弹窗上角。标题使用桌面 24px、手机 20px 字号，长标题自然换行，并为关闭按钮留足空间。
-
-## 编辑与恢复
-
-文档中的标题表单在保存时去除首尾空格；只有空格时保留弹窗并聚焦错误字段。取消、Escape 或关闭按钮不提交草稿，再次打开显示已保存值。这些规则由表单示例管理，Dialog 本身不保存业务数据，也不会自动发起请求。
-
-在“状态与场景 → 文章编辑与管理”中，可以体验菜单打开编辑弹窗、弹窗内选择分类与查看写作便笺。Escape 先关闭当前最上层浮层，回到对应触发器，再关闭编辑弹窗。菜单项打开的弹窗没有常驻 Dialog trigger，因此示例通过 `finalFocus` 指向保留的菜单按钮。
-
-有异步保存时，失败保留输入，提供可见的重试说明；取消或卸载时清理等待，避免已经关闭的草稿晚到后覆盖正文。示例的 700 毫秒计时器仅模拟请求，不表示真实服务器保存。长内容依照弹窗可用高度滚动，不压缩关闭按钮和操作目标。
-
-“文章编辑与管理”（ArticleActions）示例展示长标题、窄屏和嵌套浮层，以及保存、取消、失败恢复和焦点返回；带插画示例展示插画与关闭按钮的布局。
-
-## Props 与默认值
-
-- `open`、`onOpenChange`、`title` 必填。调用方保存 `open` 并响应 `onOpenChange`，不提供内部非受控模式。
-- `trigger` 为可选 `ReactElement`；传入时会作为触发器。自定义触发组件需将 button 原生属性和 `ref` 传至实际元素。
-- `description`、`children`、`footer`、`illustration` 为可选 `ReactNode`。`illustration` 的包装元素带 `aria-hidden="true"`，仅放装饰内容。
-- `closeLabel` 默认 `"关闭弹窗"`，用作右上角关闭按钮的可访问名称。
-- `disablePointerDismissal` 默认 `false`；为 `true` 时，点击弹窗外部不会关闭，Escape 和关闭按钮仍可关闭。
-- `className`、`style`、`ref` 作用于弹窗 Popup div，不作用于遮罩、触发器或 Portal 容器。
-- `portalContainer` 默认使用 Base UI 的 body 容器；可传 `HTMLElement`、`ShadowRoot`、对应的 ref 或 `null`。改变挂载位置时，调用方负责容器的层叠与裁切环境。
-
-`initialFocus`、`finalFocus` 沿用 Base UI Popup 的类型，可传布尔值、元素 ref，或根据交互类型返回目标元素的函数。省略时，打开后聚焦首个可聚焦元素，触摸打开时聚焦 Popup；关闭后返回触发器或先前聚焦元素。传 `false` 会关闭相应的自动焦点移动；使用前需自行保证键盘用户能找到弹窗。
-
-无 `trigger` 时可通过外部状态打开，建议明确设置 `finalFocus`。主题名称与 `tokens` 会传入 Portal；`ThemeProvider` 根元素上的自定义 `className` 不会自动传过去，详见[主题](theme.md)。
-
-## 示例
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
 ```tsx
-import { useRef, useState } from 'react';
-import { Button, Dialog, TextField, ThemeProvider } from 'yahha-ui';
-import 'yahha-ui/style.css';
+import { Dialog } from 'yahha-ui';
+```
 
-export function DialogExample() {
+<a id="usage"></a>
+
+## 何时使用
+
+用于需要集中完成的简短编辑、确认或补充说明。Dialog 是模态弹窗，打开后将焦点保留在当前任务内；普通阅读内容优先放在页面。围绕触发位置展开、允许继续操作页面的轻量交互使用 [Popover](popover.md)。
+
+Dialog 使用受控状态，调用方必须保存 open 并响应 onOpenChange。title 提供弹窗名称，应包含能说明当前任务的文字。
+
+<a id="examples"></a>
+
+## 代码演示
+
+<a id="basic"></a>
+
+### 基本用法
+
+传入触发按钮，用同一份受控状态管理打开与关闭；关闭后焦点回到触发按钮。
+
+[查看示例文件](../../playground/src/examples/feedback/DialogBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/DialogBasic.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Button, Dialog } from 'yahha-ui';
+
+export default function DialogBasic() {
   const [open, setOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <ThemeProvider theme="usagi">
-      <Dialog
-        open={open}
-        onOpenChange={setOpen}
-        trigger={<Button>许个心愿</Button>}
-        title="写下新的心愿"
-        description="这里的内容只在当前页面演示。"
-        initialFocus={inputRef}
-        footer={<Button onClick={() => setOpen(false)}>完成</Button>}
-      >
-        <TextField ref={inputRef} label="心愿" defaultValue="一起去吃拉面" />
-      </Dialog>
-    </ThemeProvider>
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+      trigger={<Button>查看阅读提示</Button>}
+      title="留一点时间给阅读"
+      description="忙碌的时候，也可以留下一小段安静的阅读时间。"
+    >
+      <p>挑一篇喜欢的文章，从今天最想读的段落开始。</p>
+    </Dialog>
   );
 }
 ```
 
-## 键盘约定
+<a id="form"></a>
 
-打开后，Tab / Shift+Tab 的焦点保留在模态弹窗内；Escape 请求关闭。调用方必须更新 `open` 才会真正关闭。标题与说明会关联到 dialog，不要省略有意义的 `title`。
+### 修改并保存站点标题
+
+打开后填写标题，保存后仅在本页显示结果；取消或关闭会放弃草稿，再次打开仍是上次保存的标题。
+
+[查看示例文件](../../playground/src/examples/feedback/DialogForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/DialogForm.tsx -->
+
+```tsx
+import { useId, useRef, useState, type FormEvent } from 'react';
+import { Button, Dialog, Text, TextField } from 'yahha-ui';
+
+export default function DialogForm() {
+  const [open, setOpen] = useState(false);
+  const [saved, setSaved] = useState('');
+  const [error, setError] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const formId = useId();
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const title = String(data.get('title') ?? '').trim();
+    if (!title) {
+      setError('请输入站点标题，不能只填写空格。');
+      inputRef.current?.focus();
+      return;
+    }
+    setSaved(title);
+    setOpen(false);
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Dialog
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setError('');
+          setOpen(nextOpen);
+        }}
+        trigger={<Button>修改站点标题</Button>}
+        title="站点标题"
+        description="为这间阅读室取一个喜欢的名字。"
+        initialFocus={inputRef}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setOpen(false)}>
+              取消
+            </Button>
+            <Button type="submit" form={formId}>
+              保存标题
+            </Button>
+          </>
+        }
+      >
+        <form id={formId} onSubmit={handleSubmit}>
+          <TextField
+            ref={inputRef}
+            label="站点标题"
+            name="title"
+            defaultValue={saved}
+            placeholder="例如：小小阅读室"
+            required
+            maxLength={30}
+            hint="请输入 1–30 个字符。"
+            error={error}
+            onChange={() => setError('')}
+          />
+        </form>
+      </Dialog>
+      <Text size="sm" tone="muted" role="status">
+        {saved ? `当前标题：${saved}` : '尚未保存标题。'}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="external"></a>
+
+### 外部按钮打开与焦点返回
+
+外部按钮打开阅读提醒，点击弹窗外部不会关闭。使用“返回阅读”、Escape 或关闭按钮收起后，焦点回到外部按钮。
+
+[查看示例文件](../../playground/src/examples/feedback/DialogExternal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/DialogExternal.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { Button, Dialog } from 'yahha-ui';
+
+export default function DialogExternal() {
+  const [open, setOpen] = useState(false);
+  const returnRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
+      <Button ref={returnRef} variant="secondary" onClick={() => setOpen(true)}>
+        查看阅读提醒
+      </Button>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        title="阅读提醒"
+        description="给长文章留一段从容的阅读时间。"
+        finalFocus={returnRef}
+        disablePointerDismissal
+        footer={<Button onClick={() => setOpen(false)}>返回阅读</Button>}
+      >
+        <p>长文章可以分几次读完。先找一个舒服的位置，按照自己的节奏慢慢读。</p>
+      </Dialog>
+    </div>
+  );
+}
+```
+
+<a id="design"></a>
+
+## 状态与反馈
+
+触发器与关闭操作发出 onOpenChange 请求，调用方更新 open 后才改变打开状态。 footer 中的按钮需自行关闭弹窗或提交表单，提交不会自动关闭。
+
+编辑时由调用方区分草稿与已保存值，并决定取消、保存成功和失败时如何处理输入。组合示例见 [文章编辑与管理](../README.md#站内指南)，菜单打开编辑弹窗后通过 finalFocus 返回保留的菜单按钮。
+
+<a id="api"></a>
+
+## API
+
+### DialogProps
+
+| 参数                      | 说明                                                                                                                                                                              | 类型                             | 默认值                           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | -------------------------------- |
+| `open` **必填**           | 是否打开弹窗。组件不提供 defaultOpen 或内部非受控状态。                                                                                                                           | `boolean`                        | —                                |
+| `onOpenChange` **必填**   | 打开或关闭请求发生时调用；调用方更新 open 才会改变可见状态。                                                                                                                      | `(open: boolean) => void`        | —                                |
+| `title` **必填**          | 弹窗标题，同时提供弹窗的可访问名称，应包含有意义的文字。                                                                                                                          | `ReactNode`                      | —                                |
+| `trigger`                 | 可选触发元素。自定义组件需要把 button 原生属性、事件和 ref 传给实际元素；使用 Button 即可。                                                                                       | `ReactElement`                   | —                                |
+| `description`             | 标题下方的补充说明，会关联到弹窗的可访问描述。                                                                                                                                    | `ReactNode`                      | —                                |
+| `children`                | 弹窗正文，适合简短内容或表单。                                                                                                                                                    | `ReactNode`                      | —                                |
+| `footer`                  | 底部操作区。自定义按钮需自行更新状态或提交表单。                                                                                                                                  | `ReactNode`                      | —                                |
+| `illustration`            | 装饰插画；整个插槽隐藏于辅助技术，不要在其中放必要信息或操作。                                                                                                                    | `ReactNode`                      | —                                |
+| `initialFocus`            | 可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。 | `DialogProps['initialFocus']`    | `首个可聚焦元素；触摸时为 Popup` |
+| `finalFocus`              | 可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。                              | `DialogProps['finalFocus']`      | `触发器或先前聚焦元素`           |
+| `portalContainer`         | Portal 挂载位置，支持元素、ShadowRoot、对应 ref 或 null。自定义容器的层叠、裁切环境由调用方负责。                                                                                 | `DialogProps['portalContainer']` | `body`                           |
+| `disablePointerDismissal` | 阻止点击弹窗外部关闭；Escape、关闭按钮与受控状态仍有效。                                                                                                                          | `boolean`                        | `false`                          |
+| `closeLabel`              | 关闭按钮的可访问名称。                                                                                                                                                            | `string`                         | `"关闭弹窗"`                     |
+| `className / style`       | 作用于弹窗 Popup div；不透传其余 div 原生属性。                                                                                                                                   | `string / CSSProperties`         | —                                |
+| `ref`                     | 指向弹窗 Popup div。未打开时该元素通常未挂载。                                                                                                                                    | `Ref<HTMLDivElement>`            | —                                |
+
+<a id="keyboard-and-theme"></a>
+
+## 可访问性与键盘
+
+- 触发按钮可用 Enter / Space 打开。打开后 Tab / Shift+Tab 在弹窗内循环，页面其他内容暂不可操作，页面滚动被锁定。Escape、关闭按钮或点击外部请求关闭； disablePointerDismissal 只阻止外部点击关闭。
+- 默认聚焦首个可聚焦元素，通常是内置关闭按钮；触摸打开时聚焦弹窗本身，避免自动唤起键盘。 短表单可用 initialFocus 指定输入框；设为 false 时需自行安排进入弹窗的焦点。
+- 关闭后默认返回触发器或先前聚焦元素。省略 trigger、从外部状态打开时，建议通过 finalFocus 指定仍然存在的返回位置。
+- title 作为可访问名称，description 作为补充描述。illustration 插槽对辅助技术隐藏，只放装饰内容。
+
+<a id="styling"></a>
+
+## 内容布局与 Portal
+
+长标题自动换行，内容超出可用高度时整个弹窗滚动，footer 不固定在底部。复杂表单或长篇正文更适合独立页面，避免把必要操作埋在长滚动区中。
+
+弹窗文字与布局方向跟随 Portal 目标；仅设置触发器所在容器的 dir，不会影响 body 中的弹窗。需要局部 RTL 时，可使用带 dir="rtl" 的 portalContainer。
+
+Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，不复制页面布局类。 自定义 portalContainer 时，需检查容器的层叠与裁切，确保遮罩和弹窗都能正确覆盖页面。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [Popover 浮层](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
+- [Alert 静态提示](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。
+- [Toast 提示消息](toast.md)：在页面中反馈保存、完成或失败等操作结果，支持说明与补充操作。

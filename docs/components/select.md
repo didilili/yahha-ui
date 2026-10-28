@@ -1,53 +1,39 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # Select 下拉选择器
 
 在有限的文章分类、排序或归档选项中选择一项。
 
-触发器是白底、2px 深墨线的字段长框；18px 展开箭头以圆端墨线表达，展开后转向。选项面板使用便笺轮廓与轻纸边投影，选中纸章勾与键盘高亮分别保留，不把面板当作另一颗按钮。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
-箭头使用 150ms 旋转，菜单以 180ms 淡入，不位移或缩放；关闭立即完成，并取消尚未结束的入场过渡。选中与高亮即时更新；关闭时由 Base UI 管理不可交互状态和焦点恢复。长列表在菜单内滚动，面板在视口边缘自动避让；减少动效和强制颜色下取消过渡。
+```tsx
+import { Select } from 'yahha-ui';
+```
 
-Escape 取消后，紧接着按 Enter 或 Space 不会提交此前高亮的选项；重新打开后仍可正常选择。点向其他字段时保留新的焦点，不把焦点强行拉回触发器。
+<a id="usage"></a>
 
-## 设计与选型
+## 何时使用
 
-- 与 TextField 共用 44px 的常规字段基准、白底和不对称墨线长框；它表示一个可填写的值。主按钮的浅粉色面与按压底边留给提交动作。
-- 标签、提示与错误说明相对字段外缘使用相同的 4px 行内缩进。可编辑字段展开时使用浅纸色面和焦点色边线说明打开状态；错误边线与错误箭头颜色优先，展开反馈不会覆盖错误。只读和禁用保留各自底色与辅助墨色箭头。
-- 菜单以完整便笺浮在字段旁，列表与纸边分开计算可用高度；短视口中保留纸边，选项在菜单内滚动。长标签完整换行，触发器和选项自然增高，不挤压到相邻行。
-- 勾选列始终预留 18px 位置，让选中与未选中文字对齐。选中使用浅粉纸面与 18px 小纸章勾，键盘位置另有内部焦点轮廓；禁用纸章随禁用文字降低强调，仍保留选中含义。只读与禁用保留可读文字。
-- 少量且需要直接比较的互斥选项，可以使用 RadioGroup；同一栏目的轻量切换可以使用 SegmentedControl。Select 适合把有限选项收进字段；它不提供输入搜索或多选。
+从固定列表中选择一项，例如文章分类或排列方式，适合将选项收在下拉列表中。 选项较少且要直接比较说明时使用 [RadioGroup](radio-group.md)；少量简短的互斥筛选值使用 [SegmentedControl](segmented-control.md)；切换对应内容面板使用 [Tabs](tabs.md)。当前 Select 支持单选和键盘前缀匹配，需要输入搜索或多选时应选择适合该交互的组件。
 
-## Props 与默认值
+<a id="examples"></a>
 
-- `label`：`ReactNode`，必填。可见标签，自动关联触发按钮。
-- `options`：`readonly SelectOption[]`，必填。选项列表。value 必须唯一且为非空字符串。
-- `value`：`string | null`。受控当前值，null 表示未选择。
-- `defaultValue`：`string | null`，默认 `null`。非受控初始值；原生表单重置时恢复该初始值。
-- `onValueChange`：`(value: string | null) => void`。用户选择变化时调用，参数为值而非 DOM 事件。
-- `placeholder`：`ReactNode`，默认 `请选择`。没有选中值时显示的补充文字，不能替代 label。
-- `hint / error`：`ReactNode`。通过 aria-describedby 关联；有 error 时设置 aria-invalid。
-- `name / form`：`string`。提交字段名及外部表单 ID；传给内部表单输入。form 也作用于触发按钮。
-- `disabled / required / readOnly`：`boolean`，默认 `false`。禁用、必选、只读。只读允许浏览选项但阻止修改。
-- `autoComplete`：`string`。内部表单输入的浏览器自动填充提示。
-- `portalContainer`：`HTMLElement | ShadowRoot | RefObject<HTMLElement | ShadowRoot | null> | null`，默认 `document.body`。弹出层目标。主题及颜色覆盖通过 PortalTheme 传播。
-- `className`：`string`。根字段 div 的附加类名。
-- `classNames`：`{ label?, trigger?, value?, popup?, option?, hint?, error? }`。各部分附加类名；每个值为 string。popup / option 位于 Portal。
-- `ref / style / id / 其他按钮属性`：`ComponentPropsWithRef<"button">`，默认 `id 自动生成`。作用于真实触发 button；固定 type=button。不提供 children、type、原生 value/defaultValue/onChange。
+## 代码演示
 
-### SelectOption
+<a id="basic"></a>
 
-- `value`：`string`，必填。唯一非空字符串，作为提交值。
-- `label`：`ReactNode`，必填。选项内容；避免嵌套交互元素。
-- `disabled`：`boolean`，默认 `false`。禁用该选项。
-- `textValue`：`string`，默认 `读取选项文字`。带图标或复杂内容时提供明确的键盘前缀匹配文字。
+### 基本使用
 
-## 示例
+提供 label 与 options，未选择时显示 placeholder；标签始终可见。本例只演示选择，不筛选文章。
 
-已在应用入口导入 `yahha-ui/style.css` 并由 `ThemeProvider` 包裹时：
+[查看示例文件](../../playground/src/examples/new-forms/SelectBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectBasic.tsx -->
 
 ```tsx
 import { Select } from 'yahha-ui';
 
-export function SelectBasic() {
+export default function SelectBasic() {
   return (
     <div style={{ maxWidth: 340 }}>
       <Select
@@ -58,31 +44,270 @@ export function SelectBasic() {
           { value: 'reading', label: '读书笔记' },
           { value: 'photos', label: '散步相册' },
         ]}
-        hint="用于文章列表筛选；本例仅演示选择。"
       />
     </div>
   );
 }
 ```
 
-## 键盘与交互
+<a id="controlled"></a>
 
-使用 Tab 聚焦，Enter、Space 或方向键打开；方向键移动、Home / End 跳到边界，输入选项文字进行前缀匹配，Enter / Space 选择，Escape 关闭并返回触发按钮。禁用项可由方向键聚焦以发现其存在，但不能被选中。
+### 受控选择与禁用选项
 
-选中只读选项不会改变值，字段仍可聚焦并参与表单提交。菜单开启不改变当前值；只有确认可用选项时才调用 `onValueChange`。选项的 `label` 可含装饰性内容，装饰应使用 `aria-hidden`，并通过 `textValue` 提供前缀匹配文字。
+使用 value / onValueChange 同步状态，结果行显示当前选择。disabled 选项不可选择，null 清空当前值；本例不重排文章。
+
+[查看示例文件](../../playground/src/examples/new-forms/SelectControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectControlled.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Button, Select, Text } from 'yahha-ui';
+
+export default function SelectControlled() {
+  const [sort, setSort] = useState<string | null>('newest');
+  const labels: Record<string, string> = {
+    newest: '最近发布',
+    oldest: '从第一篇开始',
+    popular: '最多阅读',
+  };
+  return (
+    <div style={{ display: 'grid', gap: 16, maxWidth: 340 }}>
+      <Select
+        label="排列方式"
+        value={sort}
+        onValueChange={setSort}
+        options={[
+          { value: 'newest', label: '最近发布' },
+          { value: 'oldest', label: '从第一篇开始' },
+          { value: 'popular', label: '最多阅读', disabled: true },
+        ]}
+        hint="“最多阅读”暂未开放。"
+      />
+      <Text size="sm" tone="muted" role="status">
+        当前值：{sort === null ? '未选择' : labels[sort]}。
+      </Text>
+      <Button variant="secondary" onClick={() => setSort(null)}>
+        清空选择
+      </Button>
+    </div>
+  );
+}
+```
+
+<a id="states"></a>
+
+### 错误、只读与禁用
+
+选择分类后清除错误，校验由示例维护。readOnly 可浏览选项但不修改；disabled 不可交互。
+
+[查看示例文件](../../playground/src/examples/new-forms/SelectStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectStates.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Select } from 'yahha-ui';
+
+const options = [
+  { value: 'journal', label: '生活手记' },
+  { value: 'reading', label: '读书笔记' },
+];
+
+export default function SelectStates() {
+  const [category, setCategory] = useState<string | null>(null);
+  return (
+    <div style={{ display: 'grid', gap: 24, maxWidth: 340 }}>
+      <Select
+        label="必选分类"
+        options={options}
+        value={category}
+        onValueChange={setCategory}
+        required
+        error={category === null ? '请先选择文章分类。' : undefined}
+        hint="请选择一个文章分类。"
+      />
+      <Select
+        label="只读分类"
+        options={options}
+        defaultValue="journal"
+        readOnly
+        hint="可以查看选项，不能修改。"
+      />
+      <Select
+        label="暂不可用"
+        options={options}
+        defaultValue="reading"
+        disabled
+        hint="此分类暂不可更改。"
+      />
+    </div>
+  );
+}
+```
+
+<a id="form"></a>
+
+### 必选表单与重置
+
+从未选择开始，点击读取表单触发 required 校验；选择后清除错误，通过 name 读取本地表单值，非受控选择随表单重置为未选择。
+
+[查看示例文件](../../playground/src/examples/new-forms/SelectForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectForm.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { Button, Select, Text } from 'yahha-ui';
+
+export default function SelectForm() {
+  const [result, setResult] = useState('');
+  const [invalid, setInvalid] = useState(false);
+  const selectRef = useRef<HTMLButtonElement>(null);
+  return (
+    <form
+      style={{ display: 'grid', gap: 16, maxWidth: 340 }}
+      onInvalidCapture={(event) => {
+        event.preventDefault();
+        setInvalid(true);
+        setResult('');
+        selectRef.current?.focus();
+      }}
+      onSubmit={(event) => {
+        event.preventDefault();
+        setResult(`读取结果：category=${new FormData(event.currentTarget).get('category')}。`);
+      }}
+      onReset={() => {
+        setResult('');
+        setInvalid(false);
+      }}
+    >
+      <Select
+        ref={selectRef}
+        label="归档分类"
+        name="category"
+        required
+        placeholder="请选择归档分类"
+        options={[
+          { value: 'journal', label: '日常手记' },
+          { value: 'reading', label: '读书笔记' },
+          { value: 'photos', label: '散步相册' },
+        ]}
+        onValueChange={() => {
+          setInvalid(false);
+          setResult('');
+        }}
+        hint="必选，请选择归档分类。"
+        error={invalid ? '请选择归档分类后再读取表单。' : undefined}
+      />
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+        <Button type="submit">读取表单</Button>
+        <Button type="reset" variant="secondary">
+          重置为未选择
+        </Button>
+      </div>
+      <Text size="sm" tone="muted" role="status">
+        {result}
+      </Text>
+    </form>
+  );
+}
+```
+
+<a id="long-options"></a>
+
+### 长列表与长选项
+
+单独用八个分类展示列表滚动与长文字换行，保留 340px 窄容器；本例只演示选择，不筛选文章。
+
+[查看示例文件](../../playground/src/examples/new-forms/SelectLongOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectLongOptions.tsx -->
+
+```tsx
+import { Select } from 'yahha-ui';
+
+export default function SelectLongOptions() {
+  return (
+    <div style={{ maxWidth: 340 }}>
+      <Select
+        label="浏览归档分类"
+        defaultValue="journal"
+        options={[
+          { value: 'journal', label: '日常手记' },
+          { value: 'reading', label: '读书笔记' },
+          { value: 'walking', label: '那些沿着河边散步时记录下来的小小发现与漫长想法' },
+          { value: 'photos', label: '散步相册' },
+          { value: 'letters', label: '写给朋友的信' },
+          { value: 'recipes', label: '厨房里的小记录' },
+          { value: 'travel', label: '旅途与见闻' },
+          { value: 'favorites', label: '值得再看的收藏' },
+        ]}
+      />
+    </div>
+  );
+}
+```
+
+<a id="design"></a>
 
 ## 状态与表单
 
-示例中的 `error` 是调用方提供的校验结果：选择有效值后，调用方更新状态并移除错误。组件本身不判断业务规则；只有设置 `required` 才附加原生必选约束，错误文案本身不会阻止提交。
+- value / onValueChange 管理受控选择，null 表示未选择；defaultValue 设置非受控初始值。选项值须为唯一的非空字符串。
+- name 将选中值加入 FormData，form 可关联外部表单。非受控选择随表单重置到初始值；受控选择需由调用方在 onReset 中恢复 value。
+- readOnly 允许打开并浏览选项，保留提交值但阻止修改；disabled 阻止交互与提交。单个 disabled 选项保留在列表中但不可选择。
+- required 保留原生必选约束。校验规则、error 的设置和选择后的错误清除由调用方维护，必选要求还应提供可见说明。
 
-`name` 对应提交的选项 `value`，不会提交展示文字。非受控字段重置恢复 `defaultValue`；受控字段需在表单 `onReset` 中更新 `value`。没有默认值时可用 `null` 表示未选择，不使用空字符串选项充当占位符。
+<a id="api"></a>
 
-外部表单可在字段挂载后出现，或以相同 ID 替换；非受控字段重置始终以当前关联的表单为准。表单取消默认重置时保留当前选择。
+## API
 
-页面的“表单、重置与长选项”示例提供八个归档分类，可以用 End 到达末项、确认后读取表单，再重置检查初始值。错误、只读和禁用示例中的必选字段可以实际选择，观察错误说明与 `aria-invalid` 一起移除。
+### SelectProps
 
-## 状态、样式与能力边界
+| 参数                              | 说明                                                                                               | 类型                                                                                | 默认值          |
+| --------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------------- |
+| `label` **必填**                  | 可见标签，自动关联触发按钮。                                                                       | `ReactNode`                                                                         | —               |
+| `options` **必填**                | 选项列表。value 必须唯一且为非空字符串。                                                           | `readonly SelectOption[]`                                                           | —               |
+| `value`                           | 受控当前值，null 表示未选择。                                                                      | `string \| null`                                                                    | —               |
+| `defaultValue`                    | 非受控初始值；原生表单重置时恢复该初始值。                                                         | `string \| null`                                                                    | `null`          |
+| `onValueChange`                   | 选择值变化时调用，参数为值而非 DOM 事件；受控模式需同步更新 value。                                | `(value: string \| null) => void`                                                   | —               |
+| `placeholder`                     | 没有选中值时显示的补充文字，不能替代 label。                                                       | `ReactNode`                                                                         | `请选择`        |
+| `hint / error`                    | 通过 aria-describedby 关联；有 error 时设置 aria-invalid。                                         | `ReactNode`                                                                         | —               |
+| `name / form`                     | 提交字段名及外部表单 ID；传给内部表单输入。form 也作用于触发按钮。                                 | `string`                                                                            | —               |
+| `disabled / required / readOnly`  | 禁用、必选、只读。只读允许浏览选项但阻止修改。                                                     | `boolean`                                                                           | `false`         |
+| `autoComplete`                    | 内部表单输入的浏览器自动填充提示。                                                                 | `string`                                                                            | —               |
+| `portalContainer`                 | 列表的挂载目标；弹出列表保留当前 ThemeProvider 的主题配置。                                        | `HTMLElement \| ShadowRoot \| RefObject<HTMLElement \| ShadowRoot \| null> \| null` | `document.body` |
+| `className`                       | 根字段 div 的附加类名。                                                                            | `string`                                                                            | —               |
+| `classNames`                      | 各部分附加类名；每个值为 string。popup / option 位于 Portal。                                      | `{ label?, trigger?, value?, popup?, option?, hint?, error? }`                      | —               |
+| `ref / style / id / 其他按钮属性` | 作用于真实触发 button；固定 type=button。不提供 children、type、原生 value/defaultValue/onChange。 | `ComponentPropsWithRef<"button">`                                                   | `id 自动生成`   |
 
-仅提供单字符串选择，不包含输入搜索、多选、异步加载或选项分组。需要可输入筛选时应使用专门的 Combobox。受控表单重置须由调用方更新 value。
+### SelectOption
 
-短单行触发器在桌面和手机均为 44px；手机或粗指针输入字阶为 16px / 24px，长选项自然增高。菜单项至少 44px。禁用项保持可读；键盘焦点与选中勾分开表达，系统强制颜色下仍保留焦点轮廓。
+| 参数             | 说明                                           | 类型        | 默认值         |
+| ---------------- | ---------------------------------------------- | ----------- | -------------- |
+| `value` **必填** | 唯一非空字符串，作为提交值。                   | `string`    | —              |
+| `label` **必填** | 选项内容；避免嵌套交互元素。                   | `ReactNode` | —              |
+| `disabled`       | 禁用该选项。                                   | `boolean`   | `false`        |
+| `textValue`      | 带图标或复杂内容时提供明确的键盘前缀匹配文字。 | `string`    | `读取选项文字` |
+
+<a id="keyboard"></a>
+
+## 可访问性与键盘
+
+- Tab 聚焦触发按钮；Enter、Space 或上下方向键打开列表。方向键移动焦点，Home / End 到达边界，输入选项文字进行前缀匹配；Enter / Space 选择，Escape 关闭并返回触发按钮。
+- 列表打开时，移动焦点不会改变选中值；禁用选项可以由方向键聚焦，以便读取名称，但不能选中。 列表关闭且非只读时，输入字符会直接选择匹配项。
+- 选项只承载选择值，避免在 label 中嵌套按钮或链接。校验失败时，可通过 ref 聚焦触发按钮，让用户重新选择。
+
+<a id="limits"></a>
+
+## 样式定制
+
+字段宽度通过 className 或外层容器设置；style 调整的是触发按钮。 列表挂载在 Portal 中，定制列表和选项时直接使用 classNames.popup / classNames.option， 不依赖字段容器的后代选择器。默认长选项会换行，列表在可用视口内滚动。 设置原生 dir="rtl" 或 dir="ltr" 时，字段与弹出列表保持同一方向；未显式设置时， 优先沿用最近原生容器的方向，再沿用上游方向配置。容器方向变化时，已打开的列表同步更新。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [RadioGroup 单选组](radio-group.md)：将互斥选项和说明完整展示，适合订阅频率、可见范围等少量选择。
+- [SegmentedControl 分段选择](segmented-control.md)：在少量互斥选项间切换，使用原生 radio 保留表单与键盘行为。
+- [DropdownMenu 下拉菜单](dropdown-menu.md)：将文章操作或轻量工具收进一组可通过键盘操作的动作菜单。

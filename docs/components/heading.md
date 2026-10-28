@@ -1,56 +1,136 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # Heading 标题
 
 通过真实 h1–h6 元素建立清楚的文档层级。
 
-本页示例按[入门指南](../../README.md#构建与本地安装)（站内路由 `#/guides/getting-started`）在应用入口导入一次 `yahha-ui/style.css` 并包裹 ThemeProvider。交互示例和更多状态见[文档站](../../README.md#本地开发)（站内路由 `#/components/heading`）。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
-默认字体继承使用方。仅 h2 带一笔短曲线，h1 与 h3–h6 保持清楚的文字层级；长标题自然换行，装饰不改变语义层级。
+```tsx
+import { Heading } from 'yahha-ui';
+```
 
-## API
+<a id="usage"></a>
 
-| 参数                | 类型                               | 默认值 | 说明                                                                        |
-| ------------------- | ---------------------------------- | ------ | --------------------------------------------------------------------------- |
-| level               | 1 \| 2 \| 3 \| 4 \| 5 \| 6         | 2      | 渲染的标题层级，默认字号依次为 32 / 24 / 20 / 18 / 16 / 14px。              |
-| children            | ReactNode                          | —      | 标题内容。                                                                  |
-| className / style   | string / CSSProperties             | —      | 作用于由 level 决定的标题元素。                                             |
-| ref                 | ComponentPropsWithRef<'h2'>['ref'] | —      | 指向真实标题元素。                                                          |
-| 其他原生属性 / 事件 | ComponentPropsWithRef<'h2'>        | —      | 沿用对应原生元素的事件、`aria-*`、`data-*` 等属性；下表列出的组件属性优先。 |
+## 何时使用
 
-## 使用约定
+用于页面、文章和章节标题。按内容结构选择标题层级，默认字号随层级变化。
 
-- ref 指向由 level 选定的 HTMLHeadingElement，属性沿用 React 原生标题元素类型。
-- 标题不管理折叠、锚点或导航。默认没有外边距，布局使用调用方的容器间距。
-- 同一内容组内，标题与正文靠近，章节之间保留更多留白。使用外层布局组织节奏，不需要跳级来获取更小的字号。
-- 中文长标题与不含空格的英文均可自然换行；h2 的墨弧仍只在末行下方保留一笔，不增加重复装饰。
-- 文章标题、摘要和正文之间的留白由外层布局安排；添加作者区或配图时，也应根据文档层级选择标题。
+<a id="examples"></a>
 
-## 示例
+## 代码演示
+
+<a id="heading-levels"></a>
+
+### 标题层级对照
+
+用相同文字比较一级至六级标题，观察各层级的默认字号。
+
+[查看示例文件](../../playground/src/examples/content/HeadingExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/HeadingExample.tsx -->
 
 ```tsx
 import { Heading, Text } from 'yahha-ui';
 
 export default function HeadingExample() {
   return (
+    <div style={{ display: 'grid', gap: 20, maxWidth: '65ch' }}>
+      {([1, 2, 3, 4, 5, 6] as const).map((level) => (
+        <div key={level} style={{ display: 'grid', gap: 4 }}>
+          <Text size="sm" tone="muted">
+            {['一级标题', '二级标题', '三级标题', '四级标题', '五级标题', '六级标题'][level - 1]} h
+            {level}
+            {level === 2 ? '（默认）' : ''}
+          </Text>
+          <Heading level={level}>记录今天的小事</Heading>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+<a id="heading-reading-layout"></a>
+
+### 文章结构与长标题
+
+按 h2、h3、h4 组织真实章节，外层布局提供段距；长标题在窄栏中自然换行。
+
+[查看示例文件](../../playground/src/examples/content/HeadingArticle.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/HeadingArticle.tsx -->
+
+```tsx
+import { Heading, Text } from 'yahha-ui';
+
+export default function HeadingArticle() {
+  return (
     <div style={{ display: 'grid', gap: 32, maxWidth: '65ch' }}>
       <section style={{ display: 'grid', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          章节 h2
+        </Text>
         <Heading level={2}>周末的阅读手记</Heading>
-        <Text>level 同时决定标题语义与默认字号，请按文档层级选择。</Text>
+        <Text>周末的午后，我翻开上次读到一半的书。窗外有风，杯里的茶还温热。</Text>
       </section>
       <section style={{ display: 'grid', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          小节 h3
+        </Text>
         <Heading level={3}>在书页之间休息一下</Heading>
-        <Text>同一主题下的小节用更低一级标题，节前留白大于标题与正文之间的间距。</Text>
+        <Text>读过一章，就走到窗边看看树影。喜欢的句子，用一张纸签记下来。</Text>
         <div style={{ display: 'grid', gap: 8, marginTop: 8 }}>
+          <Text size="sm" tone="muted">
+            小节内标题 h4
+          </Text>
           <Heading level={4}>摘下今天喜欢的一句话</Heading>
           <Text size="sm" tone="muted">
-            标题没有默认外边距，阅读节奏由外层布局组织。
+            今天也有值得慢慢记住的小事。
           </Text>
         </div>
       </section>
       <section style={{ display: 'grid', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          长标题 h3
+        </Text>
         <Heading level={3}>把沿途遇到的小事，整理成可以慢慢读完的一篇长手记</Heading>
-        <Text>长标题保留完整文字，在窄屏中自然换行，不用缩小字号或省略号隐藏内容。</Text>
+        <Text>从河边捡到的一片叶子，到晚饭前看见的一朵云，都放进这篇手记里。</Text>
       </section>
     </div>
   );
 }
 ```
+
+<a id="design"></a>
+
+## 标题间距与长标题
+
+标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。长标题会自然换行，应保留完整文字；不必为了放进一行而降低标题层级。
+
+<a id="api"></a>
+
+## API
+
+### HeadingProps
+
+| 参数                  | 说明                                                                      | 类型                                 | 默认值 |
+| --------------------- | ------------------------------------------------------------------------- | ------------------------------------ | ------ |
+| `level`               | 渲染的标题层级，默认字号依次为 32 / 24 / 20 / 18 / 16 / 14px。            | `1 \| 2 \| 3 \| 4 \| 5 \| 6`         | `2`    |
+| `children`            | 标题内容。                                                                | `ReactNode`                          | —      |
+| `className / style`   | 作用于根 h1–h6 标题 元素。                                                | `string / CSSProperties`             | —      |
+| `ref`                 | 指向真实 h1–h6 标题 元素。                                                | `ComponentPropsWithRef<'h2'>['ref']` | —      |
+| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。 | `ComponentPropsWithRef<'h2'>`        | —      |
+
+<a id="behavior"></a>
+
+## 接续页面的标题层级
+
+例如文章标题使用 h1 时，下一级章节使用 h2，小节使用 h3；嵌入已有页面时，接续所在页面的结构。需要目录或章节链接时，可为标题提供 id，再由页面中的链接引用。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [Text 正文](text.md)：为段落提供统一的字号、行高和语义文字颜色。
+- [Divider 分隔线](divider.md)：用细线区分内容，支持水平、垂直和纯装饰模式。

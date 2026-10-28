@@ -1,0 +1,98 @@
+import SpinnerExample from '../../examples/content/SpinnerExample';
+import spinnerSource from '../../examples/content/SpinnerExample.tsx?raw';
+import SpinnerWaiting from '../../examples/content/SpinnerWaiting';
+import spinnerWaitingSource from '../../examples/content/SpinnerWaiting.tsx?raw';
+import { defineComponentPage } from '../page';
+import { nativeRows, example } from '../page-helpers';
+
+export default defineComponentPage('spinner', {
+  importCode: "import { Spinner } from 'yahha-ui';",
+  sections: [
+    {
+      id: 'usage',
+      title: '何时使用',
+      content: (
+        <p>
+          适合内容区域的短暂等待。按钮请求使用 Button 的 loading；需要按已知内容结构预留空间时，使用
+          Skeleton。
+        </p>
+      ),
+    },
+    {
+      id: 'examples',
+      title: '代码演示',
+      examples: [
+        example(
+          'spinner-sizes',
+          '尺寸对照',
+          '比较小号、中号和大号的外观；墨点不表示真实请求。',
+          SpinnerExample,
+          spinnerSource,
+        ),
+        example(
+          'spinner-waiting',
+          '区块等待与完成状态',
+          '点击按钮切换等待与完成结果；文字提供一份状态说明，墨点不重复播报。真实请求由使用方管理。',
+          SpinnerWaiting,
+          spinnerWaitingSource,
+        ),
+      ],
+    },
+    {
+      id: 'design',
+      title: '等待标记与可见说明',
+      content: (
+        <p>
+          区块等待应配合可见文字说明正在加载什么。三枚墨点仅表示等待，不表达完成百分比；减少动效时保持静止，等待信息仍由文字传达。
+        </p>
+      ),
+    },
+    {
+      id: 'api',
+      title: 'API',
+      api: [
+        {
+          name: 'SpinnerProps',
+          rows: [
+            {
+              name: 'label',
+              type: 'string',
+              defaultValue: '加载中',
+              description: '在 status 内提供的屏幕阅读器文字。',
+            },
+            {
+              name: 'size',
+              type: "'sm' | 'md' | 'lg'",
+              defaultValue: "'md'",
+              description: '默认 16 / 24 / 36px。',
+            },
+            {
+              name: 'role',
+              type: 'AriaRole',
+              defaultValue: "'status'",
+              description: '原生角色，通常保留 status。',
+            },
+            ...nativeRows('span'),
+          ],
+        },
+      ],
+    },
+    {
+      id: 'behavior',
+      title: '只播报一份等待状态',
+      content: (
+        <>
+          <p>
+            默认 role="status"，由 label
+            提供屏幕阅读器文字，图形本身为装饰。外层已有包含可见状态文字的 status 时，将内部 Spinner
+            设为 role="presentation"、aria-hidden="true"，避免同一等待重复播报。
+          </p>
+          <p>
+            请求结束时移除等待标记，并更新为实际完成、失败或空内容说明。等待过久时应提供原因或恢复入口，不让持续转动代替结果；组件不接受
+            children，可见说明放在旁边。
+          </p>
+        </>
+      ),
+    },
+  ],
+});

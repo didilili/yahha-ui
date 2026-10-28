@@ -1,31 +1,34 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # EmptyState 空状态
 
-当列表还没有内容或筛选没有结果时，说明原因，并提供与当前原因匹配的下一步。组件不判断业务是否为空。
+当列表或搜索没有内容时，解释原因，并给出合适的下一步。
 
-本页示例按[入门指南](../../README.md#构建与本地安装)（站内路由 `#/guides/getting-started`）在应用入口导入一次 `yahha-ui/style.css` 并包裹 ThemeProvider。更多可操作状态见[组件文档](../../README.md#本地开发)（站内路由 `#/components/empty-state`）。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
-## 设计与状态
+```tsx
+import { EmptyState } from 'yahha-ui';
+```
 
-- 默认小纸页采用暖墨轮廓与轻粉纸边；不依赖角色插画也能说明状态。提供 `illustration` 后使用调用方的装饰内容，必要信息始终保留在标题和说明中。
-- 首次没有文章，给出创建入口；搜索无结果，保留关键词并提供清空条件。加载失败时使用持续可见的 [Alert](alert.md) 说明问题与重试方式。仍在等待时使用 [Spinner](spinner.md) 或按内容形状组合 [Skeleton](skeleton.md)，完成后再判断是否显示空态。
-- 原生 h3 标题、说明和操作分别排布，可配合默认小纸页或自定义装饰插画。在 320px 窄屏下，长中文、英文和双按钮自然换行，内容按需增高。
-- EmptyState 本身不抢焦点。创建、清空、重置等动作由调用方实现；如果当前按钮随状态切换卸载，调用方应把焦点放在新内容标题或恢复后的输入/操作上。
+<a id="usage"></a>
 
-[加载、空态与 404 指南源码](../../playground/src/docs/guides.tsx)（站内路由 `#/guides/states`）提供首次无内容、暂无收藏和搜索无结果场景；基础示例展示创建、恢复及焦点衔接。404 使用页面组合实现，组件库不提供公共 NotFound 组件。
+## 何时使用
 
-## Props 与默认值
+用于已经确认没有内容的情况，例如首次使用、搜索无结果或列表为空。标题说明原因，描述和操作引导下一步；仍在加载或请求失败时，应展示对应状态，避免让用户误以为内容不存在。
 
-- `title: ReactNode` 必填，渲染为 h3。
-- `description`、`illustration`、`action` 为可选 `ReactNode`，无默认内容。
-- `description` 渲染在 p 内，适合文字或行内内容。
-- `illustration` 的包装元素带 `aria-hidden="true"`，放装饰插画；不要在该槽放需要操作或朗读的内容。
-- `className` 作用于根 div。当前不提供 `ref`、`style` 或其他原生 div 属性透传。
+<a id="examples"></a>
 
-组件没有内部业务状态、自动重试或自动焦点管理。调用方决定何时渲染，并负责 `action` 的行为。未提供 illustration 时显示代码绘制的小纸页。
+## 代码演示
 
-## 示例
+<a id="basic"></a>
 
-下面与站内预览来自同一份 TSX。创建后聚焦新标题，恢复初始空态后聚焦重新出现的创建按钮。
+### 创建内容与恢复空态
+
+创建与恢复只改变当前示例，不发布文章；创建后聚焦内容标题，恢复空态后回到创建按钮。
+
+[查看示例文件](../../playground/src/examples/feedback/EmptyBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/EmptyBasic.tsx -->
 
 ```tsx
 import { useEffect, useId, useRef, useState } from 'react';
@@ -82,16 +85,99 @@ export default function EmptyBasic() {
           }
         />
       )}
-      <Text size="sm" tone="muted">
-        创建与恢复仅改变当前示例，不会发布文章。
-      </Text>
     </div>
   );
 }
 ```
 
-## 键盘与使用约定
+<a id="search"></a>
 
-- 空态本身不获取焦点，也没有额外快捷键。`action` 使用 Button 或链接等可聚焦元素；不要仅在文字或插画上绑定点击。
-- 搜索示例清空关键词后保留焦点在搜索框，输入和筛选不因空态切换而丢失。
-- 搜索结果数量由外部 `role="status"` 提供温和反馈；EmptyState 不默认创建实时播报区。
+### 搜索与恢复操作
+
+输入框实际筛选示例文章。没有结果时提供清空搜索按钮，恢复列表并将焦点返回输入框。
+
+[查看示例文件](../../playground/src/examples/feedback/EmptySearch.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/EmptySearch.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { Button, EmptyState, Text, TextField } from 'yahha-ui';
+
+const articles = ['雨天书单', '周末散步'];
+
+export default function EmptySearch() {
+  const [query, setQuery] = useState('海边');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const matches = articles.filter((title) => title.includes(query.trim()));
+
+  function clearSearch() {
+    setQuery('');
+    inputRef.current?.focus();
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <TextField
+        ref={inputRef}
+        label="搜索文章"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        hint="试试输入「书单」；清空搜索可以查看全部文章。"
+      />
+      <Text size="sm" tone="muted" role="status">
+        {matches.length > 0 ? `找到 ${matches.length} 篇文章。` : '当前关键词没有匹配结果。'}
+      </Text>
+      {matches.length > 0 ? (
+        <ul>
+          {matches.map((title) => (
+            <li key={title}>{title}</li>
+          ))}
+        </ul>
+      ) : (
+        <EmptyState
+          title="没有找到匹配的文章"
+          description="换个关键词，或者先看看全部文章。"
+          action={<Button onClick={clearSearch}>清空搜索</Button>}
+        />
+      )}
+    </div>
+  );
+}
+```
+
+<a id="design"></a>
+
+## 说明原因并给出下一步
+
+首次无内容可引导创建，筛选无结果可引导清空或修改条件。默认的小纸页或自定义插画用于陪衬，原因和恢复办法仍写进文字。描述和操作保持简明，让长文本与多个按钮在窄屏自然换行。
+
+<a id="api"></a>
+
+## API
+
+### EmptyStateProps
+
+| 参数             | 说明                                                       | 类型        | 默认值 |
+| ---------------- | ---------------------------------------------------------- | ----------- | ------ |
+| `title` **必填** | 标题，渲染为 h3；说明当前为什么没有内容。                  | `ReactNode` | —      |
+| `description`    | 说明文字，渲染在 p 内，适合文本或行内内容。                | `ReactNode` | —      |
+| `illustration`   | 装饰插画；插槽带 aria-hidden，必要信息仍需写进标题或说明。 | `ReactNode` | —      |
+| `action`         | 可选按钮或链接，组件不为它绑定业务操作。                   | `ReactNode` | —      |
+| `className`      | 作用于根 div。当前不透传 ref、style 或其他原生 div 属性。  | `string`    | —      |
+
+<a id="accessibility"></a>
+
+## 恢复入口与焦点
+
+action 使用 Button 或链接等可交互元素，创建内容、清空筛选与后续焦点由调用方管理。例如清空搜索后回到输入框，创建成功后进入新内容的合理起点；不要把点击入口只放在装饰插画上。
+
+标题固定为 h3，应与页面标题层级协调。空状态本身没有自动播报；筛选结果动态变化且需要通知时，可像搜索示例一样由外层 role="status" 说明结果数量或无匹配内容。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [Spinner 加载指示](spinner.md)：表达正在进行的等待，提供可读的状态文字。
+- [Skeleton 骨架占位](skeleton.md)：为即将出现的内容预留形状，减少布局跳动。
+- [Alert 静态提示](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。

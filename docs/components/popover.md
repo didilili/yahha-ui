@@ -1,14 +1,68 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # Popover 浮层
 
-锚定到按钮的非模态补充面板，用于简短说明、阅读偏好和小表单。它允许轻交互内容；简短且不含交互的文字提示使用 [Tooltip](tooltip.md)，需要遮罩并集中完成任务时使用 [Dialog](dialog.md)。
+锚定到按钮的补充面板，适合简短说明和轻量交互。
 
-退场时保留便笺视觉，已关闭内容停止接收按键、点击和表单提交。Escape 后的快速按键不提交已取消的内容；受控父级拒绝关闭时仍能继续操作。点击其他字段关闭时保留新的焦点。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+
+```tsx
+import { Popover } from 'yahha-ui';
+```
+
+<a id="usage"></a>
+
+## 何时使用
+
+用于围绕触发位置展开的说明、阅读偏好和短表单，内容可包含链接、按钮和输入框。Popover 是非模态 dialog，用户仍可操作页面；title 必须包含有意义的文字，触发器使用按钮。
+
+只需短文字提示时使用 [Tooltip](tooltip.md)；需要集中完成独立任务或较长编辑时使用 [Dialog](dialog.md)。
+
+<a id="examples"></a>
+
+## 代码演示
+
+<a id="basic"></a>
+
+### 基本说明
+
+省略 open 时由组件维护展开状态；标题与描述自动关联到浮层，正文可以选择和复制。
+
+[查看示例文件](../../playground/src/examples/floating/PopoverBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/floating/PopoverBasic.tsx -->
+
+```tsx
+import { Button, Popover } from 'yahha-ui';
+
+export default function PopoverBasic() {
+  return (
+    <Popover
+      trigger={<Button variant="secondary">关于这份手记</Button>}
+      title="手记说明"
+      description="一些适合停下来慢慢读的记录。"
+    >
+      <p>每周整理一篇，记录散步、阅读和日常发现。</p>
+    </Popover>
+  );
+}
+```
+
+<a id="form"></a>
+
+### 修改并保存收藏夹名称
+
+打开时读取本页已保存名称，取消或关闭会放弃草稿；空白名称给出字段错误，保存后关闭并更新结果。
+
+[查看示例文件](../../playground/src/examples/floating/PopoverForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/floating/PopoverForm.tsx -->
 
 ```tsx
 import { useRef, useState } from 'react';
 import { Button, Popover, Text, TextField } from 'yahha-ui';
 
-export default function Example() {
+export default function PopoverForm() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('我的收藏');
   const [savedName, setSavedName] = useState(name);
@@ -24,11 +78,11 @@ export default function Example() {
   }
 
   return (
-    <div>
+    <div style={{ display: 'grid', gap: 16 }}>
       <Popover
         trigger={<Button variant="secondary">重命名收藏夹</Button>}
         title="收藏夹名称"
-        description="保存后更新名称；取消或关闭会放下本次修改。"
+        description="为收藏的文章取一个容易找到的名字。"
         open={open}
         onOpenChange={changeOpen}
         initialFocus={inputRef}
@@ -53,7 +107,7 @@ export default function Example() {
             value={name}
             required
             maxLength={30}
-            hint="1–30 个字符。未保存的修改不会带到下次打开。"
+            hint="请输入 1–30 个字符。"
             error={error}
             onInvalid={() => setError('请输入名称，不能只填写空格。')}
             onChange={(event) => {
@@ -69,55 +123,73 @@ export default function Example() {
           </div>
         </form>
       </Popover>
-      <p role="status">当前名称：{savedName}</p>
-      <Text size="sm" tone="muted">
-        名称仅保留在本页示例中。
+      <Text size="sm" tone="muted" role="status">
+        当前名称：{savedName}
       </Text>
     </div>
   );
 }
 ```
 
-补充面板采用深墨便笺轮廓、纸边与轻投影，标题下方用轻纸分隔线区分说明与正文。关闭按钮保留 44×44px 操作区域，其中心对齐标题第一行的行框中心；长标题自然换行，右侧留足关闭按钮空间。它承载可交互的补充内容，视觉与短文字对白 Tooltip 分开。
+<a id="design"></a>
+
+## 状态与反馈
+
+省略 open 时由组件维护展开状态，可通过 defaultOpen 设置初始状态；传入 open 后由调用方响应 onOpenChange。disabled 只禁用触发器，受控 open 或 defaultOpen 仍能显示面板。
+
+表单验证、保存和结果反馈由调用方处理，提交不会自动关闭面板。示例在每次打开时从已保存值重建草稿， 保存成功后更新页面并关闭；关闭浮层本身不代表保存或取消业务操作。
+
+<a id="api"></a>
 
 ## API
 
-| 属性              | 类型                            | 默认值           | 说明                                                                        |
-| ----------------- | ------------------------------- | ---------------- | --------------------------------------------------------------------------- |
-| trigger           | ReactElement                    | 必填             | 原生 button 或透传 button 属性、事件与 ref 的组件。                         |
-| title             | ReactNode                       | 必填             | 可见标题，同时为 dialog 提供可访问名称，应包含有意义的文字。                |
-| description       | ReactNode                       | —                | 标题下说明，关联为可访问描述；数字 0 保留，空值和布尔值不渲染。             |
-| children          | ReactNode                       | —                | 正文，可以包含按钮、链接、输入框或短表单。                                  |
-| open              | boolean                         | —                | 受控展开状态；同时响应 onOpenChange。                                       |
-| defaultOpen       | boolean                         | false            | 非受控初始展开状态；与 open 二选一。                                        |
-| onOpenChange      | (open: boolean) => void         | —                | 展开或关闭请求。                                                            |
-| disabled          | boolean                         | false            | 禁用触发器。不会阻止受控 open 或 defaultOpen 展示内容。                     |
-| side              | PopoverProps['side']            | 'bottom'         | top、bottom、left、right、inline-start、inline-end；空间不足时避让。        |
-| align             | 'start' \| 'center' \| 'end'    | 'start'          | 与触发器对齐。                                                              |
-| sideOffset        | number                          | 8                | 与触发器的间距，单位 px。                                                   |
-| initialFocus      | PopoverProps['initialFocus']    | Base UI 默认行为 | 布尔值、元素 ref 或交互类型回调；默认首个可聚焦元素，触摸打开时聚焦 Popup。 |
-| finalFocus        | PopoverProps['finalFocus']      | Base UI 默认行为 | 布尔值、元素 ref 或交互类型回调；默认返回触发器或此前聚焦元素。             |
-| portalContainer   | PopoverProps['portalContainer'] | body             | Base UI Portal 容器；元素、ShadowRoot、对应 ref 或 null。                   |
-| closeLabel        | string                          | '关闭浮层'       | 内置关闭按钮的可访问名称。                                                  |
-| className / style | string / CSSProperties          | —                | 作用于 Popup div，不作用于触发器、定位层或 Portal。                         |
-| ref               | Ref<HTMLDivElement>             | —                | 指向 Popup div，关闭卸载后为 null。                                         |
+仅支持下列属性，不透传其余 div 原生属性。
 
-## 草稿、保存与取消
+### PopoverProps
 
-- 上例明确区分输入草稿与已保存名称。每次打开先从 `savedName` 恢复草稿；取消、Escape、关闭按钮或点击外部都不保存。再次打开仍是上次保存的值。
-- `required` 与 `maxLength` 保留原生约束；提交时还会检查去掉首尾空格后的名称。只有空格时显示字段错误并回到输入框，不直接关闭。
-- 提交成功后显式关闭，结果在面板外持续显示。示例只修改本页状态，不发送网络请求。
-- 这套草稿策略属于调用方；Popover 不会自动决定取消后丢弃还是保留输入。若产品需要保留草稿，应明确提示其规则。
+| 参数                | 说明                                                                                                                                                                              | 类型                              | 默认值                           |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------------------------------- |
+| `trigger` **必填**  | 原生 button 或转发 button 属性、事件和 ref 的组件。                                                                                                                               | `ReactElement`                    | —                                |
+| `title` **必填**    | 可见标题，同时提供 dialog 的可访问名称，应包含文字。                                                                                                                              | `ReactNode`                       | —                                |
+| `description`       | 标题下的补充说明，关联为 dialog 的可访问描述。                                                                                                                                    | `ReactNode`                       | —                                |
+| `children`          | 正文，可含表单、按钮和链接。                                                                                                                                                      | `ReactNode`                       | —                                |
+| `open`              | 受控展开状态；同时响应 onOpenChange。                                                                                                                                             | `boolean`                         | —                                |
+| `defaultOpen`       | 非受控初始状态，与 open 二选一。                                                                                                                                                  | `boolean`                         | `false`                          |
+| `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                                                                                                                           | `(open: boolean) => void`         | —                                |
+| `disabled`          | 禁用触发器；受控 open 或 defaultOpen 仍能显示浮层。                                                                                                                               | `boolean`                         | `false`                          |
+| `initialFocus`      | 可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。 | `PopoverProps['initialFocus']`    | `首个可聚焦元素；触摸时为 Popup` |
+| `finalFocus`        | 可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。                              | `PopoverProps['finalFocus']`      | `触发器或先前聚焦元素`           |
+| `closeLabel`        | 内置关闭按钮的可访问名称。                                                                                                                                                        | `string`                          | `"关闭浮层"`                     |
+| `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。                                                                                                          | `PopoverProps['side']`            | `"bottom"`                       |
+| `align`             | 相对触发器的对齐方向。                                                                                                                                                            | `"start" \| "center" \| "end"`    | `"start"`                        |
+| `sideOffset`        | 与触发器的间距，单位 px。                                                                                                                                                         | `number`                          | `8`                              |
+| `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                                                                                                                         | `PopoverProps['portalContainer']` | `body`                           |
+| `className / style` | 作用于 Popup div，不作用于触发器、定位层或 Portal 外层。                                                                                                                          | `string / CSSProperties`          | —                                |
+| `ref`               | 指向 Popup div，关闭卸载后为 null。                                                                                                                                               | `Ref<HTMLDivElement>`             | —                                |
 
-## 键盘、焦点与边界
+<a id="keyboard"></a>
 
-- 点击、Enter 或 Space 打开；使用 Base UI 的 dialog、标题与描述语义。
-- 内置关闭按钮、Escape、点击外部或焦点离开按 Base UI 行为收起。表单提交不会自动关闭，调用方保存后显式更新 open。
-- 非模态，不锁定滚动、不困住焦点；Tab 可以离开面板。需要模态流程时使用 Dialog。
-- 默认首个可聚焦项包含内置关闭按钮；表单用 initialFocus 指定输入框。没有合适目标时 Base UI 回退到 Popup；触摸打开避免自动唤起键盘。
-- 自定义 trigger 必须转发 button 原生属性、事件与 ref；建议直接使用 Button 或 IconButton。触发器的 ref 放在该元素上。
-- 不透传任意 div 原生属性；ref、style、className 都只指向 Popup。
-- Portal 继承最近的 ThemeProvider 和 tokens，不继承页面布局类。内置 12px 碰撞留白、窄屏宽度限制、长文案换行和溢出滚动。
-- 不提供复杂表格、长篇阅读或大表单的容器；这类内容放到页面或 Dialog。业务状态、验证和保存由调用方管理。
+## 可访问性与键盘
 
-“文章编辑与管理”（ArticleActions）的写作便笺展示草稿、保存、取消和逐层关闭。长标题为关闭按钮预留空间；面板受视口宽高限制，长内容可在面板内滚动。
+- 点击触发器或用 Enter / Space 打开。关闭按钮、Escape、点击外部以及焦点移出触发器和面板时 请求关闭；受控模式下仍需调用方更新 open。
+- 不锁定页面滚动，Tab / Shift+Tab 可以离开面板继续操作页面。Escape 或关闭按钮通常返回触发器； 已通过 Tab 或点击转移到外部的焦点不会被默认回焦抢走。需要固定返回位置时使用 finalFocus。
+- 默认聚焦首个可聚焦元素，通常是内置关闭按钮；触摸打开时聚焦浮层本身，避免自动唤起键盘。 短表单可用 initialFocus 指定输入框，设为 false 时保留当前焦点。
+- title 作为 dialog 的可访问名称，description 作为补充描述。自定义触发器须转发 button 属性、事件和 ref。
+
+<a id="styling"></a>
+
+## 定位与 Portal
+
+默认向下展开并与触发器起点对齐，空间不足时自动避让，距视口边缘保留 12px。 长标题和正文可换行，超出可用高度时面板滚动；大表单和长篇正文宜放在页面或 Dialog 中。
+
+浮层跟随触发器自身或最近容器的显式 dir，文字、关闭按钮与 start 等逻辑定位一起调整；未指定时继承 Base UI DirectionProvider。仅设置 CSS direction 或 dir="auto" 时，请在触发器上同时设置明确的 dir。
+
+Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，不复制页面布局类。 自定义 portalContainer 时，需检查容器的层叠与裁切，确保面板可见且可操作。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [Tooltip 文字提示](tooltip.md)：悬停或聚焦时，为已有操作补充简短的视觉文字标签。
+- [Dialog 弹窗](dialog.md)：需要用户暂时集中注意力时，显示一段独立内容或简短表单。
+- [DropdownMenu 下拉菜单](dropdown-menu.md)：将文章操作或轻量工具收进一组可通过键盘操作的动作菜单。

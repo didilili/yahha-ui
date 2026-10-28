@@ -1,56 +1,278 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # Tabs 标签页
 
-在同一页面的相关内容面板之间切换。[SegmentedControl 分段选择](segmented-control.md) 用于选择互斥值；Tabs 同时管理标签、内容面板及其可访问关联，基于 Base UI Tabs。
+在同一页面的相关内容面板之间切换，用于栏目说明、作者资料和内容分区。
 
-标签列表保持开放，没有外托盘或选中按钮边框；当前标签用下方短墨线标记内容栏目。44px 是最小操作高度，不是外加托盘的高度。值选择所需的浅色纸托盘由 SegmentedControl 提供，两者保留各自语义。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
-## API
+```tsx
+import { Tabs } from 'yahha-ui';
+```
 
-| 属性                               | 类型                            | 默认值     | 说明                                              |
-| ---------------------------------- | ------------------------------- | ---------- | ------------------------------------------------- |
-| label                              | string                          | 必填       | tablist 的可访问名称                              |
-| items                              | TabItem[]                       | 必填       | 唯一 value、label、content 以及可选 disabled      |
-| value                              | string \| null                  | —          | 受控值；null 不选择任何面板                       |
-| defaultValue                       | string \| null                  | 首个可用项 | 非受控初始值，不与 value 同用                     |
-| onValueChange                      | (value: string \| null) => void | —          | 选择变化及非受控自动回退；无可用项时可能收到 null |
-| activateOnFocus                    | boolean                         | false      | 方向键聚焦标签时是否直接选中                      |
-| keepMounted                        | boolean                         | false      | 保留隐藏面板的 DOM 和表单状态                     |
-| classNames                         | { list?, tab?, panel? }         | —          | 对应部位的附加类名                                |
-| ref / className / style / 原生属性 | div 属性                        | —          | 均作用于最外层 div；label 作用于 tablist          |
+<a id="usage"></a>
 
-TabItem 的 value 必须是组内唯一的稳定字符串。label 和 content 是 ReactNode；标签中不放链接、按钮等交互元素。受控模式由调用方确保 value 指向可用项，更新 items 时同步调整状态。
+## 何时使用
 
-## 受控返回与草稿
+多个内容面板共享同一块空间时使用，组件建立标签与对应面板的语义关联。只改变一个简短筛选值时使用 [SegmentedControl](segmented-control.md)；填写带说明的单选答案时使用 [RadioGroup](radio-group.md)；需要收起选项时使用 [Select](select.md)。跨页面导航使用链接。
 
-文档中的“联系与阅读说明”使用 `keepMounted` 保留明信片草稿。切换栏目时，隐藏面板退出可见区域与键盘顺序；再次回来仍能继续填写，但刷新或离开页面不会持久保存输入。
+<a id="examples"></a>
 
-“回到明信片”不仅更新受控值，也在面板显示后通过 TextField 的公开 `ref` 继续到输入框；即使已经选中该栏目，仍可从这个动作继续填写。普通方向键只移动标签焦点，默认使用 Enter / Space 激活，示例不会把每次手动切换都改成自动聚焦输入。栏目结果使用读者看到的中文名称，不将 `write`、`about` 等内部值作为状态文字。
+## 代码演示
 
-## 使用示例
+<a id="basic"></a>
+
+### 基本栏目与内容面板
+
+默认选择第一个可用项。用左右方向键移动焦点，再按 Enter / Space 激活；Tab 进入内容面板。
+
+[查看示例文件](../../playground/src/examples/navigation/TabsBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/TabsBasic.tsx -->
 
 ```tsx
 import { Tabs } from 'yahha-ui';
 
-export function ReadingTabs() {
+export default function TabsBasic() {
   return (
     <Tabs
-      label="阅读栏目"
+      label="小站栏目"
       items={[
-        { value: 'notes', label: '随笔', content: <p>河边的散步记录。</p> },
-        { value: 'photos', label: '相册', content: <p>窗边的小花。</p> },
-        { value: 'archive', label: '归档整理中', content: null, disabled: true },
+        {
+          value: 'notes',
+          label: '日常随笔',
+          content: (
+            <article>
+              <h3 style={{ marginTop: 0 }}>沿着河岸，慢慢走回家</h3>
+              <p style={{ marginBottom: 0 }}>把今天看见的树影和晚霞记下来，留给以后翻阅。</p>
+            </article>
+          ),
+        },
+        {
+          value: 'photos',
+          label: '窗边相册',
+          content: (
+            <ul style={{ margin: 0, paddingLeft: 24 }}>
+              <li>清晨落在书页上的阳光</li>
+              <li>雨停之后的小花</li>
+              <li>厨房里刚烤好的面包</li>
+            </ul>
+          ),
+        },
       ]}
     />
   );
 }
 ```
 
-## 键盘与样式约定
+<a id="controlled-value"></a>
 
-- Tab 进入标签列表，左右方向键及 Home / End 移动焦点；默认按 Enter / Space 激活。activateOnFocus 开启后随聚焦切换。
-- `dir="rtl"` 同时调整布局和左右方向键；RTL 中左箭头移到后一项、右箭头移到前一项，Home / End 仍到首项 / 末项。方向优先使用根节点或最近原生容器的 `dir="ltr"` / `dir="rtl"`，未声明时沿用上游 Base UI DirectionProvider；仅用 CSS 设置 direction 或 `dir="auto"` 时，请同步配置 DirectionProvider。
-- 禁用标签带 aria-disabled，可被方向键聚焦以发现其存在，但不可激活。默认选择首个可用项。
-- 标签与面板的 role、ID、aria-controls、aria-labelledby 由 Base UI 管理。非受控选中项被移除或禁用时由 Base UI 回退。
-- 默认卸载未选中面板，keepMounted 保留其 DOM 和状态；隐藏面板不参与键盘顺序。
-- 标签最小高度 44px，长标题与标签列表自然换行。classNames 不替换默认类名。布局方向固定为水平，不支持路由导航或异步内容加载。
-- 选中墨线与键盘焦点分别显示；受控禁用项仍为选中值时，墨线跟随禁用文字颜色，强制颜色模式使用 GrayText，不把禁用项重新强调为可操作栏目。
+### 受控栏目
+
+用 value / onValueChange 同步选中栏目，下方文字读取同一个值。
+
+[查看示例文件](../../playground/src/examples/navigation/TabsValue.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/TabsValue.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Tabs, Text } from 'yahha-ui';
+
+export default function TabsValue() {
+  const [value, setValue] = useState<string | null>('notes');
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Tabs
+        label="受控的小站栏目"
+        value={value}
+        onValueChange={setValue}
+        items={[
+          { value: 'notes', label: '手记', content: <p>今天想记下的一件小事。</p> },
+          { value: 'photos', label: '相册', content: <p>这一周拍下的树影与晚霞。</p> },
+        ]}
+      />
+      <Text size="sm" tone="muted" role="status">
+        当前栏目：{value === 'notes' ? '手记' : '相册'}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="states"></a>
+
+### 长标签与禁用栏目
+
+缩窄预览可观察长标签换行；方向键可以聚焦“旧站归档（整理中）”读取名称，但不能激活它。
+
+[查看示例文件](../../playground/src/examples/navigation/TabsStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/TabsStates.tsx -->
+
+```tsx
+import { Tabs } from 'yahha-ui';
+
+export default function TabsStates() {
+  return (
+    <Tabs
+      label="小站阅读说明"
+      items={[
+        {
+          value: 'about',
+          label: '关于这个小站与慢慢更新的日常记录',
+          content: <p>这里收集散步、阅读和窗边的小小日常。</p>,
+        },
+        {
+          value: 'contact',
+          label: '来信方式',
+          content: <p>可以在文章末尾找到作者留下的联系方式。</p>,
+        },
+        {
+          value: 'archive',
+          label: '旧站归档（整理中）',
+          content: <p>旧文章正在整理。</p>,
+          disabled: true,
+        },
+      ]}
+    />
+  );
+}
+```
+
+<a id="controlled"></a>
+
+### 组合：切换栏目时保留草稿
+
+写下明信片后切到说明，再切回查看保留的草稿。“回到明信片”会切回并聚焦输入框；草稿只保留在当前示例，不会发送或保存到服务器。
+
+[查看示例文件](../../playground/src/examples/navigation/TabsControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/TabsControlled.tsx -->
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import { Button, Tabs, Text, TextField } from 'yahha-ui';
+
+export default function TabsControlled() {
+  const [value, setValue] = useState<string | null>('write');
+  const [focusDraft, setFocusDraft] = useState(false);
+  const draft = useRef<HTMLInputElement>(null);
+  const currentLabel =
+    value === 'write' ? '写一张明信片' : value === 'about' ? '明信片说明' : '未选择';
+
+  useEffect(() => {
+    if (!focusDraft || value !== 'write') return;
+    const frame = requestAnimationFrame(() => {
+      draft.current?.focus();
+      setFocusDraft(false);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [focusDraft, value]);
+
+  return (
+    <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+      <Tabs
+        label="联系与阅读说明"
+        value={value}
+        onValueChange={(nextValue) => {
+          setFocusDraft(false);
+          setValue(nextValue);
+        }}
+        keepMounted
+        items={[
+          {
+            value: 'write',
+            label: '写一张明信片',
+            content: (
+              <TextField ref={draft} label="明信片草稿" placeholder="写下今天想分享的一件小事" />
+            ),
+          },
+          {
+            value: 'about',
+            label: '明信片说明',
+            content: (
+              <p style={{ margin: 0 }}>写下最近读到的一句话，或者分享今天路上遇到的小事。</p>
+            ),
+          },
+        ]}
+      />
+      <Button
+        variant="secondary"
+        style={{ justifySelf: 'start' }}
+        onClick={() => {
+          setValue('write');
+          setFocusDraft(true);
+        }}
+      >
+        回到明信片
+      </Button>
+      <Text size="sm" tone="muted" role="status">
+        当前栏目：{currentLabel}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="design"></a>
+
+## 状态与内容面板
+
+- value / onValueChange 管理受控选择，defaultValue 设置非受控初始值；未指定初始值时选择首个可用项，null 可表示不选中任何面板。
+- 非受控选中项被移除或禁用后，会回退到可用项并报告变化；受控模式需由调用方在 items 变化时维护有效 value。
+- 默认卸载未选中面板，keepMounted 保留 DOM 和草稿等局部状态，隐藏内容不参与键盘顺序。面板中的受控输入仍由调用方维护。
+- 面板切换不会自动移动焦点到内容中的输入；“继续填写”等操作可由调用方显式聚焦。组合示例见 [个人博客归档](../README.md#站内指南)。
+
+<a id="api"></a>
+
+## API
+
+TabsProps 支持原生 div 属性，children 和 defaultValue 除外。
+
+### TabsProps
+
+| 参数                      | 说明                                                                      | 类型                                              | 默认值       |
+| ------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------- | ------------ |
+| `label` **必填**          | 标签列表 tablist 的可访问名称。                                           | `string`                                          | —            |
+| `items` **必填**          | 标签及其对应内容面板。value 组内唯一。                                    | `TabItem[]`                                       | —            |
+| `value`                   | 受控选中值；null 不选中任何面板。                                         | `string \| null`                                  | —            |
+| `defaultValue`            | 非受控初始值，不与 value 同时使用。                                       | `string \| null`                                  | `首个可用项` |
+| `onValueChange`           | 选择变化；非受控选中项被禁用或移除时也会报告回退，无可用项时可能为 null。 | `(value: string \| null) => void`                 | —            |
+| `activateOnFocus`         | 方向键聚焦时直接切换内容；默认需要 Enter / Space。                        | `boolean`                                         | `false`      |
+| `keepMounted`             | 保留隐藏面板 DOM 和局部状态。                                             | `boolean`                                         | `false`      |
+| `classNames`              | 标签列表、各标签按钮、各内容面板的附加类名。                              | `{ list?: string; tab?: string; panel?: string }` | —            |
+| `ref / className / style` | 指向根 div，不指向列表或当前面板。                                        | `原生 div 属性`                                   | —            |
+
+### TabItem
+
+| 参数               | 说明                                     | 类型        | 默认值  |
+| ------------------ | ---------------------------------------- | ----------- | ------- |
+| `value` **必填**   | 组内唯一的稳定值。                       | `string`    | —       |
+| `label` **必填**   | 标签按钮内容，不放其他交互控件。         | `ReactNode` | —       |
+| `content` **必填** | 对应面板的内容。                         | `ReactNode` | —       |
+| `disabled`         | 禁用该项激活，保留可被方向键发现的名称。 | `boolean`   | `false` |
+
+<a id="keyboard"></a>
+
+## 可访问性与键盘
+
+- 方向优先读取 Tabs 根节点或最近容器上的显式 dir，包括 Shadow DOM 宿主与 slot 所在的容器；未指定时继承上游 DirectionProvider。仅使用 CSS direction 或 dir="auto" 时，请同时配置 Tabs 的显式 dir；没有原生 dir 覆盖时，也可同步 Base UI DirectionProvider 的 direction，保证视觉顺序与键盘一致。
+- label 为 tablist 提供可访问名称；组件管理 tab / tabpanel 的角色、ID 和相互关联。标签按钮内不嵌套其他交互控件。
+- Tab 进入标签列表后，左右方向键移动焦点并在首尾循环，Home / End 移到首项或末项。默认 Enter / Space 激活，activateOnFocus 开启后随聚焦切换；切换后焦点留在标签上，再按 Tab 进入面板。左右方向键遵循当前 LTR / RTL 方向。
+- 禁用标签使用 aria-disabled，允许方向键聚焦以读取名称，但不可激活。焦点所在标签与当前选中面板可能不同。
+
+<a id="styling"></a>
+
+## 长标签与面板布局
+
+长标签与标签列表可以换行。即使列表分成多行，左右方向键仍按标签顺序移动；不要把换行布局当作二维网格。 面板中的文章、表单等内容由调用方排版，局部间距可通过 classNames.panel 调整。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [SegmentedControl 分段选择](segmented-control.md)：在少量互斥选项间切换，使用原生 radio 保留表单与键盘行为。
+- [Accordion 折叠面板](accordion.md)：展开 FAQ 和补充说明，提供单项或多项展开，使用语义标题和按钮。
+- [Pagination 分页](pagination.md)：在文章列表和归档中切换页码，保留首页、末页和当前页附近的页码。

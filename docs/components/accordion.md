@@ -1,60 +1,190 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # Accordion 折叠面板
 
-按需展开 FAQ 和补充说明。基于 Base UI Accordion，标题使用语义 heading 内的原生按钮。
+展开 FAQ 和补充说明，提供单项或多项展开，使用语义标题和按钮。
 
-内容以轻纸分隔线的开放行组织，展开箭头放在 28px 小圆扣中；默认不为每条内容增加独立卡片投影。圆扣对齐问题的第一行，长问题换行后不会移到整段中央。圆扣随展开状态短暂转向，减少动效时取消过渡。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
-## 内容与阅读位置
+```tsx
+import { Accordion } from 'yahha-ui';
+```
 
-折叠标题应概括展开后回答的问题，面板正文提供完整说明。长标题自然增高，正文保留阅读字阶与段落间距，不靠截断或缩小文字塞进单行。
+<a id="usage"></a>
 
-受控示例的“展开可用说明”只设置可用项目，“全部收起”清空展开值；两种批量操作都保留当前按钮焦点。直接用标题按钮展开或收起时，焦点仍留在该标题。关闭内容不应把用户送到页面起点；若由面板内部的自定义操作关闭自身，调用方需把焦点返回仍存在的控制，而不是已经隐藏的内容。
+## 何时使用
 
-示例将阅读进度同步、离线缓存等未提供的能力边界留在面板外，避免必须先展开才能发现限制。实际站点的隐私告知、错误处理或其他必须始终可见的信息也应直接展示；“准备中”的禁用条目不能代替可用功能。
+按需展开帮助、FAQ 和次要说明，在一个页面保留多个条目的入口。需要对照阅读时开启 multiple；多个栏目轮流占用同一内容区域时使用 [Tabs](tabs.md)。主要内容、错误信息和必要告知应始终可见。
 
-## API
+<a id="examples"></a>
 
-| 属性                               | 类型                                  | 默认值 | 说明                                           |
-| ---------------------------------- | ------------------------------------- | ------ | ---------------------------------------------- |
-| items                              | AccordionItem[]                       | 必填   | 唯一 value、title、content 和可选 disabled     |
-| value                              | string[]                              | —      | 受控展开项                                     |
-| defaultValue                       | string[]                              | []     | 非受控初始展开项，不与 value 同用              |
-| onValueChange                      | (value: string[]) => void             | —      | 展开或关闭后的值数组                           |
-| multiple                           | boolean                               | false  | 是否可同时展开多项；单项模式只使用值数组第一项 |
-| disabled                           | boolean                               | false  | 禁用整个面板组                                 |
-| keepMounted                        | boolean                               | false  | 关闭后保留 DOM，用于保留表单等局部状态         |
-| headingLevel                       | 2 \| 3 \| 4 \| 5 \| 6                 | 3      | 根据所在页面的标题层级选择                     |
-| classNames                         | { item?, heading?, trigger?, panel? } | —      | 各部位附加类名                                 |
-| ref / className / style / 原生属性 | div 属性                              | —      | 均作用于最外层 div                             |
+## 代码演示
 
-AccordionItem 的 value 必须组内唯一，title / content 为 ReactNode。title 已在 button 中，请勿再放交互元素。受控值应指向有效项目；禁用不会强行关闭已展开内容。此组件不提交表单值。
+<a id="basic"></a>
 
-`defaultValue` 只在首次渲染时使用。非受控状态下从多项切换为单项模式时，只保留当前值数组的第一项；切回多项不会恢复被收起的项目，也不会因模式切换触发 `onValueChange`。受控值仍由调用方维护，单项模式仅展示传入数组的第一项。
+### 常见问题
 
-## 使用示例
+defaultValue 设置初始展开项，默认一次只展开一个；再次点击可关闭。
+
+[查看示例文件](../../playground/src/examples/navigation/AccordionBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/AccordionBasic.tsx -->
 
 ```tsx
 import { Accordion } from 'yahha-ui';
 
-export function SiteQuestions() {
+export default function AccordionBasic() {
   return (
     <Accordion
       defaultValue={['rss']}
       items={[
-        { value: 'rss', title: '如何订阅？', content: <p>用 RSS 阅读器添加本站地址。</p> },
-        { value: 'comments', title: '可以留言吗？', content: <p>可以在文章下方分享想法。</p> },
-        { value: 'offline', title: '离线阅读准备中', content: null, disabled: true },
+        {
+          value: 'rss',
+          title: '如何订阅这个小站？',
+          content: (
+            <p style={{ margin: 0 }}>把本站的 RSS 地址添加到你的阅读器，有新文章时就能看到更新。</p>
+          ),
+        },
+        {
+          value: 'comments',
+          title: '我可以给文章留言吗？',
+          content: (
+            <p style={{ margin: 0 }}>可以在文章下方分享想法。联系表单适合需要单独回复的内容。</p>
+          ),
+        },
+        {
+          value: 'frequency',
+          title: '多久更新一次？',
+          content: <p style={{ margin: 0 }}>没有固定频率。遇到值得记下的小事，就会慢慢写出来。</p>,
+        },
       ]}
     />
   );
 }
 ```
 
-## 键盘与样式约定
+<a id="controlled"></a>
 
-- Tab / Shift+Tab 按页面顺序聚焦可用标题按钮，Enter / Space 展开或收起；方向键不切换标题焦点。
-- trigger 和 panel 的 aria-expanded、aria-controls、aria-labelledby、ID 由 Base UI 管理。多项模式用于需要同时阅读比较的说明。
-- 默认卸载关闭的内容；keepMounted 可保留当前页面的局部表单状态，隐藏内容不参与键盘顺序。
-- 标题操作区最小高度 44px，圆扣与标题第一行对齐，长标题自然增高。正文使用 16px 阅读字号；标题样式仅作用于组件内的 heading。
-- 禁用已展开项仍保留展开方向，圆扣改为中性禁用底色；不靠取消箭头方向表达禁用。强制颜色模式下禁用文字与圆扣使用 GrayText。
-- 不把必须始终可见的主要内容、错误说明或隐私告知藏进默认收起的面板。
+### 受控的多项展开
+
+展开两项读书会说明以便对照查看，也可逐项收起或全部收起。尚未确认的雨天安排保持禁用。
+
+[查看示例文件](../../playground/src/examples/navigation/AccordionControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/AccordionControlled.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Accordion, Button, Text } from 'yahha-ui';
+
+export default function AccordionControlled() {
+  const [value, setValue] = useState<string[]>([]);
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+        <Button variant="secondary" onClick={() => setValue(['preparation', 'meeting'])}>
+          展开可用说明
+        </Button>
+        <Button variant="ghost" onClick={() => setValue([])}>
+          全部收起
+        </Button>
+      </div>
+      <Accordion
+        multiple
+        value={value}
+        onValueChange={setValue}
+        items={[
+          {
+            value: 'preparation',
+            title: '参加周末读书会前，需要带些什么？',
+            content: (
+              <div style={{ display: 'grid', gap: 12 }}>
+                <Text>带一本愿意分享的书，以及记录喜欢段落的小本子。</Text>
+                <Text>不需要准备完整讲稿，挑一段想读给大家听的文字就好。</Text>
+              </div>
+            ),
+          },
+          {
+            value: 'meeting',
+            title: '到达后在哪里集合？',
+            content: (
+              <p style={{ margin: 0 }}>
+                先到书店门口的小桌签到，再一起去窗边的阅读区。请提前十分钟到达。
+              </p>
+            ),
+          },
+          {
+            value: 'rain',
+            title: '雨天安排（确认中）',
+            content: <p>确认后会补充当天的集合安排。</p>,
+            disabled: true,
+          },
+        ]}
+      />
+      <Text size="sm" tone="muted" role="status">
+        已展开 {value.length} 项说明。
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="design"></a>
+
+## 展开状态与内容保留
+
+- value / onValueChange 管理受控展开项，defaultValue 设置非受控初始展开项；默认可全部收起，一次展开一项，multiple 允许同时展开多项。
+- 单项模式只使用值数组的第一项。从多项切回单项时，非受控状态保留第一项；受控状态需由调用方同步维护数组和有效的项目值。
+- 默认卸载关闭内容，keepMounted 可保留输入草稿等局部状态，隐藏内容不参与键盘顺序。展开状态与内容中的表单值由各自的状态逻辑管理。
+- 可禁用单项或整组，已展开内容仍保持可见。外部“全部展开”等操作保留当前操作位置，需要进入具体内容时再显式移动焦点。
+
+<a id="api"></a>
+
+## API
+
+AccordionProps 支持原生 div 属性，children 和 defaultValue 除外。
+
+### AccordionProps
+
+| 参数                      | 说明                                                 | 类型                                                                    | 默认值  |
+| ------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------- | ------- |
+| `items` **必填**          | 每项包含唯一 value、title、content 和可选 disabled。 | `AccordionItem[]`                                                       | —       |
+| `value`                   | 受控展开项，不与 defaultValue 同时使用。             | `string[]`                                                              | —       |
+| `defaultValue`            | 非受控初始展开项。                                   | `string[]`                                                              | `[]`    |
+| `onValueChange`           | 展开或关闭后的值数组。                               | `(value: string[]) => void`                                             | —       |
+| `multiple`                | 允许同时展开多项；单项模式只使用传入值数组第一项。   | `boolean`                                                               | `false` |
+| `disabled`                | 禁用整个面板组，不强行关闭已展开内容。               | `boolean`                                                               | `false` |
+| `keepMounted`             | 关闭时保留 DOM 和表单等局部状态。                    | `boolean`                                                               | `false` |
+| `headingLevel`            | 标题的语义层级，按所在页面的标题结构选择。           | `2 \| 3 \| 4 \| 5 \| 6`                                                 | `3`     |
+| `classNames`              | 各部位附加类名，与默认类名合并。                     | `{ item?: string; heading?: string; trigger?: string; panel?: string }` | —       |
+| `ref / className / style` | 作用于最外层 div。                                   | `原生 div 属性`                                                         | —       |
+
+### AccordionItem
+
+| 参数               | 说明                             | 类型        | 默认值  |
+| ------------------ | -------------------------------- | ----------- | ------- |
+| `value` **必填**   | 组内唯一的稳定值。               | `string`    | —       |
+| `title` **必填**   | 标题按钮内容，不放其他交互元素。 | `ReactNode` | —       |
+| `content` **必填** | 展开后的内容。                   | `ReactNode` | —       |
+| `disabled`         | 禁用本项操作，保留可见标题。     | `boolean`   | `false` |
+
+<a id="keyboard"></a>
+
+## 可访问性与键盘
+
+- 标题是 heading 中的原生按钮；headingLevel 应匹配所在页面的标题结构。标题内不嵌套链接或其他按钮。
+- Tab / Shift+Tab 按顺序聚焦可用标题按钮，Enter / Space 展开或收起；当前实现不使用方向键切换标题焦点。
+- 组件管理展开状态与标题、面板之间的语义关联。禁用标题按钮退出 Tab 顺序，展开或收起不会自动把焦点移入正文。
+
+<a id="styling"></a>
+
+## 长标题与正文
+
+标题自动换行，正文不按固定高度截断。为折叠区设置宽度或局部样式时，保留整行标题的点击区域； 链接、复制按钮和表单放在正文中，避免嵌入标题按钮。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [Tabs 标签页](tabs.md)：在同一页面的相关内容面板之间切换，用于栏目说明、作者资料和内容分区。
+- [Heading 标题](heading.md)：通过真实 h1–h6 元素建立清楚的文档层级。

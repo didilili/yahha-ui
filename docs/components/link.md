@@ -1,32 +1,34 @@
+<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
+
 # Link 链接
 
 保留原生链接行为，统一下划线与键盘焦点。
 
-本页示例按[入门指南](../../README.md#构建与本地安装)（站内路由 `#/guides/getting-started`）在应用入口导入一次 `yahha-ui/style.css` 并包裹 ThemeProvider。交互示例和更多状态见[文档站](../../README.md#本地开发)（站内路由 `#/components/link`）。
+首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
-正文链接采用 1.5px 墨色下划线、随字号调整的偏移与跨行文字避让；悬停时下划线加粗并使用焦点色。保持行内阅读节奏，键盘聚焦使用单层 2px 轮廓。
+```tsx
+import { Link } from 'yahha-ui';
+```
 
-## API
+<a id="usage"></a>
 
-| 参数                | 类型                              | 默认值 | 说明                                                                        |
-| ------------------- | --------------------------------- | ------ | --------------------------------------------------------------------------- |
-| href（必填）        | string                            | —      | 链接目标。                                                                  |
-| external            | boolean                           | false  | 未指定 target 时使用 _blank。                                               |
-| target / rel        | 原生 anchor 属性                  | —      | target=_blank 时保留原 rel 并补充 noopener noreferrer。                     |
-| children            | ReactNode                         | —      | 清楚描述目标的链接内容。                                                    |
-| className / style   | string / CSSProperties            | —      | 作用于根 a 元素。                                                           |
-| ref                 | ComponentPropsWithRef<'a'>['ref'] | —      | 指向真实 a 元素。                                                           |
-| 其他原生属性 / 事件 | ComponentPropsWithRef<'a'>        | —      | 沿用对应原生元素的事件、`aria-*`、`data-*` 等属性；下表列出的组件属性优先。 |
+## 何时使用
 
-## 使用约定
+用于页面跳转、文章阅读和外部资源入口；保存、收藏等操作使用 Button。
 
-- Enter 激活链接。支持浏览器新窗口、复制链接与打开方式，组件不替换路由器。
-- 没有 disabled 模式。不可访问的目标应由页面提供说明或不渲染链接。
-- 链接可以嵌入 Text 的连续段落。长文字或地址自然换行，下划线与键盘焦点均保留；不增加额外按钮背景或统一成块级操作。
-- 外部链接的文字应说明目标；新窗口行为可在可见文案中告知。内页 hash 路由仍由应用负责，组件不自行改变焦点或滚动位置。
-- 正文中的多行中文、长地址和行尾标点遵循行内排版，下划线与焦点轮廓保持可见。页内跳转的滚动与后续焦点由调用方管理。
+<a id="examples"></a>
 
-## 示例
+## 代码演示
+
+<a id="link-native"></a>
+
+### 站内与外部链接
+
+站内入口与正文中的长链接；外链使用明确标注的 example.com 占位地址，接入时替换为实际目标，并保留新窗口提示。
+
+[查看示例文件](../../playground/src/examples/content/LinkExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/LinkExample.tsx -->
 
 ```tsx
 import { Link, Text } from 'yahha-ui';
@@ -39,22 +41,60 @@ export default function LinkExample() {
       </Text>
       <Text>
         <Link href="https://example.com" external>
-          示例作者主页（新窗口）
+          example.com 占位页面（新窗口）
         </Link>
       </Text>
       <Text>
-        参考链接也可以放在连续的正文中，例如
+        周末空下来的时候，可以读读
         <Link href="https://example.com" external>
-          一段较长的链接文字，用来观察正文中的自然换行（新窗口）
+          example.com 占位页面：适合周末慢慢阅读的散步与书单手记（新窗口）
         </Link>
-        。Tab 聚焦时保持可见轮廓，Enter 沿用浏览器导航。
+        。
       </Text>
       <Text size="sm" tone="muted">
         <Link href="https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress" external>
-          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress
+          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress（新窗口）
         </Link>
       </Text>
     </div>
   );
 }
 ```
+
+<a id="design"></a>
+
+## 让目标在正文中可辨认
+
+链接使用墨色下划线，跨行仍可辨认；悬停加强下划线，键盘聚焦时显示清楚的轮廓。链接文字应说明目标内容，避免只写“点击这里”；长地址可以自然换行。
+
+<a id="api"></a>
+
+## API
+
+### LinkProps
+
+| 参数                  | 说明                                                                      | 类型                                | 默认值  |
+| --------------------- | ------------------------------------------------------------------------- | ----------------------------------- | ------- |
+| `href` **必填**       | 链接目标。                                                                | `string`                            | —       |
+| `external`            | 未指定 target 时使用 \_blank。                                            | `boolean`                           | `false` |
+| `target / rel`        | target=\_blank 时保留原 rel 并补充 noopener noreferrer。                  | `原生 anchor 属性`                  | —       |
+| `children`            | 清楚描述目标的链接内容。                                                  | `ReactNode`                         | —       |
+| `className / style`   | 作用于根 a 元素。                                                         | `string / CSSProperties`            | —       |
+| `ref`                 | 指向真实 a 元素。                                                         | `ComponentPropsWithRef<'a'>['ref']` | —       |
+| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。 | `ComponentPropsWithRef<'a'>`        | —       |
+
+<a id="behavior"></a>
+
+## 导航与新窗口
+
+- Tab 聚焦时显示可见轮廓，保留原生链接的 Enter 激活、新窗口和复制地址等操作。组件不接管路由，需要客户端导航时由应用接入。
+- 在链接文字或相邻说明中交代新窗口行为，让用户在打开前知道会离开当前阅读环境。
+- 没有 disabled 模式。不可访问的目标应由页面提供说明或不渲染链接。
+
+<a id="related"></a>
+
+## 相关组件
+
+- [Button 按钮](button.md)：触发提交、收藏或其他操作的原生按钮，提供三种强调程度与完整的交互状态。
+- [Text 正文](text.md)：为段落提供统一的字号、行高和语义文字颜色。
+- [Pagination 分页](pagination.md)：在文章列表和归档中切换页码，保留首页、末页和当前页附近的页码。
