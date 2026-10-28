@@ -37,7 +37,10 @@
     "lint:package": "publint --strict",
     "test:package": "node scripts/test-package.mjs",
     "test:docs": "node scripts/test-docs.mjs",
-    "check": "npm run format:check && npm run lint && npm run check:design && npm run typecheck && npm test && npm run build:lib && npm run build:demo && npm run lint:package && npm run test:package && npm run test:docs && npm run test:blog",
+    "test:controls": "node scripts/test-docs.mjs --core-controls",
+    "test:navigation": "node scripts/test-docs.mjs --navigation-controls",
+    "test:overlays": "node scripts/test-docs.mjs --overlay-controls",
+    "check": "npm run format:check && npm run lint && npm run check:docs && npm run check:design && npm run typecheck && npm test && npm run build:lib && npm run build:demo && npm run lint:package && npm run test:package && npm run test:docs && npm run test:blog",
     "prepare": "husky",
     "check:design": "node --test tests/design-contract.test.mjs && node scripts/check-design.mjs && npm run check:artwork",
     "sync:artwork": "node scripts/sync-little-days-artwork.mjs",
@@ -45,7 +48,9 @@
     "dev:blog": "npm run build:lib && vite --config examples/blog/vite.config.ts --host 127.0.0.1 --port 4186 --strictPort",
     "build:blog": "npm run build:lib && tsc --noEmit -p examples/blog/tsconfig.json && vite build --config examples/blog/vite.config.ts",
     "preview:blog": "vite preview --config examples/blog/vite.config.ts --host 127.0.0.1 --port 4187 --strictPort",
-    "test:blog": "node scripts/test-blog.mjs"
+    "test:blog": "node scripts/test-blog.mjs",
+    "sync:docs": "node scripts/sync-component-docs.mjs",
+    "check:docs": "node --test tests/documentation-contract.test.mjs && node scripts/sync-component-docs.mjs --check"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0"

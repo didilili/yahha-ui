@@ -18,7 +18,7 @@
 
 ## 从真实小样找到组件
 
-文档站的组件总览位于 `#/components`，按七类展示现有 29 个 UI 组件，并单列 ThemeProvider 主题配置，共 30 个文档入口。小样进入对应文档后，可操作完整示例、展开代码并查阅 API；当前共 86 个同源 TSX 示例。
+文档站的组件总览位于 `#/components`，按八类展示现有 29 个 UI 组件，并单列 ThemeProvider 主题配置，共 30 个文档入口。小样进入对应文档后，可操作完整示例、展开代码并查阅 API；当前共 95 个同源 TSX 示例。
 
 ![组件视觉总览：真实按钮、字段、排版与容器小样](docs/images/yahha-components.png)
 
@@ -27,8 +27,9 @@
 - **布局**：Surface、Divider。
 - **表单**：TextField、Textarea、Select、Checkbox、RadioGroup、Switch、SegmentedControl。
 - **内容展示**：Badge、Avatar、Image、Accordion。
-- **导航**：Tabs、Pagination、DropdownMenu。
-- **浮层与反馈**：Dialog、Popover、Tooltip、Alert、Toast、EmptyState、Spinner、Skeleton。
+- **导航**：Tabs、Pagination。
+- **浮层**：DropdownMenu、Dialog、Popover、Tooltip。
+- **反馈**：Alert、Toast、EmptyState、Spinner、Skeleton。
 - **主题配置**：ThemeProvider。
 
 [查阅组件示例与 API](docs/README.md) · [查看设计规则和尺寸规范](docs/design-language.md)

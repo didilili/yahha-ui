@@ -22,7 +22,7 @@ npm run dev
 - `playground/src/docs/`：指南与组件页数据、API、站内代码展示工具；`examples/` 放实时示例。每个示例同时作为 TSX 模块和 `?raw` 源码导入。完整接入分别提供原样的 `Example.tsx` 与负责 CSS / ThemeProvider 包裹的 `App.tsx`；含场景素材时同时提供 artwork 文件，保留 `Example.tsx` 同级 `artwork/` 的相对引用。
 - `playground/src/examples/scenes/`：加载、空态与 404 页面组合及其 `artwork/` 素材。素材只属于展示示例，不进入 `src/` 或默认组件库产物。
 - `playground/src/docs/component-catalog.ts`：搜索和导航的轻量元信息目录，不导入示例模块；页面 ID、名称、中文名、分组和描述需与页面定义一致。
-- `playground/src/docs/component-pages.ts`：按文档组加载页面内容与示例；新增文档组时同步 loader 与目录的 module 字段。
+- `playground/src/docs/component-pages.ts`：按组件加载页面内容与示例；新增页面时在 loader 注册对应组件，页面元信息复用目录。
 - `docs/components/`：已实现 API、默认值、原生属性与样式入口的文档。
 - `tests/package-consumer/`：真实安装包的使用方、独立边界场景与浏览器断言；不作为公开组件导出。
 - `tests/package-consumer/Basics.tsx` 与配套 `basics-checks.mjs`：新增基础组件的表单、导航、图片回退和浮层组合验收。
@@ -32,13 +32,15 @@ npm run dev
 - `docs/images/`：从实际页面截取的仓库展示图，拍摄路由和视口见目录内 README，不进入安装包。
 - `scripts/`：打包与验收脚本。
 
-库内相对模块路径使用 `.js` 扩展名，使构建后的多文件声明可被 Bundler 与 NodeNext 解析。公开 Props 与实际默认值是 API 契约依据；站内 API 和组件 Markdown 分别维护，公共接口变更需同步核对属性名、类型、必填项、默认值、原生属性及 ref 的作用目标，并检查源码导出和使用方示例。站内预览与展示源码使用同一个 TSX，Markdown 入门示例单独维护，两者都由真实安装包验收编译。页面元信息变更时同步 component-catalog。
+Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Switch 和 SegmentedControl 可单独运行三引擎验收：首次执行 `npx playwright install chromium firefox webkit`，然后执行 `npm run build:demo && npm run test:controls`。它复用构建后的官网，在 Chromium、Firefox 与 WebKit 检查桌面和 320px 下的原生表单、错误恢复、加载几何、图标、键盘选择及多行编辑。Textarea 覆盖换行、长文本、200 字原生输入上限、错误关联与恢复、只读、父 fieldset 禁用、FormData 和重置。WebKit 引擎结果不等同于所有 Safari／iOS 真机环境均已验证。浏览器下载在本机 Playwright 缓存中，不增加组件运行时依赖。
 
-组件目录与总览按通用、排版、布局、表单、内容展示、导航、浮层与反馈七组组织 29 个 UI 组件，ThemeProvider 单列为主题配置；界面分组调整只更新目录与页面元信息，文档加载模块继续按实际文件组织。TextField、SegmentedControl、ThemeProvider 的中文名称分别统一为“单行输入”“分段选择”“主题配置”，英文导出名和路由保持稳定。
+库内相对模块路径使用 `.js` 扩展名，使构建后的多文件声明可被 Bundler 与 NodeNext 解析。公开 Props 与实际默认值是 API 契约依据；站内说明、API 与示例组织在 `playground/src/docs/components/` 维护，组件 Markdown 由 `npm run sync:docs` 生成。公共接口变更需核对属性名、类型、必填项、默认值、原生属性及 ref 的作用目标，并检查源码导出和使用方示例。站内预览与展示源码使用同一个 TSX，Markdown 的原始示例也由同一页面生成，两者均由真实安装包验收编译。页面元信息变更时同步 component-catalog。
+
+组件目录与总览按通用、排版、布局、表单、内容展示、导航、浮层、反馈八组组织 29 个 UI 组件，ThemeProvider 单列为主题配置；元信息只在目录维护，文档按组件独立加载。TextField、SegmentedControl、ThemeProvider 的中文名称分别统一为“单行输入”“分段选择”“主题配置”，英文导出名和路由保持稳定。
 
 组件使用文档描述当前用途、示例、API 和交互约定，不混入“本轮复核”“保留既有”“不计新增”等开发过程表述。设计原则和视觉规则集中在设计语言文档；文档不承诺尚未实现或验证的能力。
 
-当前文档站有 30 个组件入口（29 个 UI 组件与 ThemeProvider）和 86 个同源 TSX 示例，组件 Markdown 为 29 份（Button / IconButton 共页）。[设计语言](docs/design-language.md) 单独说明视觉和使用规则；默认设计规范位于 `#/guides/design-baseline`，示例不得覆盖控件外观与尺寸；共享 token 集中在 `src/theme/theme.module.css`，改设计必须通过 `npm run check:design` 与安装包实际尺寸验证；加载、空态与 404 场景位于 `#/guides/states`，以现有组件组合，不增加公共组件。增加或删除公开组件与示例时，同时更新 README 和文档索引。
+当前文档站有 30 个组件入口（29 个 UI 组件与 ThemeProvider）和 95 个同源 TSX 示例，组件 Markdown 为 30 份。[设计语言](docs/design-language.md) 单独说明视觉和使用规则；默认设计规范位于 `#/guides/design-baseline`，示例不得覆盖控件外观与尺寸；共享 token 集中在 `src/theme/theme.module.css`，改设计必须通过 `npm run check:design` 与安装包实际尺寸验证；加载、空态与 404 场景位于 `#/guides/states`，以现有组件组合，不增加公共组件。增加或删除公开组件与示例时，同时更新 README 和文档索引。
 
 组件边界也应随实现核对：Select 当前为单值选择，不包含搜索或多选；Pagination 使用按钮与页码回调，路由与列表更新属于调用方；Tooltip 沿用 Base UI 1.9 的视觉补充约定，触发器必须具备自身可访问名称，重要说明使用可见文字或 Popover。
 
@@ -57,6 +59,8 @@ npm test -- src/components/text-field/TextField.test.tsx
 npm run typecheck
 ```
 
+组件说明遵循 [文档规范](docs/documentation.md)。编辑组件页后执行 `npm run sync:docs`，提交前以 `npm run check:docs` 核对生成结果；不要直接编辑生成的组件 Markdown。
+
 纯文档改动可检查涉及文件的格式：
 
 ```sh
@@ -71,6 +75,8 @@ npx prettier --check README.md CONTRIBUTING.md docs
 - `npm run lint:package`：对构建后的包运行 publint。
 - `npm run test:package`：将实际安装包放入独立使用方，检查 Markdown 和文档站全部 TSX 示例类型并运行 Chromium 验证；包含 1280、320、390px 的键盘、长文本、表单重置、弹窗焦点及滚动边界，以及 Basics 中的新增组件组合场景。先执行 `npm run build:lib`。
 - `npm run test:docs`：检查文档路由、API 与示例入口、复制降级、搜索、移动导航和弹窗。先执行 `npm run build:demo`。
+- `npm run test:navigation`：在 Chromium、Firefox 与 WebKit 的 1280 / 320px 视口复验 Tabs 草稿与焦点、Accordion 受控展开，以及 Pagination 归档列表、搜索与翻页。先执行 `npm run build:demo`，三引擎安装方法同上文控件验收。
+- `npm run test:overlays`：在三引擎复验 Dialog 表单、Popover 重命名、菜单草稿操作、Tooltip 及 ArticleActions 嵌套流程；包含 320×500px 短屏、错误恢复、取消与关闭回焦。先执行 `npm run build:demo`，三引擎安装方法同上文控件验收。
 - `npm run test:blog`：用真实本地安装包运行 `examples/blog/` 同份网站，验证三页面、URL 筛选、历史返回、收藏和窄屏布局。先执行 `npm run build:lib`。
 - `npm run check`：完整本地检查；涉及公共 API、构建或依赖边界时运行。
 

@@ -36,6 +36,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Check component documentation synchronization
+        run: npm run check:docs
+
       - name: Check design contract
         run: npm run check:design
 
