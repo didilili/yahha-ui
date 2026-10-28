@@ -15,10 +15,10 @@ export default function SegmentedLongLabels() {
   return (
     <div style={{ display: 'grid', gap: 16, width: '100%', maxWidth: 350 }}>
       <Text id={descriptionId} size="sm" tone="muted">
-        浏览文章专题。容器最多 350px，长标签自然换行；每项仍可点击整片区域。
+        选择一个想浏览的文章专题。
       </Text>
       <SegmentedControl
-        label="浏览文章专题"
+        label="文章专题"
         aria-describedby={descriptionId}
         value={topic}
         onValueChange={setTopic}
@@ -28,9 +28,6 @@ export default function SegmentedLongLabels() {
           { value: 'travel', label: labels.travel },
         ]}
       />
-      <Text role="status" size="sm">
-        正在浏览：{labels[topic]}
-      </Text>
     </div>
   );
 }

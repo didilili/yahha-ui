@@ -18,9 +18,7 @@ export default function AvatarPicture() {
         </Button>
       </div>
       <Text size="sm" tone="muted" role="status">
-        {broken
-          ? '图片失效后保留姓名回退，头像区域仍为 64px。'
-          : '使用本地示例头像，加载中仍有姓名回退。'}
+        {broken ? '图片暂不可用，已显示姓名回退。' : '当前使用图片头像。'}
       </Text>
     </div>
   );

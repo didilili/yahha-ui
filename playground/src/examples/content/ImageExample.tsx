@@ -19,7 +19,7 @@ export default function ImageExample() {
       />
       <figcaption>
         <Text size="sm" tone="muted">
-          周末手记的示例封面。比例容器保持 16:9，图片随内容宽度缩放；内嵌 SVG 不请求外部资源。
+          周末手记的封面。
         </Text>
       </figcaption>
     </figure>

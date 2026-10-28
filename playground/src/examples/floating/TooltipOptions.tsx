@@ -1,24 +1,24 @@
 import { useState } from 'react';
-import { Button, Tooltip } from 'yahha-ui';
+import { Button, Text, Tooltip } from 'yahha-ui';
 
 export default function TooltipOptions() {
   const [disabled, setDisabled] = useState(false);
-  const [message, setMessage] = useState('可以先悬停或用 Tab 聚焦，再执行操作');
+  const [message, setMessage] = useState('尚未触发操作。');
   return (
-    <div>
-      <p>
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
+      <div>
         <Tooltip
           disabled={disabled}
           delay={800}
           side="bottom"
           content="加入稍后阅读"
           trigger={
-            <Button variant="secondary" onClick={() => setMessage('已加入稍后阅读')}>
+            <Button variant="secondary" onClick={() => setMessage('已触发“加入稍后阅读”操作。')}>
               加入稍后阅读
             </Button>
           }
         />
-      </p>
+      </div>
       <Button
         variant="ghost"
         aria-pressed={disabled}
@@ -26,9 +26,12 @@ export default function TooltipOptions() {
       >
         关闭文字提示
       </Button>
-      <p role="status">{message}</p>
-      <p>当前文字提示：{disabled ? '已关闭' : '已开启'}。</p>
-      <p>关闭 Tooltip 只关闭提示，原按钮仍能使用。</p>
+      <Text size="sm" tone="muted" role="status">
+        {message}
+      </Text>
+      <Text size="sm" tone="muted">
+        当前文字提示：{disabled ? '已关闭' : '已开启'}。
+      </Text>
     </div>
   );
 }

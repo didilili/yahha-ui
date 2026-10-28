@@ -11,26 +11,20 @@ export default function SwitchForm() {
         const values = new FormData(event.currentTarget);
         setResult(
           values.has('covers')
-            ? `显示封面；读取到 covers=${String(values.get('covers'))}。禁用的 notifications 不会提交。`
-            : '隐藏封面；没有 covers 字段。禁用的 notifications 也不会提交。',
+            ? `读取结果：covers=${String(values.get('covers'))}。`
+            : '读取结果：未包含封面偏好。',
         );
       }}
-      onReset={() => setResult('已恢复初始开启；点击“读取偏好”可重新检查表单值。')}
+      onReset={() => setResult('封面偏好已恢复为开启。')}
     >
-      <Switch
-        label="文章封面"
-        name="covers"
-        value="visible"
-        defaultChecked
-        hint="关闭时 FormData 中没有 covers 字段。重置恢复初始开启。"
-      />
+      <Switch label="文章封面" name="covers" value="visible" defaultChecked />
       <Switch
         label="站内通知"
         name="notifications"
         value="enabled"
         defaultChecked
         disabled
-        hint="开启但禁用；原生表单同样不会提交此项。"
+        hint="此设置暂不可更改。"
       />
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
         <Button type="submit">读取偏好</Button>
@@ -38,8 +32,8 @@ export default function SwitchForm() {
           重置
         </Button>
       </div>
-      <Text size="sm" role="status">
-        {result || '尚未读取表单；这里不会保存设置或调用接口。'}
+      <Text size="sm" tone="muted" role="status">
+        {result}
       </Text>
     </form>
   );

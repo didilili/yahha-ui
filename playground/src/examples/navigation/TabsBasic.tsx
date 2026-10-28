@@ -11,8 +11,7 @@ export default function TabsBasic() {
           content: (
             <article>
               <h3 style={{ marginTop: 0 }}>沿着河岸，慢慢走回家</h3>
-              <p>把今天看见的树影和晚霞记下来，留给以后翻阅。</p>
-              <p style={{ marginBottom: 0 }}>这里是随笔栏目，切换到相册可以查看另一段内容。</p>
+              <p style={{ marginBottom: 0 }}>把今天看见的树影和晚霞记下来，留给以后翻阅。</p>
             </article>
           ),
         },

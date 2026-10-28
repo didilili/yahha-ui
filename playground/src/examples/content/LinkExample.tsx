@@ -8,19 +8,19 @@ export default function LinkExample() {
       </Text>
       <Text>
         <Link href="https://example.com" external>
-          示例作者主页（新窗口）
+          example.com 占位页面（新窗口）
         </Link>
       </Text>
       <Text>
-        参考链接也可以放在连续的正文中，例如
+        周末空下来的时候，可以读读
         <Link href="https://example.com" external>
-          一段较长的链接文字，用来观察正文中的自然换行（新窗口）
+          example.com 占位页面：适合周末慢慢阅读的散步与书单手记（新窗口）
         </Link>
-        。Tab 聚焦时保持可见轮廓，Enter 沿用浏览器导航。
+        。
       </Text>
       <Text size="sm" tone="muted">
         <Link href="https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress" external>
-          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress
+          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress（新窗口）
         </Link>
       </Text>
     </div>

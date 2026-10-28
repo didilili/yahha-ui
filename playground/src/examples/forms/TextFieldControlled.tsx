@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextField } from 'yahha-ui';
+import { Text, TextField } from 'yahha-ui';
 
 export default function TextFieldControlled() {
   const [keyword, setKeyword] = useState('');
@@ -25,11 +25,11 @@ export default function TextFieldControlled() {
             <path d="m16 16 4.5 4.5" />
           </svg>
         }
-        hint="可输入标题中的一部分，关键词始终由 React 状态管理。"
+        hint="可输入标题中的一部分。"
       />
-      <p style={{ margin: 0 }} aria-live="polite">
-        {keyword ? `当前关键词：${keyword}` : '输入内容，查看受控状态。'}
-      </p>
+      <Text size="sm" tone="muted">
+        当前关键词：{keyword || '未填写'}
+      </Text>
     </div>
   );
 }

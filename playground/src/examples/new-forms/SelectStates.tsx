@@ -17,21 +17,21 @@ export default function SelectStates() {
         onValueChange={setCategory}
         required
         error={category === null ? '请先选择文章分类。' : undefined}
-        hint="选择分类后清除错误；校验状态由这个示例维护。"
+        hint="请选择一个文章分类。"
       />
       <Select
         label="只读分类"
         options={options}
         defaultValue="journal"
         readOnly
-        hint="可以查看选项，不能修改；仍参与表单提交。"
+        hint="可以查看选项，不能修改。"
       />
       <Select
         label="暂不可用"
         options={options}
         defaultValue="reading"
         disabled
-        hint="禁用字段不参与表单提交。"
+        hint="此分类暂不可更改。"
       />
     </div>
   );

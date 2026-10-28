@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { IconButton, Tooltip } from 'yahha-ui';
+import { IconButton, Text, Tooltip } from 'yahha-ui';
 
 export default function TooltipBasic() {
   const [saved, setSaved] = useState(false);
   const label = '收藏文章';
   return (
-    <div>
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
       <Tooltip
         content={label}
         trigger={
@@ -19,8 +19,9 @@ export default function TooltipBasic() {
           </IconButton>
         }
       />
-      <p role="status">{saved ? '文章已收藏' : '文章尚未收藏'}</p>
-      <p>点击星星切换收藏；操作和结果都不依赖悬停提示。</p>
+      <Text size="sm" tone="muted" role="status">
+        {saved ? '文章已收藏' : '文章尚未收藏'}
+      </Text>
     </div>
   );
 }

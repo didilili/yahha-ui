@@ -26,10 +26,10 @@ export default function ThemeTokensExample() {
           onOpenChange={setOpen}
           trigger={<Button>查看主题弹窗</Button>}
           title="同一套主题颜色"
-          description="弹窗挂载到 Portal 后，仍使用这个 Provider 的 tokens。"
+          description="每月一封阅读推荐，分享文章与书单。"
           footer={<Button onClick={() => setOpen(false)}>明白了</Button>}
         >
-          <p>使用 tokens 传入的颜色会随主题上下文进入弹窗，无需复制页面布局样式。</p>
+          <p>给自己留一点安静的阅读时间。</p>
         </Dialog>
       </Surface>
     </ThemeProvider>

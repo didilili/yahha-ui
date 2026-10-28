@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from 'yahha-ui';
+import { Button, Text } from 'yahha-ui';
 
 export default function ButtonBasic() {
   const [count, setCount] = useState(0);
@@ -7,7 +7,9 @@ export default function ButtonBasic() {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
       <Button onClick={() => setCount((value) => value + 1)}>打个招呼</Button>
-      <span role="status">已收到 {count} 次问候</span>
+      <Text size="sm" tone="muted" role="status">
+        已收到 {count} 次问候
+      </Text>
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
-import { Button, Textarea } from 'yahha-ui';
+import { Button, Text, Textarea } from 'yahha-ui';
 
 export default function TextareaControlled() {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
-  const error = submitted && !message.trim() ? '请写下一点内容再发送。' : undefined;
+  const error = submitted && !message.trim() ? '请填写留言后再检查。' : undefined;
   return (
     <form
       noValidate
@@ -26,13 +26,13 @@ export default function TextareaControlled() {
         }}
         required
         maxLength={200}
-        hint={`${message.length} / 200 字；本例不会发送数据。`}
+        hint={`${message.length} / 200 字`}
         error={error}
       />
       <Button type="submit">检查留言</Button>
-      <p role="status" style={{ margin: 0 }}>
-        {submitted && message.trim() ? '内容已填写，可以继续接入发送逻辑。' : ''}
-      </p>
+      <Text size="sm" tone="muted" role="status">
+        {submitted && message.trim() ? '检查结果：留言符合要求。' : ''}
+      </Text>
     </form>
   );
 }

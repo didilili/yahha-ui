@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, RadioGroup } from 'yahha-ui';
+import { Button, RadioGroup, Text } from 'yahha-ui';
 
 export default function RadioGroupForm() {
   const [frequency, setFrequency] = useState('');
@@ -30,7 +30,7 @@ export default function RadioGroupForm() {
           setResult('');
         }}
         onInvalid={() => setHasError(true)}
-        hint="先选择来信频率，再读取表单；重置后恢复未选择。"
+        hint="必选，请选择一种来信频率。"
         error={hasError ? '请选择一种订阅频率，再读取表单。' : undefined}
         options={[
           { value: 'weekly', label: '每周' },
@@ -43,9 +43,9 @@ export default function RadioGroupForm() {
           重置
         </Button>
       </div>
-      <p role="status" style={{ margin: 0 }}>
-        提交值：{result || '尚未提交'}
-      </p>
+      <Text size="sm" tone="muted" role="status">
+        {result && `读取结果：frequency=${result}。`}
+      </Text>
     </form>
   );
 }

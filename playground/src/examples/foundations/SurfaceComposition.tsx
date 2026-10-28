@@ -27,7 +27,7 @@ export default function SurfaceComposition() {
           收藏文章
         </Button>
         <Text role="status" size="sm" tone="muted">
-          {saved ? '已加入收藏，之后可以继续读。' : '喜欢的话，可以先收藏起来。'}
+          {saved ? '已加入收藏' : '尚未收藏'}
         </Text>
       </div>
     </Surface>

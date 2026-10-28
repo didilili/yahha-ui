@@ -7,7 +7,7 @@ export default function SwitchControlled() {
     <div style={{ display: 'grid', gap: 20 }}>
       <Switch
         label="显示文章摘要"
-        hint="切换后立即更新下方文章；本例只保留当前页面内的状态。"
+        hint="开启后显示下方文章的摘要。"
         checked={showExcerpt}
         onChange={(event) => setShowExcerpt(event.target.checked)}
       />

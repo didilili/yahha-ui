@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Heading, Toast } from 'yahha-ui';
+import { Button, Heading, Text, Toast } from 'yahha-ui';
 
 const messages = [
   { tone: 'success', title: '文章已保存', description: '改动已经记录在草稿中。' },
@@ -34,16 +34,22 @@ export default function ToastTones() {
       </Heading>
       <div ref={messagesRoot} style={{ display: 'grid', gap: 16 }}>
         {messages.map((message) => (
-          <Toast
-            key={message.tone}
-            {...message}
-            open={!dismissed.includes(message.tone)}
-            onClose={() => {
-              if (messagesRoot.current?.contains(document.activeElement))
-                pendingFocus.current = 'restore';
-              setDismissed((current) => [...current, message.tone]);
-            }}
-          />
+          <div key={message.tone} style={{ display: 'grid', gap: 8 }}>
+            <Text size="sm" tone="muted">
+              {message.tone === 'success' ? '成功' : message.tone === 'info' ? '信息' : '错误'}
+              {message.tone === 'success' ? '（默认）' : ''}
+              {dismissed.includes(message.tone) ? ' · 已关闭' : ''}
+            </Text>
+            <Toast
+              {...message}
+              open={!dismissed.includes(message.tone)}
+              onClose={() => {
+                if (messagesRoot.current?.contains(document.activeElement))
+                  pendingFocus.current = 'restore';
+                setDismissed((current) => [...current, message.tone]);
+              }}
+            />
+          </div>
         ))}
       </div>
       <div>

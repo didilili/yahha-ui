@@ -1,9 +1,9 @@
 import { Avatar, Text } from 'yahha-ui';
 
 const sizes = [
-  { name: '小八', size: 'sm', description: '小号 · 32px' },
-  { name: '吉伊', size: 'md', description: '常规 · 44px' },
-  { name: '乌萨奇', size: 'lg', description: '大号 · 64px' },
+  { name: '小八', size: 'sm', description: '小号 sm' },
+  { name: '吉伊', size: 'md', description: '中号 md（默认）' },
+  { name: '乌萨奇', size: 'lg', description: '大号 lg' },
 ] as const;
 
 export default function AvatarExample() {
@@ -24,14 +24,14 @@ export default function AvatarExample() {
         <div style={{ minWidth: 0 }}>
           <Text>把散步写成手记的作者小林</Text>
           <Text size="sm" tone="muted">
-            完整姓名放在头像旁，图形中保留简短回退。
+            手记作者
           </Text>
         </div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <Avatar name=" " />
         <Text size="sm" tone="muted">
-          没有填写昵称时，回退为问号，并提供“匿名用户”的名称。
+          匿名用户
         </Text>
       </div>
     </div>

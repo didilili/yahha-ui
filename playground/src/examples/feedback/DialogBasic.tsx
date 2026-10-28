@@ -10,9 +10,9 @@ export default function DialogBasic() {
       onOpenChange={setOpen}
       trigger={<Button>查看阅读提示</Button>}
       title="留一点时间给阅读"
-      description="这是一个受控弹窗。点击关闭按钮、按 Escape 或点击外部都可以关闭。"
+      description="忙碌的时候，也可以留下一小段安静的阅读时间。"
     >
-      <p>打开后，可以用 Tab 在弹窗内移动焦点；关闭后，焦点回到触发按钮。</p>
+      <p>挑一篇喜欢的文章，从今天最想读的段落开始。</p>
     </Dialog>
   );
 }

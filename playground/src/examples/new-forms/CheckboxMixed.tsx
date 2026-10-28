@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Checkbox } from 'yahha-ui';
+import { Button, Checkbox, Text } from 'yahha-ui';
 
 export default function CheckboxMixed() {
   const [selected, setSelected] = useState(['journal']);
@@ -45,9 +45,9 @@ export default function CheckboxMixed() {
           ))}
         </div>
       </fieldset>
-      <p role="status" style={{ margin: 0 }}>
-        已选 {selected.length} 项，共 {items.length} 项；半选表示只订阅了部分分类。
-      </p>
+      <Text size="sm" tone="muted" role="status">
+        已选 {selected.length} 项，共 {items.length} 项。
+      </Text>
       <div>
         <Button type="reset" variant="secondary">
           恢复初始选择

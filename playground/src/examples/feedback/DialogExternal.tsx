@@ -6,21 +6,21 @@ export default function DialogExternal() {
   const returnRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <>
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
       <Button ref={returnRef} variant="secondary" onClick={() => setOpen(true)}>
-        从外部状态打开
+        查看阅读提醒
       </Button>
       <Dialog
         open={open}
         onOpenChange={setOpen}
-        title="继续整理书签？"
-        description="此示例禁用点击外部关闭；Escape 和右上角的关闭按钮仍可使用。"
+        title="阅读提醒"
+        description="给长文章留一段从容的阅读时间。"
         finalFocus={returnRef}
         disablePointerDismissal
-        footer={<Button onClick={() => setOpen(false)}>继续阅读</Button>}
+        footer={<Button onClick={() => setOpen(false)}>返回阅读</Button>}
       >
-        <p>没有传入 trigger 时，由外部按钮设置 open，并通过 finalFocus 指定关闭后的焦点。</p>
+        <p>长文章可以分几次读完。先找一个舒服的位置，按照自己的节奏慢慢读。</p>
       </Dialog>
-    </>
+    </div>
   );
 }

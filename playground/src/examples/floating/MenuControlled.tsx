@@ -53,7 +53,7 @@ export default function MenuControlled() {
                 value={draftTitle}
                 required
                 maxLength={60}
-                hint="1–60 个字符；这里只修改本页示例。"
+                hint="1–60 个字符。"
                 onChange={(event) => setDraftTitle(event.target.value)}
               />
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -124,12 +124,8 @@ export default function MenuControlled() {
         />
         {removed && <Button onClick={restore}>恢复草稿</Button>}
       </div>
-      <Text size="sm" tone="muted">
-        菜单状态：{open ? '展开' : '收起'}
-      </Text>
-      <Text role="status">{message}</Text>
-      <Text size="sm" tone="muted">
-        移出不会永久删除内容；恢复入口保留在菜单外，也可以从菜单进入。
+      <Text size="sm" tone="muted" role="status">
+        {message}
       </Text>
     </div>
   );

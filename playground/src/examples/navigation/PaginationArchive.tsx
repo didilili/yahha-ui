@@ -21,10 +21,6 @@ export default function PaginationArchive() {
 
   return (
     <div style={{ display: 'grid', gap: 20 }}>
-      <Text size="sm" tone="muted">
-        用三篇本地示例摘要和页码编号模拟 80
-        页归档，只生成当前页。选择页码会更新列表，不发起请求或改变网址。
-      </Text>
       <Heading level={3} ref={heading} tabIndex={-1}>
         归档第 {page} 页
       </Heading>
@@ -54,18 +50,9 @@ export default function PaginationArchive() {
           setPage(nextPage);
         }}
       />
-      <p role="status" style={{ margin: 0 }}>
+      <Text size="sm" tone="muted" role="status">
         正在查看归档第 {page} 页。
-      </p>
-      <div>
-        <p>没有文章时，上一页与下一页均不可用：</p>
-        <Pagination
-          aria-label="空列表分页"
-          currentPage={1}
-          totalPages={0}
-          onPageChange={() => {}}
-        />
-      </div>
+      </Text>
     </div>
   );
 }

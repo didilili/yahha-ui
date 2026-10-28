@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
-import { Button, TextField } from 'yahha-ui';
+import { Button, Text, TextField } from 'yahha-ui';
 
 export default function TextFieldValidation() {
   const [nickname, setNickname] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [saved, setSaved] = useState('');
+  const [result, setResult] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const valid = nickname.trim().length >= 2 && nickname.trim().length <= 12;
   const error = submitted && !valid ? '请填写 2～12 个字符的昵称。' : undefined;
@@ -16,12 +16,12 @@ export default function TextFieldValidation() {
       onSubmit={(event) => {
         event.preventDefault();
         setSubmitted(true);
-        setSaved('');
+        setResult('');
         if (!valid) {
           inputRef.current?.focus();
           return;
         }
-        setSaved(`已保存：${nickname.trim()}`);
+        setResult(`检查结果：昵称“${nickname.trim()}”符合要求。`);
       }}
     >
       <TextField
@@ -33,17 +33,17 @@ export default function TextFieldValidation() {
         value={nickname}
         onChange={(event) => {
           setNickname(event.target.value);
-          setSaved('');
+          setResult('');
         }}
-        hint="必填，2～12 个字符，会显示在你的个人主页。"
+        hint="必填，2～12 个字符。"
         error={error}
       />
       <div>
-        <Button type="submit">保存昵称</Button>
+        <Button type="submit">检查昵称</Button>
       </div>
-      <p role="status" style={{ margin: 0 }}>
-        {saved || (error ? '尚未保存，请检查上方输入。' : '填写后提交，试试空白或过长的昵称。')}
-      </p>
+      <Text size="sm" tone="muted" role="status">
+        {result}
+      </Text>
     </form>
   );
 }

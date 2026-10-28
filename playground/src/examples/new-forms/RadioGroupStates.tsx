@@ -21,8 +21,18 @@ export default function RadioGroupStates() {
           清空选择
         </Button>
       </div>
-      <fieldset disabled style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
-        <RadioGroup label="暂不可修改" options={options} value="private" onValueChange={() => {}} />
+      <fieldset
+        aria-label="禁用状态样本"
+        disabled
+        style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}
+      >
+        <RadioGroup
+          label="收藏可见范围（已禁用）"
+          hint="此设置暂不可更改。"
+          options={options}
+          value="private"
+          onValueChange={() => {}}
+        />
       </fieldset>
     </div>
   );

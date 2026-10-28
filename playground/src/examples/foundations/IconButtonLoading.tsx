@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IconButton } from 'yahha-ui';
+import { IconButton, Text } from 'yahha-ui';
 
 export default function IconButtonLoading() {
   const [loading, setLoading] = useState(false);
@@ -15,16 +15,32 @@ export default function IconButtonLoading() {
   }, [loading]);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-      <IconButton
-        aria-label="收藏文章"
-        aria-pressed={saved}
-        loading={loading}
-        onClick={() => setLoading(true)}
-      >
-        <span aria-hidden="true">{saved ? '★' : '☆'}</span>
-      </IconButton>
-      <span role="status">{loading ? '正在更新收藏…' : saved ? '已收藏' : '尚未收藏'}</span>
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <IconButton
+          aria-label="收藏文章"
+          aria-pressed={saved}
+          loading={loading}
+          onClick={() => setLoading(true)}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill={saved ? 'currentColor' : 'none'}
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
+            <path
+              d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </IconButton>
+        <Text size="sm" tone="muted" role="status">
+          {loading ? '正在更新收藏…' : saved ? '已收藏' : '尚未收藏'}
+        </Text>
+      </div>
     </div>
   );
 }

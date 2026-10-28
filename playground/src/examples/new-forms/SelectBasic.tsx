@@ -11,7 +11,6 @@ export default function SelectBasic() {
           { value: 'reading', label: '读书笔记' },
           { value: 'photos', label: '散步相册' },
         ]}
-        hint="用于文章列表筛选；本例仅演示选择。"
       />
     </div>
   );

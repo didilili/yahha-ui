@@ -52,9 +52,6 @@ export default function EmptyBasic() {
           }
         />
       )}
-      <Text size="sm" tone="muted">
-        创建与恢复仅改变当前示例，不会发布文章。
-      </Text>
     </div>
   );
 }

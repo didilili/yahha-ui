@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Button, TextField } from 'yahha-ui';
+import { Button, Text, TextField } from 'yahha-ui';
 
 export default function ButtonForm() {
-  const [message, setMessage] = useState('填写称呼后提交表单。');
+  const [message, setMessage] = useState('尚未提交');
 
   return (
     <form
@@ -15,7 +15,9 @@ export default function ButtonForm() {
     >
       <TextField label="怎么称呼你" name="nickname" required autoComplete="nickname" />
       <Button type="submit">提交表单</Button>
-      <span role="status">{message}</span>
+      <Text size="sm" tone="muted" role="status">
+        {message}
+      </Text>
     </form>
   );
 }

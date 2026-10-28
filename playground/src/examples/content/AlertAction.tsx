@@ -80,12 +80,12 @@ export default function AlertAction() {
       </Alert>
       <Text role="status" size="sm" tone="muted">
         {phase === 'error'
-          ? '本次模拟失败，选项没有丢失。'
+          ? '保存失败，选择已保留。'
           : successful
-            ? '演示偏好已更新，未发送网络请求。'
+            ? '订阅偏好已更新。'
             : pending
-              ? '正在保存，请稍候…'
-              : '首次模拟失败，重试后成功；不发送真实订阅。'}
+              ? '正在保存…'
+              : '尚未保存。'}
       </Text>
     </div>
   );

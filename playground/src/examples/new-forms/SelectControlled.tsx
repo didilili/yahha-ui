@@ -1,8 +1,13 @@
 import { useState } from 'react';
-import { Button, Select } from 'yahha-ui';
+import { Button, Select, Text } from 'yahha-ui';
 
 export default function SelectControlled() {
   const [sort, setSort] = useState<string | null>('newest');
+  const labels: Record<string, string> = {
+    newest: '最近发布',
+    oldest: '从第一篇开始',
+    popular: '最多阅读',
+  };
   return (
     <div style={{ display: 'grid', gap: 16, maxWidth: 340 }}>
       <Select
@@ -14,11 +19,11 @@ export default function SelectControlled() {
           { value: 'oldest', label: '从第一篇开始' },
           { value: 'popular', label: '最多阅读', disabled: true },
         ]}
-        hint="最多阅读暂未开放，方向键可聚焦该选项，但不能选中。"
+        hint="“最多阅读”暂未开放。"
       />
-      <p role="status" style={{ margin: 0 }}>
-        当前值：{sort ?? '尚未选择'}
-      </p>
+      <Text size="sm" tone="muted" role="status">
+        当前值：{sort === null ? '未选择' : labels[sort]}。
+      </Text>
       <Button variant="secondary" onClick={() => setSort(null)}>
         清空选择
       </Button>

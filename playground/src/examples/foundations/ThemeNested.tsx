@@ -7,13 +7,13 @@ export default function ThemeNested() {
     <ThemeProvider theme="chiikawa" tokens={outerTokens}>
       <Surface style={{ display: 'grid', gap: 20 }}>
         <div>
-          <p style={{ marginTop: 0 }}>外层：吉伊主题，加上自定义绿色。</p>
-          <Button>外层颜色</Button>
+          <p style={{ marginTop: 0 }}>外层：吉伊主题，自定义绿色。</p>
+          <Button>外层按钮外观</Button>
         </div>
         <ThemeProvider theme="usagi">
           <Surface>
-            <p style={{ marginTop: 0 }}>内层：从乌萨奇主题默认值开始，不合并外层 tokens。</p>
-            <Button>内层颜色</Button>
+            <p style={{ marginTop: 0 }}>内层：乌萨奇主题。</p>
+            <Button>内层按钮外观</Button>
           </Surface>
         </ThemeProvider>
       </Surface>

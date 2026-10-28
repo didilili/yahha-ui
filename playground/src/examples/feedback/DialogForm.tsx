@@ -1,5 +1,5 @@
 import { useId, useRef, useState, type FormEvent } from 'react';
-import { Button, Dialog, TextField } from 'yahha-ui';
+import { Button, Dialog, Text, TextField } from 'yahha-ui';
 
 export default function DialogForm() {
   const [open, setOpen] = useState(false);
@@ -13,7 +13,7 @@ export default function DialogForm() {
     const data = new FormData(event.currentTarget);
     const title = String(data.get('title') ?? '').trim();
     if (!title) {
-      setError('请输入站点名称，不能只填写空格。');
+      setError('请输入站点标题，不能只填写空格。');
       inputRef.current?.focus();
       return;
     }
@@ -31,7 +31,7 @@ export default function DialogForm() {
         }}
         trigger={<Button>修改站点标题</Button>}
         title="站点标题"
-        description="打开后直接聚焦输入框，提交时使用原生表单校验。"
+        description="为这间阅读室取一个喜欢的名字。"
         initialFocus={inputRef}
         footer={
           <>
@@ -39,7 +39,7 @@ export default function DialogForm() {
               取消
             </Button>
             <Button type="submit" form={formId}>
-              保存
+              保存标题
             </Button>
           </>
         }
@@ -47,7 +47,7 @@ export default function DialogForm() {
         <form id={formId} onSubmit={handleSubmit}>
           <TextField
             ref={inputRef}
-            label="站点名称"
+            label="站点标题"
             name="title"
             defaultValue={saved}
             placeholder="例如：小小阅读室"
@@ -59,7 +59,9 @@ export default function DialogForm() {
           />
         </form>
       </Dialog>
-      <p role="status">{saved ? `当前标题：${saved}` : '尚未保存标题。'}</p>
+      <Text size="sm" tone="muted" role="status">
+        {saved ? `当前标题：${saved}` : '尚未保存标题。'}
+      </Text>
     </div>
   );
 }

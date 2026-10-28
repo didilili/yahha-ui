@@ -24,7 +24,7 @@ export default function ImageFallback() {
         />
         <figcaption>
           <Text size="sm" tone="muted">
-            用 aspectRatio 预留 5:3 的区域，加载、失败和恢复使用相同比例。
+            周末手记的封面。
           </Text>
         </figcaption>
       </figure>
@@ -33,7 +33,7 @@ export default function ImageFallback() {
           {status === 'loading'
             ? '正在加载图片…'
             : status === 'loaded'
-              ? '图片已恢复，正文位置保持不变。'
+              ? '图片已恢复。'
               : '图片暂不可用，正文仍可继续阅读。'}
         </Text>
       </div>

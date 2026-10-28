@@ -14,7 +14,6 @@ export default function RadioGroupBasic() {
           { value: 'monthly', label: '每月精选', description: '只寄送当月值得反复阅读的内容。' },
           { value: 'daily', label: '每天更新', description: '此选项暂未开放。', disabled: true },
         ]}
-        hint="使用方向键在可用选项间移动并选择。"
       />
     </div>
   );

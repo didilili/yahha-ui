@@ -28,7 +28,7 @@ export default function ToastBasic() {
             setOpen(false);
           }}
           title="保存成功"
-          description="这条提示会保留到你主动关闭。关闭后可以再次显示。"
+          description="标题和正文已保存在草稿中。"
         />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useId, useState } from 'react';
 import { Button, SegmentedControl, Text } from 'yahha-ui';
 
-type Visibility = 'public' | 'private' | 'scheduled';
+type Visibility = 'public' | 'private' | 'unlisted';
 
 export default function SegmentedDisabled() {
   const descriptionId = useId();
@@ -12,7 +12,7 @@ export default function SegmentedDisabled() {
   return (
     <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
       <div style={{ display: 'grid', gap: 8 }}>
-        <Text size="sm">禁用一项：暂未开放定时发布。</Text>
+        <Text size="sm">暂未开放“仅持链接者可见”。</Text>
         <SegmentedControl
           label="文章可见性"
           value={visibility}
@@ -20,14 +20,13 @@ export default function SegmentedDisabled() {
           options={[
             { value: 'public', label: '公开' },
             { value: 'private', label: '仅自己' },
-            { value: 'scheduled', label: '定时发布', disabled: true },
+            { value: 'unlisted', label: '仅持链接者', disabled: true },
           ]}
         />
       </div>
       <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
         <Text id={descriptionId} size="sm">
           {locked ? '整组已禁用，保留当前选择。' : '整组已恢复，可以更改选择。'}
-          此处由外层原生 fieldset 控制。
         </Text>
         <fieldset
           aria-label="文章设置"

@@ -20,7 +20,7 @@ export default function SegmentedForm() {
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        setResult(`提交的 sort：${data.get('sort')}`);
+        setResult(`读取结果：sort=${data.get('sort')}。`);
       }}
       onReset={(event) => {
         event.preventDefault();
@@ -30,7 +30,7 @@ export default function SegmentedForm() {
       }}
     >
       <Text id={descriptionId} size="sm">
-        文章排序（必选）。先尝试直接应用，再选择一种排序方式。
+        请选择一种文章排序方式（必选）。
       </Text>
       <SegmentedControl
         label="文章排序"
@@ -52,17 +52,17 @@ export default function SegmentedForm() {
       />
       {invalid && (
         <Text id={errorId} role="alert" size="sm">
-          请选择一种文章排序方式，再应用排序。
+          请选择一种文章排序方式，再读取排序值。
         </Text>
       )}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-        <Button type="submit">应用排序</Button>
+        <Button type="submit">读取排序值</Button>
         <Button type="reset" variant="secondary">
           恢复初始值
         </Button>
       </div>
       <Text role="status" size="sm" tone="muted">
-        {result || '表单提交读取原生 radio；重置由调用方更新受控状态。'}
+        {result}
       </Text>
     </form>
   );

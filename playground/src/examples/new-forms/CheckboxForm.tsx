@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Checkbox } from 'yahha-ui';
+import { Button, Checkbox, Text } from 'yahha-ui';
 
 export default function CheckboxForm() {
   const [result, setResult] = useState('');
@@ -22,12 +22,12 @@ export default function CheckboxForm() {
         <Checkbox label="读书笔记" name="topics" value="reading" />
       </fieldset>
       <Checkbox
-        label="我已阅读订阅说明"
+        label="我确认读取以上订阅分类"
         name="agreement"
         value="accepted"
         required
-        hint="此项使用浏览器原生必选校验；数据只在本地读取。"
-        error={agreementError ? '请先阅读并勾选订阅说明，再读取订阅。' : undefined}
+        hint="必选，请先确认已选择的订阅分类。"
+        error={agreementError ? '请勾选确认后再读取订阅分类。' : undefined}
         onInvalid={(event) => {
           event.preventDefault();
           setAgreementError(true);
@@ -44,9 +44,9 @@ export default function CheckboxForm() {
           重置
         </Button>
       </div>
-      <p role="status" style={{ margin: 0 }}>
-        订阅分类值：{result || '尚未提交'}
-      </p>
+      <Text size="sm" tone="muted" role="status">
+        {result && `读取结果：${result}。`}
+      </Text>
     </form>
   );
 }

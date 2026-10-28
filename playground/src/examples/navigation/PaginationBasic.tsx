@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pagination } from 'yahha-ui';
+import { Pagination, Text } from 'yahha-ui';
 
 const articles = [
   '沿着河岸，慢慢走回家',
@@ -29,9 +29,9 @@ export default function PaginationBasic() {
         totalPages={Math.ceil(articles.length / pageSize)}
         onPageChange={setPage}
       />
-      <p role="status" style={{ margin: 0 }}>
-        第 {page} 页，共 {articles.length} 篇文章。此例仅对本地数组分页。
-      </p>
+      <Text size="sm" tone="muted" role="status">
+        第 {page} 页，共 {articles.length} 篇文章。
+      </Text>
     </div>
   );
 }

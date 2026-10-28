@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Avatar, Button, Heading, Skeleton, Text } from 'yahha-ui';
 
-const titleHeight = 'calc(var(--chi-font-size-heading-3, 20px) * var(--chi-leading-heading, 1.45))';
-const summaryHeight = 'calc(var(--chi-font-size-body, 16px) * var(--chi-leading-body, 1.8) * 2)';
+// These reserved slots belong to this article layout, not to Skeleton's defaults.
+const titleHeight = 32;
+const summaryLineHeight = 28;
+const summaryHeight = 64;
 
 export default function SkeletonExample() {
   const [loading, setLoading] = useState(true);
@@ -30,9 +32,9 @@ export default function SkeletonExample() {
         </div>
         <div style={{ display: 'grid', minHeight: summaryHeight }}>
           {loading ? (
-            <div style={{ display: 'grid', gap: 12 }}>
-              <Skeleton height="var(--chi-font-size-body, 16px)" />
-              <Skeleton width="80%" height="var(--chi-font-size-body, 16px)" />
+            <div style={{ display: 'grid', alignContent: 'start', gap: 8 }}>
+              <Skeleton height={summaryLineHeight} />
+              <Skeleton width="80%" height={summaryLineHeight} />
             </div>
           ) : (
             <Text>把喜欢的小事留给下一次阅读。</Text>
@@ -45,10 +47,7 @@ export default function SkeletonExample() {
         </Button>
       </div>
       <Text role="status" size="sm" tone="muted">
-        {loading ? '正在展示文章加载占位。' : '文章内容已显示。'}
-      </Text>
-      <Text size="sm" tone="muted">
-        头像、标题与两行摘要共用布局；长内容仍可自然增高，不靠裁切维持占位。
+        {loading ? '文章加载中…' : '文章内容已显示。'}
       </Text>
     </div>
   );

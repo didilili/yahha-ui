@@ -17,11 +17,11 @@ export default function PopoverForm() {
   }
 
   return (
-    <div>
+    <div style={{ display: 'grid', gap: 16 }}>
       <Popover
         trigger={<Button variant="secondary">重命名收藏夹</Button>}
         title="收藏夹名称"
-        description="保存后更新名称；取消或关闭会放下本次修改。"
+        description="为收藏的文章取一个容易找到的名字。"
         open={open}
         onOpenChange={changeOpen}
         initialFocus={inputRef}
@@ -46,7 +46,7 @@ export default function PopoverForm() {
             value={name}
             required
             maxLength={30}
-            hint="1–30 个字符。未保存的修改不会带到下次打开。"
+            hint="请输入 1–30 个字符。"
             error={error}
             onInvalid={() => setError('请输入名称，不能只填写空格。')}
             onChange={(event) => {
@@ -62,9 +62,8 @@ export default function PopoverForm() {
           </div>
         </form>
       </Popover>
-      <p role="status">当前名称：{savedName}</p>
-      <Text size="sm" tone="muted">
-        名称仅保留在本页示例中。
+      <Text size="sm" tone="muted" role="status">
+        当前名称：{savedName}
       </Text>
     </div>
   );

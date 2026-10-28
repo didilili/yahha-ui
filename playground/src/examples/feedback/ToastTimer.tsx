@@ -51,7 +51,9 @@ export default function ToastTimer() {
 
   return (
     <div style={{ display: 'grid', gap: 20 }}>
-      <Text>{archived ? '《周末散步》已归档。' : '《周末散步》在文章列表中。'}</Text>
+      <Text size="sm" tone="muted">
+        {archived ? '《周末散步》已归档。' : '《周末散步》在文章列表中。'}
+      </Text>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
         <Button ref={archiveButton} onClick={archive} disabled={archived}>
           归档文章
@@ -76,7 +78,7 @@ export default function ToastTimer() {
             setOpen(false);
           }}
           title="文章已归档"
-          description="调用方在 8 秒后关闭提示；悬停或聚焦时暂停，离开后重新计时。"
+          description="《周末散步》已移入归档，可以随时恢复。"
           action={
             <Button size="sm" variant="ghost" onClick={undo}>
               撤销归档

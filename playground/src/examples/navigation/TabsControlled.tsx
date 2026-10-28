@@ -1,16 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Tabs, TextField } from 'yahha-ui';
+import { Button, Tabs, Text, TextField } from 'yahha-ui';
 
 export default function TabsControlled() {
   const [value, setValue] = useState<string | null>('write');
   const [focusDraft, setFocusDraft] = useState(false);
   const draft = useRef<HTMLInputElement>(null);
   const currentLabel =
-    value === 'write'
-      ? '写一张明信片'
-      : value === 'about'
-        ? '关于这个小站与慢慢更新的日常记录'
-        : '未选择';
+    value === 'write' ? '写一张明信片' : value === 'about' ? '明信片说明' : '未选择';
 
   useEffect(() => {
     if (!focusDraft || value !== 'write') return;
@@ -36,23 +32,15 @@ export default function TabsControlled() {
             value: 'write',
             label: '写一张明信片',
             content: (
-              <TextField
-                ref={draft}
-                label="明信片草稿"
-                placeholder="切换栏目后再回来，草稿仍会保留"
-              />
+              <TextField ref={draft} label="明信片草稿" placeholder="写下今天想分享的一件小事" />
             ),
           },
           {
             value: 'about',
-            label: '关于这个小站与慢慢更新的日常记录',
-            content: <p style={{ margin: 0 }}>草稿只保留在当前页面，不会发送或保存到服务器。</p>,
-          },
-          {
-            value: 'archive',
-            label: '旧站归档（整理中）',
-            content: <p>旧文章正在整理。</p>,
-            disabled: true,
+            label: '明信片说明',
+            content: (
+              <p style={{ margin: 0 }}>写下最近读到的一句话，或者分享今天路上遇到的小事。</p>
+            ),
           },
         ]}
       />
@@ -66,9 +54,9 @@ export default function TabsControlled() {
       >
         回到明信片
       </Button>
-      <p role="status" style={{ margin: 0 }}>
+      <Text size="sm" tone="muted" role="status">
         当前栏目：{currentLabel}
-      </p>
+      </Text>
     </div>
   );
 }
