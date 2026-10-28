@@ -70,6 +70,196 @@ export async function verifyOverlayClose(popup, label) {
   );
 }
 
+export async function verifyTooltipSeam(popup, label) {
+  const geometry = await popup.evaluate((node) => {
+    const arrow = node.nextElementSibling;
+    const box = arrow.getBoundingClientRect();
+    const paper = node.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    const rtl = style.direction === 'rtl';
+    const requested = arrow.dataset.side;
+    const side =
+      requested === 'inline-start'
+        ? rtl
+          ? 'right'
+          : 'left'
+        : requested === 'inline-end'
+          ? rtl
+            ? 'left'
+            : 'right'
+          : requested;
+    const base = ['left', 'right'].includes(side)
+      ? box.left + box.width / 2
+      : box.top + box.height / 2;
+    const borderCenter = {
+      top: paper.bottom - parseFloat(style.borderBottomWidth) / 2,
+      bottom: paper.top + parseFloat(style.borderTopWidth) / 2,
+      left: paper.right - parseFloat(style.borderRightWidth) / 2,
+      right: paper.left + parseFloat(style.borderLeftWidth) / 2,
+    }[side];
+    return { side, gap: Math.abs(base - borderCenter) };
+  });
+  assert(
+    geometry.gap <= 0.75,
+    `${label}: the arrow joins the popup border center without a disconnected seam: ${JSON.stringify(geometry)}.`,
+  );
+  return geometry;
+}
+
+export async function verifyTooltipGeometry(popup, trigger, label) {
+  const anchor = await trigger.elementHandle();
+  const geometry = await popup.evaluate((node, anchor) => {
+    const arrow = node.nextElementSibling;
+    const paper = node.getBoundingClientRect();
+    const box = arrow.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    const ink = getComputedStyle(arrow, '::before');
+    const rtl = style.direction === 'rtl';
+    const requested = arrow.dataset.side;
+    const side =
+      requested === 'inline-start'
+        ? rtl
+          ? 'right'
+          : 'left'
+        : requested === 'inline-end'
+          ? rtl
+            ? 'left'
+            : 'right'
+          : requested;
+    if (
+      getComputedStyle(arrow).display === 'none' ||
+      getComputedStyle(arrow).visibility === 'hidden'
+    ) {
+      return { side, visible: false, uncentered: arrow.hasAttribute('data-uncentered') };
+    }
+    // Transform the actual pseudo-element border box, not the unrotated Arrow wrapper.
+    const outer = (dimension, edges) =>
+      parseFloat(ink[dimension]) +
+      (ink.boxSizing === 'border-box'
+        ? 0
+        : edges.reduce(
+            (sum, edge) =>
+              sum + parseFloat(ink[`border${edge}Width`]) + parseFloat(ink[`padding${edge}`]),
+            0,
+          ));
+    const width = outer('width', ['Left', 'Right']);
+    const height = outer('height', ['Top', 'Bottom']);
+    const [ox, oy] = ink.transformOrigin.split(' ').map(parseFloat);
+    const matrix = new DOMMatrix(ink.transform);
+    const corners = [
+      [0, 0],
+      [width, 0],
+      [width, height],
+      [0, height],
+    ].map(([x, y]) => {
+      const point = new DOMPoint(x - ox, y - oy).matrixTransform(matrix);
+      return {
+        x: box.left + parseFloat(ink.left) + ox + point.x,
+        y: box.top + parseFloat(ink.top) + oy + point.y,
+      };
+    });
+    const painted = {
+      left: Math.min(...corners.map((p) => p.x)),
+      right: Math.max(...corners.map((p) => p.x)),
+      top: Math.min(...corners.map((p) => p.y)),
+      bottom: Math.max(...corners.map((p) => p.y)),
+    };
+    const target = anchor.getBoundingClientRect();
+    const focus = getComputedStyle(anchor);
+    const focusExtent =
+      anchor.matches(':focus-visible') && focus.outlineStyle !== 'none'
+        ? Math.max(0, parseFloat(focus.outlineOffset) + parseFloat(focus.outlineWidth))
+        : 0;
+    const clearance = {
+      top: target.top - painted.bottom,
+      bottom: painted.top - target.bottom,
+      left: target.left - painted.right,
+      right: painted.left - target.right,
+    }[side];
+    const vertical = ['left', 'right'].includes(side);
+    const cornerNames = {
+      top: ['BottomLeft', 'BottomRight'],
+      bottom: ['TopLeft', 'TopRight'],
+      left: ['TopRight', 'BottomRight'],
+      right: ['TopLeft', 'BottomLeft'],
+    }[side];
+    const axis = vertical ? 'y' : 'x';
+    const start = vertical ? paper.top : paper.left;
+    const end = vertical ? paper.bottom : paper.right;
+    const margins = [
+      Math.min(...corners.map((p) => p[axis])) -
+        start -
+        parseFloat(style[`border${cornerNames[0]}Radius`]),
+      end -
+        Math.max(...corners.map((p) => p[axis])) -
+        parseFloat(style[`border${cornerNames[1]}Radius`]),
+    ];
+    return { side, visible: true, clearance, focusExtent, cornerMargins: margins };
+  }, anchor);
+  if (!geometry.visible) {
+    assert(geometry.uncentered, `${label}: only an uncentered arrow is hidden.`);
+    return geometry;
+  }
+  assert(
+    geometry.clearance >= geometry.focusExtent + 0.25,
+    `${label}: painted arrow clears the trigger and its visible focus outline: ${JSON.stringify(geometry)}.`,
+  );
+  assert(
+    geometry.cornerMargins.every((margin) => margin >= -0.5),
+    `${label}: the arrow joins a straight border segment beyond both rounded corners: ${JSON.stringify(geometry)}.`,
+  );
+  return geometry;
+}
+
+async function verifyCompactTooltip(page, label) {
+  const trigger = page.getByRole('button', { name: 'Compact help', exact: true });
+  await trigger.evaluate((node) => node.scrollIntoView({ block: 'center' }));
+  await trigger.focus();
+  const popup = page.locator('.compact-tooltip');
+  await popup.waitFor();
+  await painted(popup);
+  await verifyTooltipGeometry(popup, trigger, `${label}: compact end alignment`);
+  await page.keyboard.press('Escape');
+  await popup.waitFor({ state: 'hidden' });
+  const edgeTrigger = page.getByRole('button', { name: 'Edge help', exact: true });
+  const clampedPopup = page.locator('.clamped-tooltip');
+  const original = await edgeTrigger.getAttribute('style');
+  try {
+    // Force viewport clamping beside a small trigger. A hidden arrow must keep its
+    // measured size so repeated positioning cannot toggle between hidden and visible.
+    for (const left of [17, 17.01, 17, 17.01]) {
+      await edgeTrigger.evaluate((node, left) => {
+        Object.assign(node.style, { position: 'fixed', left: `${left}px`, top: '180px' });
+        window.dispatchEvent(new Event('resize'));
+      }, left);
+      await edgeTrigger.focus();
+      await clampedPopup.waitFor();
+      await painted(clampedPopup);
+      await page.waitForTimeout(100);
+      await verifyTooltipGeometry(clampedPopup, edgeTrigger, `${label}: clamped compact alignment`);
+      const arrow = await clampedPopup.evaluate((node) => {
+        const arrow = node.nextElementSibling;
+        return {
+          hidden: getComputedStyle(arrow).visibility === 'hidden',
+          uncentered: arrow.hasAttribute('data-uncentered'),
+          width: arrow.getBoundingClientRect().width,
+        };
+      });
+      assert(
+        arrow.uncentered && arrow.hidden && arrow.width > 0,
+        `${label}: an uncentered arrow stays hidden without losing positioning geometry.`,
+      );
+    }
+  } finally {
+    await edgeTrigger.evaluate((node, original) => {
+      if (original === null) node.removeAttribute('style');
+      else node.setAttribute('style', original);
+    }, original);
+    await page.keyboard.press('Escape');
+    await clampedPopup.waitFor({ state: 'hidden' });
+  }
+}
+
 async function verifyTooltip(page, label) {
   const tooltip = page.locator('.basic-tooltip');
   await tooltip.waitFor();
@@ -156,6 +346,178 @@ async function verifyTooltip(page, label) {
     edges[arrow.side],
     `${label}: arrow ink faces its actual placement.`,
   );
+  await verifyTooltipSeam(tooltip, label);
+  await verifyTooltipGeometry(
+    tooltip,
+    page.getByRole('button', { name: 'Read article help', exact: true }),
+    label,
+  );
+}
+
+export async function verifyNativeOverlayDirection(page, label) {
+  const menuTrigger = page.getByRole('button', { name: 'Basic actions', exact: true });
+  const popoverTrigger = page.getByRole('button', { name: 'Open basic popover', exact: true });
+  const help = page.getByRole('button', { name: 'Read article help', exact: true });
+  const originalDirection = await menuTrigger.evaluate((node) =>
+    node.parentElement.getAttribute('dir'),
+  );
+  try {
+    for (const direction of ['rtl', 'ltr']) {
+      await menuTrigger.evaluate((node, dir) => (node.parentElement.dir = dir), direction);
+      for (const [kind, trigger, popup] of [
+        ['menu', menuTrigger, page.getByRole('menu')],
+        ['popover', popoverTrigger, page.getByRole('dialog', { name: /^Basic popover:/ })],
+        ['tooltip', help, page.locator('.basic-tooltip')],
+      ]) {
+        await page.mouse.move(0, 0);
+        if (kind === 'tooltip') {
+          // Re-enter with the keyboard after Escape, which suppresses the current focus session.
+          await trigger.blur();
+          await page.keyboard.press('Tab');
+          await trigger.focus();
+        } else {
+          await trigger.evaluate((node) => node.scrollIntoView({ block: 'start' }));
+          await trigger.click();
+        }
+        await popup.waitFor();
+        await painted(popup);
+        assert.equal(
+          await popup.evaluate((node) => getComputedStyle(node).direction),
+          direction,
+          `${label}: ${kind} inherits its trigger's live native ${direction} direction.`,
+        );
+        const anchor = await trigger.boundingBox();
+        const bounds = await popup.boundingBox();
+        assert(
+          bounds.x >= 0 && bounds.x + bounds.width <= page.viewportSize().width + 1,
+          `${label}: ${kind} stays inside the viewport after its direction changes.`,
+        );
+        const side = await popup.evaluate((node) => node.parentElement.dataset.side);
+        if (kind !== 'tooltip' && ['top', 'bottom'].includes(side)) {
+          const start = direction === 'rtl' ? anchor.x + anchor.width : anchor.x;
+          const left = direction === 'rtl' ? start - bounds.width : start;
+          // Only compare the requested start edge when viewport collision does not clamp it.
+          if (left >= 12 && left + bounds.width <= page.viewportSize().width - 12) {
+            const actualStart = direction === 'rtl' ? bounds.x + bounds.width : bounds.x;
+            assert(
+              Math.abs(actualStart - start) <= 1,
+              `${label}: ${kind} start alignment follows the ${direction} reading edge.`,
+            );
+          }
+        }
+        await page.keyboard.press('Escape');
+        await popup.waitFor({ state: 'hidden' });
+        await page.waitForFunction(
+          (node) => document.activeElement === node,
+          await trigger.elementHandle(),
+        );
+      }
+    }
+  } finally {
+    await menuTrigger.evaluate((node, dir) => {
+      if (dir === null) node.parentElement.removeAttribute('dir');
+      else node.parentElement.setAttribute('dir', dir);
+    }, originalDirection);
+  }
+}
+
+export async function verifyLogicalTooltipDirection(page, label) {
+  const start = page.getByRole('button', { name: 'Logical start help', exact: true });
+  const original = await start.evaluate((node) => ({
+    direction: node.parentElement.getAttribute('dir'),
+    language: node.parentElement.getAttribute('lang'),
+    documentLanguage: document.documentElement.getAttribute('lang'),
+  }));
+  try {
+    for (const [direction, language] of [
+      ['rtl', null],
+      ['rtl', 'en'],
+      ['ltr', 'ar'],
+    ]) {
+      await start.evaluate(
+        (node, { direction, language }) => {
+          node.parentElement.dir = direction;
+          for (const element of [node.parentElement, document.documentElement]) {
+            if (language === null) element.removeAttribute('lang');
+            else element.setAttribute('lang', language);
+          }
+        },
+        { direction, language },
+      );
+      for (const [name, selector] of [
+        ['Logical start help', '.logical-start-tooltip'],
+        ['Logical end help', '.logical-end-tooltip'],
+      ]) {
+        const trigger = page.getByRole('button', { name, exact: true });
+        await page.mouse.move(0, 0);
+        await trigger.evaluate((node) => node.scrollIntoView({ block: 'center' }));
+        await trigger.blur();
+        await page.keyboard.press('Tab');
+        await trigger.focus();
+        const popup = page.locator(selector);
+        await popup.waitFor();
+        await painted(popup);
+        const geometry = await popup.evaluate((node) => {
+          const arrow = node.nextElementSibling;
+          const paper = node.getBoundingClientRect();
+          const box = arrow.getBoundingClientRect();
+          const direction = getComputedStyle(node).direction;
+          const side = node.dataset.side;
+          const physicalSide =
+            side === 'inline-start'
+              ? direction === 'rtl'
+                ? 'right'
+                : 'left'
+              : side === 'inline-end'
+                ? direction === 'rtl'
+                  ? 'left'
+                  : 'right'
+                : side;
+          const ink = getComputedStyle(arrow, '::before');
+          return {
+            direction,
+            physicalSide,
+            edgeGap:
+              physicalSide === 'right'
+                ? Math.abs(box.right - paper.left)
+                : Math.abs(box.left - paper.right),
+            borders: ['Top', 'Right', 'Bottom', 'Left'].map((side) =>
+              Number(parseFloat(ink[`border${side}Width`]) > 0),
+            ),
+          };
+        });
+        assert.equal(geometry.direction, direction);
+        assert(
+          ['left', 'right'].includes(geometry.physicalSide) && geometry.edgeGap <= 6,
+          `${label}: ${name}, dir=${direction}, lang=${language ?? 'unset'} keeps its arrow beside the actual popup edge.`,
+        );
+        assert.deepEqual(
+          geometry.borders,
+          geometry.physicalSide === 'right' ? [0, 0, 1, 1] : [1, 1, 0, 0],
+          `${label}: the logical-side arrow ink points toward its trigger.`,
+        );
+        await verifyTooltipSeam(popup, `${label}: ${name}`);
+        await verifyTooltipGeometry(popup, trigger, `${label}: ${name}`);
+        await page.keyboard.press('Escape');
+        await popup.waitFor({ state: 'hidden' });
+        await page.waitForFunction(
+          (node) => document.activeElement === node,
+          await trigger.elementHandle(),
+        );
+      }
+    }
+  } finally {
+    await start.evaluate((node, original) => {
+      for (const [element, attribute, value] of [
+        [node.parentElement, 'dir', original.direction],
+        [node.parentElement, 'lang', original.language],
+        [document.documentElement, 'lang', original.documentLanguage],
+      ]) {
+        if (value === null) element.removeAttribute(attribute);
+        else element.setAttribute(attribute, value);
+      }
+    }, original);
+  }
 }
 
 export async function verifyOverlayAppearance(page, theme) {
@@ -253,6 +615,13 @@ export async function verifyOverlayAppearance(page, theme) {
   await verifyTooltip(page, `${label} top-edge collision`);
   await page.keyboard.press('Escape');
   await page.locator('.basic-tooltip').waitFor({ state: 'hidden' });
+  if (theme === 'chiikawa' && [1280, 320].includes(page.viewportSize().width)) {
+    await verifyCompactTooltip(page, label);
+    await verifyNativeOverlayDirection(page, label);
+    if (page.viewportSize().width === 1280) {
+      await verifyLogicalTooltipDirection(page, label);
+    }
+  }
   console.log(
     `Browser overlay geometry passed: ${label}, multiline menu/note, form, and tooltip arrow.`,
   );

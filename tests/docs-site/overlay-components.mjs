@@ -6,14 +6,14 @@ export async function verifyDialogForm(page, baseURL) {
   const trigger = example.getByRole('button', { name: '修改站点标题', exact: true });
   await trigger.click();
   const dialog = page.getByRole('dialog', { name: '站点标题', exact: true });
-  const name = dialog.getByRole('textbox', { name: '站点名称', exact: true });
+  const name = dialog.getByRole('textbox', { name: '站点标题', exact: true });
   await name.fill('   ');
-  await dialog.getByRole('button', { name: '保存', exact: true }).click();
+  await dialog.getByRole('button', { name: '保存标题', exact: true }).click();
   assert.equal(await dialog.isVisible(), true, 'Whitespace-only titles must keep the form open.');
   assert.equal(await name.getAttribute('aria-invalid'), 'true');
   assert.equal(await name.evaluate((node) => document.activeElement === node), true);
   await name.fill('  小小阅读室  ');
-  await dialog.getByRole('button', { name: '保存', exact: true }).click();
+  await dialog.getByRole('button', { name: '保存标题', exact: true }).click();
   await dialog.waitFor({ state: 'hidden' });
   await example.getByRole('status').getByText('当前标题：小小阅读室', { exact: true }).waitFor();
   await trigger.click();
@@ -175,7 +175,10 @@ export async function verifyOverlayExamples(page, baseURL) {
   await disable.click();
   assert.equal(await disable.getAttribute('aria-pressed'), 'true');
   await options.getByRole('button', { name: '加入稍后阅读', exact: true }).click();
-  await options.getByRole('status').getByText('已加入稍后阅读', { exact: true }).waitFor();
+  await options
+    .getByRole('status')
+    .getByText('已触发“加入稍后阅读”操作。', { exact: true })
+    .waitFor();
   await disable.click();
   assert.equal(await disable.getAttribute('aria-pressed'), 'false');
 }

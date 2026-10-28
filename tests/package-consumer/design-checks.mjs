@@ -95,6 +95,7 @@ export async function verifyDesignContract(browser, url) {
             closeTo(result.font, configuration.inputFont, `${label} ${family} ${state} font`);
           }
         }
+        await verifyNativeDateFields(scope, label);
         await verifyTextarea(page, scope, label);
         await verifyFieldFeedback(page, scope, label);
         if (!configuration.hasTouch) await verifyPressedHover(page, scope, label);
@@ -163,6 +164,40 @@ export async function verifyDesignContract(browser, url) {
   }
   await verifySelectForcedColors(browser, url);
   await verifyShortViewport(browser, url);
+}
+
+/** Keep native date editors on the field scale without replacing their browser behavior. */
+export async function verifyNativeDateFields(scope, label) {
+  const values = [
+    ['date', '2026-10-28', '2026-10-29'],
+    ['time', '10:30', '11:45'],
+    ['datetime-local', '2026-10-28T10:30', '2026-10-29T11:45'],
+    ['month', '2026-10', '2026-11'],
+    ['week', '2026-W44', '2026-W45'],
+  ];
+  const form = scope.getByTestId('design-native-dates');
+  for (const [type, initial, changed] of values) {
+    const input = form.getByTestId(`design-native-${type}`);
+    closeTo((await measurement(input)).height, 44, `${label}: native ${type} field height`);
+    assert.equal(await input.getAttribute('type'), type);
+    assert.equal(await input.inputValue(), initial);
+    await input.fill(changed);
+    assert.equal(await input.inputValue(), changed, `${label}: native ${type} remains editable.`);
+  }
+  assert.deepEqual(
+    await form.evaluate((node) => [...new FormData(node)]),
+    values.map(([type, , changed]) => [type, changed]),
+    `${label}: native date values participate in FormData.`,
+  );
+  const required = form.getByTestId('design-native-date');
+  await required.fill('');
+  assert.equal(await form.evaluate((node) => node.checkValidity()), false);
+  assert.equal(await required.evaluate((node) => node.validity.valueMissing), true);
+  await form.getByRole('button', { name: 'Reset native dates', exact: true }).click();
+  for (const [type, initial] of values) {
+    assert.equal(await form.getByTestId(`design-native-${type}`).inputValue(), initial);
+  }
+  assert.equal(await form.evaluate((node) => node.checkValidity()), true);
 }
 
 async function verifyTextarea(page, scope, label) {

@@ -14,7 +14,7 @@ const expectedEntries = Object.fromEntries(
     .map((entry) => entry.split(':')),
 );
 const expectedIds = Object.keys(expectedEntries).sort();
-const uiGroups = ['通用', '排版', '布局', '表单', '内容展示', '导航', '浮层与反馈'];
+const uiGroups = ['通用', '排版', '布局', '表单', '内容展示', '导航', '浮层', '反馈'];
 const groupCounts = Object.fromEntries(
   uiGroups.map((group) => [group, componentCatalog.filter((item) => item.group === group).length]),
 );
@@ -223,6 +223,12 @@ async function verifyLegacyCategoryNavigation(page, baseURL) {
     );
   }
   await page.goto(`${baseURL}#/components?${new URLSearchParams({ group: '反馈' })}`);
+  await expectIds(page, ['alert', 'toast', 'empty-state', 'spinner', 'skeleton']);
+  assert.equal(await category(page, '反馈').isChecked(), true);
+  await page.goto(`${baseURL}#/components?${new URLSearchParams({ group: '浮层' })}`);
+  await expectIds(page, ['dialog', 'popover', 'tooltip', 'dropdown-menu']);
+  assert.equal(await category(page, '浮层').isChecked(), true);
+  await page.goto(`${baseURL}#/components?${new URLSearchParams({ group: '浮层与反馈' })}`);
   await expectIds(page, [
     'dialog',
     'popover',
@@ -233,10 +239,7 @@ async function verifyLegacyCategoryNavigation(page, baseURL) {
     'spinner',
     'skeleton',
   ]);
-  assert.equal(await category(page, '浮层与反馈').isChecked(), true);
-  await page.waitForFunction(
-    () => new URLSearchParams(location.hash.split('?')[1]).get('group') === '浮层与反馈',
-  );
+  assert.equal(await category(page, '浮层与反馈（旧分类）').isChecked(), true);
   await page.locator('.docs-header').getByRole('link', { name: '组件', exact: true }).click();
   await overview(page);
 }

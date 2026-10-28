@@ -109,7 +109,7 @@ export async function verifyHome(browser, baseURL) {
     await page.locator('#api').waitFor();
     assert.ok((await page.locator('.example-block').count()) >= 4);
     assert.ok((await page.locator('.api-table tbody tr').count()) > 0);
-    await verifyDeployedArtwork(page, page.locator('img.doc-friends-art'), baseURL);
+    await verifyDeployedArtwork(page, page.locator('.doc-scene img.doc-scene-friends'), baseURL);
     const brand = page.locator('.docs-header .docs-brand');
     assert.equal(await brand.getAttribute('href'), '#/');
     await brand.click();

@@ -14,6 +14,13 @@ import {
 } from 'yahha-ui';
 
 const themes: ThemeName[] = ['chiikawa', 'hachiware', 'usagi'];
+const nativeDates = [
+  { type: 'date', value: '2026-10-28' },
+  { type: 'time', value: '10:30' },
+  { type: 'datetime-local', value: '2026-10-28T10:30' },
+  { type: 'month', value: '2026-10' },
+  { type: 'week', value: '2026-W44' },
+] as const;
 const options = [
   { value: 'first', label: 'First design option' },
   { value: 'next', label: 'Next design option' },
@@ -160,6 +167,26 @@ export function DesignContract() {
               defaultValue="Disabled"
               disabled
             />
+            <form
+              data-testid="design-native-dates"
+              style={{ display: 'grid', gap: 16 }}
+              onSubmit={(event) => event.preventDefault()}
+            >
+              {nativeDates.map(({ type, value }) => (
+                <TextField
+                  key={type}
+                  type={type}
+                  name={type}
+                  label={`Native ${type} field`}
+                  data-testid={`design-native-${type}`}
+                  defaultValue={value}
+                  required
+                />
+              ))}
+              <Button type="reset" variant="secondary">
+                Reset native dates
+              </Button>
+            </form>
             {(['normal', 'readonly', 'error', 'disabled'] as const).map((state) => (
               <Textarea
                 key={state}

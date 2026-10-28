@@ -17,7 +17,66 @@ export const firstTextRect = (locator) =>
     throw new Error('The contract expects a visible text line.');
   });
 
+/** Check the rendered marks from the installed package, including optimizer output. */
+export async function verifyCheckboxMarks(scope) {
+  for (const testId of ['selection-checkbox', 'selection-disabled']) {
+    const checkedPaint = await scope.getByTestId(testId).evaluate((node) =>
+      ['::before', '::after'].map((pseudo) => {
+        const style = getComputedStyle(node, pseudo);
+        return { opacity: Number(style.opacity), angle: parseFloat(style.rotate) || 0 };
+      }),
+    );
+    assert(
+      checkedPaint.every((part) => part.opacity === 1),
+      'Enabled and disabled checked boxes keep both strokes visible.',
+    );
+    near(checkedPaint[0].angle, 45);
+    near(checkedPaint[1].angle, -47);
+  }
+
+  const mixed = scope.getByTestId('selection-mixed');
+  for (const direction of ['ltr', 'rtl']) {
+    for (const disabled of [false, true]) {
+      const paint = await mixed.evaluate(
+        (node, state) => {
+          const previousDirection = node.getAttribute('dir');
+          const previousDisabled = node.disabled;
+          node.dir = state.direction;
+          node.disabled = state.disabled;
+          const line = getComputedStyle(node, '::after');
+          const before = getComputedStyle(node, '::before');
+          const result = {
+            angle: parseFloat(line.rotate) || 0,
+            width: parseFloat(line.width),
+            height: parseFloat(line.height),
+            opacity: Number(line.opacity),
+            beforeOpacity: Number(before.opacity),
+            indeterminate: node.indeterminate,
+            ariaChecked: node.getAttribute('aria-checked'),
+          };
+          if (previousDirection === null) node.removeAttribute('dir');
+          else node.setAttribute('dir', previousDirection);
+          node.disabled = previousDisabled;
+          return result;
+        },
+        { direction, disabled },
+      );
+      assert.equal(
+        paint.angle,
+        0,
+        `The ${direction} ${disabled ? 'disabled' : 'enabled'} mixed mark stays horizontal after packaging.`,
+      );
+      assert(paint.width > paint.height, 'The mixed mark is a short horizontal bar.');
+      assert.equal(paint.opacity, 1);
+      assert.equal(paint.beforeOpacity, 0, 'A mixed checkbox does not retain a checked stroke.');
+      assert.equal(paint.indeterminate, true);
+      assert.equal(paint.ariaChecked, 'mixed');
+    }
+  }
+}
+
 export async function verifySelectionContract(page, scope, hasTouch) {
+  await verifyCheckboxMarks(scope);
   const checkbox = scope.getByTestId('selection-checkbox');
   const mixed = scope.getByTestId('selection-mixed');
   const toggle = scope.getByTestId('selection-switch');

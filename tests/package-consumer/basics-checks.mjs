@@ -51,6 +51,110 @@ async function choose(page, trigger, popupClass, label) {
   await popup.waitFor({ state: 'hidden' });
 }
 
+export async function verifyBadgeAppearance(page, theme) {
+  const marks = await page.getByTestId('hidden-badge').evaluate((sample) => {
+    const container = document.createElement('div');
+    sample.parentElement.append(container);
+    try {
+      return ['ltr', 'rtl'].map((direction) => {
+        const row = document.createElement('div');
+        row.dir = direction;
+        const badge = sample.cloneNode();
+        badge.removeAttribute('hidden');
+        badge.removeAttribute('data-testid');
+        badge.dataset.tone = 'success';
+        badge.textContent = 'Saved';
+        row.append(badge);
+        container.append(row);
+        const mark = getComputedStyle(badge, '::before');
+        return {
+          direction: getComputedStyle(badge).direction,
+          visible:
+            mark.content !== 'none' &&
+            parseFloat(mark.width) > 0 &&
+            parseFloat(mark.height) > 0 &&
+            parseFloat(mark.borderBottomWidth) > 0 &&
+            (parseFloat(mark.borderLeftWidth) > 0 || parseFloat(mark.borderRightWidth) > 0),
+          shape: {
+            left: mark.borderLeft,
+            right: mark.borderRight,
+            bottom: mark.borderBottom,
+            width: mark.width,
+            height: mark.height,
+            transform: mark.transform,
+          },
+        };
+      });
+    } finally {
+      container.remove();
+    }
+  });
+  assert.deepEqual(
+    marks.map(({ direction }) => direction),
+    ['ltr', 'rtl'],
+  );
+  assert(
+    marks.every(({ visible }) => visible),
+    'A success badge retains its visible check.',
+  );
+  assert.deepEqual(
+    marks[1].shape,
+    marks[0].shape,
+    `${theme}: a success check keeps its shape when the badge follows RTL reading order.`,
+  );
+}
+
+export async function verifyImageFallbackAppearance(page) {
+  const cases = await page.locator('.reading-fallback-image').evaluate((sample) => {
+    const container = document.createElement('div');
+    sample.parentElement.append(container);
+    try {
+      return ['ltr', 'rtl'].flatMap((direction) =>
+        ['16 / 9', '1 / 1'].map((aspectRatio) => {
+          const row = document.createElement('div');
+          row.dir = direction;
+          row.style.width = '160px';
+          const frame = sample.cloneNode(true);
+          frame.style.aspectRatio = aspectRatio;
+          row.append(frame);
+          container.append(row);
+          const bounds = frame.getBoundingClientRect();
+          const fallback = frame.querySelector('[role="img"]');
+          const fallbackBounds = fallback.getBoundingClientRect();
+          const fits = (rect) =>
+            rect.left >= bounds.left - 1 &&
+            rect.right <= bounds.right + 1 &&
+            rect.top >= bounds.top - 1 &&
+            rect.bottom <= bounds.bottom + 1;
+          const walker = document.createTreeWalker(fallback, NodeFilter.SHOW_TEXT);
+          const textBounds = [];
+          for (let text = walker.nextNode(); text; text = walker.nextNode()) {
+            if (!text.textContent.trim()) continue;
+            const range = document.createRange();
+            range.selectNodeContents(text);
+            textBounds.push(...range.getClientRects());
+          }
+          return {
+            direction,
+            aspectRatio,
+            frameFits: fits(fallbackBounds),
+            textFits: textBounds.length > 0 && textBounds.every(fits),
+            iconFits: fits(fallback.querySelector('svg').getBoundingClientRect()),
+          };
+        }),
+      );
+    } finally {
+      container.remove();
+    }
+  });
+  for (const { direction, aspectRatio, frameFits, textFits, iconFits } of cases) {
+    assert(
+      frameFits && textFits && iconFits,
+      `${direction} ${aspectRatio}: a 160px image keeps its failure border, icon and default explanation inside the reserved frame.`,
+    );
+  }
+}
+
 async function verifyReadingAppearance(page, theme) {
   for (const [size, dimension, name, initials] of [
     ['sm', 32, '小林', '小林'],
@@ -292,6 +396,18 @@ async function verifyNavigationAppearance(page, theme) {
   assert(alignment.offset <= 2, 'The round disclosure aligns with the first question line.');
   const answer = page.getByTestId('navigation-long-answer');
   await answer.waitFor({ state: 'visible' });
+  for (const direction of ['ltr', 'rtl']) {
+    await accordion.evaluate((node, dir) => (node.dir = dir), direction);
+    const titleBounds = await question.locator('span').first().boundingBox();
+    const answerBounds = await answer.boundingBox();
+    const titleStart = direction === 'rtl' ? titleBounds.x + titleBounds.width : titleBounds.x;
+    const answerStart = direction === 'rtl' ? answerBounds.x + answerBounds.width : answerBounds.x;
+    assert(
+      Math.abs(titleStart - answerStart) <= 1,
+      `${theme}: ${direction} answers align with their question's reading edge.`,
+    );
+  }
+  await accordion.evaluate((node) => node.removeAttribute('dir'));
   assert(
     await answer.evaluate((node) => {
       const range = document.createRange();
@@ -351,6 +467,7 @@ export async function verifyBasics(browser, url) {
       const category = page.getByRole('combobox', { name: 'Basic category', exact: true });
       for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
         await page.getByRole('combobox', { name: 'Basic preview theme' }).selectOption(theme);
+        await verifyBadgeAppearance(page, theme);
         await verifyReadingAppearance(page, theme);
         await verifyNavigationAppearance(page, theme);
         await verifyOverlayAppearance(page, theme);
@@ -529,6 +646,7 @@ export async function verifyBasics(browser, url) {
       await normalFrame.scrollIntoViewIfNeeded();
       await normalFrame.getByText('图片暂时无法显示', { exact: true }).waitFor();
       await normalFrame.getByRole('img', { name: 'Reading preview', exact: true }).waitFor();
+      await verifyImageFallbackAppearance(page);
       const normalBefore = await normalFrame.boundingBox();
       assert(
         await normalFrame.evaluate((node) => {

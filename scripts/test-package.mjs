@@ -26,6 +26,7 @@ import {
 import { verifyBasics } from '../tests/package-consumer/basics-checks.mjs';
 import { verifyDesignContract } from '../tests/package-consumer/design-checks.mjs';
 import { createExampleEntry } from '../playground/src/docs/example-source.ts';
+import { markdownExamples } from './documentation-contract.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const require = createRequire(new URL('../package.json', import.meta.url));
@@ -90,12 +91,27 @@ try {
   await cp(join(root, 'tests/package-consumer'), consumer, { recursive: true });
   const examplesDirectory = join(consumer, 'doc-examples');
   await mkdir(examplesDirectory);
+  const markdownDirectory = join(examplesDirectory, 'markdown');
+  // Markdown contains the same unchanged TSX and relative assets as the website.
+  await cp(join(root, 'playground/src/examples'), markdownDirectory, { recursive: true });
   let exampleCount = 0;
   for (const file of await readdir(join(root, 'docs/components'))) {
     if (!file.endsWith('.md')) continue;
     const markdown = await readFile(join(root, 'docs/components', file), 'utf8');
-    for (const [index, match] of [...markdown.matchAll(/```tsx\r?\n([\s\S]*?)```/g)].entries()) {
-      await writeFile(join(examplesDirectory, `${basename(file, '.md')}-${index}.tsx`), match[1]);
+    for (const { sourcePath, source } of markdownExamples(markdown)) {
+      assert(sourcePath.startsWith('playground/src/examples/'), `${file}: unexpected source path.`);
+      const localPath = sourcePath.slice('playground/src/examples/'.length);
+      const target = resolve(markdownDirectory, localPath);
+      assert(
+        target.startsWith(`${markdownDirectory}${sep}`),
+        `${file}: source must remain in examples.`,
+      );
+      assert.equal(
+        source,
+        await readFile(join(root, sourcePath), 'utf8'),
+        `${file}: Markdown example must retain the original source.`,
+      );
+      await writeFile(target, source);
       exampleCount++;
     }
   }

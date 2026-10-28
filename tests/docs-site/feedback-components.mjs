@@ -100,7 +100,7 @@ export async function verifyFeedbackExamples(page, baseURL) {
   }
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`${baseURL}#/components/spinner`);
-  const spinner = page.locator('#spinner-sizes .example-preview');
+  const spinner = page.locator('#spinner-waiting .example-preview');
   await spinner.getByRole('button', { name: '显示完成状态', exact: true }).click();
   await spinner
     .getByRole('status', { name: '文章等待状态', exact: true })

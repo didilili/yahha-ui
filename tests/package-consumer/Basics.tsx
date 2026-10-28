@@ -261,6 +261,43 @@ export function Basics() {
             delay={0}
             className="basic-tooltip"
           />
+          <Tooltip
+            trigger={<Button>Logical start help</Button>}
+            content="Help beside the start edge."
+            side="inline-start"
+            delay={0}
+            className="logical-start-tooltip"
+          />
+          <Tooltip
+            trigger={<Button>Logical end help</Button>}
+            content="Help beside the end edge."
+            side="inline-end"
+            delay={0}
+            className="logical-end-tooltip"
+          />
+          <Tooltip
+            trigger={
+              <IconButton size="sm" aria-label="Compact help">
+                +
+              </IconButton>
+            }
+            content="A longer explanation beside a small icon, with enough text to exercise the rounded corners."
+            side="bottom"
+            align="end"
+            delay={0}
+            className="compact-tooltip"
+          />
+          <Tooltip
+            trigger={
+              <IconButton size="sm" aria-label="Edge help">
+                +
+              </IconButton>
+            }
+            content="A longer explanation beside a small icon, with enough text to exercise viewport clamping."
+            side="top"
+            delay={0}
+            className="clamped-tooltip"
+          />
         </div>
         <output aria-label="Basic action result">{message}</output>
         <ThemeProvider

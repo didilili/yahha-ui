@@ -70,7 +70,7 @@ export async function verifyNavigationExamples(page, baseURL) {
   const tabs = page.locator('#controlled .example-preview');
   const draft = tabs.getByRole('textbox', { name: '明信片草稿', exact: true });
   await draft.fill('留给周末的一句问候');
-  await tabs.getByRole('tab', { name: '关于这个小站与慢慢更新的日常记录', exact: true }).click();
+  await tabs.getByRole('tab', { name: '明信片说明', exact: true }).click();
   await tabs.getByRole('button', { name: '回到明信片', exact: true }).click();
   await page.waitForFunction(
     (node) => document.activeElement === node,
@@ -82,15 +82,18 @@ export async function verifyNavigationExamples(page, baseURL) {
   await page.goto(`${baseURL}#/components/accordion?section=controlled`);
   const accordion = page.locator('#controlled .example-preview');
   const expand = accordion.getByRole('button', { name: '展开可用说明', exact: true });
-  await expand.click();
+  // WebKit may leave a pointer-clicked button unfocused. Exercise keyboard focus retention.
+  await expand.focus();
+  await expand.press('Enter');
   assert.equal(await expand.evaluate((node) => document.activeElement === node), true);
   assert.equal(await accordion.locator('button[aria-expanded="true"]').count(), 2);
   const collapse = accordion.getByRole('button', { name: '全部收起', exact: true });
-  await collapse.click();
+  await collapse.focus();
+  await collapse.press('Space');
   assert.equal(await collapse.evaluate((node) => document.activeElement === node), true);
   assert.equal(await accordion.locator('button[aria-expanded="true"]').count(), 0);
   assert.equal(
-    await accordion.getByRole('button', { name: '离线阅读（准备中）', exact: true }).isDisabled(),
+    await accordion.getByRole('button', { name: '雨天安排（确认中）', exact: true }).isDisabled(),
     true,
   );
 
@@ -109,7 +112,7 @@ export async function verifyNavigationExamples(page, baseURL) {
   );
   assert.equal(await list.getByRole('listitem').count(), 3);
   assert.notEqual(await list.innerText(), before);
-  const empty = archive.getByRole('navigation', { name: '空列表分页', exact: true });
+  const empty = page.locator('#empty').getByRole('navigation', { name: '空列表分页', exact: true });
   assert.equal(await empty.getByRole('button', { name: '上一页', exact: true }).isDisabled(), true);
   assert.equal(await empty.getByRole('button', { name: '下一页', exact: true }).isDisabled(), true);
 }

@@ -23,7 +23,10 @@ export async function verifySelectionComponents(page, baseURL) {
     await mixed.getByRole('button', { name: '恢复初始选择', exact: true }).click();
     assert.equal(await all.getAttribute('aria-checked'), 'mixed');
     const checkboxForm = page.locator('#form');
-    const agreement = checkboxForm.getByRole('checkbox', { name: '我已阅读订阅说明', exact: true });
+    const agreement = checkboxForm.getByRole('checkbox', {
+      name: '我确认读取以上订阅分类',
+      exact: true,
+    });
     await checkboxForm.getByRole('button', { name: '读取订阅', exact: true }).click();
     assert.equal(await agreement.getAttribute('aria-invalid'), 'true');
     assert.equal(await agreement.evaluate((node) => node === document.activeElement), true);
@@ -32,7 +35,7 @@ export async function verifySelectionComponents(page, baseURL) {
     await checkboxForm.getByRole('button', { name: '读取订阅', exact: true }).click();
     await checkboxForm
       .getByRole('status')
-      .getByText('订阅分类值：journal', { exact: true })
+      .getByText('读取结果：journal。', { exact: true })
       .waitFor();
     await checkboxForm.getByRole('button', { name: '重置', exact: true }).click();
     assert.equal(await agreement.isChecked(), false);
@@ -64,7 +67,10 @@ export async function verifySelectionComponents(page, baseURL) {
       null,
     );
     await radioForm.getByRole('button', { name: '读取表单', exact: true }).click();
-    await radioForm.getByRole('status').getByText('提交值：monthly', { exact: true }).waitFor();
+    await radioForm
+      .getByRole('status')
+      .getByText('读取结果：frequency=monthly。', { exact: true })
+      .waitFor();
     await radioForm.getByRole('button', { name: '重置', exact: true }).click();
     assert.equal(await radioForm.getByRole('radio', { checked: true }).count(), 0);
     await verifySource(radioForm, 'new-forms/RadioGroupForm.tsx');
@@ -87,7 +93,7 @@ export async function verifySelectionComponents(page, baseURL) {
     await switchForm.getByRole('button', { name: '读取偏好', exact: true }).click();
     assert.match(
       await switchForm.locator('.example-preview').getByRole('status').innerText(),
-      /没有 covers 字段/,
+      /未包含封面偏好/,
     );
     await switchForm.getByRole('button', { name: '重置', exact: true }).click();
     assert.equal(
@@ -98,14 +104,14 @@ export async function verifySelectionComponents(page, baseURL) {
 
     await page.goto(`${baseURL}#/components/segmented-control`);
     const segmented = page.locator('#form');
-    await segmented.getByRole('button', { name: '应用排序', exact: true }).click();
+    await segmented.getByRole('button', { name: '读取排序值', exact: true }).click();
     await segmented.getByRole('alert').waitFor();
     await segmented.getByRole('radio', { name: '最多阅读', exact: true }).check();
     assert.equal(await segmented.getByRole('alert').count(), 0);
-    await segmented.getByRole('button', { name: '应用排序', exact: true }).click();
+    await segmented.getByRole('button', { name: '读取排序值', exact: true }).click();
     await segmented
       .getByRole('status')
-      .getByText('提交的 sort：popular', { exact: true })
+      .getByText('读取结果：sort=popular。', { exact: true })
       .waitFor();
     await segmented.getByRole('button', { name: '恢复初始值', exact: true }).click();
     assert.equal(await segmented.getByRole('radio', { checked: true }).count(), 0);
@@ -125,6 +131,89 @@ export async function verifySelectionComponents(page, baseURL) {
     assert.equal(await group.getByRole('radio').first().isDisabled(), false);
     await verifySource(segmented, 'forms/SegmentedForm.tsx');
   }
+  await verifyTextareaExamples(page, baseURL);
+}
+
+/** Textarea retains native editing, caller-owned validation and form reset. */
+export async function verifyTextareaExamples(page, baseURL) {
+  for (const width of [1280, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto(`${baseURL}#/components/textarea`);
+    const basic = page.locator('#basic');
+    const message = basic.getByRole('textbox', { name: '给作者留言', exact: true });
+    await message.waitFor();
+    assert.equal(await message.getAttribute('rows'), '4');
+    assert.equal(await message.evaluate((node) => getComputedStyle(node).resize), 'vertical');
+    assert.equal(
+      await message.evaluate((node) => parseFloat(getComputedStyle(node).fontSize)),
+      width === 320 ? 16 : 14,
+    );
+    const multiline = `第一行留言\n第二行留言\n${'PersonalReadingJournal'.repeat(30)}`;
+    await message.fill(multiline);
+    assert.equal(await message.inputValue(), multiline);
+    assert.equal(
+      await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+      true,
+      `Long multiline content stays within the ${width}px document.`,
+    );
+
+    const controlled = page.locator('#controlled');
+    const checkedMessage = controlled.getByRole('textbox', { name: '留言内容', exact: true });
+    const check = controlled.getByRole('button', { name: '检查留言', exact: true });
+    await checkedMessage.fill('');
+    await check.click();
+    assert.equal(await checkedMessage.getAttribute('aria-invalid'), 'true');
+    assert.equal(
+      await checkedMessage.evaluate((node) => document.activeElement === node),
+      true,
+      'A failed message check returns focus to the textarea.',
+    );
+    const descriptions = await checkedMessage.evaluate((node) =>
+      (node.getAttribute('aria-describedby') ?? '')
+        .split(/\s+/)
+        .map((id) => document.getElementById(id)?.textContent ?? ''),
+    );
+    assert(descriptions.some((text) => text.includes('请填写留言后再检查')));
+    await checkedMessage.fill('谢谢分享。\n这篇手记很温柔。');
+    assert.equal(await checkedMessage.getAttribute('aria-invalid'), null);
+    await check.click();
+    await controlled
+      .getByRole('status')
+      .getByText('检查结果：留言符合要求。', { exact: true })
+      .waitFor();
+    await checkedMessage.fill('');
+    await checkedMessage.press('a');
+    await checkedMessage.press('End');
+    await page.keyboard.insertText('文'.repeat(250));
+    assert.equal(
+      (await checkedMessage.inputValue()).length,
+      200,
+      'Native maxLength limits typing.',
+    );
+    await controlled.getByText('200 / 200 字', { exact: true }).waitFor();
+    await verifySource(controlled, 'new-forms/TextareaControlled.tsx');
+
+    const native = page.locator('#native');
+    const draft = native.getByRole('textbox', { name: '草稿', exact: true });
+    const initial = await draft.inputValue();
+    await draft.fill('修改后的草稿\n保留换行。');
+    assert.deepEqual(await draft.evaluate((node) => [...new FormData(node.form)]), [
+      ['draft', '修改后的草稿\n保留换行。'],
+    ]);
+    const readonly = native.getByRole('textbox', { name: '已发布简介', exact: true });
+    assert.equal(await readonly.getAttribute('readonly'), '');
+    assert.equal(await readonly.evaluate((node) => getComputedStyle(node).resize), 'none');
+    await readonly.focus();
+    const published = await readonly.inputValue();
+    await readonly.press('x');
+    assert.equal(await readonly.inputValue(), published);
+    const disabled = native.getByRole('textbox', { name: '暂时关闭留言', exact: true });
+    assert.equal(await disabled.isDisabled(), true);
+    await native.getByRole('button', { name: '重置草稿', exact: true }).click();
+    assert.equal(await draft.inputValue(), initial);
+    assert.equal(await readonly.inputValue(), published);
+    await verifySource(native, 'new-forms/TextareaStates.tsx');
+  }
 }
 
 async function verifySource(example, relative) {
@@ -133,4 +222,5 @@ async function verifySource(example, relative) {
     await example.locator('.component-source pre code').textContent(),
     await readFile(new URL(`../../playground/src/examples/${relative}`, import.meta.url), 'utf8'),
   );
+  await example.getByRole('button', { name: '收起代码', exact: true }).click();
 }

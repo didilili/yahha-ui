@@ -4,6 +4,7 @@ import { verifyHome } from './home-checks.mjs';
 import { verifyArtwork } from './artwork-checks.mjs';
 import { verifyWelcome } from './welcome-checks.mjs';
 import { verifyComponentOverview } from './overview-checks.mjs';
+import { verifyExampleHeadings } from './example-teaching-checks.mjs';
 
 export async function verifyDocs(browser, baseURL) {
   await verifyHome(browser, baseURL);
@@ -120,17 +121,98 @@ export async function verifyDocs(browser, baseURL) {
       const examples = await page.locator('.example-block').count();
       assert.equal(examples > 0, true, `${id} examples`);
       totalExamples += examples;
+      await verifyExampleHeadings(page);
       assert.equal(await page.locator('.docs-sidebar a[aria-current="page"]').count(), 1);
+      const usage = page.locator('#usage');
+      assert.equal(await usage.count(), 1, `${id}: one introductory usage section.`);
+      assert.equal(
+        await usage.evaluate((node) => {
+          const examples = document.getElementById('examples');
+          return (
+            !!examples &&
+            !!(node.compareDocumentPosition(examples) & Node.DOCUMENT_POSITION_FOLLOWING)
+          );
+        }),
+        true,
+        `${id}: usage precedes the examples in reading order.`,
+      );
+      const usageDescription = usage.locator('..').locator('.doc-prose');
+      assert(
+        (await usageDescription.innerText()).trim().length > 0,
+        `${id}: usage explains its purpose.`,
+      );
+      if (['textarea', 'checkbox', 'radio-group', 'switch'].includes(id)) {
+        await usageDescription.scrollIntoViewIfNeeded();
+        assert.equal(
+          await usageDescription.isVisible(),
+          true,
+          `${id}: the new usage guidance is visible.`,
+        );
+      }
+      const relatedLinks = await page
+        .locator('#related')
+        .locator('..')
+        .locator('.doc-prose')
+        .getByRole('link')
+        .evaluateAll((links) =>
+          links.map((link) => ({ href: link.getAttribute('href'), name: link.textContent.trim() })),
+        );
+      assert(relatedLinks.length > 0, `${id}: related components provide navigation choices.`);
+      for (const link of relatedLinks) {
+        assert(link.name.length > 0, `${id}: related links have accessible text.`);
+        assert(
+          ids.some((target) => link.href === `#/components/${target}`),
+          `${id}: related link ${link.href} points to an existing component document.`,
+        );
+      }
     }
-    assert.equal(totalExamples, 74, 'The 30 component documents must retain all 74 examples.');
+    assert.equal(totalExamples, 83, 'The 30 component documents provide 83 focused examples.');
+
+    // Reorganized chapters retain their existing deep links and keyboard destination.
+    await page.goto(`${baseURL}#/components/text`);
+    await page.locator('#behavior').waitFor();
+    await page
+      .getByRole('navigation', { name: '本页内容' })
+      .locator('a[href="#/components/text?section=behavior"]')
+      .click();
+    await page.waitForFunction(
+      () =>
+        location.hash === '#/components/text?section=behavior' &&
+        document.activeElement === document.getElementById('behavior'),
+    );
+    assert.equal(
+      (await page.locator('#behavior').boundingBox()).y >= 72,
+      true,
+      'The retained Text chapter remains below the sticky header after TOC navigation.',
+    );
+
+    await page.goto(`${baseURL}#/components/select?section=related`);
+    await page
+      .locator('#related')
+      .locator('..')
+      .getByRole('link', { name: 'RadioGroup 单选组', exact: true })
+      .click();
+    const radioGroupHeading = page.getByRole('heading', {
+      level: 1,
+      name: 'RadioGroup 单选组',
+      exact: true,
+    });
+    await radioGroupHeading.waitFor();
+    await page.waitForFunction(
+      (heading) => document.activeElement === heading,
+      await radioGroupHeading.elementHandle(),
+    );
+    assert.equal(new URL(page.url()).hash, '#/components/radio-group');
+
     let guideExamples = 0;
     for (const id of ['getting-started', 'styling', 'design-baseline', 'states', 'artwork']) {
       await page.goto(`${baseURL}#/guides/${id}`);
       await page.locator('.example-block').first().waitFor();
       guideExamples += await page.locator('.example-block').count();
+      await verifyExampleHeadings(page);
     }
     assert.equal(guideExamples, 12, 'The guides must retain all twelve integration examples.');
-    assert.equal(totalExamples + guideExamples, 86, 'The public site must retain all 86 examples.');
+    assert.equal(totalExamples + guideExamples, 95, 'The public site provides 95 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
     await page.getByRole('heading', { level: 1, name: '开始使用', exact: true }).waitFor();
     assert.match(await page.locator('main').innerText(), /npm pack/);
@@ -176,6 +258,7 @@ export async function verifyDocs(browser, baseURL) {
       for (const id of ids) {
         await page.goto(`${baseURL}#/components/${id}`);
         await page.locator('.example-block').first().waitFor();
+        await verifyExampleHeadings(page);
         assert.equal(
           await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
           true,

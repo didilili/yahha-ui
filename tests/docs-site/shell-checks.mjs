@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { verifyDesignBaseline } from './design-checks.mjs';
 import { verifyCoreComponents } from './core-components.mjs';
 import { verifySelectionComponents } from './selection-components.mjs';
+import { verifyTeachingExamples } from './example-teaching-checks.mjs';
 import { verifyFeedbackFlow, verifyFeedbackExamples } from './feedback-components.mjs';
 import { verifyBlogArchive, verifyNavigationExamples } from './navigation-components.mjs';
 import {
@@ -154,8 +155,19 @@ export async function verifyDocsNavigation(browser, baseURL) {
       const sidebar = page.locator('.docs-sidebar');
       assert.deepEqual(
         await sidebar.locator('.nav-group > p').allTextContents(),
-        ['开始使用', '通用', '排版', '布局', '表单', '内容展示', '导航', '浮层与反馈', '主题配置'],
-        'The directory keeps seven UI categories and a separate theme configuration group.',
+        [
+          '开始使用',
+          '通用',
+          '排版',
+          '布局',
+          '表单',
+          '内容展示',
+          '导航',
+          '浮层',
+          '反馈',
+          '主题配置',
+        ],
+        'The directory keeps eight UI categories and a separate theme configuration group.',
       );
       const componentLinks = sidebar.locator('a[href^="#/components/"]');
       assert.equal(await componentLinks.count(), 30);
@@ -243,6 +255,7 @@ export async function verifyDocsNavigation(browser, baseURL) {
 
 /** Exercise the actual documentation controls without depending on CSS Modules names. */
 export async function verifyDocsShell(browser, baseURL) {
+  await verifyDocsRouteIdentity(browser, baseURL);
   await verifyDocsIdentity(browser, baseURL);
   await verifyDocsNavigation(browser, baseURL);
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -272,6 +285,7 @@ export async function verifyDocsShell(browser, baseURL) {
     await verifyNavigationExamples(page, baseURL);
     await verifyDesignBaseline(page, baseURL);
     await verifyCoreComponents(page, baseURL);
+    await verifyTeachingExamples(page, baseURL);
     await verifySelectionComponents(page, baseURL);
 
     for (const width of [320, 390, 640, 768]) {
@@ -346,14 +360,14 @@ export async function verifyDocsLoading(browser, baseURL) {
   page.setDefaultTimeout(4000);
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  const isNavigationModule = (url) =>
-    /\/(?:src\/docs\/navigation\.tsx|assets\/navigation-[^/]+\.js)$/.test(url.pathname);
+  const isTabsModule = (url) =>
+    /\/(?:src\/docs\/components\/tabs\.tsx|assets\/tabs-[^/]+\.js)$/.test(url.pathname);
   let releaseRequest;
   const held = new Promise((resolve) => {
     releaseRequest = resolve;
   });
   let intercepted = 0;
-  await page.route(isNavigationModule, async (route) => {
+  await page.route(isTabsModule, async (route) => {
     intercepted += 1;
     if (intercepted === 1) {
       await held;
@@ -363,7 +377,7 @@ export async function verifyDocsLoading(browser, baseURL) {
     }
   });
   try {
-    const request = page.waitForRequest((request) => isNavigationModule(new URL(request.url())));
+    const request = page.waitForRequest((request) => isTabsModule(new URL(request.url())));
     await page.goto(`${baseURL}#/components/tabs`, { waitUntil: 'domcontentloaded' });
     await request;
     const loading = page.getByRole('status').filter({ hasText: '正在加载组件文档' });
@@ -373,7 +387,7 @@ export async function verifyDocsLoading(browser, baseURL) {
     const failure = page.getByRole('alert').filter({ hasText: '组件文档暂时未能加载' });
     await failure.waitFor();
     assert.equal(intercepted, 1, 'The test must fail the initial documentation module request.');
-    await page.unroute(isNavigationModule);
+    await page.unroute(isTabsModule);
     await failure.getByRole('button', { name: '重新加载文档', exact: true }).click();
     await page.getByRole('tablist', { name: '小站栏目', exact: true }).waitFor();
     await requireFocus(
@@ -389,7 +403,7 @@ export async function verifyDocsLoading(browser, baseURL) {
       (message) =>
         !(
           /Failed to fetch dynamically imported module/.test(message) &&
-          /(?:navigation\.tsx|navigation-[^/]+\.js)/.test(message)
+          /(?:tabs\.tsx|tabs-[^/]+\.js)/.test(message)
         ),
     );
     assert.deepEqual(
@@ -399,6 +413,56 @@ export async function verifyDocsLoading(browser, baseURL) {
     );
   } finally {
     releaseRequest();
+    await context.close();
+  }
+}
+
+/** Route identity remains correct when every page shares the same site treatment. */
+export async function verifyDocsRouteIdentity(browser, baseURL) {
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    reducedMotion: 'reduce',
+  });
+  const page = await context.newPage();
+  page.setDefaultTimeout(4000);
+  const routes = [
+    ['/', /^和朋友们，\s*搭一间小小的网站。$/, '#/'],
+    ['/guides/introduction', 'Yahha UI', '#/guides/getting-started'],
+    ['/guides/getting-started', '开始使用', '#/guides/getting-started'],
+    ['/guides/styling', '设计与组合', '#/guides/styling'],
+    ['/guides/design-baseline', '设计规范', '#/guides/styling'],
+    ['/guides/states', '状态与场景', '#/guides/styling'],
+    ['/guides/artwork', '小日常 SVG', '#/guides/styling'],
+    ['/components', '组件总览', '#/components'],
+    ['/components/button', 'Button 按钮', '#/components'],
+    ['/components/segmented-control', 'SegmentedControl 分段选择', '#/components'],
+    ['/components/theme-provider', 'ThemeProvider 主题配置', '#/components'],
+  ];
+  try {
+    for (const [path, title, currentHref] of routes) {
+      await page.goto(`${baseURL}#${path}`);
+      const heading = page.getByRole('heading', { level: 1, name: title, exact: true });
+      await heading.waitFor();
+      if (path.startsWith('/components/')) await page.locator('.doc-section').first().waitFor();
+      if (path === '/components') await page.locator('.component-overview-page').waitFor();
+      assert.deepEqual(
+        await page
+          .getByRole('navigation', { name: '快捷导航', exact: true })
+          .locator('a[aria-current="page"]')
+          .evaluateAll((links) => links.map((link) => link.getAttribute('href'))),
+        [currentHref],
+        `${path}: exactly the matching top navigation entry is current.`,
+      );
+      assert.equal(await heading.count(), 1, `${path}: the title keeps its accessible name.`);
+      assert.deepEqual(
+        await heading
+          .locator('span')
+          .evaluateAll((spans) => spans.filter((span) => !span.textContent.trim()).length),
+        0,
+        `${path}: titles without a Chinese subtitle must not render an empty title fragment.`,
+      );
+    }
+  } finally {
     await context.close();
   }
 }
@@ -551,7 +615,7 @@ async function verifyThemePresets(page, baseURL) {
   const colors = [];
   for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
     const provider = example.locator(`.example-preview [data-chiikawa-theme="${theme}"]`);
-    const button = provider.getByRole('button', { name: '主要操作', exact: true });
+    const button = provider.getByRole('button', { name: '主要按钮外观', exact: true });
     await minHeight(button, 44, `${theme} preset button`);
     colors.push(await button.evaluate((element) => getComputedStyle(element).backgroundColor));
   }
@@ -689,7 +753,7 @@ export async function verifyReadingMediaExamples(page, baseURL) {
     .waitFor();
   const avatar = page.locator('#avatar-picture .example-preview');
   await avatar.getByRole('button', { name: '模拟图片失效', exact: true }).click();
-  await avatar.getByText('图片失效后保留姓名回退，头像区域仍为 64px。', { exact: true }).waitFor();
+  await avatar.getByText('图片暂不可用，已显示姓名回退。', { exact: true }).waitFor();
   assert.equal(
     (await avatar.getByRole('img', { name: '小八', exact: true }).boundingBox()).height,
     64,
@@ -709,10 +773,7 @@ export async function verifyReadingMediaExamples(page, baseURL) {
     const frame = fallback.locator('..');
     const before = await frame.boundingBox();
     await example.getByRole('button', { name: '恢复图片', exact: true }).click();
-    await example
-      .getByRole('status')
-      .getByText('图片已恢复，正文位置保持不变。', { exact: true })
-      .waitFor();
+    await example.getByRole('status').getByText('图片已恢复。', { exact: true }).waitFor();
     const after = await example.locator('img').locator('..').boundingBox();
     assert.ok(
       Math.abs(before.width - after.width) < 0.1 && Math.abs(before.height - after.height) < 0.1,
@@ -810,6 +871,11 @@ async function verifyStateSceneExamples(page, baseURL) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await reload.click();
   await status.getByText('正在加载文章…', { exact: true }).waitFor();
+  // Reload mounts a fresh image; the text state can commit before its cached SVG decodes.
+  await page.waitForFunction(() => {
+    const image = document.querySelector('#scene-loading .story-loading-frame');
+    return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
+  });
   assert.ok(
     await loading
       .locator('.story-loading-frame')
