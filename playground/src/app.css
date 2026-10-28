@@ -385,7 +385,10 @@ h3:hover .heading-anchor,
   margin-top: 14px;
 }
 .example-block {
-  margin: 16px 0 24px;
+  margin: 24px 0 36px;
+  min-width: 0;
+}
+.example-frame {
   border: 1px solid var(--docs-line, #e3d5cd);
   border-radius: 16px 20px 18px 15px;
   overflow: hidden;
@@ -400,16 +403,20 @@ h3:hover .heading-anchor,
 .example-preview > * {
   max-width: 100%;
 }
+.example-preview.is-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 128px;
+}
 .example-description {
-  padding: 20px 28px;
-  border-top: 1px solid var(--docs-line, #eee4dd);
-  background: var(--chi-surface, #fffefa);
+  padding: 0 0 14px;
 }
 .docs-content .example-title {
   display: flex;
   align-items: baseline;
   gap: 9px;
-  font-size: var(--chi-font-size-md, 14px);
+  font-size: var(--chi-font-size-heading-4, 18px);
   margin: 0 0 6px;
   font-weight: 600;
 }
@@ -981,7 +988,7 @@ h3:hover .heading-anchor,
     padding: 23px 16px;
   }
   .example-description {
-    padding: 15px 16px;
+    padding-bottom: 12px;
   }
   .source-code pre {
     font-size: 13px;

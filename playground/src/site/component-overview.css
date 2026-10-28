@@ -7,7 +7,7 @@
   min-width: 0;
   margin-inline: auto;
   padding-bottom: 32px;
-  color: var(--site-ink, #503b3b);
+  color: var(--site-ink, #49333b);
 }
 
 .component-overview-page
@@ -32,34 +32,50 @@
 
 .component-overview-page .overview-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(150px, 240px);
-  align-items: end;
-  gap: 24px;
-  padding: 26px 30px 28px;
-  border: 1px solid var(--site-soft-line, #e3d8cb);
-  border-radius: 20px 28px 24px 18px;
-  background: var(--site-sky, #e9f4fa);
+  grid-template-columns: minmax(0, 1fr) 250px;
+  align-items: center;
+  gap: 16px;
+  min-height: 240px;
+  margin-top: 8px;
+  padding: 25px 26px 12px;
+  border: 2px solid var(--site-line, #68434c);
+  border-bottom-width: 3px;
+  border-radius: 25px 30px 23px 27px;
+  background: var(--site-sky, #def2ff);
+}
+
+.component-overview-page .overview-hero-copy {
+  min-width: 0;
+  padding-block: 4px 16px;
 }
 
 .component-overview-page .overview-eyebrow {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 9px;
-  margin-bottom: 9px;
-  font-size: 13px;
+  gap: 7px;
+  margin-bottom: 16px;
+  padding: 3px 11px;
+  border: 1.5px solid var(--site-line, #68434c);
+  border-radius: 8px 11px 8px 9px;
+  background: var(--site-pink, #f8bed2);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  transform: rotate(-2deg);
 }
 
 .component-overview-page .overview-eyebrow > svg {
-  width: 29px;
-  height: 29px;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .component-overview-page .overview-hero h1 {
   width: fit-content;
   font-family: WenKai, sans-serif;
-  font-size: clamp(32px, 3vw, 40px);
+  font-size: clamp(26px, 2.6vw, 36px);
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.25;
   letter-spacing: -0.025em;
 }
 
@@ -72,8 +88,8 @@
 .component-overview-page .overview-description {
   max-width: 43ch;
   margin-top: 5px;
-  color: var(--chi-muted, #79656a);
-  font-size: 14px;
+  color: var(--site-ink, #49333b);
+  font-size: 16px;
   line-height: 1.8;
 }
 
@@ -93,19 +109,14 @@
 .component-overview-page .overview-friends {
   display: grid;
   justify-items: center;
+  align-self: end;
   min-width: 0;
   padding-bottom: 4px;
 }
 
-.component-overview-page .overview-friends img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .component-overview-page .overview-friends > span {
-  margin-top: 9px;
-  color: var(--site-line, #72534c);
+  margin-top: 6px;
+  color: var(--site-line, #68434c);
   font-family: WenKai, sans-serif;
   font-size: 14px;
 }
@@ -113,7 +124,7 @@
 .component-overview-page .overview-find {
   margin-top: 30px;
   padding-bottom: 17px;
-  border-bottom: 1px solid var(--site-soft-line, #e3d8cb);
+  border-bottom: 1px solid var(--site-soft-line, #bed5e1);
 }
 
 .component-overview-page .overview-filterbar {
@@ -172,7 +183,7 @@
 }
 
 .component-overview-page .overview-results strong {
-  color: var(--site-ink, #503b3b);
+  color: var(--site-ink, #49333b);
   font-weight: 600;
 }
 
@@ -180,6 +191,13 @@
   display: grid;
   gap: 38px;
   margin-top: 28px;
+}
+
+.component-overview-page .overview-empty {
+  margin-top: 28px;
+  border: 1px solid var(--site-soft-line, #bed5e1);
+  border-radius: 16px 20px 18px 16px;
+  background: var(--docs-muted-surface, #f0f7fc);
 }
 
 .component-overview-page .overview-group-heading {
@@ -191,12 +209,14 @@
 
 .component-overview-page .overview-configuration {
   padding-top: 24px;
-  border-top: 1px solid var(--site-soft-line, #e3d8cb);
+  border-top: 1px solid var(--site-soft-line, #bed5e1);
 }
 
 .component-overview-page .overview-group-heading > svg {
-  width: 34px;
-  height: 34px;
+  flex: 0 0 29px;
+  width: 29px;
+  height: 29px;
+  color: var(--site-line, #68434c);
 }
 
 .component-overview-page .overview-group-heading h2 {
@@ -204,21 +224,26 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 10px;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 650;
   line-height: 1.5;
 }
 
 .component-overview-page .overview-group-heading h2 > span {
-  color: var(--chi-muted, #79656a);
+  padding: 2px 8px;
+  border: 1px solid var(--site-soft-line, #bed5e1);
+  border-radius: 7px 10px 8px 7px;
+  background: var(--docs-muted-surface, #f0f7fc);
+  color: var(--site-line, #68434c);
   font-size: 12px;
   font-weight: 400;
+  line-height: 1.7;
 }
 
 .component-overview-page .overview-group-heading p {
   margin-top: 2px;
   color: var(--chi-muted, #79656a);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -233,9 +258,9 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  border: 1px solid var(--site-soft-line, #e3d8cb);
-  border-radius: 14px 18px 16px 13px;
-  background: var(--chi-field-background, #fffefd);
+  border: 1px solid var(--site-soft-line, #bed5e1);
+  border-radius: 16px 20px 18px 16px;
+  background: var(--site-paper, #fff);
 }
 
 .component-overview-page .overview-preview {
@@ -246,14 +271,14 @@
   padding: 20px 16px;
   border-start-start-radius: inherit;
   border-start-end-radius: inherit;
-  background: var(--site-cream, #fffaf0);
+  background: var(--site-paper, #fff);
 }
 
 .component-overview-page .overview-card-copy {
   flex: 1;
   min-width: 0;
   padding: 18px 18px 20px;
-  border-top: 1px solid var(--site-soft-line, #e3d8cb);
+  border-top: 1px solid var(--site-soft-line, #bed5e1);
 }
 
 .component-overview-page .overview-card-copy h3 {
@@ -268,6 +293,8 @@
   gap: 10px;
   width: 100%;
   min-height: 44px;
+  color: var(--site-ink, #49333b);
+  text-decoration: none;
 }
 
 /* One real anchor opens the card, including its non-interactive visual sample. */
@@ -284,12 +311,18 @@
 }
 
 .component-overview-page .overview-card-link strong {
+  display: inline-block;
+  max-width: 100%;
+  padding: 4px 9px;
+  border: 1.5px solid var(--site-line, #68434c);
+  border-radius: 9px 12px 10px 11px;
+  background: var(--site-pink, #f8bed2);
   font-weight: 650;
 }
 
 .component-overview-page .overview-card-chinese {
   display: block;
-  margin-top: 2px;
+  margin-top: 5px;
   color: var(--chi-muted, #79656a);
   font-size: 13px;
   font-weight: 400;
@@ -299,7 +332,7 @@
 .component-overview-page .overview-card-copy > p {
   margin-top: 10px;
   color: var(--chi-muted, #79656a);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.8;
   overflow-wrap: anywhere;
 }
@@ -310,14 +343,15 @@
   gap: 18px;
   margin-top: 42px;
   padding: 24px;
-  border: 1px solid var(--site-soft-line, #e3d8cb);
+  border: 1px solid var(--site-soft-line, #bed5e1);
   border-radius: 16px 22px 18px 15px;
-  background: var(--site-grass, #edf3df);
+  background: var(--docs-muted-surface, #f0f7fc);
 }
 
 .component-overview-page .overview-next > svg {
   width: 46px;
   height: 46px;
+  color: var(--site-line, #68434c);
 }
 
 .component-overview-page .overview-next > div {
@@ -325,6 +359,11 @@
 }
 
 .component-overview-page .overview-next h2 {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1.5px solid var(--site-line, #68434c);
+  border-radius: 9px 12px 10px 11px;
+  background: var(--site-pink, #f8bed2);
   font-family: WenKai, sans-serif;
   font-size: 24px;
   line-height: 1.5;
@@ -333,7 +372,7 @@
 .component-overview-page .overview-next p {
   margin-top: 7px;
   color: var(--chi-muted, #79656a);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.8;
 }
 
@@ -354,7 +393,13 @@
 
 @media (hover: hover) and (pointer: fine) {
   .component-overview-page .overview-card:has(.overview-card-link:hover) {
-    border-color: var(--site-line, #72534c);
+    border-color: var(--site-line, #68434c);
+  }
+
+  .component-overview-page .overview-card-link:hover strong {
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 4px;
   }
 }
 
@@ -381,9 +426,7 @@
 
 @media (max-width: 760px) {
   .component-overview-page .overview-hero {
-    grid-template-columns: minmax(0, 1fr) 156px;
-    gap: 16px;
-    padding: 22px;
+    grid-template-columns: minmax(0, 1fr) 200px;
   }
 
   .component-overview-page .overview-description {
@@ -395,15 +438,21 @@
   }
 }
 
-@media (max-width: 580px) {
+@media (max-width: 600px) {
   .component-overview-page .overview-hero {
-    position: relative;
     grid-template-columns: minmax(0, 1fr);
-    padding: 16px;
+    gap: 0;
+    margin-top: 0;
+    padding: 20px 18px 8px;
+    border-radius: 19px 23px 20px 22px;
+  }
+
+  .component-overview-page .overview-hero-copy {
+    padding-bottom: 0;
   }
 
   .component-overview-page .overview-eyebrow {
-    margin-bottom: 5px;
+    margin-bottom: 14px;
   }
 
   .component-overview-page .overview-introduction {
@@ -419,10 +468,9 @@
   }
 
   .component-overview-page .overview-friends {
-    position: absolute;
-    top: 54px;
-    inset-inline-end: 16px;
-    width: clamp(70px, 24vw, 100px);
+    justify-self: end;
+    width: 180px;
+    margin-top: 8px;
     padding: 0;
   }
 
@@ -492,8 +540,13 @@
 
 @media (forced-colors: active) {
   .component-overview-page .overview-hero,
+  .component-overview-page .overview-eyebrow,
+  .component-overview-page .overview-group-heading h2 > span,
   .component-overview-page .overview-card,
-  .component-overview-page .overview-next {
+  .component-overview-page .overview-card-link strong,
+  .component-overview-page .overview-empty,
+  .component-overview-page .overview-next,
+  .component-overview-page .overview-next h2 {
     border-color: CanvasText;
   }
 }

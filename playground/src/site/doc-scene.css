@@ -1,0 +1,78 @@
+.doc-scene {
+  position: relative;
+  flex: 0 0 250px;
+  align-self: flex-end;
+  width: 250px;
+  max-width: 100%;
+  aspect-ratio: 5 / 3;
+  color: var(--site-ink, #50312e);
+  pointer-events: none;
+  user-select: none;
+}
+
+.doc-scene-backdrop {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.doc-scene-sky {
+  fill: #bde6fa;
+}
+
+.doc-scene-cloudbank {
+  fill: #fff;
+}
+
+.doc-scene-cloud,
+.doc-scene-star,
+.doc-scene-flower {
+  position: absolute;
+  display: block;
+  height: auto;
+}
+
+.doc-scene-cloud {
+  top: 12%;
+  left: 1%;
+  width: 24%;
+  transform: rotate(-8deg);
+}
+
+.doc-scene-star {
+  top: 7%;
+  right: 10%;
+  width: 11%;
+  transform: rotate(12deg);
+}
+
+.doc-scene-friends {
+  position: absolute;
+  right: 2%;
+  bottom: 7%;
+  display: block;
+  width: 96%;
+  height: auto;
+}
+
+.doc-scene-flower {
+  right: 1%;
+  bottom: 0;
+  width: 13%;
+  transform: rotate(8deg);
+}
+
+@media (max-width: 600px) {
+  .doc-scene {
+    flex-basis: auto;
+    align-self: flex-end;
+    width: 180px;
+  }
+}

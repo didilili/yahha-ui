@@ -191,14 +191,13 @@
   border-color: var(--site-soft-line);
 }
 
-.docs-site .example-block {
+.docs-site .example-frame {
   border-color: var(--site-soft-line);
   background: #fff;
 }
 
 .docs-site .example-description {
-  background: #fffcf6;
-  border-color: var(--site-soft-line);
+  background: transparent;
 }
 
 .docs-site .page-pagination {

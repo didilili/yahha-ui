@@ -2,8 +2,8 @@ import { useEffect, useId, useRef, useState, type Ref } from 'react';
 import { ArrowRight, Search, X } from 'lucide-react';
 import { Badge, Button, EmptyState, IconButton, Link, SegmentedControl, TextField } from 'yahha-ui';
 import { catalogGroups, componentCatalog } from '../docs/component-catalog';
-import friendsPeek from '../examples/scenes/artwork/friends-preview/friends-peek.svg';
 import ComponentPreview from './ComponentPreviews';
+import DocScene from './DocScene';
 import Motif from './Motif';
 import './component-overview.css';
 
@@ -21,8 +21,9 @@ const groupDetails: Record<
   布局: { description: '用内容纸面与分隔线，安排阅读的节奏。', motif: 'cloud' },
   表单: { description: '写下想法，选好偏好，让每一次填写都有回应。', motif: 'sprout' },
   内容展示: { description: '展示作者、配图、状态标签与补充说明。', motif: 'cloud' },
-  浮层与反馈: { description: '等待、完成和小小的提醒，都认真说明。', motif: 'star' },
-  导航: { description: '翻翻栏目、切换页码，也收好常用操作。', motif: 'letter' },
+  浮层: { description: '展开一张便笺，安放操作与补充说明。', motif: 'letter' },
+  反馈: { description: '等待、完成和小小的提醒，都认真说明。', motif: 'star' },
+  导航: { description: '翻翻栏目，接着阅读下一页。', motif: 'letter' },
   主题配置: { description: '为页面设置一致的配色，并让浮层同步主题。', motif: 'flower' },
 };
 
@@ -43,6 +44,10 @@ const legacyGroups: Record<string, { label: string; ids: readonly string[] }> = 
     ],
   },
   内容: { label: '内容（旧分类）', ids: ['avatar', 'image'] },
+  浮层与反馈: {
+    label: '浮层与反馈（旧分类）',
+    ids: ['dialog', 'popover', 'tooltip', 'alert', 'toast', 'empty-state', 'spinner', 'skeleton'],
+  },
 };
 
 function readFilters() {
@@ -50,7 +55,7 @@ function readFilters() {
   if (path !== '/components') return { query: '', group: 'all' };
   const parameters = new URLSearchParams(query);
   const requested = parameters.get('group') ?? 'all';
-  const group = requested === '反馈' ? '浮层与反馈' : requested;
+  const group = requested;
   return {
     query: (parameters.get('q') ?? '').slice(0, 80),
     group:
@@ -151,12 +156,12 @@ export default function ComponentOverview({
           <p className="overview-introduction">一眼找到，刚好合用的组件。</p>
           <p className="overview-description">给个人博客、主页与内容小站。</p>
           <div className="overview-hero-notes">
-            <Badge>{componentCatalog.length} 个文档入口</Badge>
+            <Badge tone="accent">{componentCatalog.length} 个文档入口</Badge>
             <span className="overview-inventory-note">{uiCount} 个 UI 组件与主题配置 · React</span>
           </div>
         </div>
         <div className="overview-friends" aria-hidden="true">
-          <img src={friendsPeek} width="440" height="170" alt="" />
+          <DocScene />
           <span>今天，也一起做点喜欢的事。</span>
         </div>
       </header>
@@ -223,6 +228,7 @@ export default function ComponentOverview({
 
       {matches.length === 0 ? (
         <EmptyState
+          className="overview-empty"
           title="这间小屋里，还没找到它"
           description="试试组件名或用途关键词，也可以清空筛选，重新逛一逛。"
           illustration={<Motif name="cloud" />}

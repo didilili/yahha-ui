@@ -21,6 +21,8 @@ import type { DocPage } from './docs/types';
 import friendsPeek from './examples/scenes/artwork/friends-preview/friends-peek.svg';
 import NotFoundScene from './examples/scenes/NotFoundScene';
 import HomePage from './site/HomePage';
+import DocScene from './site/DocScene';
+import Motif from './site/Motif';
 import { blogHref } from './site/site-links';
 
 /* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- API tables need keyboard focus for horizontal scrolling on narrow screens. */
@@ -34,6 +36,18 @@ const overviewSummary = {
 } as const;
 const pages = [...guidePages, overviewSummary, ...componentCatalog];
 const groups = ['开始使用', ...componentGroups, ...configurationGroups] as const;
+const groupMotifs = {
+  开始使用: 'flower',
+  通用: 'star',
+  排版: 'letter',
+  布局: 'cloud',
+  表单: 'sprout',
+  内容展示: 'flower',
+  导航: 'star',
+  浮层: 'cloud',
+  反馈: 'letter',
+  主题配置: 'sprout',
+} as const;
 const componentAliases = new Map(componentCatalog.map((page) => [page.id, page.aliases ?? []]));
 const legacy: Record<string, string> = {
   buttons: 'button',
@@ -90,6 +104,9 @@ export default function App() {
   const isOverview = route.path === '/components';
   const pageSummary = pages.find((item) => pathFor(item).slice(1) === route.path);
   const componentId = pageSummary?.group === '开始使用' ? undefined : pageSummary?.id;
+  const isGettingStarted =
+    pageSummary?.id === 'introduction' || pageSummary?.id === 'getting-started';
+  const isDesignGuide = pageSummary?.group === '开始使用' && !isOverview && !isGettingStarted;
   const currentComponentLoad =
     componentLoad && componentLoad.id === componentId && componentLoad.attempt === loadAttempt
       ? componentLoad
@@ -305,7 +322,7 @@ export default function App() {
   }, []);
 
   return (
-    <ThemeProvider theme="chiikawa" className="docs-app docs-site">
+    <ThemeProvider theme="chiikawa" className="docs-app docs-site docs-cartoon">
       <title>
         {isHome
           ? 'Yahha UI · 朋友们的组件小屋'
@@ -337,17 +354,25 @@ export default function App() {
           <Link href="#/" className="header-link" aria-current={isHome ? 'page' : undefined}>
             首页
           </Link>
-          <Link href="#/guides/getting-started" className="header-link">
+          <Link
+            href="#/guides/getting-started"
+            className="header-link"
+            aria-current={isGettingStarted ? 'page' : undefined}
+          >
             开始使用
           </Link>
           <Link
             href="#/components"
             className="header-link"
-            aria-current={isOverview ? 'page' : undefined}
+            aria-current={isOverview || componentId ? 'page' : undefined}
           >
             组件
           </Link>
-          <Link href="#/guides/styling" className="header-link">
+          <Link
+            href="#/guides/styling"
+            className="header-link"
+            aria-current={isDesignGuide ? 'page' : undefined}
+          >
             设计与组合
           </Link>
           <Link href={blogHref} className="header-link" target="_blank" rel="noopener noreferrer">
@@ -386,109 +411,114 @@ export default function App() {
           className={`docs-sidebar ${menuOpen ? 'is-open' : ''}`}
           inert={isHome && !menuOpen}
         >
-          <div className={`doc-search${query ? ' has-query' : ''}`}>
-            <TextField
-              ref={searchRef}
-              label="搜索文档"
-              leading={<Search size={17} />}
-              type="search"
-              placeholder="搜索组件或指南…"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              classNames={{
-                label: 'sr-only',
-                inputWrapper: 'doc-search-control',
-                input: 'doc-search-input',
-              }}
-            />
-            {query && (
-              <IconButton
-                variant="ghost"
-                className="search-clear"
-                aria-label="清空搜索"
+          <div className="docs-sidebar-scroll">
+            <div className={`doc-search${query ? ' has-query' : ''}`}>
+              <TextField
+                ref={searchRef}
+                label="搜索文档"
+                leading={<Search size={17} />}
+                type="search"
+                placeholder="搜索组件或指南…"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                classNames={{
+                  label: 'sr-only',
+                  inputWrapper: 'doc-search-control',
+                  input: 'doc-search-input',
+                }}
+              />
+              {query && (
+                <IconButton
+                  variant="ghost"
+                  className="search-clear"
+                  aria-label="清空搜索"
+                  onClick={() => {
+                    setQuery('');
+                    searchRef.current?.focus();
+                  }}
+                >
+                  <X size={17} aria-hidden="true" />
+                </IconButton>
+              )}
+            </div>
+            <nav aria-label="文档目录">
+              <a
+                className="sidebar-home"
+                href="#/"
+                aria-current={isHome ? 'page' : undefined}
                 onClick={() => {
+                  setMenuOpen(false);
                   setQuery('');
-                  searchRef.current?.focus();
+                  if (isHome) requestAnimationFrame(() => headingRef.current?.focus());
                 }}
               >
-                <X size={17} aria-hidden="true" />
-              </IconButton>
-            )}
-          </div>
-          <nav aria-label="文档目录">
-            <a
-              className="sidebar-home"
-              href="#/"
-              aria-current={isHome ? 'page' : undefined}
-              onClick={() => {
-                setMenuOpen(false);
-                setQuery('');
-                if (isHome) requestAnimationFrame(() => headingRef.current?.focus());
-              }}
-            >
-              朋友们的组件小屋
-            </a>
-            <Link
-              href={blogHref}
-              className="sidebar-blog"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              示例网站 <ArrowUpRight size={16} aria-hidden="true" />
-              <span className="sr-only">（新标签页打开）</span>
-            </Link>
-            {groups.map((group) => {
-              const items = filtered.filter((item) => item.group === group);
-              return items.length ? (
-                <div className="nav-group" key={group}>
-                  <p>{group}</p>
-                  {items.map((item) => (
-                    <a
-                      key={item.id}
-                      href={pathFor(item)}
-                      aria-current={pageSummary?.id === item.id ? 'page' : undefined}
+                朋友们的组件小屋
+              </a>
+              <Link
+                href={blogHref}
+                className="sidebar-blog"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                示例网站 <ArrowUpRight size={16} aria-hidden="true" />
+                <span className="sr-only">（新标签页打开）</span>
+              </Link>
+              {groups.map((group) => {
+                const items = filtered.filter((item) => item.group === group);
+                return items.length ? (
+                  <div className="nav-group" key={group}>
+                    <p>
+                      <Motif name={groupMotifs[group]} />
+                      {group}
+                    </p>
+                    {items.map((item) => (
+                      <a
+                        key={item.id}
+                        href={pathFor(item)}
+                        aria-current={pageSummary?.id === item.id ? 'page' : undefined}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          setQuery('');
+                          if (menuOpen && item.id === pageSummary?.id)
+                            requestAnimationFrame(() => headingRef.current?.focus());
+                        }}
+                      >
+                        <span>{item.name}</span>
+                        {item.chinese && <span className="nav-chinese">{item.chinese}</span>}
+                      </a>
+                    ))}
+                  </div>
+                ) : null;
+              })}
+            </nav>
+            {filtered.length === 0 && (
+              <div role="status" className="search-empty">
+                <EmptyState
+                  title="没有匹配的文档"
+                  description="试试组件英文名或中文名，也可以清空搜索。"
+                  action={
+                    <Button
+                      variant="secondary"
                       onClick={() => {
-                        setMenuOpen(false);
                         setQuery('');
-                        if (menuOpen && item.id === pageSummary?.id)
-                          requestAnimationFrame(() => headingRef.current?.focus());
+                        searchRef.current?.focus();
                       }}
                     >
-                      <span>{item.name}</span>
-                      {item.chinese && <span className="nav-chinese">{item.chinese}</span>}
-                    </a>
-                  ))}
-                </div>
-              ) : null;
-            })}
-          </nav>
-          {filtered.length === 0 && (
-            <div role="status" className="search-empty">
-              <EmptyState
-                title="没有匹配的文档"
-                description="试试组件英文名或中文名，也可以清空搜索。"
-                action={
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      setQuery('');
-                      searchRef.current?.focus();
-                    }}
-                  >
-                    显示全部文档
-                  </Button>
-                }
-              />
+                      显示全部文档
+                    </Button>
+                  }
+                />
+              </div>
+            )}
+            <div className="sidebar-foot">
+              <BookOpen size={17} />
+              <p>
+                小小的组件，
+                <br />
+                也可以认真做好。
+              </p>
+              <span>React · 非官方同人项目</span>
             </div>
-          )}
-          <div className="sidebar-foot">
-            <BookOpen size={17} />
-            <p>
-              小小的组件，
-              <br />
-              也可以认真做好。
-            </p>
-            <span>React · 非官方同人项目</span>
           </div>
         </aside>
         <main
@@ -509,17 +539,17 @@ export default function App() {
                       {page.group === '开始使用' ? 'GUIDE / 使用指南' : `${page.group} / COMPONENT`}
                     </p>
                     <Heading level={1} tabIndex={-1} ref={headingRef} className="doc-title">
-                      {titleFor(page)}
+                      <span className="doc-title-name">{page.name}</span>
+                      {page.chinese && (
+                        <>
+                          {' '}
+                          <span className="doc-title-chinese">{page.chinese}</span>
+                        </>
+                      )}
                     </Heading>
                     <Text className="doc-description">{page.description}</Text>
                   </div>
-                  <img
-                    className="doc-friends-art"
-                    src={friendsPeek}
-                    alt=""
-                    width="440"
-                    height="170"
-                  />
+                  <DocScene />
                 </div>
                 {page.importCode && <CodeBlock source={page.importCode} compact />}
               </header>
@@ -532,6 +562,7 @@ export default function App() {
                     data-doc-heading
                     tabIndex={-1}
                   >
+                    <Motif name={section.id === 'examples' ? 'flower' : 'star'} />
                     {section.title}
                     <a
                       className="heading-anchor"
@@ -554,6 +585,7 @@ export default function App() {
                       source,
                       themeScope,
                       assets,
+                      previewAlign,
                     }) => (
                       <section
                         id={id}
@@ -563,10 +595,7 @@ export default function App() {
                         key={id}
                         aria-labelledby={`${id}-label`}
                       >
-                        <div className="example-preview">
-                          <Example />
-                        </div>
-                        <div className="example-description">
+                        <header className="example-description">
                           <Heading level={3} className="example-title">
                             <span id={`${id}-label`}>{title}</span>
                             <a
@@ -581,8 +610,15 @@ export default function App() {
                             </a>
                           </Heading>
                           <Text className="example-caption">{description}</Text>
+                        </header>
+                        <div className="example-frame">
+                          <div
+                            className={`example-preview${previewAlign === 'center' ? ' is-centered' : ''}`}
+                          >
+                            <Example />
+                          </div>
+                          <ExampleSource source={source} themeScope={themeScope} assets={assets} />
                         </div>
-                        <ExampleSource source={source} themeScope={themeScope} assets={assets} />
                       </section>
                     ),
                   )}
@@ -664,17 +700,17 @@ export default function App() {
                       {isOverview ? 'CATALOG / 组件小屋' : `${pageSummary.group} / COMPONENT`}
                     </p>
                     <Heading level={1} tabIndex={-1} ref={headingRef} className="doc-title">
-                      {titleFor(pageSummary)}
+                      <span className="doc-title-name">{pageSummary.name}</span>
+                      {pageSummary.chinese && (
+                        <>
+                          {' '}
+                          <span className="doc-title-chinese">{pageSummary.chinese}</span>
+                        </>
+                      )}
                     </Heading>
                     <Text className="doc-description">{pageSummary.description}</Text>
                   </div>
-                  <img
-                    className="doc-friends-art"
-                    src={friendsPeek}
-                    alt=""
-                    width="440"
-                    height="170"
-                  />
+                  <DocScene />
                 </div>
               </header>
               {loadFailed ? (
