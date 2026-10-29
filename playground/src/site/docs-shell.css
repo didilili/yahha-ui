@@ -88,24 +88,6 @@
   color: #8b7664;
 }
 
-.docs-site .sidebar-home {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
-  margin-top: 12px;
-  padding: 7px 12px;
-  border: 1px dashed var(--site-soft-line);
-  border-radius: 12px;
-  color: var(--site-ink);
-  font-family: WenKai, sans-serif;
-  font-size: 16px;
-}
-
-.docs-site .sidebar-home:hover,
-.docs-site .sidebar-home[aria-current='page'] {
-  background: var(--site-pink);
-}
-
 .docs-site .nav-group a {
   border-radius: 12px 15px 12px 14px;
 }
@@ -286,8 +268,7 @@
 }
 
 @media (forced-colors: active) {
-  .docs-site .nav-group a[aria-current='page'],
-  .docs-site .sidebar-home[aria-current='page'] {
+  .docs-site .nav-group a[aria-current='page'] {
     outline: 2px solid Highlight;
     outline-offset: -2px;
   }

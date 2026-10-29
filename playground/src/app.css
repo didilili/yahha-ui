@@ -204,6 +204,9 @@ svg {
 .nav-group {
   margin-top: 26px;
 }
+.mobile-site-links {
+  display: none;
+}
 .sidebar-blog {
   display: flex;
   align-items: center;
@@ -919,6 +922,10 @@ h3:hover .heading-anchor,
     display: inline-flex;
     flex: 0 0 auto;
     margin-left: auto;
+  }
+  .mobile-site-links {
+    display: block;
+    margin-top: 26px;
   }
   .docs-content {
     max-width: 850px;

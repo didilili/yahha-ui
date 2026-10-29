@@ -279,8 +279,10 @@ export default function App() {
         setMenuOpen(false);
         const directoryHidden = !sidebar.current?.getClientRects().length;
         const lostDirectoryFocus =
-          directoryHidden &&
-          (sidebar.current?.contains(active) || (navigationHadFocus && active === document.body));
+          (sidebar.current?.contains(active) &&
+            (directoryHidden ||
+              (active instanceof HTMLElement && !active.getClientRects().length))) ||
+          (navigationHadFocus && active === document.body);
         if (
           active === menuButton.current ||
           (menuHadFocus && active === document.body) ||
@@ -442,27 +444,6 @@ export default function App() {
               )}
             </div>
             <nav aria-label="文档目录">
-              <a
-                className="sidebar-home"
-                href="#/"
-                aria-current={isHome ? 'page' : undefined}
-                onClick={() => {
-                  setMenuOpen(false);
-                  setQuery('');
-                  if (isHome) requestAnimationFrame(() => headingRef.current?.focus());
-                }}
-              >
-                朋友们的组件小屋
-              </a>
-              <Link
-                href={blogHref}
-                className="sidebar-blog"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                示例网站 <ArrowUpRight size={16} aria-hidden="true" />
-                <span className="sr-only">（新标签页打开）</span>
-              </Link>
               {groups.map((group) => {
                 const items = filtered.filter((item) => item.group === group);
                 return items.length ? (
@@ -510,6 +491,17 @@ export default function App() {
                 />
               </div>
             )}
+            <nav className="mobile-site-links" aria-label="示例入口">
+              <Link
+                href={blogHref}
+                className="sidebar-blog"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                示例网站 <ArrowUpRight size={16} aria-hidden="true" />
+                <span className="sr-only">（新标签页打开）</span>
+              </Link>
+            </nav>
             <div className="sidebar-foot">
               <BookOpen size={17} />
               <p>
