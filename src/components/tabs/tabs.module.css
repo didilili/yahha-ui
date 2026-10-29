@@ -7,8 +7,8 @@
 .list {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--chi-space-1, 4px) var(--chi-space-2, 8px);
-  padding: var(--chi-focus-offset, 2px);
+  gap: var(--chi-space-2, 8px);
+  padding: calc(var(--chi-focus-width, 2px) + var(--chi-focus-offset, 2px));
 }
 .tab {
   box-sizing: border-box;
@@ -42,24 +42,28 @@
   overflow-wrap: anywhere;
   cursor: pointer;
   touch-action: manipulation;
-  transition: background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+  transition:
+    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
+    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
 .tab::after {
   content: '';
   position: absolute;
   bottom: 2px;
   left: 50%;
-  width: 28px;
+  width: 32px;
   max-width: calc(100% - 24px);
   height: 4px;
   border-radius: 4px 3px 4px 2px;
   background: var(--chi-contour, #684150);
   opacity: 0;
-  transform: translateX(-50%);
+  transform: translateX(-50%) rotate(-2deg);
   pointer-events: none;
   transition: opacity var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
 .tab[data-active] {
+  background: var(--chi-accent-soft, #fff0f6);
+  box-shadow: inset 0 1px 0 var(--chi-field-background, #ffffff);
   color: var(--chi-ink, #49313d);
 }
 .tab[data-active]::after {
@@ -71,6 +75,8 @@
   outline-offset: var(--chi-focus-offset, 2px);
 }
 .tab[data-disabled] {
+  background: transparent;
+  box-shadow: none;
   color: var(--chi-muted, #7a5c6d);
   cursor: not-allowed;
 }
@@ -89,10 +95,10 @@
 }
 @media (hover: hover) {
   .tab:not([data-disabled]):not([data-active]):hover {
-    background: var(--chi-accent-soft, #fff0f6);
+    background: var(--chi-neutral-surface, #f1f8ff);
   }
   .tab[data-active]:not([data-disabled]):hover {
-    background: var(--chi-accent-soft, #fff0f6);
+    background: color-mix(in srgb, var(--chi-accent, #ffc3d9) 45%, var(--chi-surface, #ffffff));
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -103,6 +109,10 @@
 }
 
 @media (forced-colors: active) {
+  .tab,
+  .tab[data-active] {
+    box-shadow: none;
+  }
   .tab[data-disabled] {
     color: GrayText;
   }

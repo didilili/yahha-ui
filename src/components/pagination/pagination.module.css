@@ -20,6 +20,7 @@
 .pageGroup {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--chi-space-2, 8px);
 }
 .button {
@@ -48,18 +49,27 @@
   touch-action: manipulation;
   transition:
     background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
+    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
 .pageGroup .button {
+  flex: 0 0 auto;
   padding-inline: calc(var(--chi-space-3, 12px) - var(--chi-control-border-width, 2px));
   border-color: var(--chi-paper-line, #c9deec);
   background: var(--chi-surface, #ffffff);
+  box-shadow: inset 0 -2px 0 var(--chi-neutral-surface, #f1f8ff);
   font-variant-numeric: tabular-nums;
 }
 .button[aria-current='page'] {
   border-color: var(--chi-contour, #684150);
   border-radius: 48% 52% 50% 46%;
   background: var(--chi-accent, #ffc3d9);
+  box-shadow:
+    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
+    inset 0 -3px 0 color-mix(in srgb, var(--chi-line, #c58ba1) 45%, transparent);
+}
+.button:not(:disabled):active {
+  box-shadow: var(--chi-shadow-selected, inset 0 2px 0 rgb(70 46 49 / 8%));
 }
 .button:focus-visible {
   outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
@@ -69,6 +79,7 @@
   border-color: transparent;
   background: transparent;
   color: var(--chi-muted, #7a5c6d);
+  box-shadow: none;
   cursor: not-allowed;
 }
 .ellipsis {
@@ -91,6 +102,12 @@
 }
 
 @media (forced-colors: active) {
+  .button,
+  .pageGroup .button,
+  .button[aria-current='page'],
+  .button:not(:disabled):active {
+    box-shadow: none;
+  }
   .button[aria-current='page'] {
     border-color: Highlight;
   }
