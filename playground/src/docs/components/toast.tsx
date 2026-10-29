@@ -33,7 +33,7 @@ export default defineComponentPage('toast', {
           id: 'basic',
           title: '受控显示与关闭',
           description:
-            '点击按钮显示示例保存结果，手动关闭后可再次显示；从提示内关闭后回到触发按钮。',
+            '点击按钮显示模拟保存结果，不实际持久化草稿；手动关闭后可再次显示，从提示内关闭后回到触发按钮。',
           component: ToastBasic,
           source: toastBasicSource,
         },
@@ -136,10 +136,15 @@ export default defineComponentPage('toast', {
       id: 'styling',
       title: '放置提示',
       content: (
-        <p>
-          默认在文档流中显示。需要固定在屏幕角落时，由外层容器设置定位、窄屏边距与多条消息的排列，并避免遮挡当前操作；Toast
-          不创建 Portal 或全局消息队列。
-        </p>
+        <>
+          <p>
+            白纸回执使用浅蓝内底缘，状态印签使用白色上内缘与浅语义色下内缘。补充操作区以浅蓝纸面、轻纸虚线和内部留白与正文分开；强制颜色下清除装饰阴影。
+          </p>
+          <p>
+            默认在文档流中显示。需要固定在屏幕角落时，由外层容器设置定位、窄屏边距与多条消息的排列，并避免遮挡当前操作；Toast
+            不创建 Portal 或全局消息队列。
+          </p>
+        </>
       ),
     },
   ],

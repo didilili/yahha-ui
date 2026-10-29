@@ -1,4 +1,5 @@
 .alert {
+  --alert-paper-line: var(--chi-info-line, #bbd0df);
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
@@ -8,6 +9,9 @@
   border: var(--chi-border-width, 1px) solid var(--chi-info-line, #bbd0df);
   border-radius: var(--chi-radius-note, 14px 20px 17px 12px);
   background: var(--chi-info-surface, #f4f9fd);
+  box-shadow:
+    inset 0 1px 0 var(--chi-surface, #ffffff),
+    inset 0 -2px 0 color-mix(in srgb, var(--alert-paper-line) 35%, transparent);
   color: var(--chi-ink, #49313d);
   font-family: inherit;
   font-size: var(--chi-font-size-body-sm, 14px);
@@ -39,6 +43,7 @@
   font-size: inherit;
 }
 .alert[data-tone='success'] {
+  --alert-paper-line: var(--chi-success-line, #c6d8b8);
   background: var(--chi-success-surface, #f3f8ed);
   border-color: var(--chi-success-line, #c6d8b8);
 }
@@ -46,6 +51,7 @@
   color: var(--chi-success-ink, #506a3b);
 }
 .alert[data-tone='warning'] {
+  --alert-paper-line: var(--chi-warning-line, #daca9f);
   background: var(--chi-warning-surface, #fff8e8);
   border-color: var(--chi-warning-line, #daca9f);
 }
@@ -53,9 +59,16 @@
   color: var(--chi-warning-ink, #896329);
 }
 .alert[data-tone='error'] {
+  --alert-paper-line: var(--chi-error, #a33e4f);
   background: var(--chi-error-surface, #fff4f5);
   border-color: var(--chi-error, #a33e4f);
 }
 .alert[data-tone='error'] .icon {
   color: var(--chi-error, #a33e4f);
+}
+
+@media (forced-colors: active) {
+  .alert {
+    box-shadow: none;
+  }
 }

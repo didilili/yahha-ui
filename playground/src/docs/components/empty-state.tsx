@@ -22,7 +22,7 @@ export default defineComponentPage('empty-state', {
       examples: [
         {
           id: 'basic',
-          title: '创建内容与恢复空态',
+          title: '首次无内容与创建',
           description:
             '创建与恢复只改变当前示例，不发布文章；创建后聚焦内容标题，恢复空态后回到创建按钮。',
           component: EmptyBasic,
@@ -30,7 +30,7 @@ export default defineComponentPage('empty-state', {
         },
         {
           id: 'search',
-          title: '搜索与恢复操作',
+          title: '搜索无结果与清空条件',
           description:
             '输入框实际筛选示例文章。没有结果时提供清空搜索按钮，恢复列表并将焦点返回输入框。',
           component: EmptySearch,
@@ -42,9 +42,15 @@ export default defineComponentPage('empty-state', {
       id: 'design',
       title: '说明原因并给出下一步',
       content: (
-        <p>
-          首次无内容可引导创建，筛选无结果可引导清空或修改条件。默认的小纸页或自定义插画用于陪衬，原因和恢复办法仍写进文字。描述和操作保持简明，让长文本与多个按钮在窄屏自然换行。
-        </p>
+        <>
+          <p>
+            首次无内容可引导创建，筛选无结果可引导清空或修改条件。默认的小纸页或自定义插画用于陪衬，原因和恢复办法仍写进文字。描述和操作保持简明，让长文本与多个按钮在窄屏自然换行。
+          </p>
+          <p>
+            默认小纸页使用白色亮边和浅蓝内底缘，强制颜色下清除装饰阴影。自定义插画由 illustration
+            提供，不套用默认小纸页的绘制。
+          </p>
+        </>
       ),
     },
     {

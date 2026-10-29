@@ -124,7 +124,7 @@ export default function SpinnerWaiting() {
 
 默认 role="status"，由 label 提供屏幕阅读器文字，图形本身为装饰。外层已有包含可见状态文字的 status 时，将内部 Spinner 设为 role="presentation"、aria-hidden="true"，避免同一等待重复播报。
 
-请求结束时移除等待标记，并更新为实际完成、失败或空内容说明。等待过久时应提供原因或恢复入口，不让持续转动代替结果；组件不接受 children，可见说明放在旁边。
+请求结束时移除等待标记，并更新为实际完成、失败或空内容说明。等待过久时应提供原因或恢复入口，不让等待标记代替结果；组件不接受 children，可见说明放在旁边。
 
 <a id="related"></a>
 
