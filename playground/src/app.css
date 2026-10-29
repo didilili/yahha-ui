@@ -4,8 +4,8 @@
   font-display: swap;
 }
 :root {
-  color: var(--chi-ink, #462e31);
-  background: var(--chi-surface, #fffefa);
+  color: var(--chi-ink, #49313d);
+  background: var(--chi-surface, #ffffff);
   font-family:
     -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
     sans-serif;
@@ -42,7 +42,7 @@ svg {
 }
 ::selection {
   background: var(--chi-accent, #f3d7df);
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
 }
 :where(:focus-visible) {
   outline: 2px solid var(--chi-focus, #8e6371);
@@ -68,7 +68,7 @@ svg {
   --docs-line: #e4d9d3;
   --docs-muted-surface: #f9f5f1;
   min-height: 100vh;
-  background: var(--chi-surface, #fffefa);
+  background: var(--chi-surface, #ffffff);
 }
 .skip-link {
   position: fixed;
@@ -77,7 +77,7 @@ svg {
   z-index: 100;
   padding: 10px 18px;
   border-radius: 8px;
-  background: var(--chi-ink, #462e31);
+  background: var(--chi-ink, #49313d);
   color: #fff;
 }
 .skip-link:focus {
@@ -92,7 +92,7 @@ svg {
   align-items: center;
   gap: 23px;
   padding: 0 max(24px, calc((100vw - var(--docs-page-width)) / 2 + 24px));
-  background: var(--chi-surface, #fffefa);
+  background: var(--chi-surface, #ffffff);
   border-bottom: 1px solid var(--docs-line, #e9dfd7);
 }
 .docs-brand {
@@ -382,7 +382,7 @@ h3:hover .heading-anchor,
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
 }
 .doc-retry {
   margin-top: 14px;
@@ -395,7 +395,7 @@ h3:hover .heading-anchor,
   border: 1px solid var(--docs-line, #e3d5cd);
   border-radius: 16px 20px 18px 15px;
   overflow: hidden;
-  background: var(--chi-field-background, #fffefd);
+  background: var(--chi-field-background, #ffffff);
   min-width: 0;
 }
 .example-preview {
@@ -450,7 +450,7 @@ h3:hover .heading-anchor,
   gap: 8px;
   padding: 4px 10px;
   background: var(--docs-muted-surface, #f9f5f1);
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   font-size: var(--chi-font-size-sm, 12px);
 }
 .code-action {
@@ -503,21 +503,21 @@ h3:hover .heading-anchor,
 }
 .example-setup {
   border-top: 1px solid var(--docs-line, #e4d9d3);
-  background: var(--chi-surface, #fffefa);
+  background: var(--chi-surface, #ffffff);
   font-size: var(--chi-font-size-body-sm, 14px);
 }
 .example-setup summary {
   min-height: 44px;
   padding: 10px 24px;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   cursor: pointer;
 }
 .example-setup[open] summary {
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
 }
 .example-setup-label {
   margin-inline-start: 12px;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   font-size: var(--chi-font-size-sm, 12px);
   white-space: nowrap;
 }
@@ -533,7 +533,7 @@ h3:hover .heading-anchor,
 .example-file-label {
   display: block;
   margin-bottom: 8px;
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-weight: 600;
 }
 .example-setup-content {
@@ -697,7 +697,7 @@ h3:hover .heading-anchor,
   border-color: var(--chi-focus, #b77e8c);
 }
 .docs-toc a:hover {
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
 }
 .page-pagination {
   display: flex;
@@ -774,7 +774,7 @@ h3:hover .heading-anchor,
   font-size: var(--chi-font-size-body-sm, 14px);
 }
 .guide-status {
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   font-size: var(--chi-font-size-body-sm, 14px);
 }
 .guide-paths a {
@@ -790,7 +790,7 @@ h3:hover .heading-anchor,
 .guide-paths span {
   display: block;
   margin-top: 4px;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   font-size: var(--chi-font-size-body-sm, 14px);
 }
 .principles {
@@ -908,7 +908,7 @@ h3:hover .heading-anchor,
     left: 0;
     width: min(310px, calc(100vw - 35px));
     height: calc(100dvh - var(--docs-header-height));
-    background: var(--chi-surface, #fffefa);
+    background: var(--chi-surface, #ffffff);
     box-shadow: 10px 0 35px #54302913;
   }
   .sidebar-backdrop {

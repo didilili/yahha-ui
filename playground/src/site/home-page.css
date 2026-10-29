@@ -27,15 +27,15 @@
       )
     )
     var(--chi-space-6, 24px);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
-  border-radius: var(--chi-radius-control-lg, 26px 32px 28px 24px);
-  background: var(--chi-accent, #f8dbe2);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
+  border-radius: var(--chi-radius-control-lg, 26px 32px 28px 24px / 52% 48% 52% 48%);
+  background: var(--chi-accent, #ffc3d9);
   box-shadow: var(
     --chi-shadow-action,
-    inset 0 2px 0 var(--chi-accent-soft, #fff6f7),
-    0 3px 0 var(--chi-line, #d7c3c0)
+    inset 0 2px 0 var(--chi-accent-soft, #fff0f6),
+    0 3px 0 var(--chi-line, #c58ba1)
   );
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-size: var(--chi-font-size-lg, 16px);
   font-weight: 600;
   line-height: var(--chi-leading-control-lg, 24px);
@@ -48,7 +48,7 @@
 }
 
 .site-home .home-primary-link:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
   outline-offset: var(--chi-focus-offset-outer, 3px);
 }
 
@@ -56,14 +56,14 @@
   transform: translateY(var(--chi-press-offset, 1px));
   box-shadow: var(
     --chi-shadow-action-pressed,
-    inset 0 1px 0 var(--chi-accent-soft, #fff6f7),
-    0 1px 0 var(--chi-line, #d7c3c0)
+    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
+    0 1px 0 var(--chi-line, #c58ba1)
   );
 }
 
 @media (hover: hover) {
   .site-home .home-primary-link:hover {
-    background: var(--chi-accent-hover, #f2c9d4);
+    background: var(--chi-accent-hover, #ffb3cf);
     text-decoration: none;
   }
 }
