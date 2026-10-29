@@ -4,6 +4,30 @@ import { Avatar } from './Avatar.js';
 
 afterEach(cleanup);
 describe('Avatar', () => {
+  it.each([
+    ['👩‍💻库米', '👩‍💻库'],
+    ['e\u0301mile', 'e\u0301m'],
+    ['🇨🇳库米', '🇨🇳库'],
+    ['库米', '库米'],
+  ])('keeps complete visible characters in the fallback for %s', (name, initials) => {
+    render(<Avatar name={name} />);
+    expect(screen.getByRole('img', { name }).textContent).toBe(initials);
+  });
+  it('stops painting the fallback beneath a loaded transparent picture and restores it for a new source', () => {
+    const { container, rerender } = render(
+      <Avatar name="库米" src="transparent.svg" fallback={<span>米</span>} />,
+    );
+    expect(screen.getByText('米')).toBeTruthy();
+    fireEvent.load(container.querySelector('img')!);
+    expect(screen.queryByText('米')).toBeNull();
+    expect(screen.getByRole('img', { name: '库米' })).toBeTruthy();
+
+    rerender(<Avatar name="库米" src="another.svg" fallback={<span>米</span>} />);
+    expect(screen.getByText('米')).toBeTruthy();
+    fireEvent.error(container.querySelector('img')!);
+    expect(screen.getByText('米')).toBeTruthy();
+    expect(container.querySelector('img')).toBeNull();
+  });
   it('provides an anonymous name and a readable fallback for a blank author', () => {
     render(<Avatar name={' \t '} />);
     expect(screen.getByRole('img', { name: '匿名用户' }).textContent).toBe('?');

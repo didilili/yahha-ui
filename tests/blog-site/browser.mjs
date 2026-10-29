@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { verifyReadingExperience } from './reading-checks.mjs';
+import { verifyContentResources } from './content-checks.mjs';
 
 const storageKey = 'chiikawa-ui-example-blog:saved:v1';
 const latestTitle = '沿着河边，慢慢走';
@@ -550,4 +551,5 @@ export async function verifyBlog(browser, baseURL) {
   await verifyReadingReturnAfterRemoval(browser, baseURL);
   await verifyReadingReturnAfterRemoval(browser, baseURL, 'back');
   await verifyReadingExperience(browser, baseURL);
+  await verifyContentResources(browser, baseURL);
 }

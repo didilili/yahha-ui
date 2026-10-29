@@ -8,6 +8,7 @@ import {
   Dialog,
   EmptyState,
   IconButton,
+  Image,
   SegmentedControl,
   Select,
   Skeleton,
@@ -22,6 +23,16 @@ import {
 import './edge-cases.css';
 
 const longWord = 'https://example.com/' + 'W'.repeat(160);
+const transparentAvatar =
+  'data:image/svg+xml,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><circle cx="50" cy="14" r="8" fill="pink"/></svg>',
+  );
+const naturalPicture =
+  'data:image/svg+xml,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80"><rect width="120" height="80" fill="skyblue"/></svg>',
+  );
 
 /** Installed-package fixtures, deliberately isolated from the public playground. */
 export function EdgeCases() {
@@ -36,6 +47,7 @@ export function EdgeCases() {
   const [externalFormVersion, setExternalFormVersion] = useState<number | null>(null);
   const [multiplePanels, setMultiplePanels] = useState(true);
   const [avatarSource, setAvatarSource] = useState<string>();
+  const [contentImageSource, setContentImageSource] = useState<string>();
 
   return (
     <ThemeProvider theme={theme}>
@@ -338,6 +350,63 @@ export function EdgeCases() {
           <Avatar name="Review author" src={avatarSource} data-testid="review-avatar" />
           <Button onClick={() => setAvatarSource('/review-avatar.svg')}>Load review avatar</Button>
           <Button onClick={() => setAvatarSource(undefined)}>Clear review avatar</Button>
+        </section>
+        <section aria-label="Content resource regression cases">
+          <h2>Content resource regression cases</h2>
+          <div className="forced-state-pair" data-testid="content-avatar-sizes">
+            {(['sm', 'md', 'lg'] as const).map((size) => (
+              <Avatar
+                key={size}
+                name={`Transparent author ${size}`}
+                src={transparentAvatar}
+                fallback="Name must not show through"
+                size={size}
+                data-testid={`content-avatar-${size}`}
+              />
+            ))}
+          </div>
+          <div className="forced-state-pair">
+            <Avatar name="👩‍💻库米" data-testid="content-avatar-emoji" />
+            <Avatar name={'e\u0301mile'} data-testid="content-avatar-accent" />
+            <Avatar name="🇨🇳库米" data-testid="content-avatar-flag" />
+          </div>
+          <div style={{ width: 160, maxWidth: '100%' }} data-testid="content-long-image">
+            <Image
+              alt="Content narrow cover"
+              aspectRatio="2 / 1"
+              fallback="封面暂不可用，可以继续阅读正文。"
+            />
+          </div>
+          <div style={{ width: 240, maxWidth: '100%' }} data-testid="content-short-image">
+            <Image alt="Content short cover" aspectRatio="3 / 2" fallback="图片暂缺" />
+          </div>
+          <div style={{ width: 160, maxWidth: '100%' }} data-testid="content-decorative-image">
+            <Image alt="" aspectRatio="2 / 1" fallback="封面暂不可用，可以继续阅读正文。" />
+          </div>
+          <div style={{ width: 160, maxWidth: '100%' }} data-testid="content-blank-image">
+            <Image alt={' \t '} aspectRatio="2 / 1" fallback="封面暂不可用，可以继续阅读正文。" />
+          </div>
+          <div style={{ width: 160, maxWidth: '100%' }} data-testid="content-natural-image">
+            <Image
+              src={naturalPicture}
+              alt="Content natural picture"
+              width={120}
+              height={80}
+              loading="eager"
+            />
+          </div>
+          <div style={{ width: 160, maxWidth: '100%' }} data-testid="content-retry-image">
+            <Image
+              src={contentImageSource}
+              alt="Content retry picture"
+              aspectRatio="3 / 2"
+              loading="eager"
+            />
+          </div>
+          <Button onClick={() => setContentImageSource('/content-retry.svg')}>
+            Load content image
+          </Button>
+          <Button onClick={() => setContentImageSource(undefined)}>Clear content image</Button>
         </section>
       </main>
     </ThemeProvider>

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { verifyContentResources } from './content-checks.mjs';
 
 export async function verifyReviewRegressions(browser, url) {
   for (const width of [1280, 320]) {
@@ -91,6 +92,7 @@ export async function verifyReviewRegressions(browser, url) {
       await picture.evaluate((node) => node.decode());
       assert.equal(imageRequests, 2);
       assert.ok(await picture.evaluate((node) => node.naturalWidth > 0));
+      await verifyContentResources(page);
       assert.deepEqual(errors, []);
       console.log(
         `Browser review regressions passed: ${width}px RTL tabs, live external-form reset, accordion mode and avatar retry.`,

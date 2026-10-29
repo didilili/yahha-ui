@@ -59,7 +59,7 @@ export default defineComponentPage('avatar', {
               type: 'string',
               required: true,
               description:
-                '去除首尾空白后作为可访问名称；为空时使用匿名用户。默认回退取前两个 Unicode 字符。',
+                '去除首尾空白后作为可访问名称；为空时使用匿名用户。默认回退取前两个完整字符，保留组合 emoji 和附加符号。',
             },
             {
               name: 'src',
@@ -69,7 +69,7 @@ export default defineComponentPage('avatar', {
             {
               name: 'fallback',
               type: 'ReactNode',
-              defaultValue: 'name 前两个字符；空姓名为 ?',
+              defaultValue: 'name 前两个完整字符；空姓名为 ?',
               description: '图片缺失、加载中或失败时的装饰内容。',
             },
             {
@@ -90,7 +90,8 @@ export default defineComponentPage('avatar', {
         <ul>
           {[
             'name 为整个头像提供可访问名称，内部图片和回退内容均为装饰。空白姓名的可访问名称为“匿名用户”，默认显示问号。',
-            '缺图、加载中和加载失败时保留回退内容；更换 src 后重新加载，新图片就绪后替换回退。头像尺寸在这个过程中保持不变。',
+            '缺图、加载中和加载失败时保留回退内容；更换 src 后重新加载，新图片就绪后移除回退，透明图片不会透出姓名。头像尺寸在这个过程中保持不变。',
+            '默认按完整字素取姓名的前两项；不支持 Intl.Segmenter 的旧环境按 Unicode 码点降级，需要固定缩写时可显式传入 fallback。',
             'fallback 只放展示内容，不放链接或按钮。头像不接收 children，也不透传原生 img 属性。',
           ].map((note) => (
             <li key={note}>{note}</li>

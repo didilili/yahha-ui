@@ -139,26 +139,27 @@ export default function ImageFallback() {
 
 ### ImageProps
 
-| 参数                   | 说明                                                           | 类型                                        | 默认值             |
-| ---------------------- | -------------------------------------------------------------- | ------------------------------------------- | ------------------ |
-| `alt` **必填**         | 原生替代文字；失败回退也以此作为名称。                         | `string`                                    | —                  |
-| `src / srcSet / sizes` | 图片地址与响应式资源选择。                                     | `原生 img 属性`                             | —                  |
-| `aspectRatio`          | 可选比例，设置在外层容器，在加载、失败和恢复期间保持预留区域。 | `CSSProperties['aspectRatio']`              | —                  |
-| `fallback`             | 失败后的装饰内容；可访问名称仍使用 alt。                       | `ReactNode`                                 | `图片暂时无法显示` |
-| `loading`              | 原生加载策略；首屏关键图片可设 eager。                         | `'lazy' \| 'eager'`                         | `'lazy'`           |
-| `className`            | 作用于外层比例容器。                                           | `string`                                    | —                  |
-| `classNames`           | 附加到真实 img 与失败容器。                                    | `{ image?: string; fallback?: string }`     | —                  |
-| `style / ref`          | 作用于真实 img，失败时 img 仍保留但隐藏。                      | `CSSProperties / Ref<HTMLImageElement>`     | —                  |
-| `onLoad / onError`     | 监听图片加载成功或失败，可用于更新相邻状态说明。               | `原生 img 事件`                             | —                  |
-| `hidden / aria-hidden` | 作用于整个图片呈现，包括失败回退；aria-hidden 不改变可见性。   | `原生对应属性`                              | —                  |
-| `其他原生图片属性`     | 包括 width、height、decoding 等，传给 img。                    | `Omit<ComponentPropsWithRef<'img'>, 'alt'>` | —                  |
+| 参数                   | 说明                                                                                 | 类型                                        | 默认值             |
+| ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------- | ------------------ |
+| `alt` **必填**         | 原生替代文字；失败回退也以此作为名称。                                               | `string`                                    | —                  |
+| `src / srcSet / sizes` | 图片地址与响应式资源选择。                                                           | `原生 img 属性`                             | —                  |
+| `aspectRatio`          | 可选比例，设置在外层容器，在加载、失败和恢复期间保持预留区域。                       | `CSSProperties['aspectRatio']`              | —                  |
+| `fallback`             | 失败后的装饰内容；可访问名称仍使用 alt。说明宜简短，固定比例内较长的内容可滚动查看。 | `ReactNode`                                 | `图片暂时无法显示` |
+| `loading`              | 原生加载策略；首屏关键图片可设 eager。                                               | `'lazy' \| 'eager'`                         | `'lazy'`           |
+| `className`            | 作用于外层比例容器。                                                                 | `string`                                    | —                  |
+| `classNames`           | 附加到真实 img 与失败容器。                                                          | `{ image?: string; fallback?: string }`     | —                  |
+| `style / ref`          | 作用于真实 img，失败时 img 仍保留但隐藏。                                            | `CSSProperties / Ref<HTMLImageElement>`     | —                  |
+| `onLoad / onError`     | 监听图片加载成功或失败，可用于更新相邻状态说明。                                     | `原生 img 事件`                             | —                  |
+| `hidden / aria-hidden` | 作用于整个图片呈现，包括失败回退；aria-hidden 不改变可见性。                         | `原生对应属性`                              | —                  |
+| `其他原生图片属性`     | 包括 width、height、decoding 等，传给 img。                                          | `Omit<ComponentPropsWithRef<'img'>, 'alt'>` | —                  |
 
 <a id="behavior"></a>
 
 ## 替代文字与失败恢复
 
 - 失败后仍以 alt 作为可访问名称，fallback 是装饰内容。alt="" 的图片及失败回退都保持装饰性，即使 aria-hidden={false} 也不会补出图像名称。
-- 缺少可用地址或加载失败时显示 fallback；更换 src 或 srcSet 会重新进入加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。
+- 缺少可用地址或加载失败时显示 fallback；更换 src 或 srcSet 会重新进入加载。清空地址后再设置原地址，也会重新加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。
+- 固定比例较小而失败提示过长时，回退区域允许滚动。非装饰图片的溢出回退可通过 Tab 聚焦，再用方向键或 PageDown 查看；短提示及空 alt 的装饰图片不会增加键盘入口。
 - 不要把必要说明或交互元素只放进 fallback，因为整个回退内容用于装饰。需要隐藏图片时，hidden 隐藏图片与回退，aria-hidden 仅将两者从辅助技术中隐藏。
 
 <a id="related"></a>

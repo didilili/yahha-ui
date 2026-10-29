@@ -51,6 +51,18 @@ describe('Image', () => {
       expect(screen.queryByRole('img')).toBeNull();
       expect(screen.getByText('封面暂缺').closest('[aria-hidden="true"]')).toBeTruthy();
     });
+
+    it(`keeps a whitespace-alt fallback out of the accessibility tree after ${failure}`, () => {
+      const ref = createRef<HTMLImageElement>();
+      render(<Image ref={ref} src={source} alt={' \t '} aspectRatio="2 / 1" fallback="封面暂缺" />);
+      if (source) fireEvent.error(ref.current!);
+
+      expect(ref.current?.getAttribute('alt')).toBe(' \t ');
+      expect(screen.queryByRole('img')).toBeNull();
+      expect(screen.getByText('封面暂缺').closest('[tabindex]')?.getAttribute('tabindex')).toBe(
+        '-1',
+      );
+    });
   }
 
   it('preserves native image visibility set by the caller', () => {
@@ -90,4 +102,26 @@ describe('Image', () => {
     expect(screen.queryByText('图片暂不可用')).toBe(null);
     expect(screen.getByRole('img', { name: '散步时的天空' }).getAttribute('src')).toBe('next.svg');
   });
+
+  it.each([{ src: 'retry.svg' }, { srcSet: 'retry.svg 1x' }])(
+    'retries the same failed resource after its source is cleared: %j',
+    (source) => {
+      const ref = createRef<HTMLImageElement>();
+      const { rerender } = render(<Image ref={ref} {...source} alt="重新加载的封面" />);
+      fireEvent.error(ref.current!);
+      expect(ref.current?.hidden).toBe(true);
+      expect(screen.getByText('图片暂时无法显示')).toBeTruthy();
+
+      rerender(<Image ref={ref} alt="重新加载的封面" />);
+      expect(screen.getByText('图片暂时无法显示')).toBeTruthy();
+      rerender(<Image ref={ref} {...source} alt="重新加载的封面" />);
+
+      expect(ref.current?.hidden).toBe(false);
+      expect(ref.current?.parentElement?.dataset.status).toBe('loading');
+      expect(screen.queryByText('图片暂时无法显示')).toBeNull();
+      fireEvent.load(ref.current!);
+      expect(ref.current?.parentElement?.dataset.status).toBe('loaded');
+      expect(screen.getAllByRole('img', { name: '重新加载的封面' })).toHaveLength(1);
+    },
+  );
 });

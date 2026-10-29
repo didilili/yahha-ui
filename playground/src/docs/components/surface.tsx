@@ -25,7 +25,7 @@ export default defineComponentPage('surface', {
           id: 'surface-basic',
           title: '基本使用',
           description:
-            '平面奶白内容面使用轻纸边和 24px 默认内边距；通过 style 或 className 调整宽度、标题与段落间距。',
+            '平面白纸内容面使用轻纸边和 24px 默认内边距；通过 style 或 className 调整宽度、标题与段落间距。',
           component: SurfaceBasic,
           source: surfaceBasicSource,
         },

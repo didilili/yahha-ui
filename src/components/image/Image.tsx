@@ -1,4 +1,11 @@
-import { useState, type ComponentPropsWithRef, type CSSProperties, type ReactNode } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ComponentPropsWithRef,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
 import { cx } from '../../internal/cx.js';
 import styles from './image.module.css';
 
@@ -26,9 +33,36 @@ export function Image({
 }: ImageProps) {
   const source = JSON.stringify([src, srcSet]);
   const [image, setImage] = useState({ source, status: 'loading' });
+  if (image.source !== source) {
+    setImage({ source, status: 'loading' });
+  }
   const status =
     !src?.trim() && !srcSet?.trim() ? 'error' : image.source === source ? image.status : 'loading';
   const failed = status === 'error';
+  const hasAlternativeText = alt.trim().length > 0;
+  const fallbackRef = useRef<HTMLDivElement>(null);
+  const fallbackContentRef = useRef<HTMLSpanElement>(null);
+  const [overflowing, setOverflowing] = useState(false);
+
+  useEffect(() => {
+    const container = fallbackRef.current;
+    const content = fallbackContentRef.current;
+    if (!failed || !aspectRatio || !container || !content) {
+      setOverflowing(false);
+      return;
+    }
+    const measure = () => setOverflowing(container.scrollHeight > container.clientHeight + 1);
+    measure();
+    if (typeof ResizeObserver === 'function') {
+      const observer = new ResizeObserver(measure);
+      observer.observe(container);
+      observer.observe(content);
+      return () => observer.disconnect();
+    }
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [failed, aspectRatio, source, fallback]);
+
   return (
     <div
       className={cx(styles.frame, className)}
@@ -40,6 +74,7 @@ export function Image({
     >
       <img
         {...props}
+        key={source}
         className={cx(styles.image, classNames?.image)}
         src={src?.trim() ? src : undefined}
         srcSet={srcSet?.trim() ? srcSet : undefined}
@@ -57,12 +92,22 @@ export function Image({
       />
       {failed && (
         <div
+          ref={fallbackRef}
           className={cx(styles.fallback, classNames?.fallback)}
-          role={alt ? 'img' : undefined}
-          aria-label={alt || undefined}
-          aria-hidden={!alt || undefined}
+          role={hasAlternativeText ? 'img' : undefined}
+          aria-label={hasAlternativeText ? alt : undefined}
+          aria-hidden={!hasAlternativeText || undefined}
+          tabIndex={
+            overflowing &&
+            hasAlternativeText &&
+            !hidden &&
+            props['aria-hidden'] !== true &&
+            props['aria-hidden'] !== 'true'
+              ? 0
+              : -1
+          }
         >
-          <span className={styles.fallbackContent} aria-hidden="true">
+          <span ref={fallbackContentRef} className={styles.fallbackContent} aria-hidden="true">
             <svg width="32" height="28" viewBox="0 0 32 28" fill="none">
               <path
                 d="M5 3.5h21c2 0 3 1.5 3 3.5v15c0 2-1.5 3-3.5 3H6c-2 0-3-1.5-3-3.5V7c0-2 0-3.5 2-3.5Z"

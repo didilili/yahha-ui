@@ -76,7 +76,8 @@ export default defineComponentPage('image', {
               name: 'fallback',
               type: 'ReactNode',
               defaultValue: '图片暂时无法显示',
-              description: '失败后的装饰内容；可访问名称仍使用 alt。',
+              description:
+                '失败后的装饰内容；可访问名称仍使用 alt。说明宜简短，固定比例内较长的内容可滚动查看。',
             },
             {
               name: 'loading',
@@ -121,7 +122,8 @@ export default defineComponentPage('image', {
         <ul>
           {[
             '失败后仍以 alt 作为可访问名称，fallback 是装饰内容。alt="" 的图片及失败回退都保持装饰性，即使 aria-hidden={false} 也不会补出图像名称。',
-            '缺少可用地址或加载失败时显示 fallback；更换 src 或 srcSet 会重新进入加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。',
+            '缺少可用地址或加载失败时显示 fallback；更换 src 或 srcSet 会重新进入加载。清空地址后再设置原地址，也会重新加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。',
+            '固定比例较小而失败提示过长时，回退区域允许滚动。非装饰图片的溢出回退可通过 Tab 聚焦，再用方向键或 PageDown 查看；短提示及空 alt 的装饰图片不会增加键盘入口。',
             '不要把必要说明或交互元素只放进 fallback，因为整个回退内容用于装饰。需要隐藏图片时，hidden 隐藏图片与回退，aria-hidden 仅将两者从辅助技术中隐藏。',
           ].map((note) => (
             <li key={note}>{note}</li>
