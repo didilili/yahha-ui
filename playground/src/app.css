@@ -478,6 +478,9 @@ h3:hover .heading-anchor,
     Consolas,
     monospace;
 }
+.source-code pre:focus-visible {
+  outline-offset: calc(-1 * var(--chi-focus-width, 2px));
+}
 .source-code code {
   font: inherit;
   white-space: pre;

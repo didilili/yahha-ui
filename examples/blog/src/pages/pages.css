@@ -287,6 +287,12 @@
   line-height: 1.8;
 }
 
+@media (max-height: 480px) {
+  .blog-article-sidebar {
+    position: static;
+  }
+}
+
 @media (max-width: 960px) {
   .blog-article-layout {
     grid-template-columns: minmax(0, 1fr);

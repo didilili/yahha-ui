@@ -1,6 +1,70 @@
 import assert from 'node:assert/strict';
 
+export async function verifyDesktopContentsVisibility(browser, baseURL) {
+  const page = await browser.newPage({
+    viewport: { width: 1280, height: 280 },
+    reducedMotion: 'reduce',
+  });
+  page.setDefaultTimeout(4000);
+  try {
+    for (const height of [280, 740]) {
+      await page.setViewportSize({ width: 1280, height });
+      await page.goto(`${baseURL}#/posts/river-evening`);
+      const contents = page.getByRole('navigation', { name: '这一页的小路标', exact: true });
+      const links = contents.getByRole('link');
+      await links.first().waitFor();
+      await page.evaluate(() => document.fonts.ready);
+      await links.first().focus();
+      const tab =
+        process.platform === 'darwin' && browser.browserType().name() === 'webkit'
+          ? 'Alt+Tab'
+          : 'Tab';
+      for (let index = 0; index < (await links.count()); index++) {
+        if (index > 0) await page.keyboard.press(tab);
+        const link = links.nth(index);
+        await page.waitForFunction(
+          (node) => document.activeElement === node,
+          await link.elementHandle(),
+        );
+        await page.evaluate(
+          () =>
+            new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+        );
+        assert(
+          await link.evaluate((node) => {
+            const bounds = node.getBoundingClientRect();
+            const style = getComputedStyle(node);
+            const outline =
+              style.outlineStyle === 'none'
+                ? 0
+                : Math.max(0, parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset));
+            return bounds.top >= outline && bounds.bottom + outline <= innerHeight;
+          }),
+          `1280×${height}: every contents link and its focus outline stay inside the viewport after Tab.`,
+        );
+      }
+      if (height === 740) {
+        await page.evaluate(() => scrollTo(0, 1000));
+        await page.waitForFunction(
+          () =>
+            Math.abs(
+              document.querySelector('.blog-article-sidebar').getBoundingClientRect().top - 112,
+            ) <= 1,
+        );
+        assert.equal(
+          await contents.evaluate((node) => getComputedStyle(node.parentElement).position),
+          'sticky',
+          'The normal desktop contents keep their sticky reading position.',
+        );
+      }
+    }
+  } finally {
+    await page.close();
+  }
+}
+
 export async function verifyReadingExperience(browser, baseURL) {
+  await verifyDesktopContentsVisibility(browser, baseURL);
   for (const width of [320, 390]) {
     const context = await browser.newContext({ viewport: { width, height: 844 } });
     const page = await context.newPage();
