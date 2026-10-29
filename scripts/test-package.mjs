@@ -21,9 +21,17 @@ import { promisify } from 'node:util';
 import { verifyConsumer } from '../tests/package-consumer/browser.mjs';
 import {
   verifyEdgeCases,
+  verifyForcedColors,
   verifyReviewRegressions,
 } from '../tests/package-consumer/edge-checks.mjs';
 import { verifyBasics } from '../tests/package-consumer/basics-checks.mjs';
+import { verifyNavigation } from '../tests/package-consumer/navigation-checks.mjs';
+import { verifyFeedback } from '../tests/package-consumer/feedback-checks.mjs';
+import {
+  verifyDialogScrollbar,
+  verifyFloatingScrollbars,
+  verifyOverlays,
+} from '../tests/package-consumer/overlay-checks.mjs';
 import { verifyDesignContract } from '../tests/package-consumer/design-checks.mjs';
 import { createExampleEntry } from '../playground/src/docs/example-source.ts';
 import { markdownExamples } from './documentation-contract.mjs';
@@ -306,20 +314,67 @@ try {
   });
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
-  const { chromium } = await import('playwright');
-  browser = await chromium.launch({ headless: true });
+  const { chromium, firefox, webkit } = await import('playwright');
   const url = `http://127.0.0.1:${server.address().port}/`;
-  if (!process.argv.includes('--design-only')) {
-    await verifyConsumer(browser, url);
-    await verifyEdgeCases(browser, url);
-    await verifyReviewRegressions(browser, url);
-    await verifyBasics(browser, url);
+  if (process.argv.includes('--scrollbar-only')) {
+    browser = await chromium.launch({ headless: true, ignoreDefaultArgs: ['--hide-scrollbars'] });
+    await verifyDialogScrollbar(browser, url);
+    await verifyFloatingScrollbars(browser, url);
+  } else if (
+    process.argv.includes('--feedback-only') ||
+    process.argv.includes('--navigation-only') ||
+    process.argv.includes('--overlays-only')
+  ) {
+    const feedbackOnly = process.argv.includes('--feedback-only');
+    const overlaysOnly = process.argv.includes('--overlays-only');
+    const family = feedbackOnly ? 'feedback' : overlaysOnly ? 'overlays' : 'navigation';
+    for (const [name, engine] of Object.entries({ chromium, firefox, webkit })) {
+      browser = await engine.launch({ headless: true });
+      try {
+        if (feedbackOnly) await verifyFeedback(browser, url);
+        else if (overlaysOnly) await verifyOverlays(browser, url);
+        else await verifyNavigation(browser, url);
+        if (name === 'chromium') await verifyForcedColors(browser, url);
+        console.log(`${name}: installed ${family} package passed.`);
+      } finally {
+        await browser.close();
+        browser = undefined;
+      }
+    }
+  } else {
+    browser = await chromium.launch({ headless: true });
+    if (!process.argv.includes('--design-only')) {
+      await verifyConsumer(browser, url);
+      await verifyEdgeCases(browser, url);
+      await verifyReviewRegressions(browser, url);
+      await verifyBasics(browser, url);
+      await verifyFeedback(browser, url);
+    }
+    await verifyDesignContract(browser, url);
   }
-  await verifyDesignContract(browser, url);
+  if (
+    !process.argv.includes('--scrollbar-only') &&
+    !process.argv.includes('--feedback-only') &&
+    !process.argv.includes('--navigation-only') &&
+    !process.argv.includes('--design-only')
+  ) {
+    await browser?.close();
+    browser = await chromium.launch({ headless: true, ignoreDefaultArgs: ['--hide-scrollbars'] });
+    await verifyDialogScrollbar(browser, url);
+    await verifyFloatingScrollbars(browser, url);
+  }
   console.log(
-    process.argv.includes('--design-only')
-      ? 'Package design contract passed: independent install, types, docs compilation, dimensions, and forced colors.'
-      : 'Package consumer passed: independent install, types, docs, CSS, refs, keyboard, and edge cases.',
+    process.argv.includes('--scrollbar-only')
+      ? 'Package overlay scrollbars passed: independent install and visible native scrollbar interaction.'
+      : process.argv.includes('--feedback-only')
+        ? 'Package feedback passed: independent install, types, docs compilation, all themes and three browser engines.'
+        : process.argv.includes('--navigation-only')
+          ? 'Package navigation passed: independent install, types, docs compilation, all themes and three browser engines.'
+          : process.argv.includes('--overlays-only')
+            ? 'Package overlays passed: independent install, types, docs compilation, all themes and three browser engines.'
+            : process.argv.includes('--design-only')
+              ? 'Package design contract passed: independent install, types, docs compilation, dimensions, and forced colors.'
+              : 'Package consumer passed: independent install, types, docs, CSS, refs, keyboard, and edge cases.',
   );
 } finally {
   try {

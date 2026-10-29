@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 
 const textGeometry = (node) => {
   const box = node.getBoundingClientRect();
+  const style = getComputedStyle(node);
   const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
   const lines = [];
   for (let text = walker.nextNode(); text; text = walker.nextNode()) {
@@ -21,15 +22,17 @@ const textGeometry = (node) => {
   return {
     lines,
     height: box.height,
+    firstLineCenter:
+      box.top +
+      parseFloat(style.borderTopWidth) +
+      parseFloat(style.paddingTop) +
+      parseFloat(style.lineHeight) / 2,
     complete:
       lines.length > 0 &&
-      lines.every(
-        (line) =>
-          line.left >= box.left - 1 &&
-          line.right <= box.right + 1 &&
-          line.top >= box.top - 1 &&
-          line.bottom <= box.bottom + 1,
-      ),
+      lines.every((line) => line.left >= box.left - 1 && line.right <= box.right + 1) &&
+      // Font Range boxes can extend beyond CSS line boxes in Firefox. Overflow
+      // geometry checks the actual reserved block instead of a fallback font box.
+      node.scrollHeight <= node.clientHeight + 1,
   };
 };
 
@@ -51,11 +54,11 @@ export async function verifyOverlayClose(popup, label) {
   const title = popup.getByRole('heading');
   const text = await title.evaluate(textGeometry);
   const close = popup.getByRole('button', { name: /^关闭/ });
-  const box = await close.boundingBox();
+  const box = await close.evaluate((node) => node.getBoundingClientRect().toJSON());
   assert(box.width >= 44 && box.height >= 44, `${label}: closing retains a 44px target.`);
   assert(text.complete, `${label}: every title line stays inside its heading.`);
   assert(
-    Math.abs(box.y + box.height / 2 - (text.lines[0].top + text.lines[0].height / 2)) <= 2,
+    Math.abs(box.y + box.height / 2 - text.firstLineCenter) <= 2,
     `${label}: close aligns with the title's first rendered line.`,
   );
   assert(
@@ -524,13 +527,347 @@ export async function verifyLogicalTooltipDirection(page, label) {
   }
 }
 
+async function verifyDialogFooter(popup, label, scrollToActions = false) {
+  const actions = popup.locator('[data-testid^="overlay-footer-"]');
+  const boxes = [];
+  for (const action of await actions.all()) {
+    const text = await action.evaluate(textGeometry);
+    assert(text.complete, `${label}: the full footer action label remains readable.`);
+    const box = await action.evaluate((node) => {
+      const box = node.getBoundingClientRect();
+      const footer = node.parentElement;
+      const paper = node.closest('[role="dialog"]').getBoundingClientRect();
+      return {
+        ...box.toJSON(),
+        fits:
+          footer.scrollWidth <= footer.clientWidth + 1 &&
+          box.left >= paper.left &&
+          box.right <= paper.right,
+      };
+    });
+    assert(box.width >= 44 && box.height >= 44, `${label}: footer targets remain at least 44px.`);
+    assert(box.fits, `${label}: long footer actions fit the dialog's paper width.`);
+    boxes.push(box);
+  }
+  assert.equal(boxes.length, 2, `${label}: both footer actions are exercised.`);
+  assert(
+    boxes[0].right <= boxes[1].left || boxes[0].bottom <= boxes[1].top,
+    `${label}: long footer actions wrap without overlapping.`,
+  );
+  if (scrollToActions) {
+    for (const action of await actions.all()) {
+      await action.focus();
+      // Firefox's native focus scroll can stop with a tall button partly visible.
+      // Exercise the available scroll before measuring the complete pointer target.
+      await action.evaluate((node) => node.scrollIntoView({ block: 'nearest' }));
+      assert(
+        await action.evaluate((node) => {
+          const box = node.getBoundingClientRect();
+          const paper = node.closest('[role="dialog"]').getBoundingClientRect();
+          const x = box.x + box.width / 2;
+          const y = box.y + box.height / 2;
+          return (
+            box.top >= paper.top &&
+            box.bottom <= paper.bottom &&
+            y >= 0 &&
+            y < innerHeight &&
+            node.contains(document.elementFromPoint(x, y))
+          );
+        }),
+        `${label}: each footer action scrolls into view and receives a pointer.`,
+      );
+    }
+  }
+}
+
+export async function verifyNativeScrollbarPaint(popup, label) {
+  const metrics = await popup.evaluate((node) => {
+    const css = getComputedStyle(node);
+    const thumb = getComputedStyle(node, '::-webkit-scrollbar-thumb');
+    const box = node.getBoundingClientRect();
+    const right = parseFloat(css.borderRightWidth);
+    const gutter = node.offsetWidth - node.clientWidth - right - parseFloat(css.borderLeftWidth);
+    return {
+      background: getComputedStyle(node, '::-webkit-scrollbar').backgroundColor,
+      visible:
+        thumb.visibility !== 'hidden' && thumb.display !== 'none' && parseFloat(thumb.opacity) > 0,
+      color: thumb.backgroundColor
+        .match(/[\d.]+/g)
+        ?.slice(0, 3)
+        .map(Number),
+      inset: parseFloat(css.getPropertyValue('--native-scrollbar-inset')),
+      clip: {
+        x: Math.ceil(box.right - right - gutter),
+        y: Math.ceil(box.top + parseFloat(css.borderTopWidth)),
+        width: Math.floor(gutter),
+        height: node.clientHeight,
+      },
+    };
+  });
+  assert.equal(
+    metrics.background,
+    'rgba(0, 0, 0, 0)',
+    `${label}: the scrollbar itself keeps a transparent background.`,
+  );
+  assert(metrics.visible, `${label}: the native thumb is not hidden.`);
+  assert(
+    metrics.clip.width > 0 && metrics.color?.length === 3,
+    `${label}: a native gutter and thumb color are available.`,
+  );
+  const png = await popup.page().screenshot({ clip: metrics.clip });
+  const paintedThumb = await popup.page().evaluate(
+    async ({ data, color }) => {
+      const image = new Image();
+      image.src = 'data:image/png;base64,' + data;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      const points = [];
+      for (let y = 0; y < canvas.height; y++)
+        for (let x = 0; x < canvas.width; x++) {
+          const offset = (y * canvas.width + x) * 4;
+          if (
+            color.every((channel, index) => pixels[offset + index] === channel) &&
+            pixels[offset + 3] > 200
+          )
+            points.push({ x, y });
+        }
+      return points.length
+        ? {
+            left: Math.min(...points.map((p) => p.x)),
+            right: Math.max(...points.map((p) => p.x)),
+            top: Math.min(...points.map((p) => p.y)),
+            bottom: Math.max(...points.map((p) => p.y)),
+          }
+        : null;
+    },
+    { data: png.toString('base64'), color: metrics.color },
+  );
+  assert(paintedThumb, `${label}: the screenshot contains the painted thumb.`);
+  assert(
+    paintedThumb.top >= metrics.inset && paintedThumb.bottom < metrics.clip.height - metrics.inset,
+    `${label}: painted thumb endpoints stay clear of both rounded corners.`,
+  );
+  return {
+    x: metrics.clip.x + (paintedThumb.left + paintedThumb.right) / 2,
+    y: metrics.clip.y + (paintedThumb.top + paintedThumb.bottom) / 2,
+  };
+}
+
+// Run with Chromium's --hide-scrollbars default removed: invisible headless
+// scrollbars cannot expose a square track protruding through the rounded paper.
+export async function verifyDialogScrollbar(browser, url) {
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 280 },
+    reducedMotion: 'reduce',
+  });
+  try {
+    await page.goto(`${url}?basics`);
+    const trigger = page.getByRole('button', { name: 'Open nested controls', exact: true });
+    await trigger.click();
+    const popup = page.getByRole('dialog', { name: 'Nested basic controls', exact: true });
+    await popup.waitFor();
+    await painted(popup);
+    const geometry = await popup.evaluate((node) => {
+      const css = getComputedStyle(node);
+      const track = getComputedStyle(node, '::-webkit-scrollbar-track');
+      return {
+        gutter:
+          node.offsetWidth -
+          node.clientWidth -
+          parseFloat(css.borderLeftWidth) -
+          parseFloat(css.borderRightWidth),
+        scrolls: node.scrollHeight > node.clientHeight,
+        fits: node.scrollWidth <= node.clientWidth,
+        width: css.scrollbarWidth,
+        track: track.backgroundColor,
+        thumb: getComputedStyle(node, '::-webkit-scrollbar-thumb').backgroundColor,
+      };
+    });
+    assert(
+      geometry.scrolls && geometry.fits,
+      'The short dialog scrolls without horizontal overflow.',
+    );
+    assert(geometry.gutter > 0, 'This regression exercises a visible classic scrollbar.');
+    assert.notEqual(geometry.width, 'none', 'The native scroll affordance remains available.');
+    assert.equal(
+      geometry.track,
+      'rgba(0, 0, 0, 0)',
+      'The track does not paint a square white strip.',
+    );
+    assert.notEqual(
+      geometry.thumb,
+      'rgba(0, 0, 0, 0)',
+      'The native thumb has a visible themed fill.',
+    );
+    await popup.evaluate((node) => {
+      node.scrollTop = 0;
+    });
+    const box = await popup.boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.wheel(0, 10000);
+    await page.waitForFunction(
+      (node) => node.scrollTop + node.clientHeight >= node.scrollHeight - 1,
+      await popup.elementHandle(),
+    );
+    await popup.evaluate((node) => {
+      node.scrollTop = 0;
+    });
+    await page.evaluate(
+      () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+    );
+    const thumb = await verifyNativeScrollbarPaint(popup, 'Dialog');
+    await page.mouse.move(thumb.x, thumb.y);
+    await page.mouse.down();
+    try {
+      await page.evaluate(
+        () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+      );
+      assert.equal(
+        await popup.evaluate((node) => node.scrollTop),
+        0,
+        'Pressing the thumb does not page the track.',
+      );
+      await page.mouse.move(thumb.x, box.y + (box.height * 2) / 3, { steps: 8 });
+    } finally {
+      await page.mouse.up();
+    }
+    assert(
+      await popup.evaluate((node) => node.scrollTop > 0),
+      'The native scrollbar thumb remains draggable.',
+    );
+    await popup.evaluate((node) => {
+      node.scrollTop = node.scrollHeight;
+    });
+    await page.waitForFunction(
+      (node) => node.scrollTop + node.clientHeight >= node.scrollHeight - 1,
+      await popup.elementHandle(),
+    );
+    await page.evaluate(
+      () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+    );
+    await verifyNativeScrollbarPaint(popup, 'Dialog bottom');
+    await verifyDialogFooter(popup, 'Visible classic scrollbar', true);
+    await page.keyboard.press('Escape');
+    await popup.waitFor({ state: 'hidden' });
+    await page.waitForFunction(
+      (node) => document.activeElement === node,
+      await trigger.elementHandle(),
+    );
+    console.log(
+      'Dialog classic scrollbar passed: transparent track, wheel, native thumb dragging, footer, and focus return.',
+    );
+  } finally {
+    await page.close();
+  }
+}
+
+export async function verifyFloatingScrollbars(browser, url) {
+  const page = await browser.newPage({
+    viewport: { width: 320, height: 280 },
+    reducedMotion: 'reduce',
+  });
+  page.setDefaultTimeout(4000);
+  try {
+    await page.goto(`${url}?basics`);
+    for (const [name, selector] of [
+      ['Basic actions', '[role="menu"]'],
+      ['Open basic popover', '[role="dialog"]'],
+      ['Long scrolling tooltip', '.scrolling-tooltip'],
+    ]) {
+      const trigger = page.getByRole('button', { name, exact: true });
+      await page.mouse.move(0, 0);
+      await trigger.scrollIntoViewIfNeeded();
+      await trigger.focus();
+      if (name !== 'Long scrolling tooltip') await page.keyboard.press('Enter');
+      const popup = page.locator(selector);
+      await popup.waitFor();
+      await painted(popup);
+      if (name === 'Basic actions') await popup.getByRole('menuitem').first().focus();
+      const native = await popup.evaluate((node) => {
+        const css = getComputedStyle(node);
+        return {
+          scrolls: node.scrollHeight > node.clientHeight,
+          horizontal: node.scrollWidth > node.clientWidth,
+          gutter:
+            node.offsetWidth -
+            node.clientWidth -
+            parseFloat(css.borderLeftWidth) -
+            parseFloat(css.borderRightWidth),
+          thumb: getComputedStyle(node, '::-webkit-scrollbar-thumb').backgroundColor,
+          track: getComputedStyle(node, '::-webkit-scrollbar-track').backgroundColor,
+          inset: css.getPropertyValue('--native-scrollbar-inset').trim(),
+        };
+      });
+      assert(
+        native.scrolls && !native.horizontal && native.gutter > 0,
+        `${name}: native scrolls within the popup.`,
+      );
+      assert.notEqual(
+        native.thumb,
+        'rgba(0, 0, 0, 0)',
+        `${name}: the themed native thumb is visible.`,
+      );
+      assert.equal(native.track, 'rgba(0, 0, 0, 0)', `${name}: the track is transparent.`);
+      assert.equal(native.inset, '16px', `${name}: its own corners retain their inset.`);
+      await verifyNativeScrollbarPaint(popup, name);
+      const box = await popup.boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.wheel(0, 10000);
+      await page.waitForFunction(
+        (node) => node.scrollTop + node.clientHeight >= node.scrollHeight - 1,
+        await popup.elementHandle(),
+      );
+      await page.evaluate(
+        () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+      );
+      await verifyNativeScrollbarPaint(popup, `${name} bottom`);
+      await page.keyboard.press('Escape');
+      await popup.waitFor({ state: 'hidden' });
+      await page.waitForFunction(
+        (node) => document.activeElement === node,
+        await trigger.elementHandle(),
+      );
+    }
+    console.log(
+      'Floating native scrollbars passed: Menu, Popover, long Tooltip, wheel and focus return.',
+    );
+  } finally {
+    await page.close();
+  }
+}
+
 export async function verifyOverlayAppearance(page, theme) {
   const label = `${theme} ${page.viewportSize().width}px`;
   const menuTrigger = page.getByRole('button', { name: 'Basic actions', exact: true });
-  await menuTrigger.click();
+  await page.mouse.move(0, 0);
+  await menuTrigger.scrollIntoViewIfNeeded();
+  await menuTrigger.focus();
+  // Firefox preserves pointer focus visibility when focus() follows a click,
+  // even after Home. Enter the trigger through native keyboard navigation.
+  const optionTab =
+    process.platform === 'darwin' && page.context().browser()?.browserType().name() === 'webkit';
+  await page.keyboard.press(optionTab ? 'Alt+Shift+Tab' : 'Shift+Tab');
+  await page.keyboard.press(optionTab ? 'Alt+Tab' : 'Tab');
+  await page.waitForFunction(
+    (node) => document.activeElement === node,
+    await menuTrigger.elementHandle(),
+  );
+  await page.keyboard.press('Enter');
   const menu = page.getByRole('menu');
   await menu.waitFor();
   const items = menu.getByRole('menuitem');
+  const first = items.first();
+  // Keyboard opening can still be scrolling/focusing after the popup becomes
+  // visible. Measure all rows after that native focus move has completed.
+  await page.waitForFunction(
+    (node) => document.activeElement === node,
+    await first.elementHandle(),
+  );
   let previous;
   for (const item of await items.all()) {
     const text = await item.evaluate(textGeometry);
@@ -542,8 +879,8 @@ export async function verifyOverlayAppearance(page, theme) {
       assert(previous <= text.lines[0].top, `${label}: adjacent menu labels stay separate.`);
     previous = text.lines.at(-1).bottom;
   }
-  const first = items.first();
   await first.focus();
+  await page.keyboard.press('Home');
   const text = await first.evaluate(textGeometry);
   assert(text.lines.length > 1, `${label}: the menu exercises a multiline action.`);
   const mark = await first.evaluate((node) => {
@@ -552,12 +889,35 @@ export async function verifyOverlayAppearance(page, theme) {
     return {
       center: box.top + parseFloat(css.top) + parseFloat(css.height) / 2,
       opacity: css.opacity,
+      focused: document.activeElement === node && node.matches(':focus-visible'),
+      focusPaint:
+        getComputedStyle(node).boxShadow !== 'none' ||
+        (getComputedStyle(node).outlineStyle !== 'none' &&
+          parseFloat(getComputedStyle(node).outlineWidth) > 0),
     };
   });
   assert.equal(mark.opacity, '1', `${label}: keyboard highlighting paints the short ink mark.`);
+  assert(mark.focused && mark.focusPaint, `${label}: menu highlighting retains keyboard focus.`);
   assert(
-    Math.abs(mark.center - (text.lines[0].top + text.lines[0].height / 2)) <= 2,
+    Math.abs(mark.center - text.firstLineCenter) <= 2,
     `${label}: the short ink mark follows the first line of a multiline action.`,
+  );
+  const locked = items.filter({ hasText: /^Unavailable action:/ });
+  const result = page.getByLabel('Basic action result');
+  const before = await result.innerText();
+  await locked.focus();
+  await page.keyboard.press('Enter');
+  assert.equal(await locked.getAttribute('aria-disabled'), 'true');
+  assert.equal(
+    await result.innerText(),
+    before,
+    `${label}: a long disabled action stays inactive.`,
+  );
+  const destructive = items.filter({ hasText: /^Remove this article/ });
+  assert.notEqual(
+    await destructive.evaluate((node) => getComputedStyle(node).color),
+    await first.evaluate((node) => getComputedStyle(node).color),
+    `${label}: a long destructive action keeps its distinct warning ink.`,
   );
   await page.keyboard.press('Escape');
   await menu.waitFor({ state: 'hidden' });
@@ -604,8 +964,25 @@ export async function verifyOverlayAppearance(page, theme) {
   await popover.getByRole('button', { name: '关闭浮层', exact: true }).click();
   await popover.waitFor({ state: 'hidden' });
 
+  const dialogTrigger = page.getByRole('button', { name: 'Open nested controls', exact: true });
+  await dialogTrigger.click();
+  const dialog = page.getByRole('dialog', { name: 'Nested basic controls', exact: true });
+  await dialog.waitFor();
+  await verifyOverlayClose(dialog, `${label}: dialog`);
+  await verifyDialogFooter(dialog, label);
+  await dialog.getByTestId('overlay-footer-cancel').click();
+  await dialog.waitFor({ state: 'hidden' });
+  await page.waitForFunction(
+    (node) => document.activeElement === node,
+    await dialogTrigger.elementHandle(),
+  );
+
   const help = page.getByRole('button', { name: 'Read article help', exact: true });
+  // Closing the dialog can uncover this trigger beneath the resting pointer.
+  // Keep hover separate from the keyboard focus and scrolling exercised below.
+  await page.mouse.move(0, 0);
   await page.keyboard.press('Tab');
+  await help.evaluate((node) => node.scrollIntoView({ block: 'center' }));
   await help.focus();
   await verifyTooltip(page, label);
   await page.keyboard.press('Escape');
@@ -632,7 +1009,7 @@ export async function verifyOverlayAppearance(page, theme) {
 }
 
 export async function verifyShortOverlays(browser, url) {
-  for (const width of [1280, 390]) {
+  for (const width of [1280, 390, 320]) {
     const page = await browser.newPage({
       viewport: { width, height: 280 },
       reducedMotion: 'reduce',
@@ -692,6 +1069,9 @@ export async function verifyShortOverlays(browser, url) {
           }),
           `${width}×280: the note/dialog fits and scrolls.`,
         );
+        if (title === 'Nested basic controls') {
+          await verifyDialogFooter(popup, `${width}×280`, true);
+        }
         await popup.getByRole('combobox').focus();
         await popup.evaluate((node) => {
           node.scrollTop = node.scrollHeight;
@@ -733,4 +1113,28 @@ export async function verifyShortOverlays(browser, url) {
       await page.close();
     }
   }
+}
+
+export async function verifyOverlays(browser, url) {
+  for (const width of [1280, 390, 320]) {
+    const page = await browser.newPage({
+      viewport: { width, height: 900 },
+      reducedMotion: 'reduce',
+    });
+    page.setDefaultTimeout(8000);
+    const errors = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    try {
+      await page.goto(`${url}?basics`);
+      await page.getByRole('heading', { name: 'Basic component consumer' }).waitFor();
+      for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
+        await page.getByRole('combobox', { name: 'Basic preview theme' }).selectOption(theme);
+        await verifyOverlayAppearance(page, theme);
+      }
+      assert.deepEqual(errors, [], 'The installed overlay consumer has no runtime errors.');
+    } finally {
+      await page.close();
+    }
+  }
+  await verifyShortOverlays(browser, url);
 }

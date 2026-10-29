@@ -9,6 +9,7 @@ import {
   Dialog,
   Divider,
   DropdownMenu,
+  EmptyState,
   Heading,
   Image,
   IconButton,
@@ -26,6 +27,7 @@ import {
   TextField,
   Textarea,
   ThemeProvider,
+  Toast,
   Tooltip,
   type ThemeName,
 } from 'yahha-ui';
@@ -49,10 +51,12 @@ export function Basics() {
   const [submitted, setSubmitted] = useState('');
   const [page, setPage] = useState(1);
   const [numericPage, setNumericPage] = useState(108);
+  const [fullRangePage, setFullRangePage] = useState(Number.MAX_SAFE_INTEGER - 2);
   const [message, setMessage] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [source, setSource] = useState('data:text/plain,unavailable');
   const [authorSource, setAuthorSource] = useState('data:text/plain,unavailable');
+  const [feedbackOpen, setFeedbackOpen] = useState(true);
   const popoverInput = useRef<HTMLInputElement>(null);
   return (
     <ThemeProvider theme={theme}>
@@ -167,6 +171,21 @@ export function Basics() {
             },
           ]}
         />
+        <div style={{ maxWidth: 320, minWidth: 0 }}>
+          <Tabs
+            data-testid="navigation-unbroken-tabs"
+            label="Long address tabs"
+            items={[
+              { value: 'short', label: 'Short address', content: 'Short address panel' },
+              {
+                value: 'address',
+                label: `https://example.com/${'W'.repeat(100)}`,
+                content: 'Long address panel',
+              },
+              { value: 'last', label: 'Last address', content: 'Last address panel' },
+            ]}
+          />
+        </div>
         <Accordion
           data-testid="navigation-accordion"
           multiple
@@ -207,6 +226,14 @@ export function Basics() {
           totalPages={2000}
           onPageChange={setNumericPage}
         />
+        <Pagination
+          data-testid="navigation-full-range-pages"
+          aria-label="Full numeric archive"
+          currentPage={fullRangePage}
+          totalPages={Number.MAX_SAFE_INTEGER}
+          siblingCount={2}
+          onPageChange={setFullRangePage}
+        />
         <div className="basics-actions">
           <DropdownMenu
             trigger={<Button>Basic actions</Button>}
@@ -222,11 +249,25 @@ export function Basics() {
                 disabled: true,
                 onSelect: () => setMessage('Incorrect action'),
               },
+              {
+                id: 'long-locked',
+                label:
+                  'Unavailable action: keep this longer explanation readable while editing is locked',
+                disabled: true,
+                onSelect: () => setMessage('Incorrect long action'),
+              },
               ...Array.from({ length: 3 }, (_, index) => ({
                 id: `long-${index}`,
                 label: `Reading action ${index + 1}: keep every line of this longer explanation separate from the next action`,
                 onSelect: () => setMessage(`Reading action ${index + 1}`),
               })),
+              {
+                id: 'remove',
+                label:
+                  'Remove this article from the reading list while keeping its complete title readable',
+                destructive: true,
+                onSelect: () => setMessage('Removed article'),
+              },
               { id: 'save', label: 'Save article', onSelect: () => setMessage('Saved article') },
             ]}
           />
@@ -309,6 +350,20 @@ export function Basics() {
             onOpenChange={setDialogOpen}
             title="Nested basic controls"
             trigger={<Button>Open nested controls</Button>}
+            footer={
+              <>
+                <Button
+                  variant="secondary"
+                  data-testid="overlay-footer-cancel"
+                  onClick={() => setDialogOpen(false)}
+                >
+                  Cancel this edit and keep the previously saved reading note
+                </Button>
+                <Button data-testid="overlay-footer-save" onClick={() => setDialogOpen(false)}>
+                  Keep this longer reading note with its complete category and title
+                </Button>
+              </>
+            }
           >
             <Select
               label="Dialog category"
@@ -425,6 +480,67 @@ export function Basics() {
           </div>
           <Spinner label="Loading basic content" />
         </section>
+        <section data-testid="feedback-samples" style={{ display: 'grid', gap: 24, minWidth: 0 }}>
+          <Alert
+            data-testid="feedback-long-alert"
+            tone="error"
+            title="这次没有保存成功，较长的标题仍然应该从第一行开始清楚地阅读，并且为状态图标留出独立的位置"
+          >
+            内容仍然保留。请核对这段连续地址后再重试：
+            {'https://example.com/' + 'ReadingJournal'.repeat(12)}
+          </Alert>
+          <Alert data-testid="feedback-untitled-alert">
+            没有标题时，正文从第一行自然开始，图标仍有自己的空间。
+          </Alert>
+          <Button variant="secondary" onClick={() => setFeedbackOpen(true)}>
+            Restore feedback receipts
+          </Button>
+          {(['success', 'info', 'error'] as const).map((tone) => (
+            <div key={tone} data-testid={`feedback-toast-${tone}`}>
+              <Toast
+                open={feedbackOpen}
+                onClose={() => setFeedbackOpen(false)}
+                tone={tone}
+                title="这篇较长的手记已经处理，所有标题文字都应该在小屏幕上完整保留"
+                description={
+                  '结果说明与完整地址：https://example.com/' + 'ReadingJournal'.repeat(10)
+                }
+                action={<Button variant="secondary">重新查看这篇手记和保存结果</Button>}
+              />
+            </div>
+          ))}
+          <div data-testid="feedback-empty">
+            <EmptyState
+              title="这次还没有找到符合筛选条件的手记，可以换一个关键词后再试一次"
+              description={
+                '长说明和完整地址都保留在空态中：https://example.com/' + 'ReadingJournal'.repeat(8)
+              }
+              action={
+                <>
+                  <Button>清空筛选并查看全部手记</Button>
+                  <Button variant="secondary">回到刚才阅读的文章列表</Button>
+                </>
+              }
+            />
+          </div>
+          <div className="basics-actions">
+            {(['sm', 'md', 'lg'] as const).map((size) => (
+              <Spinner
+                key={size}
+                size={size}
+                label={`Feedback loading ${size}`}
+                data-testid={`feedback-spinner-${size}`}
+              />
+            ))}
+          </div>
+        </section>
+        {/* Keep the stress case outside the action row used by placement checks. */}
+        <Tooltip
+          trigger={<Button>Long scrolling tooltip</Button>}
+          content={'Keep this longer plain-text explanation inside the rounded popup. '.repeat(24)}
+          delay={0}
+          className="scrolling-tooltip"
+        />
       </main>
     </ThemeProvider>
   );
