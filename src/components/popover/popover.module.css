@@ -6,6 +6,8 @@
   visibility: hidden;
 }
 .popup {
+  composes: scrollable from '../../internal/native-scrollbar.module.css';
+  --native-scrollbar-inset: var(--chi-space-4, 16px);
   box-sizing: border-box;
   position: relative;
   width: 320px;
@@ -21,7 +23,9 @@
   font: inherit;
   font-size: var(--chi-font-size-body, 16px);
   line-height: var(--chi-leading-body, 1.8);
-  box-shadow: var(--chi-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
+  box-shadow:
+    inset 0 -3px 0 var(--chi-neutral-surface, #f1f8ff),
+    var(--chi-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
   outline: none;
   transform-origin: var(--transform-origin);
   transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
@@ -72,5 +76,11 @@
 @media (prefers-reduced-motion: reduce) {
   .popup {
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .popup {
+    box-shadow: none;
   }
 }

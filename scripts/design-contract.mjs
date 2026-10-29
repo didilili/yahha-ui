@@ -96,6 +96,14 @@ designExceptions.push({
 
 designExceptions.push(
   {
+    path: 'src/components/dropdown-menu/dropdown-menu.module.css',
+    selector: '.item[data-highlighted]:not([data-disabled])',
+    property: 'box-shadow',
+    value: 'inset 0 1px 0 var(--chi-surface, #ffffff)',
+    reason:
+      'This highlighted paper edge is decorative; focus-visible separately overrides it with the canonical focus inset.',
+  },
+  {
     path: 'src/components/select/select.module.css',
     selector: '.option[data-selected][data-highlighted]',
     property: 'box-shadow',

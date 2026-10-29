@@ -217,6 +217,8 @@ export default function DialogExternal() {
 
 ## 内容布局与 Portal
 
+默认使用带浅蓝内底边的白纸信笺。底部操作区以轻纸线和浅蓝纸面分组，按钮空间不足时换行，窄屏改为纵向排列。
+
 长标题自动换行，内容超出可用高度时整个弹窗滚动，footer 不固定在底部。复杂表单或长篇正文更适合独立页面，避免把必要操作埋在长滚动区中。
 
 弹窗文字与布局方向跟随 Portal 目标；仅设置触发器所在容器的 dir，不会影响 body 中的弹窗。需要局部 RTL 时，可使用带 dir="rtl" 的 portalContainer。

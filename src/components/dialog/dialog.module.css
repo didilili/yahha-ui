@@ -6,6 +6,8 @@
   transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
 }
 .dialog {
+  composes: scrollable from '../../internal/native-scrollbar.module.css';
+  --native-scrollbar-inset: var(--chi-space-7, 28px);
   --dialog-close-top: calc(
     var(--chi-space-8, 32px) +
       (
@@ -29,7 +31,9 @@
   background: var(--chi-surface, #ffffff);
   color: var(--chi-ink, #49313d);
   font-family: inherit;
-  box-shadow: var(--chi-shadow-dialog, 0 4px 0 #c58ba1, 0 12px 32px rgb(70 46 49 / 10%));
+  box-shadow:
+    inset 0 -3px 0 var(--chi-neutral-surface, #f1f8ff),
+    var(--chi-shadow-dialog, 0 4px 0 #c58ba1, 0 12px 32px rgb(70 46 49 / 10%));
   transform: translate(-50%, -50%);
   transition:
     opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease),
@@ -106,8 +110,10 @@
   justify-content: flex-end;
   gap: var(--chi-space-2, 8px);
   margin-top: var(--chi-space-6, 24px);
-  padding-top: var(--chi-space-4, 16px);
+  padding: var(--chi-space-4, 16px) var(--chi-space-3, 12px) var(--chi-space-3, 12px);
   border-top: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
+  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
+  background: var(--chi-neutral-surface, #f1f8ff);
 }
 
 @media (max-width: 480px) {
@@ -134,5 +140,11 @@
   .dialogBackdrop,
   .dialog {
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .dialog {
+    box-shadow: none;
   }
 }

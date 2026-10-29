@@ -6,6 +6,8 @@
   visibility: hidden;
 }
 .popup {
+  composes: scrollable from '../../internal/native-scrollbar.module.css';
+  --native-scrollbar-inset: var(--chi-space-4, 16px);
   box-sizing: border-box;
   width: 208px;
   max-width: min(var(--available-width), calc(100vw - var(--chi-space-6, 24px)));
@@ -18,7 +20,9 @@
   color: var(--chi-ink, #49313d);
   font: inherit;
   font-size: var(--chi-font-size-md, 14px);
-  box-shadow: var(--chi-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
+  box-shadow:
+    inset 0 -3px 0 var(--chi-neutral-surface, #f1f8ff),
+    var(--chi-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
   outline: none;
   transform-origin: var(--transform-origin);
   transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
@@ -61,6 +65,9 @@
 .item[data-highlighted] {
   background: var(--chi-accent-soft, #fff0f6);
 }
+.item[data-highlighted]:not([data-disabled]) {
+  box-shadow: inset 0 1px 0 var(--chi-surface, #ffffff);
+}
 .item[data-highlighted]:not([data-disabled])::before {
   opacity: 1;
 }
@@ -86,6 +93,10 @@
 }
 
 @media (forced-colors: active) {
+  .popup,
+  .item[data-highlighted]:not([data-disabled]) {
+    box-shadow: none;
+  }
   .item[data-disabled] {
     color: GrayText;
   }

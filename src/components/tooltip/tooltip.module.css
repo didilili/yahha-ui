@@ -6,6 +6,8 @@
   visibility: hidden;
 }
 .popup {
+  composes: scrollable from '../../internal/native-scrollbar.module.css';
+  --native-scrollbar-inset: var(--chi-space-4, 16px);
   box-sizing: border-box;
   position: relative;
   max-width: min(260px, var(--available-width), calc(100vw - var(--chi-space-6, 24px)));
