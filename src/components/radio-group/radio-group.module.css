@@ -9,7 +9,7 @@
 .legend {
   padding: 0 var(--chi-space-1, 4px);
   margin-bottom: var(--chi-space-2, 8px);
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-size: var(--chi-font-size-md, 14px);
   line-height: var(--chi-leading-label, 1.5);
   font-weight: 600;
@@ -29,7 +29,9 @@
   border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
   box-sizing: border-box;
   cursor: pointer;
-  transition: background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+  transition:
+    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
+    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
 .input {
   box-sizing: border-box;
@@ -39,17 +41,18 @@
   width: 22px;
   height: 22px;
   margin: 0;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
   border-radius: 50%;
-  background: var(--chi-field-background, #fffefd);
-  color: var(--chi-ink, #462e31);
+  background: var(--chi-field-background, #ffffff);
+  box-shadow: inset 0 0 0 2px var(--chi-field-background, #ffffff);
+  color: var(--chi-ink, #49313d);
   cursor: inherit;
   transition:
     background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
     border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
 .input:checked {
-  background: var(--chi-accent, #f8dbe2);
+  background: var(--chi-accent, #ffc3d9);
 }
 .input::after {
   content: '';
@@ -68,7 +71,7 @@
   transform: scale(1);
 }
 .input:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
   outline-offset: var(--chi-focus-offset, 2px);
 }
 .content {
@@ -78,12 +81,13 @@
   gap: var(--chi-space-1, 4px);
 }
 .label {
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-size: var(--chi-font-size-md, 14px);
   line-height: var(--chi-leading-option, 22px);
 }
 .option:has(.input:enabled:checked) {
-  background: var(--chi-accent-soft, #fff6f7);
+  background: var(--chi-accent-soft, #fff0f6);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--chi-line, #c58ba1) 25%, transparent);
 }
 .option:has(.input:checked) .label {
   font-weight: 600;
@@ -91,7 +95,7 @@
 .description,
 .hint,
 .error {
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   font-size: var(--chi-font-size-sm, 12px);
   line-height: var(--chi-leading-caption, 1.6);
 }
@@ -114,10 +118,11 @@
   transition: none;
 }
 .input:disabled {
-  background: var(--chi-disabled-surface, #f2eeea);
-  color: var(--chi-muted, #79656a);
-  border-color: var(--chi-line, #d7c3c0);
+  background: var(--chi-disabled-surface, #f0f3f7);
+  color: var(--chi-muted, #7a5c6d);
+  border-color: var(--chi-line, #c58ba1);
   opacity: 1;
+  box-shadow: none;
   transition: none;
 }
 .input:disabled::after {
@@ -125,14 +130,17 @@
 }
 .option:has(.input:disabled) .label,
 .group:has(.input:disabled):not(:has(.input:enabled)) .legend {
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
 }
 @media (hover: hover) and (pointer: fine) {
+  .option:has(.input:enabled:not(:checked)):hover {
+    background: var(--chi-neutral-surface, #f1f8ff);
+  }
   .group:not([aria-invalid='true']) .option:hover .input:enabled {
-    border-color: var(--chi-ink, #462e31);
+    border-color: var(--chi-ink, #49313d);
   }
   .option:hover .input:enabled:checked {
-    background: var(--chi-accent-hover, #f2c9d4);
+    background: var(--chi-accent-hover, #ffb3cf);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -143,11 +151,14 @@
   }
 }
 @media (forced-colors: active) {
-  .option {
+  .option,
+  .option:has(.input:enabled:checked) {
+    box-shadow: none;
     transition: none;
   }
   .input {
     appearance: auto;
+    box-shadow: none;
     transition: none;
   }
   .input::after {

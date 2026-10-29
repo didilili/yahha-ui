@@ -12,13 +12,13 @@
   max-height: var(--available-height);
   overflow-y: auto;
   padding: var(--chi-space-2, 8px);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
   border-radius: var(--chi-radius-note, 14px 20px 17px 12px);
-  background: var(--chi-surface, #fffefa);
-  color: var(--chi-ink, #462e31);
+  background: var(--chi-surface, #ffffff);
+  color: var(--chi-ink, #49313d);
   font: inherit;
   font-size: var(--chi-font-size-md, 14px);
-  box-shadow: var(--chi-shadow-popup, 0 3px 0 #d7c3c0, 0 8px 20px rgb(70 46 49 / 8%));
+  box-shadow: var(--chi-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
   outline: none;
   transform-origin: var(--transform-origin);
   transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
@@ -59,25 +59,25 @@
   pointer-events: none;
 }
 .item[data-highlighted] {
-  background: var(--chi-accent-soft, #fff6f7);
+  background: var(--chi-accent-soft, #fff0f6);
 }
 .item[data-highlighted]:not([data-disabled])::before {
   opacity: 1;
 }
 .item[data-highlighted]:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 var(--chi-focus-width, 2px) var(--chi-focus, #ad6179);
+  box-shadow: inset 0 0 0 var(--chi-focus-width, 2px) var(--chi-focus, #b04e78);
 }
 .destructive {
   color: var(--chi-error, #a33e4f);
 }
 .item[data-disabled] {
   background: transparent;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   cursor: default;
 }
 .item[data-disabled][data-highlighted] {
-  background: var(--chi-disabled-surface, #f2eeea);
+  background: var(--chi-disabled-surface, #f0f3f7);
 }
 @media (prefers-reduced-motion: reduce) {
   .popup {

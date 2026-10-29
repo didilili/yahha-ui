@@ -1,10 +1,10 @@
 .surface {
   box-sizing: border-box;
   font-family: inherit;
-  color: var(--chi-ink, #462e31);
-  border: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
+  color: var(--chi-ink, #49313d);
+  border: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
   border-radius: var(--chi-radius-surface, 22px 30px 25px 20px);
-  background: var(--chi-surface, #fffefa);
+  background: var(--chi-surface, #ffffff);
   padding: var(--chi-space-6, 24px);
   font-size: var(--chi-font-size-body, 16px);
   line-height: var(--chi-leading-body, 1.8);

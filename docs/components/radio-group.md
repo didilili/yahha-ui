@@ -217,7 +217,7 @@ export default function RadioGroupStates() {
 
 ## 样式定制
 
-调整整组宽度可使用 className 或 style；选项间距和排列由 classNames.options 设置。 选项名称与补充说明分别使用 classNames.label、classNames.description，避免用固定高度裁切长说明。
+圆墨点、白色内环和轻纸色选中行共同表达选择，键盘焦点仍独立可见。 调整整组宽度可使用 className 或 style；选项间距和排列由 classNames.options 设置。 选项名称与补充说明分别使用 classNames.label、classNames.description，避免用固定高度裁切长说明。
 
 <a id="related"></a>
 

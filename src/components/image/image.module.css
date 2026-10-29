@@ -3,7 +3,7 @@
   max-width: 100%;
   overflow: hidden;
   border-radius: var(--chi-radius-surface, 22px 30px 25px 20px);
-  background: var(--chi-neutral-surface, #f9f5f1);
+  background: var(--chi-neutral-surface, #f1f8ff);
 }
 .image {
   display: block;
@@ -25,29 +25,40 @@
   box-sizing: border-box;
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 100px;
   width: 100%;
   height: 100%;
   padding: var(--chi-space-6, 24px);
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   text-align: center;
+  overflow: auto;
   overflow-wrap: anywhere;
   font-family: inherit;
   font-size: var(--chi-font-size-body-sm, 14px);
   border-radius: inherit;
 }
-.fallback::before {
+.fallback:focus-visible {
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
+  outline-offset: calc(-1 * var(--chi-focus-offset, 2px));
+}
+.frame[data-status='error']::before {
   content: '';
   position: absolute;
+  z-index: 1;
   inset: 0;
-  border: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
+  border: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
   border-radius: inherit;
   pointer-events: none;
 }
 .fallbackContent {
   display: grid;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+  margin-block: auto;
   justify-items: center;
   gap: var(--chi-space-3, 12px);
   line-height: var(--chi-leading-body, 1.8);

@@ -1,7 +1,7 @@
 .root {
   min-width: 0;
   max-width: 100%;
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-family: inherit;
 }
 .list {
@@ -52,36 +52,36 @@
 }
 .pageGroup .button {
   padding-inline: calc(var(--chi-space-3, 12px) - var(--chi-control-border-width, 2px));
-  border-color: var(--chi-paper-line, #e4d9d3);
-  background: var(--chi-surface, #fffefa);
+  border-color: var(--chi-paper-line, #c9deec);
+  background: var(--chi-surface, #ffffff);
   font-variant-numeric: tabular-nums;
 }
 .button[aria-current='page'] {
-  border-color: var(--chi-contour, #644744);
+  border-color: var(--chi-contour, #684150);
   border-radius: 48% 52% 50% 46%;
-  background: var(--chi-accent, #f8dbe2);
+  background: var(--chi-accent, #ffc3d9);
 }
 .button:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
   outline-offset: var(--chi-focus-offset, 2px);
 }
 .button:disabled {
   border-color: transparent;
   background: transparent;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   cursor: not-allowed;
 }
 .ellipsis {
   padding-inline: 1px;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
 }
 @media (hover: hover) {
   .button:not(:disabled):not([aria-current='page']):hover {
-    border-color: var(--chi-contour, #644744);
-    background: var(--chi-accent-soft, #fff6f7);
+    border-color: var(--chi-contour, #684150);
+    background: var(--chi-accent-soft, #fff0f6);
   }
   .button[aria-current='page']:hover {
-    background: var(--chi-accent-hover, #f2c9d4);
+    background: var(--chi-accent-hover, #ffb3cf);
   }
 }
 @media (prefers-reduced-motion: reduce) {

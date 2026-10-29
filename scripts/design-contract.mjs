@@ -21,14 +21,21 @@ export const designExceptions = [
   [
     'checkbox',
     '.input',
-    '5px 6px 5px 4px',
-    'The native checkbox outline is a small, purpose-built ink square.',
+    '7px 8px 7px 6px',
+    'The native checkbox outline is a small, rounded ink square.',
   ],
   [
     'checkbox',
     '.input::before, .input::after',
     '2px',
     'The persistent check and mixed-state strokes share rounded ends.',
+  ],
+  ['select', '.popup', '13px 22px 18px 11px', 'The selection list uses a paper-note silhouette.'],
+  [
+    'select',
+    '.option[data-selected]',
+    '9px 15px 11px 8px',
+    'The chosen row forms a small ink stamp.',
   ],
   ['dropdown-menu', '.item::before', '3px', 'The menu row marker is a small paper bullet.'],
   [
@@ -88,6 +95,14 @@ designExceptions.push({
 });
 
 designExceptions.push(
+  {
+    path: 'src/components/select/select.module.css',
+    selector: '.option[data-selected][data-highlighted]',
+    property: 'box-shadow',
+    value:
+      'inset 0 0 0 var(--chi-focus-width, 2px) var(--chi-focus, #b04e78), inset 0 -3px 0 var(--chi-line, #c58ba1)',
+    reason: 'The canonical focus inset remains visible above the selected paper edge.',
+  },
   {
     path: 'src/components/skeleton/skeleton.module.css',
     selector: '.skeleton',

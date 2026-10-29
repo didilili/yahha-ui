@@ -26,7 +26,7 @@ import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
 
 ### 默认配色与可选预设
 
-比较吉伊轻粉、小八浅蓝与乌萨奇浅黄的组件外观；按钮可观察悬停和键盘焦点，不绑定业务操作。
+比较吉伊粉色、小八浅蓝与乌萨奇浅黄的组件外观；按钮可观察悬停和键盘焦点，不绑定业务操作。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -170,15 +170,15 @@ export default function ThemeNested() {
 
 | 参数              | 说明                                                                                                   | 类型     | 默认值                                         |
 | ----------------- | ------------------------------------------------------------------------------------------------------ | -------- | ---------------------------------------------- |
-| `ink`             | 正文与主要文字，--chi-ink。                                                                            | `string` | `#462e31`                                      |
-| `muted`           | 次要文字，--chi-muted。                                                                                | `string` | `#79656a`                                      |
-| `accent`          | 主题强调色，--chi-accent。                                                                             | `string` | `吉伊 #f8dbe2 / 小八 #d7eaf5 / 乌萨奇 #f8e5a7` |
-| `accentHover`     | 强调色的悬停状态，--chi-accent-hover。                                                                 | `string` | `吉伊 #f2c9d4 / 小八 #c3dfee / 乌萨奇 #f3da89` |
-| `accentSoft`      | 轻量强调背景，--chi-accent-soft。                                                                      | `string` | `吉伊 #fff6f7 / 小八 #f2f8fc / 乌萨奇 #fffaf0` |
-| `line`            | 常规边框，--chi-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。                                     | `string` | `吉伊 #d7c3c0 / 小八 #b9cedb / 乌萨奇 #daca9f` |
-| `focus`           | 键盘焦点轮廓，--chi-focus。                                                                            | `string` | `吉伊 #ad6179 / 小八 #386d93 / 乌萨奇 #896329` |
-| `surface`         | Surface 与 Dialog 背景，--chi-surface。                                                                | `string` | `#fffefa`                                      |
-| `fieldBackground` | 输入框默认背景，--chi-field-background；错误和禁用状态保留各自背景。                                   | `string` | `#fffefd`                                      |
+| `ink`             | 正文与主要文字，--chi-ink。                                                                            | `string` | `#49313d`                                      |
+| `muted`           | 次要文字，--chi-muted。                                                                                | `string` | `#7a5c6d`                                      |
+| `accent`          | 主题强调色，--chi-accent。                                                                             | `string` | `吉伊 #ffc3d9 / 小八 #d7eaf5 / 乌萨奇 #f8e5a7` |
+| `accentHover`     | 强调色的悬停状态，--chi-accent-hover。                                                                 | `string` | `吉伊 #ffb3cf / 小八 #c3dfee / 乌萨奇 #f3da89` |
+| `accentSoft`      | 轻量强调背景，--chi-accent-soft。                                                                      | `string` | `吉伊 #fff0f6 / 小八 #f2f8fc / 乌萨奇 #fffaf0` |
+| `line`            | 常规边框，--chi-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。                                     | `string` | `吉伊 #c58ba1 / 小八 #b9cedb / 乌萨奇 #daca9f` |
+| `focus`           | 键盘焦点轮廓，--chi-focus。                                                                            | `string` | `吉伊 #b04e78 / 小八 #386d93 / 乌萨奇 #896329` |
+| `surface`         | 内容面与浮层等共用背景，--chi-surface。                                                                | `string` | `#ffffff`                                      |
+| `fieldBackground` | 输入框默认背景，--chi-field-background；错误和禁用状态保留各自背景。                                   | `string` | `#ffffff`                                      |
 | `error`           | 输入框错误边框、错误时的焦点轮廓、错误文字与 Toast 错误图标，--chi-error；错误背景固定，禁用背景优先。 | `string` | `#a33e4f`                                      |
 
 <a id="boundaries"></a>

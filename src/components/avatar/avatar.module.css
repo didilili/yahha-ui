@@ -7,10 +7,10 @@
   width: 44px;
   height: 44px;
   overflow: hidden;
-  border: var(--chi-border-width, 1px) solid var(--chi-contour, #644744);
+  border: var(--chi-border-width, 1px) solid var(--chi-contour, #684150);
   border-radius: var(--chi-radius-avatar, 40% 45% 42% 38%);
-  background: var(--chi-accent, #f8dbe2);
-  color: var(--chi-ink, #462e31);
+  background: var(--chi-accent, #ffc3d9);
+  color: var(--chi-ink, #49313d);
   font-family: inherit;
   font-size: var(--chi-font-size-md, 14px);
   line-height: var(--chi-leading-control, 20px);

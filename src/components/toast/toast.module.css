@@ -7,12 +7,12 @@
   max-width: 400px;
   padding: var(--chi-space-4, 16px) var(--chi-space-3, 12px) var(--chi-space-4, 16px)
     var(--chi-space-4, 16px);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
   border-radius: var(--chi-radius-toast, 10px 15px 12px 9px);
-  background: var(--chi-surface, #fffefa);
-  color: var(--chi-ink, #462e31);
+  background: var(--chi-surface, #ffffff);
+  color: var(--chi-ink, #49313d);
   font-family: inherit;
-  box-shadow: var(--chi-shadow-popup, 0 3px 0 #d7c3c0, 0 8px 20px rgb(70 46 49 / 8%));
+  box-shadow: var(--chi-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
   text-align: start;
   overflow-wrap: anywhere;
 }
@@ -56,14 +56,14 @@
 }
 .toastDescription {
   margin: var(--chi-space-1, 4px) 0 0;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   font-size: var(--chi-font-size-body-sm, 14px);
   line-height: var(--chi-leading-caption, 1.6);
 }
 .toastAction {
   margin-top: var(--chi-space-3, 12px);
   padding-top: var(--chi-space-3, 12px);
-  border-top: var(--chi-border-width, 1px) dashed var(--chi-paper-line, #e4d9d3);
+  border-top: var(--chi-border-width, 1px) dashed var(--chi-paper-line, #c9deec);
 }
 .toastClose {
   --chi-control-height-sm: var(--chi-control-height, 44px);

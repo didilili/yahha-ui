@@ -5,7 +5,7 @@
   align-items: center;
   min-width: 0;
   padding: calc(var(--chi-space-5, 20px) * 2) var(--chi-space-6, 24px);
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -21,10 +21,10 @@
   content: '';
   position: absolute;
   inset: 5px 8px 3px 7px;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
   border-radius: 6px 9px 7px 5px;
-  background: var(--chi-surface, #fffefa);
-  box-shadow: 3px 3px 0 var(--chi-accent, #f8dbe2);
+  background: var(--chi-surface, #ffffff);
+  box-shadow: 3px 3px 0 var(--chi-accent, #ffc3d9);
   transform: rotate(-6deg);
 }
 .emptyMotif::after {
@@ -34,7 +34,7 @@
   inset-inline-start: 15px;
   width: 16px;
   height: 8px;
-  border-block: var(--chi-control-border-width, 2px) solid var(--chi-line, #d7c3c0);
+  border-block: var(--chi-control-border-width, 2px) solid var(--chi-line, #c58ba1);
   transform: rotate(-6deg);
 }
 .emptyIllustration {
@@ -65,7 +65,7 @@
 .emptyDescription {
   max-width: 38ch;
   margin: var(--chi-space-2, 8px) 0 0;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   font-size: var(--chi-font-size-body, 16px);
   line-height: var(--chi-leading-body, 1.8);
 }

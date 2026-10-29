@@ -186,13 +186,17 @@ export async function verifyTooltipGeometry(popup, trigger, label) {
     const axis = vertical ? 'y' : 'x';
     const start = vertical ? paper.top : paper.left;
     const end = vertical ? paper.bottom : paper.right;
+    const cornerRadius = (name) => {
+      const parts = style[`border${name}Radius`].split(' ');
+      const value = parts[vertical ? 1 : 0] ?? parts[0];
+      const length = parseFloat(value);
+      return value.endsWith('%')
+        ? (length / 100) * (vertical ? paper.height : paper.width)
+        : length;
+    };
     const margins = [
-      Math.min(...corners.map((p) => p[axis])) -
-        start -
-        parseFloat(style[`border${cornerNames[0]}Radius`]),
-      end -
-        Math.max(...corners.map((p) => p[axis])) -
-        parseFloat(style[`border${cornerNames[1]}Radius`]),
+      Math.min(...corners.map((p) => p[axis])) - start - cornerRadius(cornerNames[0]),
+      end - Math.max(...corners.map((p) => p[axis])) - cornerRadius(cornerNames[1]),
     ];
     return { side, visible: true, clearance, focusExtent, cornerMargins: margins };
   }, anchor);

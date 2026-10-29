@@ -33,7 +33,7 @@ export async function verifyConsumer(browser, url) {
   );
 
   const themes = [
-    ['chiikawa', 'rgb(248, 219, 226)', 'rgb(100, 71, 68)'],
+    ['chiikawa', 'rgb(255, 195, 217)', 'rgb(104, 65, 80)'],
     ['hachiware', 'rgb(215, 234, 245)', 'rgb(82, 106, 122)'],
     ['usagi', 'rgb(248, 229, 167)', 'rgb(124, 102, 56)'],
   ];
@@ -50,18 +50,18 @@ export async function verifyConsumer(browser, url) {
           style.minHeight,
           style.borderRadius,
           style.borderColor,
-          style.boxShadow,
+          style.boxShadow.split(/,(?![^()]*\))/).every((shadow) => shadow.includes('inset')),
         ];
       }),
-      ['rgb(255, 254, 250)', '44px', '22px 28px 24px 23px', contour, 'none'],
-      `${theme}: secondary buttons must use the flat reading surface and shared soft outline.`,
+      ['rgb(255, 255, 255)', '44px', '22px 28px 24px 23px / 52% 48%', contour, true],
+      `${theme}: secondary buttons must use a white reading surface, soft outline, and inner edge.`,
     );
     assert.deepEqual(
       await page.getByRole('button', { name: 'Submit scope', exact: true }).evaluate((node) => {
         const style = getComputedStyle(node);
         return [style.backgroundColor, style.color, style.boxShadow !== 'none'];
       }),
-      [background, 'rgb(70, 46, 49)', true],
+      [background, 'rgb(73, 49, 61)', true],
       `${theme}: primary buttons must use the theme accent with readable ink and a press edge.`,
     );
     await trigger.click();
@@ -119,7 +119,7 @@ export async function verifyConsumer(browser, url) {
     await page
       .getByTestId('consumer-line-skeleton')
       .evaluate((node) => getComputedStyle(node).backgroundColor),
-    'rgb(228, 217, 211)',
+    'rgb(201, 222, 236)',
     'A custom paper edge must not recolor unrelated loading placeholders.',
   );
   assert.equal(

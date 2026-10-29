@@ -79,7 +79,7 @@ export default function LittleDaysStates() {
         .little-days-states { display: grid; gap: 24px; }
         .little-days-state-tools { display: grid; justify-items: start; gap: 16px; min-width: 0; }
         .little-days-state-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
-        .little-days-state-preview { display: grid; justify-items: center; gap: 20px; padding: 24px; border: 1px solid var(--chi-paper-line, #e4d9d3); border-radius: 22px 18px 24px 20px; background: var(--chi-surface, #fffefa); text-align: center; min-width: 0; }
+        .little-days-state-preview { display: grid; justify-items: center; gap: 20px; padding: 24px; border: 1px solid var(--chi-paper-line, #c9deec); border-radius: 22px 18px 24px 20px; background: var(--chi-surface, #ffffff); text-align: center; min-width: 0; }
         .little-days-state-picture { display: grid; place-items: center; width: 100%; min-height: 180px; }
         .little-days-state-image { display: block; max-width: 100%; height: auto; }
         .little-days-state-copy { display: grid; justify-items: center; gap: 12px; max-width: 46ch; }

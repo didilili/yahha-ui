@@ -350,7 +350,7 @@ export default function TextFieldForm() {
 
 ## 样式定制
 
-字段宽度、外边距等布局通过 className 或外层容器设置。调整输入框本身的外观时使用 classNames.input 或 style；需要单独设置提示或错误文字时使用 classNames.hint / classNames.error，无需依赖内部嵌套选择器。
+默认白底保留浅蓝内底边；只读与禁用默认使用平整的状态底色，错误使用独立的红色边线与内缘。 字段宽度、外边距等布局通过 className 或外层容器设置。调整输入框本身的外观时使用 classNames.input 或 style；需要单独设置提示或错误文字时使用 classNames.hint / classNames.error，无需依赖内部嵌套选择器。
 
 <a id="related"></a>
 

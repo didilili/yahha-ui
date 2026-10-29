@@ -1,12 +1,12 @@
 .root {
   min-width: 0;
   max-width: 100%;
-  border-block: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
-  color: var(--chi-ink, #462e31);
+  border-block: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
+  color: var(--chi-ink, #49313d);
   font-family: inherit;
 }
 .item + .item {
-  border-top: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
+  border-top: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
 }
 .heading {
   margin: 0;
@@ -39,11 +39,11 @@
   transition: background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
 .trigger:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
   outline-offset: var(--chi-focus-offset, 2px);
 }
 .trigger[data-disabled] {
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   cursor: not-allowed;
 }
 .title {
@@ -57,22 +57,22 @@
   width: 28px;
   height: 28px;
   padding: var(--chi-space-1, 4px);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
   border-radius: 50%;
-  background: var(--chi-surface, #fffefa);
-  color: var(--chi-contour, #644744);
+  background: var(--chi-surface, #ffffff);
+  color: var(--chi-contour, #684150);
   transition:
     transform var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
     background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
 .trigger[aria-expanded='true'] .chevron {
-  background: var(--chi-accent, #f8dbe2);
+  background: var(--chi-accent, #ffc3d9);
   transform: rotate(180deg);
 }
 .trigger[data-disabled] .chevron {
-  border-color: var(--chi-line, #d7c3c0);
-  background: var(--chi-disabled-surface, #f2eeea);
-  color: var(--chi-muted, #79656a);
+  border-color: var(--chi-line, #c58ba1);
+  background: var(--chi-disabled-surface, #f0f3f7);
+  color: var(--chi-muted, #7a5c6d);
 }
 .panel {
   min-width: 0;
@@ -89,7 +89,7 @@
 }
 @media (hover: hover) {
   .trigger:not([data-disabled]):hover {
-    background: var(--chi-accent-soft, #fff6f7);
+    background: var(--chi-accent-soft, #fff0f6);
   }
 }
 @media (prefers-reduced-motion: reduce) {

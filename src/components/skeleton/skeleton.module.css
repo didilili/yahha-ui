@@ -5,7 +5,7 @@
   height: 1em;
   max-width: 100%;
   border-radius: var(--chi-radius-skeleton, 4px 6px 5px 3px);
-  background: var(--chi-neutral-line, #e4d9d3);
+  background: var(--chi-neutral-line, #c9deec);
   animation: breathe 2.2s ease-in-out infinite;
 }
 .skeleton[data-variant='rect'] {

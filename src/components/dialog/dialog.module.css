@@ -24,12 +24,12 @@
   padding: var(--chi-space-8, 32px) var(--chi-space-7, 28px) var(--chi-space-7, 28px);
   overflow-y: auto;
   overflow-wrap: anywhere;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
   border-radius: var(--chi-radius-dialog, 32px 42px 35px 28px / 28px 35px 32px 25px);
-  background: var(--chi-surface, #fffefa);
-  color: var(--chi-ink, #462e31);
+  background: var(--chi-surface, #ffffff);
+  color: var(--chi-ink, #49313d);
   font-family: inherit;
-  box-shadow: var(--chi-shadow-dialog, 0 4px 0 #d7c3c0, 0 12px 32px rgb(70 46 49 / 10%));
+  box-shadow: var(--chi-shadow-dialog, 0 4px 0 #c58ba1, 0 12px 32px rgb(70 46 49 / 10%));
   transform: translate(-50%, -50%);
   transition:
     opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease),
@@ -39,7 +39,7 @@
   --dialog-close-top: 10px;
 }
 .dialog:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
   outline-offset: var(--chi-focus-offset-outer, 3px);
 }
 .dialog[data-starting-style],
@@ -77,7 +77,7 @@
   margin: 0;
   padding-inline-end: calc(var(--chi-control-height, 44px) - var(--chi-space-2, 8px));
   padding-bottom: var(--chi-space-4, 16px);
-  border-bottom: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
+  border-bottom: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
   font-size: var(--chi-font-size-heading-2, 24px);
   line-height: var(--chi-leading-heading, 1.45);
   font-weight: 650;
@@ -85,7 +85,7 @@
 }
 .dialogDescription {
   margin: var(--chi-space-3, 12px) 0 0;
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   font-size: var(--chi-font-size-body-sm, 14px);
   line-height: var(--chi-leading-body, 1.8);
 }
@@ -107,7 +107,7 @@
   gap: var(--chi-space-2, 8px);
   margin-top: var(--chi-space-6, 24px);
   padding-top: var(--chi-space-4, 16px);
-  border-top: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
+  border-top: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
 }
 
 @media (max-width: 480px) {

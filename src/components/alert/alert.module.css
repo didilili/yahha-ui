@@ -8,7 +8,7 @@
   border: var(--chi-border-width, 1px) solid var(--chi-info-line, #bbd0df);
   border-radius: var(--chi-radius-note, 14px 20px 17px 12px);
   background: var(--chi-info-surface, #f4f9fd);
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-family: inherit;
   font-size: var(--chi-font-size-body-sm, 14px);
   line-height: var(--chi-leading-body, 1.8);

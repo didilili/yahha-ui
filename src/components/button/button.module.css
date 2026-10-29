@@ -24,15 +24,17 @@
       )
     )
     var(--button-inline-padding);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
-  border-radius: var(--chi-radius-control, 22px 28px 24px 23px);
-  background: var(--chi-accent, #f8dbe2);
-  color: var(--chi-ink, #462e31);
-  box-shadow: var(
-    --chi-shadow-action,
-    inset 0 2px 0 var(--chi-accent-soft, #fff6f7),
-    0 3px 0 var(--chi-line, #d7c3c0)
-  );
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
+  border-radius: var(--chi-radius-control, 22px 28px 24px 23px / 52% 48% 52% 48%);
+  background: var(--chi-accent, #ffc3d9);
+  color: var(--chi-ink, #49313d);
+  box-shadow:
+    inset 0 -3px 0 color-mix(in srgb, var(--chi-contour, #684150) 8%, transparent),
+    var(
+      --chi-shadow-action,
+      inset 0 2px 0 var(--chi-accent-soft, #fff0f6),
+      0 3px 0 var(--chi-line, #c58ba1)
+    );
   font-size: var(--chi-font-size-md, 14px);
   line-height: var(--button-line-height);
   font-weight: 600;
@@ -62,13 +64,13 @@
 .button[data-variant='primary']:not(:disabled):active {
   box-shadow: var(
     --chi-shadow-action-pressed,
-    inset 0 1px 0 var(--chi-accent-soft, #fff6f7),
-    0 1px 0 var(--chi-line, #d7c3c0)
+    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
+    0 1px 0 var(--chi-line, #c58ba1)
   );
 }
 .button[data-variant='secondary'] {
-  background: var(--chi-surface, #fffefa);
-  box-shadow: none;
+  background: var(--chi-surface, #ffffff);
+  box-shadow: inset 0 -2px 0 var(--chi-neutral-surface, #f1f8ff);
 }
 .button[data-variant='ghost'] {
   background: transparent;
@@ -76,19 +78,21 @@
   box-shadow: none;
 }
 .button[aria-pressed='true'] {
-  background: var(--chi-accent, #f8dbe2);
-  border-color: var(--chi-contour, #644744);
-  box-shadow: inset 0 -2px 0 var(--chi-line, #d7c3c0);
+  background: var(--chi-accent-hover, #ffb3cf);
+  border-color: var(--chi-contour, #684150);
+  box-shadow:
+    inset 0 2px 0 var(--chi-line, #c58ba1),
+    inset 0 -1px 0 var(--chi-accent-soft, #fff0f6);
 }
 .button[aria-pressed='true']:not(:disabled):active {
-  box-shadow: inset 0 -1px 0 var(--chi-line, #d7c3c0);
+  box-shadow: inset 0 3px 0 var(--chi-line, #c58ba1);
 }
 .button[data-size='sm'] {
   --button-inline-padding: var(--chi-space-4, 16px);
   --button-height: var(--chi-control-height-sm, 36px);
   --button-line-height: var(--chi-leading-control-sm, 16px);
   --button-icon-size: 16px;
-  border-radius: var(--chi-radius-control-sm, 18px 23px 19px 17px);
+  border-radius: var(--chi-radius-control-sm, 18px 23px 19px 17px / 52% 48% 52% 48%);
   font-size: var(--chi-font-size-sm, 12px);
 }
 .button[data-size='lg'] {
@@ -96,7 +100,7 @@
   --button-height: var(--chi-control-height-lg, 52px);
   --button-line-height: var(--chi-leading-control-lg, 24px);
   --button-icon-size: 20px;
-  border-radius: var(--chi-radius-control-lg, 26px 32px 28px 24px);
+  border-radius: var(--chi-radius-control-lg, 26px 32px 28px 24px / 52% 48% 52% 48%);
   font-size: var(--chi-font-size-lg, 16px);
 }
 .button:disabled {
@@ -104,9 +108,9 @@
 }
 .button:disabled:not([aria-busy='true']) {
   box-shadow: none;
-  color: var(--chi-muted, #79656a);
-  border-color: var(--chi-line, #d7c3c0);
-  background: var(--chi-disabled-surface, #f2eeea);
+  color: var(--chi-muted, #7a5c6d);
+  border-color: var(--chi-line, #c58ba1);
+  background: var(--chi-disabled-surface, #f0f3f7);
 }
 .button[data-variant='ghost']:disabled:not([aria-busy='true']) {
   border-color: transparent;
@@ -116,7 +120,7 @@
   cursor: progress;
 }
 .button:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
   outline-offset: var(--chi-focus-offset-outer, 3px);
 }
 
@@ -188,17 +192,17 @@
 
 @media (hover: hover) {
   .button:not(:disabled):hover {
-    border-color: var(--chi-contour, #644744);
+    border-color: var(--chi-contour, #684150);
   }
   .button[data-variant='primary']:not(:disabled):hover {
-    background: var(--chi-accent-hover, #f2c9d4);
+    background: var(--chi-accent-hover, #ffb3cf);
   }
   .button[data-variant='secondary']:not(:disabled):hover,
   .button[data-variant='ghost']:not(:disabled):hover {
-    background: var(--chi-accent-soft, #fff6f7);
+    background: var(--chi-accent-soft, #fff0f6);
   }
   .button[aria-pressed='true']:not(:disabled):hover {
-    background: var(--chi-accent-hover, #f2c9d4);
+    background: var(--chi-accent-hover, #ffb3cf);
   }
   .button[data-variant='ghost']:not(:disabled):hover:not([aria-pressed='true']) {
     border-color: transparent;
@@ -215,17 +219,22 @@
 }
 
 @media (forced-colors: active) {
+  .button {
+    box-shadow: none;
+  }
   .button[aria-pressed='true'],
   .button[aria-pressed='true']:not(:disabled):hover {
     border-color: Highlight;
     border-style: dashed;
     background: ButtonFace;
     color: ButtonText;
+    box-shadow: none;
   }
   .button[aria-pressed='true']:disabled:not([aria-busy='true']) {
     border-color: GrayText;
     border-style: dashed;
     background: ButtonFace;
     color: GrayText;
+    box-shadow: none;
   }
 }

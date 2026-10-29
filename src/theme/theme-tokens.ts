@@ -10,9 +10,9 @@ export interface ThemeTokens {
   /** Overrides control contours, content paper edges and action bases together. */
   line?: string;
   focus?: string;
-  /** Surface background. @default '#fffefa' */
+  /** Surface background. @default '#ffffff' */
   surface?: string;
-  /** Text field background. @default '#fffefd' */
+  /** Text field background. @default '#ffffff' */
   fieldBackground?: string;
   /** Text field error border, focus outline, text and Toast error icon color. @default '#a33e4f' */
   error?: string;

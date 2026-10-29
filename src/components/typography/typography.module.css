@@ -1,7 +1,7 @@
 .text {
   margin: 0;
   font-family: inherit;
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-size: var(--chi-font-size-body, 16px);
   line-height: var(--chi-leading-body, 1.8);
   overflow-wrap: anywhere;
@@ -13,12 +13,12 @@
   font-size: var(--chi-font-size-body-lg, 18px);
 }
 .text[data-tone='muted'] {
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
 }
 .heading {
   margin: 0;
   font-family: inherit;
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-weight: 650;
   line-height: var(--chi-leading-heading, 1.45);
   overflow-wrap: anywhere;
@@ -39,7 +39,7 @@ h2.heading::after {
   inset-block-end: 0;
   inline-size: 1.35em;
   block-size: 5px;
-  border-block-end: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
+  border-block-end: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
   border-radius: 0 0 48% 55%;
   transform: rotate(-4deg);
   pointer-events: none;
@@ -57,23 +57,23 @@ h6.heading {
   font-size: var(--chi-font-size-heading-6, 14px);
 }
 .link {
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   text-decoration: underline;
-  text-decoration-color: var(--chi-contour, #644744);
+  text-decoration-color: var(--chi-contour, #684150);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 0.24em;
   text-decoration-skip-ink: auto;
   overflow-wrap: anywhere;
 }
 .link:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
   outline-offset: var(--chi-focus-offset-outer, 3px);
   border-radius: 3px;
 }
 .divider {
   box-sizing: border-box;
   border: 0;
-  border-block-start: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
+  border-block-start: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
   inline-size: 100%;
   margin: var(--chi-space-5, 20px) 0;
 }
@@ -83,7 +83,7 @@ h6.heading {
   block-size: 1.5em;
   align-self: stretch;
   border-block-start: 0;
-  border-inline-start: var(--chi-border-width, 1px) solid var(--chi-paper-line, #e4d9d3);
+  border-inline-start: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
   margin: 0 var(--chi-space-3, 12px);
   vertical-align: middle;
 }
@@ -92,8 +92,8 @@ h6.heading {
 }
 @media (hover: hover) {
   .link:hover {
-    color: var(--chi-ink, #462e31);
+    color: var(--chi-ink, #49313d);
     text-decoration-thickness: 2px;
-    text-decoration-color: var(--chi-focus, #ad6179);
+    text-decoration-color: var(--chi-focus, #b04e78);
   }
 }

@@ -14,14 +14,16 @@
   padding: var(--chi-space-2, 8px) var(--chi-space-3, 12px);
   overflow-y: auto;
   overflow-wrap: anywhere;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
-  border-radius: var(--chi-radius-bubble, 12px 16px 14px 8px);
-  background: var(--chi-surface, #fffefa);
-  color: var(--chi-ink, #462e31);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
+  border-radius: var(--chi-radius-bubble, 17px 22px 19px 12px / 12px 16px 14px 8px);
+  background: var(--chi-surface, #ffffff);
+  color: var(--chi-ink, #49313d);
   font: inherit;
   font-size: var(--chi-font-size-body-sm, 14px);
   line-height: var(--chi-leading-caption, 1.6);
-  box-shadow: var(--chi-shadow-popup, 0 3px 0 #d7c3c0, 0 8px 20px rgb(70 46 49 / 8%));
+  box-shadow:
+    inset 0 -3px 0 var(--chi-neutral-surface, #f1f8ff),
+    var(--chi-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
   outline: none;
   transform-origin: var(--transform-origin);
   transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
@@ -37,8 +39,8 @@
   content: '';
   position: absolute;
   inset: 0;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #644744);
-  background: var(--chi-surface, #fffefa);
+  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
+  background: var(--chi-surface, #ffffff);
   transform: rotate(45deg);
 }
 .arrow[data-side='top'] {

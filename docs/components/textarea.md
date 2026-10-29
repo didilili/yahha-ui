@@ -179,7 +179,7 @@ export default function TextareaStates() {
 
 ## 样式定制
 
-使用 rows 设置初始可见行数，默认四行；内容超出后滚动，不会随输入自动增高。 通过 style 或 classNames.textarea 调整高度、minHeight 与 resize；字段宽度由 className 或外层容器控制。默认允许用户垂直拖动，固定高度前应考虑长内容的编辑需要。
+默认与单行输入共用白底和浅蓝内底边；只读和禁用默认使用平整底色，错误使用独立语义色内缘。 使用 rows 设置初始可见行数，默认四行；内容超出后滚动，不会随输入自动增高。 通过 style 或 classNames.textarea 调整高度、minHeight 与 resize；字段宽度由 className 或外层容器控制。默认允许用户垂直拖动，固定高度前应考虑长内容的编辑需要。
 
 <a id="related"></a>
 

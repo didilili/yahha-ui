@@ -1,7 +1,7 @@
 .root {
   min-width: 0;
   max-width: 100%;
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
   font-family: inherit;
 }
 .list {
@@ -53,25 +53,25 @@
   max-width: calc(100% - 24px);
   height: 4px;
   border-radius: 4px 3px 4px 2px;
-  background: var(--chi-contour, #644744);
+  background: var(--chi-contour, #684150);
   opacity: 0;
   transform: translateX(-50%);
   pointer-events: none;
   transition: opacity var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
 }
 .tab[data-active] {
-  color: var(--chi-ink, #462e31);
+  color: var(--chi-ink, #49313d);
 }
 .tab[data-active]::after {
   opacity: 1;
 }
 .tab:focus-visible,
 .panel:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #ad6179);
+  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
   outline-offset: var(--chi-focus-offset, 2px);
 }
 .tab[data-disabled] {
-  color: var(--chi-muted, #79656a);
+  color: var(--chi-muted, #7a5c6d);
   cursor: not-allowed;
 }
 .tab[data-disabled]::after {
@@ -89,10 +89,10 @@
 }
 @media (hover: hover) {
   .tab:not([data-disabled]):not([data-active]):hover {
-    background: var(--chi-accent-soft, #fff6f7);
+    background: var(--chi-accent-soft, #fff0f6);
   }
   .tab[data-active]:not([data-disabled]):hover {
-    background: var(--chi-accent-soft, #fff6f7);
+    background: var(--chi-accent-soft, #fff0f6);
   }
 }
 @media (prefers-reduced-motion: reduce) {
