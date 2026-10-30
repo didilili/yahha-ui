@@ -64,7 +64,7 @@ export default function ArticlePage({ post, returnTo, savedIds, onToggleSave }: 
       <div className="blog-article-back">
         <SiteLink className="blog-reading-inline-link" to={returnTo} restoreReadingPosition>
           <ArrowLeft size={18} aria-hidden="true" />
-          返回手记列表
+          {returnTo === '#/' ? '返回首页' : '返回手记归档'}
         </SiteLink>
       </div>
 
@@ -128,7 +128,7 @@ export default function ArticlePage({ post, returnTo, savedIds, onToggleSave }: 
               <div className="blog-article-save-row">
                 <div className="blog-article-save-copy">
                   <Heading level={2}>谢谢你，读到这里</Heading>
-                  <Text tone="muted">喜欢这一页的话，就夹一枚书签吧。下次再来，接着慢慢读。</Text>
+                  <Text tone="muted">想留住这件小事，就收藏这篇手记吧。下次来，再一起翻翻。</Text>
                 </div>
                 <Button
                   id={`save-${post.id}`}

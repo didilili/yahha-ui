@@ -26,6 +26,7 @@ interface NavigationOptions {
 }
 
 interface EntryState {
+  blogEntry?: string;
   blogScroll?: number;
   blogFocus?: string;
 }
@@ -40,11 +41,35 @@ export let navigation = {
 let readingReturn: { href: string; entry: EntryState } | undefined;
 const subscribers = new Set<() => void>();
 let snapshot = window.location.hash || '#/';
+const positions = new Map<string, EntryState>();
+const entryPrefix = Math.random().toString(36).slice(2);
+let entrySequence = 0;
+const createEntryId = () => `${entryPrefix}-${entrySequence++}`;
+let currentEntryId = identifyEntry();
+let positionReady = true;
+
+function identifyEntry() {
+  const state = (history.state ?? {}) as EntryState;
+  if (state.blogEntry) return state.blogEntry;
+  const id = createEntryId();
+  history.replaceState({ ...state, blogEntry: id }, '');
+  return id;
+}
+
+function currentPosition(): EntryState {
+  return {
+    blogScroll: window.scrollY,
+    blogFocus: document.activeElement instanceof HTMLElement ? document.activeElement.id : '',
+  };
+}
 
 function changed(kind: 'push' | 'pop') {
   const next = window.location.hash || '#/';
   if (next === snapshot) return;
-  if (kind === 'pop')
+  if (kind === 'pop') {
+    // history.state already belongs to the destination; the DOM still shows the page we left.
+    if (positionReady) positions.set(currentEntryId, currentPosition());
+    currentEntryId = identifyEntry();
     navigation = {
       kind,
       focus: 'page',
@@ -52,6 +77,8 @@ function changed(kind: 'push' | 'pop') {
       preserveNotice: false,
       restoreReadingPosition: false,
     };
+  }
+  positionReady = false;
   snapshot = next;
   subscribers.forEach((callback) => callback());
 }
@@ -61,9 +88,15 @@ window.addEventListener('popstate', () => changed('pop'));
 window.addEventListener('hashchange', () => changed('pop'));
 
 function rememberEntry() {
+  if (!positionReady) return;
   const state = (history.state ?? {}) as EntryState;
-  const active = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
-  history.replaceState({ ...state, blogScroll: window.scrollY, blogFocus: active }, '');
+  const position = { ...state, ...currentPosition() };
+  positions.set(currentEntryId, position);
+  history.replaceState(position, '');
+}
+
+export function finishNavigation(location: string) {
+  if (location === snapshot) positionReady = true;
 }
 
 export function navigate(to: string, options: NavigationOptions = {}) {
@@ -108,10 +141,12 @@ export function navigate(to: string, options: NavigationOptions = {}) {
     preserveNotice: options.preserveNotice ?? false,
     restoreReadingPosition: !!remembered,
   };
-  const state: EntryState = remembered ?? {
-    blogScroll: options.scroll === 'preserve' ? window.scrollY : 0,
+  const state: EntryState = {
+    ...(remembered ?? { blogScroll: options.scroll === 'preserve' ? window.scrollY : 0 }),
+    blogEntry: createEntryId(),
   };
   history[options.replace ? 'replaceState' : 'pushState'](state, '', to);
+  currentEntryId = state.blogEntry!;
   changed('push');
 }
 
@@ -194,5 +229,6 @@ export function postSectionHref(id: string, from: string, section: string) {
 }
 
 export function restoredPosition() {
-  return (history.state ?? {}) as EntryState;
+  const state = (history.state ?? {}) as EntryState;
+  return positions.get(state.blogEntry ?? '') ?? state;
 }

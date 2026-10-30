@@ -19,20 +19,20 @@ const categories = [
   {
     id: 'daily',
     motif: 'flower',
-    description: '一顿好饭、一次发呆，还有普通日子里的小确幸。',
-    note: '把平凡过得有滋有味',
+    description: '煮一碗热汤，分半块面包，和朋友把一天过好。',
+    note: '饭桌旁，留一个位置',
   },
   {
     id: 'reading',
     motif: 'star',
-    description: '翻过的书页，和那些想要留下来的句子。',
-    note: '在文字里坐一会儿',
+    description: '把喜欢的句子记下来，下次见面，一起读一遍。',
+    note: '这一页，想和你一起读',
   },
   {
     id: 'walk',
     motif: 'sprout',
-    description: '走远一点，也认真看看家门口的风景。',
-    note: '出门捡一点好心情',
+    description: '沿着熟悉的小路走走，回来讲讲今天遇见了什么。',
+    note: '带一片落叶回家',
   },
 ] as const;
 
@@ -67,11 +67,11 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
               记下小小的日常。
             </Heading>
             <Text className="blog-home-intro">
-              你好呀，欢迎来坐坐。
+              你好呀，给你留了一个位置。
               <br />
-              这里有慢慢过的日子、读到一半的书，
+              这里有读到一半的书、刚煮好的汤，
               <br className="blog-home-desktop-break" />
-              和路上遇见的一点点快乐。
+              和朋友们想讲给你听的小小日常。
             </Text>
             <div className="blog-home-hero-actions">
               <SiteLink
@@ -110,7 +110,7 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
           <div className="blog-home-section-heading">
             <div>
               <Text size="sm" tone="muted" className="blog-home-section-kicker">
-                慢慢写，慢慢积攒
+                趁还记得，先写给你看
               </Text>
               <Heading level={2} id="blog-home-latest-heading">
                 最近写下的
@@ -154,7 +154,7 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
                   <div className="blog-home-author-signature">
                     <span aria-hidden="true">{authorName}</span>
                     <Text size="sm" tone="muted">
-                      很高兴在这里遇见你
+                      下次来，再讲一件小事
                     </Text>
                   </div>
                 </Surface>
@@ -181,7 +181,7 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
                     aspectRatio="3 / 2"
                   />
                   <Text size="sm" className="blog-home-photo-caption">
-                    给自己留一点安静的时间。
+                    翻到有趣的一页，就叫朋友来看。
                   </Text>
                 </div>
                 {readingPost && (
@@ -206,7 +206,7 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
               <Image src={artwork.peek} alt="" className="blog-home-peek-image" />
             </div>
             <Text size="sm" tone="muted">
-              随着心情，走进一个小角落
+              今天想读哪一种小事？
             </Text>
             <Heading level={2} id="blog-home-categories-heading">
               日子里的小口袋
@@ -248,10 +248,10 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
             <Heading level={3} id="blog-home-saved-heading">
               想留住的，就先收好。
             </Heading>
-            <Text tone="muted">读到喜欢的手记，点一下「收好」，下次回来还能找到。</Text>
+            <Text tone="muted">读到喜欢的手记，点一下「收藏」，以后可以在收藏中找到。</Text>
           </div>
           <SiteLink to={archiveHref({ savedOnly: true })} className="blog-home-saved-link">
-            已收好 {savedIds.size} 篇 <span aria-hidden="true">→</span>
+            查看收藏 · {savedIds.size} 篇 <span aria-hidden="true">→</span>
           </SiteLink>
         </section>
       </div>

@@ -220,7 +220,7 @@ async function inspectFailed(browser, baseURL, viewport, resources) {
       'true',
       'Missing assets do not block bookmarking.',
     );
-    await page.getByRole('link', { name: '返回手记列表', exact: true }).click();
+    await page.getByRole('link', { name: '返回手记归档', exact: true }).click();
     await page.waitForURL((url) => url.hash === '#/archive');
     await page.locator('#post-link-window-reading').click();
     await page

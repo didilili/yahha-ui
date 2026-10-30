@@ -88,12 +88,12 @@ export default function ArchivePage({ route, savedIds, onToggleSave }: ArchivePa
       <header className="blog-archive-intro">
         <div className="blog-page-intro-copy">
           <Text size="sm" tone="muted">
-            日子一页一页，慢慢积攒
+            和朋友们，一起翻翻从前
           </Text>
           <Heading level={1} id="page-heading" tabIndex={-1}>
             手记归档
           </Heading>
-          <Text tone="muted">一些日常，一些书页，还有散步时捡到的小小心情。</Text>
+          <Text tone="muted">留给朋友的热汤、一起读过的书，都好好记在这里。</Text>
         </div>
         <img className="blog-archive-peek" src={artwork.peek} alt="" width={180} height={120} />
       </header>
@@ -146,7 +146,7 @@ export default function ArchivePage({ route, savedIds, onToggleSave }: ArchivePa
             />
             {hasFilters && (
               <Button variant="ghost" onClick={resetFilters}>
-                清空条件
+                清空筛选
               </Button>
             )}
           </div>
@@ -187,15 +187,15 @@ export default function ArchivePage({ route, savedIds, onToggleSave }: ArchivePa
                 height={162}
               />
             }
-            title={emptyCollection ? '先收藏一篇喜欢的手记吧' : '这一页暂时没有手记'}
+            title={emptyCollection ? '还没有收藏的手记' : '未找到相关手记'}
             description={
-              route.savedOnly
-                ? '收藏的手记会留在这里。也可以清空条件，去其他页逛一逛。'
-                : '试试另一个关键词，或清空条件，重新翻一翻所有手记。'
+              emptyCollection
+                ? '收藏喜欢的手记后，就可以在这里找到。清空筛选，去看看所有手记吧。'
+                : '试试其他关键词或分类，或清空筛选查看全部手记。'
             }
             action={
               <Button variant="secondary" onClick={resetFilters}>
-                清空条件，看看全部
+                清空筛选
               </Button>
             }
           />

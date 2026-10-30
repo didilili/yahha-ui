@@ -79,7 +79,7 @@ export async function verifyReadingExperience(browser, baseURL) {
       await toggle.waitFor();
       assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
       assert.equal(await contents.getByRole('link').count(), 0);
-      const back = page.getByRole('link', { name: '返回手记列表', exact: true });
+      const back = page.getByRole('link', { name: '返回手记归档', exact: true });
       assert.ok(
         (await back.boundingBox()).height >= 44,
         'The article return link has a full touch target.',

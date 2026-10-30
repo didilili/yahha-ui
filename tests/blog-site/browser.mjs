@@ -162,7 +162,7 @@ async function coreJourney(page, baseURL) {
   const save = page.locator('#save-bookshop-corner');
   await touchTarget(save);
   await save.click();
-  await page.getByText('喜欢的手记，收好啦', { exact: true }).waitFor();
+  await page.locator('.blog-notice').getByText('已收藏', { exact: true }).waitFor();
   const savedArtwork = page.locator('.blog-notice-celebration');
   await savedArtwork.evaluate((image) => image.decode());
   assert.match(await savedArtwork.getAttribute('src'), /collection-saved-motion.*\.svg/);
@@ -188,12 +188,27 @@ async function coreJourney(page, baseURL) {
     '#/archive?page=2',
   );
   await healthy(page, baseURL);
+  const readingFocus = 'article-section-the-empty-chair';
+  const readingScroll = await page.evaluate((id) => {
+    document.getElementById(id).focus({ preventScroll: true });
+    window.scrollTo(0, 1100);
+    return window.scrollY;
+  }, readingFocus);
+  assert.ok(readingScroll > 500, 'History must restore a genuinely scrolled article.');
   await page.goBack();
   await hashIs(page, '#/archive?page=2');
   await results(page, pageTwoIds, 12, 2, 3);
   await focused(page, 'post-link-bookshop-corner');
   await page.waitForFunction((top) => Math.abs(window.scrollY - top) <= 2, scroll);
   assert.equal(await page.locator('#save-bookshop-corner').getAttribute('aria-pressed'), 'true');
+  await page.goForward();
+  await page.getByRole('heading', { level: 1, name: '书店角落，有一把空椅子' }).waitFor();
+  await page.waitForFunction((top) => Math.abs(window.scrollY - top) <= 2, readingScroll);
+  await focused(page, readingFocus);
+  await page.goBack();
+  await hashIs(page, '#/archive?page=2');
+  await focused(page, 'post-link-bookshop-corner');
+  await page.waitForFunction((top) => Math.abs(window.scrollY - top) <= 2, scroll);
 }
 
 async function desktopJourney(page, baseURL) {
@@ -208,7 +223,7 @@ async function desktopJourney(page, baseURL) {
     'article-section-shelter-from-rain',
   );
   assert.equal(await page.locator('h1').innerText(), '书店角落，有一把空椅子');
-  await page.getByRole('link', { name: '返回手记列表' }).click();
+  await page.getByRole('link', { name: '返回手记归档' }).click();
   await hashIs(page, '#/archive?page=2');
   await page
     .getByRole('navigation', { name: '主导航' })
@@ -231,7 +246,7 @@ async function desktopJourney(page, baseURL) {
   await healthy(page, baseURL);
 
   await search.fill('这是一条没有对应手记的检索词');
-  await page.getByRole('heading', { name: '这一页暂时没有手记', exact: true }).waitFor();
+  await page.getByRole('heading', { name: '未找到相关手记', exact: true }).waitFor();
   assert.match(
     await page.locator('.blog-archive-empty img').getAttribute('src'),
     /search-empty.*\.svg/,
@@ -241,7 +256,10 @@ async function desktopJourney(page, baseURL) {
     '这是一条没有对应手记的检索词',
   );
   await healthy(page, baseURL);
-  await page.getByRole('button', { name: '清空条件，看看全部' }).click();
+  await page
+    .locator('.blog-archive-empty')
+    .getByRole('button', { name: '清空筛选', exact: true })
+    .click();
   await hashIs(page, '#/archive');
   await focused(page, 'archive-search');
   await results(
@@ -255,7 +273,7 @@ async function desktopJourney(page, baseURL) {
   await hashIs(page, '#/archive?saved=1');
   await results(page, ['bookshop-corner']);
   await page.locator('#save-bookshop-corner').click();
-  await page.getByRole('heading', { name: '先收藏一篇喜欢的手记吧', exact: true }).waitFor();
+  await page.getByRole('heading', { name: '还没有收藏的手记', exact: true }).waitFor();
   assert.equal(
     await page.locator('.blog-notice-celebration').count(),
     0,
@@ -274,7 +292,7 @@ async function desktopJourney(page, baseURL) {
   await page.getByRole('button', { name: '关闭提示' }).click();
   await focused(page, 'archive-results-heading');
   await page.reload();
-  await page.getByRole('heading', { name: '先收藏一篇喜欢的手记吧', exact: true }).waitFor();
+  await page.getByRole('heading', { name: '还没有收藏的手记', exact: true }).waitFor();
   assert.deepEqual(
     await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), storageKey),
     [],
@@ -295,9 +313,9 @@ async function desktopJourney(page, baseURL) {
     'about-heading',
   );
   await page.goto(`${baseURL}#//[`);
-  await page.getByRole('heading', { name: '这一页，好像走丢了', exact: true }).waitFor();
+  await page.getByRole('heading', { name: '页面未找到', exact: true }).waitFor();
   assert.equal(
-    await page.getByRole('heading', { level: 1, name: '这一页，好像走丢了', exact: true }).count(),
+    await page.getByRole('heading', { level: 1, name: '页面未找到', exact: true }).count(),
     1,
   );
   assert.match(
@@ -306,9 +324,9 @@ async function desktopJourney(page, baseURL) {
   );
   await healthy(page, baseURL);
   await page.goto(`${baseURL}#/missing-page`);
-  await page.getByRole('heading', { name: '这一页，好像走丢了', exact: true }).waitFor();
+  await page.getByRole('heading', { name: '页面未找到', exact: true }).waitFor();
   await healthy(page, baseURL);
-  await page.getByRole('link', { name: '回到小站首页 →' }).click();
+  await page.getByRole('link', { name: '返回首页 →' }).click();
   await hashIs(page, '#/');
   await focused(page, 'blog-home-heading');
 }
@@ -336,7 +354,7 @@ export async function verifyReadingReturn(browser, baseURL) {
       .click();
     await page.getByRole('navigation', { name: '继续阅读' }).getByRole('link').click();
     await page.locator('.blog-article-header h1').waitFor();
-    await page.getByRole('link', { name: '返回手记列表', exact: true }).click();
+    await page.getByRole('link', { name: '返回手记归档', exact: true }).click();
     await hashIs(page, '#/archive?page=2');
     await focused(page, 'post-link-reread-pages');
     await page.waitForFunction((top) => Math.abs(scrollY - top) <= 2, originalScroll);
@@ -347,7 +365,7 @@ export async function verifyReadingReturn(browser, baseURL) {
       `${baseURL}#/posts/reread-pages?from=${encodeURIComponent('#/archive?page=2')}`,
     );
     await direct.locator('.blog-article-header h1').waitFor();
-    await direct.getByRole('link', { name: '返回手记列表', exact: true }).click();
+    await direct.getByRole('link', { name: '返回手记归档', exact: true }).click();
     await hashIs(direct, '#/archive?page=2');
     await focused(direct, 'page-heading');
     assert.equal(
@@ -387,9 +405,9 @@ export async function verifyReadingReturnAfterRemoval(browser, baseURL, returnMe
     await link.click();
     await page.locator('.blog-article-header h1').waitFor();
     await page.locator('#save-bookshop-corner').click();
-    await page.getByText('已经从收藏里放下了', { exact: true }).waitFor();
+    await page.getByText('已取消收藏', { exact: true }).waitFor();
     if (returnMethod === 'back') await page.goBack();
-    else await page.getByRole('link', { name: '返回手记列表', exact: true }).click();
+    else await page.getByRole('link', { name: '返回手记归档', exact: true }).click();
     await hashIs(page, '#/archive?saved=1');
     await results(page, saved.slice(0, 4), 4, 1, 1);
     await page.evaluate(
@@ -437,7 +455,7 @@ export async function verifySavedPageRecovery(browser, baseURL) {
     const undo = page.getByRole('button', { name: '撤销这次收藏操作', exact: true });
     await undo.waitFor();
     assert.equal(
-      await page.getByText('已经从收藏里放下了', { exact: true }).isVisible(),
+      await page.getByText('已取消收藏', { exact: true }).isVisible(),
       true,
       'Automatic page correction must preserve the result and its undo action.',
     );
@@ -510,6 +528,109 @@ export async function verifySavedPageRecovery(browser, baseURL) {
   }
 }
 
+/** Verify that feedback describes the actual persisted add/remove outcome, including refresh. */
+export async function verifyBookmarkFeedback(browser, baseURL) {
+  const postId = 'river-evening';
+  const noticeDescription = '本次操作未能保存到浏览器，当前页面仍可使用；刷新后可能恢复原状态。';
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 900 },
+    reducedMotion: 'reduce',
+  });
+  const page = await context.newPage();
+  page.setDefaultTimeout(4000);
+  try {
+    await page.goto(baseURL);
+    const save = page.locator(`#save-${postId}`);
+    const notice = page.locator('.blog-notice');
+    await save.waitFor();
+    assert.equal(await save.getAttribute('aria-pressed'), 'false');
+    await save.click();
+    await notice.getByText('已收藏', { exact: true }).waitFor();
+    await notice.getByText('已保存到当前浏览器，下次可在收藏中找到。', { exact: true }).waitFor();
+    assert.equal(await save.getAttribute('aria-pressed'), 'true');
+    assert.deepEqual(
+      await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), storageKey),
+      [postId],
+    );
+    await page.reload();
+    await save.waitFor();
+    assert.equal(await save.getAttribute('aria-pressed'), 'true');
+
+    await save.click();
+    await notice.getByText('已取消收藏', { exact: true }).waitFor();
+    await notice.getByText('已从当前浏览器的收藏中移除。', { exact: true }).waitFor();
+    assert.equal(
+      await notice.getByText('已保存到当前浏览器，下次可在收藏中找到。', { exact: true }).count(),
+      0,
+      'Removing a bookmark must not retain the add-result description.',
+    );
+    assert.equal(await save.getAttribute('aria-pressed'), 'false');
+    assert.deepEqual(
+      await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), storageKey),
+      [],
+    );
+    await page.reload();
+    await save.waitFor();
+    assert.equal(await save.getAttribute('aria-pressed'), 'false');
+  } finally {
+    await context.close();
+  }
+
+  for (const initiallySaved of [false, true]) {
+    const failed = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+      reducedMotion: 'reduce',
+    });
+    await failed.addInitScript(
+      ({ key, postId, initiallySaved }) => {
+        localStorage.setItem(key, JSON.stringify(initiallySaved ? [postId] : []));
+        Storage.prototype.setItem = function () {
+          throw new DOMException('Simulated storage write failure', 'QuotaExceededError');
+        };
+      },
+      { key: storageKey, postId, initiallySaved },
+    );
+    const failedPage = await failed.newPage();
+    failedPage.setDefaultTimeout(4000);
+    try {
+      await failedPage.goto(baseURL);
+      const save = failedPage.locator(`#save-${postId}`);
+      const notice = failedPage.locator('.blog-notice');
+      await save.waitFor();
+      assert.equal(await save.getAttribute('aria-pressed'), String(initiallySaved));
+      await save.click();
+      await notice
+        .getByText(initiallySaved ? '取消收藏未能保存' : '收藏未能保存', { exact: true })
+        .waitFor();
+      await notice.getByText(noticeDescription, { exact: true }).waitFor();
+      assert.equal(
+        await save.getAttribute('aria-pressed'),
+        String(!initiallySaved),
+        'A storage failure still allows the current-page state to change.',
+      );
+      assert.deepEqual(
+        await failedPage.evaluate((key) => JSON.parse(localStorage.getItem(key)), storageKey),
+        initiallySaved ? [postId] : [],
+        'A failed write must leave the previous persisted value intact.',
+      );
+      assert.equal(await notice.getByText('已收藏', { exact: true }).count(), 0);
+      assert.equal(await notice.getByText('已取消收藏', { exact: true }).count(), 0);
+      await failedPage.reload();
+      await save.waitFor();
+      assert.equal(
+        await save.getAttribute('aria-pressed'),
+        String(initiallySaved),
+        'After a failed write, refreshing restores the prior persisted state described by feedback.',
+      );
+    } finally {
+      await failed.close();
+    }
+  }
+  console.log(
+    'Blog: bookmark add/remove feedback matches persisted results; failed writes explain and preserve the refresh fallback.',
+  );
+}
+
 export async function verifyBlog(browser, baseURL) {
   for (const viewport of [
     { width: 1280, height: 900 },
@@ -546,6 +667,7 @@ export async function verifyBlog(browser, baseURL) {
       await context.close();
     }
   }
+  await verifyBookmarkFeedback(browser, baseURL);
   await verifySavedPageRecovery(browser, baseURL);
   await verifyReadingReturn(browser, baseURL);
   await verifyReadingReturnAfterRemoval(browser, baseURL);

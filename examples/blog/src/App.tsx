@@ -7,7 +7,14 @@ import { artwork } from './assets';
 import { getPost, posts } from './data/posts';
 import { siteName, siteSubtitle } from './data/site';
 import { SiteLink } from './SiteLink';
-import { navigation, parseRoute, restoredPosition, sectionTarget, useLocation } from './router';
+import {
+  finishNavigation,
+  navigation,
+  parseRoute,
+  restoredPosition,
+  sectionTarget,
+  useLocation,
+} from './router';
 
 const storageKey = 'chiikawa-ui-example-blog:saved:v1';
 interface Notice {
@@ -59,13 +66,9 @@ export default function App() {
   useLayoutEffect(() => {
     const current = parseRoute(location);
     const currentPost = current.kind === 'post' ? getPost(current.id) : undefined;
-    const title =
-      current.kind === 'home'
-        ? siteSubtitle
-        : current.kind === 'archive'
-          ? '手记归档'
-          : currentPost?.title || '这一页走丢了';
-    document.title = `${title} · ${siteName}`;
+    const title = current.kind === 'archive' ? '手记归档' : currentPost?.title || '页面未找到';
+    document.title =
+      current.kind === 'home' ? `${siteName} · ${siteSubtitle}` : `${title} · ${siteName}`;
     if (previousLocation.current !== location && !navigation.preserveNotice) {
       setNotice(null);
       setNoticeHovered(false);
@@ -74,27 +77,35 @@ export default function App() {
     previousLocation.current = location;
     const movement = { ...navigation };
     const frame = requestAnimationFrame(() => {
-      const heading = document.querySelector<HTMLElement>('#blog-main h1');
-      if (heading) heading.tabIndex = -1;
-      if (movement.kind === 'pop' || movement.restoreReadingPosition) {
-        const saved = restoredPosition();
-        window.scrollTo(0, saved.blogScroll ?? 0);
-        (document.getElementById(saved.blogFocus ?? '') ?? heading)?.focus({ preventScroll: true });
-        return;
+      try {
+        const heading = document.querySelector<HTMLElement>('#blog-main h1');
+        if (heading) heading.tabIndex = -1;
+        if (movement.kind === 'pop' || movement.restoreReadingPosition) {
+          const saved = restoredPosition();
+          window.scrollTo(0, saved.blogScroll ?? 0);
+          (document.getElementById(saved.blogFocus ?? '') ?? heading)?.focus({
+            preventScroll: true,
+          });
+          return;
+        }
+        const section = sectionTarget(current);
+        if (section) {
+          section.focus({ preventScroll: true });
+          section.scrollIntoView({ block: 'start' });
+          return;
+        }
+        if (movement.kind === 'initial') return;
+        if (movement.focus === 'preserve') return;
+        const target =
+          movement.focus === 'results'
+            ? document.getElementById('archive-results-heading')
+            : heading;
+        target?.focus({ preventScroll: true });
+        if (movement.scroll === 'top') window.scrollTo(0, 0);
+        else if (movement.focus === 'results') target?.scrollIntoView({ block: 'start' });
+      } finally {
+        finishNavigation(location);
       }
-      const section = sectionTarget(current);
-      if (section) {
-        section.focus({ preventScroll: true });
-        section.scrollIntoView({ block: 'start' });
-        return;
-      }
-      if (movement.kind === 'initial') return;
-      if (movement.focus === 'preserve') return;
-      const target =
-        movement.focus === 'results' ? document.getElementById('archive-results-heading') : heading;
-      target?.focus({ preventScroll: true });
-      if (movement.scroll === 'top') window.scrollTo(0, 0);
-      else if (movement.focus === 'results') target?.scrollIntoView({ block: 'start' });
     });
     return () => cancelAnimationFrame(frame);
   }, [location]);
@@ -216,11 +227,11 @@ export default function App() {
               404
             </Text>
             <Heading level={1} id="blog-not-found-heading" tabIndex={-1}>
-              这一页，好像走丢了
+              页面未找到
             </Heading>
-            <Text tone="muted">可能是地址写错了。回到小站，还能继续看看其他手记。</Text>
+            <Text tone="muted">这个地址没有对应的页面。回到首页，朋友们还在那里等你。</Text>
             <SiteLink to="#/" className="blog-action-link">
-              回到小站首页 →
+              返回首页 →
             </SiteLink>
           </div>
         )}
@@ -234,7 +245,7 @@ export default function App() {
         </div>
         <div className="blog-footer-note">
           <Text size="sm" tone="muted">
-            {posts.length} 篇虚构示例手记 · 收藏保存在当前浏览器
+            {posts.length} 篇虚构示例手记 · 收藏仅保留在当前浏览器，不会同步到其他设备
           </Text>
           <Text size="sm" tone="muted">
             使用 Yahha UI 搭建 · 非官方示例网站
@@ -264,11 +275,21 @@ export default function App() {
         <Toast
           open={!!notice}
           onClose={closeNotice}
-          title={notice?.wasSaved ? '已经从收藏里放下了' : '喜欢的手记，收好啦'}
+          title={
+            notice?.persisted
+              ? notice.wasSaved
+                ? '已取消收藏'
+                : '已收藏'
+              : notice?.wasSaved
+                ? '取消收藏未能保存'
+                : '收藏未能保存'
+          }
           description={
             notice?.persisted
-              ? '收藏保存在当前浏览器，下次打开还能继续找。'
-              : '浏览器暂时无法保存，本次打开仍可继续使用。'
+              ? notice.wasSaved
+                ? '已从当前浏览器的收藏中移除。'
+                : '已保存到当前浏览器，下次可在收藏中找到。'
+              : '本次操作未能保存到浏览器，当前页面仍可使用；刷新后可能恢复原状态。'
           }
           action={
             <Button size="sm" variant="ghost" onClick={undoNotice}>
