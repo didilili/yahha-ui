@@ -101,7 +101,7 @@ export default defineComponentPage('popover', {
             {
               name: 'initialFocus',
               type: "PopoverProps['initialFocus']",
-              defaultValue: '首个可聚焦元素；触摸时为 Popup',
+              defaultValue: '首个可聚焦元素；触摸打开时聚焦面板本身',
               description:
                 '可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。',
             },

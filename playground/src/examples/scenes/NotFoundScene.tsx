@@ -36,17 +36,17 @@ export default function NotFoundScene({
           tabIndex={-1}
           className={asPage ? 'doc-title' : undefined}
         >
-          没有找到这篇文档
+          页面未找到
         </Heading>
         <Text className="story-not-found-copy" tone="muted">
-          这条路暂时没有页面。链接可能已变更，可以从目录继续找。
+          这个地址没有对应的页面。朋友们在路口等你，可以从使用指南或组件总览继续逛逛。
         </Text>
         <nav className="story-not-found-actions" aria-label="找回文档">
           <a className="story-not-found-primary" href="#/guides/getting-started">
-            返回开始使用
+            开始使用
           </a>
           <a className="story-not-found-secondary" href="#/components">
-            查看组件目录
+            浏览组件
           </a>
         </nav>
       </section>

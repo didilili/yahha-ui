@@ -141,12 +141,12 @@ export function popupRows(name: string, side: string, align: string): ApiRow[] {
     {
       name: 'className / style',
       type: 'string / CSSProperties',
-      description: '作用于 Popup div，不作用于触发器、定位层或 Portal 外层。',
+      description: '作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。',
     },
     {
       name: 'ref',
       type: 'Ref<HTMLDivElement>',
-      description: '指向 Popup div，关闭卸载后为 null。',
+      description: '指向浮层面板 div，关闭卸载后为 null。',
     },
   ];
 }

@@ -30,7 +30,7 @@ export async function verifyBlogArchive(page, baseURL) {
   );
   assert.equal(await search.evaluate((node) => document.activeElement === node), true);
   await search.fill('这篇文章不存在');
-  await archive.getByRole('heading', { name: '没有找到这篇手记', exact: true }).waitFor();
+  await archive.getByRole('heading', { name: '未找到相关手记', exact: true }).waitFor();
   assert.equal(
     await pagination.getByRole('button', { name: '上一页', exact: true }).isDisabled(),
     true,

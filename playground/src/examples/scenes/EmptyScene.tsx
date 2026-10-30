@@ -74,7 +74,7 @@ export default function EmptyScene() {
           <EmptyState
             title={
               scene === 'search'
-                ? '没有找到匹配的文章'
+                ? '未找到相关文章'
                 : scene === 'saved'
                   ? '还没有收藏'
                   : '还没有手记'

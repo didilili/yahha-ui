@@ -107,9 +107,9 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
       return (
         <Surface>
           <div style={stack}>
-            <Heading level={4}>给日常留一页</Heading>
+            <Heading level={4}>草地上的空位</Heading>
             <Text size="sm" tone="muted">
-              把今天的小事，好好放在这里。
+              新朋友还没到，点心先给它留着。
             </Text>
           </div>
         </Surface>
@@ -186,9 +186,9 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
     case 'text':
       return (
         <div style={stack}>
-          <Text>沿着河边，慢慢走。</Text>
+          <Text>小星星问：还有我的位置吗？</Text>
           <Text size="sm" tone="muted">
-            把小花和晚风，留在这一页。
+            大家挪了挪，给它腾出一块草地。
           </Text>
         </div>
       );
@@ -321,7 +321,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
         </Dialog>
       );
     case 'empty-state':
-      return <EmptyState title="这里还没有手记" description="先收藏一篇，慢慢装满这一页。" />;
+      return <EmptyState title="还没有收藏的手记" description="先收藏一篇喜欢的手记吧。" />;
     case 'toast':
       return <Toast open onClose={noop} title="手记已保存" description="草稿已经好好收起。" />;
     default:

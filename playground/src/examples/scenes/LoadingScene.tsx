@@ -105,7 +105,7 @@ export default function LoadingScene() {
               : phase === 'success'
                 ? '文章已准备好'
                 : phase === 'error'
-                  ? '文章加载未完成'
+                  ? '文章未能加载'
                   : '文章列表为空'}
           </span>
         </div>
@@ -127,7 +127,7 @@ export default function LoadingScene() {
                 height={168}
                 alt=""
               />
-              <Text tone="muted">稍等一下，把这一页带过来。</Text>
+              <Text tone="muted">稍等一下，朋友们正把这一页送来。</Text>
             </>
           ) : phase === 'error' ? (
             <div className="story-loading-error-result">
@@ -138,10 +138,10 @@ export default function LoadingScene() {
                 width={112}
                 height={84}
               />
-              <Alert tone="error" title="这一页暂时没能过来">
+              <Alert tone="error" title="文章加载失败">
                 <div className="story-loading-error">
                   <p style={{ margin: 0 }}>
-                    文章内容还没有加载完成。可以重新试一次，其他操作仍然保留。
+                    暂时无法显示文章内容。别着急，可以重新加载，再和朋友们一起读下去。
                   </p>
                   <div>
                     <Button ref={retryButton} variant="secondary" onClick={() => load('success')}>
@@ -167,7 +167,7 @@ export default function LoadingScene() {
               <Heading level={3} ref={resultHeading} tabIndex={-1}>
                 今天，也有一件想记住的小事。
               </Heading>
-              <Text>散步、翻书，或是刚好碰见的一朵小花。</Text>
+              <Text>朋友走得慢，就在桥边等一等。最后一块饼干，也可以掰开分。</Text>
               <Button
                 ref={saveButton}
                 variant="secondary"
@@ -180,7 +180,7 @@ export default function LoadingScene() {
                 收藏这篇手记
               </Button>
               <Text size="sm" tone="muted">
-                {saved ? '已保存在本页收藏中。' : '收藏只保留在当前演示页面。'}
+                {saved ? '已在当前示例中收藏。' : '收藏仅在当前演示页面生效。'}
               </Text>
             </>
           )}

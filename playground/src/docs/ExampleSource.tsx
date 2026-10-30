@@ -28,7 +28,7 @@ export function ExampleSource({
             <li>
               <strong className="example-file-label">Example.tsx · 示例组件</strong>
               <p>
-                展开上方“代码”，将原始源码原样复制并保存为 <code>Example.tsx</code>。
+                点击上方“展开代码”，将源码保存为 <code>Example.tsx</code>。
               </p>
             </li>
             <li>

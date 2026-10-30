@@ -10,7 +10,7 @@ export default function HeadingExample() {
             {level}
             {level === 2 ? '（默认）' : ''}
           </Text>
-          <Heading level={level}>记录今天的小事</Heading>
+          <Heading level={level}>星球上的点心时间</Heading>
         </div>
       ))}
     </div>

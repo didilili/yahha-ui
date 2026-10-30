@@ -5,8 +5,10 @@ import { verifyArtwork } from './artwork-checks.mjs';
 import { verifyWelcome } from './welcome-checks.mjs';
 import { verifyComponentOverview } from './overview-checks.mjs';
 import { verifyExampleHeadings } from './example-teaching-checks.mjs';
+import { verifyBrand } from './brand-checks.mjs';
 
 export async function verifyDocs(browser, baseURL) {
+  await verifyBrand(browser, baseURL);
   await verifyHome(browser, baseURL);
   await verifyComponentOverview(browser, baseURL);
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
@@ -24,7 +26,7 @@ export async function verifyDocs(browser, baseURL) {
     const sourceBlock = example.locator('.component-source');
     await page
       .getByRole('navigation', { name: '本页内容' })
-      .getByRole('link', { name: '基本使用', exact: true })
+      .getByRole('link', { name: '基础用法', exact: true })
       .click();
     await page.waitForFunction(
       () => document.activeElement?.classList.contains('example-block'),
@@ -78,7 +80,7 @@ export async function verifyDocs(browser, baseURL) {
       .getByRole('heading', { level: 1, name: 'TextField 单行输入', exact: true })
       .waitFor();
     await search.fill('不存在的组件');
-    assert.equal(await page.getByText('没有匹配的文档').isVisible(), true);
+    assert.equal(await page.getByText('未找到相关文档').isVisible(), true);
     await search.fill('');
 
     const ids = [
@@ -220,12 +222,12 @@ export async function verifyDocs(browser, baseURL) {
 
     // Unknown routes must have a recovery link, not silently show another page.
     await page.goto(`${baseURL}#/components/missing`);
-    await page.getByRole('heading', { level: 1, name: '没有找到这篇文档', exact: true }).waitFor();
-    await page.getByRole('link', { name: '返回开始使用' }).click();
+    await page.getByRole('heading', { level: 1, name: '页面未找到', exact: true }).waitFor();
+    await page.locator('.not-found').getByRole('link', { name: '开始使用', exact: true }).click();
     await page.getByRole('heading', { level: 1, name: '开始使用', exact: true }).waitFor();
     await page.goBack();
-    await page.getByRole('heading', { level: 1, name: '没有找到这篇文档', exact: true }).waitFor();
-    await page.getByRole('link', { name: '查看组件目录', exact: true }).click();
+    await page.getByRole('heading', { level: 1, name: '页面未找到', exact: true }).waitFor();
+    await page.locator('.not-found').getByRole('link', { name: '浏览组件', exact: true }).click();
     await page.getByRole('heading', { level: 1, name: '组件总览', exact: true }).waitFor();
     await page.locator('.component-overview-page').waitFor();
     assert.equal(await page.locator('[data-component-id]').count(), 30);

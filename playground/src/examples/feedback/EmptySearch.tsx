@@ -33,7 +33,7 @@ export default function EmptySearch() {
         </ul>
       ) : (
         <EmptyState
-          title="没有找到匹配的文章"
+          title="未找到相关文章"
           description="换个关键词，或者先看看全部文章。"
           action={<Button onClick={clearSearch}>清空搜索</Button>}
         />

@@ -23,7 +23,7 @@ export default defineComponentPage('surface', {
       examples: [
         {
           id: 'surface-basic',
-          title: '基本使用',
+          title: '基础用法',
           description:
             '平面白纸内容面使用轻纸边和 24px 默认内边距；通过 style 或 className 调整宽度、标题与段落间距。',
           component: SurfaceBasic,

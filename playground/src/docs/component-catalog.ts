@@ -30,7 +30,7 @@ export const componentCatalog: ComponentPageSummary[] = [
     name: 'Button',
     chinese: '按钮',
     group: '通用',
-    description: '触发提交、收藏或其他操作的原生按钮，提供三种强调程度与完整的交互状态。',
+    description: '用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。',
   },
   {
     id: 'icon-button',
@@ -184,8 +184,9 @@ export const componentCatalog: ComponentPageSummary[] = [
   {
     id: 'popover',
     name: 'Popover',
-    chinese: '浮层',
+    chinese: '弹出面板',
     group: '浮层',
+    aliases: ['浮层'],
     description: '锚定到按钮的补充面板，适合简短说明和轻量交互。',
   },
   {
@@ -198,8 +199,9 @@ export const componentCatalog: ComponentPageSummary[] = [
   {
     id: 'alert',
     name: 'Alert',
-    chinese: '静态提示',
+    chinese: '提示条',
     group: '反馈',
+    aliases: ['静态提示'],
     description: '持续展示阅读说明、完成结果或需要处理的问题。',
   },
   {

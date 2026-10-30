@@ -32,7 +32,7 @@ export default defineComponentPage('segmented-control', {
       examples: [
         {
           id: 'basic',
-          title: '基本使用与受控状态',
+          title: '基础用法与受控状态',
           description:
             '最小受控示例：value / onValueChange 更新选择。label 提供组名，可见标题放在外部。',
           component: SegmentedBasic,

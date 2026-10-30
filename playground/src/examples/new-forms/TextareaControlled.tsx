@@ -26,7 +26,7 @@ export default function TextareaControlled() {
         }}
         required
         maxLength={200}
-        hint={`${message.length} / 200 字`}
+        hint={`已输入 ${message.length} / 200`}
         error={error}
       />
       <Button type="submit">检查留言</Button>

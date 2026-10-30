@@ -83,7 +83,7 @@ export default function MenuOpen() {
   return (
     <div style={{ display: 'grid', justifyItems: 'center', gap: 16 }}>
       <DropdownMenu
-        trigger={<Button variant="secondary">受控文章操作</Button>}
+        trigger={<Button variant="secondary">文章操作</Button>}
         open={open}
         onOpenChange={setOpen}
         items={[
@@ -263,7 +263,7 @@ export default function MenuControlled() {
 
 ### DropdownMenuProps
 
-| 参数                | 说明                                                                     | 类型                                   | 默认值     |
+| 属性                | 说明                                                                     | 类型                                   | 默认值     |
 | ------------------- | ------------------------------------------------------------------------ | -------------------------------------- | ---------- |
 | `trigger` **必填**  | 原生 button 或转发原生 button 属性、事件及 ref 的组件，例如 Button。     | `ReactElement`                         | —          |
 | `items` **必填**    | 单层动作列表；id 在当前菜单内唯一。                                      | `readonly DropdownMenuItem[]`          | —          |
@@ -275,12 +275,12 @@ export default function MenuControlled() {
 | `align`             | 相对触发器的对齐方向。                                                   | `"start" \| "center" \| "end"`         | `"start"`  |
 | `sideOffset`        | 与触发器的间距，单位 px。                                                | `number`                               | `8`        |
 | `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                | `DropdownMenuProps['portalContainer']` | `body`     |
-| `className / style` | 作用于 Popup div，不作用于触发器、定位层或 Portal 外层。                 | `string / CSSProperties`               | —          |
-| `ref`               | 指向 Popup div，关闭卸载后为 null。                                      | `Ref<HTMLDivElement>`                  | —          |
+| `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。               | `string / CSSProperties`               | —          |
+| `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                    | `Ref<HTMLDivElement>`                  | —          |
 
 ### DropdownMenuItem
 
-| 参数                | 说明                                               | 类型         | 默认值  |
+| 属性                | 说明                                               | 类型         | 默认值  |
 | ------------------- | -------------------------------------------------- | ------------ | ------- |
 | `id` **必填**       | 当前菜单内稳定、唯一的 key。                       | `string`     | —       |
 | `label` **必填**    | 显示文字，并供键盘按字查找使用。                   | `string`     | —       |
@@ -313,5 +313,5 @@ Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，�
 ## 相关组件
 
 - [Select 下拉选择器](select.md)：在有限的文章分类、排序或归档选项中选择一项。
-- [Popover 浮层](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
+- [Popover 弹出面板](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
 - [Dialog 弹窗](dialog.md)：需要用户暂时集中注意力时，显示一段独立内容或简短表单。

@@ -23,7 +23,7 @@ export default function IconButtonBasic() {
     <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
       {visible ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span>欢迎来到我的小站。</span>
+          <span>欢迎来坐坐，给你留了个位置。</span>
           <IconButton
             ref={closeRef}
             aria-label="关闭欢迎提示"

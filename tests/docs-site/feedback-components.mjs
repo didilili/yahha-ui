@@ -15,7 +15,7 @@ export async function verifyFeedbackFlow(page, baseURL) {
   const reload = scene.getByRole('button', { name: '重新加载文章', exact: true });
   await choose(page, next, '加载失败');
   await reload.click();
-  await scene.getByText('这一页暂时没能过来', { exact: true }).waitFor();
+  await scene.getByText('文章加载失败', { exact: true }).waitFor();
   await scene.getByRole('button', { name: '重试加载', exact: true }).click();
   await ready.waitFor();
   await page.waitForFunction(
@@ -61,7 +61,7 @@ export async function verifyFeedbackExamples(page, baseURL) {
   const during = await save.boundingBox();
   assert.equal(before.width, during.width);
   assert.equal(before.height, during.height);
-  await alert.getByText('这次没有保存成功', { exact: true }).waitFor();
+  await alert.getByText('订阅偏好保存失败', { exact: true }).waitFor();
   assert.equal(await checkbox.isChecked(), false);
   await alert.getByRole('button', { name: '重试保存', exact: true }).click();
   await alert.getByText('订阅偏好已保存', { exact: true }).waitFor();

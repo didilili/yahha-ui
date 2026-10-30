@@ -16,15 +16,15 @@ const groupDetails: Record<
   string,
   { description: string; motif: 'flower' | 'sprout' | 'cloud' | 'star' | 'letter' }
 > = {
-  通用: { description: '用清楚的按钮，回应每一个小小的动作。', motif: 'flower' },
-  排版: { description: '让标题、正文和链接各有清楚的位置。', motif: 'letter' },
-  布局: { description: '用内容纸面与分隔线，安排阅读的节奏。', motif: 'cloud' },
+  通用: { description: '把想法交给按钮，让每一次点击都有回应。', motif: 'flower' },
+  排版: { description: '让标题、正文和链接，排成好读的一页。', motif: 'letter' },
+  布局: { description: '用纸面和分隔线，为内容留出舒展的空间。', motif: 'cloud' },
   表单: { description: '写下想法，选好偏好，让每一次填写都有回应。', motif: 'sprout' },
-  内容展示: { description: '展示作者、配图、状态标签与补充说明。', motif: 'cloud' },
-  浮层: { description: '展开一张便笺，安放操作与补充说明。', motif: 'letter' },
-  反馈: { description: '等待、完成和小小的提醒，都认真说明。', motif: 'star' },
-  导航: { description: '翻翻栏目，接着阅读下一页。', motif: 'letter' },
-  主题配置: { description: '为页面设置一致的配色，并让浮层同步主题。', motif: 'flower' },
+  内容展示: { description: '给作者、配图与内容标记一个清楚的位置。', motif: 'cloud' },
+  浮层: { description: '展开便笺，把操作和补充说明放在手边。', motif: 'letter' },
+  反馈: { description: '等待时有说明，完成时有回应，遇到问题也有下一步。', motif: 'star' },
+  导航: { description: '翻过一页，还有新的故事等着你。', motif: 'letter' },
+  主题配置: { description: '选一组喜欢的配色，让页面与浮层保持一致。', motif: 'flower' },
 };
 
 // Preserve the original result sets of saved filters whose categories were split.
@@ -146,23 +146,27 @@ export default function ComponentOverview({
         <div className="overview-hero-copy">
           <p className="overview-eyebrow">
             <Motif name="flower" />
-            朋友们的组件小屋
+            Yahha 星球 · 朋友们的组件集合
           </p>
           {/* Route navigation focuses the heading without adding another tab stop. */}
           {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
           <h1 ref={headingRef} tabIndex={-1}>
             组件总览
           </h1>
-          <p className="overview-introduction">一眼找到，刚好合用的组件。</p>
-          <p className="overview-description">给个人博客、主页与内容小站。</p>
+          <p className="overview-introduction">朋友们把组件摆好了，来挑几个吧。</p>
+          <p className="overview-description">
+            浏览漫画手账风 React 组件，查看交互示例、用法与 API。
+          </p>
           <div className="overview-hero-notes">
-            <Badge tone="accent">{componentCatalog.length} 个文档入口</Badge>
-            <span className="overview-inventory-note">{uiCount} 个 UI 组件与主题配置 · React</span>
+            <Badge tone="accent">{uiCount} 个 UI 组件</Badge>
+            <span className="overview-inventory-note">
+              {groups.length - 1} 个分类 · ThemeProvider 主题配置
+            </span>
           </div>
         </div>
         <div className="overview-friends" aria-hidden="true">
           <DocScene />
-          <span>今天，也一起做点喜欢的事。</span>
+          <span>你先挑，朋友们在这里等你。</span>
         </div>
       </header>
 
@@ -203,7 +207,7 @@ export default function ComponentOverview({
             </p>
           </div>
           <div className="overview-categories">
-            <p className="overview-filter-label">按分类逛逛</p>
+            <p className="overview-filter-label">按分类筛选</p>
             <SegmentedControl
               label="组件分类"
               value={filters.group}
@@ -219,18 +223,18 @@ export default function ComponentOverview({
             aria-label="组件筛选结果"
             aria-live="polite"
           >
-            显示 <strong>{matches.length}</strong> / {componentCatalog.length} 个入口
+            找到 <strong>{matches.length}</strong> 项 / 共 {componentCatalog.length} 项
             {filters.group !== 'all' && <span> · {legacyGroup?.label ?? filters.group}</span>}
           </p>
-          <p className="overview-preview-note">先看样式，再点开示例与 API。</p>
+          <p className="overview-preview-note">选择组件，查看交互示例与 API。</p>
         </div>
       </section>
 
       {matches.length === 0 ? (
         <EmptyState
           className="overview-empty"
-          title="这间小屋里，还没找到它"
-          description="试试组件名或用途关键词，也可以清空筛选，重新逛一逛。"
+          title="未找到相关组件"
+          description="试试其他组件名或用途关键词，或清空筛选，看看其他可爱的伙伴。"
           illustration={<Motif name="cloud" />}
           action={
             <Button variant="secondary" onClick={clearFilters}>
@@ -252,7 +256,7 @@ export default function ComponentOverview({
                 <div>
                   <h2 id={`${overviewId}-${groups.indexOf(group)}`}>
                     {group}
-                    <span>{components.length} 个入口</span>
+                    <span>{components.length} 项</span>
                   </h2>
                   <p>{groupDetails[group]?.description}</p>
                 </div>
@@ -299,8 +303,8 @@ export default function ComponentOverview({
       <aside className="overview-next" aria-labelledby={`${overviewId}-next`}>
         <Motif name="letter" />
         <div>
-          <h2 id={`${overviewId}-next`}>把组件，放进一页小日常。</h2>
-          <p>接好样式，读一篇文章，再把喜欢的组件用到自己的小站里。</p>
+          <h2 id={`${overviewId}-next`}>挑好了，就一起搭起来。</h2>
+          <p>接好样式，先搭一页手记，再给你的故事添个位置。</p>
           <nav aria-label="总览相关指南">
             <Link href="#/guides/getting-started">
               安装与接入 <ArrowRight size={15} aria-hidden="true" />

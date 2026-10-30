@@ -41,19 +41,19 @@ export default function LinkExample() {
       </Text>
       <Text>
         <Link href="https://example.com" external>
-          example.com 占位页面（新窗口）
+          example.com 占位页面（新标签页打开）
         </Link>
       </Text>
       <Text>
         周末空下来的时候，可以读读
         <Link href="https://example.com" external>
-          example.com 占位页面：适合周末慢慢阅读的散步与书单手记（新窗口）
+          example.com 占位页面：适合周末慢慢阅读的散步与书单手记（新标签页打开）
         </Link>
         。
       </Text>
       <Text size="sm" tone="muted">
         <Link href="https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress" external>
-          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress（新窗口）
+          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress（新标签页打开）
         </Link>
       </Text>
     </div>
@@ -73,7 +73,7 @@ export default function LinkExample() {
 
 ### LinkProps
 
-| 参数                  | 说明                                                                      | 类型                                | 默认值  |
+| 属性                  | 说明                                                                      | 类型                                | 默认值  |
 | --------------------- | ------------------------------------------------------------------------- | ----------------------------------- | ------- |
 | `href` **必填**       | 链接目标。                                                                | `string`                            | —       |
 | `external`            | 未指定 target 时使用 \_blank。                                            | `boolean`                           | `false` |
@@ -95,6 +95,6 @@ export default function LinkExample() {
 
 ## 相关组件
 
-- [Button 按钮](button.md)：触发提交、收藏或其他操作的原生按钮，提供三种强调程度与完整的交互状态。
+- [Button 按钮](button.md)：用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。
 - [Text 正文](text.md)：为段落提供统一的字号、行高和语义文字颜色。
 - [Pagination 分页](pagination.md)：在文章列表和归档中切换页码，保留首页、末页和当前页附近的页码。

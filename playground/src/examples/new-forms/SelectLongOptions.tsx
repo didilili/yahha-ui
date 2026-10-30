@@ -7,7 +7,7 @@ export default function SelectLongOptions() {
         label="浏览归档分类"
         defaultValue="journal"
         options={[
-          { value: 'journal', label: '日常手记' },
+          { value: 'journal', label: '生活手记' },
           { value: 'reading', label: '读书笔记' },
           { value: 'walking', label: '那些沿着河边散步时记录下来的小小发现与漫长想法' },
           { value: 'photos', label: '散步相册' },

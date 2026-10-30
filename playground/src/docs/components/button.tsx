@@ -38,7 +38,7 @@ export default defineComponentPage('button', {
         {
           id: 'button-basic',
           previewAlign: 'center',
-          title: '基本使用',
+          title: '基础用法',
           description: '点击按钮，更新相邻文字中的问候次数。',
           component: ButtonBasic,
           source: buttonBasicSource,

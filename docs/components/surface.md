@@ -22,7 +22,7 @@ import { Surface } from 'yahha-ui';
 
 <a id="surface-basic"></a>
 
-### 基本使用
+### 基础用法
 
 平面白纸内容面使用轻纸边和 24px 默认内边距；通过 style 或 className 调整宽度、标题与段落间距。
 
@@ -36,8 +36,11 @@ import { Heading, Surface, Text } from 'yahha-ui';
 export default function SurfaceBasic() {
   return (
     <Surface style={{ display: 'grid', gap: 12, maxWidth: 480 }}>
-      <Heading level={3}>沿着河边走一会儿</Heading>
-      <Text>午后的风很轻，树影慢慢落在水面上。</Text>
+      <Heading level={3}>给路过的小星星写封信</Heading>
+      <Text>
+        在 Yahha
+        星球的云朵邮局，信纸可以借，铅笔也可以借。写好后，别忘了告诉小星星：下次来，给你留块饼干。
+      </Text>
     </Surface>
   );
 }
@@ -70,9 +73,9 @@ export default function SurfaceComposition() {
       <header style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
         <Badge>生活随笔</Badge>
         <Heading level={3} id={headingId}>
-          沿着河边走一会儿
+          沿着河边，等一等朋友
         </Heading>
-        <Text>一篇大约需要 5 分钟的短文，记录午后的散步。</Text>
+        <Text>一篇约 5 分钟的手记：有人系鞋带，大家就站在桥边等一等。</Text>
       </header>
       <div style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
         <Button
@@ -103,7 +106,7 @@ export default function SurfaceComposition() {
 
 ### SurfaceProps
 
-| 参数                | 说明                                                                             | 类型                           | 默认值 |
+| 属性                | 说明                                                                             | 类型                           | 默认值 |
 | ------------------- | -------------------------------------------------------------------------------- | ------------------------------ | ------ |
 | `children`          | 容器内容。                                                                       | `ReactNode`                    | —      |
 | `className / style` | 作用于根 div，可调整布局与外观。                                                 | `string / CSSProperties`       | —      |

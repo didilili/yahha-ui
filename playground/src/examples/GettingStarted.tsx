@@ -8,7 +8,7 @@ export default function App() {
   return (
     <ThemeProvider theme="chiikawa">
       <Button aria-pressed={saved} onClick={() => setSaved(!saved)}>
-        {saved ? '已收藏' : '收藏这篇文章'}
+        收藏这篇文章
       </Button>
     </ThemeProvider>
   );

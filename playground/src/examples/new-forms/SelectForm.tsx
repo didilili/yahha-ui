@@ -30,7 +30,7 @@ export default function SelectForm() {
         required
         placeholder="请选择归档分类"
         options={[
-          { value: 'journal', label: '日常手记' },
+          { value: 'journal', label: '生活手记' },
           { value: 'reading', label: '读书笔记' },
           { value: 'photos', label: '散步相册' },
         ]}

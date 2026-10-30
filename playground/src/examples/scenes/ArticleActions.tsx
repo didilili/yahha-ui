@@ -19,7 +19,7 @@ import {
 const initialArticle = {
   title: '沿着河边，慢慢走',
   category: '日常',
-  summary: '把今天遇见的小花和晚风，留在这一页。',
+  summary: '走到桥边，等系好鞋带的朋友一起回家。',
 };
 
 export default function ArticleActions() {
@@ -257,7 +257,7 @@ export default function ArticleActions() {
             毫秒计时器模拟失败；再次保存成功。关闭会取消等待，数据不上传服务器。
           </Text>
           {error && (
-            <Alert role="alert" tone="error" title="这次没有保存成功">
+            <Alert role="alert" tone="error" title="保存失败">
               {error}
             </Alert>
           )}

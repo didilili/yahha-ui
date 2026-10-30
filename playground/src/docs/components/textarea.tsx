@@ -25,7 +25,7 @@ export default defineComponentPage('textarea', {
       examples: [
         {
           id: 'basic',
-          title: '基本使用',
+          title: '基础用法',
           description: '输入多行留言；桌面端可拖动角落的调整手柄改变输入区域的高度。',
           component: TextareaBasic,
           source: TextareaBasicSource,

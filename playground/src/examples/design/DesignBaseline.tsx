@@ -207,7 +207,7 @@ export default function DesignBaseline() {
             </Button>
             <IconButton
               variant="secondary"
-              aria-label={saved ? '取消收藏示例' : '收藏示例'}
+              aria-label="收藏示例"
               aria-pressed={saved}
               onClick={() => setSaved(!saved)}
             >

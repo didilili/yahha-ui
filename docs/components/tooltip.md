@@ -128,7 +128,7 @@ export default function TooltipOptions() {
 
 ### TooltipProps
 
-| 参数                | 说明                                                                              | 类型                              | 默认值     |
+| 属性                | 说明                                                                              | 类型                              | 默认值     |
 | ------------------- | --------------------------------------------------------------------------------- | --------------------------------- | ---------- |
 | `trigger` **必填**  | 可聚焦按钮。必须有自身可访问名称，通常使用 Button 或带 aria-label 的 IconButton。 | `ReactElement`                    | —          |
 | `content` **必填**  | 简短纯文字，与 trigger 名称一致或紧密对应。不能包含链接、按钮和表单。             | `string`                          | —          |
@@ -141,8 +141,8 @@ export default function TooltipOptions() {
 | `align`             | 相对触发器的对齐方向。                                                            | `"start" \| "center" \| "end"`    | `"center"` |
 | `sideOffset`        | 提示外框与触发器的间距，单位 px；默认给尖角和按钮焦点圈留出空间。                 | `number`                          | `12`       |
 | `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                         | `TooltipProps['portalContainer']` | `body`     |
-| `className / style` | 作用于 Popup div，不作用于触发器、定位层或 Portal 外层。                          | `string / CSSProperties`          | —          |
-| `ref`               | 指向 Popup div，关闭卸载后为 null。                                               | `Ref<HTMLDivElement>`             | —          |
+| `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。                        | `string / CSSProperties`          | —          |
+| `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                             | `Ref<HTMLDivElement>`             | —          |
 
 <a id="keyboard"></a>
 
@@ -166,5 +166,5 @@ Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，�
 
 ## 相关组件
 
-- [Popover 浮层](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
+- [Popover 弹出面板](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
 - [IconButton 图标按钮](icon-button.md)：为关闭、收藏等仅用图标表达的操作提供方形点击区域与明确的可访问名称。

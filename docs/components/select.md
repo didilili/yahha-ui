@@ -22,7 +22,7 @@ import { Select } from 'yahha-ui';
 
 <a id="basic"></a>
 
-### 基本使用
+### 基础用法
 
 提供 label 与 options，未选择时显示 placeholder；标签始终可见。本例只演示选择，不筛选文章。
 
@@ -189,7 +189,7 @@ export default function SelectForm() {
         required
         placeholder="请选择归档分类"
         options={[
-          { value: 'journal', label: '日常手记' },
+          { value: 'journal', label: '生活手记' },
           { value: 'reading', label: '读书笔记' },
           { value: 'photos', label: '散步相册' },
         ]}
@@ -234,7 +234,7 @@ export default function SelectLongOptions() {
         label="浏览归档分类"
         defaultValue="journal"
         options={[
-          { value: 'journal', label: '日常手记' },
+          { value: 'journal', label: '生活手记' },
           { value: 'reading', label: '读书笔记' },
           { value: 'walking', label: '那些沿着河边散步时记录下来的小小发现与漫长想法' },
           { value: 'photos', label: '散步相册' },
@@ -264,7 +264,7 @@ export default function SelectLongOptions() {
 
 ### SelectProps
 
-| 参数                              | 说明                                                                                               | 类型                                                                                | 默认值          |
+| 属性                              | 说明                                                                                               | 类型                                                                                | 默认值          |
 | --------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------------- |
 | `label` **必填**                  | 可见标签，自动关联触发按钮。                                                                       | `ReactNode`                                                                         | —               |
 | `options` **必填**                | 选项列表。value 必须唯一且为非空字符串。                                                           | `readonly SelectOption[]`                                                           | —               |
@@ -283,7 +283,7 @@ export default function SelectLongOptions() {
 
 ### SelectOption
 
-| 参数             | 说明                                           | 类型        | 默认值         |
+| 属性             | 说明                                           | 类型        | 默认值         |
 | ---------------- | ---------------------------------------------- | ----------- | -------------- |
 | `value` **必填** | 唯一非空字符串，作为提交值。                   | `string`    | —              |
 | `label` **必填** | 选项内容；避免嵌套交互元素。                   | `ReactNode` | —              |

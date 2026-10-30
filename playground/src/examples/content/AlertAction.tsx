@@ -33,7 +33,7 @@ export default function AlertAction() {
         tone={phase === 'error' ? 'error' : successful ? 'success' : 'info'}
         title={
           phase === 'error'
-            ? '这次没有保存成功'
+            ? '订阅偏好保存失败'
             : successful
               ? '订阅偏好已保存'
               : pending

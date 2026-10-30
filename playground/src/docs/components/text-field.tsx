@@ -31,7 +31,7 @@ export default defineComponentPage('text-field', {
       examples: [
         {
           id: 'basic',
-          title: '基本使用',
+          title: '基础用法',
           description: '用 label 命名字段，defaultValue 填入可编辑的博客名称。',
           component: TextFieldBasic,
           source: textFieldBasicSource,

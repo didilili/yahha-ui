@@ -7,7 +7,7 @@ export default function TabsValue() {
   return (
     <div style={{ display: 'grid', gap: 16 }}>
       <Tabs
-        label="受控的小站栏目"
+        label="小站栏目"
         value={value}
         onValueChange={setValue}
         items={[

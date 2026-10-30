@@ -37,7 +37,7 @@ export default function SkeletonExample() {
               <Skeleton width="80%" height={summaryLineHeight} />
             </div>
           ) : (
-            <Text>把喜欢的小事留给下一次阅读。</Text>
+            <Text>朋友走得慢一点，就在桥边等一等。</Text>
           )}
         </div>
       </section>

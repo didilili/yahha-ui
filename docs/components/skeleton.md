@@ -70,7 +70,7 @@ export default function SkeletonExample() {
               <Skeleton width="80%" height={summaryLineHeight} />
             </div>
           ) : (
-            <Text>把喜欢的小事留给下一次阅读。</Text>
+            <Text>朋友走得慢一点，就在桥边等一等。</Text>
           )}
         </div>
       </section>
@@ -99,7 +99,7 @@ export default function SkeletonExample() {
 
 ### SkeletonProps
 
-| 参数                  | 说明                                                                                     | 类型                                   | 默认值   |
+| 属性                  | 说明                                                                                     | 类型                                   | 默认值   |
 | --------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------- | -------- |
 | `variant`             | 文本行、矩形或圆形。                                                                     | `'text' \| 'rect' \| 'circle'`         | `'text'` |
 | `width / height`      | 文本默认 100% × 1em，矩形默认 100% × 100px，圆形默认 44 × 44px；style 中的同名属性优先。 | `CSSProperties 尺寸`                   | —        |

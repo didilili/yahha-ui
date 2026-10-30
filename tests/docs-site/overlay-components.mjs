@@ -73,7 +73,7 @@ export async function verifyArticleActions(page, baseURL) {
   await title.fill('散步以后，记下一点小事');
   const save = dialog.getByRole('button', { name: '保存手记', exact: true });
   await save.click();
-  await dialog.getByRole('alert').getByText('这次没有保存成功', { exact: true }).waitFor();
+  await dialog.getByRole('alert').getByText('保存失败', { exact: true }).waitFor();
   await page.waitForFunction((node) => document.activeElement === node, await save.elementHandle());
   const saveBounds = await save.boundingBox();
   const popupBounds = await dialog.boundingBox();

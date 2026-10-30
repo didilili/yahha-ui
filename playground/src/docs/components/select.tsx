@@ -32,7 +32,7 @@ export default defineComponentPage('select', {
       examples: [
         {
           id: 'basic',
-          title: '基本使用',
+          title: '基础用法',
           description:
             '提供 label 与 options，未选择时显示 placeholder；标签始终可见。本例只演示选择，不筛选文章。',
           component: SelectBasic,

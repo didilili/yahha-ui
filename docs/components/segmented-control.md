@@ -22,7 +22,7 @@ import { SegmentedControl } from 'yahha-ui';
 
 <a id="basic"></a>
 
-### 基本使用与受控状态
+### 基础用法与受控状态
 
 最小受控示例：value / onValueChange 更新选择。label 提供组名，可见标题放在外部。
 
@@ -324,7 +324,7 @@ export default function SegmentedLongLabels() {
 
 ### SegmentedControlProps<T extends string>
 
-| 参数                     | 说明                                                                                                    | 类型                                    | 默认值             |
+| 属性                     | 说明                                                                                                    | 类型                                    | 默认值             |
 | ------------------------ | ------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------ |
 | `options` **必填**       | 所有选项。每项 value 必须唯一。                                                                         | `readonly SegmentedOption<T>[]`         | —                  |
 | `value` **必填**         | 当前受控值。空字符串可表示待选择；有值时应对应 options 中的一项。                                       | `T`                                     | —                  |
@@ -342,7 +342,7 @@ export default function SegmentedLongLabels() {
 
 ### SegmentedOption<T extends string>
 
-| 参数             | 说明                                                                       | 类型        | 默认值  |
+| 属性             | 说明                                                                       | 类型        | 默认值  |
 | ---------------- | -------------------------------------------------------------------------- | ----------- | ------- |
 | `value` **必填** | 唯一选项值，作为 radio 的 value 和变化回调参数。                           | `T`         | —       |
 | `label` **必填** | 选项内容，支持文字或简单图标组合；应包含清楚的可访问名称，不嵌套交互控件。 | `ReactNode` | —       |
@@ -350,7 +350,7 @@ export default function SegmentedLongLabels() {
 
 ### classNames
 
-| 参数      | 说明                                   | 类型     | 默认值 |
+| 属性      | 说明                                   | 类型     | 默认值 |
 | --------- | -------------------------------------- | -------- | ------ |
 | `options` | 选项的共同容器，可用于调整组内布局。   | `string` | —      |
 | `option`  | 每个选项的 label，可用于调整单项布局。 | `string` | —      |

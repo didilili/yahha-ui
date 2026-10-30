@@ -22,7 +22,7 @@ import { Textarea } from 'yahha-ui';
 
 <a id="basic"></a>
 
-### 基本使用
+### 基础用法
 
 输入多行留言；桌面端可拖动角落的调整手柄改变输入区域的高度。
 
@@ -87,7 +87,7 @@ export default function TextareaControlled() {
         }}
         required
         maxLength={200}
-        hint={`${message.length} / 200 字`}
+        hint={`已输入 ${message.length} / 200`}
         error={error}
       />
       <Button type="submit">检查留言</Button>
@@ -146,7 +146,7 @@ export default function TextareaStates() {
 
 ### TextareaProps
 
-| 参数                                           | 说明                                                                     | 类型                                       | 默认值          |
+| 属性                                           | 说明                                                                     | 类型                                       | 默认值          |
 | ---------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------ | --------------- |
 | `label` **必填**                               | 可见标签，自动关联 textarea。                                            | `ReactNode`                                | —               |
 | `hint / error`                                 | 辅助和错误说明，与 aria-describedby 合并；error 设置 aria-invalid。      | `ReactNode`                                | —               |
@@ -186,4 +186,4 @@ export default function TextareaStates() {
 ## 相关组件
 
 - [TextField 单行输入](text-field.md)：带可见标签的单行输入框，用于站内搜索、个人资料和轻量表单。
-- [Button 按钮](button.md)：触发提交、收藏或其他操作的原生按钮，提供三种强调程度与完整的交互状态。
+- [Button 按钮](button.md)：用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。

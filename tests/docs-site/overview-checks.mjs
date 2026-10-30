@@ -40,7 +40,7 @@ async function expectIds(page, expected) {
     .innerText();
   assert.match(
     status.replace(/\s/g, ''),
-    new RegExp(`显示${expected.length}/30个入口`),
+    new RegExp(`找到${expected.length}项/共30项`),
     'Visible result counts agree with rendered cards.',
   );
 }
@@ -425,7 +425,7 @@ async function verifyOverviewLoadRecovery(browser, baseURL) {
   try {
     await page.route(chunkPattern, (route) => route.abort('failed'));
     await page.goto(`${baseURL}#/components`);
-    await page.getByRole('alert').filter({ hasText: '组件总览暂时未能加载' }).waitFor();
+    await page.getByRole('alert').filter({ hasText: '组件总览加载失败' }).waitFor();
     assert.equal(await page.locator('main h1').textContent(), '组件总览');
     assert.equal(
       await catalog(page).count(),
@@ -469,7 +469,10 @@ export async function verifyComponentOverview(browser, baseURL) {
         false,
         'Homepage does not download the full overview preview chunk.',
       );
-      await page.locator('main').getByRole('link', { name: '逛逛组件小屋', exact: true }).click();
+      await page
+        .locator('.home-hero-actions')
+        .getByRole('link', { name: '浏览组件', exact: true })
+        .click();
       await overview(page);
       await focus(page, page.getByRole('heading', { level: 1, name: '组件总览', exact: true }));
       assert(

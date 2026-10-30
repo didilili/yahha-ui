@@ -34,7 +34,7 @@ export default defineComponentPage('dialog', {
         {
           id: 'basic',
           previewAlign: 'center',
-          title: '基本用法',
+          title: '基础用法',
           description: '传入触发按钮，用同一份受控状态管理打开与关闭；关闭后焦点回到触发按钮。',
           component: DialogBasic,
           source: dialogBasicSource,
@@ -128,7 +128,7 @@ export default defineComponentPage('dialog', {
             {
               name: 'initialFocus',
               type: "DialogProps['initialFocus']",
-              defaultValue: '首个可聚焦元素；触摸时为 Popup',
+              defaultValue: '首个可聚焦元素；触摸打开时聚焦弹窗本身',
               description:
                 '可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。',
             },
@@ -161,12 +161,12 @@ export default defineComponentPage('dialog', {
             {
               name: 'className / style',
               type: 'string / CSSProperties',
-              description: '作用于弹窗 Popup div；不透传其余 div 原生属性。',
+              description: '作用于弹窗面板 div；不透传其余 div 原生属性。',
             },
             {
               name: 'ref',
               type: 'Ref<HTMLDivElement>',
-              description: '指向弹窗 Popup div。未打开时该元素通常未挂载。',
+              description: '指向弹窗面板 div。未打开时该元素通常未挂载。',
             },
           ],
         },

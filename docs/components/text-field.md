@@ -22,7 +22,7 @@ import { TextField } from 'yahha-ui';
 
 <a id="basic"></a>
 
-### 基本使用
+### 基础用法
 
 用 label 命名字段，defaultValue 填入可编辑的博客名称。
 
@@ -266,14 +266,14 @@ export default function TextFieldForm() {
       }}
     >
       <TextField
-        label="文章标题（受控）"
+        label="文章标题"
         name="title"
         value={title}
         onChange={(event) => setTitle(event.target.value)}
         required
         hint="必填，请填写文章标题。"
       />
-      <TextField label="分类（非受控）" name="category" defaultValue="生活" />
+      <TextField label="文章分类" name="category" defaultValue="生活" />
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
         <Button type="submit">读取表单</Button>
         <Button type="reset" variant="secondary">
@@ -305,7 +305,7 @@ export default function TextFieldForm() {
 
 ### TextFieldProps
 
-| 参数                         | 说明                                                                                         | 类型                                   | 默认值           |
+| 属性                         | 说明                                                                                         | 类型                                   | 默认值           |
 | ---------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------- | ---------------- |
 | `label` **必填**             | 可见标签，自动关联 input。请提供有意义的字段名称。                                           | `ReactNode`                            | —                |
 | `hint`                       | 辅助说明，通过 aria-describedby 与 input 关联。                                              | `ReactNode`                            | —                |
@@ -330,7 +330,7 @@ export default function TextFieldForm() {
 
 ### classNames
 
-| 参数           | 说明                                    | 类型     | 默认值 |
+| 属性           | 说明                                    | 类型     | 默认值 |
 | -------------- | --------------------------------------- | -------- | ------ |
 | `label`        | 可见 label。                            | `string` | —      |
 | `inputWrapper` | 前缀与输入框的共同容器。                | `string` | —      |

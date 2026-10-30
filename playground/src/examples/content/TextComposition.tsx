@@ -18,7 +18,7 @@ export default function TextComposition() {
         </Text>
         <Text>
           我把这次散步的记录存成 PersonalJournalWithAVeryLongUnbrokenTitle，
-          留给下个周末慢慢补上照片。
+          留给下个周末，和没赶上散步的朋友一起看。
         </Text>
       </section>
     </div>

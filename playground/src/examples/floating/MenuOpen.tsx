@@ -7,7 +7,7 @@ export default function MenuOpen() {
   return (
     <div style={{ display: 'grid', justifyItems: 'center', gap: 16 }}>
       <DropdownMenu
-        trigger={<Button variant="secondary">受控文章操作</Button>}
+        trigger={<Button variant="secondary">文章操作</Button>}
         open={open}
         onOpenChange={setOpen}
         items={[

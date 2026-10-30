@@ -8,19 +8,19 @@ export default function LinkExample() {
       </Text>
       <Text>
         <Link href="https://example.com" external>
-          example.com 占位页面（新窗口）
+          example.com 占位页面（新标签页打开）
         </Link>
       </Text>
       <Text>
         周末空下来的时候，可以读读
         <Link href="https://example.com" external>
-          example.com 占位页面：适合周末慢慢阅读的散步与书单手记（新窗口）
+          example.com 占位页面：适合周末慢慢阅读的散步与书单手记（新标签页打开）
         </Link>
         。
       </Text>
       <Text size="sm" tone="muted">
         <Link href="https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress" external>
-          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress（新窗口）
+          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress（新标签页打开）
         </Link>
       </Text>
     </div>

@@ -18,7 +18,7 @@ import { guidePages } from './docs/guides';
 import { loadComponentPage } from './docs/component-pages';
 import { componentCatalog, componentGroups, configurationGroups } from './docs/component-catalog';
 import type { DocPage } from './docs/types';
-import friendsPeek from './examples/scenes/artwork/friends-preview/friends-peek.svg';
+import brandLogo from './assets/brand/yahha-ui-logo.png';
 import NotFoundScene from './examples/scenes/NotFoundScene';
 import HomePage from './site/HomePage';
 import DocScene from './site/DocScene';
@@ -32,7 +32,7 @@ const overviewSummary = {
   name: '组件总览',
   chinese: '',
   group: '开始使用',
-  description: '按分类看看真实组件，从喜欢的小样进入示例与 API。',
+  description: '朋友们把组件摆好了。按分类挑选，查看交互示例、使用方法与 API。',
 } as const;
 const pages = [...guidePages, overviewSummary, ...componentCatalog];
 const groups = ['开始使用', ...componentGroups, ...configurationGroups] as const;
@@ -327,8 +327,8 @@ export default function App() {
     <ThemeProvider theme="chiikawa" className="docs-app docs-site docs-cartoon">
       <title>
         {isHome
-          ? 'Yahha UI · 朋友们的组件小屋'
-          : `${pageSummary ? titleFor(pageSummary) : '文档未找到'} · Yahha UI`}
+          ? 'Yahha UI · 漫画手账风 React 组件库'
+          : `${pageSummary ? titleFor(pageSummary) : '页面未找到'} · Yahha UI`}
       </title>
       <a
         className="skip-link"
@@ -338,15 +338,11 @@ export default function App() {
           headingRef.current?.focus();
         }}
       >
-        跳到文档正文
+        跳到主要内容
       </a>
       <header className="docs-header">
         <a className="docs-brand" href="#/" aria-label="Yahha UI 首页" inert={menuOpen}>
-          <img className="brand-friends" src={friendsPeek} width="440" height="170" alt="" />
-          <span className="brand-name">
-            Yahha <b>UI</b>
-            <small>朋友们的组件小屋</small>
-          </span>
+          <img className="brand-logo" src={brandLogo} width="824" height="280" alt="" />
         </a>
         <span className="header-divider" />
         <span className="header-caption">
@@ -475,8 +471,8 @@ export default function App() {
             {filtered.length === 0 && (
               <div role="status" className="search-empty">
                 <EmptyState
-                  title="没有匹配的文档"
-                  description="试试组件英文名或中文名，也可以清空搜索。"
+                  title="未找到相关文档"
+                  description="试试其他关键词，或清空搜索查看全部文档。"
                   action={
                     <Button
                       variant="secondary"
@@ -505,9 +501,9 @@ export default function App() {
             <div className="sidebar-foot">
               <BookOpen size={17} />
               <p>
-                小小的组件，
+                带上你的点子，
                 <br />
-                也可以认真做好。
+                这里给你留了个位置。
               </p>
               <span>React · 非官方同人项目</span>
             </div>
@@ -631,7 +627,7 @@ export default function App() {
                         <table className="api-table">
                           <thead>
                             <tr>
-                              <th scope="col">参数</th>
+                              <th scope="col">属性</th>
                               <th scope="col">说明</th>
                               <th scope="col">类型</th>
                               <th scope="col">默认值</th>
@@ -689,7 +685,7 @@ export default function App() {
                 <div className="doc-title-row">
                   <div className="doc-title-copy">
                     <p className="doc-eyebrow">
-                      {isOverview ? 'CATALOG / 组件小屋' : `${pageSummary.group} / COMPONENT`}
+                      {isOverview ? 'CATALOG / 组件总览' : `${pageSummary.group} / COMPONENT`}
                     </p>
                     <Heading level={1} tabIndex={-1} ref={headingRef} className="doc-title">
                       <span className="doc-title-name">{pageSummary.name}</span>
@@ -709,7 +705,7 @@ export default function App() {
                 <Alert
                   tone="error"
                   role="alert"
-                  title={isOverview ? '组件总览暂时未能加载' : '组件文档暂时未能加载'}
+                  title={isOverview ? '组件总览加载失败' : '组件文档加载失败'}
                   className="doc-load-error"
                 >
                   <Text>请重试，或刷新页面后再试。</Text>
@@ -739,8 +735,10 @@ export default function App() {
             </article>
           )}
           <footer className="docs-footer">
-            <span>Yahha UI · 让内容慢慢被看见。</span>
-            <span>本地预览 / 尚未发布 npm</span>
+            <span>Yahha UI · 把可爱，搭进你的世界。</span>
+            <span>
+              早期预览 · <Link href="#/guides/getting-started">使用方式</Link>
+            </span>
           </footer>
         </main>
         {page && (

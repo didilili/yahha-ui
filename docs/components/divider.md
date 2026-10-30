@@ -60,7 +60,7 @@ export default function DividerExample() {
 
 ### DividerProps
 
-| 参数                  | 说明                                                                      | 类型                                 | 默认值         |
+| 属性                  | 说明                                                                      | 类型                                 | 默认值         |
 | --------------------- | ------------------------------------------------------------------------- | ------------------------------------ | -------------- |
 | `orientation`         | 方向，垂直默认高度 1.5em。                                                | `'horizontal' \| 'vertical'`         | `'horizontal'` |
 | `decorative`          | true 时 role=presentation、aria-hidden=true。                             | `boolean`                            | `false`        |

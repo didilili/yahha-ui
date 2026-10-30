@@ -136,7 +136,7 @@ export default function EmptySearch() {
         </ul>
       ) : (
         <EmptyState
-          title="没有找到匹配的文章"
+          title="未找到相关文章"
           description="换个关键词，或者先看看全部文章。"
           action={<Button onClick={clearSearch}>清空搜索</Button>}
         />
@@ -160,7 +160,7 @@ export default function EmptySearch() {
 
 ### EmptyStateProps
 
-| 参数             | 说明                                                       | 类型        | 默认值 |
+| 属性             | 说明                                                       | 类型        | 默认值 |
 | ---------------- | ---------------------------------------------------------- | ----------- | ------ |
 | `title` **必填** | 标题，渲染为 h3；说明当前为什么没有内容。                  | `ReactNode` | —      |
 | `description`    | 说明文字，渲染在 p 内，适合文本或行内内容。                | `ReactNode` | —      |
@@ -182,4 +182,4 @@ action 使用 Button 或链接等可交互元素，创建内容、清空筛选�
 
 - [Spinner 加载指示](spinner.md)：表达正在进行的等待，提供可读的状态文字。
 - [Skeleton 骨架占位](skeleton.md)：为即将出现的内容预留形状，减少布局跳动。
-- [Alert 静态提示](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。
+- [Alert 提示条](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。

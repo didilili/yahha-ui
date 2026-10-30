@@ -46,7 +46,7 @@ export default function TextExample() {
               {size === 'sm' ? '小号' : size === 'md' ? '中号' : '大号'} {size}
               {size === 'md' ? '（默认）' : ''}
             </Text>
-            <Text size={size}>记录一点小事，慢慢读也很好。</Text>
+            <Text size={size}>饼干掰成两半，一半留给你。</Text>
           </div>
         ))}
       </section>
@@ -60,7 +60,7 @@ export default function TextExample() {
               {tone === 'default' ? '主要文字' : '次要文字'}
               {tone === 'default' ? '（默认）' : ''}
             </Text>
-            <Text tone={tone}>今天沿着河边走了一会儿，把喜欢的风景留在这里。</Text>
+            <Text tone={tone}>今天沿着河边散步，走到桥边时，停下来等了等还在系鞋带的朋友。</Text>
           </div>
         ))}
       </section>
@@ -100,7 +100,7 @@ export default function TextComposition() {
         </Text>
         <Text>
           我把这次散步的记录存成 PersonalJournalWithAVeryLongUnbrokenTitle，
-          留给下个周末慢慢补上照片。
+          留给下个周末，和没赶上散步的朋友一起看。
         </Text>
       </section>
     </div>
@@ -120,7 +120,7 @@ export default function TextComposition() {
 
 ### TextProps
 
-| 参数                  | 说明                                                                      | 类型                                | 默认值      |
+| 属性                  | 说明                                                                      | 类型                                | 默认值      |
 | --------------------- | ------------------------------------------------------------------------- | ----------------------------------- | ----------- |
 | `size`                | 正文独立字阶 14 / 16 / 18px，默认 md 为 16px；不改变控件字号。            | `'sm' \| 'md' \| 'lg'`              | `'md'`      |
 | `tone`                | 正文与次要文字。                                                          | `'default' \| 'muted'`              | `'default'` |

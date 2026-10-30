@@ -80,7 +80,7 @@ export function apiMarkdown(api) {
   return [
     `### ${api.name}`,
     '',
-    '| 参数 | 说明 | 类型 | 默认值 |',
+    '| 属性 | 说明 | 类型 | 默认值 |',
     '| --- | --- | --- | --- |',
     ...api.rows.map(
       (row) =>

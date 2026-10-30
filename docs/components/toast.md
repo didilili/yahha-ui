@@ -88,7 +88,7 @@ import { Button, Heading, Text, Toast } from 'yahha-ui';
 const messages = [
   { tone: 'success', title: '文章已保存', description: '改动已经记录在草稿中。' },
   { tone: 'info', title: '还有一件小事', description: '发布前可以补充文章摘要。' },
-  { tone: 'error', title: '保存未完成', description: '请检查网络连接后重试。' },
+  { tone: 'error', title: '保存失败', description: '请检查网络连接后重试。' },
 ] as const;
 
 export default function ToastTones() {
@@ -270,7 +270,7 @@ export default function ToastTimer() {
 
 ### ToastProps
 
-| 参数               | 说明                                                             | 类型                             | 默认值      |
+| 属性               | 说明                                                             | 类型                             | 默认值      |
 | ------------------ | ---------------------------------------------------------------- | -------------------------------- | ----------- |
 | `open` **必填**    | 是否显示，false 时返回 null。没有 defaultOpen。                  | `boolean`                        | —           |
 | `onClose` **必填** | 点击内置关闭按钮时调用，调用方应将 open 更新为 false。           | `() => void`                     | —           |
@@ -300,5 +300,5 @@ export default function ToastTimer() {
 
 ## 相关组件
 
-- [Alert 静态提示](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。
+- [Alert 提示条](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。
 - [Dialog 弹窗](dialog.md)：需要用户暂时集中注意力时，显示一段独立内容或简短表单。

@@ -85,7 +85,7 @@ export async function verifyTeachingExamples(page, baseURL) {
 
     await page.goto(`${baseURL}#/components/dropdown-menu`);
     const menu = page.locator('#open-state');
-    const trigger = menu.getByRole('button', { name: '受控文章操作', exact: true });
+    const trigger = menu.getByRole('button', { name: '文章操作', exact: true });
     await trigger.click();
     await menu.getByText('菜单状态：展开', { exact: true }).waitFor();
     await page.getByRole('menuitem', { name: '收藏到本页', exact: true }).click();

@@ -24,11 +24,11 @@ const articles = [
     category: '日常',
     title: '沿着河边，慢慢走',
     date: '2026-10-18',
-    summary: '走过熟悉的街道，也会遇见一点新的东西。',
+    summary: '朋友的鞋带散了，我们就在河边等一等。',
     paragraphs: [
-      '周末出门时，没有特意想好要去哪里。沿着河边走了一段，看见树叶的影子落在水面上，又被风轻轻推开。',
-      '路边的小店换了招牌，门口还是摆着那张旧木椅。我停下来坐了一会儿，把想记住的事情写了两行。',
-      '有些日子不需要安排得很满。走一走，看看天色，也就很好。',
+      '周末在 Yahha 星球的河边散步，小八走着走着停了下来。原来鞋带散了，大家就在桥边等他，顺手数了数水面上的叶子。',
+      '路边小店门口还是那张旧木椅。我们挤着坐了一会儿，把带来的饼干掰成几份，也给迟到的朋友留下一份。',
+      '回家才发现，今天没有走多远。不过等到了朋友，也记下了饼干掉进衣领的事，已经够写一页。',
     ],
   },
   {
@@ -36,11 +36,11 @@ const articles = [
     category: '读书',
     title: '给周末留一页空白',
     date: '2026-10-12',
-    summary: '翻几页书，把喜欢的一句话留给自己。',
+    summary: '书读到一半，先给打瞌睡的朋友留个书签。',
     paragraphs: [
-      '这周读得很慢，一本书在桌边放了好几天。有时只翻两页，有时读到一半，就把窗户打开听一会儿雨声。',
-      '我开始在读书笔记里多留一些空白。以后再读到这里，也许会想到不同的事情。',
-      '今天先记到这里。下一次翻开时，再接着写。',
+      '窗边的读书会才开始没多久，就有朋友抱着书睡着了。大家把声音放轻，在读到的地方夹上书签。',
+      '我的笔记只写了两行，还画歪了一只小猫。旁边的朋友说，留点空白吧，下次可以一起画。',
+      '今天先记到这里。没读完的那一段，等大家都醒着的时候，再接着读。',
     ],
   },
 ];
@@ -126,9 +126,9 @@ export default function ReadingExample() {
             <Avatar name="小林" />
             <div className="reading-author-copy">
               <Text size="lg">
-                <strong>小林的周末手记</strong>
+                <strong>小林的星球手记</strong>
               </Text>
-              <Text tone="muted">写一点日常，读几页喜欢的书。</Text>
+              <Text tone="muted">在星球上散步，和朋友交换手记。</Text>
             </div>
           </div>
           <div className="reading-author-actions">
@@ -140,7 +140,10 @@ export default function ReadingExample() {
               description="这是用于展示组件组合的示例作者。"
               trigger={<Button variant="ghost">关于作者</Button>}
             >
-              <Text>你好，我是小林。这里放着散步时的发现和读书时留下的几句话。</Text>
+              <Text>
+                你好，我是小林。我在 Yahha
+                星球记一点日常：有人迟到，留块饼干；有人读得慢，就把这一页留着。
+              </Text>
             </Dialog>
           </div>
         </div>
@@ -262,7 +265,7 @@ export default function ReadingExample() {
                   写在手记后面
                 </Heading>
                 <Text>
-                  不用把每天都写成特别的故事。记住一点喜欢的事情，下一次翻开时，也能想起当时的心情。
+                  不是每一天都有大事发生。有人把鞋带系好了，有人把半块饼干分给你，这一页也就有了想留下的事。
                 </Text>
               </Surface>
               <Divider decorative className="reading-divider" />
@@ -279,7 +282,7 @@ export default function ReadingExample() {
                     setNotice(
                       isSaved
                         ? `已取消收藏「${active.title}」。`
-                        : '已放进收藏，想读的时候再回来。',
+                        : '已在当前示例中收藏，刷新后恢复。',
                     );
                   }}
                 >
@@ -288,14 +291,14 @@ export default function ReadingExample() {
               </div>
               <div className="reading-feedback" role="status" id={`${rootId}-saved`}>
                 <Text size="sm" tone="muted">
-                  {notice || '示例文章，收藏状态仅保留在当前页面。'}
+                  {notice || '示例文章，收藏状态仅在当前页面生效，刷新后恢复。'}
                 </Text>
               </div>
             </article>
           </>
         ) : (
           <EmptyState
-            title="还没有找到这篇手记"
+            title="未找到相关手记"
             description="换个词，或看看全部文章。"
             action={
               <Button

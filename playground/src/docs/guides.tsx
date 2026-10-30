@@ -32,43 +32,45 @@ import { artworkGuide } from './artwork-guide';
 export const guidePages: DocPage[] = [
   {
     id: 'introduction',
-    name: 'Yahha UI',
+    name: '项目介绍',
     chinese: '',
     group: '开始使用',
-    description: '给个人博客、主页和小型内容站点，一点轻盈、温柔的交互。',
+    description: '一套漫画手账风 React 组件库。Yahha 星球的朋友们给你的点子留了个位置。',
     sections: [
       {
         id: 'overview',
-        title: '小小的组件，认真地使用。',
+        title: '一起做，全宇宙最可爱的 UI 组件库。',
         content: (
           <>
+            <p>Yahha UI 是一套漫画手账风 React 组件库，面向个人博客、个人主页与内容网站。</p>
             <p>
-              清楚的漫画墨线、饱满的小按钮、像纸签一样的分类标记。内容放在舒展的白纸面上，人物出现在等待与发现的小场景里。写日常、读文章，也留一点小小的回应。
+              欢迎来到 Yahha
+              星球。朋友们给你留了个位置，等你带着点子坐下来。用圆润的漫画轮廓、清亮配色和白纸般的内容面，把手记、照片与天马行空的小故事放进页面。
             </p>
             <p className="guide-status">当前通过本地安装包试用，尚未发布 npm 包。</p>
             <div className="guide-actions">
               <Link className="guide-primary" href="#/guides/getting-started">
                 开始使用 <ArrowUpRight size={16} />
               </Link>
-              <Link href="#/guides/styling?section=reading">试读一篇手记 →</Link>
-              <Link href="#/guides/states?section=loading">看看等待与空态 →</Link>
+              <Link href="#/guides/styling?section=reading">体验阅读示例 →</Link>
+              <Link href="#/guides/states?section=loading">查看状态与反馈 →</Link>
               <Link href="#/guides/design-baseline">查看设计规范 →</Link>
             </div>
             <div className="principles">
               <div>
                 <MousePointer2 size={21} />
-                <h3>先把交互做好</h3>
+                <h3>每次操作，都有清楚的回应</h3>
                 <p>原生按钮、输入与单选语义；弹窗使用 Base UI 的焦点管理。</p>
               </div>
               <div>
                 <BookOpen size={21} />
-                <h3>为内容留出空间</h3>
-                <p>适合收藏、筛选、订阅与阅读反馈，避免复杂后台界面所需的额外负担。</p>
+                <h3>给文章和照片留个位置</h3>
+                <p>用阅读、收藏、筛选与轻量表单组件，搭建博客、个人主页与内容网站。</p>
               </div>
               <div>
                 <Layers size={21} />
-                <h3>样式与素材分开</h3>
-                <p>CSS 单独导入。角色图片、字体和文档站工具不会进入组件库产物。</p>
+                <h3>请朋友们来串门</h3>
+                <p>角色插画与场景按需使用。CSS 单独导入，图片、字体和文档站工具不进入组件包。</p>
               </div>
             </div>
           </>
@@ -76,19 +78,19 @@ export const guidePages: DocPage[] = [
       },
       {
         id: 'try',
-        title: '先逛一逛内容小站',
+        title: '翻翻手记，试试组件',
         content: (
           <nav className="guide-paths" aria-label="内容场景">
             <Link href="#/guides/styling?section=reading">
-              <strong>读一篇手记 →</strong>
+              <strong>阅读与收藏示例 →</strong>
               <span>在正文、配图和文末便笺之间，体验阅读与收藏。</span>
             </Link>
             <Link href="#/guides/states?section=archive">
-              <strong>翻一翻文章归档 →</strong>
+              <strong>文章归档示例 →</strong>
               <span>切换栏目、搜索和翻页，看看列表与空结果如何恢复。</span>
             </Link>
             <Link href="#/guides/states?section=article-actions">
-              <strong>整理一篇小手记 →</strong>
+              <strong>文章编辑示例 →</strong>
               <span>从菜单进入编辑，体验取消、保存失败与重试。</span>
             </Link>
           </nav>
@@ -96,12 +98,12 @@ export const guidePages: DocPage[] = [
       },
       {
         id: 'components',
-        title: '已有组件',
+        title: '挑几个组件，一起搭起来',
         content: (
           <div className="component-overview">
             <Link href="#/components">
-              <strong>打开组件视觉总览 ↗</strong>
-              <span>按分类浏览真实样式小样，找到需要的组件，再查看示例与 API。</span>
+              <strong>浏览组件 →</strong>
+              <span>按分类找到需要的组件，查看交互示例、使用方法与 API。</span>
             </Link>
             {componentCatalog.map(({ id, name, description }) => (
               <Link key={id} href={`#/components/${id}`}>
@@ -165,11 +167,11 @@ export const guidePages: DocPage[] = [
     name: '开始使用',
     chinese: '',
     group: '开始使用',
-    description: '把组件接入自己的项目，运行完整博客，或按需带走 SVG 小场景。',
+    description: '安装组件、加载样式，先把第一个按钮放进你的页面。',
     sections: [
       {
         id: 'choose-path',
-        title: '先选择要做的事',
+        title: '从这里开始',
         content: (
           <nav className="guide-paths" aria-label="接入路径">
             <Link href="#/guides/getting-started?section=install">
@@ -177,11 +179,11 @@ export const guidePages: DocPage[] = [
               <span>安装本地包，加载样式与主题，再复制需要的组件示例。</span>
             </Link>
             <Link href="#/guides/getting-started?section=blog-example">
-              <strong>先运行完整博客 →</strong>
-              <span>在本仓库启动小小日常，看看组件如何组成库米的内容小站。</span>
+              <strong>运行完整博客示例 →</strong>
+              <span>在本仓库启动「小小日常」，看看库米如何用组件记录生活。</span>
             </Link>
-            <Link href="#/guides/artwork?section=artwork-downloads">
-              <strong>使用 SVG 与动效 →</strong>
+            <Link href="#/guides/artwork?section=artwork-language">
+              <strong>使用图标与插画 →</strong>
               <span>按需下载素材，选择图片用法或带暂停与重播的完整场景。</span>
             </Link>
           </nav>
@@ -245,8 +247,9 @@ export const guidePages: DocPage[] = [
             <p>
               下面的第一个按钮已经包含样式导入和主题设置，可直接保存为 <code>App.tsx</code>。
               放在已有 React 应用的源码目录，并由应用入口渲染。启动应用后，应看到带墨线和轻粉底的
-              「收藏这篇文章」按钮，点击或用键盘 Space 操作后变为「已收藏」。
-              使用其他示例时，按下一节的两文件方式操作。
+              「收藏这篇文章」按钮，点击或用键盘 Space
+              操作后切换选中状态；名称保持稳定，状态通过按钮外观与
+              <code>aria-pressed</code> 表达。 使用其他示例时，按下一节的两文件方式操作。
             </p>
           </>
         ),
@@ -340,7 +343,7 @@ export const guidePages: DocPage[] = [
               </li>
             </ul>
             <p>
-              <Link href="#/guides/artwork?section=artwork-downloads">查看素材下载与接入</Link>
+              <Link href="#/guides/artwork?section=artwork-language">查看素材预览与下载</Link>
               ，或先在 <Link href="#/guides/artwork?section=artwork-welcome">欢迎场景</Link>{' '}
               中试试控制。等待场景跟随真实请求显示与结束，演示时长只用于预览。
             </p>
@@ -358,7 +361,7 @@ export const guidePages: DocPage[] = [
             </p>
             <p>
               <Link href={blogHref} target="_blank" rel="noopener noreferrer">
-                体验小小日常 <ArrowUpRight size={16} aria-hidden="true" />
+                体验示例网站 <ArrowUpRight size={16} aria-hidden="true" />
                 <span className="sr-only">（新标签页打开）</span>
               </Link>
             </p>
@@ -376,7 +379,7 @@ export const guidePages: DocPage[] = [
             <p>
               也可以先在文档中试试{' '}
               <Link href="#/guides/styling?section=reading">阅读与收藏组合</Link>
-              ，或回到 <Link href="#/components">组件总览</Link> 选择需要的部件。
+              ，或回到 <Link href="#/components">组件总览</Link> 选择需要的组件。
             </p>
           </>
         ),
@@ -388,7 +391,7 @@ export const guidePages: DocPage[] = [
           <>
             <ul>
               <li>
-                <Link href="#/components">组件总览</Link>：按分类找到部件，查看完整示例与 API。
+                <Link href="#/components">组件总览</Link>：按分类找到组件，查看完整示例与 API。
               </li>
               <li>
                 <Link href="#/components/theme-provider">ThemeProvider</Link>
@@ -411,15 +414,16 @@ export const guidePages: DocPage[] = [
     name: '设计与组合',
     chinese: '',
     group: '开始使用',
-    description: '漫画手账：清楚的墨线、白纸内容面，以及各有用途的控件和小场景。',
+    description: '从漫画墨线、纸面和配色开始，看看朋友们怎样走进你的页面。',
     sections: [
       {
         id: 'language',
-        title: '墨线、纸签与小小的回应',
+        title: '把星球上的日常画进界面',
         content: (
           <>
             <p>
-              深色圆钝墨线为按钮和字段勾出轮廓，白纸承载正文，浅粉只强调少量操作与分类。小八蓝与乌萨奇黄作为可选配色保留在
+              纸签夹住一篇手记，朋友从页边探出头。Yahha
+              星球的日常，落在圆润的墨线、纸面和角色插画里。深色墨线为按钮和字段勾出轮廓，白纸承载正文，浅粉强调少量操作与分类。小八蓝与乌萨奇黄作为可选配色保留在
               <Link href="#/components/theme-provider">ThemeProvider</Link>{' '}
               中；它们共享同一套形状、排版和交互规则。
             </p>
@@ -440,7 +444,7 @@ export const guidePages: DocPage[] = [
       },
       {
         id: 'reading',
-        title: '放进一篇真实的手记',
+        title: '用组件搭一篇生活手记',
         content: (
           <p>
             下面把作者信息、分类、搜索、摘要、正文、配图、图注与收藏放在一起。试着关闭配图、切换文章、搜索一个不存在的词，或沿正文链接读到文末便笺。整个示例不依赖角色图片或文档站字体。
@@ -547,11 +551,11 @@ export const guidePages: DocPage[] = [
     name: '设计规范',
     chinese: '',
     group: '开始使用',
-    description: '统一组件、示例与文档的尺寸、排版、漫画轮廓和状态规则。',
+    description: '让圆润轮廓、纸面细节与交互状态遵循同一套尺寸和排版规则。',
     sections: [
       {
         id: 'scope',
-        title: '漫画轮廓，清楚尺度',
+        title: '可爱的轮廓，清楚的尺度',
         content: (
           <>
             <p>
@@ -687,11 +691,11 @@ export const guidePages: DocPage[] = [
     name: '状态与场景',
     chinese: '',
     group: '开始使用',
-    description: '等一页内容、开始第一篇手记、走到没有页面的小路。状态要有原因，也有下一步。',
+    description: '加载时说明在等什么，空页面留好下一步，遇到错误也能重新开始。',
     sections: [
       {
         id: 'archive',
-        title: '把栏目与页码放进归档里',
+        title: '文章归档与页面导航',
         content: (
           <p>
             Tabs 切换一组相关内容面板，Pagination 只更新当前列表，Accordion
@@ -711,7 +715,7 @@ export const guidePages: DocPage[] = [
       },
       {
         id: 'article-actions',
-        title: '把浮层放进一篇手记里',
+        title: '文章编辑与浮层组合',
         content: (
           <p>
             动作菜单负责选择操作，信笺弹窗承载编辑，便笺补充写作说明，短对白解释图标。它们各自承担不同的任务；保存、取消、错误恢复和收藏状态由使用方管理。
@@ -730,7 +734,7 @@ export const guidePages: DocPage[] = [
       },
       {
         id: 'loading',
-        title: '等这一页过来',
+        title: '加载、失败与恢复',
         content: (
           <p>
             按钮和行内加载使用共享三墨点。内容区配合翻页小手记
@@ -756,7 +760,7 @@ export const guidePages: DocPage[] = [
       },
       {
         id: 'empty',
-        title: '还没有内容，也知道怎么开始',
+        title: '空状态与下一步',
         content: (
           <p>
             首次无内容、暂无收藏与搜索无结果分别给出原因和操作。角色插画用于较大的首次空态，搜索无结果保持小巧；操作成功后不继续停在空态。
@@ -777,7 +781,7 @@ export const guidePages: DocPage[] = [
       },
       {
         id: 'not-found',
-        title: '走错路，仍能继续找',
+        title: '页面未找到与导航恢复',
         content: (
           <p>
             404 表示页面不存在，不是网络失败。下面用现有 Heading、Text 与 Link
@@ -799,7 +803,7 @@ export const guidePages: DocPage[] = [
       },
       {
         id: 'errors',
-        title: '错误说明先把问题讲清楚',
+        title: '错误说明与恢复操作',
         content: (
           <>
             <p>
@@ -808,7 +812,7 @@ export const guidePages: DocPage[] = [
             </p>
             <p>
               翻页手记是本项目绘制的 SVG，静态与动效版本见
-              <Link href="#/guides/artwork">小日常素材</Link>。404 使用 v3
+              <Link href="#/guides/artwork">图标与插画</Link>。404 使用 v3
               人物模型与路牌、地图组成找路场景。空态 PNG 为非官方 AI
               生成展示资源，单独下载使用，不进入组件库默认产物；素材来源与授权状态见仓库内
               artwork/README.md。

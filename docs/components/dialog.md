@@ -24,7 +24,7 @@ Dialog 使用受控状态，调用方必须保存 open 并响应 onOpenChange。
 
 <a id="basic"></a>
 
-### 基本用法
+### 基础用法
 
 传入触发按钮，用同一份受控状态管理打开与关闭；关闭后焦点回到触发按钮。
 
@@ -45,9 +45,9 @@ export default function DialogBasic() {
       onOpenChange={setOpen}
       trigger={<Button>查看阅读提示</Button>}
       title="留一点时间给阅读"
-      description="忙碌的时候，也可以留下一小段安静的阅读时间。"
+      description="书还没读完，也可以先坐下来。朋友在旁边给你留了个位置。"
     >
-      <p>挑一篇喜欢的文章，从今天最想读的段落开始。</p>
+      <p>从今天最想读的一段开始。碰到不认识的字，就一起查一查。</p>
     </Dialog>
   );
 }
@@ -186,23 +186,23 @@ export default function DialogExternal() {
 
 ### DialogProps
 
-| 参数                      | 说明                                                                                                                                                                              | 类型                             | 默认值                           |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | -------------------------------- |
-| `open` **必填**           | 是否打开弹窗。组件不提供 defaultOpen 或内部非受控状态。                                                                                                                           | `boolean`                        | —                                |
-| `onOpenChange` **必填**   | 打开或关闭请求发生时调用；调用方更新 open 才会改变可见状态。                                                                                                                      | `(open: boolean) => void`        | —                                |
-| `title` **必填**          | 弹窗标题，同时提供弹窗的可访问名称，应包含有意义的文字。                                                                                                                          | `ReactNode`                      | —                                |
-| `trigger`                 | 可选触发元素。自定义组件需要把 button 原生属性、事件和 ref 传给实际元素；使用 Button 即可。                                                                                       | `ReactElement`                   | —                                |
-| `description`             | 标题下方的补充说明，会关联到弹窗的可访问描述。                                                                                                                                    | `ReactNode`                      | —                                |
-| `children`                | 弹窗正文，适合简短内容或表单。                                                                                                                                                    | `ReactNode`                      | —                                |
-| `footer`                  | 底部操作区。自定义按钮需自行更新状态或提交表单。                                                                                                                                  | `ReactNode`                      | —                                |
-| `illustration`            | 装饰插画；整个插槽隐藏于辅助技术，不要在其中放必要信息或操作。                                                                                                                    | `ReactNode`                      | —                                |
-| `initialFocus`            | 可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。 | `DialogProps['initialFocus']`    | `首个可聚焦元素；触摸时为 Popup` |
-| `finalFocus`              | 可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。                              | `DialogProps['finalFocus']`      | `触发器或先前聚焦元素`           |
-| `portalContainer`         | Portal 挂载位置，支持元素、ShadowRoot、对应 ref 或 null。自定义容器的层叠、裁切环境由调用方负责。                                                                                 | `DialogProps['portalContainer']` | `body`                           |
-| `disablePointerDismissal` | 阻止点击弹窗外部关闭；Escape、关闭按钮与受控状态仍有效。                                                                                                                          | `boolean`                        | `false`                          |
-| `closeLabel`              | 关闭按钮的可访问名称。                                                                                                                                                            | `string`                         | `"关闭弹窗"`                     |
-| `className / style`       | 作用于弹窗 Popup div；不透传其余 div 原生属性。                                                                                                                                   | `string / CSSProperties`         | —                                |
-| `ref`                     | 指向弹窗 Popup div。未打开时该元素通常未挂载。                                                                                                                                    | `Ref<HTMLDivElement>`            | —                                |
+| 属性                      | 说明                                                                                                                                                                              | 类型                             | 默认值                                   |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ---------------------------------------- |
+| `open` **必填**           | 是否打开弹窗。组件不提供 defaultOpen 或内部非受控状态。                                                                                                                           | `boolean`                        | —                                        |
+| `onOpenChange` **必填**   | 打开或关闭请求发生时调用；调用方更新 open 才会改变可见状态。                                                                                                                      | `(open: boolean) => void`        | —                                        |
+| `title` **必填**          | 弹窗标题，同时提供弹窗的可访问名称，应包含有意义的文字。                                                                                                                          | `ReactNode`                      | —                                        |
+| `trigger`                 | 可选触发元素。自定义组件需要把 button 原生属性、事件和 ref 传给实际元素；使用 Button 即可。                                                                                       | `ReactElement`                   | —                                        |
+| `description`             | 标题下方的补充说明，会关联到弹窗的可访问描述。                                                                                                                                    | `ReactNode`                      | —                                        |
+| `children`                | 弹窗正文，适合简短内容或表单。                                                                                                                                                    | `ReactNode`                      | —                                        |
+| `footer`                  | 底部操作区。自定义按钮需自行更新状态或提交表单。                                                                                                                                  | `ReactNode`                      | —                                        |
+| `illustration`            | 装饰插画；整个插槽隐藏于辅助技术，不要在其中放必要信息或操作。                                                                                                                    | `ReactNode`                      | —                                        |
+| `initialFocus`            | 可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。 | `DialogProps['initialFocus']`    | `首个可聚焦元素；触摸打开时聚焦弹窗本身` |
+| `finalFocus`              | 可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。                              | `DialogProps['finalFocus']`      | `触发器或先前聚焦元素`                   |
+| `portalContainer`         | Portal 挂载位置，支持元素、ShadowRoot、对应 ref 或 null。自定义容器的层叠、裁切环境由调用方负责。                                                                                 | `DialogProps['portalContainer']` | `body`                                   |
+| `disablePointerDismissal` | 阻止点击弹窗外部关闭；Escape、关闭按钮与受控状态仍有效。                                                                                                                          | `boolean`                        | `false`                                  |
+| `closeLabel`              | 关闭按钮的可访问名称。                                                                                                                                                            | `string`                         | `"关闭弹窗"`                             |
+| `className / style`       | 作用于弹窗面板 div；不透传其余 div 原生属性。                                                                                                                                     | `string / CSSProperties`         | —                                        |
+| `ref`                     | 指向弹窗面板 div。未打开时该元素通常未挂载。                                                                                                                                      | `Ref<HTMLDivElement>`            | —                                        |
 
 <a id="keyboard-and-theme"></a>
 
@@ -229,6 +229,6 @@ Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，�
 
 ## 相关组件
 
-- [Popover 浮层](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
-- [Alert 静态提示](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。
+- [Popover 弹出面板](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
+- [Alert 提示条](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。
 - [Toast 提示消息](toast.md)：在页面中反馈保存、完成或失败等操作结果，支持说明与补充操作。

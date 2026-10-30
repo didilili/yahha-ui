@@ -1,6 +1,6 @@
 <!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
 
-# Alert 静态提示
+# Alert 提示条
 
 持续展示阅读说明、完成结果或需要处理的问题。
 
@@ -37,7 +37,7 @@ const notices = [
   { tone: 'info', title: '阅读提示', description: '这篇文章包含一些个人记录，可以慢慢读。' },
   { tone: 'success', title: '草稿已保存', description: '下次打开时可以继续编辑。' },
   { tone: 'warning', title: '还有一项没有填写', description: '补充联系邮箱后再提交。' },
-  { tone: 'error', title: '这次没有发送成功', description: '内容仍保留在输入框中，请稍后重试。' },
+  { tone: 'error', title: '发送失败', description: '内容仍保留在输入框中，请稍后重试。' },
 ] as const;
 
 export default function AlertExample() {
@@ -111,7 +111,7 @@ export default function AlertAction() {
         tone={phase === 'error' ? 'error' : successful ? 'success' : 'info'}
         title={
           phase === 'error'
-            ? '这次没有保存成功'
+            ? '订阅偏好保存失败'
             : successful
               ? '订阅偏好已保存'
               : pending
@@ -184,7 +184,7 @@ export default function AlertAction() {
 
 ### AlertProps
 
-| 参数                  | 说明                                                                      | 类型                                          | 默认值   |
+| 属性                  | 说明                                                                      | 类型                                          | 默认值   |
 | --------------------- | ------------------------------------------------------------------------- | --------------------------------------------- | -------- |
 | `tone`                | 说明类型，决定图标与背景颜色。                                            | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` |
 | `title`               | 可选标题，渲染为 p，不是原生 title 属性。                                 | `ReactNode`                                   | —        |

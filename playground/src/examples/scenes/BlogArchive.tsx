@@ -17,73 +17,73 @@ const articles = [
     id: 'river',
     category: 'daily',
     title: '沿着河边，慢慢走',
-    summary: '把晚风和今天遇见的小花留在这一页。',
+    summary: '走到桥边，等系好鞋带的朋友一起回家。',
   },
   {
     id: 'book',
     category: 'reading',
     title: '读到喜欢的一句话',
-    summary: '合上书以后，也想把这句温柔的话记下来。',
+    summary: '把喜欢的那句话抄下来，夹进给朋友的信里。',
   },
   {
     id: 'morning',
     category: 'daily',
     title: '早一点醒来的周末',
-    summary: '给早餐多留十分钟，也给自己留一点空白。',
+    summary: '面包烤得有一点焦，大家还是分着吃完了。',
   },
   {
     id: 'rain',
     category: 'daily',
     title: '窗边听雨的小事',
-    summary: '今天适合坐下来，慢慢写一封信。',
+    summary: '云朵邮局的窗边挤着几位朋友，等雨停，也等一封回信。',
   },
   {
     id: 'margin',
     category: 'reading',
     title: '写在书页边的小小批注',
-    summary: '不急着读完，先留住一个想继续思考的问题。',
+    summary: '朋友在书边画了只歪歪的小猫，我在旁边添了一条尾巴。',
   },
   {
     id: 'flower',
     category: 'daily',
     title: '路口那一朵小花',
-    summary: '每天经过的地方，也会有新的发现。',
+    summary: '小花长在路口，我们绕开一点，让它多晒一会儿太阳。',
   },
   {
     id: 'walk',
     category: 'daily',
     title: '换一条回家的路',
-    summary: '多走一小段，看见另一片晚霞。',
+    summary: '绕远一点，陪怕黑的朋友走到家门口。',
   },
   {
     id: 'reread',
     category: 'reading',
     title: '再读一次喜欢的章节',
-    summary: '同一段文字，在不同的日子有不同的回应。',
+    summary: '上次没读懂的那一段，今天和朋友轮流念一遍。',
   },
   {
     id: 'tea',
     category: 'daily',
     title: '等一杯茶慢慢凉下来',
-    summary: '放下手里的事情，认真休息一会儿。',
+    summary: '茶还烫着。先给朋友搬把椅子，再一起吹一吹。',
   },
   {
     id: 'letter',
     category: 'daily',
     title: '给下个月的自己一张明信片',
-    summary: '写下现在喜欢的事，等以后再打开。',
+    summary: '写下今天分到半块饼干的事，寄给下个月的自己。',
   },
   {
     id: 'bookmark',
     category: 'reading',
     title: '今天的书签停在这里',
-    summary: '把没有读完的故事，留给下一次相遇。',
+    summary: '书签歪歪地夹着，等下次和朋友一起把故事读完。',
   },
   {
     id: 'night',
     category: 'daily',
     title: '睡前记下一件开心的小事',
-    summary: '不一定很特别，值得记住就好。',
+    summary: '今天有人特意等了我。睡前把这件事记下来。',
   },
 ];
 
@@ -151,7 +151,7 @@ export default function BlogArchive() {
         </ul>
       ) : (
         <EmptyState
-          title="没有找到这篇手记"
+          title="未找到相关手记"
           description="试试其他关键词，或清空搜索、回到全部手记。"
           action={
             <Button variant="secondary" onClick={reset}>
@@ -179,7 +179,7 @@ export default function BlogArchive() {
     >
       <div style={{ display: 'grid', gap: 12 }}>
         <Heading level={2}>手记归档</Heading>
-        <Text tone="muted">把日常和读过的书，一页一页留在这里。</Text>
+        <Text tone="muted">Yahha 星球的朋友们，把一起过的日子记在这里。</Text>
         <Text size="sm" tone="muted">
           这里有 12 篇本地示例摘要，每页显示 3 篇；不会读取或保存真实文章。
         </Text>

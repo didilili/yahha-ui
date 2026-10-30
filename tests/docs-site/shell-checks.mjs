@@ -132,7 +132,7 @@ async function verifySearchRecovery(page) {
   await requireFocus(search, 'Clearing the search must restore input focus.');
   await search.fill('这条搜索没有任何组件');
   const empty = sidebar.locator('.search-empty');
-  await empty.getByText('没有匹配的文档', { exact: true }).waitFor();
+  await empty.getByText('未找到相关文档', { exact: true }).waitFor();
   await empty.getByRole('button', { name: '显示全部文档', exact: true }).click();
   assert.equal(await search.inputValue(), '');
   await requireFocus(search, 'Empty-result recovery must restore input focus.');
@@ -384,12 +384,12 @@ export async function verifyDocsLoading(browser, baseURL) {
     await loading.waitFor();
     assert.equal(await page.locator('.example-block').count(), 0);
     releaseRequest();
-    const failure = page.getByRole('alert').filter({ hasText: '组件文档暂时未能加载' });
+    const failure = page.getByRole('alert').filter({ hasText: '组件文档加载失败' });
     await failure.waitFor();
     assert.equal(intercepted, 1, 'The test must fail the initial documentation module request.');
     await page.unroute(isTabsModule);
     await failure.getByRole('button', { name: '重新加载文档', exact: true }).click();
-    await page.getByRole('tablist', { name: '小站栏目', exact: true }).waitFor();
+    await page.locator('#basic').getByRole('tablist', { name: '小站栏目', exact: true }).waitFor();
     await requireFocus(
       page.getByRole('heading', { level: 1, name: 'Tabs 标签页', exact: true }),
       'Retrying a failed document must restore a usable heading after the retry control unmounts.',
@@ -426,13 +426,13 @@ export async function verifyDocsRouteIdentity(browser, baseURL) {
   const page = await context.newPage();
   page.setDefaultTimeout(4000);
   const routes = [
-    ['/', /^和朋友们，\s*搭一间小小的网站。$/, '#/'],
-    ['/guides/introduction', 'Yahha UI', '#/guides/getting-started'],
+    ['/', /^一起做，\s*全宇宙最可爱的\s*UI 组件库。$/, '#/'],
+    ['/guides/introduction', '项目介绍', '#/guides/getting-started'],
     ['/guides/getting-started', '开始使用', '#/guides/getting-started'],
     ['/guides/styling', '设计与组合', '#/guides/styling'],
     ['/guides/design-baseline', '设计规范', '#/guides/styling'],
     ['/guides/states', '状态与场景', '#/guides/styling'],
-    ['/guides/artwork', '小日常 SVG', '#/guides/styling'],
+    ['/guides/artwork', '图标与插画', '#/guides/styling'],
     ['/components', '组件总览', '#/components'],
     ['/components/button', 'Button 按钮', '#/components'],
     ['/components/segmented-control', 'SegmentedControl 分段选择', '#/components'],
@@ -674,7 +674,7 @@ export async function verifyReadingExample(page, baseURL) {
   const search = reading.getByRole('searchbox', { name: '搜索手记', exact: true });
   const river = reading.getByRole('button', { name: '沿着河边，慢慢走', exact: true });
   const weekend = reading.getByRole('button', { name: '给周末留一页空白', exact: true });
-  await search.fill('树叶');
+  await search.fill('叶子');
   await river.waitFor();
   await weekend.waitFor({ state: 'hidden' });
   await search.fill('');
@@ -696,7 +696,7 @@ export async function verifyReadingExample(page, baseURL) {
   await reading.getByRole('radio', { name: '读书', exact: true }).check();
   await reading.getByRole('article').getByRole('button', { pressed: true }).waitFor();
   await search.fill('这篇手记不存在');
-  await reading.getByText('还没有找到这篇手记', { exact: true }).waitFor();
+  await reading.getByText('未找到相关手记', { exact: true }).waitFor();
   await reading.getByRole('button', { name: '显示全部手记', exact: true }).click();
   await requireFocus(search, 'Recovering from an empty reading result must return to search.');
   assert.equal(await search.inputValue(), '');
@@ -728,7 +728,7 @@ export async function verifyReadingExample(page, baseURL) {
     assert.equal(await image.count(), 0, 'Reading must work without illustration.');
     await reading
       .getByRole('article')
-      .getByText('今天先记到这里。下一次翻开时，再接着写。', { exact: true })
+      .getByText('今天先记到这里。没读完的那一段，等大家都醒着的时候，再接着读。', { exact: true })
       .waitFor();
     await illustration.check();
     await image.waitFor();
@@ -921,7 +921,7 @@ async function verifyStateSceneExamples(page, baseURL) {
   await page.getByRole('option', { name: '搜索无结果', exact: true }).click();
   const search = empty.getByRole('textbox', { name: '搜索关键词', exact: true });
   assert.equal(await search.inputValue(), '海边');
-  await empty.getByRole('heading', { name: '没有找到匹配的文章', exact: true }).waitFor();
+  await empty.getByRole('heading', { name: '未找到相关文章', exact: true }).waitFor();
   await empty.getByRole('button', { name: '清空筛选', exact: true }).click();
   assert.equal(await search.inputValue(), '');
   await requireFocus(search, 'Clearing scene filters must return focus to the query.');
@@ -930,18 +930,16 @@ async function verifyStateSceneExamples(page, baseURL) {
   await empty.getByText('周末散步的小发现', { exact: true }).waitFor();
   await empty.getByRole('button', { name: '重置空态示例', exact: true }).click();
   assert.equal(await search.inputValue(), '海边');
-  await empty.getByRole('heading', { name: '没有找到匹配的文章', exact: true }).waitFor();
+  await empty.getByRole('heading', { name: '未找到相关文章', exact: true }).waitFor();
 
   const notFound = page.locator('#scene-not-found .example-preview');
-  await notFound
-    .getByRole('heading', { level: 3, name: '没有找到这篇文档', exact: true })
-    .waitFor();
+  await notFound.getByRole('heading', { level: 3, name: '页面未找到', exact: true }).waitFor();
   assert.equal(
-    await notFound.getByRole('link', { name: '返回开始使用', exact: true }).getAttribute('href'),
+    await notFound.getByRole('link', { name: '开始使用', exact: true }).getAttribute('href'),
     '#/guides/getting-started',
   );
   assert.equal(
-    await notFound.getByRole('link', { name: '查看组件目录', exact: true }).getAttribute('href'),
+    await notFound.getByRole('link', { name: '浏览组件', exact: true }).getAttribute('href'),
     '#/components',
   );
 

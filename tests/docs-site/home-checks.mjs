@@ -20,7 +20,7 @@ async function requireHome(page) {
   await heading.waitFor();
   assert.equal(
     (await heading.innerText()).replace(/\s/g, ''),
-    '和朋友们，搭一间小小的网站。',
+    '一起做，全宇宙最可爱的UI组件库。',
     'The default entry must show the public homepage.',
   );
   assert.equal(await page.locator('main h1').count(), 1);
@@ -59,44 +59,43 @@ export async function verifyHome(browser, baseURL) {
       await page.goto(`${baseURL}${suffix}`);
       await requireHome(page);
     }
-    const explore = page.getByRole('link', { name: '往下逛逛', exact: true });
+    const explore = page.getByRole('link', { name: '查看交互示例', exact: true });
     assert.equal(await explore.getAttribute('href'), '#/?section=home-little-site');
     await explore.click();
     await requireFocus(
-      page.getByRole('heading', { name: '小小的组件，认真地使用。', exact: true }),
+      page.getByRole('heading', { name: '这次，轮到你来起名字。', exact: true }),
       'Homepage section navigation must continue at the live component sample heading.',
     );
     await requireHome(page);
     await verifyDeployedArtwork(page, page.locator('main .site-home img'), baseURL);
 
     const main = page.locator('main');
-    const name = main.getByRole('textbox', { name: '给小站起个名字', exact: true });
-    const date = main.getByText('一个适合分享的晴天', { exact: true });
-    const showDate = main.getByRole('checkbox', { name: '显示手记的日期说明', exact: true });
-    assert.equal(await name.inputValue(), '小小的生活记录');
+    const name = main.getByRole('textbox', { name: '手记标题', exact: true });
+    const date = main.getByText('草地上，还空着一个位置', { exact: true });
+    const showDate = main.getByRole('checkbox', { name: '显示副标题', exact: true });
+    assert.equal(await name.inputValue(), '给晚到的朋友留块饼干');
     await name.fill('窗边的小小手记');
     await main.getByRole('heading', { name: '窗边的小小手记', exact: true }).waitFor();
     await name.fill('   ');
-    await main.getByRole('heading', { name: '还没起名字的小站', exact: true }).waitFor();
+    await main.getByRole('heading', { name: '未命名手记', exact: true }).waitFor();
     await name.fill('窗边的小小手记');
     assert.equal(await showDate.isChecked(), true);
     await date.waitFor();
     await showDate.uncheck();
     await date.waitFor({ state: 'hidden' });
-    await main.getByRole('button', { name: '收好这篇手记', pressed: false, exact: true }).click();
-    await main.getByRole('button', { name: '已经收好啦', pressed: true, exact: true }).waitFor();
-    await main
-      .getByRole('status')
-      .getByText('手记留在了这个示例的小小收藏里。', { exact: true })
-      .waitFor();
+    await main.getByRole('button', { name: '收藏手记', pressed: false, exact: true }).click();
+    await main.getByRole('button', { name: '收藏手记', pressed: true, exact: true }).waitFor();
+    await main.getByRole('status').getByText('已在当前示例中收藏。', { exact: true }).waitFor();
     await page.reload();
     await requireHome(page);
-    assert.equal(await name.inputValue(), '小小的生活记录');
+    assert.equal(await name.inputValue(), '给晚到的朋友留块饼干');
     assert.equal(await showDate.isChecked(), true, 'Refreshing must reset this local sample.');
     await date.waitFor();
-    await main.getByRole('button', { name: '收好这篇手记', pressed: false, exact: true }).waitFor();
+    await main.getByRole('button', { name: '收藏手记', pressed: false, exact: true }).waitFor();
 
-    const components = main.getByRole('link', { name: '逛逛组件小屋', exact: true });
+    const components = main
+      .locator('.home-hero-actions')
+      .getByRole('link', { name: '浏览组件', exact: true });
     assert.equal(await components.getAttribute('href'), '#/components');
     assert.equal(
       await main.getByRole('link', { name: '开始使用', exact: true }).getAttribute('href'),
@@ -117,7 +116,7 @@ export async function verifyHome(browser, baseURL) {
 
     // The introduction remains a real guide, separate from the public default entry.
     await page.goto(`${baseURL}#/guides/introduction`);
-    await page.getByRole('heading', { level: 1, name: 'Yahha UI', exact: true }).waitFor();
+    await page.getByRole('heading', { level: 1, name: '项目介绍', exact: true }).waitFor();
     await page.locator('#components').waitFor();
 
     for (const width of [390, 320]) {

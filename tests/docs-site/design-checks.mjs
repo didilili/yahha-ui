@@ -88,7 +88,7 @@ export async function verifyDesignBaseline(page, baseURL) {
   await controls.getByRole('button', { name: '收藏示例', exact: true }).click();
   assert.equal(
     await controls
-      .getByRole('button', { name: '取消收藏示例', exact: true })
+      .getByRole('button', { name: '收藏示例', pressed: true, exact: true })
       .getAttribute('aria-pressed'),
     'true',
   );
@@ -113,20 +113,20 @@ export async function verifyDesignBaseline(page, baseURL) {
 
   const reading = page.getByRole('region', { name: '规范阅读', exact: true });
   const body = reading.getByText(
-    '周末出门时，没有特意想好要去哪里。沿着河边走了一段，看见树叶的影子落在水面上，又被风轻轻推开。',
+    '傍晚在 Yahha 星球散步，吉伊在河边遇到一颗打瞌睡的小星星。它揉揉眼睛，说自己忘了回家的方向。',
     { exact: true },
   );
   assert.equal(await body.evaluate((element) => getComputedStyle(element).fontSize), '16px');
   await reading.getByRole('radio', { name: '已收藏', exact: true }).check();
   await reading.getByRole('button', { name: '显示全部手记', exact: true }).click();
   await page.waitForFunction(() => document.activeElement?.tagName === 'H4');
-  await reading.getByRole('button', { name: '收藏这篇', exact: true }).click();
+  await reading.getByRole('button', { name: '收藏这篇手记', pressed: false, exact: true }).click();
   await reading.getByRole('tab', { name: '看目录', exact: true }).click();
   await reading.getByRole('button', { name: '给周末留一页空白', exact: true }).click();
   await reading.getByRole('article', { name: '给周末留一页空白', exact: true }).waitFor();
   await page.waitForFunction(() => document.activeElement?.tagName === 'H4');
   await reading.getByRole('radio', { name: '已收藏', exact: true }).check();
-  await reading.getByRole('article', { name: '沿着河边，慢慢走', exact: true }).waitFor();
+  await reading.getByRole('article', { name: '把迷路的小星星送回家', exact: true }).waitFor();
   assert.equal(
     await reading.getByRole('article', { name: '给周末留一页空白', exact: true }).count(),
     0,
@@ -134,7 +134,7 @@ export async function verifyDesignBaseline(page, baseURL) {
   await reading.getByRole('link', { name: '关于这篇示例', exact: true }).click();
   assert.match(page.url(), /#\/guides\/design-baseline$/);
   assert.equal(await reading.locator(':focus').count(), 1);
-  await reading.getByRole('button', { name: '已收藏这篇', exact: true }).click();
+  await reading.getByRole('button', { name: '收藏这篇手记', pressed: true, exact: true }).click();
   const recover = reading.getByRole('button', { name: '显示全部手记', exact: true });
   await recover.waitFor();
   assert.equal(await recover.evaluate((element) => element === document.activeElement), true);

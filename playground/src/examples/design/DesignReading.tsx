@@ -16,12 +16,12 @@ const notes = [
   {
     id: 'river',
     date: '2026-10-18',
-    title: '沿着河边，慢慢走',
-    summary: '出门没有安排，回家时却多了两行想写下的话。',
+    title: '把迷路的小星星送回家',
+    summary: '一张云朵地图、一束手电光，还有三个愿意陪它走一程的朋友。',
     paragraphs: [
-      '周末出门时，没有特意想好要去哪里。沿着河边走了一段，看见树叶的影子落在水面上，又被风轻轻推开。',
-      '路边的小店换了招牌，门口还是摆着那张旧木椅。我停下来坐了一会儿，把想记住的事情写了两行。',
-      '有些日子不需要安排得很满。走一走，看看天色，也就很好。',
+      '傍晚在 Yahha 星球散步，吉伊在河边遇到一颗打瞌睡的小星星。它揉揉眼睛，说自己忘了回家的方向。',
+      '小八把云朵地图摊在草地上，画反的方向擦掉重画。乌萨奇举起手电，大家陪着小星星，一步一步走到能看见月亮的山坡。',
+      '小星星回到夜空，朝地面眨了三下眼睛。我们也挥挥手，把剩下的一块饼干分成三份。',
     ],
   },
   {
@@ -147,7 +147,7 @@ export default function DesignReading() {
                 <article aria-label={active.title} style={{ display: 'grid', gap: 24 }}>
                   <header style={{ display: 'grid', gap: 12 }}>
                     <Text size="sm" tone="muted">
-                      <time dateTime={active.date}>{active.date}</time> · 小林的周末手记
+                      <time dateTime={active.date}>{active.date}</time> · 小林的星球手记
                     </Text>
                     <Heading level={4} ref={articleRef} tabIndex={-1}>
                       {active.title}
@@ -163,7 +163,7 @@ export default function DesignReading() {
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
                     <Button variant="secondary" aria-pressed={isSaved} onClick={toggleSaved}>
-                      {isSaved ? '已收藏这篇' : '收藏这篇'}
+                      收藏这篇手记
                     </Button>
                     <Link
                       href={`#${rootId}-note`}

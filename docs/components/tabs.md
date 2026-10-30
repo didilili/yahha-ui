@@ -85,7 +85,7 @@ export default function TabsValue() {
   return (
     <div style={{ display: 'grid', gap: 16 }}>
       <Tabs
-        label="受控的小站栏目"
+        label="小站栏目"
         value={value}
         onValueChange={setValue}
         items={[
@@ -233,7 +233,7 @@ TabsProps 支持原生 div 属性，children 和 defaultValue 除外。
 
 ### TabsProps
 
-| 参数                      | 说明                                                                      | 类型                                              | 默认值       |
+| 属性                      | 说明                                                                      | 类型                                              | 默认值       |
 | ------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------- | ------------ |
 | `label` **必填**          | 标签列表 tablist 的可访问名称。                                           | `string`                                          | —            |
 | `items` **必填**          | 标签及其对应内容面板。value 组内唯一。                                    | `TabItem[]`                                       | —            |
@@ -247,7 +247,7 @@ TabsProps 支持原生 div 属性，children 和 defaultValue 除外。
 
 ### TabItem
 
-| 参数               | 说明                                     | 类型        | 默认值  |
+| 属性               | 说明                                     | 类型        | 默认值  |
 | ------------------ | ---------------------------------------- | ----------- | ------- |
 | `value` **必填**   | 组内唯一的稳定值。                       | `string`    | —       |
 | `label` **必填**   | 标签按钮内容，不放其他交互控件。         | `ReactNode` | —       |

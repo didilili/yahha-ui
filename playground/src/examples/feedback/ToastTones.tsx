@@ -4,7 +4,7 @@ import { Button, Heading, Text, Toast } from 'yahha-ui';
 const messages = [
   { tone: 'success', title: '文章已保存', description: '改动已经记录在草稿中。' },
   { tone: 'info', title: '还有一件小事', description: '发布前可以补充文章摘要。' },
-  { tone: 'error', title: '保存未完成', description: '请检查网络连接后重试。' },
+  { tone: 'error', title: '保存失败', description: '请检查网络连接后重试。' },
 ] as const;
 
 export default function ToastTones() {

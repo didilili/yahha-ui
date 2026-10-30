@@ -13,7 +13,7 @@ export default function TextExample() {
               {size === 'sm' ? '小号' : size === 'md' ? '中号' : '大号'} {size}
               {size === 'md' ? '（默认）' : ''}
             </Text>
-            <Text size={size}>记录一点小事，慢慢读也很好。</Text>
+            <Text size={size}>饼干掰成两半，一半留给你。</Text>
           </div>
         ))}
       </section>
@@ -27,7 +27,7 @@ export default function TextExample() {
               {tone === 'default' ? '主要文字' : '次要文字'}
               {tone === 'default' ? '（默认）' : ''}
             </Text>
-            <Text tone={tone}>今天沿着河边走了一会儿，把喜欢的风景留在这里。</Text>
+            <Text tone={tone}>今天沿着河边散步，走到桥边时，停下来等了等还在系鞋带的朋友。</Text>
           </div>
         ))}
       </section>

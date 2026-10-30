@@ -24,7 +24,7 @@ import { IconButton } from 'yahha-ui';
 
 <a id="icon-button-basic"></a>
 
-### 基本使用
+### 基础用法
 
 关闭欢迎提示后，焦点移到重新显示按钮；重新显示后回到关闭按钮。回焦由示例管理，初次展示不抢焦点；图标通过 children 传入。
 
@@ -58,7 +58,7 @@ export default function IconButtonBasic() {
     <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
       {visible ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span>欢迎来到我的小站。</span>
+          <span>欢迎来坐坐，给你留了个位置。</span>
           <IconButton
             ref={closeRef}
             aria-label="关闭欢迎提示"
@@ -236,7 +236,7 @@ export default function IconButtonLoading() {
 
 ### IconButtonProps
 
-| 参数                  | 说明                                                                                     | 类型                                      | 默认值      |
+| 属性                  | 说明                                                                                     | 类型                                      | 默认值      |
 | --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----------- |
 | `aria-label` **必填** | 必填的可访问名称，描述动作，例如“关闭提示”。                                             | `string`                                  | —           |
 | `children`            | 图标内容。建议装饰图标设置 aria-hidden="true"，加载时此内容被替换。                      | `ReactNode`                               | —           |
@@ -269,5 +269,5 @@ disabled 或 loading 为真时，按钮退出键盘顺序且不能激活。加�
 
 ## 相关组件
 
-- [Button 按钮](button.md)：触发提交、收藏或其他操作的原生按钮，提供三种强调程度与完整的交互状态。
+- [Button 按钮](button.md)：用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。
 - [Tooltip 文字提示](tooltip.md)：悬停或聚焦时，为已有操作补充简短的视觉文字标签。

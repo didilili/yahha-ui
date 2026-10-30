@@ -43,7 +43,7 @@ export default function HeadingExample() {
             {level}
             {level === 2 ? '（默认）' : ''}
           </Text>
-          <Heading level={level}>记录今天的小事</Heading>
+          <Heading level={level}>星球上的点心时间</Heading>
         </div>
       ))}
     </div>
@@ -71,22 +71,25 @@ export default function HeadingArticle() {
         <Text size="sm" tone="muted">
           章节 h2
         </Text>
-        <Heading level={2}>周末的阅读手记</Heading>
-        <Text>周末的午后，我翻开上次读到一半的书。窗外有风，杯里的茶还温热。</Text>
+        <Heading level={2}>云朵邮局的第一封来信</Heading>
+        <Text>
+          Yahha
+          星球的云朵邮局，今天收到一封字歪歪的来信。小八念给大家听，吉伊找来彩色铅笔，乌萨奇把邮票排成一行。
+        </Text>
       </section>
       <section style={{ display: 'grid', gap: 12 }}>
         <Text size="sm" tone="muted">
           小节 h3
         </Text>
-        <Heading level={3}>在书页之间休息一下</Heading>
-        <Text>读过一章，就走到窗边看看树影。喜欢的句子，用一张纸签记下来。</Text>
+        <Heading level={3}>给远方的朋友写封回信</Heading>
+        <Text>信纸上画一张草地野餐图，给还没来过的朋友也留一个位置。邮票贴歪了，就再按一按。</Text>
         <div style={{ display: 'grid', gap: 8, marginTop: 8 }}>
           <Text size="sm" tone="muted">
             小节内标题 h4
           </Text>
-          <Heading level={4}>摘下今天喜欢的一句话</Heading>
+          <Heading level={4}>在信里给朋友留个位置</Heading>
           <Text size="sm" tone="muted">
-            今天也有值得慢慢记住的小事。
+            “下次一起吃点心吧。”大家画了三块饼干，又添上一块。
           </Text>
         </div>
       </section>
@@ -94,8 +97,10 @@ export default function HeadingArticle() {
         <Text size="sm" tone="muted">
           长标题 h3
         </Text>
-        <Heading level={3}>把沿途遇到的小事，整理成可以慢慢读完的一篇长手记</Heading>
-        <Text>从河边捡到的一片叶子，到晚饭前看见的一朵云，都放进这篇手记里。</Text>
+        <Heading level={3}>
+          把云朵邮局里借来的铅笔、贴歪的邮票和分给朋友的半块饼干，写进今天的长手记
+        </Heading>
+        <Text>有些字擦了又写，信封也折得不太齐。寄出去之前，大家还是认认真真签上了名字。</Text>
       </section>
     </div>
   );
@@ -114,7 +119,7 @@ export default function HeadingArticle() {
 
 ### HeadingProps
 
-| 参数                  | 说明                                                                      | 类型                                 | 默认值 |
+| 属性                  | 说明                                                                      | 类型                                 | 默认值 |
 | --------------------- | ------------------------------------------------------------------------- | ------------------------------------ | ------ |
 | `level`               | 渲染的标题层级，默认字号依次为 32 / 24 / 20 / 18 / 16 / 14px。            | `1 \| 2 \| 3 \| 4 \| 5 \| 6`         | `2`    |
 | `children`            | 标题内容。                                                                | `ReactNode`                          | —      |
