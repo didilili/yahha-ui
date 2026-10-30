@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { Badge, Button, Checkbox, Heading, Link, SegmentedControl, Text } from 'yahha-ui';
+import { Button, Checkbox, Heading, Link, SegmentedControl, Text } from 'yahha-ui';
 import searchEmpty from './artwork/little-days-search-empty.svg?no-inline';
 import collectionSaved from './artwork/little-days-collection-saved.svg?no-inline';
 import collectionSavedMotion from './artwork/little-days-collection-saved-motion.svg?no-inline';
@@ -11,7 +11,7 @@ const states = [
   { value: 'search', label: '搜索无结果' },
   { value: 'saved', label: '收藏成功' },
   { value: 'error', label: '加载失败' },
-  { value: 'not-found', label: '404 找路' },
+  { value: 'not-found', label: '页面未找到（404）' },
 ] as const;
 
 type State = (typeof states)[number]['value'];
@@ -28,14 +28,14 @@ const scenes: Record<
   }
 > = {
   search: {
-    title: '草芽边，再找找',
-    description: '没有找到对应的手记。换个关键词，或清空筛选，就能继续翻看其他日常。',
+    title: '未找到相关手记',
+    description: '试试其他关键词，或清空筛选，继续翻看其他手记。',
     image: searchEmpty,
     width: 240,
     height: 180,
   },
   saved: {
-    title: '星星纸签，收好啦',
+    title: '收藏成功',
     description: '把喜欢的一页收进口袋。下一次想起时，还能回来慢慢读。',
     image: collectionSaved,
     motion: collectionSavedMotion,
@@ -43,7 +43,7 @@ const scenes: Record<
     height: 180,
   },
   error: {
-    title: '这一页，暂时没能过来',
+    title: '加载失败',
     description: '加载没有完成，已经写下的内容仍然保留。可以重新尝试，也可以先看看其他页面。',
     image: loadError,
     motion: loadErrorMotion,
@@ -51,7 +51,7 @@ const scenes: Record<
     height: 180,
   },
   'not-found': {
-    title: '和朋友们，看看该往哪走',
+    title: '页面未找到',
     description: '这条小路暂时没有页面。从首页或目录重新出发，还能找到其他有趣的内容。',
     image: friendsLost,
     width: 480,
@@ -99,7 +99,7 @@ export default function LittleDaysStates() {
           onValueChange={choose}
         />
         <Text id={hintId} size="sm" tone="muted">
-          这里只切换本页演示状态，不发起请求或保存收藏。成功与失败提供一次性动作，搜索与找路保持静态。
+          选择一种状态；收藏成功和加载失败可开启单次动效。
         </Text>
         <div className="little-days-state-controls">
           <Checkbox
@@ -136,7 +136,6 @@ export default function LittleDaysStates() {
           />
         </div>
         <div className="little-days-state-copy">
-          <Badge>{animated ? '动作播放一次后停止' : '静态 SVG'}</Badge>
           <Heading level={3}>{scene.title}</Heading>
           <Text tone="muted">{scene.description}</Text>
         </div>
@@ -144,7 +143,7 @@ export default function LittleDaysStates() {
 
       <Text role="status" aria-atomic="true" size="sm" tone="muted">
         当前预览：{states.find((item) => item.value === state)?.label}。
-        {animated ? '单次动效开启，结束后保留完整结果；系统减少动效时显示静帧。' : '显示静态画面。'}
+        {animated ? '动效播放一次；减少动效时显示静帧。' : '显示静态画面。'}
       </Text>
       <div className="little-days-state-links">
         <Link href="#/guides/states?section=loading">查看完整加载与恢复流程 →</Link>

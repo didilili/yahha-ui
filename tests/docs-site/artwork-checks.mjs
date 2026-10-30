@@ -249,13 +249,13 @@ async function stateArtworkJourney(page, baseURL) {
   const complete = example.getByRole('button', { name: '演示完成结果', exact: true });
   assert.equal(await once.isChecked(), false);
   assert.equal(await replay.isDisabled(), true);
-  await picture.getByRole('heading', { name: '草芽边，再找找', exact: true }).waitFor();
-  assert.match(await picture.innerText(), /换个关键词.*清空筛选/);
+  await picture.getByRole('heading', { name: '未找到相关手记', exact: true }).waitFor();
+  assert.match(await picture.innerText(), /试试其他关键词.*清空筛选/);
   assert.match(await image.getAttribute('src'), /search-empty[^/]*\.svg/);
   await healthy(page, example, baseURL);
 
   await example.getByRole('radio', { name: '收藏成功', exact: true }).check();
-  await picture.getByRole('heading', { name: '星星纸签，收好啦', exact: true }).waitFor();
+  await picture.getByRole('heading', { name: '收藏成功', exact: true }).waitFor();
   const savedStatic = await image.getAttribute('src');
   assert.match(savedStatic, /collection-saved[^/]*\.svg/);
   assert.doesNotMatch(savedStatic, /collection-saved-motion/);
@@ -272,7 +272,7 @@ async function stateArtworkJourney(page, baseURL) {
   assert.match(await image.getAttribute('src'), /collection-saved-motion/);
 
   await example.getByRole('radio', { name: '加载失败', exact: true }).check();
-  await picture.getByRole('heading', { name: '这一页，暂时没能过来', exact: true }).waitFor();
+  await picture.getByRole('heading', { name: '加载失败', exact: true }).waitFor();
   assert.match(await picture.innerText(), /内容仍然保留.*重新尝试/s);
   assert.match(await image.getAttribute('src'), /load-error-motion/);
   const beforeRetryReplay = await image.elementHandle();
@@ -284,8 +284,8 @@ async function stateArtworkJourney(page, baseURL) {
   assert.equal(await replay.isDisabled(), true);
   assert.doesNotMatch(await image.getAttribute('src'), /load-error-motion/);
 
-  await example.getByRole('radio', { name: '404 找路', exact: true }).check();
-  await picture.getByRole('heading', { name: '和朋友们，看看该往哪走', exact: true }).waitFor();
+  await example.getByRole('radio', { name: '页面未找到（404）', exact: true }).check();
+  await picture.getByRole('heading', { name: '页面未找到', exact: true }).waitFor();
   assert.match(await picture.innerText(), /从首页或目录重新出发/);
   assert.match(await image.getAttribute('src'), /friends-lost[^/]*\.svg/);
   assert.equal(await image.getAttribute('width'), '480');
@@ -337,7 +337,7 @@ export async function verifyArtwork(browser, baseURL) {
       await example.getByRole('region', { name: '小日常素材交互示例', exact: true }).waitFor();
       await healthy(page, example, baseURL);
 
-      const bookmark = example.getByRole('button', { name: /^(收藏纸签|已收藏)$/ });
+      const bookmark = example.getByRole('button', { name: '收藏纸签', exact: true });
       assert.equal(await bookmark.getAttribute('aria-pressed'), 'false');
       await bookmark.click();
       assert.equal(await bookmark.getAttribute('aria-pressed'), 'true');

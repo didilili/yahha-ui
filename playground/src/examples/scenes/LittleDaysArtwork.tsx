@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { Badge, Button, Checkbox, EmptyState, Heading, Link, Text } from 'yahha-ui';
+import { Button, Checkbox, EmptyState, Heading, Link, Text } from 'yahha-ui';
 import bookmark from './artwork/little-days-bookmark.svg?no-inline';
 import teaCup from './artwork/little-days-tea-cup.svg?no-inline';
 import teaCupMotion from './artwork/little-days-tea-cup-motion.svg?no-inline';
@@ -45,12 +45,8 @@ export default function LittleDaysArtwork() {
       <div className="little-days-small">
         <section className="little-days-specimen" aria-label="收藏书签图标">
           <header>
-            <span className="little-days-number">01 / 操作图标</span>
-            <Heading level={3}>收好这一枚纸签</Heading>
+            <Heading level={3}>收藏书签</Heading>
           </header>
-          <Text size="sm" tone="muted">
-            小尺寸保留清楚的书签轮廓。图形负责识别，按钮文字说明操作。
-          </Text>
           <div className="little-days-tools">
             <Button
               variant="secondary"
@@ -58,7 +54,7 @@ export default function LittleDaysArtwork() {
               startIcon={<img src={bookmark} alt="" width={18} height={18} />}
               onClick={() => setSaved((value) => !value)}
             >
-              {saved ? '已收藏' : '收藏纸签'}
+              收藏纸签
             </Button>
             <div className="little-days-icon-sizes" aria-label="18、20、22 像素的图标样张">
               {[18, 20, 22].map((size) => (
@@ -73,12 +69,8 @@ export default function LittleDaysArtwork() {
 
         <section className="little-days-specimen" aria-label="热茶生活图案">
           <header>
-            <span className="little-days-number">02 / 生活图案</span>
-            <Heading level={3}>热茶，等一会儿</Heading>
+            <Heading level={3}>热茶</Heading>
           </header>
-          <Text size="sm" tone="muted">
-            96 × 96 的小图案。杯子稳稳放着，只有蒸汽轻轻升起。
-          </Text>
           <div className="little-days-tea">
             <img src={teaPlaying ? teaCupMotion : teaCup} alt="" width={96} height={96} />
             <Checkbox
@@ -87,20 +79,13 @@ export default function LittleDaysArtwork() {
               onChange={(event) => setTeaPlaying(event.currentTarget.checked)}
             />
           </div>
-          <Text size="sm" tone="muted">
-            关闭后显示静态 SVG；开启时也遵循系统的减少动效设置。
-          </Text>
         </section>
       </div>
 
       <section className="little-days-wait" aria-label="翻页等待素材">
         <div className="little-days-wait-copy">
-          <span className="little-days-number">03 / 区块等待</span>
-          <Heading level={3}>翻一页，稍等一下</Heading>
-          <Text size="sm">
-            240 × 168 的手记场景。开始与结束由你控制，本例不发起请求，也不让真实页面多等一会儿。
-          </Text>
-          <Badge>等待动效演示</Badge>
+          <Heading level={3}>翻页等待</Heading>
+          <Text size="sm">开始后循环翻页，结束后显示静态图。</Text>
           <Button
             variant="secondary"
             aria-controls={waitingId}
@@ -135,12 +120,7 @@ export default function LittleDaysArtwork() {
 
       <section className="little-days-empty" aria-label="空收藏素材">
         <div className="little-days-empty-copy">
-          <span className="little-days-number">04 / 空内容场景</span>
-          <Heading level={3}>给下一件小事留个位置</Heading>
-          <Text size="sm" tone="muted">
-            240 × 180 的口袋保留为空白。插画补充情境，原因和下一步仍用文字表达。
-          </Text>
-          <Badge>静态 SVG</Badge>
+          <Heading level={3}>收藏夹</Heading>
         </div>
         <EmptyState
           title="还没收进小口袋"
