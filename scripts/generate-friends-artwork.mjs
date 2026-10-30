@@ -119,7 +119,7 @@ for (const character of characters) {
     outputs.set(
       `portraits/${character}-${expression}.svg`,
       svg(
-        `${names[character]}：${moods[expression]}，人物校准样张。`,
+        `${names[character]}：${moods[expression]}。`,
         '-110 -205 220 310',
         `<use href="#${character}-${expression}"/>`,
       ),

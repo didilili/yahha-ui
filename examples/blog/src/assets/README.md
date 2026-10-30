@@ -2,7 +2,7 @@
 
 本目录为现有素材的原样副本，方便网站源码在独立安装包验收中使用；未重新绘制人物或改变角色比例。
 
-- `peek.svg`、`author.svg` 来自仓库 `playground/src/examples/scenes/artwork/friends-preview/` 的当前版本；`author.svg` 对应 `portraits/chiikawa-smile.svg`。
+- `peek.svg`、`author.svg` 来自仓库 `playground/src/examples/scenes/artwork/friends-preview/` 的当前版本；`author.svg` 对应 `portraits/chiikawa-smile.svg`，由 `npm run sync:artwork` 同步，`npm run check:artwork` 核对副本一致。
 - `reading.png`、`rest.png`、`lounge.png` 来自 `playground/src/assets/`。
 - `marker.woff2`、`wenkai.woff2` 及对应 `OFL-*.txt` 来自 `playground/src/assets/`，原字体声明保持。
 

@@ -126,6 +126,17 @@ for (const drawing of drawings) {
   }
 }
 
+await output(
+  'examples/blog/src/assets/author.svg',
+  await readFile(
+    join(
+      root,
+      'playground/src/examples/scenes/artwork/friends-preview/portraits/chiikawa-smile.svg',
+    ),
+    'utf8',
+  ),
+);
+
 const welcomeExample = await readFile(
   join(root, 'playground/src/examples/scenes/FriendsWelcome.tsx'),
   'utf8',
