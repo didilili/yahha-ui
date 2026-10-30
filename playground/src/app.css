@@ -445,6 +445,7 @@ h3:hover .heading-anchor,
 }
 .code-toolbar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
@@ -454,8 +455,9 @@ h3:hover .heading-anchor,
   font-size: var(--chi-font-size-sm, 12px);
 }
 .code-action {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   padding-inline: 10px;
+  white-space: nowrap;
 }
 .code-action:last-of-type {
   margin-left: auto;
@@ -1049,6 +1051,9 @@ h3:hover .heading-anchor,
   }
 }
 @media (max-width: 380px) {
+  .code-toolbar {
+    padding-inline: 8px;
+  }
   .docs-header {
     gap: 8px;
     padding-inline: 10px;

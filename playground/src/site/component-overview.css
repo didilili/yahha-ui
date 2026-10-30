@@ -121,6 +121,11 @@
   font-size: 14px;
 }
 
+.component-overview-page .overview-friends > .doc-scene {
+  width: 100%;
+  min-width: 0;
+}
+
 .component-overview-page .overview-find {
   margin-top: 30px;
   padding-bottom: 17px;
@@ -440,27 +445,39 @@
 
 @media (max-width: 600px) {
   .component-overview-page .overview-hero {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
+    grid-template-columns: minmax(0, 1fr) 132px;
+    gap: 0 8px;
+    min-height: 0;
     margin-top: 0;
-    padding: 20px 18px 8px;
+    padding: 16px 16px 8px;
     border-radius: 19px 23px 20px 22px;
   }
 
   .component-overview-page .overview-hero-copy {
-    padding-bottom: 0;
+    display: contents;
+  }
+
+  .component-overview-page .overview-eyebrow,
+  .component-overview-page .overview-hero h1,
+  .component-overview-page .overview-description {
+    grid-column: 1 / -1;
   }
 
   .component-overview-page .overview-eyebrow {
-    margin-bottom: 14px;
+    justify-self: start;
+    margin-bottom: 12px;
+    padding-inline: 8px;
+    letter-spacing: 0;
   }
 
   .component-overview-page .overview-introduction {
-    margin-top: 8px;
+    display: none;
   }
 
   .component-overview-page .overview-hero-notes {
-    margin-top: 12px;
+    grid-column: 1;
+    align-self: center;
+    margin-top: 8px;
   }
 
   .component-overview-page .overview-inventory-note {
@@ -468,8 +485,9 @@
   }
 
   .component-overview-page .overview-friends {
+    grid-column: 2;
     justify-self: end;
-    width: 180px;
+    width: 132px;
     margin-top: 8px;
     padding: 0;
   }
@@ -484,12 +502,16 @@
   }
 
   .component-overview-page .overview-find {
-    margin-top: 20px;
+    margin-top: 16px;
     padding-bottom: 12px;
   }
 
   .component-overview-page .overview-filterbar {
-    gap: 12px;
+    gap: 8px;
+  }
+
+  .component-overview-page .overview-search-hint {
+    margin-top: 4px;
   }
 
   .component-overview-page .overview-filter-label,
@@ -498,12 +520,12 @@
   }
 
   .component-overview-page .overview-result-row {
-    margin-top: 10px;
+    margin-top: 8px;
   }
 
   .component-overview-page .overview-groups {
     gap: 30px;
-    margin-top: 20px;
+    margin-top: 16px;
   }
 
   .component-overview-page .overview-group-heading {
