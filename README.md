@@ -1,22 +1,26 @@
-# Yahha UI · 朋友们的组件小屋
+# Yahha UI
 
-给个人博客、个人主页和小型内容站点，一点轻盈、温柔的交互。
+**一起做，全宇宙最可爱的 UI 组件库。**
+
+欢迎来到 **Yahha 星球**。朋友们在这里搭界面、写手记，也给新来的你留了个位置。
+
+Yahha UI 是一套漫画手账风 React 组件库，适合博客、个人主页与内容网站。圆润的按钮、像纸签一样的标记，还有便笺般的弹出面板，都在这里等你动手。
 
 [开始使用](#构建与本地安装) · [组件文档](docs/README.md) · [完整博客示例](examples/blog/README.md) · [设计语言](docs/design-language.md) · [静态部署](docs/deployment.md)
 
-**0.0.1 本地试用中** · React / React DOM `^19.3.1` · 29 个 UI 组件与 ThemeProvider · 尚未发布 npm
+**v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 29 个 UI 组件与 ThemeProvider · 当前通过本地安装包试用，尚未发布 npm
 
-![Yahha UI 文档站首页：朋友们一起搭建小小的网站](docs/images/yahha-home.png)
+![Yahha UI 文档站首页：一起做全宇宙最可爱的 UI 组件库](docs/images/yahha-home.png)
 
-## 朋友们一起搭建、使用的小站
+## 把可爱，搭进你的世界
 
-白纸、暖墨、清亮粉色和浅蓝纸边，组成漫画手账的轮廓。软团按钮、白底字段、分类纸签、栏目墨线与便笺浮层各有用途；人物、天空和草地在入口与小场景里陪伴阅读。
+在这颗星球上，云朵邮局会收到没有署名的信，朋友们会一起帮迷路的小星星找路，也会给晚到的伙伴留一块饼干。界面用白纸、暖墨、清亮粉色和浅蓝纸边接住这些日常；组件各有用途，故事交给你来写。
 
 - **为内容网站准备**：阅读、分类、搜索、收藏与轻量表单可以组合成完整小站。[博客示例](examples/blog/README.md)提供库米的首页、手记归档与文章详情。
-- **组件本身也完整**：组件继承使用方字体，常规控件为 44px，Button / IconButton 有 36 / 44 / 52px 三档；键盘、原生表单、焦点与减少动效按实际组件能力处理。
+- **每次操作，都好好回应**：组件继承使用方字体，常规控件为 44px，Button / IconButton 有 36 / 44 / 52px 三档；键盘、原生表单、焦点与减少动效按实际组件能力处理。
 - **按需加入小场景**：静态 SVG、状态动效和可暂停的欢迎场景独立提供。基础组件不依赖角色图片，组件安装包不包含网站、字体或场景素材。
 
-## 从真实小样找到组件
+## 浏览组件
 
 文档站的组件总览位于 `#/components`，按八类展示现有 29 个 UI 组件，并单列 ThemeProvider 主题配置，共 30 个文档入口。小样进入对应文档后，可操作完整示例、展开代码并查阅 API；当前共 95 个同源 TSX 示例。
 
@@ -65,14 +69,14 @@ export default function App() {
   return (
     <ThemeProvider theme="chiikawa">
       <Button aria-pressed={saved} onClick={() => setSaved(!saved)}>
-        {saved ? '已收藏' : '收藏这篇文章'}
+        收藏这篇文章
       </Button>
     </ThemeProvider>
   );
 }
 ```
 
-启动应用后，点击或用 Space 操作按钮，可在“收藏这篇文章”和“已收藏”之间切换。
+启动应用后，点击或用 Space 操作“收藏这篇文章”按钮，可切换收藏状态。操作名称保持稳定，选中状态通过按钮外观与 `aria-pressed` 表达。
 
 样式只需在应用入口导入一次；`ThemeProvider` 的 `theme` 必填。默认使用 `chiikawa`，另有 `hachiware`、`usagi` 可选预设，保持同一套尺寸、排版和交互规则。
 
@@ -122,7 +126,7 @@ npm run build:blog
 
 这是非官方同人项目。组件代码、人物 SVG、道具、PNG、字体和页面截图分别记录来源与分发位置；代码的最终许可证与角色素材的完整许可清单尚未确定。已有字体 OFL 声明仅对应相应字体。
 
-[素材与分发范围](docs/assets-and-distribution.md)汇总实际目录、原始记录、派生关系与当前许可状态。[小日常 SVG](playground/src/examples/scenes/artwork/little-days/README.md)说明静态、动效及欢迎控制器的使用区别。
+[素材与分发范围](docs/assets-and-distribution.md)汇总实际目录、原始记录、派生关系与当前许可状态。[图标与插画](playground/src/examples/scenes/artwork/little-days/README.md)说明静态、动效及欢迎控制器的使用区别。
 
 ## 参与开发
 

@@ -1,7 +1,7 @@
 {
   "name": "yahha-ui",
   "version": "0.0.1",
-  "description": "Yahha UI: a playful React component library with an independent local playground.",
+  "description": "A manga-journal-inspired React component library for personal sites and stories.",
   "private": true,
   "type": "module",
   "files": [

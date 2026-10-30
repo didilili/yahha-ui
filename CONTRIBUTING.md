@@ -36,7 +36,7 @@ Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Sw
 
 库内相对模块路径使用 `.js` 扩展名，使构建后的多文件声明可被 Bundler 与 NodeNext 解析。公开 Props 与实际默认值是 API 契约依据；站内说明、API 与示例组织在 `playground/src/docs/components/` 维护，组件 Markdown 由 `npm run sync:docs` 生成。公共接口变更需核对属性名、类型、必填项、默认值、原生属性及 ref 的作用目标，并检查源码导出和使用方示例。站内预览与展示源码使用同一个 TSX，Markdown 的原始示例也由同一页面生成，两者均由真实安装包验收编译。页面元信息变更时同步 component-catalog。
 
-组件目录与总览按通用、排版、布局、表单、内容展示、导航、浮层、反馈八组组织 29 个 UI 组件，ThemeProvider 单列为主题配置；元信息只在目录维护，文档按组件独立加载。TextField、SegmentedControl、ThemeProvider 的中文名称分别统一为“单行输入”“分段选择”“主题配置”，英文导出名和路由保持稳定。
+组件目录与总览按通用、排版、布局、表单、内容展示、导航、浮层、反馈八组组织 29 个 UI 组件，ThemeProvider 单列为主题配置；元信息只在目录维护，文档按组件独立加载。TextField、SegmentedControl、ThemeProvider 的中文名称分别统一为“单行输入”“分段选择”“主题配置”；Popover 使用“弹出面板”，Alert 使用“提示条”，旧称保留为搜索别名。英文导出名和路由保持稳定。
 
 组件使用文档描述当前用途、示例、API 和交互约定，不混入“本轮复核”“保留既有”“不计新增”等开发过程表述。设计原则和视觉规则集中在设计语言文档；文档不承诺尚未实现或验证的能力。
 

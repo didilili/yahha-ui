@@ -1,12 +1,16 @@
 # 组件文档
 
+欢迎来到 Yahha 星球。朋友们给你的点子留了个位置，一起挑几个组件，把故事搭进页面。
+
+Yahha UI 是一套漫画手账风 React 组件库，面向个人博客、个人主页与内容网站。这里收录组件示例、API 与接入说明，从第一个按钮开始，逐步搭出自己的页面。
+
 首次了解这套组件库，可先看[项目介绍与实际界面](../README.md)；[完整博客](../examples/blog/README.md)、[静态部署](deployment.md)与[素材分发范围](assets-and-distribution.md)分别说明场景接入、网站输出和素材来源。
 
-组件视觉总览（站内路由 `#/components`）将 29 个 UI 组件按通用、排版、布局、表单、内容展示、导航、浮层、反馈分为八组；ThemeProvider 作为独立的主题配置入口。先看真实样式小样，再进入对应示例与 API；搜索和分类保留在总览 URL，浏览器返回后可以接着查看。页面复用 `component-catalog.ts` 的目录与分类，不维护另一份组件清单。
+组件总览（站内路由 `#/components`）将 29 个 UI 组件按通用、排版、布局、表单、内容展示、导航、浮层、反馈分为八组；ThemeProvider 作为独立的主题配置入口。先看真实样式小样，再进入对应示例与 API；搜索和分类保留在总览 URL，浏览器返回后可以接着查看。页面复用 `component-catalog.ts` 的目录与分类，不维护另一份组件清单。
 
 在仓库根目录完成 `npm ci` 后运行 `npm run dev`，打开终端输出的本地地址。将本文的 `#/...` 追加在该地址后即可访问相应交互页面；Markdown 链接直接指向仓库文件，便于在 GitHub 阅读。站内提供 30 个独立组件文档入口（29 个 UI 组件与 ThemeProvider）、95 个实时 TSX 示例、API 表格、入门、样式与状态场景指南。本文索引覆盖 30 份组件 Markdown，每个文档入口都有对应文件。组合示例包括[文章编辑与管理源码](../playground/src/examples/scenes/ArticleActions.tsx)（`#/guides/states?section=article-actions`）和[个人博客归档源码](../playground/src/examples/scenes/BlogArchive.tsx)（`#/guides/states?section=archive`）。
 
-[设计语言](design-language.md) 说明漫画手账的深墨轮廓，以及按钮、白底字段、纸签、栏目和便笺浮层的结构差异。文档站统一呈现奶白、暖墨与轻粉的默认语言；三套角色配色在 ThemeProvider 文档中作为可选预设展示。
+[设计语言](design-language.md) 说明漫画手账的深墨轮廓，以及按钮、白底字段、纸签、栏目和便笺浮层的结构差异。文档站以天空蓝组织场景，以白纸、暖墨与轻粉承载阅读和操作；三套角色配色在 ThemeProvider 文档中作为可选预设展示。
 
 设计规范（`#/guides/design-baseline`，见[表单组合源码](../playground/src/examples/design/DesignBaseline.tsx)与[阅读组合源码](../playground/src/examples/design/DesignReading.tsx)）用默认组件展示表单状态、36 / 44 / 52px 按钮尺度与 16px 正文阅读。两份自包含 TSX 不重写组件外观；可操作状态、原始代码与完整接入同时提供。
 
@@ -22,7 +26,7 @@
 
 完整小站在同仓库的[博客示例](../examples/blog/README.md)，从根目录运行 `npm run dev:blog`；自己的应用则安装 `.tgz`，不需要复制整个文档站或博客。
 
-小图标、状态场景和欢迎动效见“小日常 SVG”（`#/guides/artwork`，[指南源码](../playground/src/docs/artwork-guide.tsx)）。基础包不包含这些可选素材：静态 SVG 可直接作为图片使用；动效 SVG 内置播放，外部按钮无法控制其内部时间线；需要暂停当前帧或重播挥手时，复制该指南的完整欢迎示例与配套静态 SVG。现有动效遵循系统减少动效设置，实际等待结束时应切回静态图。素材来源与派生关系见[SVG 说明](../playground/src/examples/scenes/artwork/little-days/README.md)。
+小图标、状态场景和欢迎动效见“图标与插画”（`#/guides/artwork`，[指南源码](../playground/src/docs/artwork-guide.tsx)）。基础包不包含这些可选素材：静态 SVG 可直接作为图片使用；动效 SVG 内置播放，外部按钮无法控制其内部时间线；需要暂停当前帧或重播挥手时，复制该指南的完整欢迎示例与配套静态 SVG。现有动效遵循系统减少动效设置，实际等待结束时应切回静态图。素材来源与派生关系见[SVG 说明](../playground/src/examples/scenes/artwork/little-days/README.md)。
 
 ## 通用
 
@@ -67,12 +71,12 @@
 - [DropdownMenu](components/dropdown-menu.md)：可通过键盘操作的单层动作菜单，不承担值选择。
 
 - [Dialog](components/dialog.md)：受控模态弹窗、焦点和 Portal。
-- [Popover](components/popover.md)：带标题的非模态补充面板和短表单。
+- [Popover 弹出面板](components/popover.md)：带标题的非模态补充面板和短表单。
 - [Tooltip](components/tooltip.md)：视觉文字补充；沿用 Base UI 1.9 约定，触发器须有自身可访问名称。
 
 ## 反馈
 
-- [Alert](components/alert.md)：留在页面内的说明、结果与错误提示。
+- [Alert 提示条](components/alert.md)：留在页面内的说明、结果与错误提示。
 - [Toast](components/toast.md)：由调用方管理显示状态的提示消息。
 - [EmptyState](components/empty-state.md)：空内容、说明与操作插槽。
 - [Spinner](components/spinner.md)：带可读状态文字的加载指示。
