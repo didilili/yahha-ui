@@ -6,10 +6,10 @@
 .label {
   display: flex;
   align-items: flex-start;
-  gap: var(--chi-space-3, 12px);
-  min-height: var(--chi-control-height, 44px);
-  padding-block: calc((var(--chi-control-height, 44px) - 30px) / 2);
-  padding-inline: var(--chi-space-1, 4px);
+  gap: var(--yahha-space-3, 12px);
+  min-height: var(--yahha-control-height, 44px);
+  padding-block: calc((var(--yahha-control-height, 44px) - 30px) / 2);
+  padding-inline: var(--yahha-space-1, 4px);
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -21,16 +21,16 @@
   height: 30px;
   position: relative;
   margin: 0;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
-  border-radius: var(--chi-radius-pill, 999px);
-  background: var(--chi-neutral-surface, #f1f8ff);
-  box-shadow: inset 0 -3px 0 var(--chi-paper-line, #c9deec);
-  color: var(--chi-ink, #49313d);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  border-radius: var(--yahha-radius-pill, 999px);
+  background: var(--yahha-neutral-surface, #f1f8ff);
+  box-shadow: inset 0 -3px 0 var(--yahha-paper-line, #c9deec);
+  color: var(--yahha-ink, #49313d);
   cursor: inherit;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    border-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .input::after {
   content: '';
@@ -40,67 +40,67 @@
   box-sizing: border-box;
   width: 22px;
   height: 22px;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
   border-radius: 50%;
-  background: var(--chi-field-background, #ffffff);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--chi-contour, #684150) 20%, transparent);
-  transition: inset-inline-start var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+  background: var(--yahha-field-background, #ffffff);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--yahha-contour, #684150) 20%, transparent);
+  transition: inset-inline-start var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .input:checked {
-  background: var(--chi-accent, #ffc3d9);
+  background: var(--yahha-accent, #ffc3d9);
   box-shadow:
-    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
-    inset 0 -3px 0 var(--chi-line, #c58ba1);
+    inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
+    inset 0 -3px 0 var(--yahha-line, #c58ba1);
 }
 .input:checked::after {
   inset-inline-start: 22px;
 }
 .input:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 .input:disabled {
-  background: var(--chi-disabled-surface, #f0f3f7);
-  border-color: var(--chi-line, #c58ba1);
-  color: var(--chi-muted, #7a5c6d);
+  background: var(--yahha-disabled-surface, #f0f3f7);
+  border-color: var(--yahha-line, #c58ba1);
+  color: var(--yahha-muted, #7a5c6d);
   opacity: 1;
   cursor: not-allowed;
   box-shadow: none;
   transition: none;
 }
 .input:disabled:checked {
-  background: var(--chi-line, #c58ba1);
+  background: var(--yahha-line, #c58ba1);
 }
 .input:disabled::after {
-  border-color: var(--chi-muted, #7a5c6d);
+  border-color: var(--yahha-muted, #7a5c6d);
   box-shadow: none;
   transition: none;
 }
 .text {
   min-width: 0;
-  color: var(--chi-ink, #49313d);
-  font-size: var(--chi-font-size-md, 14px);
-  padding-block: calc((30px - var(--chi-leading-control, 20px)) / 2);
-  line-height: var(--chi-leading-control, 20px);
+  color: var(--yahha-ink, #49313d);
+  font-size: var(--yahha-font-size-md, 14px);
+  padding-block: calc((30px - var(--yahha-leading-control, 20px)) / 2);
+  line-height: var(--yahha-leading-control, 20px);
 }
 .input:disabled + .text {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
 }
 .label:has(.input:disabled) {
   cursor: not-allowed;
 }
 .hint {
-  padding-inline-start: calc(50px + var(--chi-space-3, 12px) + var(--chi-space-1, 4px));
-  font-size: var(--chi-font-size-sm, 12px);
-  line-height: var(--chi-leading-caption, 1.6);
-  color: var(--chi-muted, #7a5c6d);
+  padding-inline-start: calc(50px + var(--yahha-space-3, 12px) + var(--yahha-space-1, 4px));
+  font-size: var(--yahha-font-size-sm, 12px);
+  line-height: var(--yahha-leading-caption, 1.6);
+  color: var(--yahha-muted, #7a5c6d);
 }
 @media (hover: hover) and (pointer: fine) {
   .label:hover .input:enabled {
-    border-color: var(--chi-ink, #49313d);
+    border-color: var(--yahha-ink, #49313d);
   }
   .label:hover .input:enabled:checked {
-    background: var(--chi-accent-hover, #ffb3cf);
+    background: var(--yahha-accent-hover, #ffb3cf);
   }
 }
 @media (prefers-reduced-motion: reduce) {

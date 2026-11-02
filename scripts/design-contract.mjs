@@ -99,7 +99,7 @@ designExceptions.push(
     path: 'src/components/dropdown-menu/dropdown-menu.module.css',
     selector: '.item[data-highlighted]:not([data-disabled])',
     property: 'box-shadow',
-    value: 'inset 0 1px 0 var(--chi-surface, #ffffff)',
+    value: 'inset 0 1px 0 var(--yahha-surface, #ffffff)',
     reason:
       'This highlighted paper edge is decorative; focus-visible separately overrides it with the canonical focus inset.',
   },
@@ -108,7 +108,7 @@ designExceptions.push(
     selector: '.option[data-selected][data-highlighted]',
     property: 'box-shadow',
     value:
-      'inset 0 0 0 var(--chi-focus-width, 2px) var(--chi-focus, #b04e78), inset 0 -3px 0 var(--chi-line, #c58ba1)',
+      'inset 0 0 0 var(--yahha-focus-width, 2px) var(--yahha-focus, #b04e78), inset 0 -3px 0 var(--yahha-line, #c58ba1)',
     reason: 'The canonical focus inset remains visible above the selected paper edge.',
   },
   {

@@ -13,16 +13,16 @@
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--chi-space-1, 4px);
+  gap: var(--yahha-space-1, 4px);
   min-width: 0;
   max-width: 100%;
-  padding: var(--chi-space-1, 4px);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-paper-line, #c9deec);
-  border-radius: var(--chi-radius-field, 12px 16px 14px 11px);
-  background: var(--chi-neutral-surface, #f1f8ff);
+  padding: var(--yahha-space-1, 4px);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-paper-line, #c9deec);
+  border-radius: var(--yahha-radius-field, 12px 16px 14px 11px);
+  background: var(--yahha-neutral-surface, #f1f8ff);
   box-shadow:
-    inset 0 0 0 1px var(--chi-field-background, #ffffff),
-    inset 0 -2px 0 var(--chi-paper-line, #c9deec);
+    inset 0 0 0 1px var(--yahha-field-background, #ffffff),
+    inset 0 -2px 0 var(--yahha-paper-line, #c9deec);
 }
 .segment {
   box-sizing: border-box;
@@ -32,24 +32,24 @@
   justify-content: center;
   min-width: 0;
   max-width: 100%;
-  min-height: var(--chi-control-height, 44px);
+  min-height: var(--yahha-control-height, 44px);
   padding: max(
       0px,
       calc(
         (
-            var(--chi-control-height, 44px) - var(--chi-leading-control, 20px) - 2 *
-              var(--chi-control-border-width, 2px)
+            var(--yahha-control-height, 44px) - var(--yahha-leading-control, 20px) - 2 *
+              var(--yahha-control-border-width, 2px)
           ) /
           2
       )
     )
-    var(--chi-space-4, 16px);
-  border: var(--chi-control-border-width, 2px) solid transparent;
-  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
+    var(--yahha-space-4, 16px);
+  border: var(--yahha-control-border-width, 2px) solid transparent;
+  border-radius: var(--yahha-radius-option, 8px 12px 9px 7px);
   font-family: inherit;
-  color: var(--chi-ink, #49313d);
-  font-size: var(--chi-font-size-md, 14px);
-  line-height: var(--chi-leading-control, 20px);
+  color: var(--yahha-ink, #49313d);
+  font-size: var(--yahha-font-size-md, 14px);
+  line-height: var(--yahha-leading-control, 20px);
   font-weight: 600;
   text-align: center;
   white-space: normal;
@@ -58,37 +58,37 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    border-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .segment > span {
   min-width: 0;
   max-width: 100%;
 }
 .segment[data-checked] {
-  background: var(--chi-accent, #ffc3d9);
-  border-color: var(--chi-contour, #684150);
+  background: var(--yahha-accent, #ffc3d9);
+  border-color: var(--yahha-contour, #684150);
   box-shadow:
-    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
-    inset 0 -2px 0 color-mix(in srgb, var(--chi-line, #c58ba1) 35%, transparent),
-    var(--chi-shadow-selected, inset 0 2px 0 rgb(70 46 49 / 8%));
+    inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
+    inset 0 -2px 0 color-mix(in srgb, var(--yahha-line, #c58ba1) 35%, transparent),
+    var(--yahha-shadow-selected, inset 0 2px 0 rgb(70 46 49 / 8%));
 }
 .segment:has(input:focus-visible) {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 .segment[data-disabled],
 .segment:has(input:disabled) {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   opacity: 1;
   cursor: not-allowed;
   transition: none;
 }
 .segment[data-disabled][data-checked],
 .segment[data-checked]:has(input:disabled) {
-  background: var(--chi-disabled-surface, #f0f3f7);
-  border-color: var(--chi-line, #c58ba1);
+  background: var(--yahha-disabled-surface, #f0f3f7);
+  border-color: var(--yahha-line, #c58ba1);
   box-shadow: none;
 }
 .segment input {
@@ -113,16 +113,16 @@
 
 @media (hover: hover) {
   .segment:not([data-disabled]):not(:has(input:disabled)):not([data-checked]):hover {
-    background: var(--chi-accent-soft, #fff0f6);
+    background: var(--yahha-accent-soft, #fff0f6);
   }
   .segment[data-checked]:not([data-disabled]):not(:has(input:disabled)):hover {
-    background: var(--chi-accent-hover, #ffb3cf);
+    background: var(--yahha-accent-hover, #ffb3cf);
   }
 }
 
 @media (max-width: 480px) {
   .segment {
-    padding-inline: var(--chi-space-3, 12px);
+    padding-inline: var(--yahha-space-3, 12px);
   }
 }
 

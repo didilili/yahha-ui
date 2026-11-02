@@ -1,48 +1,48 @@
 .positioner {
   z-index: 130;
-  max-width: calc(100vw - var(--chi-space-6, 24px));
+  max-width: calc(100vw - var(--yahha-space-6, 24px));
 }
 .positioner[data-anchor-hidden] {
   visibility: hidden;
 }
 .popup {
   composes: scrollable from '../../internal/native-scrollbar.module.css';
-  --native-scrollbar-inset: var(--chi-space-4, 16px);
+  --native-scrollbar-inset: var(--yahha-space-4, 16px);
   box-sizing: border-box;
   position: relative;
-  max-width: min(260px, var(--available-width), calc(100vw - var(--chi-space-6, 24px)));
+  max-width: min(260px, var(--available-width), calc(100vw - var(--yahha-space-6, 24px)));
   max-height: var(--available-height);
   min-height: 48px;
-  padding: var(--chi-space-2, 8px) var(--chi-space-3, 12px);
+  padding: var(--yahha-space-2, 8px) var(--yahha-space-3, 12px);
   overflow-y: auto;
   overflow-wrap: anywhere;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
-  border-radius: var(--chi-radius-bubble, 17px 22px 19px 12px / 12px 16px 14px 8px);
-  background: var(--chi-surface, #ffffff);
-  color: var(--chi-ink, #49313d);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  border-radius: var(--yahha-radius-bubble, 17px 22px 19px 12px / 12px 16px 14px 8px);
+  background: var(--yahha-surface, #ffffff);
+  color: var(--yahha-ink, #49313d);
   font: inherit;
-  font-size: var(--chi-font-size-body-sm, 14px);
-  line-height: var(--chi-leading-caption, 1.6);
+  font-size: var(--yahha-font-size-body-sm, 14px);
+  line-height: var(--yahha-leading-caption, 1.6);
   box-shadow:
-    inset 0 -3px 0 var(--chi-neutral-surface, #f1f8ff),
-    var(--chi-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
+    inset 0 -3px 0 var(--yahha-neutral-surface, #f1f8ff),
+    var(--yahha-shadow-popup, 0 3px 0 #c58ba1, 0 8px 20px rgb(70 46 49 / 8%));
   outline: none;
   transform-origin: var(--transform-origin);
-  transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
+  transition: opacity var(--yahha-duration-floating, 180ms) var(--yahha-ease, ease);
 }
 .arrow {
   position: absolute;
   width: 10px;
   height: 10px;
   pointer-events: none;
-  transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
+  transition: opacity var(--yahha-duration-floating, 180ms) var(--yahha-ease, ease);
 }
 .arrow::before {
   content: '';
   position: absolute;
   inset: 0;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
-  background: var(--chi-surface, #ffffff);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  background: var(--yahha-surface, #ffffff);
   transform: rotate(45deg);
 }
 .arrow[data-side='top'] {

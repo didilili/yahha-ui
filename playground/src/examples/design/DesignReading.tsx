@@ -53,7 +53,7 @@ type Scope = 'all' | 'saved';
 /** Reading uses the same public defaults as every component page. */
 export default function DesignReading() {
   const instance = useId();
-  const rootId = `chi-reading-${instance.replace(/[^a-zA-Z0-9_-]/g, '')}`;
+  const rootId = `yahha-reading-${instance.replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const [tab, setTab] = useState<string | null>('article');
   const [scope, setScope] = useState<Scope>('all');
   const [activeId, setActiveId] = useState('river');

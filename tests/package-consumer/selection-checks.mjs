@@ -191,7 +191,7 @@ export async function verifySelectionContract(page, scope, hasTouch) {
   const selectedPaint = await last.evaluate((node) => {
     const row = node.closest('label');
     const probe = document.createElement('span');
-    probe.style.background = 'var(--chi-accent-soft)';
+    probe.style.background = 'var(--yahha-accent-soft)';
     row.append(probe);
     const expected = getComputedStyle(probe).backgroundColor;
     probe.remove();

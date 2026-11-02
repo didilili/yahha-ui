@@ -15,8 +15,9 @@ export default defineComponentPage('theme-provider', {
       content: (
         <>
           <p>
-            为应用或局部区域设置组件配色，并在应用入口导入 yahha-ui/style.css。theme 必填，推荐从
-            chiikawa 默认配色开始，也支持 hachiware、usagi 预设；需要切换时，由应用更新 theme。
+            为应用或局部区域设置组件配色，并在应用入口导入 yahha-ui/style.css。theme
+            必填，推荐使用吉伊粉色预设（chiikawa），也可选择小八浅蓝预设（hachiware）或乌萨奇浅黄预设（usagi）；由应用更新
+            theme 切换预设。预设名称对应角色配色，三者共用组件尺寸、排版与交互规则。
           </p>
           <p>
             通过公开的 ThemeTokens 覆盖语义颜色。尺寸、圆角与动效的内部 CSS 变量不属于稳定公共
@@ -33,7 +34,7 @@ export default defineComponentPage('theme-provider', {
           id: 'theme-variants',
           title: '默认配色与可选预设',
           description:
-            '比较吉伊粉色、小八浅蓝与乌萨奇浅黄的组件外观；按钮可观察悬停和键盘焦点，不绑定业务操作。',
+            '比较吉伊粉色预设（chiikawa）、小八浅蓝预设（hachiware）与乌萨奇浅黄预设（usagi）的组件外观；按钮可观察悬停和键盘焦点，不绑定业务操作。',
           component: ThemeVariants,
           source: themeVariantsSource,
           themeScope: 'explicit',
@@ -69,7 +70,8 @@ export default defineComponentPage('theme-provider', {
               name: 'theme',
               type: "'chiikawa' | 'hachiware' | 'usagi'",
               required: true,
-              description: '当前 Provider 的配色预设名称，对应公开类型 ThemeName。推荐 chiikawa。',
+              description:
+                '当前 Provider 的配色预设名称，对应公开类型 ThemeName。推荐使用吉伊粉色预设（chiikawa）。',
             },
             {
               name: 'children',
@@ -96,62 +98,62 @@ export default defineComponentPage('theme-provider', {
               name: 'ink',
               type: 'string',
               defaultValue: '#49313d',
-              description: '正文与主要文字，--chi-ink。',
+              description: '正文与主要文字，--yahha-ink。',
             },
             {
               name: 'muted',
               type: 'string',
               defaultValue: '#7a5c6d',
-              description: '次要文字，--chi-muted。',
+              description: '次要文字，--yahha-muted。',
             },
             {
               name: 'accent',
               type: 'string',
               defaultValue: '吉伊 #ffc3d9 / 小八 #d7eaf5 / 乌萨奇 #f8e5a7',
-              description: '主题强调色，--chi-accent。',
+              description: '主题强调色，--yahha-accent。',
             },
             {
               name: 'accentHover',
               type: 'string',
               defaultValue: '吉伊 #ffb3cf / 小八 #c3dfee / 乌萨奇 #f3da89',
-              description: '强调色的悬停状态，--chi-accent-hover。',
+              description: '强调色的悬停状态，--yahha-accent-hover。',
             },
             {
               name: 'accentSoft',
               type: 'string',
               defaultValue: '吉伊 #fff0f6 / 小八 #f2f8fc / 乌萨奇 #fffaf0',
-              description: '轻量强调背景，--chi-accent-soft。',
+              description: '轻量强调背景，--yahha-accent-soft。',
             },
             {
               name: 'line',
               type: 'string',
               defaultValue: '吉伊 #c58ba1 / 小八 #b9cedb / 乌萨奇 #daca9f',
-              description: '常规边框，--chi-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。',
+              description: '常规边框，--yahha-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。',
             },
             {
               name: 'focus',
               type: 'string',
               defaultValue: '吉伊 #b04e78 / 小八 #386d93 / 乌萨奇 #896329',
-              description: '键盘焦点轮廓，--chi-focus。',
+              description: '键盘焦点轮廓，--yahha-focus。',
             },
             {
               name: 'surface',
               type: 'string',
               defaultValue: '#ffffff',
-              description: '内容面与浮层等共用背景，--chi-surface。',
+              description: '内容面与浮层等共用背景，--yahha-surface。',
             },
             {
               name: 'fieldBackground',
               type: 'string',
               defaultValue: '#ffffff',
-              description: '输入框默认背景，--chi-field-background；错误和禁用状态保留各自背景。',
+              description: '输入框默认背景，--yahha-field-background；错误和禁用状态保留各自背景。',
             },
             {
               name: 'error',
               type: 'string',
               defaultValue: '#a33e4f',
               description:
-                '输入框错误边框、错误时的焦点轮廓、错误文字与 Toast 错误图标，--chi-error；错误背景固定，禁用背景优先。',
+                '输入框错误边框、错误时的焦点轮廓、错误文字与 Toast 错误图标，--yahha-error；错误背景固定，禁用背景优先。',
             },
           ],
         },

@@ -78,7 +78,7 @@ export default function App() {
 
 启动应用后，点击或用 Space 操作“收藏这篇文章”按钮，可切换收藏状态。操作名称保持稳定，选中状态通过按钮外观与 `aria-pressed` 表达。
 
-样式只需在应用入口导入一次；`ThemeProvider` 的 `theme` 必填。默认使用 `chiikawa`，另有 `hachiware`、`usagi` 可选预设，保持同一套尺寸、排版和交互规则。
+样式只需在应用入口导入一次；`ThemeProvider` 的 `theme` 必填。推荐使用吉伊粉色预设（`chiikawa`），另有小八浅蓝预设（`hachiware`）与乌萨奇浅黄预设（`usagi`）可选，保持同一套尺寸、排版和交互规则。
 
 其他示例按文档站的“完整接入”保存原样 `Example.tsx` 与独立 `App.tsx`；有素材清单时，单独下载并保留 `artwork/` 相对路径。完整素材示例按 Vite 8 / TypeScript 7 验证，`?raw`、`?no-inline` 导入需要相应构建工具支持。
 

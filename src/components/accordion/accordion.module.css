@@ -1,12 +1,12 @@
 .root {
   min-width: 0;
   max-width: 100%;
-  border-block: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
-  color: var(--chi-ink, #49313d);
+  border-block: var(--yahha-border-width, 1px) solid var(--yahha-paper-line, #c9deec);
+  color: var(--yahha-ink, #49313d);
   font-family: inherit;
 }
 .item + .item {
-  border-top: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
+  border-top: var(--yahha-border-width, 1px) solid var(--yahha-paper-line, #c9deec);
 }
 .heading {
   margin: 0;
@@ -20,41 +20,41 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--chi-space-4, 16px);
+  gap: var(--yahha-space-4, 16px);
   width: 100%;
   min-width: 0;
-  min-height: var(--chi-control-height, 44px);
+  min-height: var(--yahha-control-height, 44px);
   border: 0;
-  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
-  padding: var(--chi-space-2, 8px) var(--chi-space-1, 4px);
+  border-radius: var(--yahha-radius-option, 8px 12px 9px 7px);
+  padding: var(--yahha-space-2, 8px) var(--yahha-space-1, 4px);
   background: transparent;
   color: inherit;
   font: inherit;
-  font-size: var(--chi-font-size-md, 14px);
+  font-size: var(--yahha-font-size-md, 14px);
   font-weight: 600;
-  line-height: var(--chi-leading-control, 20px);
+  line-height: var(--yahha-leading-control, 20px);
   text-align: start;
   cursor: pointer;
   touch-action: manipulation;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .trigger[aria-expanded='true']:not([data-disabled]) {
-  background: var(--chi-accent-soft, #fff0f6);
-  box-shadow: inset 0 1px 0 var(--chi-field-background, #ffffff);
+  background: var(--yahha-accent-soft, #fff0f6);
+  box-shadow: inset 0 1px 0 var(--yahha-field-background, #ffffff);
 }
 .trigger:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 .trigger[data-disabled] {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   cursor: not-allowed;
 }
 .title {
   min-width: 0;
-  padding-block: var(--chi-space-1, 4px);
+  padding-block: var(--yahha-space-1, 4px);
   overflow-wrap: anywhere;
 }
 .chevron {
@@ -62,30 +62,30 @@
   flex: 0 0 28px;
   width: 28px;
   height: 28px;
-  padding: var(--chi-space-1, 4px);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
+  padding: var(--yahha-space-1, 4px);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
   border-radius: 50%;
-  background: var(--chi-neutral-surface, #f1f8ff);
-  color: var(--chi-contour, #684150);
+  background: var(--yahha-neutral-surface, #f1f8ff);
+  color: var(--yahha-contour, #684150);
   box-shadow:
-    inset 0 1px 0 var(--chi-field-background, #ffffff),
-    inset 0 -2px 0 var(--chi-paper-line, #c9deec);
+    inset 0 1px 0 var(--yahha-field-background, #ffffff),
+    inset 0 -2px 0 var(--yahha-paper-line, #c9deec);
   transition:
-    transform var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    transform var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .trigger[aria-expanded='true'] .chevron {
-  background: var(--chi-accent, #ffc3d9);
+  background: var(--yahha-accent, #ffc3d9);
   box-shadow:
-    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
-    inset 0 -2px 0 color-mix(in srgb, var(--chi-line, #c58ba1) 45%, transparent);
+    inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
+    inset 0 -2px 0 color-mix(in srgb, var(--yahha-line, #c58ba1) 45%, transparent);
   transform: rotate(180deg);
 }
 .trigger[data-disabled] .chevron {
-  border-color: var(--chi-line, #c58ba1);
-  background: var(--chi-disabled-surface, #f0f3f7);
-  color: var(--chi-muted, #7a5c6d);
+  border-color: var(--yahha-line, #c58ba1);
+  background: var(--yahha-disabled-surface, #f0f3f7);
+  color: var(--yahha-muted, #7a5c6d);
   box-shadow: none;
 }
 .panel {
@@ -95,18 +95,18 @@
   display: none;
 }
 .content {
-  padding-block: var(--chi-space-2, 8px) var(--chi-space-5, 20px);
-  padding-inline: var(--chi-space-1, 4px) calc(28px + var(--chi-space-4, 16px));
-  font-size: var(--chi-font-size-body, 16px);
-  line-height: var(--chi-leading-body, 1.8);
+  padding-block: var(--yahha-space-2, 8px) var(--yahha-space-5, 20px);
+  padding-inline: var(--yahha-space-1, 4px) calc(28px + var(--yahha-space-4, 16px));
+  font-size: var(--yahha-font-size-body, 16px);
+  line-height: var(--yahha-leading-body, 1.8);
   overflow-wrap: anywhere;
 }
 @media (hover: hover) {
   .trigger:not([data-disabled]):hover {
-    background: var(--chi-neutral-surface, #f1f8ff);
+    background: var(--yahha-neutral-surface, #f1f8ff);
   }
   .trigger[aria-expanded='true']:not([data-disabled]):hover {
-    background: color-mix(in srgb, var(--chi-accent, #ffc3d9) 45%, var(--chi-surface, #ffffff));
+    background: color-mix(in srgb, var(--yahha-accent, #ffc3d9) 45%, var(--yahha-surface, #ffffff));
   }
 }
 @media (prefers-reduced-motion: reduce) {

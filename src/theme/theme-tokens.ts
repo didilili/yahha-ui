@@ -19,21 +19,21 @@ export interface ThemeTokens {
 }
 
 const tokenVariables = {
-  ink: '--chi-ink',
-  muted: '--chi-muted',
-  accent: '--chi-accent',
-  accentHover: '--chi-accent-hover',
-  accentSoft: '--chi-accent-soft',
-  line: '--chi-line',
-  focus: '--chi-focus',
-  surface: '--chi-surface',
-  fieldBackground: '--chi-field-background',
-  error: '--chi-error',
-} as const satisfies Record<keyof ThemeTokens, `--chi-${string}`>;
+  ink: '--yahha-ink',
+  muted: '--yahha-muted',
+  accent: '--yahha-accent',
+  accentHover: '--yahha-accent-hover',
+  accentSoft: '--yahha-accent-soft',
+  line: '--yahha-line',
+  focus: '--yahha-focus',
+  surface: '--yahha-surface',
+  fieldBackground: '--yahha-field-background',
+  error: '--yahha-error',
+} as const satisfies Record<keyof ThemeTokens, `--yahha-${string}`>;
 
 export function getTokenStyle(tokens?: ThemeTokens): CSSProperties | undefined {
   if (!tokens) return undefined;
-  const style: CSSProperties & Partial<Record<`--chi-${string}`, string>> = {};
+  const style: CSSProperties & Partial<Record<`--yahha-${string}`, string>> = {};
   for (const key of Object.keys(tokenVariables) as (keyof ThemeTokens)[]) {
     if (tokens[key] !== undefined) {
       style[tokenVariables[key]] = tokens[key];
@@ -41,8 +41,8 @@ export function getTokenStyle(tokens?: ThemeTokens): CSSProperties | undefined {
   }
   // One explicit line override covers both ink controls and quieter content paper.
   if (tokens.line !== undefined) {
-    style['--chi-contour'] = tokens.line;
-    style['--chi-paper-line'] = tokens.line;
+    style['--yahha-contour'] = tokens.line;
+    style['--yahha-paper-line'] = tokens.line;
   }
   return style;
 }

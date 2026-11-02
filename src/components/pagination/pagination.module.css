@@ -1,14 +1,14 @@
 .root {
   min-width: 0;
   max-width: 100%;
-  color: var(--chi-ink, #49313d);
+  color: var(--yahha-ink, #49313d);
   font-family: inherit;
 }
 .list {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--chi-space-2, 8px);
+  gap: var(--yahha-space-2, 8px);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -21,78 +21,78 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--chi-space-2, 8px);
+  gap: var(--yahha-space-2, 8px);
 }
 .button {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--chi-control-height, 44px);
+  min-width: var(--yahha-control-height, 44px);
   max-width: 100%;
-  min-height: var(--chi-control-height, 44px);
+  min-height: var(--yahha-control-height, 44px);
   padding: calc(
-      (var(--chi-control-height, 44px) - var(--chi-leading-control, 20px)) / 2 -
-        var(--chi-control-border-width, 2px)
+      (var(--yahha-control-height, 44px) - var(--yahha-leading-control, 20px)) / 2 -
+        var(--yahha-control-border-width, 2px)
     )
-    var(--chi-space-3, 12px);
-  border: var(--chi-control-border-width, 2px) solid transparent;
-  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
+    var(--yahha-space-3, 12px);
+  border: var(--yahha-control-border-width, 2px) solid transparent;
+  border-radius: var(--yahha-radius-option, 8px 12px 9px 7px);
   background: transparent;
   color: inherit;
   font: inherit;
-  font-size: var(--chi-font-size-md, 14px);
+  font-size: var(--yahha-font-size-md, 14px);
   font-weight: 600;
-  line-height: var(--chi-leading-control, 20px);
+  line-height: var(--yahha-leading-control, 20px);
   overflow-wrap: anywhere;
   cursor: pointer;
   touch-action: manipulation;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    border-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .pageGroup .button {
   flex: 0 0 auto;
-  padding-inline: calc(var(--chi-space-3, 12px) - var(--chi-control-border-width, 2px));
-  border-color: var(--chi-paper-line, #c9deec);
-  background: var(--chi-surface, #ffffff);
-  box-shadow: inset 0 -2px 0 var(--chi-neutral-surface, #f1f8ff);
+  padding-inline: calc(var(--yahha-space-3, 12px) - var(--yahha-control-border-width, 2px));
+  border-color: var(--yahha-paper-line, #c9deec);
+  background: var(--yahha-surface, #ffffff);
+  box-shadow: inset 0 -2px 0 var(--yahha-neutral-surface, #f1f8ff);
   font-variant-numeric: tabular-nums;
 }
 .button[aria-current='page'] {
-  border-color: var(--chi-contour, #684150);
+  border-color: var(--yahha-contour, #684150);
   border-radius: 48% 52% 50% 46%;
-  background: var(--chi-accent, #ffc3d9);
+  background: var(--yahha-accent, #ffc3d9);
   box-shadow:
-    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
-    inset 0 -3px 0 color-mix(in srgb, var(--chi-line, #c58ba1) 45%, transparent);
+    inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
+    inset 0 -3px 0 color-mix(in srgb, var(--yahha-line, #c58ba1) 45%, transparent);
 }
 .button:not(:disabled):active {
-  box-shadow: var(--chi-shadow-selected, inset 0 2px 0 rgb(70 46 49 / 8%));
+  box-shadow: var(--yahha-shadow-selected, inset 0 2px 0 rgb(70 46 49 / 8%));
 }
 .button:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 .button:disabled {
   border-color: transparent;
   background: transparent;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   box-shadow: none;
   cursor: not-allowed;
 }
 .ellipsis {
   padding-inline: 1px;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
 }
 @media (hover: hover) {
   .button:not(:disabled):not([aria-current='page']):hover {
-    border-color: var(--chi-contour, #684150);
-    background: var(--chi-accent-soft, #fff0f6);
+    border-color: var(--yahha-contour, #684150);
+    background: var(--yahha-accent-soft, #fff0f6);
   }
   .button[aria-current='page']:hover {
-    background: var(--chi-accent-hover, #ffb3cf);
+    background: var(--yahha-accent-hover, #ffb3cf);
   }
 }
 @media (prefers-reduced-motion: reduce) {

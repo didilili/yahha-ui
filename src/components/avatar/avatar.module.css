@@ -7,13 +7,13 @@
   width: 44px;
   height: 44px;
   overflow: hidden;
-  border: var(--chi-border-width, 1px) solid var(--chi-contour, #684150);
-  border-radius: var(--chi-radius-avatar, 40% 45% 42% 38%);
-  background: var(--chi-accent, #ffc3d9);
-  color: var(--chi-ink, #49313d);
+  border: var(--yahha-border-width, 1px) solid var(--yahha-contour, #684150);
+  border-radius: var(--yahha-radius-avatar, 40% 45% 42% 38%);
+  background: var(--yahha-accent, #ffc3d9);
+  color: var(--yahha-ink, #49313d);
   font-family: inherit;
-  font-size: var(--chi-font-size-md, 14px);
-  line-height: var(--chi-leading-control, 20px);
+  font-size: var(--yahha-font-size-md, 14px);
+  line-height: var(--yahha-leading-control, 20px);
   font-weight: 650;
 }
 .avatar[hidden]:not([hidden='until-found']) {
@@ -22,14 +22,14 @@
 .avatar[data-size='sm'] {
   width: 32px;
   height: 32px;
-  font-size: var(--chi-font-size-sm, 12px);
-  line-height: var(--chi-leading-control-sm, 16px);
+  font-size: var(--yahha-font-size-sm, 12px);
+  line-height: var(--yahha-leading-control-sm, 16px);
 }
 .avatar[data-size='lg'] {
   width: 64px;
   height: 64px;
-  font-size: var(--chi-font-size-heading-3, 20px);
-  line-height: var(--chi-leading-control-lg, 24px);
+  font-size: var(--yahha-font-size-heading-3, 20px);
+  line-height: var(--yahha-leading-control-lg, 24px);
 }
 .fallback {
   display: flex;

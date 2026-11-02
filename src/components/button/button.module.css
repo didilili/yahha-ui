@@ -1,7 +1,7 @@
 .button {
-  --button-inline-padding: var(--chi-space-5, 20px);
-  --button-height: var(--chi-control-height, 44px);
-  --button-line-height: var(--chi-leading-control, 20px);
+  --button-inline-padding: var(--yahha-space-5, 20px);
+  --button-height: var(--yahha-control-height, 44px);
+  --button-line-height: var(--yahha-leading-control, 20px);
   --button-icon-size: 18px;
   box-sizing: border-box;
   font-family: inherit;
@@ -9,7 +9,7 @@
   position: relative;
   align-items: center;
   justify-content: center;
-  gap: var(--chi-space-2, 8px);
+  gap: var(--yahha-space-2, 8px);
   min-width: 0;
   max-width: 100%;
   min-height: var(--button-height);
@@ -18,24 +18,24 @@
       calc(
         (
             var(--button-height) - var(--button-line-height) - 2 *
-              var(--chi-control-border-width, 2px)
+              var(--yahha-control-border-width, 2px)
           ) /
           2
       )
     )
     var(--button-inline-padding);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
-  border-radius: var(--chi-radius-control, 22px 28px 24px 23px / 52% 48% 52% 48%);
-  background: var(--chi-accent, #ffc3d9);
-  color: var(--chi-ink, #49313d);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  border-radius: var(--yahha-radius-control, 22px 28px 24px 23px / 52% 48% 52% 48%);
+  background: var(--yahha-accent, #ffc3d9);
+  color: var(--yahha-ink, #49313d);
   box-shadow:
-    inset 0 -3px 0 color-mix(in srgb, var(--chi-contour, #684150) 8%, transparent),
+    inset 0 -3px 0 color-mix(in srgb, var(--yahha-contour, #684150) 8%, transparent),
     var(
-      --chi-shadow-action,
-      inset 0 2px 0 var(--chi-accent-soft, #fff0f6),
-      0 3px 0 var(--chi-line, #c58ba1)
+      --yahha-shadow-action,
+      inset 0 2px 0 var(--yahha-accent-soft, #fff0f6),
+      0 3px 0 var(--yahha-line, #c58ba1)
     );
-  font-size: var(--chi-font-size-md, 14px);
+  font-size: var(--yahha-font-size-md, 14px);
   line-height: var(--button-line-height);
   font-weight: 600;
   text-align: center;
@@ -45,32 +45,32 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    transform var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    border-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    transform var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 
 .button[hidden]:not([hidden='until-found']) {
   display: none;
 }
 .button:not(:disabled):active {
-  transform: translateY(var(--chi-press-offset, 1px));
+  transform: translateY(var(--yahha-press-offset, 1px));
   /* A quick press responds before release; returning to rest stays softer. */
   transition-duration:
-    var(--chi-duration-fast, 150ms), var(--chi-duration-fast, 150ms),
-    calc(var(--chi-duration-fast, 150ms) * 0.4), calc(var(--chi-duration-fast, 150ms) * 0.4);
+    var(--yahha-duration-fast, 150ms), var(--yahha-duration-fast, 150ms),
+    calc(var(--yahha-duration-fast, 150ms) * 0.4), calc(var(--yahha-duration-fast, 150ms) * 0.4);
 }
 .button[data-variant='primary']:not(:disabled):active {
   box-shadow: var(
-    --chi-shadow-action-pressed,
-    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
-    0 1px 0 var(--chi-line, #c58ba1)
+    --yahha-shadow-action-pressed,
+    inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
+    0 1px 0 var(--yahha-line, #c58ba1)
   );
 }
 .button[data-variant='secondary'] {
-  background: var(--chi-surface, #ffffff);
-  box-shadow: inset 0 -2px 0 var(--chi-neutral-surface, #f1f8ff);
+  background: var(--yahha-surface, #ffffff);
+  box-shadow: inset 0 -2px 0 var(--yahha-neutral-surface, #f1f8ff);
 }
 .button[data-variant='ghost'] {
   background: transparent;
@@ -78,39 +78,39 @@
   box-shadow: none;
 }
 .button[aria-pressed='true'] {
-  background: var(--chi-accent-hover, #ffb3cf);
-  border-color: var(--chi-contour, #684150);
+  background: var(--yahha-accent-hover, #ffb3cf);
+  border-color: var(--yahha-contour, #684150);
   box-shadow:
-    inset 0 2px 0 var(--chi-line, #c58ba1),
-    inset 0 -1px 0 var(--chi-accent-soft, #fff0f6);
+    inset 0 2px 0 var(--yahha-line, #c58ba1),
+    inset 0 -1px 0 var(--yahha-accent-soft, #fff0f6);
 }
 .button[aria-pressed='true']:not(:disabled):active {
-  box-shadow: inset 0 3px 0 var(--chi-line, #c58ba1);
+  box-shadow: inset 0 3px 0 var(--yahha-line, #c58ba1);
 }
 .button[data-size='sm'] {
-  --button-inline-padding: var(--chi-space-4, 16px);
-  --button-height: var(--chi-control-height-sm, 36px);
-  --button-line-height: var(--chi-leading-control-sm, 16px);
+  --button-inline-padding: var(--yahha-space-4, 16px);
+  --button-height: var(--yahha-control-height-sm, 36px);
+  --button-line-height: var(--yahha-leading-control-sm, 16px);
   --button-icon-size: 16px;
-  border-radius: var(--chi-radius-control-sm, 18px 23px 19px 17px / 52% 48% 52% 48%);
-  font-size: var(--chi-font-size-sm, 12px);
+  border-radius: var(--yahha-radius-control-sm, 18px 23px 19px 17px / 52% 48% 52% 48%);
+  font-size: var(--yahha-font-size-sm, 12px);
 }
 .button[data-size='lg'] {
-  --button-inline-padding: var(--chi-space-6, 24px);
-  --button-height: var(--chi-control-height-lg, 52px);
-  --button-line-height: var(--chi-leading-control-lg, 24px);
+  --button-inline-padding: var(--yahha-space-6, 24px);
+  --button-height: var(--yahha-control-height-lg, 52px);
+  --button-line-height: var(--yahha-leading-control-lg, 24px);
   --button-icon-size: 20px;
-  border-radius: var(--chi-radius-control-lg, 26px 32px 28px 24px / 52% 48% 52% 48%);
-  font-size: var(--chi-font-size-lg, 16px);
+  border-radius: var(--yahha-radius-control-lg, 26px 32px 28px 24px / 52% 48% 52% 48%);
+  font-size: var(--yahha-font-size-lg, 16px);
 }
 .button:disabled {
   cursor: not-allowed;
 }
 .button:disabled:not([aria-busy='true']) {
   box-shadow: none;
-  color: var(--chi-muted, #7a5c6d);
-  border-color: var(--chi-line, #c58ba1);
-  background: var(--chi-disabled-surface, #f0f3f7);
+  color: var(--yahha-muted, #7a5c6d);
+  border-color: var(--yahha-line, #c58ba1);
+  background: var(--yahha-disabled-surface, #f0f3f7);
 }
 .button[data-variant='ghost']:disabled:not([aria-busy='true']) {
   border-color: transparent;
@@ -120,8 +120,8 @@
   cursor: progress;
 }
 .button:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset-outer, 3px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset-outer, 3px);
 }
 
 .buttonIcon {
@@ -164,19 +164,19 @@
 .iconButton {
   --icon-button-glyph-size: 20px;
   aspect-ratio: 1;
-  width: var(--chi-control-height, 44px);
-  min-width: var(--chi-control-height, 44px);
+  width: var(--yahha-control-height, 44px);
+  min-width: var(--yahha-control-height, 44px);
   padding: 0;
 }
 .iconButton[data-size='sm'] {
   --icon-button-glyph-size: 18px;
-  width: var(--chi-control-height-sm, 36px);
-  min-width: var(--chi-control-height-sm, 36px);
+  width: var(--yahha-control-height-sm, 36px);
+  min-width: var(--yahha-control-height-sm, 36px);
 }
 .iconButton[data-size='lg'] {
   --icon-button-glyph-size: 22px;
-  width: var(--chi-control-height-lg, 52px);
-  min-width: var(--chi-control-height-lg, 52px);
+  width: var(--yahha-control-height-lg, 52px);
+  min-width: var(--yahha-control-height-lg, 52px);
 }
 .iconButton > svg {
   display: block;
@@ -192,17 +192,17 @@
 
 @media (hover: hover) {
   .button:not(:disabled):hover {
-    border-color: var(--chi-contour, #684150);
+    border-color: var(--yahha-contour, #684150);
   }
   .button[data-variant='primary']:not(:disabled):hover {
-    background: var(--chi-accent-hover, #ffb3cf);
+    background: var(--yahha-accent-hover, #ffb3cf);
   }
   .button[data-variant='secondary']:not(:disabled):hover,
   .button[data-variant='ghost']:not(:disabled):hover {
-    background: var(--chi-accent-soft, #fff0f6);
+    background: var(--yahha-accent-soft, #fff0f6);
   }
   .button[aria-pressed='true']:not(:disabled):hover {
-    background: var(--chi-accent-hover, #ffb3cf);
+    background: var(--yahha-accent-hover, #ffb3cf);
   }
   .button[data-variant='ghost']:not(:disabled):hover:not([aria-pressed='true']) {
     border-color: transparent;

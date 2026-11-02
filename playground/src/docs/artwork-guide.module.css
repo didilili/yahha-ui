@@ -1,19 +1,19 @@
 .catalog {
   display: grid;
-  gap: var(--chi-space-8, 32px);
-  margin-block: var(--chi-space-6, 24px) var(--chi-space-8, 32px);
+  gap: var(--yahha-space-8, 32px);
+  margin-block: var(--yahha-space-6, 24px) var(--yahha-space-8, 32px);
 }
 
 .catalog .groupTitle {
-  margin: 0 0 var(--chi-space-4, 16px);
-  font-size: var(--chi-font-size-heading-4, 18px);
-  line-height: var(--chi-leading-heading, 1.45);
+  margin: 0 0 var(--yahha-space-4, 16px);
+  font-size: var(--yahha-font-size-heading-4, 18px);
+  line-height: var(--yahha-leading-heading, 1.45);
 }
 
 .catalog .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--chi-space-8, 32px) var(--chi-space-6, 24px);
+  gap: var(--yahha-space-8, 32px) var(--yahha-space-6, 24px);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -31,49 +31,49 @@
   display: grid;
   place-items: center;
   height: var(--artwork-preview-height);
-  padding: var(--chi-space-3, 12px);
-  margin-bottom: var(--chi-space-4, 16px);
-  background: var(--chi-neutral-surface, #f1f8ff);
+  padding: var(--yahha-space-3, 12px);
+  margin-bottom: var(--yahha-space-4, 16px);
+  background: var(--yahha-neutral-surface, #f1f8ff);
 }
 
 .preview img {
   display: block;
   height: auto;
   max-width: 100%;
-  max-height: calc(var(--artwork-preview-height) - var(--chi-space-6, 24px));
+  max-height: calc(var(--artwork-preview-height) - var(--yahha-space-6, 24px));
   object-fit: contain;
 }
 
 .catalog .itemTitle {
-  margin: 0 0 var(--chi-space-1, 4px);
-  font-size: var(--chi-font-size-body, 16px);
+  margin: 0 0 var(--yahha-space-1, 4px);
+  font-size: var(--yahha-font-size-body, 16px);
   font-weight: 600;
-  line-height: var(--chi-leading-heading, 1.45);
+  line-height: var(--yahha-leading-heading, 1.45);
 }
 
 .catalog .metadata {
-  margin: 0 0 var(--chi-space-2, 8px);
-  color: var(--chi-muted, #7a5c6d);
-  font-size: var(--chi-font-size-body-sm, 14px);
+  margin: 0 0 var(--yahha-space-2, 8px);
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: var(--yahha-font-size-body-sm, 14px);
 }
 
 .catalog .description {
-  margin: 0 0 var(--chi-space-2, 8px);
-  font-size: var(--chi-font-size-body-sm, 14px);
+  margin: 0 0 var(--yahha-space-2, 8px);
+  font-size: var(--yahha-font-size-body-sm, 14px);
 }
 
 .downloads {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--chi-space-4, 16px);
+  gap: 0 var(--yahha-space-4, 16px);
   margin-top: auto;
-  font-size: var(--chi-font-size-body-sm, 14px);
+  font-size: var(--yahha-font-size-body-sm, 14px);
 }
 
 .downloads > a {
   display: inline-flex;
   align-items: center;
-  min-height: var(--chi-control-height, 44px);
+  min-height: var(--yahha-control-height, 44px);
 }
 
 .catalog .compact {
@@ -91,7 +91,7 @@
 .scene .item {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  column-gap: var(--chi-space-6, 24px);
+  column-gap: var(--yahha-space-6, 24px);
   align-items: start;
 }
 
@@ -106,18 +106,18 @@
 }
 
 .setup {
-  margin-top: var(--chi-space-6, 24px);
-  border-block: 1px solid var(--chi-paper-line, #c9deec);
+  margin-top: var(--yahha-space-6, 24px);
+  border-block: 1px solid var(--yahha-paper-line, #c9deec);
 }
 
 .setup > summary {
-  padding-block: var(--chi-space-3, 12px);
+  padding-block: var(--yahha-space-3, 12px);
   cursor: pointer;
 }
 
 .setup > summary:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 
 @media (max-width: 1100px) {
@@ -135,6 +135,6 @@
   .scene .preview {
     --artwork-preview-height: 200px;
     grid-row: auto;
-    margin-bottom: var(--chi-space-4, 16px);
+    margin-bottom: var(--yahha-space-4, 16px);
   }
 }

@@ -133,17 +133,17 @@ function withoutVariables(value) {
 }
 
 function tokenRole(name) {
-  if (name.startsWith('--chi-font-size-')) return 'font-size';
-  if (name.startsWith('--chi-leading-')) return 'leading';
-  if (name.startsWith('--chi-radius-')) return 'radius';
-  if (name.startsWith('--chi-control-height')) return 'control-height';
-  if (name === '--chi-focus-width') return 'focus-width';
-  if (name.startsWith('--chi-focus-offset')) return 'focus-offset';
+  if (name.startsWith('--yahha-font-size-')) return 'font-size';
+  if (name.startsWith('--yahha-leading-')) return 'leading';
+  if (name.startsWith('--yahha-radius-')) return 'radius';
+  if (name.startsWith('--yahha-control-height')) return 'control-height';
+  if (name === '--yahha-focus-width') return 'focus-width';
+  if (name.startsWith('--yahha-focus-offset')) return 'focus-offset';
   if (name.includes('border-width')) return 'border-width';
-  if (name.startsWith('--chi-space-') || name === '--chi-press-offset') return 'space';
-  if (name.startsWith('--chi-duration-')) return 'duration';
-  if (name.startsWith('--chi-shadow-')) return 'shadow';
-  if (name === '--chi-ease') return 'ease';
+  if (name.startsWith('--yahha-space-') || name === '--yahha-press-offset') return 'space';
+  if (name.startsWith('--yahha-duration-')) return 'duration';
+  if (name.startsWith('--yahha-shadow-')) return 'shadow';
+  if (name === '--yahha-ease') return 'ease';
   return 'color';
 }
 
@@ -409,7 +409,7 @@ function checkExample(example, report, validateReferences) {
       );
       if (
         !permitted &&
-        (name.startsWith('--chi-') || (isComponent && !layoutProperties.test(name)))
+        (name.startsWith('--yahha-') || (isComponent && !layoutProperties.test(name)))
       )
         fail(
           property,
@@ -496,7 +496,7 @@ function checkExample(example, report, validateReferences) {
         /(?:^|[\s>+~,(])(?:button|input|select|textarea|h[1-6]|p|a)(?![\w-])/.test(item.selector) &&
         (classes.length === 0 || classes.some((name) => hostClasses.has(name)));
       if (
-        item.property.startsWith('--chi-') ||
+        item.property.startsWith('--yahha-') ||
         ((attached || nativeReach) && !layoutProperties.test(item.property))
       )
         report(
@@ -516,7 +516,7 @@ export function auditDesign({ theme, componentStyles = [], examples = [], except
     diagnostics.push({ file: item.path, line: item.line ?? 1, rule, message });
   const themeDeclarations = cssDeclarations(theme, 'src/theme/theme.module.css');
   for (const item of themeDeclarations)
-    if (item.property.startsWith('--chi-') && !tokens.has(item.property))
+    if (item.property.startsWith('--yahha-') && !tokens.has(item.property))
       tokens.set(item.property, item.value);
   const expand = (value, seen = new Set()) => {
     for (const record of variables(value).sort((a, b) => b.start - a.start)) {
@@ -530,7 +530,7 @@ export function auditDesign({ theme, componentStyles = [], examples = [], except
   };
   const validateReferences = (item) => {
     for (const record of variables(item.value)) {
-      if (!record.name.startsWith('--chi-')) continue;
+      if (!record.name.startsWith('--yahha-')) continue;
       if (!tokens.has(record.name)) {
         report(item, 'unknown-token', `Unknown theme token ${record.name}.`);
         continue;
@@ -553,7 +553,7 @@ export function auditDesign({ theme, componentStyles = [], examples = [], except
   for (const item of themeDeclarations) {
     validateReferences(item);
     if (
-      item.property.startsWith('--chi-') &&
+      item.property.startsWith('--yahha-') &&
       !validTokenValue(tokenRole(item.property), expand(item.value))
     )
       report(
@@ -580,7 +580,7 @@ export function auditDesign({ theme, componentStyles = [], examples = [], except
     const declarations = cssDeclarations(style.text, style.path),
       locals = new Map();
     for (const item of declarations)
-      if (item.property.startsWith('--') && !item.property.startsWith('--chi-'))
+      if (item.property.startsWith('--') && !item.property.startsWith('--yahha-'))
         locals.set(item.property, [...(locals.get(item.property) ?? []), item.value]);
     const rolesFor = (value, seen = new Set()) =>
       variables(value).flatMap((record) => {
@@ -613,7 +613,7 @@ export function auditDesign({ theme, componentStyles = [], examples = [], except
           'literal-color',
           `${item.property}: ${item.value} must consume a canonical color token.`,
         );
-      if (item.property.startsWith('--chi-')) {
+      if (item.property.startsWith('--yahha-')) {
         if (!tokens.has(item.property))
           report(item, 'unknown-token', `Unknown theme token declaration ${item.property}.`);
         else if (

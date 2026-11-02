@@ -15,7 +15,7 @@
   border-radius: 48% 55% 46% 52%;
   background: currentColor;
   transform-origin: center 75%;
-  animation: soft-beat 1.2s var(--chi-ease, ease-in-out) infinite;
+  animation: soft-beat 1.2s var(--yahha-ease, ease-in-out) infinite;
 }
 
 .dot:nth-child(2) {

@@ -55,7 +55,7 @@ export async function verifyFeedbackAppearance(page, label) {
       const firstLine = heading.y + parseFloat(getComputedStyle(title).lineHeight) / 2;
       const action = node.querySelector('p').parentElement.lastElementChild;
       const probe = document.createElement('span');
-      probe.style.color = 'var(--chi-paper-line)';
+      probe.style.color = 'var(--yahha-paper-line)';
       node.append(probe);
       const paperLine = getComputedStyle(probe).color;
       probe.remove();

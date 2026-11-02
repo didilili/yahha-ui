@@ -70,7 +70,7 @@ export async function verifyConsumer(browser, url) {
       await dialog.evaluate((node) => {
         const style = getComputedStyle(node);
         return [
-          node.closest('[data-chiikawa-theme]')?.getAttribute('data-chiikawa-theme'),
+          node.closest('[data-yahha-theme]')?.getAttribute('data-yahha-theme'),
           style.position,
           style.borderColor,
         ];
@@ -177,7 +177,7 @@ export async function verifyConsumer(browser, url) {
       return [
         style.backgroundColor,
         style.width,
-        style.getPropertyValue('--chi-accent').trim(),
+        style.getPropertyValue('--yahha-accent').trim(),
         node.closest('.custom-theme-root') === null,
       ];
     }),
@@ -186,7 +186,7 @@ export async function verifyConsumer(browser, url) {
   await page.getByRole('button', { name: 'Update custom tokens', exact: true }).click();
   assert.equal(
     await customDialog.evaluate((node) =>
-      getComputedStyle(node).getPropertyValue('--chi-accent').trim(),
+      getComputedStyle(node).getPropertyValue('--yahha-accent').trim(),
     ),
     '#e0c9f2',
   );

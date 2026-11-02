@@ -61,7 +61,7 @@ export function Dialog({
     >
       {trigger && <BaseDialog.Trigger render={trigger} />}
       <BaseDialog.Portal container={portalContainer}>
-        <div className={themeStyles.theme} data-chiikawa-theme={theme} style={themeStyle}>
+        <div className={themeStyles.theme} data-yahha-theme={theme} style={themeStyle}>
           <BaseDialog.Backdrop className={styles.dialogBackdrop} />
           <BaseDialog.Popup
             render={renderInteractivePopup}

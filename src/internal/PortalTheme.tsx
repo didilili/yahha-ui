@@ -7,7 +7,7 @@ import styles from '../theme/theme.module.css';
 export function PortalTheme({ children, dir }: { children: ReactNode; dir?: TextDirection }) {
   const { theme, style } = useContext(ThemeContext);
   return (
-    <div className={styles.theme} data-chiikawa-theme={theme} style={style} dir={dir}>
+    <div className={styles.theme} data-yahha-theme={theme} style={style} dir={dir}>
       {children}
     </div>
   );

@@ -394,20 +394,20 @@
 }
 
 .blog-home-category-count {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 14px;
   font-weight: 400;
   white-space: nowrap;
 }
 
 .blog-home-category-description {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 16px;
   line-height: 1.8;
 }
 
 .blog-home-category-note {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 14px;
   transform: rotate(-3deg);
 }

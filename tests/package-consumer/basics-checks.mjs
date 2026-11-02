@@ -169,7 +169,7 @@ async function verifyReadingAppearance(page, theme) {
     assert(Math.abs(box.width - dimension) < 0.1 && Math.abs(box.height - dimension) < 0.1);
     const color = await avatar.evaluate((node) => {
       const probe = document.createElement('span');
-      probe.style.background = 'var(--chi-accent)';
+      probe.style.background = 'var(--yahha-accent)';
       node.append(probe);
       const expected = getComputedStyle(probe).backgroundColor;
       probe.remove();
@@ -181,7 +181,7 @@ async function verifyReadingAppearance(page, theme) {
   assert.equal(await divider.getAttribute('aria-orientation'), 'horizontal');
   const edge = await divider.evaluate((node) => {
     const probe = document.createElement('span');
-    probe.style.borderColor = 'var(--chi-paper-line)';
+    probe.style.borderColor = 'var(--yahha-paper-line)';
     node.parentElement.append(probe);
     const expected = getComputedStyle(probe).borderColor;
     probe.remove();
@@ -293,9 +293,7 @@ export async function verifyBasics(browser, url) {
         const popup = page.locator('.basic-select-popup');
         await popup.waitFor();
         assert.equal(
-          await popup.evaluate(
-            (node) => node.closest('[data-chiikawa-theme]').dataset.chiikawaTheme,
-          ),
+          await popup.evaluate((node) => node.closest('[data-yahha-theme]').dataset.yahhaTheme),
           theme,
         );
         assert((await popup.boundingBox()).width <= width, 'Select popup must fit screen.');

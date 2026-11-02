@@ -253,9 +253,9 @@ describe('DropdownMenu', () => {
       expect(container.contains(menu)).toBe(true);
       expect(menu.classList.contains('custom-menu')).toBe(true);
       expect(menu.style.width).toBe('220px');
-      const theme = menu.closest<HTMLElement>('[data-chiikawa-theme]')!;
-      expect(theme.dataset.chiikawaTheme).toBe('hachiware');
-      expect(theme.style.getPropertyValue('--chi-surface')).toBe('#fefefe');
+      const theme = menu.closest<HTMLElement>('[data-yahha-theme]')!;
+      expect(theme.dataset.yahhaTheme).toBe('hachiware');
+      expect(theme.style.getPropertyValue('--yahha-surface')).toBe('#fefefe');
       expect(theme.classList.contains('page-layout')).toBe(false);
       await user.keyboard('{Escape}');
       await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());

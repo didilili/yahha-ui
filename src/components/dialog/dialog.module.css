@@ -2,17 +2,17 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: var(--chi-overlay, rgb(70 46 49 / 24%));
-  transition: opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
+  background: var(--yahha-overlay, rgb(70 46 49 / 24%));
+  transition: opacity var(--yahha-duration-floating, 180ms) var(--yahha-ease, ease);
 }
 .dialog {
   composes: scrollable from '../../internal/native-scrollbar.module.css';
-  --native-scrollbar-inset: var(--chi-space-7, 28px);
+  --native-scrollbar-inset: var(--yahha-space-7, 28px);
   --dialog-close-top: calc(
-    var(--chi-space-8, 32px) +
+    var(--yahha-space-8, 32px) +
       (
-        var(--chi-font-size-heading-2, 24px) * var(--chi-leading-heading, 1.45) -
-          var(--chi-control-height, 44px)
+        var(--yahha-font-size-heading-2, 24px) * var(--yahha-leading-heading, 1.45) -
+          var(--yahha-control-height, 44px)
       ) /
       2
   );
@@ -21,30 +21,30 @@
   top: 50%;
   left: 50%;
   z-index: 101;
-  width: min(440px, calc(100vw - var(--chi-space-8, 32px)));
-  max-height: calc(100dvh - var(--chi-space-6, 24px) * 2);
-  padding: var(--chi-space-8, 32px) var(--chi-space-7, 28px) var(--chi-space-7, 28px);
+  width: min(440px, calc(100vw - var(--yahha-space-8, 32px)));
+  max-height: calc(100dvh - var(--yahha-space-6, 24px) * 2);
+  padding: var(--yahha-space-8, 32px) var(--yahha-space-7, 28px) var(--yahha-space-7, 28px);
   overflow-y: auto;
   overflow-wrap: anywhere;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
-  border-radius: var(--chi-radius-dialog, 32px 42px 35px 28px / 28px 35px 32px 25px);
-  background: var(--chi-surface, #ffffff);
-  color: var(--chi-ink, #49313d);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  border-radius: var(--yahha-radius-dialog, 32px 42px 35px 28px / 28px 35px 32px 25px);
+  background: var(--yahha-surface, #ffffff);
+  color: var(--yahha-ink, #49313d);
   font-family: inherit;
   box-shadow:
-    inset 0 -3px 0 var(--chi-neutral-surface, #f1f8ff),
-    var(--chi-shadow-dialog, 0 4px 0 #c58ba1, 0 12px 32px rgb(70 46 49 / 10%));
+    inset 0 -3px 0 var(--yahha-neutral-surface, #f1f8ff),
+    var(--yahha-shadow-dialog, 0 4px 0 #c58ba1, 0 12px 32px rgb(70 46 49 / 10%));
   transform: translate(-50%, -50%);
   transition:
-    opacity var(--chi-duration-floating, 180ms) var(--chi-ease, ease),
-    scale var(--chi-duration-floating, 180ms) var(--chi-ease, ease);
+    opacity var(--yahha-duration-floating, 180ms) var(--yahha-ease, ease),
+    scale var(--yahha-duration-floating, 180ms) var(--yahha-ease, ease);
 }
 .dialog:has(> .dialogIllustration) {
   --dialog-close-top: 10px;
 }
 .dialog:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset-outer, 3px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset-outer, 3px);
 }
 .dialog[data-starting-style],
 .dialog[data-ending-style] {
@@ -56,7 +56,7 @@
   opacity: 0;
 }
 .dialogClose {
-  --chi-control-height-sm: var(--chi-control-height, 44px);
+  --yahha-control-height-sm: var(--yahha-control-height, 44px);
   position: absolute;
   top: var(--dialog-close-top);
   inset-inline-end: 10px;
@@ -66,7 +66,7 @@
   align-items: center;
   justify-content: center;
   height: 124px;
-  margin: 0 0 var(--chi-space-4, 16px);
+  margin: 0 0 var(--yahha-space-4, 16px);
 }
 .dialogIllustration > img,
 .dialogIllustration > svg {
@@ -79,24 +79,24 @@
 }
 .dialogTitle {
   margin: 0;
-  padding-inline-end: calc(var(--chi-control-height, 44px) - var(--chi-space-2, 8px));
-  padding-bottom: var(--chi-space-4, 16px);
-  border-bottom: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
-  font-size: var(--chi-font-size-heading-2, 24px);
-  line-height: var(--chi-leading-heading, 1.45);
+  padding-inline-end: calc(var(--yahha-control-height, 44px) - var(--yahha-space-2, 8px));
+  padding-bottom: var(--yahha-space-4, 16px);
+  border-bottom: var(--yahha-border-width, 1px) solid var(--yahha-paper-line, #c9deec);
+  font-size: var(--yahha-font-size-heading-2, 24px);
+  line-height: var(--yahha-leading-heading, 1.45);
   font-weight: 650;
   letter-spacing: -0.02em;
 }
 .dialogDescription {
-  margin: var(--chi-space-3, 12px) 0 0;
-  color: var(--chi-muted, #7a5c6d);
-  font-size: var(--chi-font-size-body-sm, 14px);
-  line-height: var(--chi-leading-body, 1.8);
+  margin: var(--yahha-space-3, 12px) 0 0;
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: var(--yahha-font-size-body-sm, 14px);
+  line-height: var(--yahha-leading-body, 1.8);
 }
 .dialogBody {
-  margin-top: var(--chi-space-5, 20px);
-  font-size: var(--chi-font-size-body, 16px);
-  line-height: var(--chi-leading-body, 1.8);
+  margin-top: var(--yahha-space-5, 20px);
+  font-size: var(--yahha-font-size-body, 16px);
+  line-height: var(--yahha-leading-body, 1.8);
 }
 .dialogBody > :first-child {
   margin-top: 0;
@@ -108,28 +108,28 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: var(--chi-space-2, 8px);
-  margin-top: var(--chi-space-6, 24px);
-  padding: var(--chi-space-4, 16px) var(--chi-space-3, 12px) var(--chi-space-3, 12px);
-  border-top: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
-  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
-  background: var(--chi-neutral-surface, #f1f8ff);
+  gap: var(--yahha-space-2, 8px);
+  margin-top: var(--yahha-space-6, 24px);
+  padding: var(--yahha-space-4, 16px) var(--yahha-space-3, 12px) var(--yahha-space-3, 12px);
+  border-top: var(--yahha-border-width, 1px) solid var(--yahha-paper-line, #c9deec);
+  border-radius: var(--yahha-radius-option, 8px 12px 9px 7px);
+  background: var(--yahha-neutral-surface, #f1f8ff);
 }
 
 @media (max-width: 480px) {
   .dialog {
     --dialog-close-top: calc(
-      var(--chi-space-6, 24px) +
+      var(--yahha-space-6, 24px) +
         (
-          var(--chi-font-size-heading-3, 20px) * var(--chi-leading-heading, 1.45) -
-            var(--chi-control-height, 44px)
+          var(--yahha-font-size-heading-3, 20px) * var(--yahha-leading-heading, 1.45) -
+            var(--yahha-control-height, 44px)
         ) /
         2
     );
-    padding: var(--chi-space-6, 24px);
+    padding: var(--yahha-space-6, 24px);
   }
   .dialogTitle {
-    font-size: var(--chi-font-size-heading-3, 20px);
+    font-size: var(--yahha-font-size-heading-3, 20px);
   }
   .dialogFooter {
     flex-direction: column;

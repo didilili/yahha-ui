@@ -22,7 +22,7 @@ describe('Popover', () => {
     const trigger = screen.getByRole('button', { name: '方向设置' });
     await user.click(trigger);
     const popup = await screen.findByRole('dialog', { name: '阅读设置' });
-    const portal = popup.closest<HTMLElement>('[data-chiikawa-theme]')!;
+    const portal = popup.closest<HTMLElement>('[data-yahha-theme]')!;
     await waitFor(() => expect(portal.dir).toBe('rtl'));
     await act(async () => {
       screen.getByTestId('reading-direction').dir = 'ltr';
@@ -44,7 +44,7 @@ describe('Popover', () => {
     );
     await user.click(screen.getByRole('button', { name: '本地设置' }));
     const popup = await screen.findByRole('dialog', { name: '本地说明' });
-    expect(popup.closest<HTMLElement>('[data-chiikawa-theme]')?.dir).toBe('ltr');
+    expect(popup.closest<HTMLElement>('[data-yahha-theme]')?.dir).toBe('ltr');
   });
 
   it('reads direction from a replacement trigger while its controlled popup stays open', async () => {
@@ -52,13 +52,9 @@ describe('Popover', () => {
       <Popover open title="阅读选项" trigger={<Button dir="rtl">阅读选项入口</Button>} />,
     );
     const popup = await screen.findByRole('dialog', { name: '阅读选项' });
-    await waitFor(() =>
-      expect(popup.closest<HTMLElement>('[data-chiikawa-theme]')?.dir).toBe('rtl'),
-    );
+    await waitFor(() => expect(popup.closest<HTMLElement>('[data-yahha-theme]')?.dir).toBe('rtl'));
     rerender(<Popover open title="阅读选项" trigger={<button dir="ltr">阅读选项入口</button>} />);
-    await waitFor(() =>
-      expect(popup.closest<HTMLElement>('[data-chiikawa-theme]')?.dir).toBe('ltr'),
-    );
+    await waitFor(() => expect(popup.closest<HTMLElement>('[data-yahha-theme]')?.dir).toBe('ltr'));
     expect(screen.getByRole('dialog', { name: '阅读选项' })).toBe(popup);
   });
 
@@ -117,9 +113,9 @@ describe('Popover', () => {
     expect(popupRef.current).toBe(popup);
     expect(popup.classList.contains('custom-popover')).toBe(true);
     expect(popup.style.width).toBe('280px');
-    const theme = popup.closest<HTMLElement>('[data-chiikawa-theme]')!;
-    expect(theme.dataset.chiikawaTheme).toBe('usagi');
-    expect(theme.style.getPropertyValue('--chi-ink')).toBe('#123456');
+    const theme = popup.closest<HTMLElement>('[data-yahha-theme]')!;
+    expect(theme.dataset.yahhaTheme).toBe('usagi');
+    expect(theme.style.getPropertyValue('--yahha-ink')).toBe('#123456');
     expect(theme.classList.contains('page-layout')).toBe(false);
     await user.click(screen.getByRole('button', { name: '读完关闭' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());

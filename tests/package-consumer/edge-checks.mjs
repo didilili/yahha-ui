@@ -354,8 +354,8 @@ export async function verifyEdgeCases(browser, url) {
         () =>
           document
             .querySelector('[role="dialog"]')
-            ?.closest('[data-chiikawa-theme]')
-            ?.getAttribute('data-chiikawa-theme') === 'hachiware',
+            ?.closest('[data-yahha-theme]')
+            ?.getAttribute('data-yahha-theme') === 'hachiware',
       );
       assert.equal(
         await dialog.evaluate((node) => getComputedStyle(node).borderColor),

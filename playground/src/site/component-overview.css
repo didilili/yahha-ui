@@ -102,7 +102,7 @@
 }
 
 .component-overview-page .overview-hero-notes > span:last-child {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 12px;
 }
 
@@ -162,7 +162,7 @@
 .component-overview-page .overview-search-hint {
   margin-top: 7px;
   padding-inline: 4px;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 12px;
   line-height: 1.6;
 }
@@ -182,7 +182,7 @@
   align-items: baseline;
   gap: 6px 16px;
   margin-top: 16px;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 12px;
   line-height: 1.7;
 }
@@ -247,7 +247,7 @@
 
 .component-overview-page .overview-group-heading p {
   margin-top: 2px;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -328,7 +328,7 @@
 .component-overview-page .overview-card-chinese {
   display: block;
   margin-top: 5px;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 13px;
   font-weight: 400;
   line-height: 1.6;
@@ -336,7 +336,7 @@
 
 .component-overview-page .overview-card-copy > p {
   margin-top: 10px;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 14px;
   line-height: 1.8;
   overflow-wrap: anywhere;
@@ -376,7 +376,7 @@
 
 .component-overview-page .overview-next p {
   margin-top: 7px;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   font-size: 16px;
   line-height: 1.8;
 }

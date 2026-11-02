@@ -104,7 +104,7 @@ export async function verifyNavigationAppearance(page, theme) {
   );
   const edge = await pages.getByRole('button', { name: '第 107 页' }).evaluate((node) => {
     const probe = document.createElement('span');
-    probe.style.borderColor = 'var(--chi-paper-line)';
+    probe.style.borderColor = 'var(--yahha-paper-line)';
     node.append(probe);
     const expected = getComputedStyle(probe).borderColor;
     probe.remove();
@@ -201,7 +201,7 @@ export async function verifyNavigationAppearance(page, theme) {
   assert.equal(await locked.getAttribute('aria-expanded'), 'true');
   const resting = await locked.locator('svg').evaluate((node) => {
     const probe = document.createElement('span');
-    probe.style.background = 'var(--chi-disabled-surface)';
+    probe.style.background = 'var(--yahha-disabled-surface)';
     node.parentElement.append(probe);
     const expected = getComputedStyle(probe).backgroundColor;
     probe.remove();

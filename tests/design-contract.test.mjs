@@ -4,15 +4,15 @@ import { auditDesign } from '../scripts/check-design.mjs';
 
 const theme = `
 .theme {
-  --chi-control-height: 44px;
-  --chi-font-size-md: 14px;
-  --chi-leading-control: 20px;
-  --chi-radius-field: 12px 16px 14px 11px;
-  --chi-focus-width: 2px;
-  --chi-focus-offset: 2px;
-  --chi-focus: #ad6179;
-  --chi-ink: #462e31;
-  --chi-accent: #f8dbe2;
+  --yahha-control-height: 44px;
+  --yahha-font-size-md: 14px;
+  --yahha-leading-control: 20px;
+  --yahha-radius-field: 12px 16px 14px 11px;
+  --yahha-focus-width: 2px;
+  --yahha-focus-offset: 2px;
+  --yahha-focus: #ad6179;
+  --yahha-ink: #462e31;
+  --yahha-accent: #f8dbe2;
 }
 `;
 const componentPath = 'src/components/text-field/text-field.module.css';
@@ -29,29 +29,32 @@ test('reports a 46px interactive minimum instead of the canonical height', () =>
 test('reports a raw font size and line height', () => {
   assert(hasRule(inspect('.input { font-size: 16px; line-height: 24px; }'), 'literal-drift'));
 });
-test('rejects unknown chi tokens even with a valid-looking fallback', () => {
-  assert(hasRule(inspect('.input { height: var(--chi-contol-height, 44px); }'), 'unknown-token'));
+test('rejects unknown Yahha tokens even with a valid-looking fallback', () => {
+  assert(hasRule(inspect('.input { height: var(--yahha-contol-height, 44px); }'), 'unknown-token'));
 });
 test('rejects an existing height token used as a font size', () => {
-  assert(hasRule(inspect('.input { font-size: var(--chi-control-height); }'), 'token-role'));
+  assert(hasRule(inspect('.input { font-size: var(--yahha-control-height); }'), 'token-role'));
 });
 test('rejects dimensional fallback drift and invalid fallback values', () => {
   assert(
-    hasRule(inspect('.input { min-height: var(--chi-control-height, 46px); }'), 'token-fallback'),
+    hasRule(inspect('.input { min-height: var(--yahha-control-height, 46px); }'), 'token-fallback'),
   );
   assert(
-    hasRule(inspect('.input { min-height: var(--chi-control-height, banana); }'), 'token-fallback'),
+    hasRule(
+      inspect('.input { min-height: var(--yahha-control-height, banana); }'),
+      'token-fallback',
+    ),
   );
 });
 test('validates token definitions in the canonical theme', () => {
   assert(
-    hasRule(inspect('', { theme: '.theme { --chi-control-height: banana; }' }), 'token-value'),
+    hasRule(inspect('', { theme: '.theme { --yahha-control-height: banana; }' }), 'token-value'),
   );
 });
 test('follows local derived variables without accepting hidden literal drift', () => {
   assert.deepEqual(
     inspect(
-      '.input { --field-height: var(--chi-control-height); min-height: var(--field-height); }',
+      '.input { --field-height: var(--yahha-control-height); min-height: var(--field-height); }',
     ),
     [],
   );
@@ -67,7 +70,7 @@ test('accepts theme tokens, ordinary layout and explicitly reviewed geometry', (
     inspect(
       `
     .field { display: grid; gap: 17px; margin-top: 13px; padding: 12px; }
-    .input { min-height: var(--chi-control-height, 44px); font-size: var(--chi-font-size-md, 14px); line-height: var(--chi-leading-control, 20px); border-radius: var(--chi-radius-field); }
+    .input { min-height: var(--yahha-control-height, 44px); font-size: var(--yahha-font-size-md, 14px); line-height: var(--yahha-leading-control, 20px); border-radius: var(--yahha-radius-field); }
     .dot { width: 17px; height: 17px; border-radius: 50%; }
   `,
       {
@@ -94,7 +97,7 @@ test('requires focus width and offset tokens', () => {
   );
   assert.deepEqual(
     inspect(
-      '.input:focus-visible { outline: var(--chi-focus-width) solid var(--chi-focus); outline-offset: var(--chi-focus-offset); }',
+      '.input:focus-visible { outline: var(--yahha-focus-width) solid var(--yahha-focus); outline-offset: var(--yahha-focus-offset); }',
     ),
     [],
   );
@@ -158,11 +161,11 @@ test('checks embedded style blocks and component-reaching native selectors', () 
     ),
   );
 });
-test('rejects inherited chi token injection on layout wrappers', () => {
+test('rejects inherited Yahha token injection on layout wrappers', () => {
   assert(
     hasRule(
       example(
-        "import { Button } from 'yahha-ui'; export default () => <div style={{ '--chi-control-height': '46px' }}><Button>Save</Button></div>;",
+        "import { Button } from 'yahha-ui'; export default () => <div style={{ '--yahha-control-height': '46px' }}><Button>Save</Button></div>;",
       ),
       'example-override',
     ),
@@ -192,7 +195,7 @@ test('rejects font shorthand and hidden local fallback dimensions', () => {
   assert(hasRule(inspect('.input { font: 16px/24px sans-serif; }'), 'literal-drift'));
   assert(
     hasRule(
-      inspect('.input { font-size: calc(var(--chi-font-size-md) + var(--local-step, 2px)); }'),
+      inspect('.input { font-size: calc(var(--yahha-font-size-md) + var(--local-step, 2px)); }'),
       'literal-drift',
     ),
   );
@@ -230,7 +233,7 @@ test('does not mistake native scene links or fieldset layout for public componen
       [
         {
           path: 'scene.css',
-          text: '.scene-link { min-height: var(--chi-control-height); background: var(--chi-ink); }',
+          text: '.scene-link { min-height: var(--yahha-control-height); background: var(--yahha-ink); }',
         },
       ],
     ),
@@ -244,8 +247,8 @@ test('does not accept arbitrary percentage radii on canonical controls', () => {
 });
 
 test('requires color fallbacks to match the canonical theme color', () => {
-  assert(hasRule(inspect('.input { color:var(--chi-accent, #f7dce3); }'), 'token-fallback'));
-  assert.deepEqual(inspect('.input { color:var(--chi-accent, #f8dbe2); }'), []);
+  assert(hasRule(inspect('.input { color:var(--yahha-accent, #f7dce3); }'), 'token-fallback'));
+  assert.deepEqual(inspect('.input { color:var(--yahha-accent, #f8dbe2); }'), []);
 });
 
 test('rejects literal paint colors while keeping system colors and graphic geometry', () => {

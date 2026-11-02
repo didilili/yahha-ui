@@ -7,31 +7,31 @@
   overflow-wrap: anywhere;
 }
 .legend {
-  padding: 0 var(--chi-space-1, 4px);
-  margin-bottom: var(--chi-space-2, 8px);
-  color: var(--chi-ink, #49313d);
-  font-size: var(--chi-font-size-md, 14px);
-  line-height: var(--chi-leading-label, 1.5);
+  padding: 0 var(--yahha-space-1, 4px);
+  margin-bottom: var(--yahha-space-2, 8px);
+  color: var(--yahha-ink, #49313d);
+  font-size: var(--yahha-font-size-md, 14px);
+  line-height: var(--yahha-leading-label, 1.5);
   font-weight: 600;
 }
 .options {
   display: flex;
   flex-direction: column;
-  gap: var(--chi-space-1, 4px);
+  gap: var(--yahha-space-1, 4px);
 }
 .option {
   display: flex;
   align-items: flex-start;
-  gap: var(--chi-space-3, 12px);
-  min-height: var(--chi-control-height, 44px);
-  padding: max(0px, calc((var(--chi-control-height, 44px) - 22px) / 2)) var(--chi-space-1, 4px);
+  gap: var(--yahha-space-3, 12px);
+  min-height: var(--yahha-control-height, 44px);
+  padding: max(0px, calc((var(--yahha-control-height, 44px) - 22px) / 2)) var(--yahha-space-1, 4px);
   border: 0;
-  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
+  border-radius: var(--yahha-radius-option, 8px 12px 9px 7px);
   box-sizing: border-box;
   cursor: pointer;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .input {
   box-sizing: border-box;
@@ -41,18 +41,18 @@
   width: 22px;
   height: 22px;
   margin: 0;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
   border-radius: 50%;
-  background: var(--chi-field-background, #ffffff);
-  box-shadow: inset 0 0 0 2px var(--chi-field-background, #ffffff);
-  color: var(--chi-ink, #49313d);
+  background: var(--yahha-field-background, #ffffff);
+  box-shadow: inset 0 0 0 2px var(--yahha-field-background, #ffffff);
+  color: var(--yahha-ink, #49313d);
   cursor: inherit;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    border-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .input:checked {
-  background: var(--chi-accent, #ffc3d9);
+  background: var(--yahha-accent, #ffc3d9);
 }
 .input::after {
   content: '';
@@ -63,31 +63,31 @@
   opacity: 0;
   transform: scale(0.6);
   transition:
-    opacity var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    transform var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    opacity var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    transform var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .input:checked::after {
   opacity: 1;
   transform: scale(1);
 }
 .input:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 .content {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  gap: var(--chi-space-1, 4px);
+  gap: var(--yahha-space-1, 4px);
 }
 .label {
-  color: var(--chi-ink, #49313d);
-  font-size: var(--chi-font-size-md, 14px);
-  line-height: var(--chi-leading-option, 22px);
+  color: var(--yahha-ink, #49313d);
+  font-size: var(--yahha-font-size-md, 14px);
+  line-height: var(--yahha-leading-option, 22px);
 }
 .option:has(.input:enabled:checked) {
-  background: var(--chi-accent-soft, #fff0f6);
-  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--chi-line, #c58ba1) 25%, transparent);
+  background: var(--yahha-accent-soft, #fff0f6);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--yahha-line, #c58ba1) 25%, transparent);
 }
 .option:has(.input:checked) .label {
   font-weight: 600;
@@ -95,32 +95,32 @@
 .description,
 .hint,
 .error {
-  color: var(--chi-muted, #7a5c6d);
-  font-size: var(--chi-font-size-sm, 12px);
-  line-height: var(--chi-leading-caption, 1.6);
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: var(--yahha-font-size-sm, 12px);
+  line-height: var(--yahha-leading-caption, 1.6);
 }
 .hint,
 .error {
-  margin-top: var(--chi-space-2, 8px);
-  padding-inline: var(--chi-space-1, 4px);
+  margin-top: var(--yahha-space-2, 8px);
+  padding-inline: var(--yahha-space-1, 4px);
 }
 .error {
-  color: var(--chi-error, #a33e4f);
+  color: var(--yahha-error, #a33e4f);
 }
 .group[aria-invalid='true'] .input:not(:disabled) {
-  border-color: var(--chi-error, #a33e4f);
+  border-color: var(--yahha-error, #a33e4f);
 }
 .group[aria-invalid='true'] .input:focus-visible {
-  outline-color: var(--chi-error, #a33e4f);
+  outline-color: var(--yahha-error, #a33e4f);
 }
 .option:has(.input:disabled) {
   cursor: not-allowed;
   transition: none;
 }
 .input:disabled {
-  background: var(--chi-disabled-surface, #f0f3f7);
-  color: var(--chi-muted, #7a5c6d);
-  border-color: var(--chi-line, #c58ba1);
+  background: var(--yahha-disabled-surface, #f0f3f7);
+  color: var(--yahha-muted, #7a5c6d);
+  border-color: var(--yahha-line, #c58ba1);
   opacity: 1;
   box-shadow: none;
   transition: none;
@@ -130,17 +130,17 @@
 }
 .option:has(.input:disabled) .label,
 .group:has(.input:disabled):not(:has(.input:enabled)) .legend {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
 }
 @media (hover: hover) and (pointer: fine) {
   .option:has(.input:enabled:not(:checked)):hover {
-    background: var(--chi-neutral-surface, #f1f8ff);
+    background: var(--yahha-neutral-surface, #f1f8ff);
   }
   .group:not([aria-invalid='true']) .option:hover .input:enabled {
-    border-color: var(--chi-ink, #49313d);
+    border-color: var(--yahha-ink, #49313d);
   }
   .option:hover .input:enabled:checked {
-    background: var(--chi-accent-hover, #ffb3cf);
+    background: var(--yahha-accent-hover, #ffb3cf);
   }
 }
 @media (prefers-reduced-motion: reduce) {

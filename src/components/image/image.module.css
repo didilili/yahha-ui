@@ -2,8 +2,8 @@
   position: relative;
   max-width: 100%;
   overflow: hidden;
-  border-radius: var(--chi-radius-surface, 22px 30px 25px 20px);
-  background: var(--chi-neutral-surface, #f1f8ff);
+  border-radius: var(--yahha-radius-surface, 22px 30px 25px 20px);
+  background: var(--yahha-neutral-surface, #f1f8ff);
 }
 .image {
   display: block;
@@ -31,25 +31,25 @@
   min-height: 100px;
   width: 100%;
   height: 100%;
-  padding: var(--chi-space-6, 24px);
-  color: var(--chi-muted, #7a5c6d);
+  padding: var(--yahha-space-6, 24px);
+  color: var(--yahha-muted, #7a5c6d);
   text-align: center;
   overflow: auto;
   overflow-wrap: anywhere;
   font-family: inherit;
-  font-size: var(--chi-font-size-body-sm, 14px);
+  font-size: var(--yahha-font-size-body-sm, 14px);
   border-radius: inherit;
 }
 .fallback:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: calc(-1 * var(--chi-focus-offset, 2px));
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: calc(-1 * var(--yahha-focus-offset, 2px));
 }
 .frame[data-status='error']::before {
   content: '';
   position: absolute;
   z-index: 1;
   inset: 0;
-  border: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
+  border: var(--yahha-border-width, 1px) solid var(--yahha-paper-line, #c9deec);
   border-radius: inherit;
   pointer-events: none;
 }
@@ -60,12 +60,12 @@
   max-width: 100%;
   margin-block: auto;
   justify-items: center;
-  gap: var(--chi-space-3, 12px);
-  line-height: var(--chi-leading-body, 1.8);
+  gap: var(--yahha-space-3, 12px);
+  line-height: var(--yahha-leading-body, 1.8);
 }
 .frame[data-framed] .fallback {
   position: absolute;
   inset: 0;
   min-height: 0;
-  padding: min(var(--chi-space-6, 24px), 7.5%);
+  padding: min(var(--yahha-space-6, 24px), 7.5%);
 }

@@ -486,7 +486,7 @@ export async function verifyDocsIdentity(browser, baseURL) {
         0,
         'The documentation header must keep one fixed identity.',
       );
-      assert.equal(await page.locator('.docs-app').getAttribute('data-chiikawa-theme'), 'chiikawa');
+      assert.equal(await page.locator('.docs-app').getAttribute('data-yahha-theme'), 'chiikawa');
       const importStrip = page.locator('.doc-heading > .source-code');
       const stripBounds = await importStrip.boundingBox();
       assert.ok(
@@ -614,7 +614,7 @@ async function verifyThemePresets(page, baseURL) {
   await example.locator('.example-preview').waitFor();
   const colors = [];
   for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
-    const provider = example.locator(`.example-preview [data-chiikawa-theme="${theme}"]`);
+    const provider = example.locator(`.example-preview [data-yahha-theme="${theme}"]`);
     const button = provider.getByRole('button', { name: '主要按钮外观', exact: true });
     await minHeight(button, 44, `${theme} preset button`);
     colors.push(await button.evaluate((element) => getComputedStyle(element).backgroundColor));
@@ -624,7 +624,7 @@ async function verifyThemePresets(page, baseURL) {
     3,
     'The three provider presets must retain distinct actual button colors.',
   );
-  assert.equal(await page.locator('.docs-app').getAttribute('data-chiikawa-theme'), 'chiikawa');
+  assert.equal(await page.locator('.docs-app').getAttribute('data-yahha-theme'), 'chiikawa');
   await verifyCompleteSetup(example, 'explicit');
 }
 
@@ -646,7 +646,7 @@ async function verifySelectFocus(page, baseURL) {
       outline: style.outlineStyle,
       width: parseFloat(style.outlineWidth),
       shadow: style.boxShadow,
-      theme: option.closest('[data-chiikawa-theme]')?.dataset.chiikawaTheme,
+      theme: option.closest('[data-yahha-theme]')?.dataset.yahhaTheme,
     };
   });
   assert.equal(appearance.theme, 'chiikawa');

@@ -209,7 +209,7 @@ describe('Select', () => {
     const trigger = screen.getByRole('combobox');
     await user.click(trigger);
     const option = await screen.findByRole('option', { name: '相册' });
-    expect(option.closest('[data-chiikawa-theme]')?.getAttribute('data-chiikawa-theme')).toBe(
+    expect(option.closest('[data-yahha-theme]')?.getAttribute('data-yahha-theme')).toBe(
       'hachiware',
     );
     expect(screen.getByRole('option', { name: '草稿' }).getAttribute('aria-disabled')).toBe('true');

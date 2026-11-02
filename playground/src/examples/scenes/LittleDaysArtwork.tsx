@@ -21,17 +21,17 @@ export default function LittleDaysArtwork() {
         .little-days-small { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
         .little-days-specimen { display: grid; align-content: start; gap: 16px; min-width: 0; }
         .little-days-specimen > header { display: grid; justify-items: start; gap: 8px; }
-        .little-days-number { color: var(--chi-muted, #7a5c6d); font-size: 12px; letter-spacing: .12em; }
+        .little-days-number { color: var(--yahha-muted, #7a5c6d); font-size: 12px; letter-spacing: .12em; }
         .little-days-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
         .little-days-icon-sizes { display: flex; align-items: center; gap: 12px; }
         .little-days-icon-sizes img { display: block; flex: 0 0 auto; }
         .little-days-tea { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
         .little-days-tea > img { display: block; flex: 0 0 auto; }
-        .little-days-wait { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 240px); align-items: center; gap: 24px; padding: 24px; background: var(--chi-surface, #ffffff); border: 1px solid var(--chi-line, #c58ba1); border-radius: 18px 22px 19px 24px; }
+        .little-days-wait { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 240px); align-items: center; gap: 24px; padding: 24px; background: var(--yahha-surface, #ffffff); border: 1px solid var(--yahha-line, #c58ba1); border-radius: 18px 22px 19px 24px; }
         .little-days-wait-copy { display: grid; justify-items: start; gap: 16px; min-width: 0; }
         .little-days-wait-art { display: grid; place-items: center; min-width: 0; }
         .little-days-scene-image { display: block; max-width: 100%; height: auto; }
-        .little-days-empty { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); align-items: center; gap: 24px; padding-top: 24px; border-top: 1px solid var(--chi-line, #c58ba1); }
+        .little-days-empty { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); align-items: center; gap: 24px; padding-top: 24px; border-top: 1px solid var(--yahha-line, #c58ba1); }
         .little-days-empty-copy { display: grid; justify-items: start; gap: 12px; min-width: 0; }
         @media (max-width: 640px) {
           .little-days-small, .little-days-wait, .little-days-empty { grid-template-columns: minmax(0, 1fr); }

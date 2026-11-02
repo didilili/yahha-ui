@@ -1,50 +1,50 @@
 .root {
   min-width: 0;
   max-width: 100%;
-  color: var(--chi-ink, #49313d);
+  color: var(--yahha-ink, #49313d);
   font-family: inherit;
 }
 .list {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--chi-space-2, 8px);
-  padding: calc(var(--chi-focus-width, 2px) + var(--chi-focus-offset, 2px));
+  gap: var(--yahha-space-2, 8px);
+  padding: calc(var(--yahha-focus-width, 2px) + var(--yahha-focus-offset, 2px));
 }
 .tab {
   box-sizing: border-box;
   position: relative;
   min-width: 0;
   max-width: 100%;
-  min-height: var(--chi-control-height, 44px);
+  min-height: var(--yahha-control-height, 44px);
   padding: calc(
       (
-          var(--chi-control-height, 44px) - var(--chi-leading-control, 20px) -
-            var(--chi-space-1, 4px)
+          var(--yahha-control-height, 44px) - var(--yahha-leading-control, 20px) -
+            var(--yahha-space-1, 4px)
         ) /
         2
     )
-    var(--chi-space-4, 16px)
+    var(--yahha-space-4, 16px)
     calc(
       (
-          var(--chi-control-height, 44px) - var(--chi-leading-control, 20px) +
-            var(--chi-space-1, 4px)
+          var(--yahha-control-height, 44px) - var(--yahha-leading-control, 20px) +
+            var(--yahha-space-1, 4px)
         ) /
         2
     );
   border: 0;
-  border-radius: var(--chi-radius-option, 8px 12px 9px 7px);
+  border-radius: var(--yahha-radius-option, 8px 12px 9px 7px);
   background: transparent;
   color: inherit;
   font: inherit;
-  font-size: var(--chi-font-size-md, 14px);
+  font-size: var(--yahha-font-size-md, 14px);
   font-weight: 600;
-  line-height: var(--chi-leading-control, 20px);
+  line-height: var(--yahha-leading-control, 20px);
   overflow-wrap: anywhere;
   cursor: pointer;
   touch-action: manipulation;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .tab::after {
   content: '';
@@ -55,29 +55,29 @@
   max-width: calc(100% - 24px);
   height: 4px;
   border-radius: 4px 3px 4px 2px;
-  background: var(--chi-contour, #684150);
+  background: var(--yahha-contour, #684150);
   opacity: 0;
   transform: translateX(-50%) rotate(-2deg);
   pointer-events: none;
-  transition: opacity var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+  transition: opacity var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .tab[data-active] {
-  background: var(--chi-accent-soft, #fff0f6);
-  box-shadow: inset 0 1px 0 var(--chi-field-background, #ffffff);
-  color: var(--chi-ink, #49313d);
+  background: var(--yahha-accent-soft, #fff0f6);
+  box-shadow: inset 0 1px 0 var(--yahha-field-background, #ffffff);
+  color: var(--yahha-ink, #49313d);
 }
 .tab[data-active]::after {
   opacity: 1;
 }
 .tab:focus-visible,
 .panel:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 .tab[data-disabled] {
   background: transparent;
   box-shadow: none;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   cursor: not-allowed;
 }
 .tab[data-disabled]::after {
@@ -85,9 +85,9 @@
 }
 .panel {
   min-width: 0;
-  padding: var(--chi-space-5, 20px) var(--chi-focus-offset, 2px) var(--chi-space-1, 4px);
-  font-size: var(--chi-font-size-body, 16px);
-  line-height: var(--chi-leading-body, 1.8);
+  padding: var(--yahha-space-5, 20px) var(--yahha-focus-offset, 2px) var(--yahha-space-1, 4px);
+  font-size: var(--yahha-font-size-body, 16px);
+  line-height: var(--yahha-leading-body, 1.8);
   overflow-wrap: anywhere;
 }
 .panel[hidden] {
@@ -95,10 +95,10 @@
 }
 @media (hover: hover) {
   .tab:not([data-disabled]):not([data-active]):hover {
-    background: var(--chi-neutral-surface, #f1f8ff);
+    background: var(--yahha-neutral-surface, #f1f8ff);
   }
   .tab[data-active]:not([data-disabled]):hover {
-    background: color-mix(in srgb, var(--chi-accent, #ffc3d9) 45%, var(--chi-surface, #ffffff));
+    background: color-mix(in srgb, var(--yahha-accent, #ffc3d9) 45%, var(--yahha-surface, #ffffff));
   }
 }
 @media (prefers-reduced-motion: reduce) {

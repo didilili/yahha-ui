@@ -6,11 +6,11 @@
 .label {
   display: flex;
   align-items: flex-start;
-  gap: var(--chi-space-3, 12px);
-  min-height: var(--chi-control-height, 44px);
+  gap: var(--yahha-space-3, 12px);
+  min-height: var(--yahha-control-height, 44px);
   box-sizing: border-box;
-  padding-block: max(0px, calc((var(--chi-control-height, 44px) - 22px) / 2));
-  padding-inline: var(--chi-space-1, 4px);
+  padding-block: max(0px, calc((var(--yahha-control-height, 44px) - 22px) / 2));
+  padding-inline: var(--yahha-space-1, 4px);
   cursor: pointer;
 }
 .input {
@@ -21,24 +21,24 @@
   height: 22px;
   position: relative;
   margin: 0;
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
   border-radius: 7px 8px 7px 6px;
-  background: var(--chi-field-background, #ffffff);
-  color: var(--chi-ink, #49313d);
-  box-shadow: inset 0 -2px 0 var(--chi-neutral-surface, #f1f8ff);
+  background: var(--yahha-field-background, #ffffff);
+  color: var(--yahha-ink, #49313d);
+  box-shadow: inset 0 -2px 0 var(--yahha-neutral-surface, #f1f8ff);
   cursor: inherit;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    border-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 /* The ARIA value exists before the effect sets native indeterminate. */
 .input:checked,
 .input:is(:indeterminate, [aria-checked='mixed']) {
-  background: var(--chi-accent, #ffc3d9);
+  background: var(--yahha-accent, #ffc3d9);
   box-shadow:
-    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
-    inset 0 -2px 0 color-mix(in srgb, var(--chi-contour, #684150) 10%, transparent);
+    inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
+    inset 0 -2px 0 color-mix(in srgb, var(--yahha-contour, #684150) 10%, transparent);
 }
 .input::before,
 .input::after {
@@ -50,8 +50,8 @@
   opacity: 0;
   transform: scaleX(0.35);
   transition:
-    opacity var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    transform var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    opacity var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    transform var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .input::before {
   left: 3px;
@@ -81,20 +81,20 @@
   transform: scaleX(1);
 }
 .input:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 .input[aria-invalid='true']:not(:disabled) {
-  border-color: var(--chi-error, #a33e4f);
+  border-color: var(--yahha-error, #a33e4f);
 }
 .input[aria-invalid='true']:focus-visible {
-  outline-color: var(--chi-error, #a33e4f);
+  outline-color: var(--yahha-error, #a33e4f);
 }
 .input:disabled {
-  background: var(--chi-disabled-surface, #f0f3f7);
-  border-color: var(--chi-line, #c58ba1);
+  background: var(--yahha-disabled-surface, #f0f3f7);
+  border-color: var(--yahha-line, #c58ba1);
   box-shadow: none;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   opacity: 1;
   cursor: not-allowed;
   transition: none;
@@ -105,37 +105,37 @@
 }
 .text {
   min-width: 0;
-  color: var(--chi-ink, #49313d);
-  font-size: var(--chi-font-size-md, 14px);
-  line-height: var(--chi-leading-option, 22px);
+  color: var(--yahha-ink, #49313d);
+  font-size: var(--yahha-font-size-md, 14px);
+  line-height: var(--yahha-leading-option, 22px);
 }
 .label:has(.input:disabled) {
   cursor: not-allowed;
 }
 .input:disabled + .text {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
 }
 .hint,
 .error {
-  padding-inline-start: calc(var(--chi-space-1, 4px) + 22px + var(--chi-space-3, 12px));
-  font-size: var(--chi-font-size-sm, 12px);
-  line-height: var(--chi-leading-caption, 1.6);
+  padding-inline-start: calc(var(--yahha-space-1, 4px) + 22px + var(--yahha-space-3, 12px));
+  font-size: var(--yahha-font-size-sm, 12px);
+  line-height: var(--yahha-leading-caption, 1.6);
 }
 .hint {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
 }
 .error {
-  color: var(--chi-error, #a33e4f);
+  color: var(--yahha-error, #a33e4f);
 }
 @media (hover: hover) and (pointer: fine) {
   .label:hover .input:enabled:not([aria-invalid='true']) {
-    border-color: var(--chi-ink, #49313d);
+    border-color: var(--yahha-ink, #49313d);
   }
   .label:hover .input:enabled:not(:checked):not(:indeterminate):not([aria-checked='mixed']) {
-    background: var(--chi-accent-soft, #fff0f6);
+    background: var(--yahha-accent-soft, #fff0f6);
   }
   .label:hover .input:enabled:is(:checked, :indeterminate, [aria-checked='mixed']) {
-    background: var(--chi-accent-hover, #ffb3cf);
+    background: var(--yahha-accent-hover, #ffb3cf);
   }
 }
 @media (prefers-reduced-motion: reduce) {

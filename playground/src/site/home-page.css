@@ -13,57 +13,57 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--chi-space-2, 8px);
-  min-height: var(--chi-control-height-lg, 52px);
+  gap: var(--yahha-space-2, 8px);
+  min-height: var(--yahha-control-height-lg, 52px);
   max-width: 100%;
   padding: max(
       0px,
       calc(
         (
-            var(--chi-control-height-lg, 52px) - var(--chi-leading-control-lg, 24px) - 2 *
-              var(--chi-control-border-width, 2px)
+            var(--yahha-control-height-lg, 52px) - var(--yahha-leading-control-lg, 24px) - 2 *
+              var(--yahha-control-border-width, 2px)
           ) /
           2
       )
     )
-    var(--chi-space-6, 24px);
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
-  border-radius: var(--chi-radius-control-lg, 26px 32px 28px 24px / 52% 48% 52% 48%);
-  background: var(--chi-accent, #ffc3d9);
+    var(--yahha-space-6, 24px);
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  border-radius: var(--yahha-radius-control-lg, 26px 32px 28px 24px / 52% 48% 52% 48%);
+  background: var(--yahha-accent, #ffc3d9);
   box-shadow: var(
-    --chi-shadow-action,
-    inset 0 2px 0 var(--chi-accent-soft, #fff0f6),
-    0 3px 0 var(--chi-line, #c58ba1)
+    --yahha-shadow-action,
+    inset 0 2px 0 var(--yahha-accent-soft, #fff0f6),
+    0 3px 0 var(--yahha-line, #c58ba1)
   );
-  color: var(--chi-ink, #49313d);
-  font-size: var(--chi-font-size-lg, 16px);
+  color: var(--yahha-ink, #49313d);
+  font-size: var(--yahha-font-size-lg, 16px);
   font-weight: 600;
-  line-height: var(--chi-leading-control-lg, 24px);
+  line-height: var(--yahha-leading-control-lg, 24px);
   text-align: center;
   text-decoration: none;
   transition:
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    box-shadow var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    transform var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    box-shadow var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    transform var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 
 .site-home .home-primary-link:focus-visible {
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset-outer, 3px);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset-outer, 3px);
 }
 
 .site-home .home-primary-link:active {
-  transform: translateY(var(--chi-press-offset, 1px));
+  transform: translateY(var(--yahha-press-offset, 1px));
   box-shadow: var(
-    --chi-shadow-action-pressed,
-    inset 0 1px 0 var(--chi-accent-soft, #fff0f6),
-    0 1px 0 var(--chi-line, #c58ba1)
+    --yahha-shadow-action-pressed,
+    inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
+    0 1px 0 var(--yahha-line, #c58ba1)
   );
 }
 
 @media (hover: hover) {
   .site-home .home-primary-link:hover {
-    background: var(--chi-accent-hover, #ffb3cf);
+    background: var(--yahha-accent-hover, #ffb3cf);
     text-decoration: none;
   }
 }
@@ -147,7 +147,7 @@
   flex-wrap: wrap;
 }
 .site-home .home-hero-actions > .home-text-link {
-  min-height: var(--chi-control-height, 44px);
+  min-height: var(--yahha-control-height, 44px);
   font-size: 14px;
 }
 .site-home .home-local-note {

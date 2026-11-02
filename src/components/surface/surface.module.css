@@ -1,13 +1,13 @@
 .surface {
   box-sizing: border-box;
   font-family: inherit;
-  color: var(--chi-ink, #49313d);
-  border: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
-  border-radius: var(--chi-radius-surface, 22px 30px 25px 20px);
-  background: var(--chi-surface, #ffffff);
-  padding: var(--chi-space-6, 24px);
-  font-size: var(--chi-font-size-body, 16px);
-  line-height: var(--chi-leading-body, 1.8);
+  color: var(--yahha-ink, #49313d);
+  border: var(--yahha-border-width, 1px) solid var(--yahha-paper-line, #c9deec);
+  border-radius: var(--yahha-radius-surface, 22px 30px 25px 20px);
+  background: var(--yahha-surface, #ffffff);
+  padding: var(--yahha-space-6, 24px);
+  font-size: var(--yahha-font-size-body, 16px);
+  line-height: var(--yahha-leading-body, 1.8);
   min-width: 0;
   overflow-wrap: anywhere;
 }

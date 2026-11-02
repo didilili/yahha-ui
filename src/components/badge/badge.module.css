@@ -1,22 +1,22 @@
 .badge {
   box-sizing: border-box;
   font-family: inherit;
-  color: var(--chi-ink, #49313d);
+  color: var(--yahha-ink, #49313d);
   display: inline-flex;
   align-items: center;
-  gap: var(--chi-space-1, 4px);
+  gap: var(--yahha-space-1, 4px);
   width: fit-content;
   min-width: 0;
   max-width: 100%;
-  padding: 3px var(--chi-space-2, 8px) var(--chi-space-1, 4px);
-  border: var(--chi-border-width, 1px) solid var(--chi-paper-line, #c9deec);
-  border-radius: var(--chi-radius-badge, 7px 11px 8px 6px);
-  background: var(--chi-neutral-surface, #f1f8ff);
+  padding: 3px var(--yahha-space-2, 8px) var(--yahha-space-1, 4px);
+  border: var(--yahha-border-width, 1px) solid var(--yahha-paper-line, #c9deec);
+  border-radius: var(--yahha-radius-badge, 7px 11px 8px 6px);
+  background: var(--yahha-neutral-surface, #f1f8ff);
   box-shadow:
-    inset 0 0 0 1px var(--chi-field-background, #ffffff),
-    inset 0 -3px 0 var(--chi-paper-line, #c9deec);
-  font-size: var(--chi-font-size-sm, 12px);
-  line-height: var(--chi-leading-label, 1.5);
+    inset 0 0 0 1px var(--yahha-field-background, #ffffff),
+    inset 0 -3px 0 var(--yahha-paper-line, #c9deec);
+  font-size: var(--yahha-font-size-sm, 12px);
+  line-height: var(--yahha-leading-label, 1.5);
   font-weight: 500;
   overflow-wrap: anywhere;
 }
@@ -24,20 +24,20 @@
   display: none;
 }
 .badge[data-tone='accent'] {
-  border-color: var(--chi-contour, #684150);
-  background: var(--chi-accent, #ffc3d9);
-  color: var(--chi-ink, #49313d);
+  border-color: var(--yahha-contour, #684150);
+  background: var(--yahha-accent, #ffc3d9);
+  color: var(--yahha-ink, #49313d);
   box-shadow:
-    inset 0 0 0 1px var(--chi-accent-soft, #fff0f6),
-    inset 0 -3px 0 color-mix(in srgb, var(--chi-line, #c58ba1) 35%, transparent);
+    inset 0 0 0 1px var(--yahha-accent-soft, #fff0f6),
+    inset 0 -3px 0 color-mix(in srgb, var(--yahha-line, #c58ba1) 35%, transparent);
 }
 .badge[data-tone='success'] {
   align-items: baseline;
-  border-color: var(--chi-success-line, #c6d8b8);
+  border-color: var(--yahha-success-line, #c6d8b8);
   border-style: dashed;
-  background: var(--chi-success-surface, #f3f8ed);
-  color: var(--chi-success-ink, #506a3b);
-  box-shadow: inset 0 0 0 1px var(--chi-field-background, #ffffff);
+  background: var(--yahha-success-surface, #f3f8ed);
+  color: var(--yahha-success-ink, #506a3b);
+  box-shadow: inset 0 0 0 1px var(--yahha-field-background, #ffffff);
 }
 .badge[data-tone='success']::before {
   content: '';

@@ -75,7 +75,7 @@ export default function LoadingScene() {
         .story-loading-toast { margin-top: 16px; }
         .story-loading-saved-art { display: block; margin: 0 0 -6px 20px; pointer-events: none; }
         .story-loading-frame { display: block; width: 240px; max-width: 100%; height: auto; }
-        .story-loading-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding-top: 16px; border-top: 1px solid var(--chi-line, #c58ba1); }
+        .story-loading-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding-top: 16px; border-top: 1px solid var(--yahha-line, #c58ba1); }
         @media (max-width: 480px) { .story-loading-error-result { grid-template-columns: minmax(0, 1fr); } .story-loading-error-art { margin: auto; } }
       `}</style>
       <div className="story-loading">

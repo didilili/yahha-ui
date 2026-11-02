@@ -12,11 +12,11 @@ export default function NotFoundScene({
       <style>{`
         .story-not-found { max-width: 660px; padding: 24px 12px; margin: auto; text-align: center; }
         .story-not-found-art { display: block; width: min(320px, 100%); height: auto; margin: 0 auto 16px; }
-        .story-not-found-number { display: block; margin-bottom: 8px; color: var(--chi-muted, #7a5c6d); font-size: var(--chi-font-size-body, 16px); font-weight: 650; letter-spacing: 4px; }
+        .story-not-found-number { display: block; margin-bottom: 8px; color: var(--yahha-muted, #7a5c6d); font-size: var(--yahha-font-size-body, 16px); font-weight: 650; letter-spacing: 4px; }
         .story-not-found-copy { margin-top: 14px; }
         .story-not-found-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px 24px; margin-top: 24px; }
-        .story-not-found-primary { display: inline-flex; align-items: center; justify-content: center; min-height: var(--chi-control-height, 44px); padding: 10px var(--chi-space-5, 20px); border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150); border-radius: var(--chi-radius-control, 22px 28px 24px 23px / 52% 48% 52% 48%); font-size: var(--chi-font-size-md, 14px); line-height: var(--chi-leading-control, 20px); background: var(--chi-accent, #ffc3d9); color: var(--chi-ink, #49313d); font-weight: 650; text-decoration: none; }
-        .story-not-found-secondary { display: inline-flex; align-items: center; min-height: var(--chi-control-height, 44px); text-decoration: underline; text-underline-offset: 0.24em; }
+        .story-not-found-primary { display: inline-flex; align-items: center; justify-content: center; min-height: var(--yahha-control-height, 44px); padding: 10px var(--yahha-space-5, 20px); border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150); border-radius: var(--yahha-radius-control, 22px 28px 24px 23px / 52% 48% 52% 48%); font-size: var(--yahha-font-size-md, 14px); line-height: var(--yahha-leading-control, 20px); background: var(--yahha-accent, #ffc3d9); color: var(--yahha-ink, #49313d); font-weight: 650; text-decoration: none; }
+        .story-not-found-secondary { display: inline-flex; align-items: center; min-height: var(--yahha-control-height, 44px); text-decoration: underline; text-underline-offset: 0.24em; }
       `}</style>
       <section className="story-not-found">
         <img

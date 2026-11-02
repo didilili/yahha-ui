@@ -73,7 +73,7 @@ describe('Dialog', () => {
     await user.click(trigger);
     const dialog = await screen.findByRole('dialog', { name: '欢迎来玩' });
     expect(dialog.getAttribute('aria-describedby')).toBeTruthy();
-    expect(dialog.closest('[data-chiikawa-theme]')?.getAttribute('data-chiikawa-theme')).toBe(
+    expect(dialog.closest('[data-yahha-theme]')?.getAttribute('data-yahha-theme')).toBe(
       'hachiware',
     );
     await user.keyboard('{Escape}');
@@ -185,23 +185,23 @@ describe('Dialog', () => {
     }
     const view = render(<Example surface="#fff000" />);
     const dialog = screen.getByRole('dialog', { name: '主题同步' });
-    const portalTheme = dialog.closest<HTMLElement>('[data-chiikawa-theme]')!;
+    const portalTheme = dialog.closest<HTMLElement>('[data-yahha-theme]')!;
 
-    expect(portalTheme.dataset.chiikawaTheme).toBe('usagi');
-    expect(portalTheme.style.getPropertyValue('--chi-ink')).toBe('#654321');
-    expect(portalTheme.style.getPropertyValue('--chi-surface')).toBe('#fff000');
+    expect(portalTheme.dataset.yahhaTheme).toBe('usagi');
+    expect(portalTheme.style.getPropertyValue('--yahha-ink')).toBe('#654321');
+    expect(portalTheme.style.getPropertyValue('--yahha-surface')).toBe('#fff000');
     expect(portalTheme.classList.contains('playground-layout')).toBe(false);
     expect(portalTheme.classList.contains('outer-layout')).toBe(false);
 
     view.rerender(<Example surface="#000fff" />);
-    expect(portalTheme.style.getPropertyValue('--chi-surface')).toBe('#000fff');
+    expect(portalTheme.style.getPropertyValue('--yahha-surface')).toBe('#000fff');
   });
 
   it('uses the default theme when there is no provider', () => {
     render(<Dialog open onOpenChange={() => {}} title="默认主题" />);
     expect(
-      screen.getByRole('dialog', { name: '默认主题' }).closest<HTMLElement>('[data-chiikawa-theme]')
-        ?.dataset.chiikawaTheme,
+      screen.getByRole('dialog', { name: '默认主题' }).closest<HTMLElement>('[data-yahha-theme]')
+        ?.dataset.yahhaTheme,
     ).toBe('chiikawa');
   });
 });

@@ -1,5 +1,5 @@
 .scrollable {
-  scrollbar-color: var(--chi-muted, #7a5c6d) transparent;
+  scrollbar-color: var(--yahha-muted, #7a5c6d) transparent;
 }
 
 @media (forced-colors: none) {
@@ -16,15 +16,15 @@
       background: transparent;
     }
     .scrollable::-webkit-scrollbar-track-piece:start {
-      margin-top: var(--native-scrollbar-inset, var(--chi-space-4, 16px));
+      margin-top: var(--native-scrollbar-inset, var(--yahha-space-4, 16px));
     }
     .scrollable::-webkit-scrollbar-track-piece:end {
-      margin-bottom: var(--native-scrollbar-inset, var(--chi-space-4, 16px));
+      margin-bottom: var(--native-scrollbar-inset, var(--yahha-space-4, 16px));
     }
     .scrollable::-webkit-scrollbar-thumb {
-      border: var(--chi-space-1, 4px) solid transparent;
-      border-radius: var(--chi-radius-pill, 999px);
-      background: var(--chi-muted, #7a5c6d);
+      border: var(--yahha-space-1, 4px) solid transparent;
+      border-radius: var(--yahha-radius-pill, 999px);
+      background: var(--yahha-muted, #7a5c6d);
       background-clip: padding-box;
     }
   }

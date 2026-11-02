@@ -224,8 +224,8 @@ async function verifyTextarea(page, scope, label) {
 
 async function verifyFieldFeedback(page, scope, label) {
   for (const [state, token] of [
-    ['normal', '--chi-focus'],
-    ['error', '--chi-error'],
+    ['normal', '--yahha-focus'],
+    ['error', '--yahha-error'],
   ]) {
     await scope.getByTestId(`design-field-${state}`).focus();
     const leading = await scope.locator(`.design-leading-${state}`).evaluate((node, variable) => {
@@ -248,8 +248,8 @@ async function verifyFieldFeedback(page, scope, label) {
     await page.getByRole('listbox').waitFor();
     const feedback = await trigger.evaluate((node, invalid) => {
       const probe = document.createElement('span');
-      probe.style.borderColor = `var(${invalid ? '--chi-error' : '--chi-focus'})`;
-      probe.style.background = `var(${invalid ? '--chi-error-field' : '--chi-accent-soft'})`;
+      probe.style.borderColor = `var(${invalid ? '--yahha-error' : '--yahha-focus'})`;
+      probe.style.background = `var(${invalid ? '--yahha-error-field' : '--yahha-accent-soft'})`;
       node.append(probe);
       const expected = getComputedStyle(probe);
       const actual = getComputedStyle(node);
@@ -348,7 +348,7 @@ async function verifyPaperHierarchy(scope, label) {
     const success = node.querySelector('[data-testid="design-badge-success"]');
     const control = node.closest('section').querySelector('[data-testid="design-button"]');
     const probe = document.createElement('span');
-    probe.style.backgroundColor = 'var(--chi-accent)';
+    probe.style.backgroundColor = 'var(--yahha-accent)';
     node.append(probe);
     const themeAccent = getComputedStyle(probe).backgroundColor;
     probe.remove();
@@ -405,7 +405,7 @@ async function verifyPressedHover(page, scope, label) {
     await button.hover();
     const colors = await button.evaluate((node) => {
       const probe = document.createElement('span');
-      probe.style.background = 'var(--chi-accent-hover)';
+      probe.style.background = 'var(--yahha-accent-hover)';
       node.append(probe);
       const expected = getComputedStyle(probe).backgroundColor;
       probe.remove();

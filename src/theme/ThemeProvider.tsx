@@ -18,7 +18,7 @@ export function ThemeProvider({ theme, children, className, tokens }: ThemeProvi
   const context = useMemo(() => ({ theme, style }), [theme, style]);
   return (
     <ThemeContext.Provider value={context}>
-      <div className={cx(styles.theme, className)} data-chiikawa-theme={theme} style={style}>
+      <div className={cx(styles.theme, className)} data-yahha-theme={theme} style={style}>
         {children}
       </div>
     </ThemeContext.Provider>

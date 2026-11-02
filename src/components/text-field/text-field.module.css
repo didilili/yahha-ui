@@ -1,7 +1,7 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: var(--chi-space-2, 8px);
+  gap: var(--yahha-space-2, 8px);
   min-width: 0;
   text-align: start;
   overflow-wrap: anywhere;
@@ -9,12 +9,12 @@
 .fieldLabel,
 .hint,
 .error {
-  padding-inline: var(--chi-space-1, 4px);
+  padding-inline: var(--yahha-space-1, 4px);
 }
 .fieldLabel {
-  color: var(--chi-ink, #49313d);
-  font-size: var(--chi-font-size-md, 14px);
-  line-height: var(--chi-leading-label, 1.5);
+  color: var(--yahha-ink, #49313d);
+  font-size: var(--yahha-font-size-md, 14px);
+  line-height: var(--yahha-leading-label, 1.5);
   font-weight: 600;
 }
 .inputWrap {
@@ -24,69 +24,69 @@
   min-width: 0;
 }
 .input {
-  --field-line-height: var(--chi-leading-control, 20px);
+  --field-line-height: var(--yahha-leading-control, 20px);
   box-sizing: border-box;
   display: block;
   width: 100%;
   min-width: 0;
-  min-height: var(--chi-control-height, 44px);
+  min-height: var(--yahha-control-height, 44px);
   padding: max(
       0px,
       calc(
         (
-            var(--chi-control-height, 44px) - var(--field-line-height) - 2 *
-              var(--chi-control-border-width, 2px)
+            var(--yahha-control-height, 44px) - var(--field-line-height) - 2 *
+              var(--yahha-control-border-width, 2px)
           ) /
           2
       )
     )
-    calc(var(--chi-space-4, 16px) - var(--chi-control-border-width, 2px));
-  border: var(--chi-control-border-width, 2px) solid var(--chi-contour, #684150);
-  border-radius: var(--chi-radius-field, 12px 16px 14px 11px);
-  background: var(--chi-field-background, #ffffff);
-  box-shadow: inset 0 -3px 0 var(--chi-neutral-surface, #f1f8ff);
-  color: var(--chi-ink, #49313d);
+    calc(var(--yahha-space-4, 16px) - var(--yahha-control-border-width, 2px));
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  border-radius: var(--yahha-radius-field, 12px 16px 14px 11px);
+  background: var(--yahha-field-background, #ffffff);
+  box-shadow: inset 0 -3px 0 var(--yahha-neutral-surface, #f1f8ff);
+  color: var(--yahha-ink, #49313d);
   font-family: inherit;
-  font-size: var(--chi-font-size-md, 14px);
+  font-size: var(--yahha-font-size-md, 14px);
   line-height: var(--field-line-height);
   transition:
-    border-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease),
-    background-color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+    border-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease),
+    background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .input[hidden]:not([hidden='until-found']) {
   display: none;
 }
 /* Native date editors have intrinsic sizes that vary between browsers. */
 .input:is([type='date'], [type='time'], [type='datetime-local'], [type='month'], [type='week']) {
-  block-size: var(--chi-control-height, 44px);
+  block-size: var(--yahha-control-height, 44px);
 }
 .input::placeholder {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   opacity: 1;
 }
 .input[readonly] {
-  border-color: var(--chi-line, #c58ba1);
-  background: var(--chi-neutral-surface, #f1f8ff);
+  border-color: var(--yahha-line, #c58ba1);
+  background: var(--yahha-neutral-surface, #f1f8ff);
   cursor: text;
   box-shadow: none;
 }
 .input:focus-visible {
-  border-color: var(--chi-focus, #b04e78);
-  outline: var(--chi-focus-width, 2px) solid var(--chi-focus, #b04e78);
-  outline-offset: var(--chi-focus-offset, 2px);
+  border-color: var(--yahha-focus, #b04e78);
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
 }
 .input[aria-invalid='true']:not(:disabled) {
-  border-color: var(--chi-error, #a33e4f);
-  background: var(--chi-error-field, #fffafb);
-  box-shadow: inset 0 -3px 0 var(--chi-error-surface, #fff4f5);
+  border-color: var(--yahha-error, #a33e4f);
+  background: var(--yahha-error-field, #fffafb);
+  box-shadow: inset 0 -3px 0 var(--yahha-error-surface, #fff4f5);
 }
 .input[aria-invalid='true']:focus-visible {
-  outline-color: var(--chi-error, #a33e4f);
+  outline-color: var(--yahha-error, #a33e4f);
 }
 .input:disabled {
-  border-color: var(--chi-line, #c58ba1);
-  background: var(--chi-disabled-surface, #f0f3f7);
-  color: var(--chi-muted, #7a5c6d);
+  border-color: var(--yahha-line, #c58ba1);
+  background: var(--yahha-disabled-surface, #f0f3f7);
+  color: var(--yahha-muted, #7a5c6d);
   -webkit-text-fill-color: currentColor;
   opacity: 1;
   cursor: not-allowed;
@@ -95,16 +95,16 @@
 }
 .leading {
   position: absolute;
-  inset-inline-start: calc(var(--chi-space-4, 16px) - var(--chi-control-border-width, 2px));
+  inset-inline-start: calc(var(--yahha-space-4, 16px) - var(--yahha-control-border-width, 2px));
   display: flex;
   align-items: center;
   justify-content: center;
   width: 18px;
   height: 18px;
   overflow: hidden;
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
   pointer-events: none;
-  transition: color var(--chi-duration-fast, 150ms) var(--chi-ease, ease);
+  transition: color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 .leading svg {
   width: 18px;
@@ -112,43 +112,43 @@
   flex-shrink: 0;
 }
 .inputWrap:has(.leading) .input {
-  padding-inline-start: var(--chi-control-height, 44px);
+  padding-inline-start: var(--yahha-control-height, 44px);
 }
 .inputWrap:has(.input:focus:not(:disabled):not([readonly])) .leading {
-  color: var(--chi-focus, #b04e78);
+  color: var(--yahha-focus, #b04e78);
 }
 .inputWrap:has(.input[aria-invalid='true']:not(:disabled):not([readonly])) .leading {
-  color: var(--chi-error, #a33e4f);
+  color: var(--yahha-error, #a33e4f);
 }
 .inputWrap:has(.input:disabled) .leading {
   transition: none;
 }
 .hint,
 .error {
-  font-size: var(--chi-font-size-sm, 12px);
-  line-height: var(--chi-leading-caption, 1.6);
+  font-size: var(--yahha-font-size-sm, 12px);
+  line-height: var(--yahha-leading-caption, 1.6);
 }
 .hint {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
 }
 .error {
-  color: var(--chi-error, #a33e4f);
+  color: var(--yahha-error, #a33e4f);
 }
 .field[data-disabled] .fieldLabel,
 .field:has(.input:disabled) .fieldLabel {
-  color: var(--chi-muted, #7a5c6d);
+  color: var(--yahha-muted, #7a5c6d);
 }
 
 @media (hover: hover) {
   .input:not(:disabled):not([readonly]):not([aria-invalid='true']):hover {
-    border-color: var(--chi-focus, #b04e78);
+    border-color: var(--yahha-focus, #b04e78);
   }
 }
 
 @media (max-width: 480px), (pointer: coarse) {
   .input {
-    --field-line-height: var(--chi-leading-input-mobile, 24px);
-    font-size: var(--chi-font-size-input-mobile, 16px);
+    --field-line-height: var(--yahha-leading-input-mobile, 24px);
+    font-size: var(--yahha-font-size-input-mobile, 16px);
   }
 }
 

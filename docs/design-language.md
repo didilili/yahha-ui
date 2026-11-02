@@ -40,9 +40,9 @@ W3C 的 WCAG 2.2 AA 点击目标基准为 24×24 CSS px、AAA 增强基准为 44
 
 ## 颜色与文字
 
-- 默认使用 `ThemeProvider theme="chiikawa"`：内容面和字段为白色 `#ffffff`，暖墨正文为 `#49313d`，深墨轮廓为 `#684150`，粉色强调为 `#ffc3d9`，悬停为 `#ffb3cf`，轻量强调为 `#fff0f6`。次要文字 `#7a5c6d` 降低强调，保留清楚的可读性。
+- 默认视觉选用吉伊粉色预设（`chiikawa`），通过 `ThemeProvider theme="chiikawa"` 设置：内容面和字段为白色 `#ffffff`，暖墨正文为 `#49313d`，深墨轮廓为 `#684150`，粉色强调为 `#ffc3d9`，悬停为 `#ffb3cf`，轻量强调为 `#fff0f6`。次要文字 `#7a5c6d` 降低强调，保留清楚的可读性。
 - 常规主题边线为 `#c58ba1`，焦点为 `#b04e78`；中性纸面为浅蓝白 `#f1f8ff`，轻纸边为蓝灰 `#c9deec`，禁用面为 `#f0f3f7`。白色承担内容，粉色承担操作和选中，蓝灰承担轻纸边；成功、警告和错误仍使用各自语义色。
-- 小八的蓝色和乌萨奇的黄色是可选配色预设，在 ThemeProvider 文档中单独展示。组件尺寸、语义和状态保持一致；文档站不通过顶栏全站换色来展示设计语言。
+- 小八浅蓝预设（`hachiware`）和乌萨奇浅黄预设（`usagi`）在 ThemeProvider 文档中单独展示。组件尺寸、语义和状态保持一致；文档站不通过顶栏全站换色来展示设计语言。
 - 使用公开 `ThemeTokens` 覆盖颜色，Portal 同步最近 Provider 的预设与颜色。显式传入 `tokens.line` 时，常规边线、深墨轮廓、轻纸边及按压底边一起覆盖，加载占位的底色独立保留。尺寸、圆角与动效变量是库内部实现，不作为公开定制接口。
 - 正文优先使用清楚的系统字体与适合连续阅读的行高。组件继承使用方字体，不自动加载手写字体；手写字体可用于少量标题或情境文字，不能成为整库使用前提。
 
@@ -143,7 +143,7 @@ ArticleActions 的首次保存失败、重试与草稿保留沿用现有流程�
 
 ## 开发约束与变更顺序
 
-1. `src/theme/theme.module.css` 是共享默认视觉 token 的唯一值源。组件引用正确语义族，不在组件内重新声明公共 `--chi-*` 值，不增加一次性的 45 / 46px 控件档位。
+1. `src/theme/theme.module.css` 是共享默认视觉 token 的唯一值源。组件引用正确语义族，不在组件内重新声明公共 `--yahha-*` 值，不增加一次性的 45 / 46px 控件档位。
 2. `src/components/` 承担基础外观与状态。字号、行高、共享轮廓、焦点偏移及单行交互尺寸通过 token 使用；圆点、勾和箭头等例外必须有具体用途，机械检查采用精确范围和原因。
 3. `playground/src/examples/` 负责组合、数据和布局。基准示例不得通过 `style`、`className`、`classNames` 或 `<style>` 重写组件的高度、字体、边框、配色、圆角或选中状态。公开定制入口仍供使用方应用使用；专门演示定制的例子应明确命名、说明范围并单独验证。
 4. 文档站通过站点语义变量维护自身品牌色、群像场景、导航、代码块和布局，不能用覆盖组件内部 DOM 的方式“修好”示例。正文不因手机而缩回 13px，示例复制后保持相同组件规则。主要链接与 Button 共用动作视觉规则，分别保留链接导航和按钮操作语义。
@@ -158,6 +158,6 @@ ArticleActions 的首次保存失败、重试与草稿保留沿用现有流程�
 
 - [Ant Design 主题与 token](https://ant.design/docs/react/customize-theme/)及[字段内边距推导](https://github.com/ant-design/ant-design/blob/master/components/input/style/token.ts)：共享尺寸种子向组件传播，而非逐组件临时改高度。
 - [Radix 排版](https://www.radix-ui.com/themes/docs/theme/typography)与[间距](https://www.radix-ui.com/themes/docs/theme/spacing)：正文、控件、字阶和缩放分开定义。
-- [Animal Island UI 固定版本变量](https://github.com/guokaigdg/animal-island-ui/blob/2d855fc6c1cb56cc4152290f50c43439d4a4920f/src/styles/variables.less)：主题化组件结构与尺寸分档参考；动森视觉不直接迁入 Chiikawa。
+- [Animal Island UI 固定版本变量](https://github.com/guokaigdg/animal-island-ui/blob/2d855fc6c1cb56cc4152290f50c43439d4a4920f/src/styles/variables.less)：主题化组件结构与尺寸分档参考；动森视觉不直接迁入 Yahha UI。
 - [W3C 最小点击目标](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)与[增强点击目标](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html)：分别评估操作目标和视觉尺寸。
 - [朋友 SVG 素材与绘制参考](../playground/src/examples/scenes/artwork/friends-preview/README.md)：记录素材来源、绘制参考和局限；暖墨、轻粉与漫画轮廓是本库的设计选择，不声称官方背书。

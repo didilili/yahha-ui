@@ -100,10 +100,10 @@ export default function ReadingExample() {
         .reading-author-identity { display: flex; align-items: center; gap: 16px; }
         .reading-author-copy { min-width: 0; flex: 1; }
         .reading-author-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-inline-start: 60px; }
-        .reading-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-block: 20px; border-block: 1px solid var(--chi-line, #c58ba1); }
+        .reading-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-block: 20px; border-block: 1px solid var(--yahha-line, #c58ba1); }
         .reading-search { flex: 1 1 210px; }
         .reading-options { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-top: 12px; }
-        .reading-list { display: grid; gap: 8px; padding-block: 20px; border-bottom: 1px solid var(--chi-line, #c58ba1); }
+        .reading-list { display: grid; gap: 8px; padding-block: 20px; border-bottom: 1px solid var(--yahha-line, #c58ba1); }
         .reading-list-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
         .reading-article { padding-top: 32px; }
         .reading-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; }

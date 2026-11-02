@@ -23,7 +23,7 @@ describe('Tooltip', () => {
       </div>,
     );
     const popup = await screen.findByText('文字方向提示');
-    const portal = popup.closest<HTMLElement>('[data-chiikawa-theme]')!;
+    const portal = popup.closest<HTMLElement>('[data-yahha-theme]')!;
     await waitFor(() => expect(portal.dir).toBe('rtl'));
     await act(async () => {
       screen.getByTestId('reading-direction').dir = 'ltr';
@@ -43,7 +43,7 @@ describe('Tooltip', () => {
       </DirectionProvider>,
     );
     const popup = await screen.findByText('本地文字提示');
-    expect(popup.closest<HTMLElement>('[data-chiikawa-theme]')?.dir).toBe('ltr');
+    expect(popup.closest<HTMLElement>('[data-yahha-theme]')?.dir).toBe('ltr');
   });
 
   it('opens on keyboard focus and closes on Escape without changing the trigger name', async () => {
@@ -94,9 +94,9 @@ describe('Tooltip', () => {
     expect(ref.current).toBe(tooltip);
     expect(tooltip.classList.contains('custom-tooltip')).toBe(true);
     expect(tooltip.style.maxWidth).toBe('200px');
-    const theme = tooltip.closest<HTMLElement>('[data-chiikawa-theme]')!;
-    expect(theme.dataset.chiikawaTheme).toBe('hachiware');
-    expect(theme.style.getPropertyValue('--chi-ink')).toBe('#123456');
+    const theme = tooltip.closest<HTMLElement>('[data-yahha-theme]')!;
+    expect(theme.dataset.yahhaTheme).toBe('hachiware');
+    expect(theme.style.getPropertyValue('--yahha-ink')).toBe('#123456');
     expect(theme.classList.contains('page-layout')).toBe(false);
   });
 
