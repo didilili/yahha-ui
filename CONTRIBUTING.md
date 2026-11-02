@@ -72,6 +72,7 @@ npx prettier --check README.md CONTRIBUTING.md docs
 
 - `npm run lint` / `npm run format:check`：代码规则与格式。
 - `npm test`：组件行为测试。
+- `npm run check:scripts`：验收脚本共享静态服务器的真实 HTTP、资源类型、子路径与路径边界检查。
 - `npm run build:lib` / `npm run build:demo`：组件库、类型声明与展示页构建。
 - `npm run lint:package`：对构建后的包运行 publint。
 - `npm run test:package`：将实际安装包放入独立使用方，检查 Markdown 和文档站全部 TSX 示例类型并运行 Chromium 验证；包含 1280、320、390px 的键盘、长文本、表单重置、弹窗焦点及滚动边界，以及 Basics 中的新增组件组合场景。先执行 `npm run build:lib`。
@@ -80,6 +81,8 @@ npx prettier --check README.md CONTRIBUTING.md docs
 - `npm run test:overlays`：在三引擎复验 Dialog 表单、Popover 重命名、菜单草稿操作、Tooltip 及 ArticleActions 嵌套流程；包含 320×500px 短屏、错误恢复、取消与关闭回焦。先执行 `npm run build:demo`，三引擎安装方法同上文控件验收。
 - `npm run test:blog`：用真实本地安装包运行 `examples/blog/` 同份网站，验证三页面、URL 筛选、历史返回、收藏和窄屏布局。先执行 `npm run build:lib`。
 - `npm run check`：完整本地检查；涉及公共 API、构建或依赖边界时运行。
+
+完整检查先统一校验字体、构建组件库，再用 `build:demo:site` 与 `build:blog:site` 构建两站，避免重复检查相同字体或再次构建组件库。日常单独构建仍使用 `build:demo` / `build:blog`，它们保留所需的字体检查与组件库构建。
 
 首次运行浏览器测试需要 `npx playwright install chromium`；Linux 可能需要 `npx playwright install --with-deps chromium`。`npm run format` 和 `npm run lint:fix` 会修改文件，只在确认作用范围后使用。
 

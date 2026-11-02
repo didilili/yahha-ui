@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createBasicConsumerPage, openBasicConsumer } from './browser-setup.mjs';
 
 async function focused(page, locator) {
   await page.waitForFunction(
@@ -298,16 +299,9 @@ export async function verifyNavigationAppearance(page, theme) {
 
 export async function verifyNavigation(browser, url) {
   for (const width of [1280, 390, 320]) {
-    const page = await browser.newPage({
-      viewport: { width, height: 900 },
-      reducedMotion: 'reduce',
-    });
-    page.setDefaultTimeout(8000);
-    const errors = [];
-    page.on('pageerror', (error) => errors.push(error.message));
+    const { page, errors } = await createBasicConsumerPage(browser, width);
     try {
-      await page.goto(`${url}?basics`);
-      await page.getByRole('heading', { name: 'Basic component consumer' }).waitFor();
+      await openBasicConsumer(page, url);
       for (const theme of ['pink', 'blue', 'yellow']) {
         await page.getByRole('combobox', { name: 'Basic preview theme' }).selectOption(theme);
         await verifyNavigationAppearance(page, theme);

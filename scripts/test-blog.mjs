@@ -1,15 +1,14 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { once } from 'node:events';
 import { readFileSync } from 'node:fs';
 import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
-import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
-import { basename, extname, join, resolve, sep } from 'node:path';
+import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { chromium } from 'playwright';
 import { verifyBlog } from '../tests/blog-site/browser.mjs';
+import { startStaticServer } from './static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const npmEntry = process.env.npm_execpath;
@@ -115,46 +114,14 @@ try {
 
   const directory = join(consumer, 'dist');
   const prefix = '/examples/blog/';
-  const mime = {
-    '.html': 'text/html',
-    '.js': 'text/javascript',
-    '.css': 'text/css',
-    '.png': 'image/png',
-    '.svg': 'image/svg+xml',
-    '.woff2': 'font/woff2',
-  };
-  server = createServer(async (request, response) => {
-    try {
-      const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-      if (!pathname.startsWith(prefix)) {
-        response.writeHead(404).end();
-        return;
-      }
-      const file = resolve(directory, pathname.slice(prefix.length) || 'index.html');
-      if (!file.startsWith(`${directory}${sep}`)) {
-        response.writeHead(403).end();
-        return;
-      }
-      response.writeHead(200, {
-        'Content-Type': mime[extname(file)] ?? 'application/octet-stream',
-      });
-      response.end(await readFile(file));
-    } catch {
-      response.writeHead(404).end();
-    }
-  });
-  server.listen(0, '127.0.0.1');
-  await once(server, 'listening');
+  server = await startStaticServer([{ directory, prefix }]);
   browser = await chromium.launch({ headless: true });
-  await verifyBlog(browser, `http://127.0.0.1:${server.address().port}${prefix}`);
+  await verifyBlog(browser, `${server.origin}${prefix}`);
   console.log(
     'Blog example passed: installed tarball, three pages, URL filters, browser back, bookmarks, focus and nested deployment.',
   );
 } finally {
   await browser?.close();
-  if (server) {
-    server.closeAllConnections();
-    await new Promise((resolve) => server.close(resolve));
-  }
+  await server?.close();
   await rm(temporary, { recursive: true, force: true });
 }

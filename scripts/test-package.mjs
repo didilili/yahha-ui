@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { once } from 'node:events';
 import {
   cp,
   lstat,
@@ -12,10 +11,9 @@ import {
   rm,
   writeFile,
 } from 'node:fs/promises';
-import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { basename, extname, join, resolve, sep } from 'node:path';
+import { basename, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { verifyConsumer } from '../tests/package-consumer/browser.mjs';
@@ -36,6 +34,7 @@ import {
 import { verifyDesignContract } from '../tests/package-consumer/design-checks.mjs';
 import { createExampleEntry } from '../playground/src/docs/example-source.ts';
 import { markdownExamples } from './documentation-contract.mjs';
+import { startStaticServer } from './static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const require = createRequire(new URL('../package.json', import.meta.url));
@@ -291,32 +290,12 @@ try {
   await run(process.execPath, [join(consumer, 'node_modules/vite/bin/vite.js'), 'build']);
 
   const output = join(consumer, 'dist');
-  const contentTypes = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
-  server = createServer(async (request, response) => {
-    try {
-      const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-      if (pathname === '/favicon.ico') {
-        response.writeHead(204).end();
-        return;
-      }
-      const path = resolve(output, `.${pathname === '/' ? '/index.html' : pathname}`);
-      if (!path.startsWith(`${output}${sep}`)) {
-        response.writeHead(403).end();
-        return;
-      }
-      const contents = await readFile(path);
-      response.writeHead(200, {
-        'Content-Type': contentTypes[extname(path)] ?? 'application/octet-stream',
-      });
-      response.end(contents);
-    } catch {
-      response.writeHead(404).end();
-    }
+  server = await startStaticServer([{ directory: output, prefix: '/' }], {
+    contentTypes: { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' },
+    favicon: true,
   });
-  server.listen(0, '127.0.0.1');
-  await once(server, 'listening');
   const { chromium, firefox, webkit } = await import('playwright');
-  const url = `http://127.0.0.1:${server.address().port}/`;
+  const url = `${server.origin}/`;
   if (process.argv.includes('--scrollbar-only')) {
     browser = await chromium.launch({ headless: true, ignoreDefaultArgs: ['--hide-scrollbars'] });
     await verifyDialogScrollbar(browser, url);
@@ -383,10 +362,7 @@ try {
     await browser?.close();
   } finally {
     try {
-      if (server) {
-        server.closeAllConnections();
-        await new Promise((resolve) => server.close(resolve));
-      }
+      await server?.close();
     } finally {
       await rm(temporary, { recursive: true, force: true });
     }

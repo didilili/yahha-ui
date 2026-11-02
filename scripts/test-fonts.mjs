@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
-import { once } from 'node:events';
 import { readFile } from 'node:fs/promises';
-import { createServer } from 'node:http';
-import { extname, resolve, sep } from 'node:path';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { siteContentTypes, startStaticServer } from './static-server.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const sites = [
@@ -21,38 +20,6 @@ const sites = [
     notices: resolve(root, 'examples/blog/src/assets'),
   },
 ];
-const mime = {
-  '.html': 'text/html',
-  '.js': 'text/javascript',
-  '.css': 'text/css',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.woff2': 'font/woff2',
-  '.txt': 'text/plain; charset=utf-8',
-};
-const server = createServer(async (request, response) => {
-  try {
-    const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-    const site = sites.find(({ prefix }) => pathname.startsWith(prefix));
-    if (!site) {
-      response.writeHead(404).end();
-      return;
-    }
-    const file = resolve(site.directory, pathname.slice(site.prefix.length) || 'index.html');
-    if (!file.startsWith(`${site.directory}${sep}`)) {
-      response.writeHead(403).end();
-      return;
-    }
-    const body = await readFile(file);
-    response.writeHead(200, {
-      'Content-Type': mime[extname(file)] ?? 'application/octet-stream',
-      'Content-Length': body.length,
-    });
-    response.end(body);
-  } catch {
-    response.writeHead(404).end();
-  }
-});
 
 const includesCodepoint = (range, codepoint) =>
   range.split(',').some((part) => {
@@ -241,19 +208,20 @@ async function verifySite(browser, site, width, origin) {
 }
 
 let browser;
+let server;
 try {
   for (const { directory } of sites) await readFile(resolve(directory, 'index.html'));
-  server.listen(0, '127.0.0.1');
-  await once(server, 'listening');
-  const origin = `http://127.0.0.1:${server.address().port}`;
+  server = await startStaticServer(sites, {
+    contentTypes: { ...siteContentTypes, '.txt': 'text/plain; charset=utf-8' },
+    contentLength: true,
+  });
   browser = await chromium.launch({ headless: true });
   for (const width of [1440, 390])
-    for (const site of sites) await verifySite(browser, site, width, origin);
+    for (const site of sites) await verifySite(browser, site, width, server.origin);
   console.log(
     'Fonts passed: desktop/mobile rendered webfonts, lazy chunks and both built OFL notices.',
   );
 } finally {
   await browser?.close();
-  server.closeAllConnections();
-  if (server.listening) await new Promise((done) => server.close(done));
+  await server?.close();
 }
