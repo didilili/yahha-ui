@@ -4,7 +4,7 @@
 
 - `peek.svg` 来自仓库 `playground/src/examples/scenes/artwork/friends-preview/friends-peek.svg`，作为博客独立副本保留；由 `npm run sync:artwork` 自动同步，`npm run check:artwork` 核对副本一致。
 - `author.svg` 对应当前 `friends-preview/portraits/chiikawa-smile.svg`，由 `npm run sync:artwork` 自动同步，`npm run check:artwork` 核对副本一致。
-- `reading.png`、`rest.png`、`lounge.png` 来自 `playground/src/assets/`，保留原字节供博客独立使用；当前没有自动同步或副本哈希检查，更新时需单独核对。
+- `reading.png`、`rest.png`、`lounge.png` 最初复制自 `playground/src/assets/`，本目录保留原字节并由博客直接维护。原 playground 文件只被已停用的旧演示引用，已于 2026-11-02 随旧演示归档至工作区 `../local-archives/yahha-ui/2026-11-02-repository-cleanup/`（相对组件库根目录），原路径、字节和 SHA-256 见归档清单；当前没有另一份活动副本或自动生成流程。
 - `fonts/` 是 `playground/src/assets/fonts/` 的同步副本，包含 `manifest.json`、`marker.css`、`wenkai.css` 及两种字体的 WOFF2 分片；对应 `OFL-*.txt` 声明保留在本目录。通过根目录 `npm run sync:fonts` 同步，`npm run check:fonts` 核对覆盖、哈希和副本一致性，不单独编辑生成文件。
 
 字体族名为 `Marker`、`WenKai`，使用官方 Regular 字体源的完整字符覆盖。两站现有源码用字集中在 `common` 首包，其余字符按每片最多 512 个码点生成 `unicode-range`，新增用字与用户输入按需加载对应的本地分片。日常安装和构建无需 Python 或 uv；重新生成入口为根目录 `npm run fonts:generate`，可选下载缓存等维护方法见[字体维护](../../../../docs/assets-and-distribution.md#字体维护)。博客构建会自动将现有声明写入 `dist/notices/OFL-marker.txt` 与 `dist/notices/OFL-wenkai.txt`。

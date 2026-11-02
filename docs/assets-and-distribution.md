@@ -24,7 +24,7 @@
 
 PNG 不进入组件安装包；实际引用的图片会进入对应网站的静态构建。
 
-- `playground/src/assets/reading.png`、`rest.png`、`lounge.png` 是仓库既有插图，博客保存同名原字节副本以便独立运行；当前没有自动同步或副本哈希检查，更新时需单独核对。目前[博客素材说明](../examples/blog/src/assets/README.md)记录了这些副本的来源路径，未给出与下列状态图同等的独立生成清单；不补写未经核实的作者、工具或许可。
+- `examples/blog/src/assets/reading.png`、`rest.png`、`lounge.png` 是博客当前使用的既有插图。原先位于 `playground/src/assets/` 的相同文件只被已停用的旧演示引用，已随旧演示归档至工作区 `../local-archives/yahha-ui/2026-11-02-repository-cleanup/`（相对组件库根目录），保留原路径、字节和 SHA-256；活动版本由博客直接维护，不再保留另一份未使用的 playground 图片。现有[博客素材说明](../examples/blog/src/assets/README.md)记录了这一迁移，未给出与下列状态图同等的独立生成清单；不补写未经核实的作者、工具或许可。
 - `playground/src/examples/scenes/artwork/empty.png` 有[生成说明](../playground/src/examples/scenes/artwork/README.md)及 [sources.json](../playground/src/examples/scenes/artwork/sources.json)，记录 Codex 内置 image_gen、生成日期、尺寸、字节数和 SHA-256，仍用于部分示例。
 
 现有状态图说明明确记录为非官方同人样张，角色素材的再发布与商业使用许可尚未核验。哈希证明文件与记录对应，不代表授权状态。
