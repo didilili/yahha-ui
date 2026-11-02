@@ -1,5 +1,20 @@
 import { useState } from 'react';
-import { Checkbox, RadioGroup, SegmentedControl, Switch } from 'yahha-ui';
+import {
+  Checkbox,
+  RadioGroup,
+  SegmentedControl,
+  Switch,
+  type RadioGroupProps,
+  type SegmentedControlProps,
+} from 'yahha-ui';
+
+type ExpectFalse<T extends false> = T;
+
+/** Option-driven groups must reject children instead of silently discarding caller content. */
+export type SelectionChildrenContract = [
+  ExpectFalse<'children' extends keyof RadioGroupProps<string> ? true : false>,
+  ExpectFalse<'children' extends keyof SegmentedControlProps<string> ? true : false>,
+];
 
 const options = [
   { value: 'first', label: 'First selection', description: 'First option detail' },

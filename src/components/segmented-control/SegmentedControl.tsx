@@ -8,10 +8,10 @@ export interface SegmentedOption<T extends string> {
   disabled?: boolean;
 }
 
-/** A controlled radio group. Native attributes and ref target the fieldset. */
+/** A controlled radio group. Native attributes and ref target the fieldset; options supply the content. */
 export interface SegmentedControlProps<T extends string> extends Omit<
   ComponentPropsWithRef<'fieldset'>,
-  'defaultValue' | 'defaultChecked'
+  'children' | 'defaultValue' | 'defaultChecked'
 > {
   options: readonly SegmentedOption<T>[];
   value: T;

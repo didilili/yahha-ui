@@ -8,10 +8,10 @@ export interface RadioOption<T extends string> {
   description?: ReactNode;
   disabled?: boolean;
 }
-/** Controlled native radios. ref/style/className target the fieldset. */
+/** Controlled native radios. ref/style/className target the fieldset; content comes from named props. */
 export interface RadioGroupProps<T extends string> extends Omit<
   ComponentPropsWithRef<'fieldset'>,
-  'defaultValue' | 'defaultChecked'
+  'children' | 'defaultValue' | 'defaultChecked'
 > {
   label: ReactNode;
   options: readonly RadioOption<T>[];
