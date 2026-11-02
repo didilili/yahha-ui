@@ -11,7 +11,7 @@
   margin: 0;
 }
 .cs-page :where(h1, h2, h3) {
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
 }
 .cs-page :where(a) {
   text-underline-offset: 4px;

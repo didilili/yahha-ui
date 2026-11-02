@@ -1,8 +1,5 @@
-@font-face {
-  font-family: WenKai;
-  src: url('./assets/wenkai.woff2') format('woff2');
-  font-display: swap;
-}
+@import './assets/fonts/wenkai.css';
+
 :root {
   color: var(--chi-ink, #49313d);
   background: var(--chi-surface, #ffffff);

@@ -1,8 +1,4 @@
-@font-face {
-  font-family: FriendsWenKai;
-  src: url('../assets/wenkai.woff2') format('woff2');
-  font-display: swap;
-}
+@import '../assets/fonts/wenkai.css';
 
 :root {
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -113,7 +109,7 @@ img {
   height: auto;
 }
 .fp-logo > span {
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   font-size: 25px;
   line-height: 1.15;
 }
@@ -209,7 +205,7 @@ img {
   transform: rotate(-10deg);
 }
 .fp-hero h1 {
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   font-weight: 700;
   font-size: clamp(38px, 4.1vw, 59px);
   line-height: 1.4;
@@ -269,7 +265,7 @@ img {
   position: absolute;
   top: 19px;
   left: 24%;
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   font-size: 17px;
   transform: rotate(3deg);
 }
@@ -323,7 +319,7 @@ img {
 }
 .fp-section-heading h2 {
   margin: 0;
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   font-size: 29px;
   line-height: 1.45;
 }
@@ -386,7 +382,7 @@ img {
   line-height: 1.5;
   overflow-wrap: anywhere;
   margin-bottom: 8px;
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
 }
 .fp-date {
   font-size: 12px;
@@ -450,7 +446,7 @@ img {
   height: auto;
 }
 .fp-next-stop h2 {
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   font-size: 25px;
   margin-bottom: 10px;
 }
@@ -478,7 +474,7 @@ img {
   margin-bottom: 12px;
 }
 .fp-footer p {
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   margin-bottom: 10px;
   font-size: 17px;
 }
@@ -509,7 +505,7 @@ img {
   height: 44px;
 }
 .fp-art-title h1 {
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   font-size: 35px;
   margin: 10px 0;
 }
@@ -556,7 +552,7 @@ img {
   margin-top: 45px;
 }
 .fp-art-pair h2 {
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   font-size: 22px;
   margin-bottom: 22px;
 }
@@ -585,7 +581,7 @@ img {
   font-size: 13px;
 }
 .fp-comparison h1 {
-  font-family: FriendsWenKai, sans-serif;
+  font-family: WenKai, sans-serif;
   font-size: 32px;
   margin-bottom: 12px;
 }

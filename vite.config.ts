@@ -1,11 +1,12 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { fontNotices } from './scripts/font-notices.ts';
 
 export default defineConfig({
   root: fileURLToPath(new URL('./playground', import.meta.url)),
   base: './',
-  plugins: [react()],
+  plugins: [react(), fontNotices(new URL('./playground/src/assets/', import.meta.url))],
   resolve: {
     alias: [
       {
@@ -18,5 +19,9 @@ export default defineConfig({
       },
     ],
   },
-  build: { outDir: '../demo-dist', emptyOutDir: true },
+  build: {
+    outDir: '../demo-dist',
+    emptyOutDir: true,
+    assetsInlineLimit: (path) => (path.endsWith('.woff2') ? false : undefined),
+  },
 });
