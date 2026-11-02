@@ -181,7 +181,7 @@ export default function SwitchForm() {
 
 ## 样式定制
 
-轨道内底边与白色圆扣保留轻微层次，开启状态仍由颜色和圆扣位置共同表达。 多个开关之间的间距在外层容器中设置；调整标签文字或提示分别使用 classNames.text / classNames.hint。长标签允许换行，避免通过缩小轨道或点击区域来压缩布局。
+多个开关之间的间距在外层容器中设置；调整标签文字或提示分别使用 classNames.text / classNames.hint。长标签允许换行，避免通过缩小轨道或点击区域来压缩布局。
 
 <a id="related"></a>
 

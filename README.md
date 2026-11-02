@@ -2,11 +2,11 @@
 
 **一起做，全宇宙最可爱的 UI 组件库。**
 
-欢迎来到 **Yahha 星球**。朋友们在这里搭界面、写手记，也给新来的你留了个位置。
+Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页与内容网站。
 
-Yahha UI 是一套漫画手账风 React 组件库，适合博客、个人主页与内容网站。圆润的按钮、像纸签一样的标记，还有便笺般的弹出面板，都在这里等你动手。
+组件采用暖墨轮廓、白纸内容面、粉色强调与浅蓝纸边，提供交互示例、API 和可复制的网站组合。
 
-[开始使用](#构建与本地安装) · [组件文档](docs/README.md) · [完整博客示例](examples/blog/README.md) · [设计语言](docs/design-language.md) · [静态部署](docs/deployment.md)
+[开始使用](#构建与本地安装) · [组件文档](https://github.com/didilili/yahha-ui/blob/main/docs/README.md) · [完整博客示例](https://github.com/didilili/yahha-ui/tree/main/examples/blog) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues)
 
 **v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 29 个 UI 组件与 ThemeProvider · 当前通过本地安装包试用，尚未发布 npm
 
@@ -14,7 +14,7 @@ Yahha UI 是一套漫画手账风 React 组件库，适合博客、个人主页�
 
 ## 把可爱，搭进你的世界
 
-在这颗星球上，云朵邮局会收到没有署名的信，朋友们会一起帮迷路的小星星找路，也会给晚到的伙伴留一块饼干。界面用白纸、暖墨、清亮粉色和浅蓝纸边接住这些日常；组件各有用途，故事交给你来写。
+站点以 **Yahha 星球** 组织首页与示例场景；基础组件可独立使用，不依赖角色图案。
 
 - **为内容网站准备**：阅读、分类、搜索、收藏与轻量表单可以组合成完整小站。[博客示例](examples/blog/README.md)提供库米的首页、手记归档与文章详情。
 - **每次操作，都好好回应**：组件继承使用方字体，常规控件为 44px，Button / IconButton 有 36 / 44 / 52px 三档；键盘、原生表单、焦点与减少动效按实际组件能力处理。
@@ -22,7 +22,7 @@ Yahha UI 是一套漫画手账风 React 组件库，适合博客、个人主页�
 
 ## 浏览组件
 
-文档站的组件总览位于 `#/components`，按八类展示现有 29 个 UI 组件，并单列 ThemeProvider 主题配置，共 30 个文档入口。小样进入对应文档后，可操作完整示例、展开代码并查阅 API；当前共 95 个同源 TSX 示例。
+文档站的组件总览位于 `#/components`，按八类展示现有 29 个 UI 组件，并单列 ThemeProvider 主题配置，共 30 个文档入口。小样进入对应文档后，可操作完整示例、展开代码并查阅 API；当前共 97 个同源 TSX 示例。
 
 ![组件视觉总览：真实按钮、字段、排版与容器小样](docs/images/yahha-components.png)
 
@@ -37,6 +37,28 @@ Yahha UI 是一套漫画手账风 React 组件库，适合博客、个人主页�
 - **主题配置**：ThemeProvider。
 
 [查阅组件示例与 API](docs/README.md) · [查看设计规则和尺寸规范](docs/design-language.md)
+
+## 导出最小项目
+
+还没有 React 项目时，可以在本仓库安装依赖后，一次导出带有本地组件包的最小项目：
+
+```sh
+npm run create:starter
+```
+
+命令输出仓库外的项目目录与 `.zip` 路径；需要指定位置时，执行 `npm run create:starter -- --output /absolute/path/yahha-ui-starter`。不会覆盖非空目录或已有压缩包。生成 ZIP 需要系统 `zip`，脚本会先检查；接收和运行导出项目不需要它。工具版本从根 package.json 与 lockfile 读取，导出物保留实际 `.tgz`、版本和 SHA-256 清单。
+
+解压后进入含有 package.json 的目录，运行 `npm install` 与 `npm run dev`，打开终端输出的地址即可试用标题输入与收藏按钮；`npm run build` 完成类型检查和静态构建。首次安装需要网络，标题与收藏只保留在当前页面。已有 React 项目继续按下一节安装组件包即可。
+
+在导出项目中运行 `npm run docs`，无需安装依赖即可打开配套的完整文档、API、示例与博客预览。`documentation/` 是导出时生成的静态快照，包含官网使用的字体、角色与相应声明；最小应用的 `src/` 和组件 `.tgz` 仍不依赖这些资源。自己的页面构建在 `dist/`，部署时只上传它的内容，保留资源文件名，不上传 `vendor/` 或 `documentation/`。
+
+需要现有博客的整套排版和源码时，使用：
+
+```sh
+npm run create:starter -- --example blog
+```
+
+生成的独立博客同样使用真实安装包，并附改站、部署和文档说明；原仓库中的 `examples/blog/` 继续共用根工具链。
 
 ## 构建与本地安装
 
@@ -82,7 +104,11 @@ export default function App() {
 
 其他示例按文档站的“完整接入”保存原样 `Example.tsx` 与独立 `App.tsx`；有素材清单时，单独下载并保留 `artwork/` 相对路径。完整素材示例按 Vite 8 / TypeScript 7 验证，`?raw`、`?no-inline` 导入需要相应构建工具支持。
 
-安装包只分发组件、类型、样式与包说明。本文的图片和相对文档链接供源码仓库阅读，不表示它们进入 `.tgz`；只有安装包时，可直接使用本节的 `App.tsx`。
+安装包只分发组件、类型、样式与包说明。只有 `.tgz` 时可先使用本节的 `App.tsx`，再从顶部组件文档入口查完整 API；本地项目 ZIP 另附可通过 `npm run docs` 打开的完整文档快照。仓库图片和相对文件链接不表示相应资源进入 `.tgz`。
+
+## 问题反馈
+
+遇到安装、样式或交互问题，可[提交 GitHub Issue](https://github.com/didilili/yahha-ui/issues/new?template=bug_report.yml)。模板会收集组件版本、React 与构建工具、重现步骤及预期和实际结果。完整代码与类型声明见 [Yahha UI 仓库](https://github.com/didilili/yahha-ui)。GitHub 入口需要网络和仓库访问权限。
 
 ## 本地开发
 
@@ -124,7 +150,7 @@ npm run build:blog
 
 ## 素材与范围
 
-这是非官方同人项目。组件代码、人物 SVG、道具、PNG、字体和页面截图分别记录来源与分发位置；代码的最终许可证与角色素材的完整许可清单尚未确定。已有字体 OFL 声明仅对应相应字体。
+组件代码的最终许可证尚未确定。网站与示例中的角色展示素材单独记录来源，其再发布与商业使用许可尚未核验；现有字体 OFL 声明仅适用于相应字体。
 
 [素材与分发范围](docs/assets-and-distribution.md)汇总实际目录、原始记录、派生关系与当前许可状态。[图标与插画](playground/src/examples/scenes/artwork/little-days/README.md)说明静态、动效及欢迎控制器的使用区别。
 

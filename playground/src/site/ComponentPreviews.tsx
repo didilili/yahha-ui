@@ -119,7 +119,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
         <ThemeProvider theme="pink">
           <div style={stack}>
             <Text size="sm" tone="muted">
-              奶白、暖墨与轻粉。
+              白底、暖墨文字与浅粉强调色。
             </Text>
             <div style={row}>
               <Button>一起搭小站</Button>
@@ -130,11 +130,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
       );
     case 'text-field':
       return (
-        <TextField
-          label="手记标题"
-          defaultValue="今天的散步小记"
-          hint="给这一页，起个喜欢的名字。"
-        />
+        <TextField label="手记标题" defaultValue="今天的散步小记" hint="建议用一句话概括内容。" />
       );
     case 'segmented-control':
       return (
@@ -323,7 +319,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
     case 'empty-state':
       return <EmptyState title="还没有收藏的手记" description="先收藏一篇喜欢的手记吧。" />;
     case 'toast':
-      return <Toast open onClose={noop} title="手记已保存" description="草稿已经好好收起。" />;
+      return <Toast open onClose={noop} title="草稿已保存" />;
     default:
       return null;
   }

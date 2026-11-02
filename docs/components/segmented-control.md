@@ -320,7 +320,7 @@ export default function SegmentedLongLabels() {
 
 ## API
 
-`SegmentedControlProps<T>` 的 `T` 为字符串类型，组件只支持受控选择。 未单列的原生 fieldset 属性作用于整组，不支持 defaultValue 或 defaultChecked。
+`SegmentedControlProps<T>` 的 `T` 为字符串类型，组件只支持受控选择。未单列的原生 fieldset 属性作用于整组，不支持 children、defaultValue 或 defaultChecked。选项由 options 提供，补充内容放在组件外。
 
 ### SegmentedControlProps<T extends string>
 
@@ -366,7 +366,7 @@ export default function SegmentedLongLabels() {
 
 ## 样式定制
 
-轻纸托盘与选中纸片使用内缘区分层次，焦点轮廓独立显示；这些绘制不改变操作区域。 需要等宽选项时，可为 classNames.option 对应的类设置 `flex: 1 1 0`，再通过 classNames.options 设置选项容器宽度。默认允许选项和长标签换行，避免用固定高度截断文字。
+需要等宽选项时，可为 classNames.option 对应的类设置 `flex: 1 1 0`，再通过 classNames.options 设置选项容器宽度。默认允许选项和长标签换行，避免用固定高度截断文字。
 
 <a id="related"></a>
 

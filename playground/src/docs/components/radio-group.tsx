@@ -45,7 +45,7 @@ export default defineComponentPage('radio-group', {
           id: 'states',
           title: '长标签、错误与禁用',
           description:
-            '分别为可修改与已禁用的收藏可见范围组命名；选择后由示例清除错误，父 fieldset disabled 保留“仅自己可见”的静态选择。',
+            '选择收藏可见范围以清除错误；点击“清空选择”重新显示错误。下方展示整组禁用时的“仅自己可见”状态。',
           component: RadioGroupStates,
           source: RadioGroupStatesSource,
         },
@@ -138,7 +138,7 @@ export default defineComponentPage('radio-group', {
               name: 'className / style / ref / 其他 fieldset 属性',
               type: 'ComponentPropsWithRef<"fieldset">',
               description:
-                '作用于 fieldset；ref 为 Ref<HTMLFieldSetElement>。不提供 defaultValue 或 defaultChecked。',
+                '作用于 fieldset；ref 为 Ref<HTMLFieldSetElement>。不提供 children、defaultValue 或 defaultChecked。选项由 options 提供，组级说明使用 hint；其他内容放在组件外。',
             },
           ],
         },
@@ -183,8 +183,8 @@ export default defineComponentPage('radio-group', {
       title: '样式定制',
       content: (
         <p>
-          圆墨点、白色内环和轻纸色选中行共同表达选择，键盘焦点仍独立可见。 调整整组宽度可使用
-          className 或 style；选项间距和排列由 classNames.options 设置。 选项名称与补充说明分别使用
+          调整整组宽度可使用 className 或 style；选项间距和排列由 classNames.options 设置。
+          选项名称与补充说明分别使用
           classNames.label、classNames.description，避免用固定高度裁切长说明。
         </p>
       ),

@@ -8,6 +8,8 @@ import SelectForm from '../../examples/new-forms/SelectForm';
 import SelectFormSource from '../../examples/new-forms/SelectForm.tsx?raw';
 import SelectLongOptions from '../../examples/new-forms/SelectLongOptions';
 import SelectLongOptionsSource from '../../examples/new-forms/SelectLongOptions.tsx?raw';
+import SelectPortalCustomization from '../../examples/customization/SelectPortalCustomization';
+import selectPortalCustomizationSource from '../../examples/customization/SelectPortalCustomization.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('select', {
@@ -66,7 +68,7 @@ export default defineComponentPage('select', {
           id: 'long-options',
           title: '长列表与长选项',
           description:
-            '单独用八个分类展示列表滚动与长文字换行，保留 340px 窄容器；本例只演示选择，不筛选文章。',
+            '在宽度最多 340px 的容器中展示八个分类，查看列表滚动与长文字换行。本例只演示选择，不筛选文章。',
           component: SelectLongOptions,
           source: SelectLongOptionsSource,
         },
@@ -243,6 +245,16 @@ export default defineComponentPage('select', {
           优先沿用最近原生容器的方向，再沿用上游方向配置。容器方向变化时，已打开的列表同步更新。
         </p>
       ),
+      examples: [
+        {
+          id: 'select-portal-customization',
+          title: 'Portal 列表的局部定制',
+          description:
+            '通过 classNames.popup 设置局部浅蓝背景，classNames.option 调整选项字重。列表挂载到 body，直接使用附加类名即可，不依赖字段容器的后代选择器。CSS 与示例源码放在一起，选中、高亮和禁用反馈保留；局部背景不随主题预设变化，整体配色仍使用 ThemeProvider。',
+          component: SelectPortalCustomization,
+          source: selectPortalCustomizationSource,
+        },
+      ],
     },
   ],
 });

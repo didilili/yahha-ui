@@ -121,7 +121,7 @@ export default function RadioGroupForm() {
 
 ### 长标签、错误与禁用
 
-分别为可修改与已禁用的收藏可见范围组命名；选择后由示例清除错误，父 fieldset disabled 保留“仅自己可见”的静态选择。
+选择收藏可见范围以清除错误；点击“清空选择”重新显示错误。下方展示整组禁用时的“仅自己可见”状态。
 
 [查看示例文件](../../playground/src/examples/new-forms/RadioGroupStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -184,18 +184,18 @@ export default function RadioGroupStates() {
 
 ### RadioGroupProps<T extends string>
 
-| 属性                                           | 说明                                                                                      | 类型                                                                          | 默认值             |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
-| `label` **必填**                               | 可见的 fieldset legend，为整组命名。                                                      | `ReactNode`                                                                   | —                  |
-| `options` **必填**                             | 互斥选项，value 必须唯一。                                                                | `readonly RadioOption<T>[]`                                                   | —                  |
-| `value` **必填**                               | 当前受控值；空字符串可表示未选择。                                                        | `T`                                                                           | —                  |
-| `onValueChange` **必填**                       | 用户选择后的字符串值；调用方更新 value。                                                  | `(value: T) => void`                                                          | —                  |
-| `hint / error`                                 | 组说明与错误，与每项 description 一同关联单选项；error 将分组标记为无效。                 | `ReactNode`                                                                   | —                  |
-| `name`                                         | 组内 radio 共用名称，显式设置后可读取 FormData。                                          | `string`                                                                      | `自动生成唯一名称` |
-| `form`                                         | 同时关联 fieldset 与全部 radio 的外部表单 ID。                                            | `string`                                                                      | —                  |
-| `required / disabled`                          | 原生必选或整组禁用；也支持父 fieldset disabled。                                          | `boolean`                                                                     | `false`            |
-| `classNames`                                   | 各部分附加类名，每个值为 string。                                                         | `{ legend?, options?, option?, input?, label?, description?, hint?, error? }` | —                  |
-| `className / style / ref / 其他 fieldset 属性` | 作用于 fieldset；ref 为 Ref<HTMLFieldSetElement>。不提供 defaultValue 或 defaultChecked。 | `ComponentPropsWithRef<"fieldset">`                                           | —                  |
+| 属性                                           | 说明                                                                                                                                                            | 类型                                                                          | 默认值             |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
+| `label` **必填**                               | 可见的 fieldset legend，为整组命名。                                                                                                                            | `ReactNode`                                                                   | —                  |
+| `options` **必填**                             | 互斥选项，value 必须唯一。                                                                                                                                      | `readonly RadioOption<T>[]`                                                   | —                  |
+| `value` **必填**                               | 当前受控值；空字符串可表示未选择。                                                                                                                              | `T`                                                                           | —                  |
+| `onValueChange` **必填**                       | 用户选择后的字符串值；调用方更新 value。                                                                                                                        | `(value: T) => void`                                                          | —                  |
+| `hint / error`                                 | 组说明与错误，与每项 description 一同关联单选项；error 将分组标记为无效。                                                                                       | `ReactNode`                                                                   | —                  |
+| `name`                                         | 组内 radio 共用名称，显式设置后可读取 FormData。                                                                                                                | `string`                                                                      | `自动生成唯一名称` |
+| `form`                                         | 同时关联 fieldset 与全部 radio 的外部表单 ID。                                                                                                                  | `string`                                                                      | —                  |
+| `required / disabled`                          | 原生必选或整组禁用；也支持父 fieldset disabled。                                                                                                                | `boolean`                                                                     | `false`            |
+| `classNames`                                   | 各部分附加类名，每个值为 string。                                                                                                                               | `{ legend?, options?, option?, input?, label?, description?, hint?, error? }` | —                  |
+| `className / style / ref / 其他 fieldset 属性` | 作用于 fieldset；ref 为 Ref<HTMLFieldSetElement>。不提供 children、defaultValue 或 defaultChecked。选项由 options 提供，组级说明使用 hint；其他内容放在组件外。 | `ComponentPropsWithRef<"fieldset">`                                           | —                  |
 
 ### RadioOption<T extends string>
 
@@ -217,7 +217,7 @@ export default function RadioGroupStates() {
 
 ## 样式定制
 
-圆墨点、白色内环和轻纸色选中行共同表达选择，键盘焦点仍独立可见。 调整整组宽度可使用 className 或 style；选项间距和排列由 classNames.options 设置。 选项名称与补充说明分别使用 classNames.label、classNames.description，避免用固定高度裁切长说明。
+调整整组宽度可使用 className 或 style；选项间距和排列由 classNames.options 设置。 选项名称与补充说明分别使用 classNames.label、classNames.description，避免用固定高度裁切长说明。
 
 <a id="related"></a>
 

@@ -39,7 +39,7 @@ export default function NotFoundScene({
           页面未找到
         </Heading>
         <Text className="story-not-found-copy" tone="muted">
-          这个地址没有对应的页面。朋友们在路口等你，可以从使用指南或组件总览继续逛逛。
+          这个地址没有对应的页面。可以查看使用指南或组件总览。
         </Text>
         <nav className="story-not-found-actions" aria-label="找回文档">
           <a className="story-not-found-primary" href="#/guides/getting-started">

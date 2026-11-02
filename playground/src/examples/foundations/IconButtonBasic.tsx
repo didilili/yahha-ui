@@ -23,10 +23,10 @@ export default function IconButtonBasic() {
     <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
       {visible ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span>欢迎来坐坐，给你留了个位置。</span>
+          <span>点击关闭按钮可隐藏这条提示。</span>
           <IconButton
             ref={closeRef}
-            aria-label="关闭欢迎提示"
+            aria-label="关闭提示"
             variant="ghost"
             onClick={() => changeVisibility(false)}
           >
@@ -43,7 +43,7 @@ export default function IconButtonBasic() {
         </div>
       ) : (
         <Button ref={reopenRef} variant="secondary" onClick={() => changeVisibility(true)}>
-          重新显示欢迎提示
+          重新显示提示
         </Button>
       )}
     </div>

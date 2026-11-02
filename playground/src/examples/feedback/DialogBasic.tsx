@@ -9,10 +9,10 @@ export default function DialogBasic() {
       open={open}
       onOpenChange={setOpen}
       trigger={<Button>查看阅读提示</Button>}
-      title="留一点时间给阅读"
-      description="书还没读完，也可以先坐下来。朋友在旁边给你留了个位置。"
+      title="长文阅读建议"
+      description="先浏览目录，再选择要读的章节。"
     >
-      <p>从今天最想读的一段开始。碰到不认识的字，就一起查一查。</p>
+      <p>文章较长时，可以按章节分次阅读。</p>
     </Dialog>
   );
 }

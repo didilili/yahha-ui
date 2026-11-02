@@ -145,3 +145,53 @@ export const exampleExceptions = [
     reason: 'Demonstrates the native textarea resize behavior on a read-only field.',
   },
 ];
+
+/** Reviewed public classNames demonstrations; these do not apply to default examples. */
+export const exampleCssExceptions = [
+  {
+    path: 'playground/src/examples/customization/TextFieldCustomization.tsx',
+    selector: '.yahha-example-nickname-hint',
+    property: 'padding',
+    value: '8px 12px',
+    reason: 'The explicit hint-slot example adds reading space without resizing the input.',
+  },
+  {
+    path: 'playground/src/examples/customization/TextFieldCustomization.tsx',
+    selector: '.yahha-example-nickname-hint',
+    property: 'border-radius',
+    value: '8px',
+    reason: 'The hint-slot note has a local corner; the field contour remains unchanged.',
+  },
+  {
+    path: 'playground/src/examples/customization/TextFieldCustomization.tsx',
+    selector: '.yahha-example-nickname-hint',
+    property: 'background',
+    value: '#fff0f6',
+    reason:
+      'This explicit hint-slot customization uses a reviewed soft pink without requiring internal tokens.',
+  },
+  {
+    path: 'playground/src/examples/customization/TextFieldCustomization.tsx',
+    selector: '.yahha-example-nickname-hint',
+    property: 'color',
+    value: '#49313d',
+    reason:
+      'The hint-slot customization pairs reviewed warm ink with its pink paper using plain CSS.',
+  },
+  {
+    path: 'playground/src/examples/customization/SelectPortalCustomization.tsx',
+    selector: '.yahha-example-archive-popup',
+    property: 'background',
+    value: '#f1f8ff',
+    reason:
+      'The explicit Portal popup slot uses reviewed light-blue paper without relying on unpublished variables.',
+  },
+  {
+    path: 'playground/src/examples/customization/SelectPortalCustomization.tsx',
+    selector: '.yahha-example-archive-option',
+    property: 'font-weight',
+    value: '600',
+    reason:
+      'The explicit option-slot example demonstrates text emphasis while preserving semantic option colors.',
+  },
+];

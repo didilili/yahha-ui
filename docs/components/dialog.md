@@ -44,10 +44,10 @@ export default function DialogBasic() {
       open={open}
       onOpenChange={setOpen}
       trigger={<Button>查看阅读提示</Button>}
-      title="留一点时间给阅读"
-      description="书还没读完，也可以先坐下来。朋友在旁边给你留了个位置。"
+      title="长文阅读建议"
+      description="先浏览目录，再选择要读的章节。"
     >
-      <p>从今天最想读的一段开始。碰到不认识的字，就一起查一查。</p>
+      <p>文章较长时，可以按章节分次阅读。</p>
     </Dialog>
   );
 }
@@ -217,7 +217,7 @@ export default function DialogExternal() {
 
 ## 内容布局与 Portal
 
-默认使用带浅蓝内底边的白纸信笺。底部操作区以轻纸线和浅蓝纸面分组，按钮空间不足时换行，窄屏改为纵向排列。
+底部操作区空间不足时，按钮会换行；窄屏改为纵向排列。
 
 长标题自动换行，内容超出可用高度时整个弹窗滚动，footer 不固定在底部。复杂表单或长篇正文更适合独立页面，避免把必要操作埋在长滚动区中。
 

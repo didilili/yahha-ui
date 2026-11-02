@@ -8,6 +8,8 @@ import TextFieldNative from '../../examples/forms/TextFieldNative';
 import textFieldNativeSource from '../../examples/forms/TextFieldNative.tsx?raw';
 import TextFieldForm from '../../examples/forms/TextFieldForm';
 import textFieldFormSource from '../../examples/forms/TextFieldForm.tsx?raw';
+import TextFieldCustomization from '../../examples/customization/TextFieldCustomization';
+import textFieldCustomizationSource from '../../examples/customization/TextFieldCustomization.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('text-field', {
@@ -257,12 +259,21 @@ export default defineComponentPage('text-field', {
       title: '样式定制',
       content: (
         <p>
-          默认白底保留浅蓝内底边；只读与禁用默认使用平整的状态底色，错误使用独立的红色边线与内缘。
           字段宽度、外边距等布局通过 className 或外层容器设置。调整输入框本身的外观时使用
           classNames.input 或 style；需要单独设置提示或错误文字时使用 classNames.hint /
           classNames.error，无需依赖内部嵌套选择器。
         </p>
       ),
+      examples: [
+        {
+          id: 'text-field-customization',
+          title: '提示区域的局部定制',
+          description:
+            '用根 className 限制字段宽度，通过 classNames.hint 设置提示区域的留白和浅粉背景。CSS 随示例源码一起复制，局部颜色不随主题预设变化；整体配色使用 ThemeProvider。本例只编辑署名，不保存数据。',
+          component: TextFieldCustomization,
+          source: textFieldCustomizationSource,
+        },
+      ],
     },
   ],
 });

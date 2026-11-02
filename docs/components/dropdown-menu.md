@@ -300,8 +300,6 @@ export default function MenuControlled() {
 
 ## 定位与 Portal
 
-默认使用白纸便笺与浅蓝内底边。可用菜单项高亮时显示浅粉纸面；悬停时补白色内缘，键盘聚焦时显示独立轮廓。
-
 默认向下展开并与触发器起点对齐，空间不足时自动避让，距视口边缘保留 12px。 长标签可以换行，面板超出可用高度时滚动；自定义宽度时保留窄屏约束。
 
 菜单跟随触发器自身或最近容器的显式 dir，文字方向与 start / inline-start 等逻辑定位保持一致；未指定时继承 Base UI DirectionProvider。仅设置 CSS direction 或 dir="auto" 时，请在触发器上同时设置明确的 dir。

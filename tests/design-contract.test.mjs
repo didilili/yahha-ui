@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { auditDesign } from '../scripts/check-design.mjs';
 
@@ -271,4 +272,97 @@ test('rejects literal paint colors while keeping system colors and graphic geome
 test('does not hide literal paint colors in local aliases or logical border shorthands', () => {
   assert(hasRule(inspect('.input { --local-ink:#fff; color:var(--local-ink); }'), 'literal-color'));
   assert(hasRule(inspect('.input { border-inline-start:2px solid red; }'), 'literal-color'));
+});
+
+const customizationPaths = [
+  'playground/src/examples/customization/TextFieldCustomization.tsx',
+  'playground/src/examples/customization/SelectPortalCustomization.tsx',
+];
+async function customizationAudit(path, change = (source) => source, targetPath = path) {
+  const [canonicalTheme, source] = await Promise.all([
+    readFile(new URL('../src/theme/theme.module.css', import.meta.url), 'utf8'),
+    readFile(new URL(`../${path}`, import.meta.url), 'utf8'),
+  ]);
+  return auditDesign({
+    theme: canonicalTheme,
+    examples: [{ path: targetPath, text: change(source) }],
+  });
+}
+
+test('permits only reviewed CSS declarations in the two explicit public customization examples', async () => {
+  for (const path of customizationPaths) assert.deepEqual(await customizationAudit(path), []);
+});
+
+test('customization permissions do not cover changed values, selectors or default examples', async () => {
+  const [field, select] = customizationPaths;
+  assert(
+    hasRule(
+      await customizationAudit(field, (source) =>
+        source.replace('padding: 8px 12px', 'padding: 9px 12px'),
+      ),
+      'example-override',
+    ),
+  );
+  assert(
+    hasRule(
+      await customizationAudit(field, (source) =>
+        source.replaceAll('yahha-example-nickname-hint', 'different-hint'),
+      ),
+      'example-override',
+    ),
+  );
+  assert(
+    hasRule(
+      await customizationAudit(field, (source) =>
+        source.replace('border-radius: 8px', 'font-size: 8px'),
+      ),
+      'example-override',
+    ),
+  );
+  assert(
+    hasRule(
+      await customizationAudit(select, (source) =>
+        source.replace('background: #f1f8ff', 'background: #ffffff'),
+      ),
+      'example-override',
+    ),
+  );
+  assert(
+    hasRule(
+      await customizationAudit(select, (source) =>
+        source.replace('font-weight: 600', 'font-weight: 700'),
+      ),
+      'example-override',
+    ),
+  );
+  assert(
+    hasRule(
+      await customizationAudit(field, (source) =>
+        source.replace('color: #49313d', 'color: #000000'),
+      ),
+      'literal-color',
+    ),
+  );
+  for (const path of customizationPaths)
+    assert(hasRule(await customizationAudit(path, undefined, examplePath), 'example-override'));
+});
+
+test('reviewed customization does not bypass unknown tokens or incorrect fallbacks', async () => {
+  const [field] = customizationPaths;
+  assert(
+    hasRule(
+      await customizationAudit(field, (source) =>
+        source.replace('background: #fff0f6', 'background: var(--yahha-unknown-color, #fff0f6)'),
+      ),
+      'unknown-token',
+    ),
+  );
+  assert(
+    hasRule(
+      await customizationAudit(field, (source) =>
+        source.replace('color: #49313d', 'color: var(--yahha-ink, #000000)'),
+      ),
+      'token-fallback',
+    ),
+  );
 });

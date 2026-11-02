@@ -180,8 +180,6 @@ export default function PopoverForm() {
 
 ## 定位与 Portal
 
-默认使用白纸便笺与浅蓝内底边，标题下用轻纸线分隔。
-
 默认向下展开并与触发器起点对齐，空间不足时自动避让，距视口边缘保留 12px。 长标题和正文可换行，超出可用高度时面板滚动；大表单和长篇正文宜放在页面或 Dialog 中。
 
 浮层跟随触发器自身或最近容器的显式 dir，文字、关闭按钮与 start 等逻辑定位一起调整；未指定时继承 Base UI DirectionProvider。仅设置 CSS direction 或 dir="auto" 时，请在触发器上同时设置明确的 dir。

@@ -6,8 +6,14 @@ import { verifyWelcome } from './welcome-checks.mjs';
 import { verifyComponentOverview } from './overview-checks.mjs';
 import { verifyExampleHeadings } from './example-teaching-checks.mjs';
 import { verifyBrand } from './brand-checks.mjs';
+import { verifySectionNavigation } from './section-navigation-checks.mjs';
+import { verifySearch } from './search-checks.mjs';
+import { verifyGuideLoading } from './guide-loading-checks.mjs';
 
 export async function verifyDocs(browser, baseURL) {
+  await verifyGuideLoading(browser, baseURL);
+  await verifySearch(browser, baseURL);
+  await verifySectionNavigation(browser, baseURL);
   await verifyBrand(browser, baseURL);
   await verifyHome(browser, baseURL);
   await verifyComponentOverview(browser, baseURL);
@@ -124,7 +130,10 @@ export async function verifyDocs(browser, baseURL) {
       assert.equal(examples > 0, true, `${id} examples`);
       totalExamples += examples;
       await verifyExampleHeadings(page);
-      assert.equal(await page.locator('.docs-sidebar a[aria-current="page"]').count(), 1);
+      assert.equal(
+        await page.locator('.docs-sidebar .nav-group a[aria-current="page"]').count(),
+        1,
+      );
       const usage = page.locator('#usage');
       assert.equal(await usage.count(), 1, `${id}: one introductory usage section.`);
       assert.equal(
@@ -168,7 +177,7 @@ export async function verifyDocs(browser, baseURL) {
         );
       }
     }
-    assert.equal(totalExamples, 83, 'The 30 component documents provide 83 focused examples.');
+    assert.equal(totalExamples, 85, 'The 30 component documents provide 85 focused examples.');
 
     // Reorganized chapters retain their existing deep links and keyboard destination.
     await page.goto(`${baseURL}#/components/text`);
@@ -207,14 +216,21 @@ export async function verifyDocs(browser, baseURL) {
     assert.equal(new URL(page.url()).hash, '#/components/radio-group');
 
     let guideExamples = 0;
-    for (const id of ['getting-started', 'styling', 'design-baseline', 'states', 'artwork']) {
+    for (const [id, title] of [
+      ['getting-started', '开始使用'],
+      ['styling', '使用与定制'],
+      ['reading', '阅读与收藏'],
+      ['design-baseline', '设计规范'],
+      ['states', '组合示例'],
+      ['artwork', '图标与插画'],
+    ]) {
       await page.goto(`${baseURL}#/guides/${id}`);
-      await page.locator('.example-block').first().waitFor();
+      await page.getByRole('heading', { level: 1, name: title, exact: true }).waitFor();
       guideExamples += await page.locator('.example-block').count();
       await verifyExampleHeadings(page);
     }
     assert.equal(guideExamples, 12, 'The guides must retain all twelve integration examples.');
-    assert.equal(totalExamples + guideExamples, 95, 'The public site provides 95 examples.');
+    assert.equal(totalExamples + guideExamples, 97, 'The public site provides 97 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
     await page.getByRole('heading', { level: 1, name: '开始使用', exact: true }).waitFor();
     assert.match(await page.locator('main').innerText(), /npm pack/);

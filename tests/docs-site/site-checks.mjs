@@ -54,7 +54,7 @@ export async function verifyTocResponsiveFocus(page, baseURL) {
     .getByRole('link', { name: 'API', exact: true });
   await api.focus();
   await page.setViewportSize({ width: 1100, height: 900 });
-  const current = page.locator('.docs-sidebar a[aria-current="page"]');
+  const current = page.locator('.docs-sidebar .nav-group a[aria-current="page"]');
   await page.waitForFunction(
     (node) => document.activeElement === node,
     await current.elementHandle(),

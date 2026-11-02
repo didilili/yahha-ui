@@ -34,7 +34,7 @@ export default defineComponentPage('icon-button', {
           id: 'icon-button-basic',
           title: '基础用法',
           description:
-            '关闭欢迎提示后，焦点移到重新显示按钮；重新显示后回到关闭按钮。回焦由示例管理，初次展示不抢焦点；图标通过 children 传入。',
+            '关闭提示后，焦点移到重新显示按钮；重新显示后回到关闭按钮。回焦由示例管理，初次展示不抢焦点；图标通过 children 传入。',
           component: IconButtonBasic,
           source: iconButtonBasicSource,
         },

@@ -91,7 +91,7 @@ export default function TextComposition() {
         </Text>
         <Text>
           这篇手记标记为 <Badge tone="accent">阅读中</Badge>。可以先读完这一段，再去
-          <Link href="#/guides/styling?section=reading">看看完整的阅读组合</Link>。
+          <Link href="#/guides/reading?section=reading">看看完整的阅读组合</Link>。
         </Text>
       </section>
       <section aria-label="长词换行" style={{ display: 'grid', gap: 8, maxWidth: '32ch' }}>
@@ -112,7 +112,7 @@ export default function TextComposition() {
 
 ## 长文的阅读节奏
 
-正文采用独立字阶和较松的行高，次要提示可使用 muted。长文章的栏宽、段距和章节留白由外层布局建立；Text 默认没有外边距，不会为每一段自动增加间隔。长单词与地址可以换行，窄栏中仍应检查真实内容的阅读效果。
+通过 size 设置字号，次要提示可使用 tone="muted"。长文章的栏宽、段距和章节留白由外层布局建立；Text 默认没有外边距，不会为每一段自动增加间隔。长单词与地址可以换行，窄栏中仍应检查真实内容的阅读效果。
 
 <a id="api"></a>
 

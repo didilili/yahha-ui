@@ -23,7 +23,9 @@ npm run dev
 - `playground/src/docs/`：指南与组件页数据、API、站内代码展示工具；`examples/` 放实时示例。每个示例同时作为 TSX 模块和 `?raw` 源码导入。完整接入分别提供原样的 `Example.tsx` 与负责 CSS / ThemeProvider 包裹的 `App.tsx`；含场景素材时同时提供 artwork 文件，保留 `Example.tsx` 同级 `artwork/` 的相对引用。
 - `playground/src/examples/scenes/`：加载、空态与 404 页面组合及其 `artwork/` 素材。素材只属于展示示例，不进入 `src/` 或默认组件库产物。
 - `playground/src/docs/component-catalog.ts`：搜索和导航的轻量元信息目录，不导入示例模块；页面 ID、名称、中文名、分组和描述需与页面定义一致。
+- `playground/src/docs/navigation.ts`：文档栏目、侧栏和相邻文档的共同来源。指南用 `area` 声明所属栏目；全站搜索保持跨栏目，页面移动时在此保留旧链接映射。
 - `playground/src/docs/component-pages.ts`：按组件加载页面内容与示例；新增页面时在 loader 注册对应组件，页面元信息复用目录。
+- `playground/src/docs/guide-catalog.ts` 与 `guide-pages.ts`：轻量指南信息与按页加载入口；`guides/` 按页维护正文，`guides.tsx` 只在需要完整指南内容时聚合。修改指南名称或归属只更新目录元信息。
 - `docs/components/`：已实现 API、默认值、原生属性与样式入口的文档。
 - `tests/package-consumer/`：真实安装包的使用方、独立边界场景与浏览器断言；不作为公开组件导出。
 - `tests/package-consumer/Basics.tsx` 与配套 `basics-checks.mjs`：新增基础组件的表单、导航、图片回退和浮层组合验收。
@@ -31,7 +33,7 @@ npm run dev
 - `playground/src/site/`：正式首页与文档外壳；`playground/src/design-preview/`：开发评审入口 `friends.html`，不进入默认展示产物。
 - `examples/blog/`：共用根工具链的完整网站示例，使用公开构建入口；`tests/blog-site/` 用实际 `.tgz` 安装验收同份源码。
 - `docs/images/`：从实际页面截取的仓库展示图，拍摄路由和视口见目录内 README，不进入安装包。
-- `scripts/`：打包与验收脚本。
+- `scripts/`：打包与验收脚本；`starter-template/` 为最小接入项目模板，不是 workspace，生成后的项目独立安装本地 `.tgz`。
 
 Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Switch 和 SegmentedControl 可单独运行三引擎验收：首次执行 `npx playwright install chromium firefox webkit`，然后执行 `npm run build:demo && npm run test:controls`。它复用构建后的官网，在 Chromium、Firefox 与 WebKit 检查桌面和 320px 下的原生表单、错误恢复、加载几何、图标、键盘选择及多行编辑。Textarea 覆盖换行、长文本、200 字原生输入上限、错误关联与恢复、只读、父 fieldset 禁用、FormData 和重置。WebKit 引擎结果不等同于所有 Safari／iOS 真机环境均已验证。浏览器下载在本机 Playwright 缓存中，不增加组件运行时依赖。
 
@@ -41,7 +43,7 @@ Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Sw
 
 组件使用文档描述当前用途、示例、API 和交互约定，不混入“本轮复核”“保留既有”“不计新增”等开发过程表述。设计原则和视觉规则集中在设计语言文档；文档不承诺尚未实现或验证的能力。
 
-当前文档站有 30 个组件入口（29 个 UI 组件与 ThemeProvider）和 95 个同源 TSX 示例，组件 Markdown 为 30 份。[设计语言](docs/design-language.md) 单独说明视觉和使用规则；默认设计规范位于 `#/guides/design-baseline`，示例不得覆盖控件外观与尺寸；共享 token 集中在 `src/theme/theme.module.css`，改设计必须通过 `npm run check:design` 与安装包实际尺寸验证；加载、空态与 404 场景位于 `#/guides/states`，以现有组件组合，不增加公共组件。增加或删除公开组件与示例时，同时更新 README 和文档索引。
+当前文档站有 30 个组件入口（29 个 UI 组件与 ThemeProvider）和 97 个同源 TSX 示例，组件 Markdown 为 30 份。[设计语言](docs/design-language.md) 单独说明视觉和使用规则；默认设计规范位于 `#/guides/design-baseline`，示例不得覆盖控件外观与尺寸；共享 token 集中在 `src/theme/theme.module.css`，改设计必须通过 `npm run check:design` 与安装包实际尺寸验证；加载、空态与 404 场景位于 `#/guides/states`，以现有组件组合，不增加公共组件。增加或删除公开组件与示例时，同时更新 README 和文档索引。
 
 组件边界也应随实现核对：Select 当前为单值选择，不包含搜索或多选；Pagination 使用按钮与页码回调，路由与列表更新属于调用方；Tooltip 沿用 Base UI 1.9 的视觉补充约定，触发器必须具备自身可访问名称，重要说明使用可见文字或 Popover。
 
@@ -50,6 +52,12 @@ Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Sw
 新增组件时，除了同步示例和 API，还需复核官网中适合复用的位置。验收覆盖官网实际的键盘操作、焦点恢复、主题及 Portal 更新、窄屏布局；增加组件数量本身不代表这些使用场景已通过验证。
 
 设计验收同时查看无插画状态及文章阅读组合：控件、内容和浮层应有各自的层次，表单不抢正文注意力，每个聚焦目标只有一套清楚的键盘提示。使用 `ReadingExample.tsx` 等真实组合检查标题、正文、分类、收藏与辅助操作；加载场景检查文字与图标保留、尺寸稳定、真实请求结束后的恢复，以及 SVG 在减少动效时保留静帧。区块可配场景素材，但可见状态说明和真实恢复入口由 HTML 承担。
+
+## 导出最小接入项目
+
+运行 `npm run create:starter`，或用 `npm run create:starter -- --output /absolute/path/yahha-ui-starter` 指定仓库外的输出目录；`--example blog` 导出已有完整博客。脚本先检查系统 zip，再拒绝覆盖非空目录和已有 `.zip`；产物缺失或早于源码时先构建组件库。两种项目都包含相对路径 `vendor/` 真实安装包、版本／SHA-256 清单及 `documentation/` 静态文档与博客快照。导出项目的 `npm run docs` 只用 Node 即可阅读该快照；自己的构建仅更新自己的 `dist/`。React、Vite、TypeScript 等精确版本来自根 package.json 对应的 lockfile 记录，完整博客另包含已使用的 lucide-react。
+
+模板不含源码 alias、角色、站点字体或页面框架；没有新增公开组件。修改模板后，在仓库外解压生成物，真实执行 `npm install`、`npm run build`，再检查标题输入、收藏与窄屏布局。修改导出脚本后执行 `node --test tests/create-starter.test.mjs`，验证原有文件不会被覆盖；本地导出不代表发布或许可变更。
 
 ## 验证
 
@@ -60,7 +68,7 @@ npm test -- src/components/text-field/TextField.test.tsx
 npm run typecheck
 ```
 
-组件说明遵循 [文档规范](docs/documentation.md)。编辑组件页后执行 `npm run sync:docs`，提交前以 `npm run check:docs` 核对生成结果；不要直接编辑生成的组件 Markdown。
+组件说明遵循 [文档规范](docs/documentation.md)。编辑组件页后执行 `npm run sync:docs`，提交前以 `npm run check:docs` 核对生成结果；不要直接编辑生成的组件 Markdown。章节搜索从这些 Markdown 生成轻量索引，因此开发时修改正文或 API 后也需要同步；`build:demo` 会先检查同步状态。搜索索引在首次输入查询时加载，不会预先加载所有组件示例。
 
 纯文档改动可检查涉及文件的格式：
 
@@ -72,7 +80,7 @@ npx prettier --check README.md CONTRIBUTING.md docs
 
 - `npm run lint` / `npm run format:check`：代码规则与格式。
 - `npm test`：组件行为测试。
-- `npm run check:scripts`：验收脚本共享静态服务器的真实 HTTP、资源类型、子路径与路径边界检查。
+- `npm run check:scripts`：验收脚本共享静态服务器的真实 HTTP、资源类型、子路径与路径边界检查，以及最小项目导出的参数与覆盖保护检查。
 - `npm run build:lib` / `npm run build:demo`：组件库、类型声明与展示页构建。
 - `npm run lint:package`：对构建后的包运行 publint。
 - `npm run test:package`：将实际安装包放入独立使用方，检查 Markdown 和文档站全部 TSX 示例类型并运行 Chromium 验证；包含 1280、320、390px 的键盘、长文本、表单重置、弹窗焦点及滚动边界，以及 Basics 中的新增组件组合场景。先执行 `npm run build:lib`。

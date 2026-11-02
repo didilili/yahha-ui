@@ -127,7 +127,7 @@ export default function LoadingScene() {
                 height={168}
                 alt=""
               />
-              <Text tone="muted">稍等一下，朋友们正把这一页送来。</Text>
+              <Text tone="muted">正在加载文章内容，请稍候。</Text>
             </>
           ) : phase === 'error' ? (
             <div className="story-loading-error-result">
@@ -140,9 +140,7 @@ export default function LoadingScene() {
               />
               <Alert tone="error" title="文章加载失败">
                 <div className="story-loading-error">
-                  <p style={{ margin: 0 }}>
-                    暂时无法显示文章内容。别着急，可以重新加载，再和朋友们一起读下去。
-                  </p>
+                  <p style={{ margin: 0 }}>暂时无法显示文章内容，请重试加载。</p>
                   <div>
                     <Button ref={retryButton} variant="secondary" onClick={() => load('success')}>
                       重试加载

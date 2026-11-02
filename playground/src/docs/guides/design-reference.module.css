@@ -1,0 +1,122 @@
+.reference {
+  margin-block: var(--yahha-space-5, 20px) var(--yahha-space-7, 28px);
+  padding: var(--yahha-space-6, 24px);
+  border: 1px solid var(--yahha-paper-line, #c9deec);
+  background: var(--yahha-surface, #ffffff);
+}
+
+.palette {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--yahha-space-5, 20px) var(--yahha-space-6, 24px);
+}
+
+.color {
+  display: grid;
+  grid-template-columns: var(--yahha-control-height-lg, 52px) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--yahha-space-3, 12px);
+  margin: 0;
+}
+
+.swatch {
+  display: block;
+  aspect-ratio: 1;
+  border: 1px solid var(--yahha-paper-line, #c9deec);
+}
+
+.color strong {
+  display: block;
+}
+
+.color code {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.reference .note {
+  margin: var(--yahha-space-1, 4px) 0 0;
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: var(--yahha-font-size-body-sm, 14px);
+}
+
+.typeRows {
+  display: grid;
+  gap: var(--yahha-space-5, 20px);
+}
+
+.typeRows + .typeRows {
+  margin-top: var(--yahha-space-6, 24px);
+  padding-top: var(--yahha-space-6, 24px);
+  border-top: 1px solid var(--yahha-paper-line, #c9deec);
+}
+
+.typeRow {
+  display: grid;
+  grid-template-columns: 11em minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--yahha-space-4, 16px);
+}
+
+.annotation {
+  display: grid;
+  justify-items: start;
+  gap: var(--yahha-space-1, 4px);
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: var(--yahha-font-size-body-sm, 14px);
+}
+
+.controlSizes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: var(--yahha-space-6, 24px);
+}
+
+.controlSize {
+  display: grid;
+  justify-items: start;
+  gap: var(--yahha-space-3, 12px);
+}
+
+.states {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--yahha-space-8, 32px) var(--yahha-space-6, 24px);
+}
+
+.state {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: var(--yahha-space-3, 12px);
+  min-width: 0;
+}
+
+.state > div:last-child {
+  justify-self: stretch;
+}
+
+.reference .stateTitle {
+  margin: 0 0 var(--yahha-space-1, 4px);
+  color: var(--yahha-ink, #49313d);
+  font-size: var(--yahha-font-size-heading-4, 18px);
+  line-height: var(--yahha-leading-heading, 1.45);
+}
+
+@media (max-width: 600px) {
+  .reference {
+    padding: var(--yahha-space-4, 16px);
+  }
+
+  .palette,
+  .states,
+  .typeRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .typeRow {
+    gap: var(--yahha-space-2, 8px);
+  }
+}

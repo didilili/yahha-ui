@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 
 /** Readers should know each example's purpose before reaching its controls. */
 export async function verifyExampleHeadings(page) {
+  for (const disclosure of await page.locator('.doc-disclosure').all()) {
+    if ((await disclosure.getAttribute('open')) === null)
+      await disclosure.locator(':scope > summary').click();
+  }
   const examples = await page.locator('.example-block').evaluateAll((blocks) =>
     blocks.map((block) => {
       const title = block.querySelector('.example-title');
@@ -57,7 +61,7 @@ export async function verifyTeachingExamples(page, baseURL) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto(`${baseURL}#/components/icon-button`);
     const example = page.locator('#icon-button-basic');
-    const close = example.getByRole('button', { name: '关闭欢迎提示', exact: true });
+    const close = example.getByRole('button', { name: '关闭提示', exact: true });
     await close.waitFor();
     assert.equal(
       await close.evaluate((node) => document.activeElement === node),
@@ -66,7 +70,7 @@ export async function verifyTeachingExamples(page, baseURL) {
     );
     await close.focus();
     await page.keyboard.press('Enter');
-    const reopen = example.getByRole('button', { name: '重新显示欢迎提示', exact: true });
+    const reopen = example.getByRole('button', { name: '重新显示提示', exact: true });
     await page.waitForFunction(
       (node) => document.activeElement === node,
       await reopen.elementHandle(),

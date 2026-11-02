@@ -9,7 +9,7 @@ export default function TextComposition() {
         </Text>
         <Text>
           这篇手记标记为 <Badge tone="accent">阅读中</Badge>。可以先读完这一段，再去
-          <Link href="#/guides/styling?section=reading">看看完整的阅读组合</Link>。
+          <Link href="#/guides/reading?section=reading">看看完整的阅读组合</Link>。
         </Text>
       </section>
       <section aria-label="长词换行" style={{ display: 'grid', gap: 8, maxWidth: '32ch' }}>

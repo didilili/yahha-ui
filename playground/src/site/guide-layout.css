@@ -1,0 +1,174 @@
+/* Document roles share the brand, while keeping their reading and browsing space distinct. */
+@media (min-width: 961px) {
+  .docs-site .docs-layout.is-gallery {
+    grid-template-columns: 252px minmax(0, 1fr);
+  }
+}
+
+.docs-site .is-gallery .docs-content {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+}
+
+.docs-cartoon .is-gallery .doc-title-row {
+  min-height: 168px;
+}
+
+.docs-cartoon .is-compact-guide .doc-heading {
+  padding-bottom: 0;
+}
+
+.docs-cartoon .is-compact-guide .doc-title-row {
+  flex-wrap: nowrap;
+  flex-direction: row;
+  gap: 24px;
+  min-height: 0;
+  margin: 0;
+  padding: 0 0 24px;
+  border: 0;
+  border-bottom: 1px solid var(--site-soft-line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.docs-cartoon .is-compact-guide .doc-title-copy {
+  flex-basis: auto;
+  padding: 0;
+}
+
+.docs-cartoon .is-compact-guide .doc-title-row .doc-eyebrow {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--yahha-muted, #7a5c6d);
+  letter-spacing: 0;
+  transform: none;
+}
+
+.docs-cartoon .is-compact-guide .doc-description {
+  max-width: 62ch;
+  margin-bottom: 0;
+}
+
+.docs-cartoon .is-compact-guide .doc-title-row > svg {
+  flex: 0 0 36px;
+  align-self: flex-start;
+  width: 36px;
+  height: 36px;
+  margin-top: 24px;
+}
+
+.docs-site .getting-started-paths {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.docs-site .getting-started-paths a {
+  padding-block: 6px 16px;
+}
+
+.docs-site .getting-started-related {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--yahha-muted, #7a5c6d);
+}
+
+.docs-site .recipe-grid dd > p {
+  margin: 0;
+}
+
+.docs-site .recipe-grid dd .recipe-purpose {
+  color: var(--site-ink);
+  font-weight: 600;
+}
+
+.docs-site .recipe-grid dd .recipe-actions {
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.docs-site .recipe-grid dd .recipe-components {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--yahha-muted, #7a5c6d);
+}
+
+.docs-site .recipe-preview-reading img {
+  object-position: top;
+}
+
+.docs-site .doc-disclosure {
+  border-block: 1px solid var(--site-soft-line);
+}
+
+.docs-site .doc-disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding-block: 12px;
+  color: var(--site-ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.docs-site .doc-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.docs-site .doc-disclosure > summary:hover {
+  color: var(--yahha-focus, #b04e78);
+}
+
+.docs-site .doc-disclosure > summary:focus-visible {
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: 2px;
+}
+
+.docs-site .doc-disclosure[open] > summary > svg {
+  transform: rotate(90deg);
+}
+
+.docs-site .doc-disclosure-content {
+  padding-block: 12px 24px;
+}
+
+@media (min-width: 961px) {
+  .docs-cartoon .is-design-area .docs-sidebar {
+    border-color: var(--site-soft-line);
+    border-radius: 0;
+    border-width: 0 1px 0 0;
+    background: transparent;
+  }
+}
+
+@media (max-width: 600px) {
+  .docs-cartoon .is-compact-guide .doc-title-row {
+    gap: 16px;
+    padding-bottom: 20px;
+  }
+
+  .docs-cartoon .is-compact-guide .doc-title-row .doc-eyebrow {
+    max-width: none;
+  }
+
+  .docs-cartoon .is-compact-guide .doc-title-row > svg {
+    flex-basis: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .docs-site .getting-started-paths {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .docs-cartoon .is-gallery .doc-title-row {
+    min-height: 0;
+  }
+}

@@ -133,7 +133,7 @@ async function verifySearchRecovery(page) {
   await search.fill('这条搜索没有任何组件');
   const empty = sidebar.locator('.search-empty');
   await empty.getByText('未找到相关文档', { exact: true }).waitFor();
-  await empty.getByRole('button', { name: '显示全部文档', exact: true }).click();
+  await empty.getByRole('button', { name: '返回目录', exact: true }).click();
   assert.equal(await search.inputValue(), '');
   await requireFocus(search, 'Empty-result recovery must restore input focus.');
   await sidebar.getByRole('link', { name: 'Button 按钮', exact: true }).waitFor();
@@ -155,18 +155,7 @@ export async function verifyDocsNavigation(browser, baseURL) {
       const sidebar = page.locator('.docs-sidebar');
       assert.deepEqual(
         await sidebar.locator('.nav-group > p').allTextContents(),
-        [
-          '开始使用',
-          '通用',
-          '排版',
-          '布局',
-          '表单',
-          '内容展示',
-          '导航',
-          '浮层',
-          '反馈',
-          '主题配置',
-        ],
+        ['组件', '通用', '排版', '布局', '表单', '内容展示', '导航', '浮层', '反馈', '主题配置'],
         'The directory keeps eight UI categories and a separate theme configuration group.',
       );
       const componentLinks = sidebar.locator('a[href^="#/components/"]');
@@ -180,7 +169,7 @@ export async function verifyDocsNavigation(browser, baseURL) {
         30,
         'Every document URL has exactly one directory entry.',
       );
-      const geometry = await sidebar.getByRole('link').evaluateAll((links) =>
+      const geometry = await sidebar.locator('.nav-group a').evaluateAll((links) =>
         links.map((link) => {
           const bounds = link.getBoundingClientRect();
           const chinese = link.querySelector('.nav-chinese');
@@ -429,10 +418,12 @@ export async function verifyDocsRouteIdentity(browser, baseURL) {
     ['/', /^一起做，\s*全宇宙最可爱的\s*UI 组件库。$/, '#/'],
     ['/guides/introduction', '项目介绍', '#/guides/getting-started'],
     ['/guides/getting-started', '开始使用', '#/guides/getting-started'],
-    ['/guides/styling', '设计与组合', '#/guides/styling'],
-    ['/guides/design-baseline', '设计规范', '#/guides/styling'],
-    ['/guides/states', '状态与场景', '#/guides/styling'],
-    ['/guides/artwork', '图标与插画', '#/guides/styling'],
+    ['/guides/recipes', '场景总览', '#/guides/recipes'],
+    ['/guides/styling', '使用与定制', '#/guides/getting-started'],
+    ['/guides/reading', '阅读与收藏', '#/guides/recipes'],
+    ['/guides/design-baseline', '设计规范', '#/guides/design-baseline'],
+    ['/guides/states', '组合示例', '#/guides/recipes'],
+    ['/guides/artwork', '图标与插画', '#/guides/design-baseline'],
     ['/components', '组件总览', '#/components'],
     ['/components/button', 'Button 按钮', '#/components'],
     ['/components/segmented-control', 'SegmentedControl 分段选择', '#/components'],
@@ -834,7 +825,7 @@ export async function verifyStateScenes(page, baseURL) {
 
 async function verifyStateSceneExamples(page, baseURL) {
   await page.goto(`${baseURL}#/guides/states`);
-  await page.getByRole('heading', { level: 1, name: '状态与场景', exact: true }).waitFor();
+  await page.getByRole('heading', { level: 1, name: '组合示例', exact: true }).waitFor();
   const loading = page.locator('#scene-loading .example-preview');
   const status = loading.getByRole('status');
   const reload = loading.getByRole('button', { name: '重新加载文章', exact: true });

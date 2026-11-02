@@ -1,6 +1,6 @@
 # 素材与分发范围
 
-本文按当前仓库文件区分组件代码、展示素材与页面截图。包名为 `yahha-ui`，当前版本 `0.0.1`，仍为本地试用包；最终代码许可证与角色素材的完整许可清单尚未确定。素材的生成、重绘或同步记录，不等于已核验再发布或商业使用许可。
+本文分别记录组件代码、角色展示素材、生活道具、字体与页面截图的来源和分发位置。包名为 `yahha-ui`，当前版本 `0.0.1`，仍为本地试用包。组件代码的最终许可证尚未确定；角色展示素材的再发布与商业使用许可尚未核验；现有字体 OFL 声明仅适用于相应字体。
 
 ## 组件代码与安装包
 
@@ -18,7 +18,7 @@
 - **小日常道具**：原稿位于 `playground/src/examples/scenes/artwork/little-days/`，包括书签、热茶、翻页、口袋和状态图案。道具由本项目绘制，找路与欢迎场景还会组合既有角色模型；不能把整组素材统称为不含角色的独立道具。见[源文件、派生与动作说明](../playground/src/examples/scenes/artwork/little-days/README.md)。
 - **静态、动效与博客副本**：`npm run sync:artwork` 先生成当前人物成品，再通过 [sync-little-days-artwork.mjs](../scripts/sync-little-days-artwork.mjs) 从原稿派生场景，欢迎场景另复用 [build-friends-welcome.mjs](../scripts/build-friends-welcome.mjs)。文档保留十四份扁平 SVG；博客的 `examples/blog/src/assets/little-days/` 只同步当前导入的六份，独立的 peek、author 副本、原生书签与欢迎控制器也由该流程维护。人物成品、定义裁剪与自动同步副本可用 `npm run check:artwork` 检查，下载和接入见文档站 `#/guides/artwork`。
 
-当前记录能够说明绘制和派生路径；角色素材的再发布与商业使用许可仍未核验。文件格式为 SVG、由项目重新绘制或包含原创道具，都不改变这一记录状态。
+上述文件保留绘制与派生路径，角色展示素材的许可状态仍按本页开头的记录说明。
 
 ## PNG 插图
 
@@ -27,7 +27,7 @@ PNG 不进入组件安装包；实际引用的图片会进入对应网站的静�
 - `examples/blog/src/assets/reading.png`、`rest.png`、`lounge.png` 是博客当前使用的既有插图。原先位于 `playground/src/assets/` 的相同文件只被已停用的旧演示引用，已随旧演示归档至工作区 `../local-archives/yahha-ui/2026-11-02-repository-cleanup/`（相对组件库根目录），保留原路径、字节和 SHA-256；活动版本由博客直接维护，不再保留另一份未使用的 playground 图片。现有[博客素材说明](../examples/blog/src/assets/README.md)记录了这一迁移，未给出与下列状态图同等的独立生成清单；不补写未经核实的作者、工具或许可。
 - `playground/src/examples/scenes/artwork/empty.png` 有[生成说明](../playground/src/examples/scenes/artwork/README.md)及 [sources.json](../playground/src/examples/scenes/artwork/sources.json)，记录 Codex 内置 image_gen、生成日期、尺寸、字节数和 SHA-256，仍用于部分示例。
 
-现有状态图说明明确记录为非官方同人样张，角色素材的再发布与商业使用许可尚未核验。哈希证明文件与记录对应，不代表授权状态。
+生成说明将该状态图记录为非官方同人样张，具体来源、尺寸与哈希保留在原目录。
 
 ## 字体与现有声明
 

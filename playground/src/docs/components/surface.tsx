@@ -24,8 +24,7 @@ export default defineComponentPage('surface', {
         {
           id: 'surface-basic',
           title: '基础用法',
-          description:
-            '平面白纸内容面使用轻纸边和 24px 默认内边距；通过 style 或 className 调整宽度、标题与段落间距。',
+          description: '默认内边距为 24px；通过 style 或 className 调整容器宽度与内容布局。',
           component: SurfaceBasic,
           source: surfaceBasicSource,
         },
@@ -41,10 +40,11 @@ export default defineComponentPage('surface', {
     },
     {
       id: 'design',
-      title: '内容容器的层次',
+      title: '内容布局',
       content: (
         <p>
-          平面纸色和轻纸边将一组内容从页面中分出，内部通过标题、段距与操作留白建立层次。连续正文可以直接开放排布，不必把每一段都包进卡片；外层宽度与内部布局按实际内容安排。
+          通过 style 或 className 设置容器宽度和内部布局。例如设置 <code>display: grid</code> 与{' '}
+          <code>gap</code>，安排标题、正文与操作之间的间距。
         </p>
       ),
     },

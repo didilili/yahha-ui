@@ -6,6 +6,7 @@ import {
   baselineExamples,
   componentSizing,
   designExceptions,
+  exampleCssExceptions,
   exampleExceptions,
 } from './design-contract.mjs';
 
@@ -484,7 +485,15 @@ function checkExample(example, report, validateReferences) {
   for (const style of styles) {
     for (const item of cssDeclarations(style.text, style.path)) {
       validateReferences(item);
-      if (literalColorIn(item))
+      const permitted = exampleCssExceptions.some(
+        (entry) =>
+          entry.path === example.path &&
+          entry.path === item.path &&
+          normalize(entry.selector) === item.selector &&
+          entry.property === item.property &&
+          normalize(entry.value) === item.value,
+      );
+      if (!permitted && literalColorIn(item))
         report(
           item,
           'literal-color',
@@ -496,8 +505,9 @@ function checkExample(example, report, validateReferences) {
         /(?:^|[\s>+~,(])(?:button|input|select|textarea|h[1-6]|p|a)(?![\w-])/.test(item.selector) &&
         (classes.length === 0 || classes.some((name) => hostClasses.has(name)));
       if (
-        item.property.startsWith('--yahha-') ||
-        ((attached || nativeReach) && !layoutProperties.test(item.property))
+        !permitted &&
+        (item.property.startsWith('--yahha-') ||
+          ((attached || nativeReach) && !layoutProperties.test(item.property)))
       )
         report(
           item,
@@ -562,7 +572,7 @@ export function auditDesign({ theme, componentStyles = [], examples = [], except
         `${item.property} has invalid ${tokenRole(item.property)} value ${item.value}.`,
       );
   }
-  for (const [index, entry] of exceptions.entries()) {
+  for (const [index, entry] of [...exceptions, ...exampleCssExceptions].entries()) {
     if (
       ![entry.path, entry.selector, entry.property, entry.value, entry.reason].every(
         (part) => typeof part === 'string' && part.trim(),

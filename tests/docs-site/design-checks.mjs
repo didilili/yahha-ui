@@ -23,6 +23,11 @@ export async function verifyDesignBaseline(page, baseURL) {
   const defaults = await original.evaluate(appearance);
   await page.goto(`${baseURL}#/guides/design-baseline`);
   await page.getByRole('heading', { level: 1, name: '设计规范', exact: true }).waitFor();
+  const formDisclosure = page.locator('#controls').locator('..').locator('.doc-disclosure');
+  assert.equal(await formDisclosure.getAttribute('open'), null);
+  await formDisclosure.locator(':scope > summary').focus();
+  await page.keyboard.press('Enter');
+  assert.notEqual(await formDisclosure.getAttribute('open'), null);
   const controls = page.getByRole('region', { name: '规范表单', exact: true });
   const save = controls.getByRole('button', { name: '保存设置', exact: true });
   assert.deepEqual(
@@ -111,6 +116,7 @@ export async function verifyDesignBaseline(page, baseURL) {
     'Reset must restore the existing incomplete-email example alongside the new preferences.',
   );
 
+  await page.locator('#reading').locator('..').locator('.doc-disclosure > summary').click();
   const reading = page.getByRole('region', { name: '规范阅读', exact: true });
   const body = reading.getByText(
     '傍晚在 Yahha 星球散步，吉伊在河边遇到一颗打瞌睡的小星星。它揉揉眼睛，说自己忘了回家的方向。',

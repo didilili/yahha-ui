@@ -24,7 +24,7 @@ import { Surface } from 'yahha-ui';
 
 ### 基础用法
 
-平面白纸内容面使用轻纸边和 24px 默认内边距；通过 style 或 className 调整宽度、标题与段落间距。
+默认内边距为 24px；通过 style 或 className 调整容器宽度与内容布局。
 
 [查看示例文件](../../playground/src/examples/foundations/SurfaceBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -96,9 +96,9 @@ export default function SurfaceComposition() {
 
 <a id="design"></a>
 
-## 内容容器的层次
+## 内容布局
 
-平面纸色和轻纸边将一组内容从页面中分出，内部通过标题、段距与操作留白建立层次。连续正文可以直接开放排布，不必把每一段都包进卡片；外层宽度与内部布局按实际内容安排。
+通过 style 或 className 设置容器宽度和内部布局。例如设置 `display: grid` 与 `gap`，安排标题、正文与操作之间的间距。
 
 <a id="api"></a>
 

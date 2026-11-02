@@ -221,21 +221,6 @@ svg {
   font-size: var(--yahha-font-size-sm, 12px);
   color: var(--yahha-muted, #897169);
 }
-.sidebar-foot {
-  margin: 28px 10px 0;
-  padding-top: 23px;
-  border-top: 1px solid var(--docs-line, #eee4da);
-  color: var(--yahha-muted, #947c6d);
-}
-.sidebar-foot p {
-  font-family: WenKai, serif;
-  font-size: var(--yahha-font-size-body, 16px);
-  margin: 8px 0;
-  line-height: var(--yahha-leading-body, 1.8);
-}
-.sidebar-foot > span {
-  font-size: var(--yahha-font-size-sm, 12px);
-}
 .search-empty {
   padding: 30px 6px;
   color: var(--yahha-muted, #826d63);

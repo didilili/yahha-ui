@@ -218,7 +218,7 @@ export default function SelectForm() {
 
 ### 长列表与长选项
 
-单独用八个分类展示列表滚动与长文字换行，保留 340px 窄容器；本例只演示选择，不筛选文章。
+在宽度最多 340px 的容器中展示八个分类，查看列表滚动与长文字换行。本例只演示选择，不筛选文章。
 
 [查看示例文件](../../playground/src/examples/new-forms/SelectLongOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -303,6 +303,54 @@ export default function SelectLongOptions() {
 ## 样式定制
 
 字段宽度通过 className 或外层容器设置；style 调整的是触发按钮。 列表挂载在 Portal 中，定制列表和选项时直接使用 classNames.popup / classNames.option， 不依赖字段容器的后代选择器。默认长选项会换行，列表在可用视口内滚动。 设置原生 dir="rtl" 或 dir="ltr" 时，字段与弹出列表保持同一方向；未显式设置时， 优先沿用最近原生容器的方向，再沿用上游方向配置。容器方向变化时，已打开的列表同步更新。
+
+<a id="select-portal-customization"></a>
+
+### Portal 列表的局部定制
+
+通过 classNames.popup 设置局部浅蓝背景，classNames.option 调整选项字重。列表挂载到 body，直接使用附加类名即可，不依赖字段容器的后代选择器。CSS 与示例源码放在一起，选中、高亮和禁用反馈保留；局部背景不随主题预设变化，整体配色仍使用 ThemeProvider。
+
+[查看示例文件](../../playground/src/examples/customization/SelectPortalCustomization.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/customization/SelectPortalCustomization.tsx -->
+
+```tsx
+import { Select } from 'yahha-ui';
+
+export default function SelectPortalCustomization() {
+  return (
+    <>
+      <style>{`
+        .yahha-example-archive-field {
+          width: 100%;
+          max-width: 360px;
+        }
+        .yahha-example-archive-popup {
+          background: #f1f8ff;
+        }
+        .yahha-example-archive-option {
+          font-weight: 600;
+        }
+      `}</style>
+      <Select
+        label="手记分类"
+        defaultValue="reading"
+        hint="给这篇手记选一个归档位置。"
+        className="yahha-example-archive-field"
+        classNames={{
+          popup: 'yahha-example-archive-popup',
+          option: 'yahha-example-archive-option',
+        }}
+        options={[
+          { value: 'walking', label: '散步手记' },
+          { value: 'reading', label: '阅读摘记' },
+          { value: 'travel', label: '旅行记录（稍后开放）', disabled: true },
+        ]}
+      />
+    </>
+  );
+}
+```
 
 <a id="related"></a>
 

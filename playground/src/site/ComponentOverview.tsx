@@ -16,15 +16,15 @@ const groupDetails: Record<
   string,
   { description: string; motif: 'flower' | 'sprout' | 'cloud' | 'star' | 'letter' }
 > = {
-  通用: { description: '把想法交给按钮，让每一次点击都有回应。', motif: 'flower' },
-  排版: { description: '让标题、正文和链接，排成好读的一页。', motif: 'letter' },
-  布局: { description: '用纸面和分隔线，为内容留出舒展的空间。', motif: 'cloud' },
-  表单: { description: '写下想法，选好偏好，让每一次填写都有回应。', motif: 'sprout' },
-  内容展示: { description: '给作者、配图与内容标记一个清楚的位置。', motif: 'cloud' },
-  浮层: { description: '展开便笺，把操作和补充说明放在手边。', motif: 'letter' },
-  反馈: { description: '等待时有说明，完成时有回应，遇到问题也有下一步。', motif: 'star' },
-  导航: { description: '翻过一页，还有新的故事等着你。', motif: 'letter' },
-  主题配置: { description: '选一组喜欢的配色，让页面与浮层保持一致。', motif: 'flower' },
+  通用: { description: '按钮与图标按钮，用于触发操作。', motif: 'flower' },
+  排版: { description: '标题、正文与链接，用于组织文字内容。', motif: 'letter' },
+  布局: { description: '内容容器与分隔线，用于划分页面区域。', motif: 'cloud' },
+  表单: { description: '输入、选择与切换，用于收集信息和设置偏好。', motif: 'sprout' },
+  内容展示: { description: '展示头像、图片和标记，按需展开补充内容。', motif: 'cloud' },
+  浮层: { description: '通过菜单、弹窗和提示，呈现操作或补充说明。', motif: 'letter' },
+  反馈: { description: '说明加载、操作结果和空状态，并提供下一步操作。', motif: 'star' },
+  导航: { description: '标签页与分页，用于切换内容和浏览列表。', motif: 'letter' },
+  主题配置: { description: '设置配色与语义颜色，在页面和浮层中保持一致。', motif: 'flower' },
 };
 
 // Preserve the original result sets of saved filters whose categories were split.
@@ -144,19 +144,12 @@ export default function ComponentOverview({
     <div className="component-overview-page">
       <header className="overview-hero">
         <div className="overview-hero-copy">
-          <p className="overview-eyebrow">
-            <Motif name="flower" />
-            Yahha 星球 · 朋友们的组件集合
-          </p>
           {/* Route navigation focuses the heading without adding another tab stop. */}
           {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
           <h1 ref={headingRef} tabIndex={-1}>
             组件总览
           </h1>
-          <p className="overview-introduction">朋友们把组件摆好了，来挑几个吧。</p>
-          <p className="overview-description">
-            浏览漫画手账风 React 组件，查看交互示例、用法与 API。
-          </p>
+          <p className="overview-description">按分类浏览组件，查看交互示例、用法与 API。</p>
           <div className="overview-hero-notes">
             <Badge tone="accent">{uiCount} 个 UI 组件</Badge>
             <span className="overview-inventory-note">
@@ -166,7 +159,6 @@ export default function ComponentOverview({
         </div>
         <div className="overview-friends" aria-hidden="true">
           <DocScene />
-          <span>你先挑，朋友们在这里等你。</span>
         </div>
       </header>
 
@@ -234,7 +226,7 @@ export default function ComponentOverview({
         <EmptyState
           className="overview-empty"
           title="未找到相关组件"
-          description="试试其他组件名或用途关键词，或清空筛选，看看其他可爱的伙伴。"
+          description="更换组件名或用途关键词，或清空筛选查看全部组件。"
           illustration={<Motif name="cloud" />}
           action={
             <Button variant="secondary" onClick={clearFilters}>
@@ -303,13 +295,13 @@ export default function ComponentOverview({
       <aside className="overview-next" aria-labelledby={`${overviewId}-next`}>
         <Motif name="letter" />
         <div>
-          <h2 id={`${overviewId}-next`}>挑好了，就一起搭起来。</h2>
-          <p>接好样式，先搭一页手记，再给你的故事添个位置。</p>
+          <h2 id={`${overviewId}-next`}>接入与组合示例</h2>
+          <p>先完成安装，再查看阅读、编辑场景中的组件组合和完整博客示例。</p>
           <nav aria-label="总览相关指南">
             <Link href="#/guides/getting-started">
               安装与接入 <ArrowRight size={15} aria-hidden="true" />
             </Link>
-            <Link href="#/guides/styling?section=reading">
+            <Link href="#/guides/reading?section=reading">
               阅读与组合 <ArrowRight size={15} aria-hidden="true" />
             </Link>
             <Link href="#/guides/states?section=article-actions">

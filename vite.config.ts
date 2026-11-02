@@ -2,11 +2,16 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fontNotices } from './scripts/font-notices.ts';
+import { docsSearchIndex } from './scripts/docs-search.ts';
 
 export default defineConfig({
   root: fileURLToPath(new URL('./playground', import.meta.url)),
   base: './',
-  plugins: [react(), fontNotices(new URL('./playground/src/assets/', import.meta.url))],
+  plugins: [
+    react(),
+    fontNotices(new URL('./playground/src/assets/', import.meta.url)),
+    docsSearchIndex(new URL('./docs/components/', import.meta.url)),
+  ],
   resolve: {
     alias: [
       {

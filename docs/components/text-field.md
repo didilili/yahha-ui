@@ -350,7 +350,48 @@ export default function TextFieldForm() {
 
 ## 样式定制
 
-默认白底保留浅蓝内底边；只读与禁用默认使用平整的状态底色，错误使用独立的红色边线与内缘。 字段宽度、外边距等布局通过 className 或外层容器设置。调整输入框本身的外观时使用 classNames.input 或 style；需要单独设置提示或错误文字时使用 classNames.hint / classNames.error，无需依赖内部嵌套选择器。
+字段宽度、外边距等布局通过 className 或外层容器设置。调整输入框本身的外观时使用 classNames.input 或 style；需要单独设置提示或错误文字时使用 classNames.hint / classNames.error，无需依赖内部嵌套选择器。
+
+<a id="text-field-customization"></a>
+
+### 提示区域的局部定制
+
+用根 className 限制字段宽度，通过 classNames.hint 设置提示区域的留白和浅粉背景。CSS 随示例源码一起复制，局部颜色不随主题预设变化；整体配色使用 ThemeProvider。本例只编辑署名，不保存数据。
+
+[查看示例文件](../../playground/src/examples/customization/TextFieldCustomization.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/customization/TextFieldCustomization.tsx -->
+
+```tsx
+import { TextField } from 'yahha-ui';
+
+export default function TextFieldCustomization() {
+  return (
+    <>
+      <style>{`
+        .yahha-example-nickname-field {
+          width: 100%;
+          max-width: 360px;
+        }
+        .yahha-example-nickname-hint {
+          padding: 8px 12px;
+          border-radius: 8px;
+          background: #fff0f6;
+          color: #49313d;
+        }
+      `}</style>
+      <TextField
+        label="手记署名"
+        defaultValue="库米"
+        maxLength={12}
+        hint="用朋友们认识的名字，最多 12 个字符。"
+        className="yahha-example-nickname-field"
+        classNames={{ hint: 'yahha-example-nickname-hint' }}
+      />
+    </>
+  );
+}
+```
 
 <a id="related"></a>
 
