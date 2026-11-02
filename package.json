@@ -46,6 +46,7 @@
     "lint:package": "publint --strict",
     "test:package": "node scripts/test-package.mjs",
     "test:docs": "node scripts/test-docs.mjs",
+    "test:adoption": "node scripts/test-docs.mjs --adoption",
     "create:starter": "node scripts/create-starter.mjs",
     "test:controls": "node scripts/test-docs.mjs --core-controls",
     "test:navigation": "node scripts/test-docs.mjs --navigation-controls",

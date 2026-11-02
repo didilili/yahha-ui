@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { basename, extname } from 'node:path';
 
 async function requireFocus(locator, message) {
   await locator
@@ -29,7 +30,7 @@ async function requireHome(page) {
   return heading;
 }
 
-async function verifyDeployedArtwork(page, images, baseURL) {
+async function verifyDeployedArtwork(page, images, baseURL, requiredExtension) {
   assert.ok((await images.count()) > 0, 'The public site must show its friends artwork.');
   for (const image of await images.all()) {
     await image.scrollIntoViewIfNeeded();
@@ -38,12 +39,157 @@ async function verifyDeployedArtwork(page, images, baseURL) {
     assert.ok(source.startsWith(baseURL), 'Artwork must resolve within the nested deployment.');
     const response = await page.request.get(source);
     assert.equal(response.ok(), true, 'The deployed artwork must be retrievable.');
-    assert.match(response.headers()['content-type'] ?? '', /^image\/svg\+xml(?:;|$)/);
+    const extension = extname(new URL(source).pathname).toLowerCase();
+    const expectedMime = { '.svg': 'image/svg+xml', '.png': 'image/png' }[extension];
+    assert.ok(expectedMime, `Artwork must use a known SVG or PNG source: ${source}`);
+    if (requiredExtension) assert.equal(extension, requiredExtension);
+    assert.equal(
+      (response.headers()['content-type'] ?? '').split(';')[0].trim(),
+      expectedMime,
+      'The server must return the actual image format rather than an HTML fallback.',
+    );
     assert.equal(
       await image.evaluate((element) => element.naturalWidth > 0 && element.naturalHeight > 0),
       true,
       'Artwork must decode as an image, rather than only return a successful response.',
     );
+  }
+}
+
+async function verifyReadingControls(page, main) {
+  const tabs = main.getByRole('tablist', { name: '手记内容', exact: true });
+  const body = tabs.getByRole('tab', { name: '正文', exact: true });
+  const afterword = tabs.getByRole('tab', { name: '后记', exact: true });
+  assert.equal(await body.getAttribute('aria-selected'), 'true');
+  await body.focus();
+  await page.keyboard.press('ArrowRight');
+  await requireFocus(afterword, 'Arrow keys must move between the real homepage tabs.');
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(
+    (element) => element.getAttribute('aria-selected') === 'true',
+    await afterword.elementHandle(),
+  );
+  await main.getByRole('tabpanel', { name: '后记', exact: true }).waitFor();
+  await main.getByRole('tabpanel', { name: '正文', exact: true }).waitFor({ state: 'hidden' });
+  assert.equal(await main.getByRole('tabpanel', { name: '正文', exact: true }).isVisible(), false);
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('Enter');
+  await main.getByRole('tabpanel', { name: '正文', exact: true }).waitFor();
+  await main.getByRole('tabpanel', { name: '后记', exact: true }).waitFor({ state: 'hidden' });
+  assert.equal(await main.getByRole('tabpanel').count(), 1);
+
+  const trigger = main.getByRole('button', { name: '阅读说明', exact: true });
+  await trigger.click();
+  const popup = page.getByRole('dialog', { name: '示例说明', exact: true });
+  await popup.waitFor();
+  assert.equal(await popup.evaluate((node) => node.closest('main') === null), true);
+  await page.keyboard.press('Escape');
+  await popup.waitFor({ state: 'hidden' });
+  await requireFocus(trigger, 'Escape must return focus to the reading explanation trigger.');
+}
+
+async function accentBackground(locator) {
+  // Default presets use hex tokens; wait for the real CSS background transition to finish.
+  await locator.page().waitForFunction(
+    (element) => {
+      const style = getComputedStyle(element);
+      const hex = style.getPropertyValue('--yahha-accent').trim();
+      if (!/^#[0-9a-f]{6}$/i.test(hex)) return false;
+      const rgb = [1, 3, 5].map((start) => Number.parseInt(hex.slice(start, start + 2), 16));
+      return style.backgroundColor === `rgb(${rgb.join(', ')})`;
+    },
+    await locator.elementHandle(),
+  );
+  return locator.evaluate((element) => ({
+    accent: getComputedStyle(element).getPropertyValue('--yahha-accent').trim(),
+    background: getComputedStyle(element).backgroundColor,
+  }));
+}
+
+async function verifyThemePreview(page, main) {
+  const theme = main.locator('.home-theme');
+  const choices = theme.getByRole('group', { name: '示例配色', exact: true });
+  const trigger = theme.getByRole('button', { name: '查看配色说明', exact: true });
+  const saved = main.getByRole('button', { name: '收藏手记', exact: true });
+  const originalSaved = await saved.getAttribute('aria-pressed');
+  const hero = main.locator('.home-hero');
+  const heroColors = () =>
+    hero.evaluate((element) => ({
+      accent: getComputedStyle(element).getPropertyValue('--yahha-accent').trim(),
+      color: getComputedStyle(element).color,
+      background: getComputedStyle(element.querySelector('.home-primary-link')).backgroundColor,
+    }));
+  const originalHero = await heroColors();
+  const input = theme.getByRole('textbox');
+  await input.fill('palette@example.com');
+  const backgrounds = new Set();
+  assert.equal(await choices.getByRole('radio', { name: '粉色', exact: true }).isChecked(), true);
+
+  for (const [value, label] of [
+    ['pink', '粉色'],
+    ['blue', '浅蓝'],
+    ['yellow', '浅黄'],
+  ]) {
+    await choices.getByRole('radio', { name: label, exact: true }).check();
+    await page.waitForFunction(
+      ({ element, themeName }) =>
+        element.closest('[data-yahha-theme]')?.getAttribute('data-yahha-theme') === themeName,
+      { element: await trigger.elementHandle(), themeName: value },
+    );
+    await page.mouse.move(0, 0);
+    const buttonColors = await accentBackground(trigger);
+    backgrounds.add(buttonColors.background);
+    await trigger.click();
+    const popup = page.getByRole('dialog', { name: '配色说明', exact: true });
+    await popup.waitFor();
+    assert.equal(await popup.evaluate((node) => node.closest('.home-theme') === null), true);
+    const badge = popup.locator('[data-tone="accent"]');
+    assert.deepEqual(
+      await accentBackground(badge),
+      buttonColors,
+      'The portaled badge must use the same current accent as the themed Button.',
+    );
+    assert.equal(
+      await popup.evaluate((node) =>
+        getComputedStyle(node).getPropertyValue('--yahha-accent').trim(),
+      ),
+      buttonColors.accent,
+    );
+    await page.keyboard.press('Escape');
+    await popup.waitFor({ state: 'hidden' });
+    await requireFocus(trigger, 'Escape must restore the themed Popover trigger.');
+    assert.equal(await input.inputValue(), 'palette@example.com');
+    assert.equal(await saved.getAttribute('aria-pressed'), originalSaved);
+    assert.deepEqual(await heroColors(), originalHero, 'Preview colors must remain local.');
+  }
+  assert.equal(backgrounds.size, 3, 'All three presets must visibly change the preview accent.');
+}
+
+async function verifySceneLinks(page) {
+  const scenes = page.locator('.home-scenes');
+  assert.equal(await scenes.locator('.home-scene img').count(), 3);
+  for (const [name, href, target, imageName] of [
+    ['阅读与收藏', '#/guides/reading?section=reading-example', 'reading-example', 'reading'],
+    ['归档与搜索', '#/guides/states?section=scene-blog-archive', 'scene-blog-archive', 'archive'],
+    [
+      '文章编辑与保存',
+      '#/guides/states?section=scene-article-actions',
+      'scene-article-actions',
+      'editing',
+    ],
+  ]) {
+    const link = scenes.getByRole('link', { name, exact: true });
+    assert.equal(await link.getAttribute('href'), href);
+    await link.locator('img').scrollIntoViewIfNeeded();
+    await link.locator('img').evaluate((image) => image.decode());
+    const imagePath = await link
+      .locator('img')
+      .evaluate((image) => new URL(image.currentSrc).pathname);
+    assert.match(basename(imagePath), new RegExp(`^${imageName}(?:-[^/]+)?\\.png$`));
+    await link.click();
+    await page.locator(`#${target}`).waitFor();
+    await page.goBack();
+    await requireHome(page);
   }
 }
 
@@ -63,15 +209,20 @@ export async function verifyHome(browser, baseURL) {
     assert.equal(await explore.getAttribute('href'), '#/?section=home-little-site');
     await explore.click();
     await requireFocus(
-      page.getByRole('heading', { name: '这次，轮到你来起名字。', exact: true }),
+      page.getByRole('heading', { name: '修改标题，试试收藏', exact: true }),
       'Homepage section navigation must continue at the live component sample heading.',
     );
     await requireHome(page);
+    assert.equal(
+      await page.locator('main .home-hero-stage svg[role="img"]').count(),
+      1,
+      'The welcome scene must remain real SVG artwork.',
+    );
     await verifyDeployedArtwork(page, page.locator('main .site-home img'), baseURL);
 
     const main = page.locator('main');
     const name = main.getByRole('textbox', { name: '手记标题', exact: true });
-    const date = main.getByText('草地上，还空着一个位置', { exact: true });
+    const date = main.getByText('生活记录 · 示例文章', { exact: true });
     const showDate = main.getByRole('checkbox', { name: '显示副标题', exact: true });
     assert.equal(await name.inputValue(), '给晚到的朋友留块饼干');
     await name.fill('窗边的小小手记');
@@ -86,12 +237,24 @@ export async function verifyHome(browser, baseURL) {
     await main.getByRole('button', { name: '收藏手记', pressed: false, exact: true }).click();
     await main.getByRole('button', { name: '收藏手记', pressed: true, exact: true }).waitFor();
     await main.getByRole('status').getByText('已在当前示例中收藏。', { exact: true }).waitFor();
+    await verifyReadingControls(page, main);
+    await verifyThemePreview(page, main);
+    await main.getByRole('button', { name: '收藏手记', pressed: true, exact: true }).waitFor();
     await page.reload();
     await requireHome(page);
     assert.equal(await name.inputValue(), '给晚到的朋友留块饼干');
     assert.equal(await showDate.isChecked(), true, 'Refreshing must reset this local sample.');
     await date.waitFor();
     await main.getByRole('button', { name: '收藏手记', pressed: false, exact: true }).waitFor();
+    assert.equal(
+      await main
+        .locator('.home-theme')
+        .getByRole('radio', { name: '粉色', exact: true })
+        .isChecked(),
+      true,
+      'Refreshing must reset the local theme preview.',
+    );
+    await verifySceneLinks(page);
 
     const components = main
       .locator('.home-hero-actions')
@@ -108,7 +271,12 @@ export async function verifyHome(browser, baseURL) {
     await page.locator('#api').waitFor();
     assert.ok((await page.locator('.example-block').count()) >= 4);
     assert.ok((await page.locator('.api-table tbody tr').count()) > 0);
-    await verifyDeployedArtwork(page, page.locator('.doc-scene img.doc-scene-friends'), baseURL);
+    await verifyDeployedArtwork(
+      page,
+      page.locator('.doc-scene img.doc-scene-friends'),
+      baseURL,
+      '.svg',
+    );
     const brand = page.locator('.docs-header .docs-brand');
     assert.equal(await brand.getAttribute('href'), '#/');
     await brand.click();
@@ -128,6 +296,21 @@ export async function verifyHome(browser, baseURL) {
         true,
         `The homepage must fit a ${width}px viewport.`,
       );
+      const themeTrigger = page
+        .locator('.home-theme')
+        .getByRole('button', { name: '查看配色说明', exact: true });
+      await themeTrigger.click();
+      const themePopup = page.getByRole('dialog', { name: '配色说明', exact: true });
+      await themePopup.waitFor();
+      const popupBox = await themePopup.boundingBox();
+      assert.ok(popupBox.x >= -1 && popupBox.x + popupBox.width <= width + 1);
+      assert.equal(
+        await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+        true,
+      );
+      await page.keyboard.press('Escape');
+      await themePopup.waitFor({ state: 'hidden' });
+      await requireFocus(themeTrigger, 'Mobile Popover dismissal must return to its trigger.');
       const open = page.getByRole('button', { name: '打开文档目录', exact: true });
       await open.click();
       const search = page.getByRole('searchbox', { name: '搜索文档', exact: true });

@@ -1,7 +1,9 @@
 import { useState, type Ref } from 'react';
 import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Heart } from 'lucide-react';
-import { Badge, Button, Checkbox, Link, TextField } from 'yahha-ui';
+import { Badge, Button, Checkbox, Link, Popover, Surface, Tabs, Text, TextField } from 'yahha-ui';
 import Motif from './Motif';
+import HomeScenes from './HomeScenes';
+import HomeTheme from './HomeTheme';
 import { blogHref } from './site-links';
 import FriendsWelcome from '../examples/scenes/FriendsWelcome';
 import peek from '../examples/scenes/artwork/friends-preview/friends-peek.svg';
@@ -33,9 +35,12 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
               <span>UI 组件库。</span>
             </h1>
             <p className="home-hero-description">
-              一套漫画手账风的 React 组件库。
+              漫画手账风的 React 组件库，
               <br className="home-desktop-break" />
-              带上你的奇思妙想，和朋友们一起搭出喜欢的界面。
+              用来搭博客、个人主页与内容小站。
+            </p>
+            <p className="home-hero-detail">
+              按钮、字段与浮层延续暖墨轮廓和纸面细节，附阅读、归档与编辑示例。
             </p>
             <div className="home-hero-actions">
               <Link className="home-primary-link" href="#/guides/getting-started">
@@ -56,13 +61,13 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
             </div>
             <p className="home-local-note">
               v0.0.1 <span aria-hidden="true">·</span> 早期预览
+              <span aria-hidden="true">·</span> 通过本地包试用
             </p>
+            <Link className="home-introduction-link" href="#/guides/introduction">
+              了解项目与当前范围 <ArrowRight size={14} aria-hidden="true" />
+            </Link>
           </div>
           <div className="home-hero-stage">
-            <div className="home-scene-note">
-              给你留了个位置，一起来搭吧。
-              <Motif name="star" />
-            </div>
             <FriendsWelcome
               label="吉伊扶着小站卡片，小八笑着招手，乌萨奇在旁惊喜地看着。"
               onRunningChange={setSceneRunning}
@@ -96,14 +101,17 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
         <div className="home-section-heading">
           <Motif name="sprout" />
           <div>
-            <p>朋友们先搭了一页手记</p>
+            <p>组件交互示例</p>
             {/* The route moves focus here after section navigation without adding a tab stop. */}
             {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
             <h2 id="home-little-site" tabIndex={-1}>
-              这次，轮到你来起名字。
+              修改标题，试试收藏
             </h2>
           </div>
         </div>
+        <p className="home-section-intro">
+          暖墨轮廓、白纸字段和粉色强调，延续到按钮、页签与便笺浮层里。试试修改内容、切换页签和打开补充说明。
+        </p>
         <div className="home-site-window">
           <div className="home-window-bar">
             <div aria-hidden="true">
@@ -121,22 +129,47 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
                 <span>生活手记</span>
               </div>
               <h3>{name.trim() || '未命名手记'}</h3>
-              {showDate && <p className="home-date">草地上，还空着一个位置</p>}
-              <p>
-                大家数了数，还差一位朋友。
-                <br />
-                最后一块饼干，先替你留在盘子里。
-              </p>
-              <Button
-                variant="secondary"
-                aria-pressed={saved}
-                startIcon={
-                  <Heart aria-hidden="true" size={16} fill={saved ? 'currentColor' : 'none'} />
-                }
-                onClick={() => setSaved(!saved)}
-              >
-                收藏手记
-              </Button>
+              {showDate && <p className="home-date">生活记录 · 示例文章</p>}
+              <Tabs
+                label="手记内容"
+                items={[
+                  {
+                    value: 'body',
+                    label: '正文',
+                    content: (
+                      <Text>
+                        大家数了数，还差一位朋友。
+                        <br />
+                        最后一块饼干，先替你留在盘子里。
+                      </Text>
+                    ),
+                  },
+                  {
+                    value: 'afterword',
+                    label: '后记',
+                    content: (
+                      <Surface>
+                        <Text>第二天，大家带来了新的点心，又在同一张桌边坐下。</Text>
+                      </Surface>
+                    ),
+                  },
+                ]}
+              />
+              <div className="home-article-actions">
+                <Button
+                  variant="secondary"
+                  aria-pressed={saved}
+                  startIcon={
+                    <Heart aria-hidden="true" size={16} fill={saved ? 'currentColor' : 'none'} />
+                  }
+                  onClick={() => setSaved(!saved)}
+                >
+                  收藏手记
+                </Button>
+                <Popover title="示例说明" trigger={<Button variant="ghost">阅读说明</Button>}>
+                  <Text>这是一篇示例手记。标题、收藏和副标题只在当前页面生效，刷新后恢复。</Text>
+                </Popover>
+              </div>
               <p className="home-save-status" role="status">
                 {saved ? '已在当前示例中收藏。' : '点击按钮，切换收藏状态。'}
               </p>
@@ -159,25 +192,49 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
                 onChange={(event) => setShowDate(event.target.checked)}
               />
               <p className="home-component-note">
-                这个示例使用了 Button、TextField、Checkbox 和 Badge。
+                这个示例使用了 <Link href="#/components/button">Button</Link>、
+                <Link href="#/components/text-field">TextField</Link>、
+                <Link href="#/components/checkbox">Checkbox</Link>、
+                <Link href="#/components/badge">Badge</Link>、
+                <Link href="#/components/tabs">Tabs</Link> 和{' '}
+                <Link href="#/components/popover">Popover</Link>。
               </p>
+              <Link href="#/guides/reading?section=reading-example">
+                查看阅读与收藏示例 <ArrowRight size={16} aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </div>
         <p className="home-demo-caption">修改与收藏仅在当前页面生效，刷新后恢复。</p>
+        <p className="home-demo-caption">
+          <Link href="#/guides/recipes">
+            查看组合示例：阅读、归档、编辑与状态反馈 <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </p>
       </section>
+
+      <HomeScenes />
+      <HomeTheme />
 
       <section className="home-next-stop" aria-labelledby="home-next-title">
         <div className="home-next-picture">
           <img src={peek} width="440" height="170" alt="" />
         </div>
         <div>
-          <h2 id="home-next-title">下一页，留给你的故事。</h2>
-          <p>按钮、纸签和便笺都在这里。挑几样，搭出你的下一页。</p>
+          <h2 id="home-next-title">从第一个组件开始</h2>
+          <p>在已有项目中接入，或从最小项目开始，再复制需要的组合示例。</p>
+          <nav className="home-next-links" aria-label="开始搭建">
+            <Link href="#/guides/getting-started">
+              安装与接入 <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+            <Link href="#/guides/getting-started?section=starter-project">
+              运行最小项目 <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+            <Link href="#/guides/recipes">
+              查看组合代码 <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </nav>
         </div>
-        <Link className="home-text-link" href="#/components">
-          浏览组件 <ArrowRight size={18} aria-hidden="true" />
-        </Link>
       </section>
     </div>
   );

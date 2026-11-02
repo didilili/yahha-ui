@@ -2,6 +2,10 @@ import { fileURLToPath } from 'node:url';
 import { chromium, firefox, webkit } from 'playwright';
 import { startStaticServer } from './static-server.mjs';
 import { verifyDocs } from '../tests/docs-site/browser.mjs';
+import { verifyAdoption } from '../tests/docs-site/adoption-checks.mjs';
+import { verifySectionNavigation } from '../tests/docs-site/section-navigation-checks.mjs';
+import { verifySearch } from '../tests/docs-site/search-checks.mjs';
+import { verifyGuideLoading } from '../tests/docs-site/guide-loading-checks.mjs';
 import {
   verifyCoreComponents,
   verifyCoreControlEdges,
@@ -24,7 +28,14 @@ try {
   // A nested deployment catches absolute asset URLs that would fail on GitHub Pages.
   server = await startStaticServer([{ directory: root, prefix: '/docs-preview/' }]);
   const baseURL = `${server.origin}/docs-preview/`;
-  if (process.argv.includes('--core-controls')) {
+  if (process.argv.includes('--adoption')) {
+    browser = await chromium.launch({ headless: true });
+    await verifyGuideLoading(browser, baseURL);
+    await verifySearch(browser, baseURL);
+    await verifySectionNavigation(browser, baseURL);
+    await verifyAdoption(browser, baseURL);
+    console.log('Documentation adoption paths passed at desktop and 390px.');
+  } else if (process.argv.includes('--core-controls')) {
     for (const [name, engine] of Object.entries({ chromium, firefox, webkit })) {
       browser = await engine.launch({ headless: true });
       try {

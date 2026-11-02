@@ -6,6 +6,7 @@ import { verifyWelcome } from './welcome-checks.mjs';
 import { verifyComponentOverview } from './overview-checks.mjs';
 import { verifyExampleHeadings } from './example-teaching-checks.mjs';
 import { verifyBrand } from './brand-checks.mjs';
+import { verifyAdoption } from './adoption-checks.mjs';
 import { verifySectionNavigation } from './section-navigation-checks.mjs';
 import { verifySearch } from './search-checks.mjs';
 import { verifyGuideLoading } from './guide-loading-checks.mjs';
@@ -14,6 +15,7 @@ export async function verifyDocs(browser, baseURL) {
   await verifyGuideLoading(browser, baseURL);
   await verifySearch(browser, baseURL);
   await verifySectionNavigation(browser, baseURL);
+  await verifyAdoption(browser, baseURL);
   await verifyBrand(browser, baseURL);
   await verifyHome(browser, baseURL);
   await verifyComponentOverview(browser, baseURL);
