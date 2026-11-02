@@ -26,7 +26,7 @@
     "dev": "vite --host 127.0.0.1 --port 4175 --strictPort",
     "build": "npm run typecheck && npm run build:lib && npm run build:demo",
     "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
-    "build:demo": "vite build",
+    "build:demo": "npm run check:fonts && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4176 --strictPort",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint --deny-warnings .",
@@ -40,17 +40,21 @@
     "test:controls": "node scripts/test-docs.mjs --core-controls",
     "test:navigation": "node scripts/test-docs.mjs --navigation-controls",
     "test:overlays": "node scripts/test-docs.mjs --overlay-controls",
-    "check": "npm run format:check && npm run lint && npm run check:docs && npm run check:design && npm run typecheck && npm test && npm run build:lib && npm run build:demo && npm run lint:package && npm run test:package && npm run test:docs && npm run test:blog",
+    "check": "npm run format:check && npm run lint && npm run check:docs && npm run check:fonts && npm run check:design && npm run typecheck && npm test && npm run build:lib && npm run build:demo && npm run lint:package && npm run test:package && npm run test:docs && npm run test:blog && npm run build:blog && npm run test:fonts",
     "prepare": "husky",
     "check:design": "node --test tests/design-contract.test.mjs && node scripts/check-design.mjs && npm run check:artwork",
     "sync:artwork": "node scripts/sync-little-days-artwork.mjs",
     "check:artwork": "node scripts/sync-little-days-artwork.mjs --check",
     "dev:blog": "npm run build:lib && vite --config examples/blog/vite.config.ts --host 127.0.0.1 --port 4186 --strictPort",
-    "build:blog": "npm run build:lib && tsc --noEmit -p examples/blog/tsconfig.json && vite build --config examples/blog/vite.config.ts",
+    "build:blog": "npm run check:fonts && npm run build:lib && tsc --noEmit -p examples/blog/tsconfig.json && vite build --config examples/blog/vite.config.ts",
     "preview:blog": "vite preview --config examples/blog/vite.config.ts --host 127.0.0.1 --port 4187 --strictPort",
     "test:blog": "node scripts/test-blog.mjs",
     "sync:docs": "node scripts/sync-component-docs.mjs",
-    "check:docs": "node --test tests/documentation-contract.test.mjs && node scripts/sync-component-docs.mjs --check"
+    "check:docs": "node --test tests/documentation-contract.test.mjs && node scripts/sync-component-docs.mjs --check",
+    "fonts:generate": "uv run scripts/build-fonts.py && npm run sync:fonts",
+    "sync:fonts": "node scripts/sync-fonts.mjs",
+    "check:fonts": "node --test tests/fonts.test.mjs && node scripts/check-fonts.mjs",
+    "test:fonts": "node scripts/test-fonts.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0"
