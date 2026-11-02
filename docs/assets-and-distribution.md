@@ -14,9 +14,9 @@
 
 这些独立素材不进入组件安装包；文档和示例网站按需引用。
 
-- **朋友场景与人物模型**：原稿及当前场景位于 `playground/src/examples/scenes/artwork/friends-preview/`。造型源为 `source/characters.svg`，正式页面复用当前 v3 场景与探头图；历史和撤回版本保留在开发评审目录。现有说明记录了项目绘制、参考来源及其非官方属性，未将其标为官方资产。见[朋友 SVG 原始说明](../playground/src/examples/scenes/artwork/friends-preview/README.md)。
+- **朋友场景与人物模型**：原稿及当前场景位于 `playground/src/examples/scenes/artwork/friends-preview/`。完整造型源为 `source/characters.svg`，保留三位角色的全部表情；生成的场景与人物成品只保留实际引用的定义及其传递依赖。开发评审实际使用的七张历史和撤回图保持原路径、原字节，其余 28 张未引用历史 SVG 已归档至工作区 `../local-archives/yahha-ui/2026-11-02-artwork-cleanup/`（相对组件库根目录），包含原路径、哈希、理由和还原说明，已跟踪文件也可从 Git 历史追溯。现有说明记录了项目绘制、参考来源及其非官方属性，未将其标为官方资产。见[朋友 SVG 原始说明](../playground/src/examples/scenes/artwork/friends-preview/README.md)。
 - **小日常道具**：原稿位于 `playground/src/examples/scenes/artwork/little-days/`，包括书签、热茶、翻页、口袋和状态图案。道具由本项目绘制，找路与欢迎场景还会组合既有角色模型；不能把整组素材统称为不含角色的独立道具。见[源文件、派生与动作说明](../playground/src/examples/scenes/artwork/little-days/README.md)。
-- **静态、动效与博客副本**：由 [sync-little-days-artwork.mjs](../scripts/sync-little-days-artwork.mjs) 从原稿派生，欢迎场景另复用 [build-friends-welcome.mjs](../scripts/build-friends-welcome.mjs)。文档使用扁平 SVG，博客使用 `examples/blog/src/assets/little-days/` 副本；原生书签与欢迎控制器也由同一同步流程维护。来源一致性可用 `npm run check:artwork` 检查，下载和接入见文档站 `#/guides/artwork`。
+- **静态、动效与博客副本**：`npm run sync:artwork` 先生成当前人物成品，再通过 [sync-little-days-artwork.mjs](../scripts/sync-little-days-artwork.mjs) 从原稿派生场景，欢迎场景另复用 [build-friends-welcome.mjs](../scripts/build-friends-welcome.mjs)。文档保留十四份扁平 SVG；博客的 `examples/blog/src/assets/little-days/` 只同步当前导入的六份，独立的 peek、author 副本、原生书签与欢迎控制器也由该流程维护。人物成品、定义裁剪与自动同步副本可用 `npm run check:artwork` 检查，下载和接入见文档站 `#/guides/artwork`。
 
 当前记录能够说明绘制和派生路径；角色素材的再发布与商业使用许可仍未核验。文件格式为 SVG、由项目重新绘制或包含原创道具，都不改变这一记录状态。
 
@@ -24,7 +24,7 @@
 
 PNG 不进入组件安装包；实际引用的图片会进入对应网站的静态构建。
 
-- `playground/src/assets/reading.png`、`rest.png`、`lounge.png` 是仓库既有插图，博客保存同名副本。目前[博客素材说明](../examples/blog/src/assets/README.md)记录了这些副本的来源路径，未给出与下列状态图同等的独立生成清单；不补写未经核实的作者、工具或许可。
+- `playground/src/assets/reading.png`、`rest.png`、`lounge.png` 是仓库既有插图，博客保存同名原字节副本以便独立运行；当前没有自动同步或副本哈希检查，更新时需单独核对。目前[博客素材说明](../examples/blog/src/assets/README.md)记录了这些副本的来源路径，未给出与下列状态图同等的独立生成清单；不补写未经核实的作者、工具或许可。
 - `playground/src/examples/scenes/artwork/empty.png` 有[生成说明](../playground/src/examples/scenes/artwork/README.md)及 [sources.json](../playground/src/examples/scenes/artwork/sources.json)，记录 Codex 内置 image_gen、生成日期、尺寸、字节数和 SHA-256，仍用于部分示例。
 
 现有状态图说明明确记录为非官方同人样张，角色素材的再发布与商业使用许可尚未核验。哈希证明文件与记录对应，不代表授权状态。

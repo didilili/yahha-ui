@@ -26,9 +26,7 @@
       <use href="#eye-bright" transform="translate(-26 5) rotate(-3)" />
       <use href="#eye-bright" transform="translate(26 5) rotate(3)" />
     </g>
-    <g id="eyes-smile" stroke="#50312e" stroke-width="3.1" stroke-linecap="round" fill="none">
-      <path d="M-36 8c5-7 12-8 19-1M17 7c6-7 14-6 19 1" />
-    </g>
+
     <g id="cheeks" stroke="none" fill="#f8b5c2">
       <path d="M-73 28c1-7 8-12 17-12 10 0 18 5 18 12 0 8-8 13-18 13-10 0-18-5-17-13Z" />
       <path d="M38 29c-1-7 7-12 17-12 10-1 18 4 19 11 1 8-7 13-17 13-10 1-19-4-19-12Z" />
@@ -38,58 +36,7 @@
         />
       </g>
     </g>
-    <g
-      id="chiikawa-body"
-      stroke="#50312e"
-      stroke-width="3.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path
-        fill="#fffdfb"
-        d="M-44-65C-45-79-58-85-68-77c-9 7-8 19 2 26C-82-35-90-13-87 10c1 23 11 43 25 55 3 12 2 26 9 40 6 13 15 22 28 26l-.5 8c-.3 7.4 5.4 10.2 10.1 5.8 3.6-3.2 4-7.6 3.5-11.4 12.4 2 24 2 36.5.1-.2 6.3 2.7 11.3 8.1 10.9 6.7-.5 10-4.2 9.6-11.1C54 124 61 110 64 96c3-15 1-22-1-31C79 50 89 30 88 8c1-23-7-44-22-59 10-7 10-20 1-27-10-8-24-2-24 13-27-11-59-11-87 0Z"
-      />
-      <path
-        fill="#fffdfb"
-        d="M-61 67c-7 3-9 12-5 18 4 6 11 3 12-3l.7-7M62 68c-8-3-15 2-14 9 1 7 9 10 14 4"
-      />
-    </g>
-    <g
-      id="hachiware-body"
-      stroke="#50312e"
-      stroke-width="3.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path
-        fill="#80aac2"
-        d="M-53 112c-16 11-30 9-39-1-7-8-11-17-8-21 3-4 8-2 12 4 7 9 15 11 24 5Z"
-      />
-      <path
-        fill="#fffdfb"
-        stroke="none"
-        d="M-72-55c2-16 7-33 13-41 2-4 5-5 9-2l25 20c17-5 34-6 51-1l24-20c4-4 8-2 11 4 6 12 10 26 13 40C91-33 96-6 87 21c-4 17-13 31-25 41l3 5c10 1 19 6 20 13 1 7-6 10-13 7l-9-3c3 9 1 20-5 32-6 12-15 21-27 25l-1 6c-1 7-6 11-11 8-5-2-6-7-5-12-12 2-24 2-36 0 0 7-3 11-9 10-6-1-8-6-7-13-14-8-24-24-27-43l-10-13c-7-2-12-5-17-10-8-8-16-20-12-27 3-5 9-5 13 0 5 7 13 14 25 18v-4C-73 50-81 38-86 23-97-3-94-28-78-48Z"
-      />
-      <path
-        fill="#80aac2"
-        stroke="none"
-        d="M-72-55c2-16 7-33 13-41 2-4 5-5 9-2l25 20c17-5 34-6 51-1l24-20c4-4 8-2 11 4 6 12 10 26 13 40C49-46 20-49 0-64-18-49-47-45-72-55Z"
-      />
-      <path
-        d="M-72-60c4-15 8-29 13-36 2-4 5-5 9-2l25 20c17-5 34-6 51-1l24-20c4-4 8-2 11 4 6 10 10 23 12 35"
-      />
-      <path
-        d="M-78-48C-94-28-97-3-86 23c5 15 13 27 24 37M78-49C93-29 96-4 87 21c-4 17-13 31-25 41"
-      />
-      <path d="M-72-55C-48-45-19-48 0-64 18-49 49-45 74-55" />
-      <path
-        fill="#fffdfb"
-        d="M-62 65c-12-4-20-11-25-18-4-5-10-5-13 0-4 7 4 19 12 27 5 5 10 8 17 10M65 67c10 1 19 6 20 13 1 7-6 10-13 7l-9-3"
-      />
-      <path
-        d="M-71 84c6 2 10 7 11 13 3 19 13 35 27 43-1 7 1 12 7 13 6 1 9-3 9-10 12 2 24 2 36 0-1 5 0 10 5 12 5 3 10-1 11-8l1-6c12-4 21-13 27-25 6-12 8-23 5-32"
-      />
-    </g>
+
     <g
       id="usagi-body"
       stroke="#50312e"
@@ -120,84 +67,7 @@
         d="M-59 70c-7 5-8 15-3 21 4 5 10 4 13-2l3-8M57 70c8 4 10 12 6 18-3 6-10 7-14 1l-4-8"
       />
     </g>
-    <g id="chiikawa-face-bright">
-      <use href="#cheeks" />
-      <use href="#eyes-bright" />
-      <g stroke="#50312e" stroke-width="3.1" stroke-linecap="round" fill="none">
-        <path
-          d="M-36-16c4-2 8-3 12-2M23-18c5-1 9 0 13 2M-10 28c1 6 9 7 10 0 0 7 8 8 11 1M-3 40c2 1 4 1 6 0"
-        />
-      </g>
-    </g>
-    <g id="chiikawa-face-smile">
-      <use href="#cheeks" />
-      <use href="#eyes-smile" />
-      <g stroke="#50312e" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
-        <path fill="none" d="M-36-15c4-2 8-3 12-2M23-17c5-1 9 0 13 2" />
-        <path fill="#f8b5c2" d="M-9 27c3 4 6 4 9 0 3 4 7 5 11 0-1 10-5 16-11 16-5 0-8-6-9-16Z" />
-      </g>
-    </g>
-    <g id="chiikawa-face-surprised">
-      <use href="#cheeks" />
-      <use href="#eyes-bright" transform="translate(0 -2)" />
-      <g stroke="#50312e" stroke-width="3.1" stroke-linecap="round">
-        <path fill="none" d="M-36-20c4-3 8-4 12-3M23-23c5-1 9 0 13 3" />
-        <path fill="#f8b5c2" d="M-5 31c0-7 10-7 10 0 1 8-10 8-10 0Z" />
-      </g>
-    </g>
-    <g id="hachiware-face-bright">
-      <use href="#cheeks" />
-      <use href="#eyes-bright" />
-      <g stroke="#50312e" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m-26-17 1 .3m50-.3 1 .3" />
-        <path
-          fill="#f8b5c2"
-          d="M-11 28c1 6 8 8 11 1 1 7 8 8 12 1-1 11-5 17-11 17-6 0-10-6-12-19Z"
-        />
-        <path fill="none" d="M-3 52c2 1 4 1 6 0" />
-      </g>
-    </g>
-    <g id="hachiware-face-smile">
-      <use href="#cheeks" />
-      <use href="#eyes-smile" />
-      <g stroke="#50312e" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m-26-17 1 .3m50-.3 1 .3" />
-        <path
-          fill="#f8b5c2"
-          d="M-12 27c2 7 9 10 12 2 2 8 9 9 13 0-1 14-6 21-12 21-7 0-11-9-13-23Z"
-        />
-        <path fill="none" d="M-3 55c2 1 4 1 6 0" />
-      </g>
-    </g>
-    <g id="hachiware-face-surprised">
-      <use href="#cheeks" />
-      <use href="#eyes-bright" transform="translate(0 -2)" />
-      <g stroke="#50312e" stroke-width="3.1" stroke-linecap="round">
-        <path d="m-26-22 1 .3m50-.3 1 .3" />
-        <path fill="#f8b5c2" d="M-5 31c0-7 10-7 10 0 1 9-10 9-10 0Z" />
-        <path fill="none" d="M-3 44c2 1 4 1 6 0" />
-      </g>
-    </g>
-    <g id="usagi-face-bright">
-      <use href="#cheeks" transform="translate(0 -3) scale(.96)" />
-      <use href="#eyes-bright" transform="translate(0 1) scale(.88)" />
-      <g stroke="#50312e" stroke-width="3.1" stroke-linecap="round" fill="none">
-        <path d="M-45-11c2-14 12-23 23-24M20-35c13 0 22 9 26 22M-10 24c1 7 9 8 10 1 0 8 9 9 12 1" />
-        <path d="M-2 35c-1 5 2 9 7 9" />
-      </g>
-    </g>
-    <g id="usagi-face-smile">
-      <use href="#cheeks" transform="translate(0 -3) scale(.96)" />
-      <use href="#eyes-smile" transform="translate(0 1) scale(.9)" />
-      <g stroke="#50312e" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
-        <path fill="none" d="M-45-11c2-14 12-23 23-24M20-35c13 0 22 9 26 22" />
-        <path
-          fill="#f8b5c2"
-          d="M-11 24c2 7 8 9 11 2 1 7 9 8 13 0-2 12-6 19-12 19-6 0-10-7-12-21Z"
-        />
-        <path fill="none" d="M-2 50c-1 4 2 7 6 7" />
-      </g>
-    </g>
+
     <g id="usagi-face-surprised">
       <use href="#cheeks" transform="translate(0 -3) scale(.96)" />
       <use href="#eyes-bright" transform="translate(0 -1) scale(.9)" />
@@ -207,53 +77,10 @@
         <path fill="none" d="M-2 42c0 4 3 7 6 7" />
       </g>
     </g>
-    <g id="chiikawa-bright">
-      <use href="#chiikawa-body" />
-      <use href="#chiikawa-face-bright" />
-    </g>
-    <g id="chiikawa-smile">
-      <use href="#chiikawa-body" />
-      <use href="#chiikawa-face-smile" />
-    </g>
-    <g id="chiikawa-surprised">
-      <use href="#chiikawa-body" />
-      <use href="#chiikawa-face-surprised" />
-    </g>
-    <g id="hachiware-bright">
-      <use href="#hachiware-body" />
-      <use href="#hachiware-face-bright" />
-    </g>
-    <g id="hachiware-smile">
-      <use href="#hachiware-body" />
-      <use href="#hachiware-face-smile" />
-    </g>
-    <g id="hachiware-surprised">
-      <use href="#hachiware-body" />
-      <use href="#hachiware-face-surprised" />
-    </g>
-    <g id="usagi-bright">
-      <use href="#usagi-body" />
-      <use href="#usagi-face-bright" />
-    </g>
-    <g id="usagi-smile">
-      <use href="#usagi-body" />
-      <use href="#usagi-face-smile" />
-    </g>
+
     <g id="usagi-surprised">
       <use href="#usagi-body" />
       <use href="#usagi-face-surprised" />
-    </g>
-
-    <g
-      id="chiikawa-grip"
-      fill="#fffdfb"
-      stroke="#50312e"
-      stroke-width="3.4"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path d="M-42 3c-1-10 3-17 10-17 8 0 13 7 11 17M19 3c-2-9 2-16 9-17 7-1 14 6 14 17" />
-      <path d="M-40-3c3 2 6 3 9 2m56-1c3 1 6 1 9-1" stroke-width="2.2" fill="none" />
     </g>
   </defs>
   <use href="#usagi-surprised" />

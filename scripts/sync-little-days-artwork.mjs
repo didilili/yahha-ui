@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { format, resolveConfig } from 'prettier';
 import { createWelcomeScene } from './build-friends-welcome.mjs';
+import { pruneSvgDefs } from './prune-svg-defs.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const sourceDirectory = 'playground/src/examples/scenes/artwork/little-days';
@@ -31,6 +32,25 @@ const animated = new Set([
   'load-error',
   'friends-welcome',
 ]);
+const blogArtwork = new Set([
+  'tea-cup',
+  'empty-collection',
+  'search-empty',
+  'collection-saved-motion',
+  'friends-lost',
+  'friends-welcome',
+]);
+// Only these previously generated files are retired; unrelated files stay untouched.
+const retiredBlogArtwork = [
+  'bookmark',
+  'tea-cup-motion',
+  'page-wait',
+  'page-wait-motion',
+  'collection-saved',
+  'load-error',
+  'load-error-motion',
+  'friends-welcome-motion',
+];
 let outputs = 0;
 
 async function output(path, source) {
@@ -75,10 +95,10 @@ for (const drawing of drawings) {
       2,
       'The 404 layout must contain exactly one character-model insertion point.',
     );
-    source = await format(layout.replace('<!-- LD_CHARACTER_DEFINITIONS -->', definitions), {
-      ...formatting,
-      parser: 'html',
-    });
+    source = await format(
+      pruneSvgDefs(layout.replace('<!-- LD_CHARACTER_DEFINITIONS -->', definitions)),
+      { ...formatting, parser: 'html' },
+    );
   } else {
     source = await readFile(join(root, sourceDirectory, `${drawing}.svg`), 'utf8');
   }
@@ -105,7 +125,8 @@ for (const drawing of drawings) {
   for (const [name, svg] of versions) {
     const filename = drawing === 'friends-welcome' ? name : `little-days-${name}`;
     await output(`playground/src/examples/scenes/artwork/${filename}.svg`, svg);
-    await output(`examples/blog/src/assets/little-days/${name}.svg`, svg);
+    if (blogArtwork.has(name))
+      await output(`examples/blog/src/assets/little-days/${name}.svg`, svg);
   }
   if (drawing === 'bookmark') {
     const paths = source.match(/<path\b[^>]*\/>/g) ?? [];
@@ -137,6 +158,14 @@ await output(
   ),
 );
 
+await output(
+  'examples/blog/src/assets/peek.svg',
+  await readFile(
+    join(root, 'playground/src/examples/scenes/artwork/friends-preview/friends-peek.svg'),
+    'utf8',
+  ),
+);
+
 const welcomeExample = await readFile(
   join(root, 'playground/src/examples/scenes/FriendsWelcome.tsx'),
   'utf8',
@@ -151,6 +180,20 @@ await output(
   'examples/blog/src/components/FriendsWelcome.tsx',
   welcomeExample.replace(welcomeImport, "'../assets/little-days/friends-welcome.svg?raw'"),
 );
+
+for (const name of retiredBlogArtwork) {
+  const path = `examples/blog/src/assets/little-days/${name}.svg`;
+  const destination = join(root, path);
+  if (check) {
+    const retired = await lstat(destination).catch((error) => {
+      if (error.code === 'ENOENT') return null;
+      throw error;
+    });
+    assert.equal(retired, null, `${path} is a retired generated file; run npm run sync:artwork.`);
+  } else {
+    await rm(destination, { force: true });
+  }
+}
 
 console.log(
   `Little days artwork: ${outputs} derived/copy files ${check ? 'verified' : 'synchronized'}.`,

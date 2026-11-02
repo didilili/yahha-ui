@@ -23,6 +23,8 @@
 - `friends-preview.css` / `friends-docs.css`：候选布局与环境样式，不覆盖公共组件内部结构或注入尺寸 token。
 - `../examples/scenes/artwork/friends-preview/`：三组手工 SVG 候选和素材说明，不进入默认库产物。
 
+历史对照实际使用七张 SVG：v1 / v2 / v3 / 已撤回 v4 的四张主场景，以及 v4 三位角色的自然睁眼样张。它们保留原路径和字节；其余 28 张未引用快照已于 2026-11-02 移至工作区 `../local-archives/yahha-ui/2026-11-02-artwork-cleanup/`（相对组件库根目录），包含哈希清单与还原说明，已跟踪文件也可从 Git 历史追溯。当前完整人物源与九张表情样张继续保留，`npm run sync:artwork` 统一生成当前人物成品及派生场景，`npm run check:artwork` 核对一致性。
+
 公共交互复用现有 Button、IconButton、Badge、TextField、Select、Checkbox；原有尺寸规则与 API 不变。装饰图使用空 alt 或 aria-hidden；首页主场景提供描述。减少动效时不播放入场动画。小站名字、收藏和表单示例均只保存在当前页面内存。
 
 ## 设计依据

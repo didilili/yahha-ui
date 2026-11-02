@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
+import { pruneSvgDefs } from './prune-svg-defs.mjs';
 
 const namespace = 'http://www.w3.org/2000/svg';
 
@@ -188,5 +189,5 @@ export function createWelcomeScene(characterSource, heroSource) {
   );
   original.replaceWith(rig);
 
-  return new document.defaultView.XMLSerializer().serializeToString(root);
+  return pruneSvgDefs(new document.defaultView.XMLSerializer().serializeToString(root));
 }
