@@ -16,7 +16,8 @@ import {
   useLocation,
 } from './router';
 
-const storageKey = 'chiikawa-ui-example-blog:saved:v1';
+const storageKey = 'yahha-ui-example-blog:saved:v1';
+const legacyStorageKey = 'chiikawa-ui-example-blog:saved:v1';
 interface Notice {
   id: string;
   wasSaved: boolean;
@@ -26,12 +27,16 @@ interface Notice {
 
 function initialSaved() {
   try {
-    const stored: unknown = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    return new Set<string>(
+    const current = localStorage.getItem(storageKey);
+    const legacy = current === null ? localStorage.getItem(legacyStorageKey) : null;
+    const stored: unknown = JSON.parse(current ?? legacy ?? '[]');
+    const saved = new Set<string>(
       Array.isArray(stored)
         ? stored.filter((id): id is string => typeof id === 'string' && !!getPost(id))
         : [],
     );
+    if (current === null && legacy !== null && Array.isArray(stored)) persist(saved);
+    return saved;
   } catch {
     return new Set<string>();
   }

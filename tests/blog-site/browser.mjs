@@ -4,7 +4,8 @@ import { join } from 'node:path';
 import { verifyReadingExperience } from './reading-checks.mjs';
 import { verifyContentResources } from './content-checks.mjs';
 
-const storageKey = 'chiikawa-ui-example-blog:saved:v1';
+const storageKey = 'yahha-ui-example-blog:saved:v1';
+const legacyStorageKey = 'chiikawa-ui-example-blog:saved:v1';
 const latestTitle = '沿着河边，慢慢走';
 const pageTwoIds = ['bookshop-corner', 'rainy-room', 'early-market', 'reread-pages'];
 
@@ -631,6 +632,130 @@ export async function verifyBookmarkFeedback(browser, baseURL) {
   );
 }
 
+export async function verifyBookmarkStorageMigration(browser, baseURL) {
+  const postId = 'river-evening';
+  const legacy = JSON.stringify([postId]);
+  const cases = [
+    {
+      name: 'legacy bookmarks migrate with the existing ID validation',
+      oldValue: JSON.stringify([postId, 'missing-post', 42, postId]),
+      newValue: null,
+      saved: true,
+      expected: legacy,
+    },
+    {
+      name: 'the current key takes precedence over legacy bookmarks',
+      oldValue: legacy,
+      newValue: JSON.stringify(['window-reading']),
+      saved: false,
+      expected: JSON.stringify(['window-reading']),
+    },
+    {
+      name: 'an empty current collection does not revive legacy bookmarks',
+      oldValue: legacy,
+      newValue: '[]',
+      saved: false,
+      expected: '[]',
+    },
+    ...['not-json', ''].map((newValue) => ({
+      name: 'an invalid but present current key does not revive legacy bookmarks',
+      oldValue: legacy,
+      newValue,
+      saved: false,
+      expected: newValue,
+    })),
+    ...['not-json', JSON.stringify({ saved: [postId] })].map((oldValue) => ({
+      name: 'invalid legacy data is left intact without creating a current collection',
+      oldValue,
+      newValue: null,
+      saved: false,
+      expected: null,
+    })),
+  ];
+
+  for (const scenario of cases) {
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    try {
+      await context.addInitScript(
+        ({ key, oldKey, oldValue, newValue }) => {
+          localStorage.setItem(oldKey, oldValue);
+          if (newValue !== null) localStorage.setItem(key, newValue);
+        },
+        { key: storageKey, oldKey: legacyStorageKey, ...scenario },
+      );
+      const page = await context.newPage();
+      page.setDefaultTimeout(4000);
+      await page.goto(baseURL);
+      const save = page.locator(`#save-${postId}`);
+      await save.waitFor();
+      assert.equal(await save.getAttribute('aria-pressed'), String(scenario.saved), scenario.name);
+      assert.equal(
+        await page.evaluate((key) => localStorage.getItem(key), storageKey),
+        scenario.expected,
+        scenario.name,
+      );
+      assert.equal(
+        await page.evaluate((key) => localStorage.getItem(key), legacyStorageKey),
+        scenario.oldValue,
+        'Reading or migrating bookmarks must preserve the legacy data.',
+      );
+    } finally {
+      await context.close();
+    }
+  }
+
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  try {
+    await context.addInitScript(
+      ({ key, oldKey, legacy }) => {
+        localStorage.setItem(oldKey, legacy);
+        const setItem = Storage.prototype.setItem;
+        Storage.prototype.setItem = function (name, value) {
+          if (name === key) throw new DOMException('Simulated write failure', 'QuotaExceededError');
+          return setItem.call(this, name, value);
+        };
+        window.restoreBlogStorage = () => {
+          Storage.prototype.setItem = setItem;
+        };
+      },
+      { key: storageKey, oldKey: legacyStorageKey, legacy },
+    );
+    const page = await context.newPage();
+    page.setDefaultTimeout(4000);
+    await page.goto(baseURL);
+    const save = page.locator(`#save-${postId}`);
+    await save.waitFor();
+    assert.equal(
+      await save.getAttribute('aria-pressed'),
+      'true',
+      'A failed migration write must still display the loaded legacy bookmark.',
+    );
+    assert.equal(await page.evaluate((key) => localStorage.getItem(key), storageKey), null);
+    assert.equal(await page.evaluate((key) => localStorage.getItem(key), legacyStorageKey), legacy);
+    await page.evaluate(() => window.restoreBlogStorage());
+    await save.click();
+    assert.equal(await save.getAttribute('aria-pressed'), 'false');
+    assert.equal(
+      await page.evaluate((key) => localStorage.getItem(key), storageKey),
+      '[]',
+      'After storage recovers, later bookmark changes must write the current key.',
+    );
+    assert.equal(await page.evaluate((key) => localStorage.getItem(key), legacyStorageKey), legacy);
+    await page.reload();
+    await save.waitFor();
+    assert.equal(
+      await save.getAttribute('aria-pressed'),
+      'false',
+      'Refreshing must keep the new empty collection instead of reviving the legacy bookmark.',
+    );
+  } finally {
+    await context.close();
+  }
+  console.log(
+    'Blog: bookmarks migrate to the Yahha key, honor current data and survive write failure.',
+  );
+}
+
 export async function verifyBlog(browser, baseURL) {
   for (const viewport of [
     { width: 1280, height: 900 },
@@ -668,6 +793,7 @@ export async function verifyBlog(browser, baseURL) {
     }
   }
   await verifyBookmarkFeedback(browser, baseURL);
+  await verifyBookmarkStorageMigration(browser, baseURL);
   await verifySavedPageRecovery(browser, baseURL);
   await verifyReadingReturn(browser, baseURL);
   await verifyReadingReturnAfterRemoval(browser, baseURL);
