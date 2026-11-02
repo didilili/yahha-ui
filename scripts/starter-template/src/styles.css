@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+}
+
+.starter-page {
+  min-height: 100svh;
+}
+
+.starter-content {
+  display: grid;
+  gap: 24px;
+  box-sizing: border-box;
+  width: min(100%, 640px);
+  margin-inline: auto;
+  padding: 64px 24px;
+}
+
+.starter-intro,
+.starter-action {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .starter-content {
+    padding: 40px 20px;
+  }
+}

@@ -8,6 +8,9 @@ export const siteContentTypes = {
   '.js': 'text/javascript',
   '.css': 'text/css',
   '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.woff2': 'font/woff2',
 };
