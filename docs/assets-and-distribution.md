@@ -31,13 +31,43 @@ PNG 不进入组件安装包；实际引用的图片会进入对应网站的静�
 
 ## 字体与现有声明
 
-站点使用 `marker.woff2`、`wenkai.woff2`，组件本身继承使用方字体。这两份字体不进入组件安装包，文档站和博客各保存使用副本及声明。
+站点分别以 `Marker`、`WenKai` 字体族使用 LXGW Marker Gothic Regular 与 LXGW WenKai Regular，组件本身继承使用方字体。字体不进入组件安装包；文档站与博客使用同一来源生成的本地 WOFF2 分片，并分别保留现有声明。
+
+字体源完整字符集按 `unicode-range` 分片保留，不再仅包含当前文案中的少量字符。两个站点现有源码用字集中在各字体的 `common` 首包，其余字符按每片最多 512 个码点生成；页面新增用字或用户输入源字体支持的其他字符时，浏览器按需加载对应分片。
+
+- `playground/src/assets/fonts/` 为生成文件的主目录：`manifest.json` 记录来源、覆盖与哈希，`wenkai.css`、`marker.css` 声明字体，`wenkai/`、`marker/` 保存分片。
+- `examples/blog/src/assets/fonts/` 为博客副本，通过 `npm run sync:fonts` 同步，不单独编辑。
 
 - [OFL-marker.txt](../playground/src/assets/OFL-marker.txt) 记录 LXGW Marker Gothic 项目及 SIL Open Font License 1.1。
 - [OFL-wenkai.txt](../playground/src/assets/OFL-wenkai.txt) 记录 LXGW WenKai / Klee 项目、保留名称和对应字体许可文本。
 - 博客副本的两份声明保存在 [examples/blog/src/assets/](../examples/blog/src/assets/README.md)。
 
-已确认的是这些声明文件在源码中存在，并随字体副本保留。它们适用于相应字体，不覆盖组件代码或角色图像。静态网站使用字体时，分发目录中的声明位置按[部署说明](deployment.md)记录。
+这些声明适用于相应字体，不覆盖组件代码或角色图像。文档站与博客构建时会自动输出各自的 `notices/OFL-marker.txt` 与 `notices/OFL-wenkai.txt`；分发目录保留方式见[部署说明](deployment.md)。
+
+### 字体维护
+
+日常安装、开发与构建直接使用仓库内的字体文件，无需 uv。修改字体资源后，在仓库根目录检查覆盖、哈希及博客副本一致性：
+
+```sh
+npm run check:fonts
+```
+
+需要更新官方字体源或重新生成分片时，先安装 [uv](https://docs.astral.sh/uv/)，再运行：
+
+```sh
+npm run fonts:generate
+```
+
+该命令通过 `uv run scripts/build-fonts.py` 使用 fonttools 生成主目录，再执行 `npm run sync:fonts` 更新博客副本。生成器保留所用官方 Regular 字体源的完整字符覆盖；两站字体与分片策略统一维护，不按某个页面缺的几个字手工补包。
+
+已有官方字体下载缓存时，可直接向生成器提供目录，再同步副本：
+
+```sh
+uv run scripts/build-fonts.py --source-dir /path/to/official-font-cache
+npm run sync:fonts
+```
+
+生成后执行 `npm run check:fonts`，再按改动范围检查网站构建与实际页面。字体的来源、版本或生成结果变化时，同时核对 `manifest.json` 和现有 OFL 声明，保留对应许可文本。
 
 ## README 截图
 

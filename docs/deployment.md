@@ -12,15 +12,9 @@ npm run build:demo
 npm run build:blog
 ```
 
-每次重新构建后，把现有字体声明一同加入两份产物，再进行预览或文件整理：
+构建会自动把现有字体声明写入两份网站各自的 `notices/OFL-marker.txt` 与 `notices/OFL-wenkai.txt`，无需再手工复制。整理部署文件时保留 `notices/` 和 `assets/`。
 
-```sh
-mkdir -p demo-dist/notices examples/blog/dist/notices
-cp playground/src/assets/OFL-*.txt demo-dist/notices/
-cp examples/blog/src/assets/OFL-*.txt examples/blog/dist/notices/
-```
-
-字体由网站资源引用；当前构建不会自动复制这些文本，因此需要保留此步骤。两份声明分别位于网站的 `notices/OFL-marker.txt` 与 `notices/OFL-wenkai.txt`。
+两份网站使用仓库内生成的本地字体分片，按页面实际用字加载；构建不下载外部字体，也不需要 Python 或 uv。更新字体源或重新生成分片的方法见[字体维护](assets-and-distribution.md#字体维护)。
 
 - `demo-dist/`：文档站，包含首页、组件总览、使用指南、实时示例与 API。
 - `examples/blog/dist/`：完整的“小小日常”示例网站，包含首页、归档、文章与配套资源。
