@@ -341,7 +341,7 @@ export async function verifyFieldMotion(browser, url) {
       'An enabled initially checked radio appears without an entrance animation.',
     );
     await page.goto(`${url}?design-contract`);
-    const scope = page.locator('[data-design-theme="chiikawa"]');
+    const scope = page.locator('[data-design-theme="pink"]');
     await scope.getByTestId('selection-segments').waitFor();
     await page.evaluate(
       () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),

@@ -324,7 +324,7 @@ export default function App() {
   }, []);
 
   return (
-    <ThemeProvider theme="chiikawa" className="docs-app docs-site docs-cartoon">
+    <ThemeProvider theme="pink" className="docs-app docs-site docs-cartoon">
       <title>
         {isHome
           ? 'Yahha UI · 漫画手账风 React 组件库'

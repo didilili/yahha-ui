@@ -16,8 +16,8 @@ export default defineComponentPage('theme-provider', {
         <>
           <p>
             为应用或局部区域设置组件配色，并在应用入口导入 yahha-ui/style.css。theme
-            必填，推荐使用吉伊粉色预设（chiikawa），也可选择小八浅蓝预设（hachiware）或乌萨奇浅黄预设（usagi）；由应用更新
-            theme 切换预设。预设名称对应角色配色，三者共用组件尺寸、排版与交互规则。
+            必填，推荐使用粉色预设（pink），也可选择浅蓝（blue）或浅黄（yellow）；由应用更新 theme
+            切换预设。三者是同一套组件的强调色变体，布局、字阶与交互相同。
           </p>
           <p>
             通过公开的 ThemeTokens 覆盖语义颜色。尺寸、圆角与动效的内部 CSS 变量不属于稳定公共
@@ -32,9 +32,9 @@ export default defineComponentPage('theme-provider', {
       examples: [
         {
           id: 'theme-variants',
-          title: '默认配色与可选预设',
+          title: '默认配色与强调色变体',
           description:
-            '比较吉伊粉色预设（chiikawa）、小八浅蓝预设（hachiware）与乌萨奇浅黄预设（usagi）的组件外观；按钮可观察悬停和键盘焦点，不绑定业务操作。',
+            '比较粉色（pink）、浅蓝（blue）与浅黄（yellow）的强调色变体，布局、字阶与交互相同；按钮可观察悬停和键盘焦点，不绑定业务操作。',
           component: ThemeVariants,
           source: themeVariantsSource,
           themeScope: 'explicit',
@@ -68,10 +68,10 @@ export default defineComponentPage('theme-provider', {
           rows: [
             {
               name: 'theme',
-              type: "'chiikawa' | 'hachiware' | 'usagi'",
+              type: 'ThemeName',
               required: true,
               description:
-                '当前 Provider 的配色预设名称，对应公开类型 ThemeName。推荐使用吉伊粉色预设（chiikawa）。',
+                '当前 Provider 的强调色预设，对应公开类型 ThemeName。推荐粉色（pink）；六个可用值及旧名映射见“ThemeName 与旧名兼容”。',
             },
             {
               name: 'children',
@@ -109,31 +109,31 @@ export default defineComponentPage('theme-provider', {
             {
               name: 'accent',
               type: 'string',
-              defaultValue: '吉伊 #ffc3d9 / 小八 #d7eaf5 / 乌萨奇 #f8e5a7',
+              defaultValue: '粉色 #ffc3d9 / 浅蓝 #d7eaf5 / 浅黄 #f8e5a7',
               description: '主题强调色，--yahha-accent。',
             },
             {
               name: 'accentHover',
               type: 'string',
-              defaultValue: '吉伊 #ffb3cf / 小八 #c3dfee / 乌萨奇 #f3da89',
+              defaultValue: '粉色 #ffb3cf / 浅蓝 #c3dfee / 浅黄 #f3da89',
               description: '强调色的悬停状态，--yahha-accent-hover。',
             },
             {
               name: 'accentSoft',
               type: 'string',
-              defaultValue: '吉伊 #fff0f6 / 小八 #f2f8fc / 乌萨奇 #fffaf0',
+              defaultValue: '粉色 #fff0f6 / 浅蓝 #f2f8fc / 浅黄 #fffaf0',
               description: '轻量强调背景，--yahha-accent-soft。',
             },
             {
               name: 'line',
               type: 'string',
-              defaultValue: '吉伊 #c58ba1 / 小八 #b9cedb / 乌萨奇 #daca9f',
+              defaultValue: '粉色 #c58ba1 / 浅蓝 #b9cedb / 浅黄 #daca9f',
               description: '常规边框，--yahha-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。',
             },
             {
               name: 'focus',
               type: 'string',
-              defaultValue: '吉伊 #b04e78 / 小八 #386d93 / 乌萨奇 #896329',
+              defaultValue: '粉色 #b04e78 / 浅蓝 #386d93 / 浅黄 #896329',
               description: '键盘焦点轮廓，--yahha-focus。',
             },
             {
@@ -158,6 +158,31 @@ export default defineComponentPage('theme-provider', {
           ],
         },
       ],
+    },
+    {
+      id: 'theme-names',
+      title: 'ThemeName 与旧名兼容',
+      content: (
+        <>
+          <p>公开类型 ThemeName 接受三个颜色主名和三个旧名兼容值：</p>
+          <ul>
+            <li>
+              粉色：<code>pink</code>；旧名 <code>chiikawa</code> 映射到 pink。
+            </li>
+            <li>
+              浅蓝：<code>blue</code>；旧名 <code>hachiware</code> 映射到 blue。
+            </li>
+            <li>
+              浅黄：<code>yellow</code>；旧名 <code>usagi</code> 映射到 yellow。
+            </li>
+          </ul>
+          <p>
+            新代码使用颜色主名。旧名进入主题上下文与 <code>data-yahha-theme</code> DOM
+            属性前会规范为对应颜色主名，浮层 Portal 也使用规范值。已有 theme
+            属性值可以逐步替换，兼容映射的配色相同；theme 仍为必填属性。
+          </p>
+        </>
+      ),
     },
     {
       id: 'boundaries',

@@ -1,10 +1,15 @@
 import { createContext, type CSSProperties } from 'react';
 
-export type ThemeName = 'chiikawa' | 'hachiware' | 'usagi';
+type ColorThemeName = 'pink' | 'blue' | 'yellow';
+
+/** @deprecated Use 'pink', 'blue', or 'yellow' instead of the character-name aliases. */
+type LegacyThemeName = 'chiikawa' | 'hachiware' | 'usagi';
+
+export type ThemeName = ColorThemeName | LegacyThemeName;
 
 interface ThemeContextValue {
-  theme: ThemeName;
+  theme: ColorThemeName;
   style?: CSSProperties;
 }
 
-export const ThemeContext = createContext<ThemeContextValue>({ theme: 'chiikawa' });
+export const ThemeContext = createContext<ThemeContextValue>({ theme: 'pink' });

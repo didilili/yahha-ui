@@ -46,7 +46,7 @@ const picture =
   );
 
 export function Basics() {
-  const [theme, setTheme] = useState<ThemeName>('chiikawa');
+  const [theme, setTheme] = useState<ThemeName>('pink');
   const [radio, setRadio] = useState('first');
   const [submitted, setSubmitted] = useState('');
   const [page, setPage] = useState(1);
@@ -69,7 +69,7 @@ export function Basics() {
             value={theme}
             onChange={(event) => setTheme(event.target.value as ThemeName)}
           >
-            {(['chiikawa', 'hachiware', 'usagi'] as const).map((value) => (
+            {(['pink', 'blue', 'yellow'] as const).map((value) => (
               <option key={value}>{value}</option>
             ))}
           </select>
@@ -342,7 +342,7 @@ export function Basics() {
         </div>
         <output aria-label="Basic action result">{message}</output>
         <ThemeProvider
-          theme="usagi"
+          theme="yellow"
           tokens={{ line: '#846973', fieldBackground: '#fff4fa', ink: '#442b37' }}
         >
           <Dialog

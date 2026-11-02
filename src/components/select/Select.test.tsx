@@ -200,7 +200,7 @@ describe('Select', () => {
     function Example() {
       const [value, setValue] = useState<string | null>('notes');
       return (
-        <ThemeProvider theme="hachiware" tokens={{ line: '#234567' }}>
+        <ThemeProvider theme="blue" tokens={{ line: '#234567' }}>
           <Select label="分类" value={value} onValueChange={setValue} options={options} />
         </ThemeProvider>
       );
@@ -209,9 +209,7 @@ describe('Select', () => {
     const trigger = screen.getByRole('combobox');
     await user.click(trigger);
     const option = await screen.findByRole('option', { name: '相册' });
-    expect(option.closest('[data-yahha-theme]')?.getAttribute('data-yahha-theme')).toBe(
-      'hachiware',
-    );
+    expect(option.closest('[data-yahha-theme]')?.getAttribute('data-yahha-theme')).toBe('blue');
     expect(screen.getByRole('option', { name: '草稿' }).getAttribute('aria-disabled')).toBe('true');
     await user.click(option);
     await waitFor(() => expect(trigger.textContent).toContain('相册'));

@@ -486,7 +486,7 @@ export async function verifyDocsIdentity(browser, baseURL) {
         0,
         'The documentation header must keep one fixed identity.',
       );
-      assert.equal(await page.locator('.docs-app').getAttribute('data-yahha-theme'), 'chiikawa');
+      assert.equal(await page.locator('.docs-app').getAttribute('data-yahha-theme'), 'pink');
       const importStrip = page.locator('.doc-heading > .source-code');
       const stripBounds = await importStrip.boundingBox();
       assert.ok(
@@ -550,7 +550,7 @@ async function verifyCompleteSetup(example, themeScope, assets = []) {
   assert.match(source, /import ['"]yahha-ui\/style\.css['"]/);
   assert.match(source, /import Example from ['"]\.\/Example['"]/);
   if (themeScope === 'inherited') {
-    assert.match(source, /<ThemeProvider theme="chiikawa">/);
+    assert.match(source, /<ThemeProvider theme="pink">/);
   } else {
     assert.doesNotMatch(source, /<ThemeProvider/);
     assert.match(await details.innerText(), /自身的主题配置/);
@@ -613,7 +613,7 @@ async function verifyThemePresets(page, baseURL) {
   const example = page.locator('#theme-variants');
   await example.locator('.example-preview').waitFor();
   const colors = [];
-  for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
+  for (const theme of ['pink', 'blue', 'yellow']) {
     const provider = example.locator(`.example-preview [data-yahha-theme="${theme}"]`);
     const button = provider.getByRole('button', { name: '主要按钮外观', exact: true });
     await minHeight(button, 44, `${theme} preset button`);
@@ -624,7 +624,7 @@ async function verifyThemePresets(page, baseURL) {
     3,
     'The three provider presets must retain distinct actual button colors.',
   );
-  assert.equal(await page.locator('.docs-app').getAttribute('data-yahha-theme'), 'chiikawa');
+  assert.equal(await page.locator('.docs-app').getAttribute('data-yahha-theme'), 'pink');
   await verifyCompleteSetup(example, 'explicit');
 }
 
@@ -649,7 +649,7 @@ async function verifySelectFocus(page, baseURL) {
       theme: option.closest('[data-yahha-theme]')?.dataset.yahhaTheme,
     };
   });
-  assert.equal(appearance.theme, 'chiikawa');
+  assert.equal(appearance.theme, 'pink');
   assert.ok(
     appearance.outline === 'none' || appearance.width === 0,
     'Select options must not stack a second outline over their focused indicator.',

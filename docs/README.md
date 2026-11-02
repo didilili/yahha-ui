@@ -10,7 +10,7 @@ Yahha UI 是一套漫画手账风 React 组件库，面向个人博客、个人�
 
 在仓库根目录完成 `npm ci` 后运行 `npm run dev`，打开终端输出的本地地址。将本文的 `#/...` 追加在该地址后即可访问相应交互页面；Markdown 链接直接指向仓库文件，便于在 GitHub 阅读。站内提供 30 个独立组件文档入口（29 个 UI 组件与 ThemeProvider）、95 个实时 TSX 示例、API 表格、入门、样式与状态场景指南。本文索引覆盖 30 份组件 Markdown，每个文档入口都有对应文件。组合示例包括[文章编辑与管理源码](../playground/src/examples/scenes/ArticleActions.tsx)（`#/guides/states?section=article-actions`）和[个人博客归档源码](../playground/src/examples/scenes/BlogArchive.tsx)（`#/guides/states?section=archive`）。
 
-[设计语言](design-language.md) 说明漫画手账的深墨轮廓，以及按钮、白底字段、纸签、栏目和便笺浮层的结构差异。文档站以天空蓝组织场景，以白纸、暖墨与轻粉承载阅读和操作；三套角色配色在 ThemeProvider 文档中作为可选预设展示。
+[设计语言](design-language.md) 说明漫画手账的深墨轮廓，以及按钮、白底字段、纸签、栏目和便笺浮层的结构差异。文档站以天空蓝组织场景，以白纸、暖墨与轻粉承载阅读和操作；三种强调色预设在 ThemeProvider 文档中展示。
 
 设计规范（`#/guides/design-baseline`，见[表单组合源码](../playground/src/examples/design/DesignBaseline.tsx)与[阅读组合源码](../playground/src/examples/design/DesignReading.tsx)）用默认组件展示表单状态、36 / 44 / 52px 按钮尺度与 16px 正文阅读。两份自包含 TSX 不重写组件外观；可操作状态、原始代码与完整接入同时提供。
 

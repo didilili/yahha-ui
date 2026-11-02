@@ -230,7 +230,7 @@ describe('DropdownMenu', () => {
     function Example() {
       const [open, setOpen] = useState(false);
       return (
-        <ThemeProvider theme="hachiware" tokens={{ surface: '#fefefe' }} className="page-layout">
+        <ThemeProvider theme="blue" tokens={{ surface: '#fefefe' }} className="page-layout">
           <DropdownMenu
             trigger={<Button id="article-actions">更多</Button>}
             open={open}
@@ -254,7 +254,7 @@ describe('DropdownMenu', () => {
       expect(menu.classList.contains('custom-menu')).toBe(true);
       expect(menu.style.width).toBe('220px');
       const theme = menu.closest<HTMLElement>('[data-yahha-theme]')!;
-      expect(theme.dataset.yahhaTheme).toBe('hachiware');
+      expect(theme.dataset.yahhaTheme).toBe('blue');
       expect(theme.style.getPropertyValue('--yahha-surface')).toBe('#fefefe');
       expect(theme.classList.contains('page-layout')).toBe(false);
       await user.keyboard('{Escape}');

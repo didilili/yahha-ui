@@ -996,7 +996,7 @@ export async function verifyOverlayAppearance(page, theme) {
   await verifyTooltip(page, `${label} top-edge collision`);
   await page.keyboard.press('Escape');
   await page.locator('.basic-tooltip').waitFor({ state: 'hidden' });
-  if (theme === 'chiikawa' && [1280, 320].includes(page.viewportSize().width)) {
+  if (theme === 'pink' && [1280, 320].includes(page.viewportSize().width)) {
     await verifyCompactTooltip(page, label);
     await verifyNativeOverlayDirection(page, label);
     if (page.viewportSize().width === 1280) {
@@ -1127,7 +1127,7 @@ export async function verifyOverlays(browser, url) {
     try {
       await page.goto(`${url}?basics`);
       await page.getByRole('heading', { name: 'Basic component consumer' }).waitFor();
-      for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
+      for (const theme of ['pink', 'blue', 'yellow']) {
         await page.getByRole('combobox', { name: 'Basic preview theme' }).selectOption(theme);
         await verifyOverlayAppearance(page, theme);
       }

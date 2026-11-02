@@ -274,7 +274,7 @@ export async function verifyControlMotion(browser, url) {
       [],
       'Initially mixed controls must appear in their final state without an entrance transition.',
     );
-    const scope = page.locator('[data-design-theme="chiikawa"]');
+    const scope = page.locator('[data-design-theme="pink"]');
     for (const id of ['design-button', 'design-icon', 'design-pressed-primary'])
       await pressAction(page, scope.getByTestId(id));
     for (const id of ['design-button-disabled', 'design-button-loading', 'design-icon-loading']) {

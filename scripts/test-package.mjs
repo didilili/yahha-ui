@@ -19,6 +19,7 @@ import { basename, extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { verifyConsumer } from '../tests/package-consumer/browser.mjs';
+import { verifyThemeAliases } from '../tests/package-consumer/theme-alias-checks.mjs';
 import {
   verifyEdgeCases,
   verifyForcedColors,
@@ -344,6 +345,7 @@ try {
   } else {
     browser = await chromium.launch({ headless: true });
     if (!process.argv.includes('--design-only')) {
+      await verifyThemeAliases(browser, url);
       await verifyConsumer(browser, url);
       await verifyEdgeCases(browser, url);
       await verifyReviewRegressions(browser, url);

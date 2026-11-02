@@ -117,7 +117,7 @@ export default function BadgeStatus() {
 
 | 属性                | 说明                                                                 | 类型                                 | 默认值      |
 | ------------------- | -------------------------------------------------------------------- | ------------------------------------ | ----------- |
-| `tone`              | 标记的语义颜色。success 不随角色主题改变。                           | `'neutral' \| 'accent' \| 'success'` | `'neutral'` |
+| `tone`              | 标记的语义颜色。success 不随配色预设改变。                           | `'neutral' \| 'accent' \| 'success'` | `'neutral'` |
 | `children`          | 状态或分类内容，应能独立表达含义。                                   | `ReactNode`                          | —           |
 | `className / style` | 作用于根 span。                                                      | `string / CSSProperties`             | —           |
 | `ref`               | 指向根 span。                                                        | `Ref<HTMLSpanElement>`               | —           |

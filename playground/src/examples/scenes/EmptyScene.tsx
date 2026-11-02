@@ -25,7 +25,7 @@ export default function EmptyScene() {
   }, [created]);
 
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <style>{`
         .story-empty { max-width: 660px; margin: auto; }
         .story-empty-tools { display: flex; align-items: end; flex-wrap: wrap; gap: 16px; }

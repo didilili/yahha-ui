@@ -57,7 +57,7 @@ export default defineComponentPage('badge', {
               name: 'tone',
               type: "'neutral' | 'accent' | 'success'",
               defaultValue: "'neutral'",
-              description: '标记的语义颜色。success 不随角色主题改变。',
+              description: '标记的语义颜色。success 不随配色预设改变。',
             },
             {
               name: 'children',

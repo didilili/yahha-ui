@@ -13,7 +13,7 @@ import {
   type ThemeName,
 } from 'yahha-ui';
 
-const themes: ThemeName[] = ['chiikawa', 'hachiware', 'usagi'];
+const themes: ThemeName[] = ['pink', 'blue', 'yellow'];
 const nativeDates = [
   { type: 'date', value: '2026-10-28' },
   { type: 'time', value: '10:30' },

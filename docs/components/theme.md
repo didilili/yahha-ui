@@ -14,7 +14,7 @@ import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
 
 ## 主题作用范围
 
-为应用或局部区域设置组件配色，并在应用入口导入 yahha-ui/style.css。theme 必填，推荐使用吉伊粉色预设（chiikawa），也可选择小八浅蓝预设（hachiware）或乌萨奇浅黄预设（usagi）；由应用更新 theme 切换预设。预设名称对应角色配色，三者共用组件尺寸、排版与交互规则。
+为应用或局部区域设置组件配色，并在应用入口导入 yahha-ui/style.css。theme 必填，推荐使用粉色预设（pink），也可选择浅蓝（blue）或浅黄（yellow）；由应用更新 theme 切换预设。三者是同一套组件的强调色变体，布局、字阶与交互相同。
 
 通过公开的 ThemeTokens 覆盖语义颜色。尺寸、圆角与动效的内部 CSS 变量不属于稳定公共 API；组件布局和局部外观使用各组件公开的定制入口。
 
@@ -24,9 +24,9 @@ import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
 
 <a id="theme-variants"></a>
 
-### 默认配色与可选预设
+### 默认配色与强调色变体
 
-比较吉伊粉色预设（chiikawa）、小八浅蓝预设（hachiware）与乌萨奇浅黄预设（usagi）的组件外观；按钮可观察悬停和键盘焦点，不绑定业务操作。
+比较粉色（pink）、浅蓝（blue）与浅黄（yellow）的强调色变体，布局、字阶与交互相同；按钮可观察悬停和键盘焦点，不绑定业务操作。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -36,9 +36,9 @@ import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
 import { Badge, Button, Surface, ThemeProvider, type ThemeName } from 'yahha-ui';
 
 const themes: { value: ThemeName; label: string }[] = [
-  { value: 'chiikawa', label: '吉伊 · chiikawa' },
-  { value: 'hachiware', label: '小八 · hachiware' },
-  { value: 'usagi', label: '乌萨奇 · usagi' },
+  { value: 'pink', label: '粉色 · pink' },
+  { value: 'blue', label: '浅蓝 · blue' },
+  { value: 'yellow', label: '浅黄 · yellow' },
 ];
 
 export default function ThemeVariants() {
@@ -99,7 +99,7 @@ export default function ThemeTokensExample() {
   const [open, setOpen] = useState(false);
 
   return (
-    <ThemeProvider theme="chiikawa" tokens={tokens}>
+    <ThemeProvider theme="pink" tokens={tokens}>
       <Surface style={{ display: 'grid', gap: 20, maxWidth: 560 }}>
         <TextField label="订阅邮箱" placeholder="you@example.com" hint="每月一封更新。" />
         <Dialog
@@ -135,15 +135,15 @@ const outerTokens: ThemeTokens = { accent: '#d7eee5', line: '#6e9788' };
 
 export default function ThemeNested() {
   return (
-    <ThemeProvider theme="chiikawa" tokens={outerTokens}>
+    <ThemeProvider theme="pink" tokens={outerTokens}>
       <Surface style={{ display: 'grid', gap: 20 }}>
         <div>
-          <p style={{ marginTop: 0 }}>外层：吉伊主题，自定义绿色。</p>
+          <p style={{ marginTop: 0 }}>外层：粉色预设，自定义绿色。</p>
           <Button>外层按钮外观</Button>
         </div>
-        <ThemeProvider theme="usagi">
+        <ThemeProvider theme="yellow">
           <Surface>
-            <p style={{ marginTop: 0 }}>内层：乌萨奇主题。</p>
+            <p style={{ marginTop: 0 }}>内层：浅黄预设。</p>
             <Button>内层按钮外观</Button>
           </Surface>
         </ThemeProvider>
@@ -159,27 +159,39 @@ export default function ThemeNested() {
 
 ### ThemeProviderProps
 
-| 属性                | 说明                                                                                     | 类型                                   | 默认值 |
-| ------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------- | ------ |
-| `theme` **必填**    | 当前 Provider 的配色预设名称，对应公开类型 ThemeName。推荐使用吉伊粉色预设（chiikawa）。 | `'chiikawa' \| 'hachiware' \| 'usagi'` | —      |
-| `children` **必填** | 主题范围内的内容。                                                                       | `ReactNode`                            | —      |
-| `tokens`            | 覆盖当前主题的部分语义颜色，并传入此范围中的浮层 Portal。                                | `ThemeTokens`                          | —      |
-| `className`         | 只作用于 Provider 的根 div，不复制到浮层 Portal。                                        | `string`                               | —      |
+| 属性                | 说明                                                                                                                 | 类型          | 默认值 |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------- | ------ |
+| `theme` **必填**    | 当前 Provider 的强调色预设，对应公开类型 ThemeName。推荐粉色（pink）；六个可用值及旧名映射见“ThemeName 与旧名兼容”。 | `ThemeName`   | —      |
+| `children` **必填** | 主题范围内的内容。                                                                                                   | `ReactNode`   | —      |
+| `tokens`            | 覆盖当前主题的部分语义颜色，并传入此范围中的浮层 Portal。                                                            | `ThemeTokens` | —      |
+| `className`         | 只作用于 Provider 的根 div，不复制到浮层 Portal。                                                                    | `string`      | —      |
 
 ### ThemeTokens
 
-| 属性              | 说明                                                                                                     | 类型     | 默认值                                         |
-| ----------------- | -------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------- |
-| `ink`             | 正文与主要文字，--yahha-ink。                                                                            | `string` | `#49313d`                                      |
-| `muted`           | 次要文字，--yahha-muted。                                                                                | `string` | `#7a5c6d`                                      |
-| `accent`          | 主题强调色，--yahha-accent。                                                                             | `string` | `吉伊 #ffc3d9 / 小八 #d7eaf5 / 乌萨奇 #f8e5a7` |
-| `accentHover`     | 强调色的悬停状态，--yahha-accent-hover。                                                                 | `string` | `吉伊 #ffb3cf / 小八 #c3dfee / 乌萨奇 #f3da89` |
-| `accentSoft`      | 轻量强调背景，--yahha-accent-soft。                                                                      | `string` | `吉伊 #fff0f6 / 小八 #f2f8fc / 乌萨奇 #fffaf0` |
-| `line`            | 常规边框，--yahha-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。                                     | `string` | `吉伊 #c58ba1 / 小八 #b9cedb / 乌萨奇 #daca9f` |
-| `focus`           | 键盘焦点轮廓，--yahha-focus。                                                                            | `string` | `吉伊 #b04e78 / 小八 #386d93 / 乌萨奇 #896329` |
-| `surface`         | 内容面与浮层等共用背景，--yahha-surface。                                                                | `string` | `#ffffff`                                      |
-| `fieldBackground` | 输入框默认背景，--yahha-field-background；错误和禁用状态保留各自背景。                                   | `string` | `#ffffff`                                      |
-| `error`           | 输入框错误边框、错误时的焦点轮廓、错误文字与 Toast 错误图标，--yahha-error；错误背景固定，禁用背景优先。 | `string` | `#a33e4f`                                      |
+| 属性              | 说明                                                                                                     | 类型     | 默认值                                       |
+| ----------------- | -------------------------------------------------------------------------------------------------------- | -------- | -------------------------------------------- |
+| `ink`             | 正文与主要文字，--yahha-ink。                                                                            | `string` | `#49313d`                                    |
+| `muted`           | 次要文字，--yahha-muted。                                                                                | `string` | `#7a5c6d`                                    |
+| `accent`          | 主题强调色，--yahha-accent。                                                                             | `string` | `粉色 #ffc3d9 / 浅蓝 #d7eaf5 / 浅黄 #f8e5a7` |
+| `accentHover`     | 强调色的悬停状态，--yahha-accent-hover。                                                                 | `string` | `粉色 #ffb3cf / 浅蓝 #c3dfee / 浅黄 #f3da89` |
+| `accentSoft`      | 轻量强调背景，--yahha-accent-soft。                                                                      | `string` | `粉色 #fff0f6 / 浅蓝 #f2f8fc / 浅黄 #fffaf0` |
+| `line`            | 常规边框，--yahha-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。                                     | `string` | `粉色 #c58ba1 / 浅蓝 #b9cedb / 浅黄 #daca9f` |
+| `focus`           | 键盘焦点轮廓，--yahha-focus。                                                                            | `string` | `粉色 #b04e78 / 浅蓝 #386d93 / 浅黄 #896329` |
+| `surface`         | 内容面与浮层等共用背景，--yahha-surface。                                                                | `string` | `#ffffff`                                    |
+| `fieldBackground` | 输入框默认背景，--yahha-field-background；错误和禁用状态保留各自背景。                                   | `string` | `#ffffff`                                    |
+| `error`           | 输入框错误边框、错误时的焦点轮廓、错误文字与 Toast 错误图标，--yahha-error；错误背景固定，禁用背景优先。 | `string` | `#a33e4f`                                    |
+
+<a id="theme-names"></a>
+
+## ThemeName 与旧名兼容
+
+公开类型 ThemeName 接受三个颜色主名和三个旧名兼容值：
+
+- 粉色：`pink`；旧名 `chiikawa` 映射到 pink。
+- 浅蓝：`blue`；旧名 `hachiware` 映射到 blue。
+- 浅黄：`yellow`；旧名 `usagi` 映射到 yellow。
+
+新代码使用颜色主名。旧名进入主题上下文与 `data-yahha-theme` DOM 属性前会规范为对应颜色主名，浮层 Portal 也使用规范值。已有 theme 属性值可以逐步替换，兼容映射的配色相同；theme 仍为必填属性。
 
 <a id="boundaries"></a>
 

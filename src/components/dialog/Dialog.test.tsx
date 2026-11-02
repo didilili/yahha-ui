@@ -55,7 +55,7 @@ describe('Dialog', () => {
     function Example() {
       const [open, setOpen] = useState(false);
       return (
-        <ThemeProvider theme="hachiware">
+        <ThemeProvider theme="blue">
           <Dialog
             open={open}
             onOpenChange={setOpen}
@@ -73,9 +73,7 @@ describe('Dialog', () => {
     await user.click(trigger);
     const dialog = await screen.findByRole('dialog', { name: '欢迎来玩' });
     expect(dialog.getAttribute('aria-describedby')).toBeTruthy();
-    expect(dialog.closest('[data-yahha-theme]')?.getAttribute('data-yahha-theme')).toBe(
-      'hachiware',
-    );
+    expect(dialog.closest('[data-yahha-theme]')?.getAttribute('data-yahha-theme')).toBe('blue');
     await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
     await waitFor(() => expect(document.activeElement).toBe(trigger));
@@ -172,9 +170,9 @@ describe('Dialog', () => {
   it('shares the nearest provider tokens across its portal and updates them on rerender', () => {
     function Example({ surface }: { surface: string }) {
       return (
-        <ThemeProvider theme="hachiware" tokens={{ ink: '#123456' }} className="outer-layout">
+        <ThemeProvider theme="blue" tokens={{ ink: '#123456' }} className="outer-layout">
           <ThemeProvider
-            theme="usagi"
+            theme="yellow"
             tokens={{ ink: '#654321', surface }}
             className="playground-layout"
           >
@@ -187,7 +185,7 @@ describe('Dialog', () => {
     const dialog = screen.getByRole('dialog', { name: '主题同步' });
     const portalTheme = dialog.closest<HTMLElement>('[data-yahha-theme]')!;
 
-    expect(portalTheme.dataset.yahhaTheme).toBe('usagi');
+    expect(portalTheme.dataset.yahhaTheme).toBe('yellow');
     expect(portalTheme.style.getPropertyValue('--yahha-ink')).toBe('#654321');
     expect(portalTheme.style.getPropertyValue('--yahha-surface')).toBe('#fff000');
     expect(portalTheme.classList.contains('playground-layout')).toBe(false);
@@ -202,6 +200,6 @@ describe('Dialog', () => {
     expect(
       screen.getByRole('dialog', { name: '默认主题' }).closest<HTMLElement>('[data-yahha-theme]')
         ?.dataset.yahhaTheme,
-    ).toBe('chiikawa');
+    ).toBe('pink');
   });
 });

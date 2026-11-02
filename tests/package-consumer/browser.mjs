@@ -33,9 +33,9 @@ export async function verifyConsumer(browser, url) {
   );
 
   const themes = [
-    ['chiikawa', 'rgb(255, 195, 217)', 'rgb(104, 65, 80)'],
-    ['hachiware', 'rgb(215, 234, 245)', 'rgb(82, 106, 122)'],
-    ['usagi', 'rgb(248, 229, 167)', 'rgb(124, 102, 56)'],
+    ['pink', 'rgb(255, 195, 217)', 'rgb(104, 65, 80)'],
+    ['blue', 'rgb(215, 234, 245)', 'rgb(82, 106, 122)'],
+    ['yellow', 'rgb(248, 229, 167)', 'rgb(124, 102, 56)'],
   ];
   const trigger = page.getByTestId('dialog-trigger');
   const dialog = page.getByRole('dialog', { name: 'Package consumer dialog' });

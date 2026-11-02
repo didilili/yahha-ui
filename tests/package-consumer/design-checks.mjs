@@ -5,7 +5,7 @@ import {
   verifySelectionContract,
 } from './selection-checks.mjs';
 
-const themes = ['chiikawa', 'hachiware', 'usagi'];
+const themes = ['pink', 'blue', 'yellow'];
 const states = ['normal', 'readonly', 'error', 'disabled'];
 const closeTo = (actual, expected, label) =>
   assert(Math.abs(actual - expected) < 0.1, `${label}: expected ${expected}, received ${actual}.`);
@@ -559,7 +559,7 @@ async function verifySelectForcedColors(browser, url) {
       await page.goto(`${url}?design-contract`);
       for (const variant of ['primary', 'secondary', 'ghost']) {
         const button = page
-          .locator('[data-design-theme="chiikawa"]')
+          .locator('[data-design-theme="pink"]')
           .getByTestId(`design-pressed-${variant}`);
         await button.hover();
         const state = await button.evaluate((node) => {
@@ -573,7 +573,7 @@ async function verifySelectForcedColors(browser, url) {
         );
       }
       const trigger = page
-        .locator('[data-design-theme="chiikawa"]')
+        .locator('[data-design-theme="pink"]')
         .getByTestId('design-select-normal');
       await trigger.focus();
       await page.keyboard.press('Enter');
@@ -635,7 +635,7 @@ async function verifySelectForcedColors(browser, url) {
       assert.equal(await selected.getAttribute('aria-selected'), 'true');
       await page.keyboard.press('Escape');
       await page.getByRole('listbox').waitFor({ state: 'hidden' });
-      await verifyNativeSelectionFallback(page, page.locator('[data-design-theme="chiikawa"]'));
+      await verifyNativeSelectionFallback(page, page.locator('[data-design-theme="pink"]'));
       console.log(
         `Browser Select forced colors passed: ${colorScheme}, keyboard focus and disabled state.`,
       );

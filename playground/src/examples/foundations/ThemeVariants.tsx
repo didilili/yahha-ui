@@ -1,9 +1,9 @@
 import { Badge, Button, Surface, ThemeProvider, type ThemeName } from 'yahha-ui';
 
 const themes: { value: ThemeName; label: string }[] = [
-  { value: 'chiikawa', label: '吉伊 · chiikawa' },
-  { value: 'hachiware', label: '小八 · hachiware' },
-  { value: 'usagi', label: '乌萨奇 · usagi' },
+  { value: 'pink', label: '粉色 · pink' },
+  { value: 'blue', label: '浅蓝 · blue' },
+  { value: 'yellow', label: '浅黄 · yellow' },
 ];
 
 export default function ThemeVariants() {

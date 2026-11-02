@@ -20,9 +20,10 @@ import { EdgeCases } from './EdgeCases.js';
 import { Basics } from './Basics.js';
 import { DesignContract } from './DesignContract.js';
 import { OverlayLifecycle } from './OverlayLifecycle.js';
+import { ThemeAliases } from './ThemeAliases.js';
 
 function Consumer() {
-  const [theme, setTheme] = useState<ThemeName>('chiikawa');
+  const [theme, setTheme] = useState<ThemeName>('pink');
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,7 +67,7 @@ function Consumer() {
           label="Theme"
           value={theme}
           onValueChange={setTheme}
-          options={(['chiikawa', 'hachiware', 'usagi'] as const).map((value) => ({
+          options={(['pink', 'blue', 'yellow'] as const).map((value) => ({
             value,
             label: value,
           }))}
@@ -118,7 +119,7 @@ function Consumer() {
           <Button onClick={() => setScopeDisabled((value) => !value)}>Toggle scope disabled</Button>
           <output aria-label="Submitted scope">{submittedScope}</output>
         </form>
-        <ThemeProvider theme="usagi" tokens={customTokens} className="custom-theme-root">
+        <ThemeProvider theme="yellow" tokens={customTokens} className="custom-theme-root">
           <Surface {...surfaceProps} data-testid="consumer-surface">
             <Badge ref={badgeRef} data-testid="consumer-badge">
               Consumer badge
@@ -172,7 +173,9 @@ function Consumer() {
 }
 
 createRoot(document.getElementById('root')!).render(
-  new URLSearchParams(location.search).has('overlay-lifecycle') ? (
+  new URLSearchParams(location.search).has('theme-aliases') ? (
+    <ThemeAliases />
+  ) : new URLSearchParams(location.search).has('overlay-lifecycle') ? (
     <OverlayLifecycle />
   ) : new URLSearchParams(location.search).has('design-contract') ? (
     <DesignContract />

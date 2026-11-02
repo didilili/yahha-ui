@@ -6,7 +6,7 @@ export default function App() {
   const [saved, setSaved] = useState(false);
 
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <Button aria-pressed={saved} onClick={() => setSaved(!saved)}>
         收藏这篇文章
       </Button>

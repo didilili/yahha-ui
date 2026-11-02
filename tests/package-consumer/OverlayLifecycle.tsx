@@ -102,7 +102,7 @@ function FormCase({ kind }: { kind: 'dialog' | 'popover' }) {
 export function OverlayLifecycle() {
   const [tooltipActions, setTooltipActions] = useState(0);
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <main style={{ display: 'grid', gap: 24, maxWidth: 420, margin: '24px auto', padding: 16 }}>
         <h1>Overlay lifecycle consumer</h1>
         <TextField label="Outside overlay field" data-testid="overlay-outside-field" />

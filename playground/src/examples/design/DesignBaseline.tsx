@@ -69,7 +69,7 @@ export default function DesignBaseline() {
   }
 
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <section aria-label="规范表单" style={{ display: 'grid', gap: 24 }}>
         <header style={{ display: 'grid', gap: 8 }}>
           <Heading level={3}>同一尺寸，不同职责</Heading>

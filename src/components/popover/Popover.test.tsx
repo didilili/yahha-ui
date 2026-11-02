@@ -92,7 +92,7 @@ describe('Popover', () => {
     function Example() {
       const [open, setOpen] = useState(true);
       return (
-        <ThemeProvider theme="usagi" tokens={{ ink: '#123456' }} className="page-layout">
+        <ThemeProvider theme="yellow" tokens={{ ink: '#123456' }} className="page-layout">
           <Popover
             title="补充说明"
             trigger={<Button>打开说明</Button>}
@@ -114,7 +114,7 @@ describe('Popover', () => {
     expect(popup.classList.contains('custom-popover')).toBe(true);
     expect(popup.style.width).toBe('280px');
     const theme = popup.closest<HTMLElement>('[data-yahha-theme]')!;
-    expect(theme.dataset.yahhaTheme).toBe('usagi');
+    expect(theme.dataset.yahhaTheme).toBe('yellow');
     expect(theme.style.getPropertyValue('--yahha-ink')).toBe('#123456');
     expect(theme.classList.contains('page-layout')).toBe(false);
     await user.click(screen.getByRole('button', { name: '读完关闭' }));

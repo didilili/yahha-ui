@@ -11,11 +11,11 @@ import reading from './assets/reading.png';
 import rest from './assets/rest.png';
 
 export const themes = [
-  { value: 'chiikawa', label: '吉伊' },
-  { value: 'hachiware', label: '小八' },
-  { value: 'usagi', label: '乌萨奇' },
+  { value: 'pink', label: '粉色' },
+  { value: 'blue', label: '浅蓝' },
+  { value: 'yellow', label: '浅黄' },
 ] as const;
-export const themeNames = { chiikawa: '吉伊粉', hachiware: '小八蓝', usagi: '乌萨奇黄' };
+export const themeNames = { pink: '粉色', blue: '浅蓝', yellow: '浅黄' };
 export const navigation = [
   { id: 'buttons', label: '按钮', Icon: MousePointer2 },
   { id: 'fields', label: '输入框', Icon: TextCursorInput },

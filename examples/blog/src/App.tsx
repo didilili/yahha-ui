@@ -166,7 +166,7 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <Link
         href="#blog-main"
         className="blog-skip"

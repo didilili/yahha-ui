@@ -36,7 +36,7 @@ export function ExampleSource({
               <p>
                 {themeScope === 'explicit'
                   ? '此示例已在原始源码中配置 ThemeProvider；入口只加载样式并渲染示例，保留其自身的主题配置。'
-                  : '入口导入组件库样式，并使用吉伊粉色预设（chiikawa）包裹示例。'}
+                  : '入口导入组件库样式，并使用粉色预设（pink）包裹示例。'}
               </p>
               <p>
                 将下面的入口保存为 <code>App.tsx</code>，与 <code>Example.tsx</code> 放在一起。

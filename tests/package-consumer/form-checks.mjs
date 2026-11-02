@@ -50,7 +50,7 @@ export async function verifyFormStates(page, width) {
     exact: true,
   });
 
-  for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
+  for (const theme of ['pink', 'blue', 'yellow']) {
     await page.getByRole('combobox', { name: 'Form preview theme' }).selectOption(theme);
     await page.mouse.move(0, 0);
     const normalStyle = await appearance(input);
@@ -146,5 +146,5 @@ export async function verifyFormStates(page, width) {
     await page.keyboard.press('Tab');
     assert.equal(await page.evaluate(() => document.activeElement?.matches(':disabled')), false);
   }
-  await page.getByRole('combobox', { name: 'Form preview theme' }).selectOption('chiikawa');
+  await page.getByRole('combobox', { name: 'Form preview theme' }).selectOption('pink');
 }

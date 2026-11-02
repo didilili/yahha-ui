@@ -36,7 +36,7 @@ const naturalPicture =
 
 /** Installed-package fixtures, deliberately isolated from the public playground. */
 export function EdgeCases() {
-  const [theme, setTheme] = useState<ThemeName>('chiikawa');
+  const [theme, setTheme] = useState<ThemeName>('pink');
   const [choice, setChoice] = useState<'first' | 'disabled' | 'last'>('first');
   const [open, setOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(true);
@@ -60,9 +60,9 @@ export function EdgeCases() {
             value={theme}
             onChange={(event) => setTheme(event.target.value as ThemeName)}
           >
-            <option value="chiikawa">chiikawa</option>
-            <option value="hachiware">hachiware</option>
-            <option value="usagi">usagi</option>
+            <option value="pink">pink</option>
+            <option value="blue">blue</option>
+            <option value="yellow">yellow</option>
           </select>
         </label>
         <form
@@ -291,9 +291,7 @@ export function EdgeCases() {
           }
         >
           <TextField ref={inputRef} label="Dialog keyboard input" />
-          <Button
-            onClick={() => setTheme((value) => (value === 'chiikawa' ? 'hachiware' : 'chiikawa'))}
-          >
+          <Button onClick={() => setTheme((value) => (value === 'pink' ? 'blue' : 'pink'))}>
             Change open dialog theme
           </Button>
           {Array.from({ length: 15 }, (_, index) => (

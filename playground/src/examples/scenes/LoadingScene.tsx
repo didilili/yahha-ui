@@ -62,7 +62,7 @@ export default function LoadingScene() {
   }
 
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <style>{`
         .story-loading { max-width: 660px; margin: auto; }
         .story-loading-tools { display: grid; gap: 8px; margin-bottom: 16px; }

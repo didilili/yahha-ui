@@ -308,7 +308,7 @@ export async function verifyNavigation(browser, url) {
     try {
       await page.goto(`${url}?basics`);
       await page.getByRole('heading', { name: 'Basic component consumer' }).waitFor();
-      for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
+      for (const theme of ['pink', 'blue', 'yellow']) {
         await page.getByRole('combobox', { name: 'Basic preview theme' }).selectOption(theme);
         await verifyNavigationAppearance(page, theme);
       }

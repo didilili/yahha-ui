@@ -93,7 +93,7 @@ export default function ReadingExample() {
   }
 
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <style>{`
         .reading-example { width: 100%; max-width: 68ch; margin: auto; padding: 8px 0; }
         .reading-author { display: grid; gap: 8px; margin-bottom: 24px; }

@@ -283,7 +283,7 @@ export async function verifyBasics(browser, url) {
       await page.goto(`${url}?basics`);
       await page.getByRole('heading', { name: 'Basic component consumer' }).waitFor();
       const category = page.getByRole('combobox', { name: 'Basic category', exact: true });
-      for (const theme of ['chiikawa', 'hachiware', 'usagi']) {
+      for (const theme of ['pink', 'blue', 'yellow']) {
         await page.getByRole('combobox', { name: 'Basic preview theme' }).selectOption(theme);
         await verifyBadgeAppearance(page, theme);
         await verifyReadingAppearance(page, theme);
@@ -442,7 +442,7 @@ export async function verifyBasics(browser, url) {
       await dialogTrigger.click();
       const dialog = page.getByRole('dialog', { name: 'Nested basic controls', exact: true });
       await dialog.waitFor();
-      await verifyOverlayClose(dialog, `usagi ${width}px dialog`);
+      await verifyOverlayClose(dialog, `yellow ${width}px dialog`);
       const dialogSelect = dialog.getByRole('combobox', { name: 'Dialog category' });
       await dialogSelect.click();
       const nestedPopup = page.locator('.dialog-select-popup');

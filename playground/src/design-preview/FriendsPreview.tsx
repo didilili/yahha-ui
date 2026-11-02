@@ -390,7 +390,7 @@ export default function FriendsPreview() {
     document.title = `${titles[view]} · Yahha UI 视觉候选`;
   }, [view]);
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <div className="fp-shell" data-view={view}>
         <a
           className="fp-skip"

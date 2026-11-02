@@ -8,7 +8,7 @@ export default function NotFoundScene({
   headingRef,
 }: { asPage?: boolean; headingRef?: Ref<HTMLHeadingElement> } = {}) {
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <style>{`
         .story-not-found { max-width: 660px; padding: 24px 12px; margin: auto; text-align: center; }
         .story-not-found-art { display: block; width: min(320px, 100%); height: auto; margin: 0 auto 16px; }

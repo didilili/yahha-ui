@@ -116,7 +116,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
       );
     case 'theme-provider':
       return (
-        <ThemeProvider theme="chiikawa">
+        <ThemeProvider theme="pink">
           <div style={stack}>
             <Text size="sm" tone="muted">
               奶白、暖墨与轻粉。

@@ -79,7 +79,7 @@ describe('Tooltip', () => {
   it('applies popup refs and nearest-provider theme tokens to an initially open tooltip', async () => {
     const ref = createRef<HTMLDivElement>();
     render(
-      <ThemeProvider theme="hachiware" tokens={{ ink: '#123456' }} className="page-layout">
+      <ThemeProvider theme="blue" tokens={{ ink: '#123456' }} className="page-layout">
         <Tooltip
           defaultOpen
           content="更多阅读提示"
@@ -95,7 +95,7 @@ describe('Tooltip', () => {
     expect(tooltip.classList.contains('custom-tooltip')).toBe(true);
     expect(tooltip.style.maxWidth).toBe('200px');
     const theme = tooltip.closest<HTMLElement>('[data-yahha-theme]')!;
-    expect(theme.dataset.yahhaTheme).toBe('hachiware');
+    expect(theme.dataset.yahhaTheme).toBe('blue');
     expect(theme.style.getPropertyValue('--yahha-ink')).toBe('#123456');
     expect(theme.classList.contains('page-layout')).toBe(false);
   });

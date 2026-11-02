@@ -94,7 +94,7 @@
   line-height: var(--yahha-leading-body);
 }
 
-.theme[data-yahha-theme='hachiware'] {
+.theme[data-yahha-theme='blue'] {
   --yahha-contour: #526a7a;
   --yahha-accent: #d7eaf5;
   --yahha-accent-hover: #c3dfee;
@@ -103,7 +103,7 @@
   --yahha-focus: #386d93;
 }
 
-.theme[data-yahha-theme='usagi'] {
+.theme[data-yahha-theme='yellow'] {
   --yahha-contour: #7c6638;
   --yahha-accent: #f8e5a7;
   --yahha-accent-hover: #f3da89;

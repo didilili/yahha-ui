@@ -242,7 +242,7 @@ export const guidePages: DocPage[] = [
           <>
             <p>
               在应用入口导入一次 <code>yahha-ui/style.css</code>，用 <code>ThemeProvider</code>{' '}
-              包住组件区域，并显式设置 <code>theme="chiikawa"</code>。
+              包住组件区域，并显式设置 <code>theme="pink"</code>。
             </p>
             <p>
               下面的第一个按钮已经包含样式导入和主题设置，可直接保存为 <code>App.tsx</code>。
@@ -423,7 +423,7 @@ export const guidePages: DocPage[] = [
           <>
             <p>
               纸签夹住一篇手记，朋友从页边探出头。Yahha
-              星球的日常，落在圆润的墨线、纸面和角色插画里。深色墨线为按钮和字段勾出轮廓，白纸承载正文，浅粉强调少量操作与分类。小八蓝与乌萨奇黄作为可选配色保留在
+              星球的日常，落在圆润的墨线、纸面和角色插画里。深色墨线为按钮和字段勾出轮廓，白纸承载正文，浅粉强调少量操作与分类。浅蓝与浅黄作为可选配色保留在
               <Link href="#/components/theme-provider">ThemeProvider</Link>{' '}
               中；它们共享同一套形状、排版和交互规则。
             </p>

@@ -17,7 +17,7 @@ import 'yahha-ui/style.css';
 
 export default function App() {
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <Example />
     </ThemeProvider>
   );

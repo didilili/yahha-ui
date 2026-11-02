@@ -18,7 +18,7 @@ export default function ThemeTokensExample() {
   const [open, setOpen] = useState(false);
 
   return (
-    <ThemeProvider theme="chiikawa" tokens={tokens}>
+    <ThemeProvider theme="pink" tokens={tokens}>
       <Surface style={{ display: 'grid', gap: 20, maxWidth: 560 }}>
         <TextField label="订阅邮箱" placeholder="you@example.com" hint="每月一封更新。" />
         <Dialog

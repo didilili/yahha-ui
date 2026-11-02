@@ -112,7 +112,7 @@ export default function DesignReading() {
   );
 
   return (
-    <ThemeProvider theme="chiikawa">
+    <ThemeProvider theme="pink">
       <section
         aria-label="规范阅读"
         style={{ display: 'grid', gap: 24, maxWidth: '68ch', marginInline: 'auto' }}
