@@ -19,7 +19,7 @@
 - `FriendsPreview.tsx`：首页、素材查看、对照页、候选导航。
 - `FriendsDocs.tsx`：代表性 Button 文档与真实示例；展示源码从同一文件读取。
 - `CharacterStudy.tsx`：同画幅场景、完整头脸轮廓、等比例五官放大、九种表情、72px 预览与 SVG 下载。v4 扁脸改动已被用户否决并撤回，当前恢复 v3；默认左侧为已撤回 v4，右侧为已恢复 v3，历史保留 v3 / v2 / v1。恢复旧稿不代表圆润问题已解决，本轮暂停继续改造型。旧图仅作真实记录，不作为采用方案。
-- `Motif.tsx`：候选页面私有的小型矢量装饰，不作为公共组件导出。
+- `../site/Motif.tsx`：与正式站点共用的小型矢量装饰，不作为公共组件导出。
 - `friends-preview.css` / `friends-docs.css`：候选布局与环境样式，不覆盖公共组件内部结构或注入尺寸 token。
 - `../examples/scenes/artwork/friends-preview/`：三组手工 SVG 候选和素材说明，不进入默认库产物。
 

@@ -45,10 +45,8 @@ img {
 
 .fp-shell {
   --fp-ink: #503b3b;
-  --fp-pink: #f7bad0;
   --fp-blue: #d6edf8;
   --fp-yellow: #ffe6a3;
-  --fp-green: #e0edcb;
   --fp-line: #72534c;
   color: var(--fp-ink);
   background: #fffdf7;

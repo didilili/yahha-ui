@@ -2,7 +2,7 @@ import { componentCatalog } from './component-catalog';
 import type { DocPage } from './types';
 
 /** Select by purpose, including components from a different navigation group. */
-export const relatedComponents: Record<string, readonly string[]> = {
+const relatedComponents: Record<string, readonly string[]> = {
   button: ['icon-button', 'link'],
   'icon-button': ['button', 'tooltip'],
   text: ['heading', 'link', 'badge'],

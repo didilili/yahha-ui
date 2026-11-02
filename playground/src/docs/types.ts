@@ -22,7 +22,7 @@ export interface ApiRow {
   description: string;
 }
 
-export interface DocSection {
+interface DocSection {
   id: string;
   title: string;
   content?: ReactNode;

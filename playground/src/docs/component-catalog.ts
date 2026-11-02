@@ -1,7 +1,7 @@
 import type { ComponentCatalogGroup, ComponentGroup, ConfigurationGroup, DocPage } from './types';
 
 /** Search and navigation metadata without importing examples or their source text. */
-export type ComponentPageSummary = Pick<DocPage, 'id' | 'name' | 'chinese' | 'description'> & {
+type ComponentPageSummary = Pick<DocPage, 'id' | 'name' | 'chinese' | 'description'> & {
   group: ComponentCatalogGroup;
   aliases?: readonly string[];
 };

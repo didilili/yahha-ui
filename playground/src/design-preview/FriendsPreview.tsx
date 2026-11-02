@@ -4,7 +4,7 @@ import { Badge, Button, Checkbox, IconButton, TextField, ThemeProvider } from 'y
 import 'yahha-ui/style.css';
 import FriendsDocs from './FriendsDocs';
 import CharacterStudy from './CharacterStudy';
-import Motif from './Motif';
+import Motif from '../site/Motif';
 import hero from '../examples/scenes/artwork/friends-preview/friends-hero.svg';
 import peek from '../examples/scenes/artwork/friends-preview/friends-peek.svg';
 import motifs from '../examples/scenes/artwork/friends-preview/motifs.svg';

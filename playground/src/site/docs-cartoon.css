@@ -17,12 +17,7 @@
   border-bottom: 2px solid var(--site-line);
 }
 
-.docs-cartoon .brand-name b {
-  color: #b84670;
-}
-
-.docs-cartoon .header-caption,
-.docs-cartoon .brand-name small {
+.docs-cartoon .header-caption {
   color: #705362;
 }
 

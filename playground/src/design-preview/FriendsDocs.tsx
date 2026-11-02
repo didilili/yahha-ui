@@ -3,7 +3,7 @@ import { ArrowRight, Check, ChevronDown, Copy, Heart, Search } from 'lucide-reac
 import { Badge, Button, Checkbox, Select, TextField } from 'yahha-ui';
 import previewSource from './FriendsDocs.tsx?raw';
 import './friends-docs.css';
-import Motif from './Motif';
+import Motif from '../site/Motif';
 
 /* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- Scrollable code and API tables need keyboard focus on narrow screens. */
 

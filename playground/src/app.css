@@ -102,33 +102,6 @@ svg {
   font-weight: 700;
   white-space: nowrap;
 }
-.docs-brand > span:last-child {
-  font-size: var(--yahha-font-size-body-lg, 18px);
-  color: var(--yahha-muted, #8a665f);
-}
-.brand-dots {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  margin-right: 7px;
-  transform: rotate(-10deg);
-}
-.brand-dots i {
-  width: 8px;
-  height: 10px;
-  background: #f3ced6;
-  border: 1px solid #ae7c88;
-  border-radius: 50%;
-}
-.brand-dots i:nth-child(2) {
-  height: 14px;
-  background: #c4deeb;
-  border-color: #799aaf;
-}
-.brand-dots i:nth-child(3) {
-  background: #f4e1a4;
-  border-color: #ac974f;
-}
 .header-divider {
   height: 20px;
   width: 1px;
@@ -842,22 +815,6 @@ h3:hover .heading-anchor,
   font-size: var(--yahha-font-size-body-sm, 14px);
   margin-top: 5px;
 }
-.intro-heading {
-  min-height: 210px;
-  padding-top: 15px;
-  padding-right: 230px;
-}
-.intro-heading .doc-description {
-  max-width: 36ch;
-  line-height: var(--yahha-leading-body, 1.8);
-}
-.intro-art {
-  position: absolute;
-  right: 0;
-  bottom: 20px;
-  width: 220px;
-  height: auto;
-}
 .not-found {
   min-height: 65vh;
   padding-top: 12px;
@@ -962,20 +919,6 @@ h3:hover .heading-anchor,
     font-size: var(--yahha-font-size-heading-3, 20px);
     gap: 4px;
   }
-  .docs-brand > span:last-child {
-    font-size: var(--yahha-font-size-body, 16px);
-  }
-  .brand-dots {
-    margin-right: 4px;
-    gap: 2px;
-  }
-  .brand-dots i {
-    width: 6px;
-    height: 8px;
-  }
-  .brand-dots i:nth-child(2) {
-    height: 11px;
-  }
   .docs-content {
     padding: 28px 18px 0;
   }
@@ -1031,18 +974,6 @@ h3:hover .heading-anchor,
   .component-overview {
     gap: 0 17px;
   }
-  .intro-heading {
-    min-height: 245px;
-    padding: 0 0 95px;
-  }
-  .intro-heading .doc-description {
-    max-width: 100%;
-  }
-  .intro-art {
-    width: 145px;
-    bottom: 0;
-    right: 0;
-  }
   .heading-anchor {
     opacity: 1;
   }
@@ -1057,12 +988,6 @@ h3:hover .heading-anchor,
   }
   .docs-brand {
     font-size: var(--yahha-font-size-body-lg, 18px);
-  }
-  .docs-brand > span:last-child {
-    font-size: var(--yahha-font-size-md, 14px);
-  }
-  .brand-dots {
-    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
