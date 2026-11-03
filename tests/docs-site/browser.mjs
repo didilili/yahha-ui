@@ -9,7 +9,7 @@ import { verifyBrand } from './brand-checks.mjs';
 import { verifyAdoption } from './adoption-checks.mjs';
 import { verifySectionNavigation } from './section-navigation-checks.mjs';
 import { verifySearch } from './search-checks.mjs';
-import { verifyGuideLoading } from './guide-loading-checks.mjs';
+import { verifyGuideLoading, waitForGuideReady } from './guide-loading-checks.mjs';
 
 export async function verifyDocs(browser, baseURL) {
   await verifyGuideLoading(browser, baseURL);
@@ -227,14 +227,14 @@ export async function verifyDocs(browser, baseURL) {
       ['artwork', '图标与插画'],
     ]) {
       await page.goto(`${baseURL}#/guides/${id}`);
-      await page.getByRole('heading', { level: 1, name: title, exact: true }).waitFor();
+      await waitForGuideReady(page, title);
       guideExamples += await page.locator('.example-block').count();
       await verifyExampleHeadings(page);
     }
     assert.equal(guideExamples, 12, 'The guides must retain all twelve integration examples.');
     assert.equal(totalExamples + guideExamples, 97, 'The public site provides 97 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
-    await page.getByRole('heading', { level: 1, name: '开始使用', exact: true }).waitFor();
+    await waitForGuideReady(page, '开始使用');
     assert.match(await page.locator('main').innerText(), /npm pack/);
     assert.match(await page.locator('main').innerText(), /yahha-ui\/style\.css/);
 
@@ -242,7 +242,7 @@ export async function verifyDocs(browser, baseURL) {
     await page.goto(`${baseURL}#/components/missing`);
     await page.getByRole('heading', { level: 1, name: '页面未找到', exact: true }).waitFor();
     await page.locator('.not-found').getByRole('link', { name: '开始使用', exact: true }).click();
-    await page.getByRole('heading', { level: 1, name: '开始使用', exact: true }).waitFor();
+    await waitForGuideReady(page, '开始使用');
     await page.goBack();
     await page.getByRole('heading', { level: 1, name: '页面未找到', exact: true }).waitFor();
     await page.locator('.not-found').getByRole('link', { name: '浏览组件', exact: true }).click();

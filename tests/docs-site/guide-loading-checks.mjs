@@ -1,7 +1,73 @@
 import assert from 'node:assert/strict';
 
+export async function waitForGuideReady(page, title) {
+  const heading = page.getByRole('heading', { level: 1, name: title, exact: true });
+  await heading.waitFor();
+  // Guide metadata renders before its module; sections also cover guides without examples.
+  await page
+    .locator('main > article')
+    .filter({ has: heading })
+    .locator('.doc-section')
+    .first()
+    .waitFor();
+}
+
+async function verifyPendingGuideBodies(browser, baseURL) {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  page.setDefaultTimeout(5000);
+  let release = () => {};
+  try {
+    await page.goto(`${baseURL}#/`);
+    await page.locator('.home-title').waitFor();
+    for (const [id, title, examples] of [
+      ['getting-started', '开始使用', 1],
+      ['styling', '使用与定制', 0],
+      ['reading', '阅读与收藏', 1],
+    ]) {
+      const gate = Promise.withResolvers();
+      release = gate.resolve;
+      const module = (url) =>
+        url.pathname === `/src/docs/guides/${id}.tsx` ||
+        new RegExp(`/assets/${id}-[^/]+\\.js$`).test(url.pathname);
+      await page.route(module, async (route) => {
+        await gate.promise;
+        await route.continue();
+      });
+      const request = page.waitForRequest((request) => module(new URL(request.url())));
+      await page.goto(`${baseURL}#/guides/${id}`);
+      await request;
+      let ready = false;
+      const pending = waitForGuideReady(page, title).then(() => {
+        ready = true;
+      });
+      pending.catch(() => {});
+      await page.getByRole('heading', { level: 1, name: title, exact: true }).waitFor();
+      await page.locator('.doc-loading').waitFor();
+      // The title can settle across browser paints while the body module is still blocked.
+      await page.evaluate(
+        () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+      );
+      assert.equal(ready, false, `${id}: a metadata title must not mark the guide body ready.`);
+      release();
+      await pending;
+      assert.equal(await page.locator('.doc-loading').count(), 0, `${id}: loading has finished.`);
+      assert.equal(
+        await page.locator('.example-block').count(),
+        examples,
+        `${id}: loaded examples.`,
+      );
+      await page.unroute(module);
+    }
+  } finally {
+    release();
+    await context.close();
+  }
+}
+
 /** Guides should load on demand and recover from a failed page module like component docs. */
 export async function verifyGuideLoading(browser, baseURL) {
+  await verifyPendingGuideBodies(browser, baseURL);
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const page = await context.newPage();
   page.setDefaultTimeout(5000);
