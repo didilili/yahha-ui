@@ -14,7 +14,7 @@ npm run build:demo
 npm run build:blog
 ```
 
-构建会自动把现有字体声明写入两份网站各自的 `notices/OFL-marker.txt` 与 `notices/OFL-wenkai.txt`，无需再手工复制。整理部署文件时保留 `notices/` 和 `assets/`。
+两份网站构建会自动输出 `notices/LICENSE`、`notices/THIRD_PARTY_NOTICES.md`、`notices/OFL-marker.txt` 与 `notices/OFL-wenkai.txt`。整理部署文件时保留 `notices/` 和 `assets/`，无需手工拼接许可文本。
 
 两份网站使用仓库内生成的本地字体分片，按页面实际用字加载；构建不下载外部字体，也不需要 Python 或 uv。更新字体源或重新生成分片的方法见[字体维护](assets-and-distribution.md#字体维护)。
 
@@ -98,6 +98,6 @@ npm run test:blog
 
 整理或更换托管目录后，核对首页与直接打开的 hash 路由、刷新、组件示例、素材下载、博客文章和返回列表。子目录中的 JS、CSS、字体与图片都应由该网站自己的 `assets/` 正常加载；不能把原始源码路径当作线上资源地址。
 
-部署文件取自构建目录。不要把仓库根目录整体当作网站输出；`src/`、`node_modules/`、本地 `.tgz`、测试及历史评审页面均不属于这两份网站的部署内容。默认文档构建不包含开发入口 `friends.html`。
+部署文件取自构建目录。不要把仓库根目录整体当作网站输出；`src/`、`node_modules/`、本地 `.tgz` 和测试均不属于这两份网站的部署内容。
 
-素材的来源、进入产物的范围和当前许可状态见[素材与分发说明](assets-and-distribution.md)。部署准备与本地预览不代表这些说明中的未决状态已解决。
+项目自有内容采用 [MIT](../LICENSE)，素材来源与产物范围见[素材与分发说明](assets-and-distribution.md)。字体继续适用 OFL，角色相关的第三方权利见[第三方说明](../THIRD_PARTY_NOTICES.md)。

@@ -90,7 +90,7 @@ Yahha UI 是一套漫画手账风 React 组件库，面向个人博客、个人�
 
 组件以原生元素为基础；各页说明原生属性、`ref`、`className` 的实际作用位置。除文档列出的入口外，不依赖内部 CSS Modules 类名或 DOM 嵌套层级。
 
-安装和构建见[项目 README](../README.md)，目录与验证约定见[协作说明](../CONTRIBUTING.md)。项目保持 npm 单包与 `private: true`，通过本地打包安装，尚未发布 npm。最终代码许可证尚未确定，角色素材的再发布与商业使用许可尚未核验，具体来源见[素材与分发范围](assets-and-distribution.md)。当前验证范围为 React 19 浏览器项目，React 与 React DOM 的 peer 范围均为 `^19.3.1`；React 18 与 SSR 尚未验证。
+安装和构建见[项目 README](../README.md)，目录与验证约定见[协作说明](../CONTRIBUTING.md)。项目保持 npm 单包与 `private: true`，通过本地打包安装，尚未发布 npm。项目自有内容采用 [MIT](../LICENSE)，字体与角色相关的第三方权利见[第三方说明](../THIRD_PARTY_NOTICES.md)，具体来源见[素材与分发范围](assets-and-distribution.md)。当前验证范围为 React 19 浏览器项目，React 与 React DOM 的 peer 范围均为 `^19.3.1`；React 18 与 SSR 尚未验证。
 
 ## 验收与问题反馈
 

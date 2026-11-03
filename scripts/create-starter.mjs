@@ -210,19 +210,15 @@ async function main() {
         join(project, '.gitignore'),
       );
       await copyFile(join(root, 'scripts/blog-export-readme.md'), join(project, 'README.md'));
-      // Keep binary assets intact while removing the one source-repository-only Markdown link.
-      const notesPath = join(project, 'src/assets/README.md');
-      const notes = await readFile(notesPath, 'utf8');
-      await writeFile(
-        notesPath,
-        notes.replace(
-          '[字体维护](../../../../docs/assets-and-distribution.md#字体维护)',
-          '源仓库字体维护文档（该维护工具链不在导出项目内；素材使用说明请运行 npm run docs 查看）',
-        ),
+      await copyFile(
+        join(root, 'scripts/blog-export-assets-readme.md'),
+        join(project, 'src/assets/README.md'),
       );
     } else {
       await cp(join(root, 'scripts/starter-template'), project, { recursive: true });
     }
+    for (const path of ['LICENSE', 'THIRD_PARTY_NOTICES.md'])
+      await copyFile(join(root, path), join(project, path));
     await buildDocumentationSnapshot(join(project, 'documentation'));
     const vendor = join(project, 'vendor');
     await mkdir(vendor);
@@ -238,7 +234,9 @@ async function main() {
       throw new Error('安装包名称或版本与当前 package.json 不一致。');
     const unexpected = packed.files.filter(
       ({ path }) =>
-        !/^(?:dist\/|package\.json$|(?:readme|licen[sc]e|changelog)(?:\.|$))/i.test(path),
+        !/^(?:dist\/|package\.json$|THIRD_PARTY_NOTICES\.md$|(?:readme|licen[sc]e|changelog)(?:\.|$))/i.test(
+          path,
+        ),
     );
     if (unexpected.length) throw new Error('安装包包含分发白名单之外的文件。');
     const tarball = `vendor/${packed.filename}`;
@@ -267,6 +265,7 @@ async function main() {
     const starterPackage = {
       name,
       version: '0.0.0',
+      license: 'MIT',
       private: true,
       type: 'module',
       packageManager: pkg.packageManager,

@@ -13,6 +13,8 @@ npm run dev
 
 组件文档见 [docs/README.md](docs/README.md)。仓库保持 npm 单包，React 与 React DOM 由使用方提供，当前 peer 范围均为 `^19.3.1`。展示与交互示例放在 `playground/`，不新增 Storybook 依赖。
 
+macOS 可在安装依赖后双击根目录 `启动组件小屋.command`，它会复用已启动的本地文档站或执行 `npm run dev`；这是可选开发入口，其他平台直接使用 npm 命令。
+
 ## 目录与边界
 
 - `src/index.ts`：公共组件与类型的统一导出；新公开类型需同步导出。
@@ -30,7 +32,7 @@ npm run dev
 - `tests/package-consumer/`：真实安装包的使用方、独立边界场景与浏览器断言；不作为公开组件导出。
 - `tests/package-consumer/Basics.tsx` 与配套 `basics-checks.mjs`：新增基础组件的表单、导航、图片回退和浮层组合验收。
 - `tests/docs-site/`：构建后文档站的浏览器检查，包含静态子目录部署。
-- `playground/src/site/`：正式首页与文档外壳；`playground/src/design-preview/`：开发评审入口 `friends.html`，不进入默认展示产物。
+- `playground/src/site/`：正式首页与文档外壳。
 - `examples/blog/`：共用根工具链的完整网站示例，使用公开构建入口；`tests/blog-site/` 用实际 `.tgz` 安装验收同份源码。
 - `docs/images/`：从实际页面截取的仓库展示图，拍摄路由和视口见目录内 README，不进入安装包。
 - `scripts/`：打包与验收脚本；`starter-template/` 为最小接入项目模板，不是 workspace，生成后的项目独立安装本地 `.tgz`。
@@ -98,9 +100,9 @@ GitHub Actions 对 pull request 与 `main` push 执行完整检查。本地 Husk
 
 ## 素材与许可
 
-当前包为 `private: true`，仅本地打包试用，不进行 npm 发布。代码最终许可证与第三方素材许可清单尚未确定，不要写成 MIT 或其他已获授权的结论。保留字体 OFL 声明；角色素材、字体和代码的许可分别核对，现有字体许可不覆盖角色素材。当前以 React 19 浏览器项目为验证范围，不宣称 React 18、SSR 或其他未经验证的运行环境兼容。
+项目自有内容采用 [MIT](LICENSE)，贡献时保留现有版权与许可声明。第三方依赖、OFL 字体和角色相关权利见[第三方说明](THIRD_PARTY_NOTICES.md)，不将仓库的 MIT 声明用作第三方授权证明。当前包保持 `private: true`，通过本地包试用；公开源码与 npm 发布分别处理。React 19 浏览器项目为当前验证范围，不扩写未经验证的兼容承诺。
 
-新增状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`；再发布与商业使用许可尚未核验。修改场景素材时同步对应来源记录与完整接入下载文件。
+状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`。MIT 仅适用于贡献者能够授权的部分；第三方角色权限仍须另行确认。修改场景素材时同步来源记录与完整接入下载文件。
 
 静态文档站与博客的输出、自动携带的字体声明和本地预览见[部署说明](docs/deployment.md)；代码、字体与素材的实际分发范围见[素材清单](docs/assets-and-distribution.md)。部署时保留构建中使用字体的现有声明，不把整个源码仓库作为静态站点根目录。
 
@@ -108,7 +110,7 @@ GitHub Actions 对 pull request 与 `main` push 执行完整检查。本地 Husk
 
 工具选择参考了 [Radix Primitives 的 Oxlint 配置路线](https://github.com/radix-ui/primitives/blob/main/package.json)，本项目保留 TypeScript 7，格式化使用 Prettier。
 
-以下是从原 README 保留的 2026-10-23 设计观察记录，不代表参考站点的当前版本或官方组件规范：
+以下站点作为界面与交互设计参考，不代表官方组件规范：
 
 - [Chiikawa Bakery](https://chiikawabakery.jp/)：白底、浅粉分区、清楚的文字和行动按钮。
 - [Chiikawa Pocket](https://jp.chiikawa-pocket.com/ja/)：角色参与情境，标准交互融入同一世界。

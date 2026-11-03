@@ -6,7 +6,7 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 
 组件采用暖墨轮廓、白纸内容面、粉色强调与浅蓝纸边，提供交互示例、API 和可复制的网站组合。
 
-[开始使用](#构建与本地安装) · [组件文档](https://github.com/didilili/yahha-ui/blob/main/docs/README.md) · [完整博客示例](https://github.com/didilili/yahha-ui/tree/main/examples/blog) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues)
+[开始使用](#构建与本地安装) · [组件文档](https://github.com/didilili/yahha-ui/blob/main/docs/README.md) · [完整博客示例](https://github.com/didilili/yahha-ui/tree/main/examples/blog) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues) · [变更记录](https://github.com/didilili/yahha-ui/blob/main/CHANGELOG.md)
 
 **v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 29 个 UI 组件与 ThemeProvider · 当前通过本地安装包试用，尚未发布 npm
 
@@ -150,9 +150,22 @@ npm run build:blog
 
 ## 素材与范围
 
-组件代码的最终许可证尚未确定。网站与示例中的角色展示素材单独记录来源，其再发布与商业使用许可尚未核验；现有字体 OFL 声明仅适用于相应字体。
+项目自有代码、文档、示例、品牌图形与原创绘图采用 [MIT 许可证](LICENSE)。第三方字体继续适用 OFL；角色形象、名称和商标等第三方权利不在本项目 MIT 授权范围内，详见[第三方说明](THIRD_PARTY_NOTICES.md)。
 
 [素材与分发范围](docs/assets-and-distribution.md)汇总实际目录、原始记录、派生关系与当前许可状态。[图标与插画](playground/src/examples/scenes/artwork/little-days/README.md)说明静态、动效及欢迎控制器的使用区别。
+
+## 仓库目录
+
+```text
+src/             组件、公开类型与主题
+playground/      文档站、交互示例及展示素材
+examples/blog/   完整博客示例，共用根工具链
+docs/            使用与维护说明、生成的组件 Markdown
+scripts/         构建、资源同步、验收与项目导出
+tests/           工程脚本、浏览器和真实安装包验收
+```
+
+组件文档在 `playground/src/docs/components/` 维护，`docs/components/` 由同份页面数据生成。博客保留独立运行所需的资源副本，由同步脚本核对；这些目录不进入组件安装包。
 
 ## 参与开发
 

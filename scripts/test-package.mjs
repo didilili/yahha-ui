@@ -83,7 +83,10 @@ try {
   }
   assert.equal(packed.name, 'yahha-ui');
   const unexpected = files.filter(
-    (path) => !/^(?:dist\/|package\.json$|(?:readme|licen[sc]e|changelog)(?:\.|$))/i.test(path),
+    (path) =>
+      !/^(?:dist\/|package\.json$|THIRD_PARTY_NOTICES\.md$|(?:readme|licen[sc]e|changelog)(?:\.|$))/i.test(
+        path,
+      ),
   );
   assert.deepEqual(unexpected, [], 'Package contains files outside its distribution whitelist.');
   assert.deepEqual(
@@ -238,6 +241,14 @@ try {
   );
   assert.equal(await realpath(installedPackage), installedPackage);
   const manifest = JSON.parse(await readFile(join(installedPackage, 'package.json'), 'utf8'));
+  assert.equal(manifest.license, 'MIT');
+  for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
+    assert.deepEqual(
+      await readFile(join(installedPackage, name)),
+      await readFile(join(root, name)),
+      `Installed ${name} must retain its complete source declaration.`,
+    );
+  }
   for (const name of ['react', 'react-dom']) {
     assert(manifest.peerDependencies?.[name], `${name} must be a peer dependency.`);
     assert.equal(

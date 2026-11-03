@@ -19,6 +19,14 @@ export default defineConfig({
             source: await readFile(new URL(`./src/assets/${name}`, import.meta.url), 'utf8'),
           });
         }
+        // Resolve the installed library so this also works in an exported blog.
+        for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
+          this.emitFile({
+            type: 'asset',
+            fileName: `notices/${name}`,
+            source: await readFile(new URL(`../${name}`, import.meta.resolve('yahha-ui')), 'utf8'),
+          });
+        }
       },
     },
   ],

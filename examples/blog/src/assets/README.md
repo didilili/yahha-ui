@@ -1,15 +1,15 @@
 # 示例网站素材
 
-本目录保存网站独立运行与安装包验收所需的现有素材副本；SVG 成品按实际引用精简定义，未重新绘制人物或改变角色比例。
+本目录保存网站独立运行与安装包验收所需的素材副本。以下同步命令均在 Yahha UI 源仓库根目录运行；导出的独立博客使用单独的资源快照说明，不携带这套维护工具。SVG 成品按实际引用精简定义，不改变角色比例。
 
 - `peek.svg` 来自仓库 `playground/src/examples/scenes/artwork/friends-preview/friends-peek.svg`，作为博客独立副本保留；由 `npm run sync:artwork` 自动同步，`npm run check:artwork` 核对副本一致。
 - `author.svg` 对应当前 `friends-preview/portraits/chiikawa-smile.svg`，由 `npm run sync:artwork` 自动同步，`npm run check:artwork` 核对副本一致。
-- `reading.png`、`rest.png`、`lounge.png` 最初复制自 `playground/src/assets/`，本目录保留原字节并由博客直接维护。原 playground 文件只被已停用的旧演示引用，已于 2026-11-02 随旧演示归档至工作区 `../local-archives/yahha-ui/2026-11-02-repository-cleanup/`（相对组件库根目录），原路径、字节和 SHA-256 见归档清单；当前没有另一份活动副本或自动生成流程。
+- `reading.png`、`rest.png`、`lounge.png` 是博客直接维护的插图，没有自动生成流程。原 playground 副本的清理记录可从 `git show 995dd82^:playground/src/assets/reading.png` 查询；不需要仓库外的本机归档。
 - `fonts/` 是 `playground/src/assets/fonts/` 的同步副本，包含 `manifest.json`、`marker.css`、`wenkai.css` 及两种字体的 WOFF2 分片；对应 `OFL-*.txt` 声明保留在本目录。通过根目录 `npm run sync:fonts` 同步，`npm run check:fonts` 核对覆盖、哈希和副本一致性，不单独编辑生成文件。
 
 字体族名为 `Marker`、`WenKai`，使用官方 Regular 字体源的完整字符覆盖。两站现有源码用字集中在 `common` 首包，其余字符按每片最多 512 个码点生成 `unicode-range`，新增用字与用户输入按需加载对应的本地分片。日常安装和构建无需 Python 或 uv；重新生成入口为根目录 `npm run fonts:generate`，可选下载缓存等维护方法见[字体维护](../../../../docs/assets-and-distribution.md#字体维护)。博客构建会自动将现有声明写入 `dist/notices/OFL-marker.txt` 与 `dist/notices/OFL-wenkai.txt`。
 
-字体、代码与角色图像的许可分别记录。现有图像为非官方同人素材；再发布与商业使用许可尚未核验。素材只用于示例网站，不进入组件库 `dist/` 或默认安装包。
+项目自有内容采用 [MIT](../../../../LICENSE)，第三方字体和角色相关权利见[第三方说明](../../../../THIRD_PARTY_NOTICES.md)。现有角色图像为非官方同人素材，MIT 不授予第三方角色权利。素材用于示例网站，不进入组件库 `dist/` 或默认安装包。
 
 `little-days/` 仅保存当前实际导入的六份 SVG：`tea-cup.svg`、`empty-collection.svg`、`search-empty.svg`、`collection-saved-motion.svg`、`friends-lost.svg` 和 `friends-welcome.svg`。道具源文件集中在
 `playground/src/examples/scenes/artwork/little-days/`，找路与欢迎场景另复用当前朋友模型。静态热茶和空收藏口袋分别用于首页章节和空收藏页面，搜索空结果与收藏成功也从同一源同步。

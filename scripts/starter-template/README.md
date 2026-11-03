@@ -44,6 +44,10 @@ npm run preview
 
 运行 `npm run build` 后，将本项目 `dist/` **里面的内容**上传到静态托管目录，保留 `assets/` 的目录与文件名。使用 HTTP/HTTPS 访问；不要把整个源码目录、`vendor/` 或配套 `documentation/` 当作自己页面的部署文件。页面使用相对资源路径，放入静态站点子目录时保留结构即可。
 
+构建会把项目的 `LICENSE` 与 `THIRD_PARTY_NOTICES.md` 写入 `dist/notices/`，部署时一并保留。
+
 若要更新配套文档，应从相同版本的组件库重新导出项目；自己的 `npm run build` 只构建页面，不会更新 `documentation/`。
 
-本项目按当前 React 19 浏览器环境准备，React 18、SSR 与其他构建工具尚未验证。示例页面和组件包不含角色图片或站点字体，也没有后台服务；配套文档快照包含官网与示例博客使用的展示素材。组件代码的最终许可证尚未确定，角色展示素材的再发布与商业使用许可尚未核验；字体 OFL 声明仅适用于相应字体，保存在 `documentation/notices/` 与 `documentation/blog/notices/`。
+本项目按当前 React 19 浏览器环境准备，React 18、SSR 与其他构建工具尚未验证。示例页面和组件包不含角色图片或站点字体，也没有后台服务；配套文档快照包含官网与示例博客使用的展示素材。
+
+项目自有代码、文档和素材按 [MIT 许可证](LICENSE)提供；第三方字体与角色权利范围见[第三方说明](THIRD_PARTY_NOTICES.md)。字体保留各自的 OFL 许可，声明位于 `documentation/notices/` 与 `documentation/blog/notices/`。MIT 不授予第三方角色名称、形象或商标的权利。

@@ -193,12 +193,12 @@ async function verifySite(browser, site, width, origin) {
     console.log(
       `  on demand: ${downloaded.size} / ${declared.size} declared font files requested; no unused chunks`,
     );
-    for (const name of ['OFL-marker.txt', 'OFL-wenkai.txt']) {
+    for (const name of ['OFL-marker.txt', 'OFL-wenkai.txt', 'LICENSE', 'THIRD_PARTY_NOTICES.md']) {
       const response = await page.request.get(`${baseURL}notices/${name}`);
       assert(response.ok(), `${site.name}: built notices/${name} must be served.`);
       assert.deepEqual(
         await response.body(),
-        await readFile(resolve(site.notices, name)),
+        await readFile(resolve(name.startsWith('OFL-') ? site.notices : root, name)),
         `${site.name}: ${name} must match its source declaration.`,
       );
     }
@@ -219,7 +219,7 @@ try {
   for (const width of [1440, 390])
     for (const site of sites) await verifySite(browser, site, width, server.origin);
   console.log(
-    'Fonts passed: desktop/mobile rendered webfonts, lazy chunks and both built OFL notices.',
+    'Fonts passed: desktop/mobile rendered webfonts, lazy chunks, project licenses and OFL notices.',
   );
 } finally {
   await browser?.close();
