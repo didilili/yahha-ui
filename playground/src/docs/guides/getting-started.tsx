@@ -187,29 +187,17 @@ const page: DocPage = {
             在本仓库根目录完成 <code>npm ci</code> 后执行：
           </p>
           <CodeBlock language="sh" source={'npm run create:starter'} />
-          <p>
-            命令会在系统临时目录生成独立项目和
-            ZIP，终端会显示实际路径。应用源码包含当前版本的真实安装包；配套的
-            <code>documentation/</code> 保留完整文档和示例网站，供本地查阅。
-          </p>
+          <p>命令生成包含组件安装包与基础示例的独立项目，终端会显示目录路径。</p>
           <p>进入生成的项目目录后执行：</p>
           <CodeBlock language="sh" source={'npm install\nnpm run dev'} />
           <p>
-            首次安装需要网络。打开终端显示的地址，修改手记标题、切换收藏，确认样式和交互正常。
-            <code>src/App.tsx</code> 包含组件用法，<code>src/styles.css</code>{' '}
-            管理页面布局；改完可运行 <code>npm run build</code>。
+            打开终端显示的地址即可试用。组件用法在 <code>src/App.tsx</code>，页面布局在{' '}
+            <code>src/styles.css</code>；完成修改后，运行 <code>npm run build</code> 构建页面。
           </p>
           <p>
-            查 API 或复制其他示例时，在生成项目中运行 <code>npm run docs</code>。
-            这一步无需先安装依赖。部署自己的页面时，上传构建生成的 <code>dist/</code>
-            内容，保留其中的资源文件；<code>documentation/</code> 和 <code>vendor/</code>
-            不作为网页输出上传。
-          </p>
-          <p>
-            需要指定导出位置时，使用{' '}
-            <code>npm run create:starter -- --output /absolute/path/yahha-ui-starter</code>
-            ，选择仓库外的位置。命令不会覆盖已有非空目录或压缩包。生成 ZIP 需要系统提供{' '}
-            <code>zip</code> 命令，导出前会检查；运行收到的项目不需要它。
+            用 <code>--output /absolute/path/yahha-ui-starter</code> 指定仓库外的目录。
+            需要离线文档时加 <code>--with-docs</code>，导出后可运行 <code>npm run docs</code>{' '}
+            查阅；需要压缩包时加 <code>--zip</code>。
           </p>
         </>
       ),
@@ -324,8 +312,8 @@ const page: DocPage = {
             <Link href={repositoryHref} external>
               Yahha UI 仓库
             </Link>
-            。 本地试用项目附有文档副本，运行 <code>npm run docs</code> 即可查阅； GitHub
-            入口需要网络和仓库访问权限。
+            。 导出时加 <code>--with-docs</code> 可附带文档副本，运行 <code>npm run docs</code>{' '}
+            查阅； GitHub 入口需要网络和仓库访问权限。
           </p>
         </>
       ),

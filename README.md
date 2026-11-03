@@ -40,25 +40,20 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 
 ## 导出最小项目
 
-还没有 React 项目时，可以在本仓库安装依赖后，一次导出带有本地组件包的最小项目：
+没有现成项目时，在已获取源码并安装依赖的组件库目录中运行：
 
 ```sh
 npm run create:starter
 ```
 
-命令输出仓库外的项目目录与 `.zip` 路径；需要指定位置时，执行 `npm run create:starter -- --output /absolute/path/yahha-ui-starter`。不会覆盖非空目录或已有压缩包。生成 ZIP 需要系统 `zip`，脚本会先检查；接收和运行导出项目不需要它。工具版本从根 package.json 与 lockfile 读取，导出物保留实际 `.tgz`、版本和 SHA-256 清单。
-
-解压后进入含有 package.json 的目录，运行 `npm install` 与 `npm run dev`，打开终端输出的地址即可试用标题输入与收藏按钮；`npm run build` 完成类型检查和静态构建。首次安装需要网络，标题与收藏只保留在当前页面。已有 React 项目继续按下一节安装组件包即可。
-
-在导出项目中运行 `npm run docs`，无需安装依赖即可打开配套的完整文档、API、示例与博客预览。`documentation/` 是导出时生成的静态快照，包含官网使用的字体、角色与相应声明；最小应用的 `src/` 和组件 `.tgz` 仍不依赖这些资源。自己的页面构建在 `dist/`，部署时只上传它的内容，保留资源文件名，不上传 `vendor/` 或 `documentation/`。
-
-需要现有博客的整套排版和源码时，使用：
+项目生成在组件库旁的 `yahha-ui-starter/`。进入终端输出的项目目录，安装依赖并启动：
 
 ```sh
-npm run create:starter -- --example blog
+npm install
+npm run dev
 ```
 
-生成的独立博客同样使用真实安装包，并附改站、部署和文档说明；原仓库中的 `examples/blog/` 继续共用根工具链。
+默认只生成包含本地组件包的项目目录。完整博客可运行 `npm run create:starter -- --example blog`；离线文档、ZIP 和指定输出位置等选项见[导出说明](CONTRIBUTING.md#导出最小接入项目)。生成项目的 README 提供后续运行与部署方法。
 
 ## 构建与本地安装
 
@@ -104,7 +99,7 @@ export default function App() {
 
 其他示例按文档站的“完整接入”保存原样 `Example.tsx` 与独立 `App.tsx`；有素材清单时，单独下载并保留 `artwork/` 相对路径。完整素材示例按 Vite 8 / TypeScript 7 验证，`?raw`、`?no-inline` 导入需要相应构建工具支持。
 
-安装包只分发组件、类型、样式与包说明。只有 `.tgz` 时可先使用本节的 `App.tsx`，再从顶部组件文档入口查完整 API；本地项目 ZIP 另附可通过 `npm run docs` 打开的完整文档快照。仓库图片和相对文件链接不表示相应资源进入 `.tgz`。
+安装包只分发组件、类型、样式与包说明。只有 `.tgz` 时可先使用本节的 `App.tsx`，再从顶部组件文档入口查完整 API；导出时加 `--with-docs` 可附带完整文档快照，通过 `npm run docs` 阅读。仓库图片和相对文件链接不表示相应资源进入 `.tgz`。
 
 ## 问题反馈
 

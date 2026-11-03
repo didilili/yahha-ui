@@ -15,7 +15,6 @@ import {
   stat,
   writeFile,
 } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -23,7 +22,7 @@ import { promisify } from 'node:util';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const exec = promisify(execFile);
 const usage =
-  '用法：node scripts/create-starter.mjs [--example starter|blog] [--output /absolute/path/project]';
+  '用法：node scripts/create-starter.mjs [--example starter|blog] [--output /absolute/path/project] [--with-docs] [--zip]';
 
 async function exists(path) {
   try {
@@ -68,27 +67,25 @@ async function requireZip() {
   try {
     await exec('zip', ['-v']);
   } catch {
-    throw new Error(
-      '导出项目需要系统 zip 命令。请先安装 zip，再重新运行；接收并运行已导出的项目不需要 zip。',
-    );
+    throw new Error('生成压缩包需要系统 zip 命令。请先安装 zip，或去掉 --zip 直接生成项目目录。');
   }
 }
 
 function optionsFrom(args) {
-  const options = { example: 'starter', output: undefined };
+  const options = { example: 'starter', output: undefined, withDocs: false, zip: false };
   const seen = new Set();
-  for (let index = 0; index < args.length; index += 2) {
+  for (let index = 0; index < args.length; index++) {
     const key = args[index];
-    const value = args[index + 1];
-    if (
-      !['--example', '--output'].includes(key) ||
-      seen.has(key) ||
-      !value ||
-      value.startsWith('--')
-    )
+    if (!['--example', '--output', '--with-docs', '--zip'].includes(key) || seen.has(key))
       throw new Error(usage);
     seen.add(key);
-    options[key.slice(2)] = value;
+    if (key === '--with-docs') options.withDocs = true;
+    else if (key === '--zip') options.zip = true;
+    else {
+      const value = args[++index];
+      if (!value || value.startsWith('--')) throw new Error(usage);
+      options[key.slice(2)] = value;
+    }
   }
   if (!['starter', 'blog'].includes(options.example)) throw new Error(usage);
   return options;
@@ -141,13 +138,12 @@ async function ensureLibraryBuild() {
 
 async function main() {
   const options = optionsFrom(process.argv.slice(2));
-  await requireZip();
+  if (options.zip) await requireZip();
   const name = options.example === 'blog' ? 'yahha-ui-blog' : 'yahha-ui-starter';
-  const output = options.output
-    ? resolve(options.output)
-    : join(await mkdtemp(join(tmpdir(), `${name}-`)), name);
+  const output = options.output ? resolve(options.output) : join(dirname(root), name);
   await assertEmpty(output);
-  if (await exists(`${output}.zip`)) throw new Error(`压缩包已存在，拒绝覆盖：${output}.zip`);
+  if (options.zip && (await exists(`${output}.zip`)))
+    throw new Error(`压缩包已存在，拒绝覆盖：${output}.zip`);
   let ancestor = dirname(output);
   let suffix = basename(output);
   while (!(await exists(ancestor))) {
@@ -200,11 +196,6 @@ async function main() {
         recursive: true,
         filter: (path) => !['dist', 'node_modules'].includes(basename(path)),
       });
-      await mkdir(join(project, 'scripts'));
-      await copyFile(
-        join(root, 'scripts/starter-template/scripts/serve-documentation.mjs'),
-        join(project, 'scripts/serve-documentation.mjs'),
-      );
       await copyFile(
         join(root, 'scripts/starter-template/.gitignore'),
         join(project, '.gitignore'),
@@ -215,12 +206,22 @@ async function main() {
         join(project, 'src/assets/README.md'),
       );
     } else {
-      await cp(join(root, 'scripts/starter-template'), project, { recursive: true });
+      await cp(join(root, 'scripts/starter-template'), project, {
+        recursive: true,
+        filter: (path) => basename(path) !== 'scripts',
+      });
     }
     for (const path of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
       if (await exists(join(root, path))) await copyFile(join(root, path), join(project, path));
     }
-    await buildDocumentationSnapshot(join(project, 'documentation'));
+    if (options.withDocs) {
+      await mkdir(join(project, 'scripts'), { recursive: true });
+      await copyFile(
+        join(root, 'scripts/starter-template/scripts/serve-documentation.mjs'),
+        join(project, 'scripts/serve-documentation.mjs'),
+      );
+      await buildDocumentationSnapshot(join(project, 'documentation'));
+    }
     const vendor = join(project, 'vendor');
     await mkdir(vendor);
     const packedOutput = await npm([
@@ -244,11 +245,15 @@ async function main() {
     const manifest = {
       createdAt: new Date().toISOString(),
       example: options.example,
-      documentation: {
-        directory: 'documentation',
-        entry: '#/components',
-        blog: 'documentation/blog/',
-      },
+      ...(options.withDocs
+        ? {
+            documentation: {
+              directory: 'documentation',
+              entry: '#/components',
+              blog: 'documentation/blog/',
+            },
+          }
+        : {}),
       library: {
         name: pkg.name,
         version: pkg.version,
@@ -276,7 +281,7 @@ async function main() {
         typecheck: 'tsc --noEmit',
         build: 'npm run typecheck && vite build',
         preview: 'vite preview --host 127.0.0.1',
-        docs: 'node scripts/serve-documentation.mjs',
+        ...(options.withDocs ? { docs: 'node scripts/serve-documentation.mjs' } : {}),
       },
       dependencies: { ...dependencies, [pkg.name]: `file:./${tarball}` },
       devDependencies,
@@ -286,18 +291,22 @@ async function main() {
       join(project, 'starter-manifest.json'),
       `${JSON.stringify(manifest, null, 2)}\n`,
     );
-    const readme = await readFile(join(project, 'README.md'), 'utf8');
+    let readme = await readFile(join(project, 'README.md'), 'utf8');
+    if (options.withDocs)
+      readme +=
+        '\n## 配套文档\n\n运行 `npm run docs`，打开终端输出的地址阅读组件文档和博客预览，无需先安装依赖。\n\n`documentation/` 是导出时的静态快照，`npm run build` 只更新自己的页面。需要新版组件与文档时，从源仓库重新导出，并保留自己修改的内容。字体声明位于 `documentation/notices/` 和 `documentation/blog/notices/`，部署自己的站点只使用 `dist/`。\n';
     await writeFile(
       join(project, 'README.md'),
       readme.replaceAll('{{VERSION}}', pkg.version).replaceAll('{{NODE}}', pkg.engines.node),
     );
     const archive = join(temporary, 'starter.zip');
-    await run('zip', ['-q', '-r', archive, `./${basename(project)}`], projectParent);
+    if (options.zip)
+      await run('zip', ['-q', '-r', archive, `./${basename(project)}`], projectParent);
     await assertEmpty(output);
-    await copyFile(archive, `${output}.zip`, constants.COPYFILE_EXCL);
+    if (options.zip) await copyFile(archive, `${output}.zip`, constants.COPYFILE_EXCL);
     await rename(project, output);
     console.log(
-      `导出项目：${output}\n压缩包：${output}.zip\n组件版本：${pkg.version}\n运行 npm run docs 可直接阅读配套文档；运行项目先 npm install，再 npm run dev。首次安装需要网络。`,
+      `导出项目：${output}\n${options.zip ? `压缩包：${output}.zip\n` : ''}组件版本：${pkg.version}\n\n进入项目目录后运行：\n  npm install\n  npm run dev${options.withDocs ? '\n\n配套文档：npm run docs' : ''}`,
     );
   } finally {
     await rm(temporary, { recursive: true, force: true });

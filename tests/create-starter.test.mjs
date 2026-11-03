@@ -1,6 +1,16 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import {
+  cp,
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  realpath,
+  rm,
+  symlink,
+  writeFile,
+} from 'node:fs/promises';
 import { once } from 'node:events';
 import { get } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -15,7 +25,7 @@ const script = join(root, 'scripts/create-starter.mjs');
 const exec = promisify(execFile);
 
 async function fixture(t) {
-  const directory = await mkdtemp(join(tmpdir(), 'yahha-starter-test-'));
+  const directory = await realpath(await mkdtemp(join(tmpdir(), 'yahha-starter-test-')));
   t.after(() => rm(directory, { recursive: true, force: true }));
   return directory;
 }
@@ -35,7 +45,7 @@ test('export refuses an existing zip instead of replacing it', async (t) => {
   const output = join(directory, 'starter');
   await mkdir(output);
   await writeFile(`${output}.zip`, 'keep my archive');
-  await assert.rejects(exec(process.execPath, [script, '--output', output]), (error) =>
+  await assert.rejects(exec(process.execPath, [script, '--zip', '--output', output]), (error) =>
     /压缩包已存在/.test(error.stderr),
   );
   assert.equal(await readFile(`${output}.zip`, 'utf8'), 'keep my archive');
@@ -43,7 +53,15 @@ test('export refuses an existing zip instead of replacing it', async (t) => {
 });
 
 test('export rejects missing values, unknown options and unknown examples', async () => {
-  for (const args of [['--output'], ['--unknown'], ['--example'], ['--example', 'missing']]) {
+  for (const args of [
+    ['--output'],
+    ['--unknown'],
+    ['--example'],
+    ['--example', 'missing'],
+    ['--zip', '--zip'],
+    ['--with-docs', '--with-docs'],
+    ['--zip', 'true'],
+  ]) {
     await assert.rejects(exec(process.execPath, [script, ...args]), (error) =>
       /用法/.test(error.stderr),
     );
@@ -54,7 +72,7 @@ test('missing zip is explained before creating output or building anything', asy
   const directory = await fixture(t);
   const output = join(directory, 'project');
   await assert.rejects(
-    exec(process.execPath, [script, '--output', output], {
+    exec(process.execPath, [script, '--output', output, '--zip'], {
       env: { ...process.env, PATH: directory },
     }),
     (error) => /需要系统 zip 命令/.test(error.stderr),
@@ -153,9 +171,10 @@ async function exportFixture(t) {
   const npmEntry = join(directory, 'fake-npm.mjs');
   await writeFile(
     npmEntry,
-    `import { mkdir, writeFile } from 'node:fs/promises';
+    `import { appendFile, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 const args = process.argv.slice(2);
+await appendFile('npm-calls.jsonl', JSON.stringify(args) + '\\n');
 if (args[0] === 'run' && ['check:docs', 'check:fonts', 'build:lib'].includes(args[1])) {
   // The fixture already contains its small library outputs.
 } else if (args[0] === 'exec' && args.includes('--outDir')) {
@@ -179,13 +198,19 @@ if (args[0] === 'run' && ['check:docs', 'check:fonts', 'build:lib'].includes(arg
   return {
     repository,
     artwork,
-    async exportProject(name, example = 'starter') {
-      const output = join(directory, name);
+    async exportProject(name, example = 'starter', args = [], environment = {}) {
+      const output = join(directory, name ?? `yahha-ui-${example}`);
       await exec(
         process.execPath,
-        [join(repository, 'scripts/create-starter.mjs'), '--output', output, '--example', example],
+        [
+          join(repository, 'scripts/create-starter.mjs'),
+          ...(name ? ['--output', output] : []),
+          '--example',
+          example,
+          ...args,
+        ],
         {
-          env: { ...process.env, npm_execpath: npmEntry },
+          env: { ...process.env, npm_execpath: npmEntry, ...environment },
           timeout: 15_000,
         },
       );
@@ -194,9 +219,49 @@ if (args[0] === 'run' && ['check:docs', 'check:fonts', 'build:lib'].includes(arg
   };
 }
 
+test('default exports run without zip or website builds and preserve an unrelated archive', async (t) => {
+  const { repository, exportProject } = await exportFixture(t);
+  for (const example of ['starter', 'blog']) {
+    const output = join(dirname(repository), `yahha-ui-${example}`);
+    await writeFile(`${output}.zip`, 'existing archive');
+    assert.equal(await exportProject(undefined, example, [], { PATH: repository }), output);
+    const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
+    assert.ok(pkg.scripts.dev);
+    assert.ok(pkg.scripts.build);
+    assert.equal(pkg.scripts.docs, undefined);
+    for (const path of ['documentation', 'scripts/serve-documentation.mjs'])
+      await assert.rejects(readFile(join(output, path)), { code: 'ENOENT' });
+    assert.equal(await readFile(`${output}.zip`, 'utf8'), 'existing archive');
+    await assertLocalLinksExist(
+      join(output, 'README.md'),
+      await readFile(join(output, 'README.md'), 'utf8'),
+    );
+  }
+  const calls = (await readFile(join(repository, 'npm-calls.jsonl'), 'utf8'))
+    .trim()
+    .split('\n')
+    .map((line) => JSON.parse(line));
+  assert.ok(calls.every((args) => args[0] === 'pack' || args[1] === 'build:lib'));
+});
+
+test('offline documentation is opt-in without requiring a zip archive', async (t) => {
+  const { repository, exportProject } = await exportFixture(t);
+  for (const example of ['starter', 'blog']) {
+    const output = await exportProject(`docs-${example}`, example, ['--with-docs'], {
+      PATH: repository,
+    });
+    const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
+    assert.equal(pkg.scripts.docs, 'node scripts/serve-documentation.mjs');
+    assert.match(await readFile(join(output, 'README.md'), 'utf8'), /npm run docs/);
+    assert.match(await readFile(join(output, 'documentation/blog/index.html'), 'utf8'), /Bundled/);
+    await readFile(join(output, 'scripts/serve-documentation.mjs'));
+    await assert.rejects(readFile(`${output}.zip`), { code: 'ENOENT' });
+  }
+});
+
 test('export preserves project and archive contents when the output directory is named starter.zip', async (t) => {
   const { exportProject } = await exportFixture(t);
-  const output = await exportProject('starter.zip');
+  const output = await exportProject('starter.zip', 'starter', ['--zip', '--with-docs']);
   const manifest = JSON.parse(await readFile(join(output, 'starter-manifest.json'), 'utf8'));
   assert.equal(manifest.library.tarball, 'vendor/yahha-ui-0.0.1.tgz');
   assert.equal(
@@ -221,7 +286,7 @@ test('exports still work when optional project notice files are absent', async (
   const { repository, exportProject } = await exportFixture(t);
   for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) await rm(join(repository, name));
   for (const example of ['starter', 'blog']) {
-    const output = await exportProject(example, example);
+    const output = await exportProject(example, example, ['--zip']);
     const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
     assert.ok(pkg.scripts.build);
     assert.equal(
@@ -242,7 +307,7 @@ async function assertLocalLinksExist(file, markdown) {
 
 test('blog export explains editable asset snapshots using only available project commands and links', async (t) => {
   const { artwork, exportProject } = await exportFixture(t);
-  const output = await exportProject('my-blog', 'blog');
+  const output = await exportProject('my-blog', 'blog', ['--zip']);
   const assetsPath = join(output, 'src/assets');
   const notes = await readFile(join(assetsPath, 'README.md'), 'utf8');
   const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));

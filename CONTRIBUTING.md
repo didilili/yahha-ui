@@ -57,9 +57,14 @@ Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Sw
 
 ## 导出最小接入项目
 
-运行 `npm run create:starter`，或用 `npm run create:starter -- --output /absolute/path/yahha-ui-starter` 指定仓库外的输出目录；`--example blog` 导出已有完整博客。脚本先检查系统 zip，再拒绝覆盖非空目录和已有 `.zip`；产物缺失或早于源码时先构建组件库。两种项目都包含相对路径 `vendor/` 真实安装包、版本／SHA-256 清单及 `documentation/` 静态文档与博客快照。导出项目的 `npm run docs` 只用 Node 即可阅读该快照；自己的构建仅更新自己的 `dist/`。React、Vite、TypeScript 等精确版本来自根 package.json 对应的 lockfile 记录，完整博客另包含已使用的 lucide-react。
+运行 `npm run create:starter` 导出最小项目目录，`--example blog` 导出完整博客；`--output /absolute/path/yahha-ui-starter` 指定仓库外的位置。两个可选参数可组合使用：
 
-模板不含源码 alias、角色、站点字体或页面框架；没有新增公开组件。修改模板后，在仓库外解压生成物，真实执行 `npm install`、`npm run build`，再检查标题输入、收藏与窄屏布局。修改导出脚本后执行 `node --test tests/create-starter.test.mjs`，验证原有文件不会被覆盖。
+- `--with-docs`：检查文档和字体，构建并附带 `documentation/` 静态文档与博客预览，同时提供只需 Node 即可运行的 `npm run docs`。应用构建只更新自己的 `dist/`，不更新快照。
+- `--zip`：额外生成同名 `.zip`，此时才需要系统 zip。生成目录可直接运行；收到压缩包的使用者先解压。
+
+导出保留相对路径 `vendor/` 中的真实 `.tgz` 与 `starter-manifest.json` 版本／SHA-256 清单。React、Vite、TypeScript 等精确版本来自根 package.json 对应的 lockfile 记录，完整博客另包含 lucide-react；产物缺失或早于源码时先构建组件库。脚本拒绝覆盖非空目录，启用 `--zip` 时也拒绝覆盖已有同名压缩包。
+
+最小模板不含源码 alias、角色或站点字体。修改模板后，在仓库外生成项目，执行 `npm install`、`npm run build`，再检查标题输入、收藏与窄屏布局。修改导出脚本后执行 `node --test tests/create-starter.test.mjs`，覆盖默认目录导出、可选文档与压缩，以及原有文件保护。
 
 ## 验证
 

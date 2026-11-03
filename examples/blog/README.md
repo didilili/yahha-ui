@@ -50,7 +50,17 @@ npm run preview:blog
 - **配图**：`Post.image` 当前使用 `reading`、`rest`、`lounge` 三个资源键。替换原图可修改 `assets.ts` 的对应导入，并核对 [ArticlePage.tsx](src/pages/ArticlePage.tsx) 的 `imageDescriptions`。增加资源键时同步文章类型、资源映射和替代文字，不把图片 URL 直接写进 `Post.image`。
 - **导航与页脚补充文字**：现有三个导航和演示范围说明在 [App.tsx](src/App.tsx)。调整入口时使用现有 `SiteLink`，保留相应路由和可访问名称。
 
-完成后运行 `npm run build:blog`，再按下面的真实安装包验收检查；收藏仍保存在当前浏览器，修改这些文件不会接入后台。
+完成后运行 `npm run build:blog`，再用 `npm run preview:blog` 检查自己的页面。收藏仍保存在当前浏览器，修改这些文件不会接入后台。
+
+## 导出独立博客
+
+在仓库根目录运行：
+
+```sh
+npm run create:starter -- --example blog
+```
+
+进入终端输出的项目目录，运行 `npm install` 与 `npm run dev`。导出项目自带组件安装包、源码和改站说明，可独立运行。需要随项目阅读完整组件文档时加 `--with-docs`，需要压缩包时加 `--zip`；两项均为可选。
 
 ## 目录
 
@@ -79,7 +89,7 @@ npm run test:blog
 
 本地开发通过仓库包的公开 `exports` 加载 `dist/`，Vite 与 TypeScript 没有将 `yahha-ui` 指向 `src/` 的别名。验收脚本则把**同一份网站源码**复制到临时使用方，实际安装本地 `.tgz`，检查类型、构建和桌面/手机阅读流程；组件库打包白名单不会包含网站。
 
-示例当前使用已验证的 React 19 浏览器环境。它没有扩展 React 18 或 SSR 的兼容承诺，也没有新增公开 UI 组件。
+示例当前使用已验证的 React 19 浏览器环境，React 18 与 SSR 尚未验证。
 
 ## 按需复用与动效
 
