@@ -33,8 +33,8 @@ interface DocSection {
   api?: { name: string; rows: ApiRow[] }[];
   toc?: boolean;
   tocTitle?: string;
-  /** Keep longer application examples available after the reference material. */
-  disclosure?: boolean;
+  /** Collapse optional guidance; a string overrides the disclosure label. */
+  disclosure?: boolean | string;
 }
 
 export type ComponentGroup =

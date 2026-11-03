@@ -107,11 +107,18 @@ function focusSection(id: string) {
   target.scrollIntoView();
 }
 
-function SectionBody({ disclosure, children }: { disclosure?: boolean; children: ReactNode }) {
+function SectionBody({
+  disclosure,
+  children,
+}: {
+  disclosure?: boolean | string;
+  children: ReactNode;
+}) {
   return disclosure ? (
     <details className="doc-disclosure">
       <summary>
-        查看组合示例与代码 <ChevronRight size={16} aria-hidden="true" />
+        {typeof disclosure === 'string' ? disclosure : '查看组合示例与代码'}
+        <ChevronRight size={16} aria-hidden="true" />
       </summary>
       <div className="doc-disclosure-content">{children}</div>
     </details>
