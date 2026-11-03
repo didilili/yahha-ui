@@ -22,6 +22,7 @@ import welcomeMotionArtwork from '../examples/scenes/artwork/friends-welcome-mot
 import { CodeBlock } from './CodeBlock';
 import type { DocPage } from './types';
 import { guideMetadata } from './guide-catalog';
+import { repositoryHref } from '../site/site-links';
 import markerFontNotice from '../assets/OFL-marker.txt?url';
 import wenkaiFontNotice from '../assets/OFL-wenkai.txt?url';
 import styles from './artwork-guide.module.css';
@@ -231,7 +232,7 @@ export const artworkGuide: DocPage = {
             素材按需下载，不随组件包安装。
           </p>
           <p>
-            部分场景包含角色展示素材，其再发布与商业使用许可尚未核验。具体来源和分发范围见{' '}
+            素材的来源与分发位置见{' '}
             <Link href="#/guides/artwork?section=artwork-sources">来源与分发范围</Link>。
           </p>
           <ArtworkCatalog />
@@ -243,25 +244,28 @@ export const artworkGuide: DocPage = {
       title: '来源与分发范围',
       content: (
         <>
-          <p>项目自有内容采用 MIT；第三方字体与角色相关权利保留各自范围。</p>
+          <p>
+            项目自有内容采用 MIT，第三方内容见{' '}
+            <Link href={`${repositoryHref}/blob/main/THIRD_PARTY_NOTICES.md`} external>
+              第三方说明
+            </Link>
+            。
+          </p>
           <ul>
             <li>
               <strong>组件安装包：</strong>包含组件实现、类型与样式，以及包信息和 README。 独立
-              SVG、PNG、字体、文档站、博客源码和截图不随组件包安装。项目自有内容采用
-              MIT，安装包附有许可证与第三方说明。
+              SVG、PNG、字体、文档站、博客源码和截图不随组件包安装。
             </li>
             <li>
               <strong>SVG 道具与场景：</strong>
               书签、热茶和状态图案由本项目绘制；找路与欢迎场景还组合了既有角色模型。
-              角色展示素材的再发布与商业使用许可尚未核验。
             </li>
             <li>
               <strong>PNG 插图：</strong>博客配图保留既有素材记录；空态示例的图片另有生成说明。
             </li>
             <li>
               <strong>站点字体：</strong>文档站与博客使用 LXGW Marker Gothic Regular 和 LXGW WenKai
-              Regular，组件本身继承应用字体。现有 SIL Open Font License 1.1 声明分别适用于这些字体，
-              不覆盖组件代码或角色图像。可阅读{' '}
+              Regular，组件本身继承应用字体。现有 SIL Open Font License 1.1 声明见{' '}
               <Link href={markerFontNotice} target="_blank" rel="noopener noreferrer">
                 Marker 字体声明（新标签页）
               </Link>{' '}

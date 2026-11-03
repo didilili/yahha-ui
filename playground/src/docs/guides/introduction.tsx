@@ -93,9 +93,10 @@ const page: DocPage = {
             当前版本为 0.0.1，尚未发布到 npm。通过本地打包安装，在 React / React DOM ^19.3.1
             的浏览器项目中验证；React 18 与服务端渲染兼容性尚未验证。
           </p>
-          <p>项目自有代码、文档、示例和原创绘图采用 MIT 许可证。</p>
-          <p>角色插画用于展示，不包含在组件包内；MIT 不授予第三方角色形象、名称或商标的权利。</p>
-          <p>文档站字体保留各自的 OFL 声明，仅适用于相应字体，不覆盖组件代码或角色插画。</p>
+          <p>
+            项目自有内容采用 MIT，第三方内容见{' '}
+            <Link href="#/guides/artwork?section=artwork-sources">来源与分发范围</Link>。
+          </p>
           <p>
             文档结构参考{' '}
             <Link href="https://ant.design/components/button-cn/" target="_blank" rel="noreferrer">

@@ -50,4 +50,4 @@ npm run preview
 
 本项目按当前 React 19 浏览器环境准备，React 18、SSR 与其他构建工具尚未验证。示例页面和组件包不含角色图片或站点字体，也没有后台服务；配套文档快照包含官网与示例博客使用的展示素材。
 
-项目自有代码、文档和素材按 [MIT 许可证](LICENSE)提供；第三方字体与角色权利范围见[第三方说明](THIRD_PARTY_NOTICES.md)。字体保留各自的 OFL 许可，声明位于 `documentation/notices/` 与 `documentation/blog/notices/`。MIT 不授予第三方角色名称、形象或商标的权利。
+项目自有内容采用 [MIT 许可证](LICENSE)，第三方内容见[第三方说明](THIRD_PARTY_NOTICES.md)。配套文档的字体 OFL 声明位于 `documentation/notices/` 与 `documentation/blog/notices/`。

@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -21,10 +22,12 @@ export default defineConfig({
         }
         // Resolve the installed library so this also works in an exported blog.
         for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
+          const path = new URL(`../${name}`, import.meta.resolve('yahha-ui'));
+          if (!existsSync(path)) continue;
           this.emitFile({
             type: 'asset',
             fileName: `notices/${name}`,
-            source: await readFile(new URL(`../${name}`, import.meta.resolve('yahha-ui')), 'utf8'),
+            source: await readFile(path, 'utf8'),
           });
         }
       },

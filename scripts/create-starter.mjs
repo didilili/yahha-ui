@@ -217,8 +217,9 @@ async function main() {
     } else {
       await cp(join(root, 'scripts/starter-template'), project, { recursive: true });
     }
-    for (const path of ['LICENSE', 'THIRD_PARTY_NOTICES.md'])
-      await copyFile(join(root, path), join(project, path));
+    for (const path of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
+      if (await exists(join(root, path))) await copyFile(join(root, path), join(project, path));
+    }
     await buildDocumentationSnapshot(join(project, 'documentation'));
     const vendor = join(project, 'vendor');
     await mkdir(vendor);

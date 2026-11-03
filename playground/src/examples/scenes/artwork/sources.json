@@ -2,7 +2,8 @@
   "created": "2026-10-24",
   "tool": "Codex built-in image_gen",
   "type": "Non-official fan illustration generated from the project concept sheet",
-  "rights_status": "MIT covers only rights held by project contributors. Third-party character redistribution and commercial rights have not been verified; not included in the default library package.",
+  "rights_status": "Project contributions are MIT; see ../../../../../THIRD_PARTY_NOTICES.md.",
+  "distribution": "Optional playground examples; not included in the default library package.",
   "assets": [
     {
       "file": "empty.png",

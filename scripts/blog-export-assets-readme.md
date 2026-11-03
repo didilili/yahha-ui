@@ -16,8 +16,8 @@
 
 ## 许可与字体声明
 
-项目自有代码、文档和素材按 [MIT 许可证](../../LICENSE)提供。第三方字体与角色权利范围见[第三方说明](../../THIRD_PARTY_NOTICES.md)，不因项目采用 MIT 而改变。
+项目自有内容采用 [MIT 许可证](../../LICENSE)，第三方内容见[第三方说明](../../THIRD_PARTY_NOTICES.md)。
 
 两种字体分别保留 [Marker 的 OFL 声明](OFL-marker.txt)和 [WenKai 的 OFL 声明](OFL-wenkai.txt)。博客构建自动将声明写入 `dist/notices/OFL-marker.txt` 与 `dist/notices/OFL-wenkai.txt`；部署时保留这些文件。配套文档的字体声明位于 `documentation/notices/`，其博客预览另保留在 `documentation/blog/notices/`。
 
-现有角色展示为非官方同人素材；MIT 仅覆盖项目自有内容，不授予第三方角色名称、形象或商标的权利。角色相关使用仍需遵守权利方要求。
+现有角色展示为非官方同人素材。

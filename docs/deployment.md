@@ -100,4 +100,4 @@ npm run test:blog
 
 部署文件取自构建目录。不要把仓库根目录整体当作网站输出；`src/`、`node_modules/`、本地 `.tgz` 和测试均不属于这两份网站的部署内容。
 
-项目自有内容采用 [MIT](../LICENSE)，素材来源与产物范围见[素材与分发说明](assets-and-distribution.md)。字体继续适用 OFL，角色相关的第三方权利见[第三方说明](../THIRD_PARTY_NOTICES.md)。
+项目自有内容采用 [MIT](../LICENSE)，第三方内容见[第三方说明](../THIRD_PARTY_NOTICES.md)。素材来源与产物范围见[素材与分发说明](assets-and-distribution.md)。

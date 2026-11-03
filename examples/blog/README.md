@@ -91,4 +91,4 @@ npm run test:blog
 
 ## 素材与使用范围
 
-示例代码和项目自有内容采用 [MIT](../../LICENSE)。角色、插图与字体来源见[素材说明](src/assets/README.md)；字体继续保留 OFL，第三方角色形象、名称和商标不在 MIT 授权范围内，详见[第三方说明](../../THIRD_PARTY_NOTICES.md)。
+项目自有内容采用 [MIT](../../LICENSE)，第三方内容见[第三方说明](../../THIRD_PARTY_NOTICES.md)。角色、插图与字体来源见[素材说明](src/assets/README.md)。

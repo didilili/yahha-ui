@@ -150,9 +150,9 @@ npm run build:blog
 
 ## 素材与范围
 
-项目自有代码、文档、示例、品牌图形与原创绘图采用 [MIT 许可证](LICENSE)。第三方字体继续适用 OFL；角色形象、名称和商标等第三方权利不在本项目 MIT 授权范围内，详见[第三方说明](THIRD_PARTY_NOTICES.md)。
+项目自有内容采用 [MIT 许可证](LICENSE)，第三方内容见[第三方说明](THIRD_PARTY_NOTICES.md)。
 
-[素材与分发范围](docs/assets-and-distribution.md)汇总实际目录、原始记录、派生关系与当前许可状态。[图标与插画](playground/src/examples/scenes/artwork/little-days/README.md)说明静态、动效及欢迎控制器的使用区别。
+[素材与分发范围](docs/assets-and-distribution.md)汇总实际目录、原始记录、派生关系与分发位置。[图标与插画](playground/src/examples/scenes/artwork/little-days/README.md)说明静态、动效及欢迎控制器的使用区别。
 
 ## 仓库目录
 

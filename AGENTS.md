@@ -41,7 +41,7 @@
 - 欢迎场景由 `scripts/build-friends-welcome.mjs` 从既有 v3 派生，仅分离前爪动作，脸、身体比例和原模型保持。`FriendsWelcome.tsx` 使用原生 SVG 与真实暂停 / 继续，博客版本由同步脚本复制且只迁移资源导入路径，不另维护控制器。离屏、后台和系统减少动效时停止；重播只重建前爪，不重置环境时间线。
 - `playground/src/examples/design/` 展示默认实现，禁止通过 style、className、classNames 或内嵌 CSS 改写控件外观与几何。使用方的公开定制能力保留；专门的定制示例应说明范围，不能混进默认基准。
 - 保留导航链接、表格、pre / code 等合理的原生语义，不为组件复用把页面导航改为 Tabs 或把链接改为按钮。Portal 使用统一主题上下文，不复制带布局作用的页面 className。
-- 保留字体与素材说明，遵守 [MIT 许可证](LICENSE)与[第三方内容与权利说明](THIRD_PARTY_NOTICES.md)的范围，不将第三方角色权利或字体 OFL 纳入 MIT；不虚构许可或未经验证的 React / SSR 兼容承诺。
+- 字体与素材许可统一见[第三方内容说明](THIRD_PARTY_NOTICES.md)；不虚构许可或未经验证的 React / SSR 兼容承诺。
 
 ## 验证
 

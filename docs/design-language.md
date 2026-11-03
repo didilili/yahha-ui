@@ -103,7 +103,7 @@ ReadingExample 的外层阅读栏采用 68ch 上限，手机随容器自然收�
 
 场景素材集中在 `playground/src/examples/scenes/artwork/`：小日常 SVG 提供加载、成功、失败、找路与欢迎等图案；`empty.png` 用于空态示例；`friends-preview/` 保存人物造型源、群像和探头 SVG。示例按需引用，素材不进入 `src/` 或默认组件安装包。完整接入按清单单独提供 SVG 或 PNG，保留源码中的 `./artwork/` 相对引用。[素材来源说明](../playground/src/examples/scenes/artwork/README.md)、`sources.json` 与 [SVG 绘制说明](../playground/src/examples/scenes/artwork/friends-preview/README.md)分别记录来源和维护方式。字体与素材都不构成使用基础组件的前提。
 
-本页描述 Yahha UI 自身的视觉与交互规则。贡献者拥有权利的代码、文档、示例与原创绘图按 [MIT 许可证](../LICENSE)提供；字体继续适用各自的 OFL，第三方角色形象、名称与商标不包含在 MIT 授权中。来源、派生关系与分发边界见[素材与分发范围](assets-and-distribution.md)及[第三方内容与权利说明](../THIRD_PARTY_NOTICES.md)。角色素材的再发布与商业使用权限尚未核验。
+本页描述 Yahha UI 自身的视觉与交互规则。项目自有内容采用 [MIT 许可证](../LICENSE)，第三方内容见[第三方说明](../THIRD_PARTY_NOTICES.md)。来源、派生关系与分发位置见[素材与分发范围](assets-and-distribution.md)。
 
 ## 逐组件职责
 

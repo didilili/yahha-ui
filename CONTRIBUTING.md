@@ -59,7 +59,7 @@ Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Sw
 
 运行 `npm run create:starter`，或用 `npm run create:starter -- --output /absolute/path/yahha-ui-starter` 指定仓库外的输出目录；`--example blog` 导出已有完整博客。脚本先检查系统 zip，再拒绝覆盖非空目录和已有 `.zip`；产物缺失或早于源码时先构建组件库。两种项目都包含相对路径 `vendor/` 真实安装包、版本／SHA-256 清单及 `documentation/` 静态文档与博客快照。导出项目的 `npm run docs` 只用 Node 即可阅读该快照；自己的构建仅更新自己的 `dist/`。React、Vite、TypeScript 等精确版本来自根 package.json 对应的 lockfile 记录，完整博客另包含已使用的 lucide-react。
 
-模板不含源码 alias、角色、站点字体或页面框架；没有新增公开组件。修改模板后，在仓库外解压生成物，真实执行 `npm install`、`npm run build`，再检查标题输入、收藏与窄屏布局。修改导出脚本后执行 `node --test tests/create-starter.test.mjs`，验证原有文件不会被覆盖；本地导出不代表发布或许可变更。
+模板不含源码 alias、角色、站点字体或页面框架；没有新增公开组件。修改模板后，在仓库外解压生成物，真实执行 `npm install`、`npm run build`，再检查标题输入、收藏与窄屏布局。修改导出脚本后执行 `node --test tests/create-starter.test.mjs`，验证原有文件不会被覆盖。
 
 ## 验证
 
@@ -100,9 +100,9 @@ GitHub Actions 对 pull request 与 `main` push 执行完整检查。本地 Husk
 
 ## 素材与许可
 
-项目自有内容采用 [MIT](LICENSE)，贡献时保留现有版权与许可声明。第三方依赖、OFL 字体和角色相关权利见[第三方说明](THIRD_PARTY_NOTICES.md)，不将仓库的 MIT 声明用作第三方授权证明。当前包保持 `private: true`，通过本地包试用；公开源码与 npm 发布分别处理。React 19 浏览器项目为当前验证范围，不扩写未经验证的兼容承诺。
+项目自有内容采用 [MIT](LICENSE)，第三方内容见[第三方说明](THIRD_PARTY_NOTICES.md)。当前包保持 `private: true`，通过本地包试用；公开源码与 npm 发布分别处理。React 19 浏览器项目为当前验证范围，不扩写未经验证的兼容承诺。
 
-状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`。MIT 仅适用于贡献者能够授权的部分；第三方角色权限仍须另行确认。修改场景素材时同步来源记录与完整接入下载文件。
+状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`。修改场景素材时同步来源记录与完整接入下载文件。
 
 静态文档站与博客的输出、自动携带的字体声明和本地预览见[部署说明](docs/deployment.md)；代码、字体与素材的实际分发范围见[素材清单](docs/assets-and-distribution.md)。部署时保留构建中使用字体的现有声明，不把整个源码仓库作为静态站点根目录。
 

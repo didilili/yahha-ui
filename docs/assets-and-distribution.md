@@ -1,12 +1,12 @@
 # 素材与分发范围
 
-本文分别记录组件代码、角色展示素材、生活道具、字体与页面截图的来源和分发位置。包名为 `yahha-ui`，当前版本 `0.0.1`，仍为本地试用包。贡献者拥有权利的代码、文档、示例和原创绘图采用 [MIT](../LICENSE)；字体和角色相关的第三方内容与权利保留各自范围，见[第三方说明](../THIRD_PARTY_NOTICES.md)。
+本文分别记录组件代码、角色展示素材、生活道具、字体与页面截图的来源和分发位置。包名为 `yahha-ui`，当前版本 `0.0.1`，仍为本地试用包。项目自有内容采用 [MIT](../LICENSE)，第三方内容见[第三方说明](../THIRD_PARTY_NOTICES.md)。
 
 ## 组件代码与安装包
 
 - 源码位于 `src/`，公共入口为 `src/index.ts`。构建生成 `dist/index.js`、类型声明与 `dist/style.css`；按钮的三墨点及代码内基础图形随组件实现构建。
 - [package.json](../package.json) 的分发白名单为 `dist/`。本地 `.tgz` 另附包元信息、根 README、`LICENSE` 与 `THIRD_PARTY_NOTICES.md`，不包含文档站、博客源码、独立角色 SVG、PNG、字体或截图目录。
-- React / React DOM 由使用方提供，`@base-ui/react` 是运行时依赖。各依赖保留各自的版权与许可声明；项目的 MIT 许可不替代依赖自身的条款。
+- React / React DOM 由使用方提供，`@base-ui/react` 是运行时依赖。
 
 源码仓库 README 中的相对图片和文档链接供仓库阅读，不表示这些文件进入安装包。代码接入见[开始使用与本地安装](../README.md)。
 
@@ -17,8 +17,6 @@
 - **朋友场景与人物模型**：原稿及当前场景位于 `playground/src/examples/scenes/artwork/friends-preview/`。完整造型源为 `source/characters.svg`，生成群像、探头图与九张人物样张；生成成品只保留实际引用的定义及其传递依赖。当前素材、用途与生成方式见[朋友 SVG 说明](../playground/src/examples/scenes/artwork/friends-preview/README.md)。这些素材为非官方绘制。
 - **小日常道具**：原稿位于 `playground/src/examples/scenes/artwork/little-days/`，包括书签、热茶、翻页、口袋和状态图案。道具由本项目绘制，找路与欢迎场景还会组合既有角色模型；不能把整组素材统称为不含角色的独立道具。见[源文件、派生与动作说明](../playground/src/examples/scenes/artwork/little-days/README.md)。
 - **静态、动效与博客副本**：`npm run sync:artwork` 先生成当前人物成品，再通过 [sync-little-days-artwork.mjs](../scripts/sync-little-days-artwork.mjs) 从原稿派生场景，欢迎场景另复用 [build-friends-welcome.mjs](../scripts/build-friends-welcome.mjs)。文档保留十四份扁平 SVG；博客的 `examples/blog/src/assets/little-days/` 只同步当前导入的六份，独立的 peek、author 副本、原生书签与欢迎控制器也由该流程维护。人物成品、定义裁剪与自动同步副本可用 `npm run check:artwork` 检查，下载和接入见文档站 `#/guides/artwork`。
-
-上述文件保留绘制与派生路径，角色展示素材的许可状态仍按本页开头的记录说明。
 
 ## PNG 插图
 
@@ -42,7 +40,7 @@ PNG 不进入组件安装包；实际引用的图片会进入对应网站的静�
 - [OFL-wenkai.txt](../playground/src/assets/OFL-wenkai.txt) 记录 LXGW WenKai / Klee 项目、保留名称和对应字体许可文本。
 - 博客副本的两份声明保存在 [examples/blog/src/assets/](../examples/blog/src/assets/README.md)。
 
-这些声明适用于相应字体，不覆盖组件代码或角色图像。文档站与博客构建时会自动输出各自的 `notices/OFL-marker.txt`、`notices/OFL-wenkai.txt`、项目 `LICENSE` 与 `THIRD_PARTY_NOTICES.md`；分发目录保留方式见[部署说明](deployment.md)。
+文档站与博客构建时会自动输出各自的 `notices/OFL-marker.txt`、`notices/OFL-wenkai.txt`、项目 `LICENSE` 与 `THIRD_PARTY_NOTICES.md`；分发目录保留方式见[部署说明](deployment.md)。
 
 ### 字体维护
 
@@ -71,6 +69,6 @@ npm run sync:fonts
 
 ## README 截图
 
-`docs/images/` 保存从当前文档站和博客实际页面截取的展示图，记录组件、角色、字体与布局共同呈现的结果。它们不是从参考网站下载的图包，也不是独立的角色授权素材；截图中的素材继续按上述来源分别说明。
+`docs/images/` 保存从当前文档站和博客实际页面截取的展示图，记录组件、角色、字体与布局共同呈现的结果。它们不是从参考网站下载的图包，截图中的素材来源见上文。
 
 截图用于仓库介绍，不进入组件安装包。页面、主题或素材发生变化时，应重新截取实际页面，避免图片与使用示例不一致。

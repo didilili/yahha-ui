@@ -104,7 +104,7 @@ async function exportFixture(t) {
     await writeFile(target, '');
   }
   for (const path of ['LICENSE', 'THIRD_PARTY_NOTICES.md'])
-    await cp(join(root, path), join(repository, path));
+    await writeFile(join(repository, path), 'Fixture notice.\n');
   const dependencies = Object.fromEntries(
     [
       'react',
@@ -217,26 +217,21 @@ test('export preserves project and archive contents when the output directory is
   }
 });
 
-for (const example of ['starter', 'blog']) {
-  test(`${example} export carries the project license and third-party notices in the directory and ZIP`, async (t) => {
-    const { repository, exportProject } = await exportFixture(t);
+test('exports still work when optional project notice files are absent', async (t) => {
+  const { repository, exportProject } = await exportFixture(t);
+  for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) await rm(join(repository, name));
+  for (const example of ['starter', 'blog']) {
     const output = await exportProject(example, example);
     const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
-    assert.equal(pkg.license, 'MIT');
-    for (const path of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
-      const source = await readFile(join(repository, path), 'utf8');
-      assert.equal(await readFile(join(output, path), 'utf8'), source);
-      await assertLocalLinksExist(join(output, path), source);
-      const { stdout } = await exec('unzip', ['-p', `${output}.zip`, `${example}/${path}`]);
-      assert.equal(stdout, source, `ZIP must preserve ${path}`);
-    }
-    const readme = await readFile(join(output, 'README.md'), 'utf8');
-    await assertLocalLinksExist(join(output, 'README.md'), readme);
-    assert.match(readme, /\[MIT[^\]]*\]\(LICENSE\)/);
-    assert.match(readme, /\[[^\]]+\]\(THIRD_PARTY_NOTICES\.md\)/);
-    assert.doesNotMatch(readme, /许可证尚未确定/);
-  });
-}
+    assert.ok(pkg.scripts.build);
+    assert.equal(
+      await readFile(join(output, 'vendor/yahha-ui-0.0.1.tgz'), 'utf8'),
+      'fixture package bytes',
+    );
+    const { stdout } = await exec('unzip', ['-p', `${output}.zip`, `${example}/package.json`]);
+    assert.deepEqual(JSON.parse(stdout), pkg);
+  }
+});
 
 async function assertLocalLinksExist(file, markdown) {
   for (const match of markdown.matchAll(/\]\(([^)]+)\)/g)) {

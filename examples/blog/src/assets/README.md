@@ -9,7 +9,7 @@
 
 字体族名为 `Marker`、`WenKai`，使用官方 Regular 字体源的完整字符覆盖。两站现有源码用字集中在 `common` 首包，其余字符按每片最多 512 个码点生成 `unicode-range`，新增用字与用户输入按需加载对应的本地分片。日常安装和构建无需 Python 或 uv；重新生成入口为根目录 `npm run fonts:generate`，可选下载缓存等维护方法见[字体维护](../../../../docs/assets-and-distribution.md#字体维护)。博客构建会自动将现有声明写入 `dist/notices/OFL-marker.txt` 与 `dist/notices/OFL-wenkai.txt`。
 
-项目自有内容采用 [MIT](../../../../LICENSE)，第三方字体和角色相关权利见[第三方说明](../../../../THIRD_PARTY_NOTICES.md)。现有角色图像为非官方同人素材，MIT 不授予第三方角色权利。素材用于示例网站，不进入组件库 `dist/` 或默认安装包。
+项目自有内容采用 [MIT](../../../../LICENSE)，第三方内容见[第三方说明](../../../../THIRD_PARTY_NOTICES.md)。现有角色图像为非官方同人素材，用于示例网站，不进入组件库 `dist/` 或默认安装包。
 
 `little-days/` 仅保存当前实际导入的六份 SVG：`tea-cup.svg`、`empty-collection.svg`、`search-empty.svg`、`collection-saved-motion.svg`、`friends-lost.svg` 和 `friends-welcome.svg`。道具源文件集中在
 `playground/src/examples/scenes/artwork/little-days/`，找路与欢迎场景另复用当前朋友模型。静态热茶和空收藏口袋分别用于首页章节和空收藏页面，搜索空结果与收藏成功也从同一源同步。
