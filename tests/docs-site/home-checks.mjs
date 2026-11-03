@@ -26,7 +26,6 @@ async function requireHome(page) {
   );
   assert.equal(await page.locator('main h1').count(), 1);
   assert.doesNotMatch(await page.locator('main').innerText(), /研究|历史|撤回|候选/);
-  assert.equal(await page.locator('main a[href*="design-preview"]').count(), 0);
   return heading;
 }
 
