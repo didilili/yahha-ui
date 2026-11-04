@@ -20,11 +20,13 @@ import { TextField } from 'yahha-ui';
 
 ## 代码演示
 
+本页示例只在本地操作，不发送或保存表单数据。
+
 <a id="basic"></a>
 
 ### 基础用法
 
-用 label 命名字段，defaultValue 填入可编辑的博客名称。
+用可见标签命名字段，并提供可编辑的初始值。
 
 [查看示例文件](../../playground/src/examples/forms/TextFieldBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -50,7 +52,7 @@ export default function TextFieldBasic() {
 
 ### 受控输入与装饰图标
 
-通过 value / onChange 同步关键词，在 leading 中放入搜索图标；结果行显示当前关键词，本例不筛选文章。
+输入关键词并查看当前值；本例不筛选文章。
 
 [查看示例文件](../../playground/src/examples/forms/TextFieldControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -98,7 +100,7 @@ export default function TextFieldControlled() {
 
 ### 提示与本地校验
 
-清空昵称或输入超过 12 个字符后点击检查。表单用 noValidate 展示本地自定义校验，error 关联输入框，ref 聚焦错误字段；校验通过也不会保存昵称。
+检查昵称，校验失败时聚焦字段，保留已输入内容。
 
 [查看示例文件](../../playground/src/examples/forms/TextFieldValidation.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -160,7 +162,7 @@ export default function TextFieldValidation() {
 
 ### 字段状态与原生输入类型
 
-展示 disabled / readOnly 状态与 email、password、date、time 类型。点击“检查邮箱格式”触发浏览器必填、格式校验，ref 可聚焦邮箱；密码仅展示原生掩码。日期与时间使用浏览器原生编辑界面，显示格式随浏览器与地区设置变化；数据不保存或发送。
+对比只读、禁用与原生输入类型，可检查邮箱格式。
 
 [查看示例文件](../../playground/src/examples/forms/TextFieldNative.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -238,7 +240,7 @@ export default function TextFieldNative() {
 
 ### 表单提交与重置
 
-通过 FormData 读取 name，并显示读取结果。非受控输入随表单重置；受控输入在 onReset 中恢复 React 状态。此例只读取本地表单，不发送或保存数据。
+读取本地表单或恢复初始值；编辑后清除上次读取结果。
 
 [查看示例文件](../../playground/src/examples/forms/TextFieldForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -255,6 +257,8 @@ export default function TextFieldForm() {
   return (
     <form
       style={{ display: 'grid', gap: 16 }}
+      onInput={() => setResult('')}
+      onInvalidCapture={() => setResult('')}
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -295,7 +299,8 @@ export default function TextFieldForm() {
 - value / onChange 管理受控输入；defaultValue 设置非受控初始值。保持一种模式，避免同时传入两种值。
 - 设置 name 后可用 FormData 读取内容，form 可关联外部表单。非受控输入随原生表单重置；受控输入需在 onReset 中恢复 React 状态。
 - readOnly 保留聚焦、选择、复制和提交能力；disabled 阻止交互并退出键盘顺序，字段也不参与提交。
-- type、autoComplete、required 等沿用原生 input 行为。required 启用浏览器约束，必填要求也应写在可见标签或提示中；自定义校验、error 的设置与清除由调用方处理。
+- type、autoComplete、required 等沿用原生 input 行为。required 启用浏览器约束，必填要求也应写在可见标签或提示中。
+- error 只显示错误，不执行校验。本地校验例使用 noValidate 跳过浏览器提交校验，由示例检查昵称并设置或清除 error；邮箱例保留浏览器必填与格式校验。
 
 <a id="api"></a>
 
@@ -305,28 +310,28 @@ export default function TextFieldForm() {
 
 ### TextFieldProps
 
-| 属性                         | 说明                                                                                         | 类型                                   | 默认值           |
-| ---------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------- | ---------------- |
-| `label` **必填**             | 可见标签，自动关联 input。请提供有意义的字段名称。                                           | `ReactNode`                            | —                |
-| `hint`                       | 辅助说明，通过 aria-describedby 与 input 关联。                                              | `ReactNode`                            | —                |
-| `error`                      | 错误说明。有内容时设置 aria-invalid，不执行校验。                                            | `ReactNode`                            | —                |
-| `leading`                    | 18×18px 的装饰图标槽，超出内容会裁切；包装元素 aria-hidden，不放长前缀、交互控件或必要文字。 | `ReactNode`                            | —                |
-| `id`                         | input 的 ID，同时用于标签、提示和错误关联。                                                  | `string`                               | `自动生成`       |
-| `value`                      | 受控值，需配合 onChange。不要与 defaultValue 同时使用。                                      | `TextFieldProps["value"]`              | —                |
-| `defaultValue`               | 非受控输入的初始值。不要在生命周期内切换受控模式。                                           | `TextFieldProps["defaultValue"]`       | —                |
-| `onChange`                   | 原生输入事件，通过 event.target.value 读取内容。                                             | `ChangeEventHandler<HTMLInputElement>` | —                |
-| `disabled`                   | 禁用输入；禁用字段不可聚焦，也不参与表单提交。                                               | `boolean`                              | `false（原生）`  |
-| `readOnly`                   | 只读但仍可聚焦、复制并参与提交。                                                             | `boolean`                              | `false（原生）`  |
-| `required`                   | 启用原生必填约束；组件不会据此生成 error。                                                   | `boolean`                              | `false（原生）`  |
-| `type`                       | 原生 input 类型，例如 email、search、password、date、time；日期时间编辑界面由浏览器提供。    | `HTMLInputTypeAttribute`               | `text（浏览器）` |
-| `name / form`                | 提交字段名，以及通过 ID 关联的表单。                                                         | `string`                               | —                |
-| `placeholder / autoComplete` | 原生输入提示与自动填充设置。placeholder 不能代替 label。                                     | `string`                               | —                |
-| `className`                  | 作用于最外层字段 div，用于字段布局。                                                         | `string`                               | —                |
-| `classNames`                 | 各部位的附加类名，见下表。与默认类名合并。                                                   | `TextFieldProps["classNames"]`         | —                |
-| `style`                      | 作用于 input，而非根容器。根容器布局可使用 className 或外层元素。                            | `CSSProperties`                        | —                |
-| `ref`                        | 指向真实 input，可调用 focus、select 等原生方法。                                            | `Ref<HTMLInputElement>`                | —                |
-| `aria-describedby`           | 额外描述元素的 ID，会与 hint 和 error 的描述 ID 合并。                                       | `string`                               | —                |
-| `aria-invalid`               | 无 error 时沿用传入值；有 error 时固定为 true。true 会显示错误边框，但不会自动生成错误说明。 | `TextFieldProps["aria-invalid"]`       | —                |
+| 属性                         | 说明                                                                                                                      | 类型                                   | 默认值           |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ---------------- |
+| `label` **必填**             | 可见标签，自动关联 input。请提供有意义的字段名称。                                                                        | `ReactNode`                            | —                |
+| `hint`                       | 辅助说明，通过 aria-describedby 与 input 关联。                                                                           | `ReactNode`                            | —                |
+| `error`                      | 错误说明。有内容时设置 aria-invalid，不执行校验。                                                                         | `ReactNode`                            | —                |
+| `leading`                    | 18×18px 的装饰图标槽，超出内容会裁切；包装元素 aria-hidden，不放长前缀、交互控件或必要文字。                              | `ReactNode`                            | —                |
+| `id`                         | input 的 ID，同时用于标签、提示和错误关联。                                                                               | `string`                               | `自动生成`       |
+| `value`                      | 受控值，需配合 onChange。不要与 defaultValue 同时使用。                                                                   | `TextFieldProps["value"]`              | —                |
+| `defaultValue`               | 非受控输入的初始值。不要在生命周期内切换受控模式。                                                                        | `TextFieldProps["defaultValue"]`       | —                |
+| `onChange`                   | 原生输入事件，通过 event.target.value 读取内容。                                                                          | `ChangeEventHandler<HTMLInputElement>` | —                |
+| `disabled`                   | 禁用输入；禁用字段不可聚焦，也不参与表单提交。                                                                            | `boolean`                              | `false（原生）`  |
+| `readOnly`                   | 只读但仍可聚焦、复制并参与提交。                                                                                          | `boolean`                              | `false（原生）`  |
+| `required`                   | 启用原生必填约束；组件不会据此生成 error。                                                                                | `boolean`                              | `false（原生）`  |
+| `type`                       | 原生 input 类型，例如 email、search、password、date、time；日期时间编辑界面由浏览器提供，显示格式随浏览器与地区设置变化。 | `HTMLInputTypeAttribute`               | `text（浏览器）` |
+| `name / form`                | 提交字段名，以及通过 ID 关联的表单。                                                                                      | `string`                               | —                |
+| `placeholder / autoComplete` | 原生输入提示与自动填充设置。placeholder 不能代替 label。                                                                  | `string`                               | —                |
+| `className`                  | 作用于最外层字段 div，用于字段布局。                                                                                      | `string`                               | —                |
+| `classNames`                 | 各部位的附加类名，见下表。与默认类名合并。                                                                                | `TextFieldProps["classNames"]`         | —                |
+| `style`                      | 作用于 input，而非根容器。根容器布局可使用 className 或外层元素。                                                         | `CSSProperties`                        | —                |
+| `ref`                        | 指向真实 input，可调用 focus、select 等原生方法。                                                                         | `Ref<HTMLInputElement>`                | —                |
+| `aria-describedby`           | 额外描述元素的 ID，会与 hint 和 error 的描述 ID 合并。                                                                    | `string`                               | —                |
+| `aria-invalid`               | 无 error 时沿用传入值；有 error 时固定为 true。true 会显示错误边框，但不会自动生成错误说明。                              | `TextFieldProps["aria-invalid"]`       | —                |
 
 ### classNames
 
@@ -352,11 +357,13 @@ export default function TextFieldForm() {
 
 字段宽度、外边距等布局通过 className 或外层容器设置。调整输入框本身的外观时使用 classNames.input 或 style；需要单独设置提示或错误文字时使用 classNames.hint / classNames.error，无需依赖内部嵌套选择器。
 
+定制例的 CSS 随源码一起复制，浅粉提示背景是局部固定颜色；整体配色使用 ThemeProvider。
+
 <a id="text-field-customization"></a>
 
 ### 提示区域的局部定制
 
-用根 className 限制字段宽度，通过 classNames.hint 设置提示区域的留白和浅粉背景。CSS 随示例源码一起复制，局部颜色不随主题预设变化；整体配色使用 ThemeProvider。本例只编辑署名，不保存数据。
+用 classNames.hint 调整提示背景与留白。
 
 [查看示例文件](../../playground/src/examples/customization/TextFieldCustomization.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

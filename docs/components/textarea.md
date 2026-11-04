@@ -20,11 +20,13 @@ import { Textarea } from 'yahha-ui';
 
 ## 代码演示
 
+本页示例只在本地操作，不发送或保存留言。
+
 <a id="basic"></a>
 
 ### 基础用法
 
-输入多行留言；桌面端可拖动角落的调整手柄改变输入区域的高度。
+输入多行留言。
 
 [查看示例文件](../../playground/src/examples/new-forms/TextareaBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -52,7 +54,7 @@ export default function TextareaBasic() {
 
 ### 受控内容与校验
 
-value / onChange 管理内容和字数。点击“检查留言”进行本地必填检查，空白时显示错误并通过 ref 聚焦，通过时显示检查结果；本例不会发送数据。
+检查留言，查看输入长度与校验结果。
 
 [查看示例文件](../../playground/src/examples/new-forms/TextareaControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -87,7 +89,7 @@ export default function TextareaControlled() {
         }}
         required
         maxLength={200}
-        hint={`已输入 ${message.length} / 200`}
+        hint={`必填，已输入 ${message.length} / 200`}
         error={error}
       />
       <Button type="submit">检查留言</Button>
@@ -103,7 +105,7 @@ export default function TextareaControlled() {
 
 ### 原生重置、只读与禁用
 
-修改草稿后重置，恢复初始内容；另展示禁止拖动的只读字段与父 fieldset 禁用。
+修改草稿后重置，并对比只读与禁用状态。
 
 [查看示例文件](../../playground/src/examples/new-forms/TextareaStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -172,14 +174,17 @@ export default function TextareaStates() {
 ## 状态与表单
 
 - value / onChange 用于受控内容，defaultValue 用于非受控初始内容。非受控内容随原生表单重置，受控内容需在 onReset 中恢复 React 状态。
-- name、form、required 和 maxLength 沿用原生 textarea 属性。需要字数反馈或自定义校验时，由调用方维护说明和 error。
+- name、form、required 和 maxLength 沿用原生 textarea 属性。需要长度反馈或自定义校验时，由调用方维护说明和 error。
+- 受控例使用 noValidate 跳过浏览器提交校验，由示例检查空白内容；error 只呈现错误。输入长度与原生 maxLength 均按 UTF-16 代码单元计数，部分表情会占多个单位。
 - readOnly 仍可聚焦、复制并参与提交；disabled 不可编辑或聚焦，也不参与提交。必填要求应同时提供可见说明。
 
 <a id="styling"></a>
 
 ## 样式定制
 
-使用 rows 设置初始可见行数，默认四行；内容超出后滚动，不会随输入自动增高。 通过 style 或 classNames.textarea 调整高度、minHeight 与 resize；字段宽度由 className 或外层容器控制。默认允许用户垂直拖动，固定高度前应考虑长内容的编辑需要。
+使用 rows 设置初始可见行数，默认四行；内容超出后滚动，不会随输入自动增高。通过 style 或 classNames.textarea 调整高度、minHeight 与 resize；字段宽度由 className 或外层容器控制。默认允许用户垂直拖动，固定高度前应考虑长内容的编辑需要。
+
+只读例通过 `style={{ resize: 'none' }}` 关闭拖动；只读与拖动方式分别设置。
 
 <a id="related"></a>
 

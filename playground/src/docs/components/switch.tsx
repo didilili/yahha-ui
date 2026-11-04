@@ -23,28 +23,26 @@ export default defineComponentPage('switch', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>本页示例只在本地切换和读取，不保存设置或调用接口。</p>,
       examples: [
         {
           id: 'basic',
           title: '基本状态',
-          description:
-            '先展示默认关闭，再分组比较初始开启、禁用和长标签。点击标签切换，本例只展示开关状态，不保存设置。',
+          description: '切换开关，并对比禁用与长标签。',
           component: SwitchBasic,
           source: SwitchBasicSource,
         },
         {
           id: 'controlled',
           title: '控制内容显示',
-          description:
-            'checked / onChange 联动文章摘要与可见状态；标签保持不变，切换结果由相邻文字说明，状态仅保留在当前页面。',
+          description: '切换文章摘要的显示，标题始终保留。',
           component: SwitchControlled,
           source: SwitchControlledSource,
         },
         {
           id: 'form',
           title: '表单值与重置',
-          description:
-            '读取实际 name=value；关闭的 covers 与禁用的 notifications 不参与提交，非受控状态随原生重置恢复。本例只读取本地表单，不保存设置或调用接口。',
+          description: '读取当前开关值或重置；切换后清除上次结果。',
           component: SwitchForm,
           source: SwitchFormSource,
         },
@@ -108,7 +106,7 @@ export default defineComponentPage('switch', {
             {
               name: 'name / value / form / required',
               type: '原生 input 对应属性',
-              description: '原生 checkbox 表单能力；只有开启且未禁用时提交。',
+              description: '原生 checkbox 表单能力；仅开启且未禁用时提交，required 要求开启。',
               defaultValue: 'value 为 on（原生）',
             },
             { name: 'className', type: 'string', description: '根字段 div 的附加类名。' },

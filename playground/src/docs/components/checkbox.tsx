@@ -24,28 +24,26 @@ export default defineComponentPage('checkbox', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>本页示例只在本地勾选和读取，不实际订阅或保存设置。</p>,
       examples: [
         {
           id: 'basic',
           title: '基本状态',
-          description:
-            '先展示默认未勾选，再分组比较初始勾选、禁用和长标签；点击文字或复选框切换，本例不会订阅或保存设置。',
+          description: '切换勾选状态，并对比禁用与长标签。',
           component: CheckboxBasic,
           source: CheckboxBasicSource,
         },
         {
           id: 'mixed',
           title: '受控选择与半选',
-          description:
-            '全选项联动子项，只选择部分分类时显示半选状态；结果行显示已选数量，重置后恢复一项已选。',
+          description: '全选联动分类，查看半选与数量变化。',
           component: CheckboxMixed,
           source: CheckboxMixedSource,
         },
         {
           id: 'form',
           title: '表单提交、必选与重置',
-          description:
-            '同名分类通过 FormData.getAll 读取；必选确认未勾选时显示错误并聚焦，勾选后清除。重置恢复一项分类已选与未确认，本例不实际订阅。',
+          description: '读取已勾选分类或重置；改选后清除上次读取结果。',
           component: CheckboxForm,
           source: CheckboxFormSource,
         },

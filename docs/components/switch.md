@@ -20,11 +20,13 @@ import { Switch } from 'yahha-ui';
 
 ## 代码演示
 
+本页示例只在本地切换和读取，不保存设置或调用接口。
+
 <a id="basic"></a>
 
 ### 基本状态
 
-先展示默认关闭，再分组比较初始开启、禁用和长标签。点击标签切换，本例只展示开关状态，不保存设置。
+切换开关，并对比禁用与长标签。
 
 [查看示例文件](../../playground/src/examples/new-forms/SwitchBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -59,7 +61,7 @@ export default function SwitchBasic() {
 
 ### 控制内容显示
 
-checked / onChange 联动文章摘要与可见状态；标签保持不变，切换结果由相邻文字说明，状态仅保留在当前页面。
+切换文章摘要的显示，标题始终保留。
 
 [查看示例文件](../../playground/src/examples/new-forms/SwitchControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -95,7 +97,7 @@ export default function SwitchControlled() {
 
 ### 表单值与重置
 
-读取实际 name=value；关闭的 covers 与禁用的 notifications 不参与提交，非受控状态随原生重置恢复。本例只读取本地表单，不保存设置或调用接口。
+读取当前开关值或重置；切换后清除上次结果。
 
 [查看示例文件](../../playground/src/examples/new-forms/SwitchForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -110,6 +112,7 @@ export default function SwitchForm() {
   return (
     <form
       style={{ display: 'grid', gap: 16 }}
+      onInput={() => setResult('')}
       onSubmit={(event) => {
         event.preventDefault();
         const values = new FormData(event.currentTarget);
@@ -165,7 +168,7 @@ export default function SwitchForm() {
 | `checked / defaultChecked`           | 分别用于受控状态与非受控初始状态。                                                                                          | `boolean`                              | `false（原生）`       |
 | `onChange`                           | 原生事件，从 event.target.checked 读取开启状态。                                                                            | `ChangeEventHandler<HTMLInputElement>` | —                     |
 | `disabled`                           | 禁用交互和提交，支持父 fieldset disabled。                                                                                  | `boolean`                              | `false（原生）`       |
-| `name / value / form / required`     | 原生 checkbox 表单能力；只有开启且未禁用时提交。                                                                            | `原生 input 对应属性`                  | `value 为 on（原生）` |
+| `name / value / form / required`     | 原生 checkbox 表单能力；仅开启且未禁用时提交，required 要求开启。                                                           | `原生 input 对应属性`                  | `value 为 on（原生）` |
 | `className`                          | 根字段 div 的附加类名。                                                                                                     | `string`                               | —                     |
 | `classNames`                         | 各部分附加类名，每个值为 string。                                                                                           | `{ label?, input?, text?, hint? }`     | —                     |
 | `ref / style / id / 其他 input 属性` | 作用于真实 input；固定 type=checkbox、role=switch，不提供 readOnly、children、aria-checked。可访问状态由原生 checked 提供。 | `ComponentPropsWithRef<"input">`       | `id 自动生成`         |

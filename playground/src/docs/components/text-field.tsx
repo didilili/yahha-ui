@@ -30,43 +30,40 @@ export default defineComponentPage('text-field', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>本页示例只在本地操作，不发送或保存表单数据。</p>,
       examples: [
         {
           id: 'basic',
           title: '基础用法',
-          description: '用 label 命名字段，defaultValue 填入可编辑的博客名称。',
+          description: '用可见标签命名字段，并提供可编辑的初始值。',
           component: TextFieldBasic,
           source: textFieldBasicSource,
         },
         {
           id: 'controlled',
           title: '受控输入与装饰图标',
-          description:
-            '通过 value / onChange 同步关键词，在 leading 中放入搜索图标；结果行显示当前关键词，本例不筛选文章。',
+          description: '输入关键词并查看当前值；本例不筛选文章。',
           component: TextFieldControlled,
           source: textFieldControlledSource,
         },
         {
           id: 'validation',
           title: '提示与本地校验',
-          description:
-            '清空昵称或输入超过 12 个字符后点击检查。表单用 noValidate 展示本地自定义校验，error 关联输入框，ref 聚焦错误字段；校验通过也不会保存昵称。',
+          description: '检查昵称，校验失败时聚焦字段，保留已输入内容。',
           component: TextFieldValidation,
           source: textFieldValidationSource,
         },
         {
           id: 'native',
           title: '字段状态与原生输入类型',
-          description:
-            '展示 disabled / readOnly 状态与 email、password、date、time 类型。点击“检查邮箱格式”触发浏览器必填、格式校验，ref 可聚焦邮箱；密码仅展示原生掩码。日期与时间使用浏览器原生编辑界面，显示格式随浏览器与地区设置变化；数据不保存或发送。',
+          description: '对比只读、禁用与原生输入类型，可检查邮箱格式。',
           component: TextFieldNative,
           source: textFieldNativeSource,
         },
         {
           id: 'form',
           title: '表单提交与重置',
-          description:
-            '通过 FormData 读取 name，并显示读取结果。非受控输入随表单重置；受控输入在 onReset 中恢复 React 状态。此例只读取本地表单，不发送或保存数据。',
+          description: '读取本地表单或恢复初始值；编辑后清除上次读取结果。',
           component: TextFieldForm,
           source: textFieldFormSource,
         },
@@ -91,8 +88,11 @@ export default defineComponentPage('text-field', {
           </li>
           <li>
             type、autoComplete、required 等沿用原生 input 行为。required
-            启用浏览器约束，必填要求也应写在可见标签或提示中；自定义校验、error
-            的设置与清除由调用方处理。
+            启用浏览器约束，必填要求也应写在可见标签或提示中。
+          </li>
+          <li>
+            error 只显示错误，不执行校验。本地校验例使用 noValidate
+            跳过浏览器提交校验，由示例检查昵称并设置或清除 error；邮箱例保留浏览器必填与格式校验。
           </li>
         </ul>
       ),
@@ -176,7 +176,7 @@ export default defineComponentPage('text-field', {
               type: 'HTMLInputTypeAttribute',
               defaultValue: 'text（浏览器）',
               description:
-                '原生 input 类型，例如 email、search、password、date、time；日期时间编辑界面由浏览器提供。',
+                '原生 input 类型，例如 email、search、password、date、time；日期时间编辑界面由浏览器提供，显示格式随浏览器与地区设置变化。',
             },
             {
               name: 'name / form',
@@ -258,18 +258,22 @@ export default defineComponentPage('text-field', {
       id: 'styling',
       title: '样式定制',
       content: (
-        <p>
-          字段宽度、外边距等布局通过 className 或外层容器设置。调整输入框本身的外观时使用
-          classNames.input 或 style；需要单独设置提示或错误文字时使用 classNames.hint /
-          classNames.error，无需依赖内部嵌套选择器。
-        </p>
+        <>
+          <p>
+            字段宽度、外边距等布局通过 className 或外层容器设置。调整输入框本身的外观时使用
+            classNames.input 或 style；需要单独设置提示或错误文字时使用 classNames.hint /
+            classNames.error，无需依赖内部嵌套选择器。
+          </p>
+          <p>
+            定制例的 CSS 随源码一起复制，浅粉提示背景是局部固定颜色；整体配色使用 ThemeProvider。
+          </p>
+        </>
       ),
       examples: [
         {
           id: 'text-field-customization',
           title: '提示区域的局部定制',
-          description:
-            '用根 className 限制字段宽度，通过 classNames.hint 设置提示区域的留白和浅粉背景。CSS 随示例源码一起复制，局部颜色不随主题预设变化；整体配色使用 ThemeProvider。本例只编辑署名，不保存数据。',
+          description: '用 classNames.hint 调整提示背景与留白。',
           component: TextFieldCustomization,
           source: textFieldCustomizationSource,
         },

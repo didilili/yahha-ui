@@ -20,11 +20,13 @@ import { Select } from 'yahha-ui';
 
 ## 代码演示
 
+本页示例只在本地选择和读取，不发送或保存数据，也不筛选、重排文章。
+
 <a id="basic"></a>
 
 ### 基础用法
 
-提供 label 与 options，未选择时显示 placeholder；标签始终可见。本例只演示选择，不筛选文章。
+从三个分类中选择一项。
 
 [查看示例文件](../../playground/src/examples/new-forms/SelectBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -54,7 +56,7 @@ export default function SelectBasic() {
 
 ### 受控选择与禁用选项
 
-使用 value / onValueChange 同步状态，结果行显示当前选择。disabled 选项不可选择，null 清空当前值；本例不重排文章。
+切换或清空当前选择，禁用选项不可选。
 
 [查看示例文件](../../playground/src/examples/new-forms/SelectControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -99,7 +101,7 @@ export default function SelectControlled() {
 
 ### 错误、只读与禁用
 
-选择分类后清除错误，校验由示例维护。readOnly 可浏览选项但不修改；disabled 不可交互。
+选择分类清除预设错误，并对比只读与禁用状态。
 
 [查看示例文件](../../playground/src/examples/new-forms/SelectStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -150,7 +152,7 @@ export default function SelectStates() {
 
 ### 必选表单与重置
 
-从未选择开始，点击读取表单触发 required 校验；选择后清除错误，通过 name 读取本地表单值，非受控选择随表单重置为未选择。
+读取必选分类或重置为未选择。
 
 [查看示例文件](../../playground/src/examples/new-forms/SelectForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -218,7 +220,7 @@ export default function SelectForm() {
 
 ### 长列表与长选项
 
-在宽度最多 340px 的容器中展示八个分类，查看列表滚动与长文字换行。本例只演示选择，不筛选文章。
+查看长选项换行与列表滚动。
 
 [查看示例文件](../../playground/src/examples/new-forms/SelectLongOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -302,13 +304,17 @@ export default function SelectLongOptions() {
 
 ## 样式定制
 
-字段宽度通过 className 或外层容器设置；style 调整的是触发按钮。 列表挂载在 Portal 中，定制列表和选项时直接使用 classNames.popup / classNames.option， 不依赖字段容器的后代选择器。默认长选项会换行，列表在可用视口内滚动。 设置原生 dir="rtl" 或 dir="ltr" 时，字段与弹出列表保持同一方向；未显式设置时， 优先沿用最近原生容器的方向，再沿用上游方向配置。容器方向变化时，已打开的列表同步更新。
+字段宽度通过 className 或外层容器设置；style 调整的是触发按钮。列表挂载在 Portal 中，定制列表和选项时直接使用 classNames.popup / classNames.option， 不依赖字段容器的后代选择器。默认长选项会换行，列表在可用视口内滚动。
+
+设置原生 dir="rtl" 或 dir="ltr" 时，字段与弹出列表保持同一方向；未显式设置时，优先沿用最近原生容器的方向，再沿用上游方向配置。容器方向变化时，已打开的列表同步更新。
+
+定制例的 CSS 随源码一起复制，浅蓝列表背景为局部固定颜色；整体配色使用 ThemeProvider。选中、高亮和禁用反馈保持。
 
 <a id="select-portal-customization"></a>
 
 ### Portal 列表的局部定制
 
-通过 classNames.popup 设置局部浅蓝背景，classNames.option 调整选项字重。列表挂载到 body，直接使用附加类名即可，不依赖字段容器的后代选择器。CSS 与示例源码放在一起，选中、高亮和禁用反馈保留；局部背景不随主题预设变化，整体配色仍使用 ThemeProvider。
+通过 classNames 定制列表背景与选项字重。
 
 [查看示例文件](../../playground/src/examples/customization/SelectPortalCustomization.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

@@ -20,11 +20,13 @@ import { RadioGroup } from 'yahha-ui';
 
 ## 代码演示
 
+本页示例只在本地选择和读取，不实际订阅或保存设置。
+
 <a id="basic"></a>
 
 ### 标签与选项说明
 
-用 label 命名单选组，description 说明各个选项的含义。使用方向键在可用选项间移动并选择。
+选择来信频率，比较各选项说明。
 
 [查看示例文件](../../playground/src/examples/new-forms/RadioGroupBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -57,7 +59,7 @@ export default function RadioGroupBasic() {
 
 ### 受控表单与重置
 
-从未选择开始体验 required 校验，选择后清除错误并读取提交值；onReset 显式恢复未选择，保持 React 与表单状态一致。
+读取必选项或重置；改选后清除上次读取结果。
 
 [查看示例文件](../../playground/src/examples/new-forms/RadioGroupForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -121,7 +123,7 @@ export default function RadioGroupForm() {
 
 ### 长标签、错误与禁用
 
-选择收藏可见范围以清除错误；点击“清空选择”重新显示错误。下方展示整组禁用时的“仅自己可见”状态。
+选择范围清除预设错误，并对比长标签与整组禁用。
 
 [查看示例文件](../../playground/src/examples/new-forms/RadioGroupStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -173,8 +175,8 @@ export default function RadioGroupStates() {
 
 ## 状态与表单
 
-- 使用 value / onValueChange 管理受控选择，空字符串可表示待选择；在回调中更新 value，选项值须保持唯一。
-- 显式设置 name 后，FormData 可读取已选值；form 同时关联 fieldset 和组内 radio。重置时需在 onReset 中恢复 React 状态。
+- 使用 value / onValueChange 管理受控选择，空字符串可表示待选择；在回调中更新 value，选项值须保持唯一。用空字符串表示未选择时，不再将其作为有效选项值。
+- 显式设置 name 后，FormData 可读取已选值；同一表单内的独立组使用不同 name。form 同时关联 fieldset 和组内 radio。重置时需在 onReset 中恢复 React 状态。
 - required 将必选约束传给原生 radio；hint 和 error 用于组级说明与错误，选择后的错误清除由调用方处理。
 - disabled 禁用整组，options 中的 disabled 禁用单项，也支持父 fieldset 禁用。禁用项不参与切换或提交；锁定选择应使用禁用状态。
 

@@ -20,11 +20,13 @@ import { Checkbox } from 'yahha-ui';
 
 ## 代码演示
 
+本页示例只在本地勾选和读取，不实际订阅或保存设置。
+
 <a id="basic"></a>
 
 ### 基本状态
 
-先展示默认未勾选，再分组比较初始勾选、禁用和长标签；点击文字或复选框切换，本例不会订阅或保存设置。
+切换勾选状态，并对比禁用与长标签。
 
 [查看示例文件](../../playground/src/examples/new-forms/CheckboxBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -59,7 +61,7 @@ export default function CheckboxBasic() {
 
 ### 受控选择与半选
 
-全选项联动子项，只选择部分分类时显示半选状态；结果行显示已选数量，重置后恢复一项已选。
+全选联动分类，查看半选与数量变化。
 
 [查看示例文件](../../playground/src/examples/new-forms/CheckboxMixed.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -130,7 +132,7 @@ export default function CheckboxMixed() {
 
 ### 表单提交、必选与重置
 
-同名分类通过 FormData.getAll 读取；必选确认未勾选时显示错误并聚焦，勾选后清除。重置恢复一项分类已选与未确认，本例不实际订阅。
+读取已勾选分类或重置；改选后清除上次读取结果。
 
 [查看示例文件](../../playground/src/examples/new-forms/CheckboxForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -146,6 +148,7 @@ export default function CheckboxForm() {
   return (
     <form
       style={{ display: 'grid', gap: 16, maxWidth: 440 }}
+      onChange={() => setResult('')}
       onSubmit={(event) => {
         event.preventDefault();
         setResult(new FormData(event.currentTarget).getAll('topics').join('、') || '未选择分类');
@@ -174,7 +177,6 @@ export default function CheckboxForm() {
         }}
         onChange={(event) => {
           if (event.target.checked) setAgreementError(false);
-          setResult('');
         }}
       />
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>

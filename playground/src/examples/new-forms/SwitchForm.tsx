@@ -6,6 +6,7 @@ export default function SwitchForm() {
   return (
     <form
       style={{ display: 'grid', gap: 16 }}
+      onInput={() => setResult('')}
       onSubmit={(event) => {
         event.preventDefault();
         const values = new FormData(event.currentTarget);

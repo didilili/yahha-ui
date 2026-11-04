@@ -24,28 +24,26 @@ export default defineComponentPage('radio-group', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>本页示例只在本地选择和读取，不实际订阅或保存设置。</p>,
       examples: [
         {
           id: 'basic',
           title: '标签与选项说明',
-          description:
-            '用 label 命名单选组，description 说明各个选项的含义。使用方向键在可用选项间移动并选择。',
+          description: '选择来信频率，比较各选项说明。',
           component: RadioGroupBasic,
           source: RadioGroupBasicSource,
         },
         {
           id: 'form',
           title: '受控表单与重置',
-          description:
-            '从未选择开始体验 required 校验，选择后清除错误并读取提交值；onReset 显式恢复未选择，保持 React 与表单状态一致。',
+          description: '读取必选项或重置；改选后清除上次读取结果。',
           component: RadioGroupForm,
           source: RadioGroupFormSource,
         },
         {
           id: 'states',
           title: '长标签、错误与禁用',
-          description:
-            '选择收藏可见范围以清除错误；点击“清空选择”重新显示错误。下方展示整组禁用时的“仅自己可见”状态。',
+          description: '选择范围清除预设错误，并对比长标签与整组禁用。',
           component: RadioGroupStates,
           source: RadioGroupStatesSource,
         },
@@ -58,11 +56,11 @@ export default defineComponentPage('radio-group', {
         <ul>
           <li>
             使用 value / onValueChange 管理受控选择，空字符串可表示待选择；在回调中更新
-            value，选项值须保持唯一。
+            value，选项值须保持唯一。用空字符串表示未选择时，不再将其作为有效选项值。
           </li>
           <li>
-            显式设置 name 后，FormData 可读取已选值；form 同时关联 fieldset 和组内 radio。重置时需在
-            onReset 中恢复 React 状态。
+            显式设置 name 后，FormData 可读取已选值；同一表单内的独立组使用不同 name。form 同时关联
+            fieldset 和组内 radio。重置时需在 onReset 中恢复 React 状态。
           </li>
           <li>
             required 将必选约束传给原生 radio；hint 和 error

@@ -29,44 +29,40 @@ export default defineComponentPage('segmented-control', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>本页使用本地状态和文章，不请求接口或保存设置。</p>,
       examples: [
         {
           id: 'basic',
-          title: '基础用法与受控状态',
-          description:
-            '最小受控示例：value / onValueChange 更新选择。label 提供组名，可见标题放在外部。',
+          title: '基础用法',
+          description: '切换文章类型。',
           component: SegmentedBasic,
           source: segmentedBasicSource,
         },
         {
           id: 'filtering',
           title: '筛选本地文章',
-          description:
-            '在受控选择上接入本地文章列表，切换分类会更新文章数量与内容。筛选逻辑由示例实现。',
+          description: '按类型筛选文章，查看列表与数量变化。',
           component: SegmentedFiltering,
           source: segmentedFilteringSource,
         },
         {
           id: 'disabled',
           title: '禁用选项与整组禁用',
-          description:
-            '用同一可见性维度比较单项禁用与父 fieldset 整组禁用；通过下方按钮解除或恢复整组禁用。',
+          description: '对比单项与整组禁用，并切换整组可用状态。',
           component: SegmentedDisabled,
           source: segmentedDisabledSource,
         },
         {
           id: 'form',
           title: '原生表单与显式重置',
-          description:
-            '从未选择开始体验 required 校验；选定后读取 sort 对应值，不实际重排文章。onReset 显式恢复未选择并清除错误。',
+          description: '选择必选排序值后读取，或恢复为未选择；不重排文章。',
           component: SegmentedForm,
           source: segmentedFormSource,
         },
         {
           id: 'long-labels',
           title: '长标签与窄容器',
-          description:
-            '容器最多 350px，可在窄屏查看长标签换行与选中状态；本例只展示专题选择，不加载文章。选项较多时考虑 Select。',
+          description: '在窄栏中切换专题，查看选项如何换行排列。',
           component: SegmentedLongLabels,
           source: segmentedLongLabelsSource,
         },
@@ -79,12 +75,14 @@ export default defineComponentPage('segmented-control', {
         <ul>
           <li>
             这是受控单选组：value 指定当前值，onValueChange
-            返回选项值，由调用方更新。空字符串可表示待选择，选项值须保持唯一。
+            返回选项值，由调用方更新。选项值须保持唯一；用空字符串表示待选择时，不再将它用作有效选项值。
           </li>
           <li>
-            设置 name 后可用 FormData 读取所选值，form 可关联外部表单；required
-            保留原生必选约束。表单重置需在 onReset 中同步恢复 React 状态。
+            显式 name 提供稳定的 FormData
+            字段名；省略时仍有自动生成的唯一名称。同一表单内的独立组使用不同 name，form
+            可关联外部表单。
           </li>
+          <li>required 使用原生必选约束。表单重置需在 onReset 中同步恢复 React 状态。</li>
           <li>
             disabled 禁用整组，单项 disabled 只禁用该项，也支持父 fieldset
             禁用。禁用项不参与操作与提交，已选项被禁用后仍保留选中标记。
@@ -138,7 +136,7 @@ export default defineComponentPage('segmented-control', {
               name: 'name',
               type: 'string',
               defaultValue: '自动生成唯一名称',
-              description: '组内 radio 的共同名称。显式设置后可通过 FormData 读取。',
+              description: '组内 radio 的共同名称。显式设置可使用稳定字段名读取 FormData。',
             },
             {
               name: 'form',
@@ -224,8 +222,8 @@ export default defineComponentPage('segmented-control', {
       content: (
         <ul>
           <li>
-            Tab 进入原生单选组，方向键在可用项间移动并选择，Space
-            选择聚焦项；禁用项跳过。浏览器对组内 Tab 入口的细节可能不同。
+            Tab 进入原生单选组，方向键在可用项间移动并选择，Space 选择聚焦项；禁用项不参与选择。组内
+            Tab 入口和方向键边界行为依浏览器而异。
           </li>
           <li>
             选项应有可读名称，标签内不嵌套链接或按钮。外部提示或错误通过 aria-describedby

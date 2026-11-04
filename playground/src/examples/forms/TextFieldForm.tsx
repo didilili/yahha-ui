@@ -8,6 +8,8 @@ export default function TextFieldForm() {
   return (
     <form
       style={{ display: 'grid', gap: 16 }}
+      onInput={() => setResult('')}
+      onInvalidCapture={() => setResult('')}
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
