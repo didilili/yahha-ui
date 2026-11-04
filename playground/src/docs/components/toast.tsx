@@ -20,7 +20,7 @@ export default defineComponentPage('toast', {
           </p>
           <p>
             Toast
-            是受控展示组件，显示在调用方放置的位置。调用方管理消息内容、open、关闭时机与多条消息的排列；下方示例将提示放在文档流中。
+            是受控展示组件，显示在调用方放置的位置。调用方管理消息内容、open、关闭时机与多条消息的排列；下方示例只更新本地状态，不实际保存或归档文章。
           </p>
         </>
       ),
@@ -32,23 +32,21 @@ export default defineComponentPage('toast', {
         {
           id: 'basic',
           title: '受控显示与关闭',
-          description:
-            '点击按钮显示模拟保存结果，不实际持久化草稿；手动关闭后可再次显示，从提示内关闭后回到触发按钮。',
+          description: '显示模拟保存结果，关闭后可再次显示。',
           component: ToastBasic,
           source: toastBasicSource,
         },
         {
           id: 'tones',
           title: '三种反馈类型',
-          description: '比较成功、信息和错误三种外观。结果文案为样本，关闭与恢复由示例管理。',
+          description: '对比三种反馈样本，并关闭或恢复提示。',
           component: ToastTones,
           source: toastTonesSource,
         },
         {
           id: 'timer-and-action',
           title: '调用方计时与撤销操作',
-          description:
-            '归档文章后显示 8 秒提示；悬停或聚焦时暂停，离开后重新计时。提示关闭后仍可通过“恢复文章”找回内容。',
+          description: '归档后体验 8 秒提示与撤销，关闭后仍可恢复文章。',
           component: ToastTimer,
           source: toastTimerSource,
         },
@@ -59,7 +57,9 @@ export default defineComponentPage('toast', {
       title: '自动关闭与恢复入口',
       content: (
         <p>
-          自动关闭由调用方实现。设置足够的阅读时间，并在悬停或聚焦时暂停，避免用户操作过程中提示消失；组件本身没有计时器。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
+          自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；示例等待 8
+          秒后关闭，悬停或聚焦时暂停，离开后重新计满 8
+          秒。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
         </p>
       ),
     },

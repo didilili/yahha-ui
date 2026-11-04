@@ -24,7 +24,7 @@ import { Alert } from 'yahha-ui';
 
 ### 四种说明类型
 
-比较信息、成功、警告和错误四种外观；保存与发送文案仅为静态样本。
+对比信息、成功、警告和错误四种静态说明。
 
 [查看示例文件](../../playground/src/examples/content/AlertExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -69,7 +69,7 @@ export default function AlertExample() {
 
 ### 与操作组合
 
-首次模拟保存失败，再重试成功；选项保留，按钮加载和后续焦点由示例管理。仅更新本页状态，不发送网络请求或真实订阅。
+首次模拟保存失败，重试成功；只更新本例状态，不实际订阅。
 
 [查看示例文件](../../playground/src/examples/content/AlertAction.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -182,15 +182,15 @@ export default function AlertAction() {
 
 ### AlertProps
 
-| 属性                  | 说明                                                                      | 类型                                          | 默认值   |
-| --------------------- | ------------------------------------------------------------------------- | --------------------------------------------- | -------- |
-| `tone`                | 说明类型，决定图标与背景颜色。                                            | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` |
-| `title`               | 可选标题，渲染为 p，不是原生 title 属性。                                 | `ReactNode`                                   | —        |
-| `children`            | 内容，可组合正文、链接或按钮。                                            | `ReactNode`                                   | —        |
-| `role`                | 静态说明默认 note；紧急动态结果可显式使用 alert。                         | `AriaRole`                                    | `'note'` |
-| `className / style`   | 作用于根 div 元素。                                                       | `string / CSSProperties`                      | —        |
-| `ref`                 | 指向真实 div 元素。                                                       | `ComponentPropsWithRef<'div'>['ref']`         | —        |
-| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。 | `ComponentPropsWithRef<'div'>`                | —        |
+| 属性                  | 说明                                                                | 类型                                          | 默认值   |
+| --------------------- | ------------------------------------------------------------------- | --------------------------------------------- | -------- |
+| `tone`                | 说明类型，决定图标与背景颜色。                                      | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` |
+| `title`               | 可选标题，渲染为 p，不是原生 title 属性。                           | `ReactNode`                                   | —        |
+| `children`            | 内容，可组合正文、链接或按钮。                                      | `ReactNode`                                   | —        |
+| `role`                | 静态说明默认 note；紧急动态结果可显式使用 alert。                   | `AriaRole`                                    | `'note'` |
+| `className / style`   | 作用于根 div 元素。                                                 | `string / CSSProperties`                      | —        |
+| `ref`                 | 指向真实 div 元素。                                                 | `ComponentPropsWithRef<'div'>['ref']`         | —        |
+| `其他原生属性 / 事件` | 支持 div 事件、aria-\*、data-\* 等属性；原生 title 由组件标题替代。 | `Omit<ComponentPropsWithRef<'div'>, 'title'>` | —        |
 
 <a id="behavior"></a>
 

@@ -22,11 +22,13 @@ import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
 
 ## 代码演示
 
+配色按钮仅供外观、悬停和键盘焦点对照，不绑定业务操作。
+
 <a id="theme-variants"></a>
 
 ### 默认配色与强调色变体
 
-比较粉色（pink）、浅蓝（blue）与浅黄（yellow）的强调色变体，布局、字阶与交互相同；按钮可观察悬停和键盘焦点，不绑定业务操作。
+对比粉色、浅蓝与浅黄三种强调色预设。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -72,7 +74,7 @@ export default function ThemeVariants() {
 
 ### 定制颜色与 Portal 传播
 
-完整列出 10 个可选颜色入口。打开弹窗，可确认颜色随主题上下文进入 body 中的 Portal，无需复制页面布局样式。
+用 10 项颜色覆盖定制主题，打开弹窗查看 Portal 传播。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeTokens.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -122,7 +124,7 @@ export default function ThemeTokensExample() {
 
 ### 嵌套主题
 
-内层以自己的主题默认值为起点，不合并外层 tokens。按钮仅供配色对照，可观察悬停和键盘焦点；需要相同覆盖时，应再次显式传入。
+对比外层自定义绿色与内层浅黄预设。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeNested.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

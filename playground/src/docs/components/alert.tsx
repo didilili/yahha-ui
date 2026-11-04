@@ -3,7 +3,7 @@ import alertSource from '../../examples/content/AlertExample.tsx?raw';
 import AlertAction from '../../examples/content/AlertAction';
 import alertActionSource from '../../examples/content/AlertAction.tsx?raw';
 import { defineComponentPage } from '../page';
-import { nativeRows, example } from '../page-helpers';
+import { example } from '../page-helpers';
 
 export default defineComponentPage('alert', {
   importCode: "import { Alert } from 'yahha-ui';",
@@ -25,14 +25,14 @@ export default defineComponentPage('alert', {
         example(
           'alert-tones',
           '四种说明类型',
-          '比较信息、成功、警告和错误四种外观；保存与发送文案仅为静态样本。',
+          '对比信息、成功、警告和错误四种静态说明。',
           AlertExample,
           alertSource,
         ),
         example(
           'alert-action',
           '与操作组合',
-          '首次模拟保存失败，再重试成功；选项保留，按钮加载和后续焦点由示例管理。仅更新本页状态，不发送网络请求或真实订阅。',
+          '首次模拟保存失败，重试成功；只更新本例状态，不实际订阅。',
           AlertAction,
           alertActionSource,
         ),
@@ -72,7 +72,21 @@ export default defineComponentPage('alert', {
               defaultValue: "'note'",
               description: '静态说明默认 note；紧急动态结果可显式使用 alert。',
             },
-            ...nativeRows('div'),
+            {
+              name: 'className / style',
+              type: 'string / CSSProperties',
+              description: '作用于根 div 元素。',
+            },
+            {
+              name: 'ref',
+              type: "ComponentPropsWithRef<'div'>['ref']",
+              description: '指向真实 div 元素。',
+            },
+            {
+              name: '其他原生属性 / 事件',
+              type: "Omit<ComponentPropsWithRef<'div'>, 'title'>",
+              description: '支持 div 事件、aria-*、data-* 等属性；原生 title 由组件标题替代。',
+            },
           ],
         },
       ],

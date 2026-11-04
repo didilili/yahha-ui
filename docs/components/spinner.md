@@ -20,11 +20,13 @@ import { Spinner } from 'yahha-ui';
 
 ## 代码演示
 
+本页仅演示等待状态，不发起请求。
+
 <a id="spinner-sizes"></a>
 
 ### 尺寸对照
 
-比较小号、中号和大号的外观；墨点不表示真实请求。
+对比小号、中号和大号等待标记。
 
 [查看示例文件](../../playground/src/examples/content/SpinnerExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -65,7 +67,7 @@ export default function SpinnerExample() {
 
 ### 区块等待与完成状态
 
-点击按钮切换等待与完成结果；文字提供一份状态说明，墨点不重复播报。真实请求由使用方管理。
+切换等待与完成状态，查看对应说明。
 
 [查看示例文件](../../playground/src/examples/content/SpinnerWaiting.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -109,14 +111,14 @@ export default function SpinnerWaiting() {
 
 ### SpinnerProps
 
-| 属性                  | 说明                                                                      | 类型                                   | 默认值     |
-| --------------------- | ------------------------------------------------------------------------- | -------------------------------------- | ---------- |
-| `label`               | 在 status 内提供的屏幕阅读器文字。                                        | `string`                               | `加载中`   |
-| `size`                | 默认 16 / 24 / 36px。                                                     | `'sm' \| 'md' \| 'lg'`                 | `'md'`     |
-| `role`                | 原生角色，通常保留 status。                                               | `AriaRole`                             | `'status'` |
-| `className / style`   | 作用于根 span 元素。                                                      | `string / CSSProperties`               | —          |
-| `ref`                 | 指向真实 span 元素。                                                      | `ComponentPropsWithRef<'span'>['ref']` | —          |
-| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。 | `ComponentPropsWithRef<'span'>`        | —          |
+| 属性                  | 说明                                                        | 类型                                              | 默认值     |
+| --------------------- | ----------------------------------------------------------- | ------------------------------------------------- | ---------- |
+| `label`               | 在 status 内提供的屏幕阅读器文字。                          | `string`                                          | `加载中`   |
+| `size`                | 默认 16 / 24 / 36px。                                       | `'sm' \| 'md' \| 'lg'`                            | `'md'`     |
+| `role`                | 原生角色，通常保留 status。                                 | `AriaRole`                                        | `'status'` |
+| `className / style`   | 作用于根 span。                                             | `string / CSSProperties`                          | —          |
+| `ref`                 | 指向根 span。                                               | `Ref<HTMLSpanElement>`                            | —          |
+| `其他原生属性 / 事件` | 事件、aria-\* 和 data-\* 等作用于根 span；不接收 children。 | `Omit<ComponentPropsWithRef<"span">, "children">` | —          |
 
 <a id="behavior"></a>
 

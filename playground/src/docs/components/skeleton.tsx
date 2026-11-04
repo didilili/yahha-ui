@@ -1,7 +1,7 @@
 import SkeletonExample from '../../examples/content/SkeletonExample';
 import skeletonSource from '../../examples/content/SkeletonExample.tsx?raw';
 import { defineComponentPage } from '../page';
-import { nativeRows, example } from '../page-helpers';
+import { example } from '../page-helpers';
 
 export default defineComponentPage('skeleton', {
   importCode: "import { Skeleton } from 'yahha-ui';",
@@ -18,11 +18,12 @@ export default defineComponentPage('skeleton', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>本例手动切换占位与内容，不发起请求。</p>,
       examples: [
         example(
           'skeleton-content',
           '从占位到内容',
-          '示例自行预留头像、标题和摘要的布局高度，切换时保留同一空间；等待说明放在占位外。',
+          '切换文章摘要的占位与内容，观察预留空间。',
           SkeletonExample,
           skeletonSource,
         ),
@@ -56,7 +57,23 @@ export default defineComponentPage('skeleton', {
               description:
                 '文本默认 100% × 1em，矩形默认 100% × 100px，圆形默认 44 × 44px；style 中的同名属性优先。',
             },
-            ...nativeRows('span'),
+            {
+              name: 'aria-hidden',
+              type: 'true',
+              defaultValue: 'true',
+              description: '固定隐藏于辅助技术，不能通过同名属性覆盖。',
+            },
+            {
+              name: 'className / style',
+              type: 'string / CSSProperties',
+              description: '作用于根 span。',
+            },
+            { name: 'ref', type: 'Ref<HTMLSpanElement>', description: '指向根 span。' },
+            {
+              name: '其他原生属性 / 事件',
+              type: 'Omit<ComponentPropsWithRef<"span">, "children">',
+              description: '事件、data-* 等作用于根 span；不接收 children。',
+            },
           ],
         },
       ],

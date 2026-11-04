@@ -23,16 +23,14 @@ export default defineComponentPage('empty-state', {
         {
           id: 'basic',
           title: '首次无内容与创建',
-          description:
-            '创建与恢复只改变当前示例，不发布文章；创建后聚焦内容标题，恢复空态后回到创建按钮。',
+          description: '创建示例文章，或恢复初始空态；不实际发布。',
           component: EmptyBasic,
           source: emptyBasicSource,
         },
         {
           id: 'search',
           title: '搜索无结果与清空条件',
-          description:
-            '输入框实际筛选示例文章。没有结果时提供清空搜索按钮，恢复列表并将焦点返回输入框。',
+          description: '搜索本地文章，无结果时清空条件恢复列表。',
           component: EmptySearch,
           source: emptySearchSource,
         },

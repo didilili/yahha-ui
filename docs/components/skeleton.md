@@ -20,11 +20,13 @@ import { Skeleton } from 'yahha-ui';
 
 ## 代码演示
 
+本例手动切换占位与内容，不发起请求。
+
 <a id="skeleton-content"></a>
 
 ### 从占位到内容
 
-示例自行预留头像、标题和摘要的布局高度，切换时保留同一空间；等待说明放在占位外。
+切换文章摘要的占位与内容，观察预留空间。
 
 [查看示例文件](../../playground/src/examples/content/SkeletonExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -99,13 +101,14 @@ export default function SkeletonExample() {
 
 ### SkeletonProps
 
-| 属性                  | 说明                                                                                     | 类型                                   | 默认值   |
-| --------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------- | -------- |
-| `variant`             | 文本行、矩形或圆形。                                                                     | `'text' \| 'rect' \| 'circle'`         | `'text'` |
-| `width / height`      | 文本默认 100% × 1em，矩形默认 100% × 100px，圆形默认 44 × 44px；style 中的同名属性优先。 | `CSSProperties 尺寸`                   | —        |
-| `className / style`   | 作用于根 span 元素。                                                                     | `string / CSSProperties`               | —        |
-| `ref`                 | 指向真实 span 元素。                                                                     | `ComponentPropsWithRef<'span'>['ref']` | —        |
-| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。                | `ComponentPropsWithRef<'span'>`        | —        |
+| 属性                  | 说明                                                                                     | 类型                                              | 默认值   |
+| --------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------- | -------- |
+| `variant`             | 文本行、矩形或圆形。                                                                     | `'text' \| 'rect' \| 'circle'`                    | `'text'` |
+| `width / height`      | 文本默认 100% × 1em，矩形默认 100% × 100px，圆形默认 44 × 44px；style 中的同名属性优先。 | `CSSProperties 尺寸`                              | —        |
+| `aria-hidden`         | 固定隐藏于辅助技术，不能通过同名属性覆盖。                                               | `true`                                            | `true`   |
+| `className / style`   | 作用于根 span。                                                                          | `string / CSSProperties`                          | —        |
+| `ref`                 | 指向根 span。                                                                            | `Ref<HTMLSpanElement>`                            | —        |
+| `其他原生属性 / 事件` | 事件、data-\* 等作用于根 span；不接收 children。                                         | `Omit<ComponentPropsWithRef<"span">, "children">` | —        |
 
 <a id="behavior"></a>
 

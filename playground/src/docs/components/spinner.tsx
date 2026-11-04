@@ -3,7 +3,7 @@ import spinnerSource from '../../examples/content/SpinnerExample.tsx?raw';
 import SpinnerWaiting from '../../examples/content/SpinnerWaiting';
 import spinnerWaitingSource from '../../examples/content/SpinnerWaiting.tsx?raw';
 import { defineComponentPage } from '../page';
-import { nativeRows, example } from '../page-helpers';
+import { example } from '../page-helpers';
 
 export default defineComponentPage('spinner', {
   importCode: "import { Spinner } from 'yahha-ui';",
@@ -21,18 +21,19 @@ export default defineComponentPage('spinner', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>本页仅演示等待状态，不发起请求。</p>,
       examples: [
         example(
           'spinner-sizes',
           '尺寸对照',
-          '比较小号、中号和大号的外观；墨点不表示真实请求。',
+          '对比小号、中号和大号等待标记。',
           SpinnerExample,
           spinnerSource,
         ),
         example(
           'spinner-waiting',
           '区块等待与完成状态',
-          '点击按钮切换等待与完成结果；文字提供一份状态说明，墨点不重复播报。真实请求由使用方管理。',
+          '切换等待与完成状态，查看对应说明。',
           SpinnerWaiting,
           spinnerWaitingSource,
         ),
@@ -72,7 +73,17 @@ export default defineComponentPage('spinner', {
               defaultValue: "'status'",
               description: '原生角色，通常保留 status。',
             },
-            ...nativeRows('span'),
+            {
+              name: 'className / style',
+              type: 'string / CSSProperties',
+              description: '作用于根 span。',
+            },
+            { name: 'ref', type: 'Ref<HTMLSpanElement>', description: '指向根 span。' },
+            {
+              name: '其他原生属性 / 事件',
+              type: 'Omit<ComponentPropsWithRef<"span">, "children">',
+              description: '事件、aria-* 和 data-* 等作用于根 span；不接收 children。',
+            },
           ],
         },
       ],
