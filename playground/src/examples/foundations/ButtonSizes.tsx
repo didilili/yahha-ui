@@ -20,7 +20,7 @@ export default function ButtonSizes() {
         ))}
       </div>
       <div style={{ display: 'grid', gap: 12, width: 'min(100%, 240px)' }}>
-        <span>长文案换行</span>
+        <span>全宽与长文案换行 · 240px 窄栏</span>
         <Button
           variant="secondary"
           startIcon={

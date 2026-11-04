@@ -28,6 +28,11 @@ export default defineComponentPage('button', {
             <a href="#/components/link">Link</a>；只有图标的操作使用{' '}
             <a href="#/components/icon-button">IconButton</a>。
           </p>
+          <p>
+            同一操作区域优先保留一个主要动作，例如“保存草稿”；“取消修改”等配合动作使用次要按钮，
+            低强调的辅助动作使用文字按钮。这里的 <code>ghost</code> 表示文字按钮，
+            不等同于其他组件库的透明描边按钮。
+          </p>
         </>
       ),
     },
@@ -46,23 +51,21 @@ export default defineComponentPage('button', {
         {
           id: 'button-variants',
           title: '强调程度',
-          description: '比较主要、次要与文字按钮的外观，三者依次降低视觉强调；本例为静态对照。',
+          description: '三种强调程度的静态外观对照。',
           component: ButtonVariants,
           source: buttonVariantsSource,
         },
         {
           id: 'button-sizes',
-          title: '三种尺寸',
-          description:
-            '比较同一按钮的三档尺寸：sm、md、lg 的常规单行高度为 36、44、52px，默认 md；另展示窄栏长文案换行。本例为静态对照。',
+          title: '尺寸、全宽与长文案',
+          description: '三档尺寸、全宽与窄栏长文案的静态对照，长文案可自然换行。',
           component: ButtonSizes,
           source: buttonSizesSource,
         },
         {
           id: 'button-icons',
           title: '前后图标',
-          description:
-            '比较同一按钮的前置与后置装饰图标；按钮文字应能独立描述动作。本例为静态对照。',
+          description: '前置与后置装饰图标的静态对照。',
           component: ButtonIcons,
           source: buttonIconsSource,
         },
@@ -70,22 +73,21 @@ export default defineComponentPage('button', {
           id: 'button-states',
           title: '禁用与异步加载',
           description:
-            '上方对比三种禁用外观；下方可点击保存，体验有无前置图标时的 1.5 秒模拟加载与完成提示。',
+            '模拟保存：无图标示例保存成功，带图标示例首次失败，可再次点击重试；不发送请求。',
           component: ButtonStates,
           source: buttonStatesSource,
         },
         {
           id: 'button-toggle',
           title: '切换状态',
-          description: '使用 aria-pressed 表达收藏状态，保持操作名称稳定，选中状态由调用方控制。',
+          description: '点击按钮切换收藏状态，通过 aria-pressed 表达是否选中。',
           component: ButtonToggle,
           source: buttonToggleSource,
         },
         {
           id: 'button-form',
-          title: '原生表单提交',
-          description:
-            '填写称呼后提交，在本页显示问候，不发送请求。默认 type 为 button，提交需显式写 type="submit"；必填校验使用浏览器行为。',
+          title: '提交与重置',
+          description: '填写称呼后提交，或重置输入与结果；不发送请求。',
           component: ButtonForm,
           source: buttonFormSource,
         },
@@ -95,11 +97,20 @@ export default defineComponentPage('button', {
       id: 'design',
       title: '布局与定制',
       content: (
-        <p>
-          全宽按钮可设置 <code>{"style={{ width: '100%' }}"}</code>，长名称会换行并撑高按钮。
-          多个按钮之间的间距和换行放在外层 flex / grid 容器中设置。需要统一配色时，使用{' '}
-          <a href="#/components/theme-provider">ThemeProvider</a> 的主题配置。
-        </p>
+        <>
+          <p>
+            全宽按钮可设置 <code>{"style={{ width: '100%' }}"}</code>，长名称会换行并撑高按钮。
+            具体写法见上方<a href="#/components/button?section=button-sizes">尺寸、全宽与长文案</a>
+            。
+          </p>
+          <p>
+            多个按钮之间的间距和换行放在外层容器中设置，例如{' '}
+            <code>{"style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}"}</code>。
+            主次操作的可运行写法见<a href="#/components/button?section=button-form">提交与重置</a>。
+            需要统一配色时，使用 <a href="#/components/theme-provider">ThemeProvider</a>{' '}
+            的主题配置。
+          </p>
+        </>
       ),
     },
     {
@@ -134,6 +145,16 @@ export default defineComponentPage('button', {
             保留文案并设置
             aria-busy；请求执行、加载结束和成功或失败提示由调用方处理，结果应在按钮之外清楚呈现。
             系统启用减少动效时，按压位移和加载动画停止。
+          </p>
+          <p>
+            按钮进入原生禁用状态后，键盘焦点可能离开按钮；加载结束不会自动恢复焦点。
+            应由调用方按任务安排去向，例如失败后聚焦需要修正的字段，或在原操作仍需继续时返回按钮。
+            如果用户已转到其他位置，不要抢回焦点。结果文字应保留一份可访问的状态播报。
+          </p>
+          <p>
+            需要编辑内容、失败后保留草稿、重试并在关闭后返回操作入口时，参考{' '}
+            <a href="#/guides/states?section=article-actions">文章编辑与保存组合</a>。
+            <code>loading</code> 只控制当前按钮的等待状态，请求清理与防止重复保存仍由业务处理。
           </p>
         </>
       ),

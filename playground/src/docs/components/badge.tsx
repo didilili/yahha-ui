@@ -23,15 +23,14 @@ export default defineComponentPage('badge', {
         {
           id: 'badge-tones',
           title: '标记类型、行内组合与长标签',
-          description: '比较普通、强调和成功标记，再展示正文行内组合与窄栏中的长标签。',
+          description: '对比三种标记、行内组合和长标签换行。',
           component: BadgeTones,
           source: badgeTonesSource,
         },
         {
           id: 'badge-status',
           title: '展示动态状态',
-          description:
-            '操作由外部 Button 触发，状态文字由调用方更新。外层 role="status" 提供温和播报。',
+          description: '点击按钮切换已读状态；状态仅保留在当前示例。',
           component: BadgeStatus,
           source: badgeStatusSource,
         },

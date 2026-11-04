@@ -24,15 +24,14 @@ export default defineComponentPage('surface', {
         {
           id: 'surface-basic',
           title: '基础用法',
-          description: '默认内边距为 24px；通过 style 或 className 调整容器宽度与内容布局。',
+          description: '标题与正文的静态组合。',
           component: SurfaceBasic,
           source: surfaceBasicSource,
         },
         {
           id: 'surface-composition',
           title: '组合文章摘要',
-          description:
-            '与 Badge、Heading、Text 和 Button 组合，用标题为文章区域命名，并提供收藏操作。',
+          description: '点击“收藏文章”切换状态，收藏仅保留在当前示例中。',
           component: SurfaceComposition,
           source: surfaceCompositionSource,
         },
@@ -42,10 +41,17 @@ export default defineComponentPage('surface', {
       id: 'design',
       title: '内容布局',
       content: (
-        <p>
-          通过 style 或 className 设置容器宽度和内部布局。例如设置 <code>display: grid</code> 与{' '}
-          <code>gap</code>，安排标题、正文与操作之间的间距。
-        </p>
+        <>
+          <p>
+            默认内边距为 24px，容器宽度与内容间距由使用方安排。通过 style 或 className 设置{' '}
+            <code>maxWidth</code>、<code>display: grid</code> 与 <code>gap</code>
+            ，组织标题、正文与操作。
+          </p>
+          <p>
+            连续正文按阅读顺序排布，只在需要独立纸面时使用容器。完整用法见
+            <a href="#/guides/reading?section=reading-example">阅读组合中的文末便笺</a>。
+          </p>
+        </>
       ),
     },
     {

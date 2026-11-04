@@ -14,9 +14,9 @@ import { IconButton } from 'yahha-ui';
 
 ## 何时使用
 
-用于关闭、收藏等含义明确的图标操作。aria-label 为必填属性，应直接描述动作，例如“关闭提示”；图标与悬停提示不能替代这个名称。
+用于关闭、收藏等含义明确的图标操作。`aria-label` 为必填属性，应描述动作，例如“关闭提示”，而不是“叉号”；图标与悬停提示不能替代这个名称。
 
-需要同时展示文字时使用 [Button](button.md)。可用 [Tooltip](tooltip.md) 补充提示，帮助用户识别图标。
+需要同时展示文字时使用 [Button](button.md)。可用 [Tooltip 组合](tooltip.md#basic) 补充文字提示，帮助用户识别图标。
 
 <a id="examples"></a>
 
@@ -26,7 +26,7 @@ import { IconButton } from 'yahha-ui';
 
 ### 基础用法
 
-关闭提示后，焦点移到重新显示按钮；重新显示后回到关闭按钮。回焦由示例管理，初次展示不抢焦点；图标通过 children 传入。
+关闭提示后可重新显示；示例会将焦点移到可用的按钮。
 
 [查看示例文件](../../playground/src/examples/foundations/IconButtonBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -58,7 +58,7 @@ export default function IconButtonBasic() {
     <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
       {visible ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span>点击关闭按钮可隐藏这条提示。</span>
+          <span>欢迎来到手记小站。</span>
           <IconButton
             ref={closeRef}
             aria-label="关闭提示"
@@ -90,7 +90,7 @@ export default function IconButtonBasic() {
 
 ### 尺寸、变体与禁用
 
-分组比较尺寸、强调程度和禁用外观，每组只改变一个条件。sm、md、lg 的方形点击区域为 36、44、52px；本例为静态对照。
+尺寸、强调程度与禁用状态的静态对照。
 
 [查看示例文件](../../playground/src/examples/foundations/IconButtonSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -141,7 +141,7 @@ export default function IconButtonSizes() {
           {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
             <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
               <span>
-                {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}
+                {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '低强调'}
               </span>
               <IconButton variant={variant} aria-label={`${variant} 变体收藏样本`}>
                 <Star />
@@ -175,17 +175,18 @@ export default function IconButtonSizes() {
 
 ### 受控加载与选中
 
-点击后模拟加载 1.2 秒，再切换收藏状态；相邻文字显示等待与完成结果。
+模拟更新收藏，展示等待与选中状态；不发送请求。
 
 [查看示例文件](../../playground/src/examples/foundations/IconButtonLoading.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
 <!-- example-source: playground/src/examples/foundations/IconButtonLoading.tsx -->
 
 ```tsx
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { IconButton, Text } from 'yahha-ui';
 
 export default function IconButtonLoading() {
+  const statusId = useId();
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -203,6 +204,7 @@ export default function IconButtonLoading() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <IconButton
           aria-label="收藏文章"
+          aria-describedby={statusId}
           aria-pressed={saved}
           loading={loading}
           onClick={() => setLoading(true)}
@@ -221,7 +223,7 @@ export default function IconButtonLoading() {
             />
           </svg>
         </IconButton>
-        <Text size="sm" tone="muted" role="status">
+        <Text id={statusId} size="sm" tone="muted" role="status">
           {loading ? '正在更新收藏…' : saved ? '已收藏' : '尚未收藏'}
         </Text>
       </div>
@@ -240,7 +242,7 @@ export default function IconButtonLoading() {
 | --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----------- |
 | `aria-label` **必填** | 必填的可访问名称，描述动作，例如“关闭提示”。                                             | `string`                                  | —           |
 | `children`            | 图标内容。建议装饰图标设置 aria-hidden="true"，加载时此内容被替换。                      | `ReactNode`                               | —           |
-| `variant`             | 主要、次要或文字按钮。                                                                   | `'primary' \| 'secondary' \| 'ghost'`     | `'primary'` |
+| `variant`             | 主要、次要或低强调图标按钮。                                                             | `'primary' \| 'secondary' \| 'ghost'`     | `'primary'` |
 | `size`                | 最小高度依次为 36、44、52px；IconButton 对应为方形点击区域。                             | `'sm' \| 'md' \| 'lg'`                    | `'md'`      |
 | `loading`             | 显示加载图标并禁用按钮，设置 aria-busy。请求与完成状态由调用方管理。                     | `boolean`                                 | `false`     |
 | `type`                | 原生按钮类型。提交表单时显式传入 submit。                                                | `'button' \| 'submit' \| 'reset'`         | `'button'`  |
@@ -258,6 +260,8 @@ export default function IconButtonLoading() {
 按 Tab 聚焦，Enter / Space 激活。装饰图标设置 aria-hidden="true"；收藏等切换操作通过 aria-pressed 表达状态，aria-label 保持稳定，例如始终使用“收藏文章”。
 
 disabled 或 loading 为真时，按钮退出键盘顺序且不能激活。加载会保留可访问名称并设置 aria-busy；请求结束后，由调用方更新 loading，并提供成功或失败的提示。 系统启用减少动效时，按压位移和加载动画停止。
+
+加载结束不会自动恢复焦点，应由调用方按任务安排。关闭提示并卸载按钮时，需把焦点移到可用入口； 基础示例在关闭与重新显示后管理回焦，初次展示不移动焦点。
 
 <a id="styling"></a>
 

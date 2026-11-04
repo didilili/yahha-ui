@@ -16,12 +16,13 @@ export default defineComponentPage('icon-button', {
       content: (
         <>
           <p>
-            用于关闭、收藏等含义明确的图标操作。aria-label
-            为必填属性，应直接描述动作，例如“关闭提示”；图标与悬停提示不能替代这个名称。
+            用于关闭、收藏等含义明确的图标操作。<code>aria-label</code>{' '}
+            为必填属性，应描述动作，例如“关闭提示”，而不是“叉号”；图标与悬停提示不能替代这个名称。
           </p>
           <p>
             需要同时展示文字时使用 <a href="#/components/button">Button</a>。可用{' '}
-            <a href="#/components/tooltip">Tooltip</a> 补充提示，帮助用户识别图标。
+            <a href="#/components/tooltip?section=basic">Tooltip 组合</a>{' '}
+            补充文字提示，帮助用户识别图标。
           </p>
         </>
       ),
@@ -33,23 +34,21 @@ export default defineComponentPage('icon-button', {
         {
           id: 'icon-button-basic',
           title: '基础用法',
-          description:
-            '关闭提示后，焦点移到重新显示按钮；重新显示后回到关闭按钮。回焦由示例管理，初次展示不抢焦点；图标通过 children 传入。',
+          description: '关闭提示后可重新显示；示例会将焦点移到可用的按钮。',
           component: IconButtonBasic,
           source: iconButtonBasicSource,
         },
         {
           id: 'icon-button-sizes',
           title: '尺寸、变体与禁用',
-          description:
-            '分组比较尺寸、强调程度和禁用外观，每组只改变一个条件。sm、md、lg 的方形点击区域为 36、44、52px；本例为静态对照。',
+          description: '尺寸、强调程度与禁用状态的静态对照。',
           component: IconButtonSizes,
           source: iconButtonSizesSource,
         },
         {
           id: 'icon-button-loading',
           title: '受控加载与选中',
-          description: '点击后模拟加载 1.2 秒，再切换收藏状态；相邻文字显示等待与完成结果。',
+          description: '模拟更新收藏，展示等待与选中状态；不发送请求。',
           component: IconButtonLoading,
           source: iconButtonLoadingSource,
         },
@@ -73,7 +72,11 @@ export default defineComponentPage('icon-button', {
               type: 'ReactNode',
               description: '图标内容。建议装饰图标设置 aria-hidden="true"，加载时此内容被替换。',
             },
-            ...buttonVariantRows,
+            ...buttonVariantRows.map((row) =>
+              row.name === 'variant'
+                ? { ...row, description: '主要、次要或低强调图标按钮。' }
+                : row,
+            ),
             ...buttonNativeRows.filter((row) => row.name !== 'children'),
           ],
         },
@@ -92,6 +95,10 @@ export default defineComponentPage('icon-button', {
             disabled 或 loading 为真时，按钮退出键盘顺序且不能激活。加载会保留可访问名称并设置
             aria-busy；请求结束后，由调用方更新 loading，并提供成功或失败的提示。
             系统启用减少动效时，按压位移和加载动画停止。
+          </p>
+          <p>
+            加载结束不会自动恢复焦点，应由调用方按任务安排。关闭提示并卸载按钮时，需把焦点移到可用入口；
+            基础示例在关闭与重新显示后管理回焦，初次展示不移动焦点。
           </p>
         </>
       ),

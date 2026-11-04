@@ -16,6 +16,8 @@ import { Button } from 'yahha-ui';
 
 用于触发动作，例如提交表单、保存草稿和切换收藏。页面或地址跳转使用 [Link](link.md)；只有图标的操作使用 [IconButton](icon-button.md)。
 
+同一操作区域优先保留一个主要动作，例如“保存草稿”；“取消修改”等配合动作使用次要按钮， 低强调的辅助动作使用文字按钮。这里的 `ghost` 表示文字按钮， 不等同于其他组件库的透明描边按钮。
+
 <a id="examples"></a>
 
 ## 代码演示
@@ -52,7 +54,7 @@ export default function ButtonBasic() {
 
 ### 强调程度
 
-比较主要、次要与文字按钮的外观，三者依次降低视觉强调；本例为静态对照。
+三种强调程度的静态外观对照。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -63,17 +65,13 @@ import { Button } from 'yahha-ui';
 
 export default function ButtonVariants() {
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-        {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
-          <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-            <span>
-              {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}
-            </span>
-            <Button variant={variant}>保存草稿</Button>
-          </div>
-        ))}
-      </div>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+      {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
+        <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>{variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}</span>
+          <Button variant={variant}>保存草稿</Button>
+        </div>
+      ))}
     </div>
   );
 }
@@ -81,9 +79,9 @@ export default function ButtonVariants() {
 
 <a id="button-sizes"></a>
 
-### 三种尺寸
+### 尺寸、全宽与长文案
 
-比较同一按钮的三档尺寸：sm、md、lg 的常规单行高度为 36、44、52px，默认 md；另展示窄栏长文案换行。本例为静态对照。
+三档尺寸、全宽与窄栏长文案的静态对照，长文案可自然换行。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -112,7 +110,7 @@ export default function ButtonSizes() {
         ))}
       </div>
       <div style={{ display: 'grid', gap: 12, width: 'min(100%, 240px)' }}>
-        <span>长文案换行</span>
+        <span>全宽与长文案换行 · 240px 窄栏</span>
         <Button
           variant="secondary"
           startIcon={
@@ -151,7 +149,7 @@ export default function ButtonSizes() {
 
 ### 前后图标
 
-比较同一按钮的前置与后置装饰图标；按钮文字应能独立描述动作。本例为静态对照。
+前置与后置装饰图标的静态对照。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonIcons.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -188,7 +186,7 @@ export default function ButtonIcons() {
 
 ### 禁用与异步加载
 
-上方对比三种禁用外观；下方可点击保存，体验有无前置图标时的 1.5 秒模拟加载与完成提示。
+模拟保存：无图标示例保存成功，带图标示例首次失败，可再次点击重试；不发送请求。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -200,18 +198,18 @@ import { Button, Text } from 'yahha-ui';
 
 function AsyncAction({ withIcon = false }: { withIcon?: boolean }) {
   const statusId = useId();
-  const [loading, setLoading] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'success'>('idle');
+  const [attempt, setAttempt] = useState(0);
+  const loading = status === 'loading';
 
   useEffect(() => {
     if (!loading) return;
-    // 演示异步完成；实际项目在请求结束后更新状态。
+    // 模拟保存：带图标的例子首次失败，重试成功；实际项目按请求结果更新状态。
     const timer = window.setTimeout(() => {
-      setLoading(false);
-      setSaved(true);
+      setStatus(withIcon && attempt === 1 ? 'error' : 'success');
     }, 1500);
     return () => window.clearTimeout(timer);
-  }, [loading]);
+  }, [loading, withIcon, attempt]);
 
   return (
     <div
@@ -219,7 +217,7 @@ function AsyncAction({ withIcon = false }: { withIcon?: boolean }) {
       aria-label={withIcon ? '带前图标的异步加载' : '无前图标的异步加载'}
       style={{ display: 'grid', justifyItems: 'start', gap: 8 }}
     >
-      <span>{withIcon ? '带前置图标' : '不带图标'}</span>
+      <span>{withIcon ? '带前置图标 · 首次失败后重试' : '不带图标 · 保存成功'}</span>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
         <Button
           loading={loading}
@@ -233,14 +231,20 @@ function AsyncAction({ withIcon = false }: { withIcon?: boolean }) {
             ) : undefined
           }
           onClick={() => {
-            setSaved(false);
-            setLoading(true);
+            setAttempt((value) => value + 1);
+            setStatus('loading');
           }}
         >
           保存草稿
         </Button>
         <Text id={statusId} size="sm" tone="muted" role="status">
-          {loading ? '正在保存…' : saved ? '草稿已保存' : '尚未保存'}
+          {status === 'loading'
+            ? '正在保存…'
+            : status === 'success'
+              ? '草稿已保存'
+              : status === 'error'
+                ? '模拟保存失败，请再次点击“保存草稿”重试。'
+                : '尚未保存'}
         </Text>
       </div>
     </div>
@@ -248,6 +252,8 @@ function AsyncAction({ withIcon = false }: { withIcon?: boolean }) {
 }
 
 export default function ButtonStates() {
+  const disabledReasonId = useId();
+
   return (
     <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
@@ -256,12 +262,15 @@ export default function ButtonStates() {
             <span>
               {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'} · 禁用
             </span>
-            <Button variant={variant} disabled>
+            <Button variant={variant} disabled aria-describedby={disabledReasonId}>
               保存草稿
             </Button>
           </div>
         ))}
       </div>
+      <Text id={disabledReasonId} size="sm" tone="muted">
+        请先选择一篇手记，再保存草稿。上方为静态禁用对照。
+      </Text>
       <AsyncAction />
       <AsyncAction withIcon />
     </div>
@@ -273,7 +282,7 @@ export default function ButtonStates() {
 
 ### 切换状态
 
-使用 aria-pressed 表达收藏状态，保持操作名称稳定，选中状态由调用方控制。
+点击按钮切换收藏状态，通过 aria-pressed 表达是否选中。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonToggle.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -320,9 +329,9 @@ export default function ButtonToggle() {
 
 <a id="button-form"></a>
 
-### 原生表单提交
+### 提交与重置
 
-填写称呼后提交，在本页显示问候，不发送请求。默认 type 为 button，提交需显式写 type="submit"；必填校验使用浏览器行为。
+填写称呼后提交，或重置输入与结果；不发送请求。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -338,6 +347,8 @@ export default function ButtonForm() {
   return (
     <form
       style={{ display: 'grid', justifyItems: 'start', gap: 16, maxWidth: 400 }}
+      onInput={() => setMessage('尚未提交')}
+      onReset={() => setMessage('尚未提交')}
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -345,7 +356,12 @@ export default function ButtonForm() {
       }}
     >
       <TextField label="怎么称呼你" name="nickname" required autoComplete="nickname" />
-      <Button type="submit">提交表单</Button>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+        <Button type="submit">提交表单</Button>
+        <Button type="reset" variant="secondary">
+          重置
+        </Button>
+      </div>
       <Text size="sm" tone="muted" role="status">
         {message}
       </Text>
@@ -358,7 +374,9 @@ export default function ButtonForm() {
 
 ## 布局与定制
 
-全宽按钮可设置 `style={{ width: '100%' }}`，长名称会换行并撑高按钮。 多个按钮之间的间距和换行放在外层 flex / grid 容器中设置。需要统一配色时，使用 [ThemeProvider](theme.md) 的主题配置。
+全宽按钮可设置 `style={{ width: '100%' }}`，长名称会换行并撑高按钮。 具体写法见上方[尺寸、全宽与长文案](button.md#button-sizes)。
+
+多个按钮之间的间距和换行放在外层容器中设置，例如 `style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}`。 主次操作的可运行写法见[提交与重置](button.md#button-form)。 需要统一配色时，使用 [ThemeProvider](theme.md) 的主题配置。
 
 <a id="api"></a>
 
@@ -388,6 +406,10 @@ export default function ButtonForm() {
 按 Tab 聚焦，Enter / Space 激活。切换操作用 aria-pressed 表达状态，并保持操作名称稳定， 例如用“收藏文章”同时表示收藏和取消收藏。
 
 disabled 或 loading 为真时都会设置原生 disabled，按钮不可聚焦、不可激活。loading 保留文案并设置 aria-busy；请求执行、加载结束和成功或失败提示由调用方处理，结果应在按钮之外清楚呈现。 系统启用减少动效时，按压位移和加载动画停止。
+
+按钮进入原生禁用状态后，键盘焦点可能离开按钮；加载结束不会自动恢复焦点。 应由调用方按任务安排去向，例如失败后聚焦需要修正的字段，或在原操作仍需继续时返回按钮。 如果用户已转到其他位置，不要抢回焦点。结果文字应保留一份可访问的状态播报。
+
+需要编辑内容、失败后保留草稿、重试并在关闭后返回操作入口时，参考 [文章编辑与保存组合](../README.md#站内指南)。`loading` 只控制当前按钮的等待状态，请求清理与防止重复保存仍由业务处理。
 
 <a id="related"></a>
 

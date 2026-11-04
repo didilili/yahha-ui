@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { verifyButtonExamples } from './button-examples.mjs';
 
 export async function verifyCoreComponents(page, baseURL) {
   for (const width of [1280, 320]) {
@@ -16,21 +17,7 @@ export async function verifyCoreComponents(page, baseURL) {
 
     await page.goto(`${baseURL}#/components/button`);
     const states = page.locator('#button-states');
-    await states.waitFor();
-    for (const name of ['无前图标的异步加载', '带前图标的异步加载']) {
-      const action = states
-        .getByRole('group', { name, exact: true })
-        .getByRole('button', { name: '保存草稿', exact: true });
-      const before = await action.boundingBox();
-      await action.click();
-      assert.equal(await action.getAttribute('aria-busy'), 'true');
-      assert.equal(await action.isDisabled(), true);
-      const loading = await action.boundingBox();
-      assert(Math.abs(before.width - loading.width) < 0.1, `${name} keeps its width.`);
-      assert(Math.abs(before.height - loading.height) < 0.1, `${name} keeps its height.`);
-      await page.waitForFunction((node) => !node.disabled, await action.elementHandle());
-      assert.equal(await action.innerText(), '保存草稿');
-    }
+    await verifyButtonExamples(page);
     await verifySource(states, 'foundations/ButtonStates.tsx');
 
     await page.goto(`${baseURL}#/components/text-field`);

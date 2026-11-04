@@ -24,7 +24,7 @@ import { Badge } from 'yahha-ui';
 
 ### 标记类型、行内组合与长标签
 
-比较普通、强调和成功标记，再展示正文行内组合与窄栏中的长标签。
+对比三种标记、行内组合和长标签换行。
 
 [查看示例文件](../../playground/src/examples/foundations/BadgeTones.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -77,7 +77,7 @@ export default function BadgeTones() {
 
 ### 展示动态状态
 
-操作由外部 Button 触发，状态文字由调用方更新。外层 role="status" 提供温和播报。
+点击按钮切换已读状态；状态仅保留在当前示例。
 
 [查看示例文件](../../playground/src/examples/foundations/BadgeStatus.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

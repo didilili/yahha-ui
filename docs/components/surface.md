@@ -24,7 +24,7 @@ import { Surface } from 'yahha-ui';
 
 ### 基础用法
 
-默认内边距为 24px；通过 style 或 className 调整容器宽度与内容布局。
+标题与正文的静态组合。
 
 [查看示例文件](../../playground/src/examples/foundations/SurfaceBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -50,7 +50,7 @@ export default function SurfaceBasic() {
 
 ### 组合文章摘要
 
-与 Badge、Heading、Text 和 Button 组合，用标题为文章区域命名，并提供收藏操作。
+点击“收藏文章”切换状态，收藏仅保留在当前示例中。
 
 [查看示例文件](../../playground/src/examples/foundations/SurfaceComposition.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -98,7 +98,9 @@ export default function SurfaceComposition() {
 
 ## 内容布局
 
-通过 style 或 className 设置容器宽度和内部布局。例如设置 `display: grid` 与 `gap`，安排标题、正文与操作之间的间距。
+默认内边距为 24px，容器宽度与内容间距由使用方安排。通过 style 或 className 设置 `maxWidth`、`display: grid` 与 `gap`，组织标题、正文与操作。
+
+连续正文按阅读顺序排布，只在需要独立纸面时使用容器。完整用法见[阅读组合中的文末便笺](../README.md#站内指南)。
 
 <a id="api"></a>
 

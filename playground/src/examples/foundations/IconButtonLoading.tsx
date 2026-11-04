@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { IconButton, Text } from 'yahha-ui';
 
 export default function IconButtonLoading() {
+  const statusId = useId();
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -19,6 +20,7 @@ export default function IconButtonLoading() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <IconButton
           aria-label="收藏文章"
+          aria-describedby={statusId}
           aria-pressed={saved}
           loading={loading}
           onClick={() => setLoading(true)}
@@ -37,7 +39,7 @@ export default function IconButtonLoading() {
             />
           </svg>
         </IconButton>
-        <Text size="sm" tone="muted" role="status">
+        <Text id={statusId} size="sm" tone="muted" role="status">
           {loading ? '正在更新收藏…' : saved ? '已收藏' : '尚未收藏'}
         </Text>
       </div>

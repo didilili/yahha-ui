@@ -23,7 +23,7 @@ export default function IconButtonBasic() {
     <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
       {visible ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span>点击关闭按钮可隐藏这条提示。</span>
+          <span>欢迎来到手记小站。</span>
           <IconButton
             ref={closeRef}
             aria-label="关闭提示"

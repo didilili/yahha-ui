@@ -42,7 +42,7 @@ export default function IconButtonSizes() {
           {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
             <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
               <span>
-                {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}
+                {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '低强调'}
               </span>
               <IconButton variant={variant} aria-label={`${variant} 变体收藏样本`}>
                 <Star />
