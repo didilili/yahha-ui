@@ -22,11 +22,13 @@ import { Tooltip } from 'yahha-ui';
 
 ## 代码演示
 
+收藏状态仅保留在当前示例；稍后阅读示例只回显按钮操作，不维护阅读列表。
+
 <a id="basic"></a>
 
 ### 图标操作的文字标签
 
-content 与 IconButton 的名称一致且保持稳定，收藏状态由 aria-pressed 与相邻文字表达。点击直接操作，不依赖悬停。
+悬停或聚焦查看提示，点击切换收藏。
 
 [查看示例文件](../../playground/src/examples/floating/TooltipBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -66,7 +68,7 @@ export default function TooltipBasic() {
 
 ### 延迟、方向与禁用提示
 
-悬停“加入稍后阅读” 0.8 秒后在下方显示提示，键盘聚焦立即显示；关闭提示后仍可点击按钮并查看回调结果，不维护阅读列表。
+首次悬停 0.8 秒后在下方显示提示；关闭提示后仍可点击按钮。
 
 [查看示例文件](../../playground/src/examples/floating/TooltipOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -116,9 +118,9 @@ export default function TooltipOptions() {
 
 ## 显示与关闭
 
-默认悬停 400ms 后显示，键盘聚焦时立即显示。鼠标可以移入提示阅读文字，离开触发器与提示后收起。disabled 只关闭提示，不改变原按钮的可用状态。
+默认首次悬停 400ms 后显示，键盘聚焦时立即显示。鼠标可以移入提示阅读文字，离开触发器与提示后收起。disabled 只关闭提示，不改变原按钮的可用状态。
 
-每个 Tooltip 独立计算悬停延迟。从一个触发器移动到另一个时，仍按后者的 delay 等待， 当前没有跨实例共用的延迟分组。
+每个 Tooltip 独立计算悬停延迟。从一个触发器移动到另一个时，仍按后者的 delay 等待， 当前没有跨实例共用的延迟分组。同一提示刚关闭后短时间再次悬停可能立即显示。
 
 <a id="api"></a>
 
@@ -136,7 +138,7 @@ export default function TooltipOptions() {
 | `defaultOpen`       | 非受控初始状态，与 open 二选一。                                                  | `boolean`                         | `false`    |
 | `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                           | `(open: boolean) => void`         | —          |
 | `disabled`          | 禁用提示，不改变 trigger 元素本身的 disabled。                                    | `boolean`                         | `false`    |
-| `delay`             | 鼠标悬停等待时间，单位 ms；聚焦时立即展示。                                       | `number`                          | `400`      |
+| `delay`             | 首次鼠标悬停等待时间，单位 ms；键盘聚焦立即展示，短时间再次悬停可能立即显示。     | `number`                          | `400`      |
 | `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。          | `TooltipProps['side']`            | `"top"`    |
 | `align`             | 相对触发器的对齐方向。                                                            | `"start" \| "center" \| "end"`    | `"center"` |
 | `sideOffset`        | 提示外框与触发器的间距，单位 px；默认给尖角和按钮焦点圈留出空间。                 | `number`                          | `12`       |

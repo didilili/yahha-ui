@@ -22,11 +22,13 @@ Dialog 使用受控状态，调用方必须保存 open 并响应 onOpenChange。
 
 ## 代码演示
 
+表单结果仅保留在当前示例，不连接后台；取消或关闭后重开会从上次保存值重新开始。
+
 <a id="basic"></a>
 
 ### 基础用法
 
-传入触发按钮，用同一份受控状态管理打开与关闭；关闭后焦点回到触发按钮。
+打开阅读提示，关闭后返回触发按钮。
 
 [查看示例文件](../../playground/src/examples/feedback/DialogBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -57,7 +59,7 @@ export default function DialogBasic() {
 
 ### 修改并保存站点标题
 
-打开后填写标题，保存后仅在本页显示结果；取消或关闭会放弃草稿，再次打开仍是上次保存的标题。
+修改站点标题，保存或取消本次修改。
 
 [查看示例文件](../../playground/src/examples/feedback/DialogForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -137,7 +139,7 @@ export default function DialogForm() {
 
 ### 外部按钮打开与焦点返回
 
-外部按钮打开阅读提醒，点击弹窗外部不会关闭。使用“返回阅读”、Escape 或关闭按钮收起后，焦点回到外部按钮。
+从外部按钮打开阅读提醒，关闭后返回原按钮。
 
 [查看示例文件](../../playground/src/examples/feedback/DialogExternal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

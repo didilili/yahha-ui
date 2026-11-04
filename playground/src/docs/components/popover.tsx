@@ -28,21 +28,20 @@ export default defineComponentPage('popover', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>名称仅保留在当前示例，不连接后台。</p>,
       examples: [
         {
           id: 'basic',
           previewAlign: 'center',
           title: '基本说明',
-          description:
-            '省略 open 时由组件维护展开状态；标题与描述自动关联到浮层，正文可以选择和复制。',
+          description: '打开手记的补充说明。',
           component: PopoverBasic,
           source: popoverBasicSource,
         },
         {
           id: 'form',
           title: '修改并保存收藏夹名称',
-          description:
-            '打开时读取本页已保存名称，取消或关闭会放弃草稿；空白名称给出字段错误，保存后关闭并更新结果。',
+          description: '修改收藏夹名称，保存或取消修改。',
           component: PopoverForm,
           source: popoverFormSource,
         },

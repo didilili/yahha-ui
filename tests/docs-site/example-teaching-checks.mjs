@@ -92,7 +92,7 @@ export async function verifyTeachingExamples(page, baseURL) {
     const trigger = menu.getByRole('button', { name: '文章操作', exact: true });
     await trigger.click();
     await menu.getByText('菜单状态：展开', { exact: true }).waitFor();
-    await page.getByRole('menuitem', { name: '收藏到本页', exact: true }).click();
+    await page.getByRole('menuitem', { name: '关闭菜单', exact: true }).click();
     await menu.getByText('菜单状态：收起', { exact: true }).waitFor();
     assert.equal(await menu.locator('.example-preview').getByRole('status').count(), 1);
     await trigger.click();

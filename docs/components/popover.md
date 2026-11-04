@@ -22,11 +22,13 @@ import { Popover } from 'yahha-ui';
 
 ## 代码演示
 
+名称仅保留在当前示例，不连接后台。
+
 <a id="basic"></a>
 
 ### 基本说明
 
-省略 open 时由组件维护展开状态；标题与描述自动关联到浮层，正文可以选择和复制。
+打开手记的补充说明。
 
 [查看示例文件](../../playground/src/examples/floating/PopoverBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -52,7 +54,7 @@ export default function PopoverBasic() {
 
 ### 修改并保存收藏夹名称
 
-打开时读取本页已保存名称，取消或关闭会放弃草稿；空白名称给出字段错误，保存后关闭并更新结果。
+修改收藏夹名称，保存或取消修改。
 
 [查看示例文件](../../playground/src/examples/floating/PopoverForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

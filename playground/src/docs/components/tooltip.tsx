@@ -28,21 +28,20 @@ export default defineComponentPage('tooltip', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>收藏状态仅保留在当前示例；稍后阅读示例只回显按钮操作，不维护阅读列表。</p>,
       examples: [
         {
           id: 'basic',
           previewAlign: 'center',
           title: '图标操作的文字标签',
-          description:
-            'content 与 IconButton 的名称一致且保持稳定，收藏状态由 aria-pressed 与相邻文字表达。点击直接操作，不依赖悬停。',
+          description: '悬停或聚焦查看提示，点击切换收藏。',
           component: TooltipBasic,
           source: tooltipBasicSource,
         },
         {
           id: 'options',
           title: '延迟、方向与禁用提示',
-          description:
-            '悬停“加入稍后阅读” 0.8 秒后在下方显示提示，键盘聚焦立即显示；关闭提示后仍可点击按钮并查看回调结果，不维护阅读列表。',
+          description: '首次悬停 0.8 秒后在下方显示提示；关闭提示后仍可点击按钮。',
           component: TooltipOptions,
           source: tooltipOptionsSource,
         },
@@ -54,13 +53,13 @@ export default defineComponentPage('tooltip', {
       content: (
         <>
           <p>
-            默认悬停 400ms
+            默认首次悬停 400ms
             后显示，键盘聚焦时立即显示。鼠标可以移入提示阅读文字，离开触发器与提示后收起。disabled
             只关闭提示，不改变原按钮的可用状态。
           </p>
           <p>
             每个 Tooltip 独立计算悬停延迟。从一个触发器移动到另一个时，仍按后者的 delay 等待，
-            当前没有跨实例共用的延迟分组。
+            当前没有跨实例共用的延迟分组。同一提示刚关闭后短时间再次悬停可能立即显示。
           </p>
         </>
       ),
@@ -97,7 +96,8 @@ export default defineComponentPage('tooltip', {
               name: 'delay',
               type: 'number',
               defaultValue: '400',
-              description: '鼠标悬停等待时间，单位 ms；聚焦时立即展示。',
+              description:
+                '首次鼠标悬停等待时间，单位 ms；键盘聚焦立即展示，短时间再次悬停可能立即显示。',
             },
             ...popupRows('Tooltip', 'top', 'center').map((row) =>
               row.name === 'sideOffset'

@@ -22,11 +22,13 @@ import { DropdownMenu } from 'yahha-ui';
 
 ## 代码演示
 
+示例仅更新本页状态，不连接后台；基础例只回显选择，不执行收藏或生成摘要。
+
 <a id="basic"></a>
 
 ### 基本操作
 
-选择菜单项后收起菜单，并在下方显示最新选择；这里只演示 onSelect 回调，不执行收藏或生成摘要。
+选择菜单项，查看最新选择。
 
 [查看示例文件](../../playground/src/examples/floating/MenuBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -67,7 +69,7 @@ export default function MenuBasic() {
 
 ### 受控展开状态
 
-用 open / onOpenChange 管理展开状态；点击触发器、选择菜单项或按 Escape，观察下方变化。菜单项仅演示关闭，不维护收藏。
+打开或关闭菜单，查看展开状态。
 
 [查看示例文件](../../playground/src/examples/floating/MenuOpen.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -88,8 +90,8 @@ export default function MenuOpen() {
         onOpenChange={setOpen}
         items={[
           {
-            id: 'save',
-            label: '收藏到本页',
+            id: 'close',
+            label: '关闭菜单',
             onSelect: () => setOpen(false),
           },
         ]}
@@ -106,7 +108,7 @@ export default function MenuOpen() {
 
 ### 组合：编辑、移出与恢复草稿
 
-选择“继续编辑”修改本页草稿，保存或取消后回到菜单按钮；移出后内容仍保留，可从菜单内外恢复。等待审核的发布项不可操作。
+编辑、移出与恢复草稿；保存或取消后返回操作按钮。
 
 [查看示例文件](../../playground/src/examples/floating/MenuControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

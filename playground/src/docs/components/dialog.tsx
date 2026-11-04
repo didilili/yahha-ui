@@ -30,28 +30,29 @@ export default defineComponentPage('dialog', {
     {
       id: 'examples',
       title: '代码演示',
+      content: (
+        <p>表单结果仅保留在当前示例，不连接后台；取消或关闭后重开会从上次保存值重新开始。</p>
+      ),
       examples: [
         {
           id: 'basic',
           previewAlign: 'center',
           title: '基础用法',
-          description: '传入触发按钮，用同一份受控状态管理打开与关闭；关闭后焦点回到触发按钮。',
+          description: '打开阅读提示，关闭后返回触发按钮。',
           component: DialogBasic,
           source: dialogBasicSource,
         },
         {
           id: 'form',
           title: '修改并保存站点标题',
-          description:
-            '打开后填写标题，保存后仅在本页显示结果；取消或关闭会放弃草稿，再次打开仍是上次保存的标题。',
+          description: '修改站点标题，保存或取消本次修改。',
           component: DialogForm,
           source: dialogFormSource,
         },
         {
           id: 'external',
           title: '外部按钮打开与焦点返回',
-          description:
-            '外部按钮打开阅读提醒，点击弹窗外部不会关闭。使用“返回阅读”、Escape 或关闭按钮收起后，焦点回到外部按钮。',
+          description: '从外部按钮打开阅读提醒，关闭后返回原按钮。',
           component: DialogExternal,
           source: dialogExternalSource,
         },

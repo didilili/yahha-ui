@@ -12,8 +12,8 @@ export default function MenuOpen() {
         onOpenChange={setOpen}
         items={[
           {
-            id: 'save',
-            label: '收藏到本页',
+            id: 'close',
+            label: '关闭菜单',
             onSelect: () => setOpen(false),
           },
         ]}

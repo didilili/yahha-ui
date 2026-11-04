@@ -32,13 +32,13 @@ export default defineComponentPage('dropdown-menu', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>示例仅更新本页状态，不连接后台；基础例只回显选择，不执行收藏或生成摘要。</p>,
       examples: [
         {
           id: 'basic',
           previewAlign: 'center',
           title: '基本操作',
-          description:
-            '选择菜单项后收起菜单，并在下方显示最新选择；这里只演示 onSelect 回调，不执行收藏或生成摘要。',
+          description: '选择菜单项，查看最新选择。',
           component: MenuBasic,
           source: menuBasicSource,
         },
@@ -46,16 +46,14 @@ export default defineComponentPage('dropdown-menu', {
           id: 'open-state',
           previewAlign: 'center',
           title: '受控展开状态',
-          description:
-            '用 open / onOpenChange 管理展开状态；点击触发器、选择菜单项或按 Escape，观察下方变化。菜单项仅演示关闭，不维护收藏。',
+          description: '打开或关闭菜单，查看展开状态。',
           component: MenuOpen,
           source: menuOpenSource,
         },
         {
           id: 'controlled',
           title: '组合：编辑、移出与恢复草稿',
-          description:
-            '选择“继续编辑”修改本页草稿，保存或取消后回到菜单按钮；移出后内容仍保留，可从菜单内外恢复。等待审核的发布项不可操作。',
+          description: '编辑、移出与恢复草稿；保存或取消后返回操作按钮。',
           component: MenuControlled,
           source: menuControlledSource,
         },
