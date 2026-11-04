@@ -28,11 +28,6 @@ export default defineComponentPage('button', {
             <a href="#/components/link">Link</a>；只有图标的操作使用{' '}
             <a href="#/components/icon-button">IconButton</a>。
           </p>
-          <p>
-            同一操作区域优先保留一个主要动作，例如“保存草稿”；“取消修改”等配合动作使用次要按钮，
-            低强调的辅助动作使用文字按钮。这里的 <code>ghost</code> 表示文字按钮，
-            不等同于其他组件库的透明描边按钮。
-          </p>
         </>
       ),
     },
@@ -98,6 +93,11 @@ export default defineComponentPage('button', {
       title: '布局与定制',
       content: (
         <>
+          <p>
+            同一操作区域优先保留一个主要动作，例如“保存草稿”；“取消修改”等配合动作使用次要按钮，
+            低强调的辅助动作使用文字按钮。这里的 <code>ghost</code> 表示文字按钮，
+            不等同于其他组件库的透明描边按钮。
+          </p>
           <p>
             全宽按钮可设置 <code>{"style={{ width: '100%' }}"}</code>，长名称会换行并撑高按钮。
             具体写法见上方<a href="#/components/button?section=button-sizes">尺寸、全宽与长文案</a>

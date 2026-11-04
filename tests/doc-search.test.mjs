@@ -85,9 +85,12 @@ test('example titles and descriptions link to the actual example anchor', async 
     searchDocumentation(index, '外部按钮打开')[0]?.href,
     '#/components/dialog?section=external',
   );
-  assert.equal(searchDocumentation(index, '放弃草稿')[0]?.href, '#/components/dialog?section=form');
   assert.equal(
-    searchDocumentation(index, 'Dialog 放弃草稿')[0]?.href,
+    searchDocumentation(index, '取消本次修改')[0]?.href,
+    '#/components/dialog?section=form',
+  );
+  assert.equal(
+    searchDocumentation(index, 'Dialog 取消本次修改')[0]?.href,
     '#/components/dialog?section=form',
   );
 });

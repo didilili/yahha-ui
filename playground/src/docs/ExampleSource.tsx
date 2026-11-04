@@ -22,8 +22,8 @@ export function ExampleSource({
           <span className="example-setup-label">2 个文件{assets.length > 0 ? ' + 素材' : ''}</span>
         </summary>
         <div className="example-setup-content">
-          <p>在已安装本地组件包的 React 项目中，分开保存示例组件和入口，两个文件放在同一目录。</p>
-          <a href="#/guides/getting-started">本地安装包与环境准备</a>
+          <p>在已安装组件包的 React 项目中，分开保存示例组件和入口，两个文件放在同一目录。</p>
+          <a href="#/guides/getting-started">安装组件与环境准备</a>
           <ol className="example-setup-steps">
             <li>
               <strong className="example-file-label">Example.tsx · 示例组件</strong>

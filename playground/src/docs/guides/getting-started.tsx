@@ -51,12 +51,9 @@ const page: DocPage = {
       title: '1. 安装组件',
       content: (
         <>
-          <p>
-            当前通过本地安装包试用，尚未发布 npm。在自己的 React 项目根目录执行，
-            将路径替换为安装包的实际位置：
-          </p>
-          <CodeBlock language="sh" source={'npm install /absolute/path/yahha-ui-0.0.1.tgz'} />
-          <p>还没有安装包时，获取本仓库源码，在仓库根目录生成，再回到自己的项目安装：</p>
+          <p>在自己的 React 项目根目录执行：</p>
+          <CodeBlock language="sh" source={'npm install yahha-ui'} />
+          <p>也可以获取本仓库源码，在仓库根目录生成本地安装包，再回到自己的项目安装：</p>
           <CodeBlock language="sh" source={'npm ci\nnpm run build:lib\nnpm pack'} />
         </>
       ),

@@ -14,7 +14,7 @@ const page: DocPage = {
         <>
           <p>Yahha UI 是一套漫画手账风 React 组件库，面向个人博客、个人主页与内容网站。</p>
           <p>组件提供按钮、字段、内容排版和状态反馈，页面布局与业务数据由应用管理。</p>
-          <p className="guide-status">当前通过本地安装包试用，尚未发布 npm 包。</p>
+          <p className="guide-status">当前为早期预览，通过 npm 安装。</p>
           <div className="guide-actions">
             <Link className="guide-primary" href="#/guides/getting-started">
               开始使用 <ArrowUpRight size={16} />
@@ -90,7 +90,7 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            当前版本为 0.0.1，尚未发布到 npm。通过本地打包安装，在 React / React DOM ^19.3.1
+            当前版本为 0.0.1，通过 npm 或本地安装包接入。在 React / React DOM ^19.3.1
             的浏览器项目中验证；React 18 与服务端渲染兼容性尚未验证。
           </p>
           <p>

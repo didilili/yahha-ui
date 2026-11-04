@@ -11,7 +11,6 @@
   "bugs": {
     "url": "https://github.com/didilili/yahha-ui/issues"
   },
-  "private": true,
   "type": "module",
   "files": [
     "dist",
@@ -69,7 +68,11 @@
     "fonts:generate": "uv run scripts/build-fonts.py && npm run sync:fonts",
     "sync:fonts": "node scripts/sync-fonts.mjs",
     "check:fonts": "node --test tests/fonts.test.mjs && node scripts/check-fonts.mjs",
-    "test:fonts": "node scripts/test-fonts.mjs"
+    "test:fonts": "node scripts/test-fonts.mjs",
+    "prepack": "npm run build:lib",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0"
@@ -79,6 +82,7 @@
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@changesets/cli": "3.0.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "22.20.5",
@@ -98,5 +102,9 @@
     "typescript": "^7.0.2",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

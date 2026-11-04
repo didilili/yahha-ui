@@ -105,7 +105,7 @@ GitHub Actions 对 pull request 与 `main` push 执行完整检查。本地 Husk
 
 ## 素材与许可
 
-项目自有内容采用 [MIT](LICENSE)，第三方内容见[第三方说明](THIRD_PARTY_NOTICES.md)。当前包保持 `private: true`，通过本地包试用；公开源码与 npm 发布分别处理。React 19 浏览器项目为当前验证范围，不扩写未经验证的兼容承诺。
+项目自有内容采用 [MIT](LICENSE)，第三方内容见[第三方说明](THIRD_PARTY_NOTICES.md)。组件包通过 npm 分发，也保留本地包试用方式；版本管理和自动发布见[版本与发布](docs/releasing.md)。公开源码与 npm 发布分别处理。React 19 浏览器项目为当前验证范围，不扩写未经验证的兼容承诺。
 
 状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`。修改场景素材时同步来源记录与完整接入下载文件。
 
