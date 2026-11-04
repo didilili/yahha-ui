@@ -50,7 +50,7 @@ export default function PaginationArchive() {
           setPage(nextPage);
         }}
       />
-      <Text size="sm" tone="muted" role="status">
+      <Text size="sm" tone="muted">
         正在查看归档第 {page} 页。
       </Text>
     </div>

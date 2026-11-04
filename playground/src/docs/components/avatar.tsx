@@ -3,7 +3,7 @@ import avatarSource from '../../examples/content/AvatarExample.tsx?raw';
 import AvatarPicture from '../../examples/content/AvatarPicture';
 import avatarPictureSource from '../../examples/content/AvatarPicture.tsx?raw';
 import { defineComponentPage } from '../page';
-import { nativeRows, example } from '../page-helpers';
+import { example } from '../page-helpers';
 
 export default defineComponentPage('avatar', {
   importCode: "import { Avatar } from 'yahha-ui';",
@@ -24,14 +24,14 @@ export default defineComponentPage('avatar', {
         example(
           'avatar-fallback',
           '尺寸与文字回退',
-          '比较三档尺寸、完整长姓名与匿名回退；姓名放在头像旁，图形保留短标记。空白姓名显示问号，并使用“匿名用户”作为可访问名称。',
+          '对比三档尺寸、完整署名与匿名回退。',
           AvatarExample,
           avatarSource,
         ),
         example(
           'avatar-picture',
           '图片失败与恢复',
-          '点击按钮模拟解码失败，再恢复有效的本地图片。加载中或失败时保留姓名回退，头像区域保持 64px。',
+          '模拟图片失效并恢复，查看姓名回退。',
           AvatarPicture,
           avatarPictureSource,
         ),
@@ -78,7 +78,18 @@ export default defineComponentPage('avatar', {
               defaultValue: "'md'",
               description: '默认 32 / 44 / 64px。',
             },
-            ...nativeRows('span'),
+            {
+              name: 'className / style',
+              type: 'string / CSSProperties',
+              description: '作用于根 span。',
+            },
+            { name: 'ref', type: 'Ref<HTMLSpanElement>', description: '指向根 span。' },
+            {
+              name: '其他原生属性 / 事件',
+              type: 'Omit<ComponentPropsWithRef<"span">, "children">',
+              description:
+                '事件、data-* 等作用于根 span；固定 role="img"，aria-label 由 name 提供，不能通过同名属性覆盖。',
+            },
           ],
         },
       ],

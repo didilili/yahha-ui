@@ -71,9 +71,9 @@ export default function TextExample() {
 
 <a id="text-inline-composition"></a>
 
-### 行内组合与长词换行
+### 行内组合与换行
 
-分别展示正文中的纸签和链接，以及 32ch 窄栏内中英文长词的自然换行。
+段落内的强调、纸签和链接，以及窄栏中的长词与地址换行。
 
 [查看示例文件](../../playground/src/examples/content/TextComposition.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -81,6 +81,8 @@ export default function TextExample() {
 
 ```tsx
 import { Badge, Link, Text } from 'yahha-ui';
+
+const paragraphReference = 'https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/p';
 
 export default function TextComposition() {
   return (
@@ -90,8 +92,9 @@ export default function TextComposition() {
           行内组合
         </Text>
         <Text>
-          这篇手记标记为 <Badge tone="accent">阅读中</Badge>。可以先读完这一段，再去
-          <Link href="#/guides/reading?section=reading">看看完整的阅读组合</Link>。
+          <strong>这篇手记</strong>标记为 <Badge tone="accent">阅读中</Badge>
+          。可以先读完这一段，再去
+          <Link href="#/guides/reading?section=reading-example">看看完整的阅读组合</Link>。
         </Text>
       </section>
       <section aria-label="长词换行" style={{ display: 'grid', gap: 8, maxWidth: '32ch' }}>
@@ -101,6 +104,12 @@ export default function TextComposition() {
         <Text>
           我把这次散步的记录存成 PersonalJournalWithAVeryLongUnbrokenTitle，
           留给下个周末，和没赶上散步的朋友一起看。
+        </Text>
+        <Text>
+          段落参考：
+          <Link href={paragraphReference} external>
+            {paragraphReference}（新标签页）
+          </Link>
         </Text>
       </section>
     </div>
@@ -112,7 +121,7 @@ export default function TextComposition() {
 
 ## 长文的阅读节奏
 
-通过 size 设置字号，次要提示可使用 tone="muted"。长文章的栏宽、段距和章节留白由外层布局建立；Text 默认没有外边距，不会为每一段自动增加间隔。长单词与地址可以换行，窄栏中仍应检查真实内容的阅读效果。
+Text 默认行高为 1.8，段落不带外边距；栏宽、段距和章节留白由外层布局设置。 长词与地址可以换行，连续正文的组合写法见 [完整阅读示例](../README.md#站内指南)。
 
 <a id="api"></a>
 

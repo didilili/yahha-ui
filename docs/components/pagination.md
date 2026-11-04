@@ -20,11 +20,13 @@ import { Pagination } from 'yahha-ui';
 
 ## 代码演示
 
+本页示例只更新本地内容，不请求数据或改变网址。
+
 <a id="basic"></a>
 
 ### 对文章列表分页
 
-通过 currentPage / onPageChange 更新本地数组的显示范围。totalPages 传总页数，不传文章条数。
+翻页查看每页三篇文章。
 
 [查看示例文件](../../playground/src/examples/navigation/PaginationBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -49,6 +51,7 @@ const articles = [
 export default function PaginationBasic() {
   const [page, setPage] = useState(1);
   const pageSize = 3;
+  const totalPages = Math.ceil(articles.length / pageSize);
   const visibleArticles = articles.slice((page - 1) * pageSize, page * pageSize);
   return (
     <div style={{ display: 'grid', gap: 16 }}>
@@ -57,13 +60,9 @@ export default function PaginationBasic() {
           <li key={title}>{title}</li>
         ))}
       </ol>
-      <Pagination
-        currentPage={page}
-        totalPages={Math.ceil(articles.length / pageSize)}
-        onPageChange={setPage}
-      />
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       <Text size="sm" tone="muted" role="status">
-        第 {page} 页，共 {articles.length} 篇文章。
+        第 {page} / {totalPages} 页，共 {articles.length} 篇文章。
       </Text>
     </div>
   );
@@ -74,7 +73,7 @@ export default function PaginationBasic() {
 
 ### 较多页码与翻页阅读
 
-用三篇本地摘要和编号模拟 80 页归档，只生成当前页，不发起请求或改变网址；翻页后更新列表并聚焦本页标题。
+用三篇摘要模拟 80 页归档，翻页后聚焦本页标题。
 
 [查看示例文件](../../playground/src/examples/navigation/PaginationArchive.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -133,7 +132,7 @@ export default function PaginationArchive() {
           setPage(nextPage);
         }}
       />
-      <Text size="sm" tone="muted" role="status">
+      <Text size="sm" tone="muted">
         正在查看归档第 {page} 页。
       </Text>
     </div>
@@ -145,7 +144,7 @@ export default function PaginationArchive() {
 
 ### 空列表
 
-没有文章时传入 totalPages={0}，数字页码隐藏，上一页与下一页均不可用。
+空列表隐藏数字页码，翻页按钮不可用。
 
 [查看示例文件](../../playground/src/examples/navigation/PaginationEmpty.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -168,7 +167,7 @@ export default function PaginationEmpty() {
 
 ## 分页状态与阅读位置
 
-- currentPage 从 1 开始，totalPages 是总页数；在 onPageChange 中同步当前页和对应内容。点击当前页不会重复回调。
+- currentPage 从 1 开始，totalPages 是总页数，不是文章条数；在 onPageChange 中同步当前页和对应内容。点击当前页不会重复回调。
 - 显示页码会归一化到可用范围，但不会因此触发 onPageChange。筛选后列表缩减时，调用方需同步修正自身页码；总页数为 0 时隐藏数字并禁用两侧按钮。
 - 切页后的 URL、焦点和滚动位置由调用方安排。可把焦点移到新一页的标题，让阅读从更新后的内容开始；实际组合见 [个人博客归档](../README.md#站内指南)。
 
@@ -180,15 +179,15 @@ PaginationProps 支持原生 nav 属性，children 除外。
 
 ### PaginationProps
 
-| 属性                      | 说明                                                                          | 类型                                                    | 默认值     |
-| ------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- | ---------- |
-| `currentPage` **必填**    | 从 1 开始的受控页码。显示时取整并限制在可用范围。                             | `number`                                                | —          |
-| `totalPages` **必填**     | 总页数。取整并限制在 0 与 Number.MAX\_SAFE\_INTEGER 之间；非有限值按 0 处理。 | `number`                                                | —          |
-| `onPageChange` **必填**   | 激活不同的可用页码后调用；点击当前页不回调。                                  | `(page: number) => void`                                | —          |
-| `siblingCount`            | 当前页两侧的相邻页数，取整并限制在 0–2；非有限值使用 1。                      | `number`                                                | `1`        |
-| `aria-label`              | nav 的可访问名称；多组分页应区分命名。                                        | `string`                                                | `文章分页` |
-| `classNames`              | 列表、所有按钮、省略号的附加类名。                                            | `{ list?: string; button?: string; ellipsis?: string }` | —          |
-| `ref / className / style` | 作用于最外层 nav。                                                            | `原生 nav 属性`                                         | —          |
+| 属性                      | 说明                                                                           | 类型                                                    | 默认值     |
+| ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------- | ---------- |
+| `currentPage` **必填**    | 从 1 开始的受控页码。显示时取整并限制在可用范围；有页码时，非有限值按 1 处理。 | `number`                                                | —          |
+| `totalPages` **必填**     | 总页数。取整并限制在 0 与 Number.MAX\_SAFE\_INTEGER 之间；非有限值按 0 处理。  | `number`                                                | —          |
+| `onPageChange` **必填**   | 激活不同的可用页码后调用；点击当前页不回调。                                   | `(page: number) => void`                                | —          |
+| `siblingCount`            | 当前页两侧的相邻页数，取整并限制在 0–2；非有限值使用 1。                       | `number`                                                | `1`        |
+| `aria-label`              | nav 的可访问名称；多组分页应区分命名。                                         | `string`                                                | `文章分页` |
+| `classNames`              | 列表、所有按钮、省略号的附加类名。                                             | `{ list?: string; button?: string; ellipsis?: string }` | —          |
+| `ref / className / style` | 作用于最外层 nav。                                                             | `原生 nav 属性`                                         | —          |
 
 <a id="behavior"></a>
 

@@ -7,20 +7,21 @@ export default function LinkExample() {
         <Link href="#/guides/getting-started">阅读入门指南</Link>，继续了解组件的使用方式。
       </Text>
       <Text>
-        <Link href="https://example.com" external>
-          example.com 占位页面（新标签页打开）
-        </Link>
-      </Text>
-      <Text>
-        周末空下来的时候，可以读读
-        <Link href="https://example.com" external>
-          example.com 占位页面：适合周末慢慢阅读的散步与书单手记（新标签页打开）
+        链接的原生用法见
+        <Link
+          href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a"
+          external
+        >
+          MDN 链接元素（新标签页打开）
         </Link>
         。
       </Text>
-      <Text size="sm" tone="muted">
-        <Link href="https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress" external>
-          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress（新标签页打开）
+      <Text size="sm" tone="muted" style={{ maxWidth: '32ch' }}>
+        <Link
+          href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a"
+          external
+        >
+          https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a（新标签页打开）
         </Link>
       </Text>
     </div>

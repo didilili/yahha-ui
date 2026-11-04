@@ -18,7 +18,7 @@ export default function AvatarPicture() {
         </Button>
       </div>
       <Text size="sm" tone="muted" role="status">
-        {broken ? '图片暂不可用，已显示姓名回退。' : '当前使用图片头像。'}
+        {broken ? '图片暂不可用，已显示姓名回退。' : '当前选择：本地图片。'}
       </Text>
     </div>
   );

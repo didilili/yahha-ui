@@ -18,7 +18,7 @@ export default defineComponentPage('link', {
         example(
           'link-native',
           '站内与外部链接',
-          '站内入口与正文中的长链接；外链使用明确标注的 example.com 占位地址，接入时替换为实际目标，并保留新窗口提示。',
+          '站内导航、新标签页外链与窄栏中的长地址换行。',
           LinkExample,
           linkSource,
         ),
@@ -45,7 +45,7 @@ export default defineComponentPage('link', {
               name: 'external',
               type: 'boolean',
               defaultValue: 'false',
-              description: '未指定 target 时使用 _blank。',
+              description: '未指定 target 时使用 _blank；显式 target 优先。',
             },
             {
               name: 'target / rel',
@@ -65,6 +65,7 @@ export default defineComponentPage('link', {
         <ul>
           {[
             'Tab 聚焦时显示可见轮廓，保留原生链接的 Enter 激活、新窗口和复制地址等操作。组件不接管路由，需要客户端导航时由应用接入。',
+            'external 只设置默认打开方式，不根据 href 判断是否为外部地址；外部网站也可以在当前页打开。',
             '在链接文字或相邻说明中交代新窗口行为，让用户在打开前知道会离开当前阅读环境。',
             '没有 disabled 模式。不可访问的目标应由页面提供说明或不渲染链接。',
           ].map((note) => (

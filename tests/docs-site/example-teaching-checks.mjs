@@ -81,6 +81,55 @@ export async function verifyTeachingExamples(page, baseURL) {
       await close.elementHandle(),
     );
 
+    await page.goto(`${baseURL}#/components/heading`);
+    const headingExample = page.locator('#heading-reading-layout');
+    const contents = headingExample.getByRole('navigation', { name: '手记目录', exact: true });
+    for (const [name, title] of [
+      ['写封回信', '给远方的朋友写封回信'],
+      ['长手记', '把云朵邮局里借来的铅笔、贴歪的邮票和分给朋友的半块饼干，写进今天的长手记'],
+    ]) {
+      const link = contents.getByRole('link', { name, exact: true });
+      const target = headingExample.getByRole('heading', { level: 3, name: title, exact: true });
+      await link.click();
+      await page.waitForFunction(
+        (node) => document.activeElement === node,
+        await target.elementHandle(),
+      );
+      for (const modifier of ['ctrlKey', 'metaKey']) {
+        const intercepted = await link.evaluate((node, key) => {
+          let prevented = false;
+          window.addEventListener(
+            'click',
+            (event) => {
+              prevented = event.defaultPrevented;
+              event.preventDefault();
+            },
+            { once: true },
+          );
+          node.dispatchEvent(
+            new MouseEvent('click', { bubbles: true, cancelable: true, [key]: true }),
+          );
+          return prevented;
+        }, modifier);
+        assert.equal(intercepted, false, `${name}: ${modifier} retains native link behavior.`);
+      }
+      const destination = new URL(await link.getAttribute('href'), page.url()).href;
+      const opened = await page.context().newPage();
+      try {
+        await opened.goto(destination);
+        await opened
+          .getByRole('heading', { level: 1, name: 'Heading 标题', exact: true })
+          .waitFor();
+        const openedTarget = opened.getByRole('heading', { level: 3, name: title, exact: true });
+        await opened.waitForFunction(
+          (node) => document.activeElement === node,
+          await openedTarget.elementHandle(),
+        );
+      } finally {
+        await opened.close();
+      }
+    }
+
     await page.goto(`${baseURL}#/components/tabs`);
     const controlledTabs = page.locator('#controlled-value');
     await controlledTabs.getByRole('tab', { name: '相册', exact: true }).click();
@@ -123,6 +172,6 @@ export async function verifyTeachingExamples(page, baseURL) {
     await filtering.getByRole('status').getByText('随手记 · 1 篇文章', { exact: true }).waitFor();
   }
   console.log(
-    'Examples passed: keyboard close/reopen focus, minimal controlled Tabs/Menu, replacement of the latest action result and local article filtering at desktop/mobile widths.',
+    'Examples passed: keyboard close/reopen focus, Heading links and new-tab focus, minimal controlled Tabs/Menu, replacement of the latest action result and local article filtering at desktop/mobile widths.',
   );
 }

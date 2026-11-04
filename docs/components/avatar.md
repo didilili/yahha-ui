@@ -24,7 +24,7 @@ import { Avatar } from 'yahha-ui';
 
 ### 尺寸与文字回退
 
-比较三档尺寸、完整长姓名与匿名回退；姓名放在头像旁，图形保留短标记。空白姓名显示问号，并使用“匿名用户”作为可访问名称。
+对比三档尺寸、完整署名与匿名回退。
 
 [查看示例文件](../../playground/src/examples/content/AvatarExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -76,7 +76,7 @@ export default function AvatarExample() {
 
 ### 图片失败与恢复
 
-点击按钮模拟解码失败，再恢复有效的本地图片。加载中或失败时保留姓名回退，头像区域保持 64px。
+模拟图片失效并恢复，查看姓名回退。
 
 [查看示例文件](../../playground/src/examples/content/AvatarPicture.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -103,7 +103,7 @@ export default function AvatarPicture() {
         </Button>
       </div>
       <Text size="sm" tone="muted" role="status">
-        {broken ? '图片暂不可用，已显示姓名回退。' : '当前使用图片头像。'}
+        {broken ? '图片暂不可用，已显示姓名回退。' : '当前选择：本地图片。'}
       </Text>
     </div>
   );
@@ -122,15 +122,15 @@ export default function AvatarPicture() {
 
 ### AvatarProps
 
-| 属性                  | 说明                                                                                                    | 类型                                   | 默认值                            |
-| --------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------- | --------------------------------- |
-| `name` **必填**       | 去除首尾空白后作为可访问名称；为空时使用匿名用户。默认回退取前两个完整字符，保留组合 emoji 和附加符号。 | `string`                               | —                                 |
-| `src`                 | 去除首尾空白后的图片地址；为空不创建 img，地址变化后重新尝试加载。                                      | `string`                               | —                                 |
-| `fallback`            | 图片缺失、加载中或失败时的装饰内容。                                                                    | `ReactNode`                            | `name 前两个完整字符；空姓名为 ?` |
-| `size`                | 默认 32 / 44 / 64px。                                                                                   | `'sm' \| 'md' \| 'lg'`                 | `'md'`                            |
-| `className / style`   | 作用于根 span 元素。                                                                                    | `string / CSSProperties`               | —                                 |
-| `ref`                 | 指向真实 span 元素。                                                                                    | `ComponentPropsWithRef<'span'>['ref']` | —                                 |
-| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。                               | `ComponentPropsWithRef<'span'>`        | —                                 |
+| 属性                  | 说明                                                                                                    | 类型                                              | 默认值                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------- |
+| `name` **必填**       | 去除首尾空白后作为可访问名称；为空时使用匿名用户。默认回退取前两个完整字符，保留组合 emoji 和附加符号。 | `string`                                          | —                                 |
+| `src`                 | 去除首尾空白后的图片地址；为空不创建 img，地址变化后重新尝试加载。                                      | `string`                                          | —                                 |
+| `fallback`            | 图片缺失、加载中或失败时的装饰内容。                                                                    | `ReactNode`                                       | `name 前两个完整字符；空姓名为 ?` |
+| `size`                | 默认 32 / 44 / 64px。                                                                                   | `'sm' \| 'md' \| 'lg'`                            | `'md'`                            |
+| `className / style`   | 作用于根 span。                                                                                         | `string / CSSProperties`                          | —                                 |
+| `ref`                 | 指向根 span。                                                                                           | `Ref<HTMLSpanElement>`                            | —                                 |
+| `其他原生属性 / 事件` | 事件、data-\* 等作用于根 span；固定 role="img"，aria-label 由 name 提供，不能通过同名属性覆盖。         | `Omit<ComponentPropsWithRef<"span">, "children">` | —                                 |
 
 <a id="behavior"></a>
 

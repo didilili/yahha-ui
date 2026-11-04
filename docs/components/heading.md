@@ -55,18 +55,54 @@ export default function HeadingExample() {
 
 ### 文章结构与长标题
 
-按 h2、h3、h4 组织真实章节，外层布局提供段距；长标题在窄栏中自然换行。
+通过目录定位章节，查看标题层级与长标题换行。
 
 [查看示例文件](../../playground/src/examples/content/HeadingArticle.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
 <!-- example-source: playground/src/examples/content/HeadingArticle.tsx -->
 
 ```tsx
-import { Heading, Text } from 'yahha-ui';
+import { useRef, type MouseEvent } from 'react';
+import { Heading, Link, Text } from 'yahha-ui';
 
-export default function HeadingArticle() {
+export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: string }) {
+  const replyId = 'heading-article-reply';
+  const journalId = 'heading-article-journal';
+  const replyRef = useRef<HTMLHeadingElement>(null);
+  const journalRef = useRef<HTMLHeadingElement>(null);
+
+  function focusHeading(event: MouseEvent<HTMLAnchorElement>, heading: HTMLHeadingElement | null) {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      !heading
+    )
+      return;
+    event.preventDefault();
+    heading.scrollIntoView({ block: 'center' });
+    heading.focus({ preventScroll: true });
+  }
+
   return (
     <div style={{ display: 'grid', gap: 32, maxWidth: '65ch' }}>
+      <nav aria-label="手记目录" style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+        <Link
+          href={`${hrefPrefix}${replyId}`}
+          onClick={(event) => focusHeading(event, replyRef.current)}
+        >
+          写封回信
+        </Link>
+        <Link
+          href={`${hrefPrefix}${journalId}`}
+          onClick={(event) => focusHeading(event, journalRef.current)}
+        >
+          长手记
+        </Link>
+      </nav>
       <section style={{ display: 'grid', gap: 12 }}>
         <Text size="sm" tone="muted">
           章节 h2
@@ -81,7 +117,9 @@ export default function HeadingArticle() {
         <Text size="sm" tone="muted">
           小节 h3
         </Text>
-        <Heading level={3}>给远方的朋友写封回信</Heading>
+        <Heading level={3} id={replyId} ref={replyRef} tabIndex={-1}>
+          给远方的朋友写封回信
+        </Heading>
         <Text>信纸上画一张草地野餐图，给还没来过的朋友也留一个位置。邮票贴歪了，就再按一按。</Text>
         <div style={{ display: 'grid', gap: 8, marginTop: 8 }}>
           <Text size="sm" tone="muted">
@@ -97,7 +135,7 @@ export default function HeadingArticle() {
         <Text size="sm" tone="muted">
           长标题 h3
         </Text>
-        <Heading level={3}>
+        <Heading level={3} id={journalId} ref={journalRef} tabIndex={-1}>
           把云朵邮局里借来的铅笔、贴歪的邮票和分给朋友的半块饼干，写进今天的长手记
         </Heading>
         <Text>有些字擦了又写，信封也折得不太齐。寄出去之前，大家还是认认真真签上了名字。</Text>
@@ -111,7 +149,7 @@ export default function HeadingArticle() {
 
 ## 标题间距与长标题
 
-标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。长标题会自然换行，应保留完整文字；不必为了放进一行而降低标题层级。
+标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。长标题会自然换行，应保留完整文字；不要仅为缩小字号而改变标题层级。
 
 <a id="api"></a>
 
@@ -131,7 +169,9 @@ export default function HeadingArticle() {
 
 ## 接续页面的标题层级
 
-例如文章标题使用 h1 时，下一级章节使用 h2，小节使用 h3；嵌入已有页面时，接续所在页面的结构。需要目录或章节链接时，可为标题提供 id，再由页面中的链接引用。
+例如文章标题使用 h1 时，下一级章节使用 h2，小节使用 h3；嵌入已有页面时，接续所在页面的结构。
+
+目录链接引用标题在页面内唯一的 id。定位后的滚动与焦点由页面处理；上例通过 ref 聚焦目标标题，并设置 tabIndex=-1，使其可被聚焦而不额外加入 Tab 顺序。
 
 <a id="related"></a>
 

@@ -25,14 +25,14 @@ export default defineComponentPage('image', {
         example(
           'image-cover',
           '文章封面',
-          '原生 figure 与 figcaption 组织图片和图注，aspectRatio 预留 16:9 区域并随内容宽度缩放；内嵌 SVG 不请求外部资源。',
+          '封面与图注组合，预留 16:9 图片区域。',
           ImageExample,
           imageSource,
         ),
         example(
           'image-failure',
           '失败与新地址恢复',
-          '用 aspectRatio 在加载、失败与恢复期间保留同一 5:3 区域。点击按钮换入有效图片，相邻文字通过加载事件显示实际结果。',
+          '切换失效与有效图片，查看回退和加载结果。',
           ImageFallback,
           imageFallbackSource,
         ),
@@ -122,7 +122,7 @@ export default defineComponentPage('image', {
         <ul>
           {[
             '失败后仍以 alt 作为可访问名称，fallback 是装饰内容。alt="" 的图片及失败回退都保持装饰性，即使 aria-hidden={false} 也不会补出图像名称。',
-            '缺少可用地址或加载失败时显示 fallback；更换 src 或 srcSet 会重新进入加载。清空地址后再设置原地址，也会重新加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。',
+            '缺少可用地址时直接显示 fallback，不触发 onError；图片加载失败也显示 fallback。更换 src 或 srcSet 会重新进入加载。清空地址后再设置原地址，也会重新加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。',
             '固定比例较小而失败提示过长时，回退区域允许滚动。非装饰图片的溢出回退可通过 Tab 聚焦，再用方向键或 PageDown 查看；短提示及空 alt 的装饰图片不会增加键盘入口。',
             '不要把必要说明或交互元素只放进 fallback，因为整个回退内容用于装饰。需要隐藏图片时，hidden 隐藏图片与回退，aria-hidden 仅将两者从辅助技术中隐藏。',
           ].map((note) => (

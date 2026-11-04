@@ -20,11 +20,13 @@ import { Tabs } from 'yahha-ui';
 
 ## 代码演示
 
+本页状态和草稿仅保留在当前示例，不发送或持久保存。
+
 <a id="basic"></a>
 
 ### 基本栏目与内容面板
 
-默认选择第一个可用项。用左右方向键移动焦点，再按 Enter / Space 激活；Tab 进入内容面板。
+切换栏目，查看对应内容面板。
 
 [查看示例文件](../../playground/src/examples/navigation/TabsBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -69,7 +71,7 @@ export default function TabsBasic() {
 
 ### 受控栏目
 
-用 value / onValueChange 同步选中栏目，下方文字读取同一个值。
+切换栏目，查看同步更新的选中值。
 
 [查看示例文件](../../playground/src/examples/navigation/TabsValue.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -105,7 +107,7 @@ export default function TabsValue() {
 
 ### 长标签与禁用栏目
 
-缩窄预览可观察长标签换行；方向键可以聚焦“旧站归档（整理中）”读取名称，但不能激活它。
+对比长标签与暂不可用的归档栏目。
 
 [查看示例文件](../../playground/src/examples/navigation/TabsStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -145,7 +147,7 @@ export default function TabsStates() {
 
 ### 组合：切换栏目时保留草稿
 
-写下明信片后切到说明，再切回查看保留的草稿。“回到明信片”会切回并聚焦输入框；草稿只保留在当前示例，不会发送或保存到服务器。
+切换栏目保留草稿，或返回明信片继续填写。
 
 [查看示例文件](../../playground/src/examples/navigation/TabsControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -222,14 +224,14 @@ export default function TabsControlled() {
 
 - value / onValueChange 管理受控选择，defaultValue 设置非受控初始值；未指定初始值时选择首个可用项，null 可表示不选中任何面板。
 - 非受控选中项被移除或禁用后，会回退到可用项并报告变化；受控模式需由调用方在 items 变化时维护有效 value。
-- 默认卸载未选中面板，keepMounted 保留 DOM 和草稿等局部状态，隐藏内容不参与键盘顺序。面板中的受控输入仍由调用方维护。
+- 默认卸载未选中面板，keepMounted 保留 DOM 和草稿等局部状态，隐藏内容不参与键盘顺序。面板中的受控输入仍由调用方维护；保留的字段不会自动禁用，仍可能参与提交和校验。
 - 面板切换不会自动移动焦点到内容中的输入；“继续填写”等操作可由调用方显式聚焦。组合示例见 [个人博客归档](../README.md#站内指南)。
 
 <a id="api"></a>
 
 ## API
 
-TabsProps 支持原生 div 属性，children 和 defaultValue 除外。
+标签和面板通过 items 配置；原生 div 属性作用于根元素。
 
 ### TabsProps
 
@@ -240,7 +242,7 @@ TabsProps 支持原生 div 属性，children 和 defaultValue 除外。
 | `value`                   | 受控选中值；null 不选中任何面板。                                         | `string \| null`                                  | —            |
 | `defaultValue`            | 非受控初始值，不与 value 同时使用。                                       | `string \| null`                                  | `首个可用项` |
 | `onValueChange`           | 选择变化；非受控选中项被禁用或移除时也会报告回退，无可用项时可能为 null。 | `(value: string \| null) => void`                 | —            |
-| `activateOnFocus`         | 方向键聚焦时直接切换内容；默认需要 Enter / Space。                        | `boolean`                                         | `false`      |
+| `activateOnFocus`         | 方向键聚焦时直接切换内容，适合可即时显示的面板；默认需要 Enter / Space。  | `boolean`                                         | `false`      |
 | `keepMounted`             | 保留隐藏面板 DOM 和局部状态。                                             | `boolean`                                         | `false`      |
 | `classNames`              | 标签列表、各标签按钮、各内容面板的附加类名。                              | `{ list?: string; tab?: string; panel?: string }` | —            |
 | `ref / className / style` | 指向根 div，不指向列表或当前面板。                                        | `原生 div 属性`                                   | —            |

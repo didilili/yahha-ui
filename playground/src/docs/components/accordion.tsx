@@ -25,15 +25,14 @@ export default defineComponentPage('accordion', {
         {
           id: 'basic',
           title: '常见问题',
-          description: 'defaultValue 设置初始展开项，默认一次只展开一个；再次点击可关闭。',
+          description: '逐项展开常见问题，再次点击收起。',
           component: AccordionBasic,
           source: accordionBasicSource,
         },
         {
           id: 'controlled',
           title: '受控的多项展开',
-          description:
-            '展开两项读书会说明以便对照查看，也可逐项收起或全部收起。尚未确认的雨天安排保持禁用。',
+          description: '展开读书会说明对照阅读，也可全部收起。',
           component: AccordionControlled,
           source: accordionControlledSource,
         },
@@ -53,7 +52,7 @@ export default defineComponentPage('accordion', {
           </li>
           <li>
             默认卸载关闭内容，keepMounted
-            可保留输入草稿等局部状态，隐藏内容不参与键盘顺序。展开状态与内容中的表单值由各自的状态逻辑管理。
+            可保留输入草稿等局部状态，隐藏内容不参与键盘顺序。保留的表单字段不会自动禁用，仍可能参与提交和校验。
           </li>
           <li>
             可禁用单项或整组，已展开内容仍保持可见。外部“全部展开”等操作保留当前操作位置，需要进入具体内容时再显式移动焦点。
@@ -64,7 +63,7 @@ export default defineComponentPage('accordion', {
     {
       id: 'api',
       title: 'API',
-      content: <p>AccordionProps 支持原生 div 属性，children 和 defaultValue 除外。</p>,
+      content: <p>内容通过 items 配置；原生 div 属性作用于根元素。</p>,
       api: [
         {
           name: 'AccordionProps',

@@ -24,7 +24,7 @@ import { Divider } from 'yahha-ui';
 
 ### 水平与垂直
 
-正文使用语义分隔；元信息使用隐藏于辅助技术的装饰分隔。
+水平主题分隔与垂直装饰分隔。
 
 [查看示例文件](../../playground/src/examples/content/DividerExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -36,7 +36,7 @@ import { Divider, Text } from 'yahha-ui';
 export default function DividerExample() {
   return (
     <div>
-      <Text>正文结束，下面是本篇手记的阅读信息。</Text>
+      <Text>夕阳落到桥边时，大家把剩下的半块饼干分着吃，等朋友系好鞋带再一起回家。</Text>
       <Divider />
       <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <span>阅读约 3 分钟</span>
@@ -52,7 +52,7 @@ export default function DividerExample() {
 
 ## 分隔线与分组留白
 
-轻纸线支持水平和垂直方向。水平线自带上下留白；放进已有 gap 的布局时，应协调外层间距，避免重复留白。垂直分隔适合短元信息，具体高度可按所在行调整。
+水平线默认上下各留白 20px；放进已有 gap 的布局时，可设置 `style={{ margin: 0 }}`，由外层统一安排间距，见[文章归档组合](../README.md#站内指南)。垂直分隔适合短元信息，可通过 style 或 className 调整高度。
 
 <a id="api"></a>
 
@@ -72,7 +72,9 @@ export default function DividerExample() {
 
 ## 主题分隔还是装饰
 
-默认分隔会进入辅助技术的阅读结构，适合正文主题的变化。作者、日期等信息之间的线条通常只是装饰，使用 decorative 隐藏其分隔语义。orientation 只决定方向；垂直线也需要按内容判断是否保留语义。Divider 不接收 children，需要分组标题时单独使用标题元素。
+orientation 只决定方向；垂直线也需要按内容判断是否保留语义。设置 decorative 后，线条仍可见，但其分隔语义隐藏于辅助技术。
+
+分隔线默认是静态内容，无需添加 tabIndex。Divider 不接收 children，需要分组标题时单独使用标题元素。
 
 <a id="related"></a>
 

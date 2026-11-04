@@ -30,8 +30,8 @@ export default defineComponentPage('text', {
         ),
         example(
           'text-inline-composition',
-          '行内组合与长词换行',
-          '分别展示正文中的纸签和链接，以及 32ch 窄栏内中英文长词的自然换行。',
+          '行内组合与换行',
+          '段落内的强调、纸签和链接，以及窄栏中的长词与地址换行。',
           TextComposition,
           textCompositionSource,
         ),
@@ -42,9 +42,9 @@ export default defineComponentPage('text', {
       title: '长文的阅读节奏',
       content: (
         <p>
-          通过 size 设置字号，次要提示可使用
-          tone="muted"。长文章的栏宽、段距和章节留白由外层布局建立；Text
-          默认没有外边距，不会为每一段自动增加间隔。长单词与地址可以换行，窄栏中仍应检查真实内容的阅读效果。
+          Text 默认行高为 1.8，段落不带外边距；栏宽、段距和章节留白由外层布局设置。
+          长词与地址可以换行，连续正文的组合写法见{' '}
+          <a href="#/guides/reading?section=reading-example">完整阅读示例</a>。
         </p>
       ),
     },

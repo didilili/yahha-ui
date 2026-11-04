@@ -1,5 +1,7 @@
 import { Badge, Link, Text } from 'yahha-ui';
 
+const paragraphReference = 'https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/p';
+
 export default function TextComposition() {
   return (
     <div style={{ display: 'grid', gap: 28, maxWidth: '65ch' }}>
@@ -8,8 +10,9 @@ export default function TextComposition() {
           行内组合
         </Text>
         <Text>
-          这篇手记标记为 <Badge tone="accent">阅读中</Badge>。可以先读完这一段，再去
-          <Link href="#/guides/reading?section=reading">看看完整的阅读组合</Link>。
+          <strong>这篇手记</strong>标记为 <Badge tone="accent">阅读中</Badge>
+          。可以先读完这一段，再去
+          <Link href="#/guides/reading?section=reading-example">看看完整的阅读组合</Link>。
         </Text>
       </section>
       <section aria-label="长词换行" style={{ display: 'grid', gap: 8, maxWidth: '32ch' }}>
@@ -19,6 +22,12 @@ export default function TextComposition() {
         <Text>
           我把这次散步的记录存成 PersonalJournalWithAVeryLongUnbrokenTitle，
           留给下个周末，和没赶上散步的朋友一起看。
+        </Text>
+        <Text>
+          段落参考：
+          <Link href={paragraphReference} external>
+            {paragraphReference}（新标签页）
+          </Link>
         </Text>
       </section>
     </div>

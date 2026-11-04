@@ -27,8 +27,8 @@ export default defineComponentPage('heading', {
         example(
           'heading-reading-layout',
           '文章结构与长标题',
-          '按 h2、h3、h4 组织真实章节，外层布局提供段距；长标题在窄栏中自然换行。',
-          HeadingArticle,
+          '通过目录定位章节，查看标题层级与长标题换行。',
+          () => <HeadingArticle hrefPrefix="#/components/heading?section=" />,
           headingArticleSource,
         ),
       ],
@@ -38,7 +38,7 @@ export default defineComponentPage('heading', {
       title: '标题间距与长标题',
       content: (
         <p>
-          标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。长标题会自然换行，应保留完整文字；不必为了放进一行而降低标题层级。
+          标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。长标题会自然换行，应保留完整文字；不要仅为缩小字号而改变标题层级。
         </p>
       ),
     },
@@ -65,11 +65,16 @@ export default defineComponentPage('heading', {
       id: 'behavior',
       title: '接续页面的标题层级',
       content: (
-        <p>
-          例如文章标题使用 h1 时，下一级章节使用 h2，小节使用
-          h3；嵌入已有页面时，接续所在页面的结构。需要目录或章节链接时，可为标题提供
-          id，再由页面中的链接引用。
-        </p>
+        <>
+          <p>
+            例如文章标题使用 h1 时，下一级章节使用 h2，小节使用
+            h3；嵌入已有页面时，接续所在页面的结构。
+          </p>
+          <p>
+            目录链接引用标题在页面内唯一的 id。定位后的滚动与焦点由页面处理；上例通过 ref
+            聚焦目标标题，并设置 tabIndex={-1}，使其可被聚焦而不额外加入 Tab 顺序。
+          </p>
+        </>
       ),
     },
   ],

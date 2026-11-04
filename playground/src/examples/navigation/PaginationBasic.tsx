@@ -16,6 +16,7 @@ const articles = [
 export default function PaginationBasic() {
   const [page, setPage] = useState(1);
   const pageSize = 3;
+  const totalPages = Math.ceil(articles.length / pageSize);
   const visibleArticles = articles.slice((page - 1) * pageSize, page * pageSize);
   return (
     <div style={{ display: 'grid', gap: 16 }}>
@@ -24,13 +25,9 @@ export default function PaginationBasic() {
           <li key={title}>{title}</li>
         ))}
       </ol>
-      <Pagination
-        currentPage={page}
-        totalPages={Math.ceil(articles.length / pageSize)}
-        onPageChange={setPage}
-      />
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       <Text size="sm" tone="muted" role="status">
-        第 {page} 页，共 {articles.length} 篇文章。
+        第 {page} / {totalPages} 页，共 {articles.length} 篇文章。
       </Text>
     </div>
   );

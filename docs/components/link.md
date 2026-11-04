@@ -24,7 +24,7 @@ import { Link } from 'yahha-ui';
 
 ### 站内与外部链接
 
-站内入口与正文中的长链接；外链使用明确标注的 example.com 占位地址，接入时替换为实际目标，并保留新窗口提示。
+站内导航、新标签页外链与窄栏中的长地址换行。
 
 [查看示例文件](../../playground/src/examples/content/LinkExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -40,20 +40,21 @@ export default function LinkExample() {
         <Link href="#/guides/getting-started">阅读入门指南</Link>，继续了解组件的使用方式。
       </Text>
       <Text>
-        <Link href="https://example.com" external>
-          example.com 占位页面（新标签页打开）
-        </Link>
-      </Text>
-      <Text>
-        周末空下来的时候，可以读读
-        <Link href="https://example.com" external>
-          example.com 占位页面：适合周末慢慢阅读的散步与书单手记（新标签页打开）
+        链接的原生用法见
+        <Link
+          href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a"
+          external
+        >
+          MDN 链接元素（新标签页打开）
         </Link>
         。
       </Text>
-      <Text size="sm" tone="muted">
-        <Link href="https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress" external>
-          https://example.com/#PersonalJournalWithAVeryLongUnbrokenAddress（新标签页打开）
+      <Text size="sm" tone="muted" style={{ maxWidth: '32ch' }}>
+        <Link
+          href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a"
+          external
+        >
+          https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a（新标签页打开）
         </Link>
       </Text>
     </div>
@@ -76,7 +77,7 @@ export default function LinkExample() {
 | 属性                  | 说明                                                                      | 类型                                | 默认值  |
 | --------------------- | ------------------------------------------------------------------------- | ----------------------------------- | ------- |
 | `href` **必填**       | 链接目标。                                                                | `string`                            | —       |
-| `external`            | 未指定 target 时使用 \_blank。                                            | `boolean`                           | `false` |
+| `external`            | 未指定 target 时使用 \_blank；显式 target 优先。                          | `boolean`                           | `false` |
 | `target / rel`        | target=\_blank 时保留原 rel 并补充 noopener noreferrer。                  | `原生 anchor 属性`                  | —       |
 | `children`            | 清楚描述目标的链接内容。                                                  | `ReactNode`                         | —       |
 | `className / style`   | 作用于根 a 元素。                                                         | `string / CSSProperties`            | —       |
@@ -88,6 +89,7 @@ export default function LinkExample() {
 ## 导航与新窗口
 
 - Tab 聚焦时显示可见轮廓，保留原生链接的 Enter 激活、新窗口和复制地址等操作。组件不接管路由，需要客户端导航时由应用接入。
+- external 只设置默认打开方式，不根据 href 判断是否为外部地址；外部网站也可以在当前页打开。
 - 在链接文字或相邻说明中交代新窗口行为，让用户在打开前知道会离开当前阅读环境。
 - 没有 disabled 模式。不可访问的目标应由页面提供说明或不渲染链接。
 

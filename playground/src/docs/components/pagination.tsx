@@ -23,27 +23,26 @@ export default defineComponentPage('pagination', {
     {
       id: 'examples',
       title: '代码演示',
+      content: <p>本页示例只更新本地内容，不请求数据或改变网址。</p>,
       examples: [
         {
           id: 'basic',
           title: '对文章列表分页',
-          description:
-            '通过 currentPage / onPageChange 更新本地数组的显示范围。totalPages 传总页数，不传文章条数。',
+          description: '翻页查看每页三篇文章。',
           component: PaginationBasic,
           source: paginationBasicSource,
         },
         {
           id: 'archive',
           title: '较多页码与翻页阅读',
-          description:
-            '用三篇本地摘要和编号模拟 80 页归档，只生成当前页，不发起请求或改变网址；翻页后更新列表并聚焦本页标题。',
+          description: '用三篇摘要模拟 80 页归档，翻页后聚焦本页标题。',
           component: PaginationArchive,
           source: paginationArchiveSource,
         },
         {
           id: 'empty',
           title: '空列表',
-          description: '没有文章时传入 totalPages={0}，数字页码隐藏，上一页与下一页均不可用。',
+          description: '空列表隐藏数字页码，翻页按钮不可用。',
           component: PaginationEmpty,
           source: paginationEmptySource,
         },
@@ -55,7 +54,7 @@ export default defineComponentPage('pagination', {
       content: (
         <ul>
           <li>
-            currentPage 从 1 开始，totalPages 是总页数；在 onPageChange
+            currentPage 从 1 开始，totalPages 是总页数，不是文章条数；在 onPageChange
             中同步当前页和对应内容。点击当前页不会重复回调。
           </li>
           <li>
@@ -83,7 +82,8 @@ export default defineComponentPage('pagination', {
               name: 'currentPage',
               type: 'number',
               required: true,
-              description: '从 1 开始的受控页码。显示时取整并限制在可用范围。',
+              description:
+                '从 1 开始的受控页码。显示时取整并限制在可用范围；有页码时，非有限值按 1 处理。',
             },
             {
               name: 'totalPages',
