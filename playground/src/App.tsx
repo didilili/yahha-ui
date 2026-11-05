@@ -33,31 +33,23 @@ import {
   type DocumentationSearchResult,
 } from './docs/search';
 import type { DocPage, DocumentationArea } from './docs/types';
-import brandLogo from './assets/brand/yahha-ui-logo.webp';
+import BrandLogo from './site/BrandLogo';
 import NotFoundScene from './examples/scenes/NotFoundScene';
 import HomePage from './site/HomePage';
 import DocScene from './site/DocScene';
 import Motif from './site/Motif';
+import CategoryIcon from './site/CategoryIcon';
+import { categoryIconFor } from './site/category-icons';
 import { blogHref, repositoryHref } from './site/site-links';
 import './site/guide-layout.css';
 
 /* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- API tables need keyboard focus for horizontal scrolling on narrow screens. */
 
 const pages = createDocumentationPages(guideCatalog);
-const groupMotifs: Record<string, 'flower' | 'letter' | 'sprout' | 'star' | 'cloud'> = {
-  组件: 'star',
+const areaMotifs: Record<string, 'flower' | 'letter' | 'sprout'> = {
   开始使用: 'flower',
   组合示例: 'letter',
   设计与素材: 'sprout',
-  通用: 'star',
-  排版: 'letter',
-  布局: 'cloud',
-  表单: 'sprout',
-  内容展示: 'flower',
-  导航: 'star',
-  浮层: 'cloud',
-  反馈: 'letter',
-  主题配置: 'sprout',
 };
 const legacy: Record<string, string> = {
   buttons: 'button',
@@ -105,6 +97,9 @@ function focusSection(id: string) {
   if (disclosure) disclosure.open = true;
   target.focus({ preventScroll: true });
   target.scrollIntoView();
+  const headerBottom = document.querySelector('.docs-header')?.getBoundingClientRect().bottom ?? 0;
+  const top = target.getBoundingClientRect().top;
+  if (top < headerBottom + 24) window.scrollBy({ top: top - headerBottom - 24 });
 }
 
 function SectionBody({
@@ -300,9 +295,10 @@ export default function App() {
   }, [componentId, documentationId, loadAttempt]);
   useEffect(() => {
     if (!contentReady) return;
-    const wasFirst = firstRender.current;
-    firstRender.current = false;
     const frame = requestAnimationFrame(() => {
+      // A cancelled frame must not consume the initial render (including Strict Mode replay).
+      const wasFirst = firstRender.current;
+      firstRender.current = false;
       if (!allowRouteFocus.current) return;
       if (route.section && !loadFailed && document.getElementById(route.section))
         focusSection(route.section);
@@ -476,7 +472,7 @@ export default function App() {
       </a>
       <header className="docs-header">
         <a className="docs-brand" href="#/" aria-label="Yahha UI 首页" inert={menuOpen}>
-          <img className="brand-logo" src={brandLogo} width="824" height="280" alt="" />
+          <BrandLogo inactive={menuOpen} />
         </a>
         <span className="header-divider" />
         <span className="header-caption">
@@ -595,10 +591,15 @@ export default function App() {
                 {!hasQuery &&
                   navigationGroups.map((group) => {
                     const items = group.items;
+                    const categoryIcon = categoryIconFor(group.name);
                     return items.length ? (
                       <div className="nav-group" key={group.id}>
                         <p>
-                          <Motif name={groupMotifs[group.name] ?? 'flower'} />
+                          {categoryIcon ? (
+                            <CategoryIcon name={categoryIcon} size="compact" />
+                          ) : (
+                            <Motif name={areaMotifs[group.name] ?? 'flower'} />
+                          )}
                           {group.name}
                         </p>
                         {items.map((item) => (

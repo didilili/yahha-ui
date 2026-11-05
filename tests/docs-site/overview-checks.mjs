@@ -120,7 +120,39 @@ async function verifyCards(page) {
       count,
     );
 }
+export async function verifyCategoryIcons(page) {
+  const { sidebar, overview } = await page.evaluate(() => ({
+    sidebar: [...document.querySelectorAll('.docs-sidebar .nav-group > p')].map((heading) => ({
+      group: heading.textContent.trim(),
+      icon: heading.querySelector('svg')?.getAttribute('data-category-icon'),
+    })),
+    overview: [...document.querySelectorAll('.overview-groups > section')].map((section) => ({
+      group: section.getAttribute('data-group'),
+      icon: section
+        .querySelector('.overview-group-heading > svg')
+        ?.getAttribute('data-category-icon'),
+    })),
+  }));
+  assert(
+    sidebar.every(({ icon }) => icon),
+    'Every component navigation group has a category icon.',
+  );
+  assert.equal(
+    new Set(sidebar.map(({ icon }) => icon)).size,
+    sidebar.length,
+    'The component directory and its categories have distinct visual identities.',
+  );
+  for (const category of overview) {
+    assert.deepEqual(
+      sidebar.find(({ group }) => group === category.group),
+      category,
+      `${category.group}: sidebar and overview use the same category identity.`,
+    );
+  }
+}
+
 async function verifyCatalogSections(page) {
+  await verifyCategoryIcons(page);
   const overviewGroups = await page.locator('.overview-group').evaluateAll((sections) =>
     sections.map((section) => ({
       group: section.dataset.group,

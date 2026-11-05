@@ -32,6 +32,7 @@ import {
   Tooltip,
 } from 'yahha-ui';
 import welcomeArtwork from '../examples/scenes/artwork/friends-welcome.svg?no-inline';
+import BookmarkMark from './BookmarkMark';
 
 const noop = () => {};
 const row: CSSProperties = {
@@ -41,22 +42,6 @@ const row: CSSProperties = {
   gap: 12,
 };
 const stack: CSSProperties = { display: 'grid', gap: 12, minWidth: 0 };
-
-function BookmarkGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M6 4h12v17l-6-4-6 4Z" />
-    </svg>
-  );
-}
 
 function InfoGlyph() {
   return (
@@ -88,7 +73,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
       return (
         <div style={row}>
           <IconButton aria-label="收藏手记">
-            <BookmarkGlyph />
+            <BookmarkMark />
           </IconButton>
           <IconButton aria-label="查看阅读说明" variant="secondary">
             <InfoGlyph />
@@ -300,7 +285,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
           content="收藏手记"
           trigger={
             <IconButton aria-label="收藏手记" variant="secondary">
-              <BookmarkGlyph />
+              <BookmarkMark />
             </IconButton>
           }
         />

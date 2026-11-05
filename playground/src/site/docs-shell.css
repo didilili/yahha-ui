@@ -23,10 +23,10 @@
 
 .docs-site .brand-logo {
   display: block;
-  width: 180px;
+  /* Preserve the F2 artwork scale while adding the approved 8px wordmark gap. */
+  width: calc(180px * 847 / 824);
   height: auto;
   object-fit: contain;
-  mix-blend-mode: multiply;
 }
 
 .docs-site .header-divider {
@@ -389,7 +389,7 @@
   }
 
   .docs-site .brand-logo {
-    width: 150px;
+    width: calc(150px * 847 / 824);
   }
 
   .docs-site .docs-sidebar.is-open {
@@ -403,10 +403,6 @@
 }
 
 @media (forced-colors: active) {
-  .docs-site .brand-logo {
-    mix-blend-mode: normal;
-  }
-
   .docs-site .nav-group a[aria-current='page'] {
     outline: 2px solid Highlight;
     outline-offset: -2px;

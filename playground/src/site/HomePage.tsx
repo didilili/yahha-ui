@@ -1,7 +1,8 @@
 import { useState, type Ref } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Heart } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight, Code2 } from 'lucide-react';
 import { Badge, Button, Checkbox, Link, Popover, Surface, Tabs, Text, TextField } from 'yahha-ui';
 import Motif from './Motif';
+import BookmarkMark from './BookmarkMark';
 import HomeScenes from './HomeScenes';
 import HomeTheme from './HomeTheme';
 import { blogHref } from './site-links';
@@ -159,9 +160,7 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
                 <Button
                   variant="secondary"
                   aria-pressed={saved}
-                  startIcon={
-                    <Heart aria-hidden="true" size={16} fill={saved ? 'currentColor' : 'none'} />
-                  }
+                  startIcon={<BookmarkMark size={16} filled={saved} />}
                   onClick={() => setSaved(!saved)}
                 >
                   收藏手记

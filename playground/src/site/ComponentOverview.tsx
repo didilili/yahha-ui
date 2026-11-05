@@ -2,9 +2,12 @@ import { useEffect, useId, useRef, useState, type Ref } from 'react';
 import { ArrowRight, Search, X } from 'lucide-react';
 import { Badge, Button, EmptyState, IconButton, Link, SegmentedControl, TextField } from 'yahha-ui';
 import { catalogGroups, componentCatalog } from '../docs/component-catalog';
+import type { ComponentCatalogGroup } from '../docs/types';
 import ComponentPreview from './ComponentPreviews';
 import DocScene from './DocScene';
 import Motif from './Motif';
+import CategoryIcon from './CategoryIcon';
+import { categoryIcons } from './category-icons';
 import './component-overview.css';
 
 const groups = catalogGroups;
@@ -12,19 +15,16 @@ const groupOptions = [
   { value: 'all', label: '全部' },
   ...groups.map((group) => ({ value: group, label: group })),
 ];
-const groupDetails: Record<
-  string,
-  { description: string; motif: 'flower' | 'sprout' | 'cloud' | 'star' | 'letter' }
-> = {
-  通用: { description: '按钮与图标按钮，用于触发操作。', motif: 'flower' },
-  排版: { description: '标题、正文与链接，用于组织文字内容。', motif: 'letter' },
-  布局: { description: '内容容器与分隔线，用于划分页面区域。', motif: 'cloud' },
-  表单: { description: '输入、选择与切换，用于收集信息和设置偏好。', motif: 'sprout' },
-  内容展示: { description: '展示头像、图片和标记，按需展开补充内容。', motif: 'cloud' },
-  浮层: { description: '通过菜单、弹窗和提示，呈现操作或补充说明。', motif: 'letter' },
-  反馈: { description: '说明加载、操作结果和空状态，并提供下一步操作。', motif: 'star' },
-  导航: { description: '标签页与分页，用于切换内容和浏览列表。', motif: 'letter' },
-  主题配置: { description: '设置配色与语义颜色，在页面和浮层中保持一致。', motif: 'flower' },
+const groupDescriptions: Record<ComponentCatalogGroup, string> = {
+  通用: '按钮与图标按钮，用于触发操作。',
+  排版: '标题、正文与链接，用于组织文字内容。',
+  布局: '内容容器与分隔线，用于划分页面区域。',
+  表单: '输入、选择与切换，用于收集信息和设置偏好。',
+  内容展示: '展示头像、图片和标记，按需展开补充内容。',
+  浮层: '通过菜单、弹窗和提示，呈现操作或补充说明。',
+  反馈: '说明加载、操作结果和空状态，并提供下一步操作。',
+  导航: '标签页与分页，用于切换内容和浏览列表。',
+  主题配置: '设置配色与语义颜色，在页面和浮层中保持一致。',
 };
 
 // Preserve the original result sets of saved filters whose categories were split.
@@ -244,13 +244,13 @@ export default function ComponentOverview({
               aria-labelledby={`${overviewId}-${groups.indexOf(group)}`}
             >
               <header className="overview-group-heading">
-                <Motif name={groupDetails[group]?.motif ?? 'flower'} />
+                <CategoryIcon name={categoryIcons[group]} />
                 <div>
                   <h2 id={`${overviewId}-${groups.indexOf(group)}`}>
                     {group}
                     <span>{components.length} 项</span>
                   </h2>
-                  <p>{groupDetails[group]?.description}</p>
+                  <p>{groupDescriptions[group]}</p>
                 </div>
               </header>
               <div className="overview-grid">
