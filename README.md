@@ -6,7 +6,7 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 
 提供可交互的组件示例、API 参考与完整页面组合，支持复制示例接入 React 项目。
 
-[开始使用](#构建与本地安装) · [组件文档](https://github.com/didilili/yahha-ui/blob/main/docs/README.md) · [完整博客示例](https://github.com/didilili/yahha-ui/tree/main/examples/blog) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues) · [变更记录](https://github.com/didilili/yahha-ui/blob/main/CHANGELOG.md)
+[开始使用](#构建与本地安装) · [组件文档](https://github.com/didilili/yahha-ui/blob/main/docs/README.md) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues) · [变更记录](https://github.com/didilili/yahha-ui/blob/main/CHANGELOG.md)
 
 **v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 30 个 UI 组件与 ThemeProvider · 本仓库当前工作版本通过本地安装包试用
 
@@ -14,7 +14,7 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 
 我们想一起做，全宇宙最可爱的 UI 组件库。**Yahha 星球**是首页与示例故事的舞台，基础组件也可以独立使用，不依赖角色图案。
 
-- **为内容网站准备**：阅读、分类、搜索、收藏与轻量表单可以组合成完整小站。[博客示例](examples/blog/README.md)提供库米的首页、手记归档与文章详情。
+- **为内容网站准备**：阅读、分类、搜索、收藏与轻量表单可以组合成完整小站。文档提供阅读、归档与文章编辑等可复制的组合示例。
 - **每次操作，都好好回应**：组件继承使用方字体，提供清晰的焦点、选中与加载状态；键盘、表单和减少动效的用法见各组件文档。
 - **按需加入小场景**：静态 SVG、状态动效和可暂停的欢迎场景独立提供。基础组件不依赖角色图片，组件安装包不包含网站、字体或场景素材。
 
@@ -79,7 +79,7 @@ npm install
 npm run dev
 ```
 
-默认只生成包含本地组件包的项目目录。完整博客可运行 `npm run create:starter -- --example blog`；离线文档、ZIP 和指定输出位置等选项见[导出说明](CONTRIBUTING.md#导出最小接入项目)。生成项目的 README 提供后续运行与部署方法。
+默认只生成包含本地组件包的项目目录。离线文档、ZIP 和指定输出位置等选项见[导出说明](CONTRIBUTING.md#导出最小接入项目)。生成项目的 README 提供后续运行与部署方法。
 
 ## 浏览组件
 
@@ -105,7 +105,7 @@ npm run dev
 
 ## 本地开发
 
-在本仓库完成 `npm ci` 后，可以分别运行文档站和博客：
+在本仓库完成 `npm ci` 后，运行文档站：
 
 ```sh
 npm run dev
@@ -113,22 +113,13 @@ npm run dev
 
 打开终端输出的文档站地址，可浏览组件、入门指南和组合示例。
 
-```sh
-npm run dev:blog
-```
-
-打开终端输出的博客地址，体验搜索、分类、分页、收藏与阅读返回。示例文章为虚构内容，收藏保存在当前浏览器。
-
-[博客运行与改站说明](examples/blog/README.md)
-
 ## 构建与静态部署
 
 ```sh
 npm run build:demo
-npm run build:blog
 ```
 
-文档站输出至 `demo-dist/`，博客输出至 `examples/blog/dist/`。完整步骤见[部署说明](docs/deployment.md)。
+文档站输出至 `demo-dist/`。完整步骤见[部署说明](docs/deployment.md)。
 
 当前尚未提供线上预览地址，可先在本地浏览。
 
@@ -149,7 +140,6 @@ npm run build:blog
 ```text
 src/             组件、公开类型与主题
 playground/      文档站、交互示例及展示素材
-examples/blog/   完整博客示例，共用根工具链
 docs/            使用与维护说明、生成的组件 Markdown
 scripts/         构建、资源同步、验收与项目导出
 tests/           工程脚本、浏览器和真实安装包验收

@@ -85,7 +85,7 @@
 - `#/guides/states`：[文章编辑](../playground/src/examples/scenes/ArticleActions.tsx)、[博客归档](../playground/src/examples/scenes/BlogArchive.tsx)、等待与恢复。
 - `#/guides/artwork`：[素材与分发范围](assets-and-distribution.md)。
 
-[完整博客示例](../examples/blog/README.md)提供首页、归档和文章详情；[部署说明](deployment.md)介绍文档站与博客的静态托管。
+[部署说明](deployment.md)介绍文档站的静态托管。
 
 ## 问题反馈
 

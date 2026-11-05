@@ -4,14 +4,14 @@ Yahha UI 自有内容采用 [MIT 许可证](LICENSE)。第三方字体、依赖�
 
 ## 字体
 
-文档站和博客使用以下字体，组件安装包不包含字体文件：
+文档站使用以下字体，组件安装包不包含字体文件：
 
 | 字体                       | 来源                                                           | 许可                      |
 | -------------------------- | -------------------------------------------------------------- | ------------------------- |
 | LXGW Marker Gothic Regular | [LXGW Marker Gothic](https://github.com/lxgw/LxgwMarkerGothic) | SIL Open Font License 1.1 |
 | LXGW WenKai Regular        | [LXGW WenKai](https://github.com/lxgw/LxgwWenKai)，基于 Klee   | SIL Open Font License 1.1 |
 
-完整字体声明随 `OFL-marker.txt`、`OFL-wenkai.txt` 提供，构建后位于各站点的 `notices/`。
+完整字体声明随 `OFL-marker.txt`、`OFL-wenkai.txt` 提供，构建后位于文档站的 `notices/`。
 
 ## 依赖与工具
 

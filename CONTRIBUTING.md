@@ -21,7 +21,7 @@ macOS 可在安装依赖后双击根目录 `启动组件小屋.command`，它会
 - `src/components/<组件名>/`：组件实现、CSS Modules、行为测试与局部导出。组件内部直接引用具体模块，避免从公共入口回引。
 - `src/theme/`：主题、Context 与语义颜色；`src/internal/`：不公开的工具与图标。
 - `playground/src/`：独立展示页，包含演示数据、图片、字体和示例。库源码不得依赖它。
-- `playground/src/assets/fonts/`：两站字体分片的生成主目录，博客副本由 `npm run sync:fonts` 同步；使用 `npm run check:fonts` 核对覆盖、哈希和副本。重新生成执行 `npm run fonts:generate`（需要 uv），日常安装与构建无需 uv，详见[字体维护](docs/assets-and-distribution.md#字体维护)。
+- `playground/src/assets/fonts/`：文档站字体分片的生成目录；使用 `npm run check:fonts` 核对覆盖和哈希。重新生成执行 `npm run fonts:generate`（需要 uv），日常安装与构建无需 uv，详见[字体维护](docs/assets-and-distribution.md#字体维护)。
 - `playground/src/docs/`：指南与组件页数据、API、站内代码展示工具；`examples/` 放实时示例。每个示例同时作为 TSX 模块和 `?raw` 源码导入。完整接入分别提供原样的 `Example.tsx` 与负责 CSS / ThemeProvider 包裹的 `App.tsx`；含场景素材时同时提供 artwork 文件，保留 `Example.tsx` 同级 `artwork/` 的相对引用。
 - `playground/src/examples/scenes/`：加载、空态与 404 页面组合及其 `artwork/` 素材。素材只属于展示示例，不进入 `src/` 或默认组件库产物。
 - `playground/src/docs/component-catalog.ts`：搜索和导航的轻量元信息目录，不导入示例模块；页面 ID、名称、中文名、分组和描述需与页面定义一致。
@@ -33,7 +33,6 @@ macOS 可在安装依赖后双击根目录 `启动组件小屋.command`，它会
 - `tests/package-consumer/Basics.tsx` 与配套 `basics-checks.mjs`：新增基础组件的表单、导航、图片回退和浮层组合验收。
 - `tests/docs-site/`：构建后文档站的浏览器检查，包含静态子目录部署。
 - `playground/src/site/`：正式首页与文档外壳。
-- `examples/blog/`：共用根工具链的完整网站示例，使用公开构建入口；`tests/blog-site/` 用实际 `.tgz` 安装验收同份源码。
 - `docs/images/`：从实际页面截取的仓库展示图，拍摄路由和视口见目录内 README，不进入安装包。
 - `scripts/`：打包与验收脚本；`starter-template/` 为最小接入项目模板，不是 workspace，生成后的项目独立安装本地 `.tgz`。
 
@@ -57,12 +56,12 @@ Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Sw
 
 ## 导出最小接入项目
 
-运行 `npm run create:starter` 导出最小项目目录，`--example blog` 导出完整博客；`--output /absolute/path/yahha-ui-starter` 指定仓库外的位置。两个可选参数可组合使用：
+运行 `npm run create:starter` 导出最小项目目录；`--output /absolute/path/yahha-ui-starter` 指定仓库外的位置。以下可选参数可组合使用：
 
-- `--with-docs`：检查文档和字体，构建并附带 `documentation/` 静态文档与博客预览，同时提供只需 Node 即可运行的 `npm run docs`。应用构建只更新自己的 `dist/`，不更新快照。
+- `--with-docs`：检查文档和字体，构建并附带 `documentation/` 静态组件文档，同时提供只需 Node 即可运行的 `npm run docs`。应用构建只更新自己的 `dist/`，不更新快照。
 - `--zip`：额外生成同名 `.zip`，此时才需要系统 zip。生成目录可直接运行；收到压缩包的使用者先解压。
 
-导出保留相对路径 `vendor/` 中的真实 `.tgz` 与 `starter-manifest.json` 版本／SHA-256 清单。React、Vite、TypeScript 等精确版本来自根 package.json 对应的 lockfile 记录，完整博客另包含 lucide-react；产物缺失或早于源码时先构建组件库。脚本拒绝覆盖非空目录，启用 `--zip` 时也拒绝覆盖已有同名压缩包。
+导出保留相对路径 `vendor/` 中的真实 `.tgz` 与 `starter-manifest.json` 版本／SHA-256 清单。React、Vite、TypeScript 等精确版本来自根 package.json 对应的 lockfile 记录；产物缺失或早于源码时先构建组件库。脚本拒绝覆盖非空目录，启用 `--zip` 时也拒绝覆盖已有同名压缩包。
 
 最小模板不含源码 alias、角色或站点字体。修改模板后，在仓库外生成项目，执行 `npm install`、`npm run build`，再检查标题输入、收藏与窄屏布局。修改导出脚本后执行 `node --test tests/create-starter.test.mjs`，覆盖默认目录导出、可选文档与压缩，以及原有文件保护。
 
@@ -94,10 +93,9 @@ npx prettier --check README.md CONTRIBUTING.md docs
 - `npm run test:docs`：检查文档路由、API 与示例入口、复制降级、搜索、移动导航和弹窗。先执行 `npm run build:demo`。
 - `npm run test:navigation`：在 Chromium、Firefox 与 WebKit 的 1280 / 320px 视口复验 Tabs 草稿与焦点、Accordion 受控展开，以及 Pagination 归档列表、搜索与翻页。先执行 `npm run build:demo`，三引擎安装方法同上文控件验收。
 - `npm run test:overlays`：在三引擎复验 Dialog 表单、Popover 重命名、菜单草稿操作、Tooltip 及 ArticleActions 嵌套流程；包含 320×500px 短屏、错误恢复、取消与关闭回焦。先执行 `npm run build:demo`，三引擎安装方法同上文控件验收。
-- `npm run test:blog`：用真实本地安装包运行 `examples/blog/` 同份网站，验证三页面、URL 筛选、历史返回、收藏和窄屏布局。先执行 `npm run build:lib`。
 - `npm run check`：完整本地检查；涉及公共 API、构建或依赖边界时运行。
 
-完整检查先统一校验字体、构建组件库，再用 `build:demo:site` 与 `build:blog:site` 构建两站，避免重复检查相同字体或再次构建组件库。日常单独构建仍使用 `build:demo` / `build:blog`，它们保留所需的字体检查与组件库构建。
+完整检查先校验字体、构建组件库，再用 `build:demo:site` 构建文档站，避免重复检查字体或再次构建组件库。日常单独构建使用 `build:demo`，保留所需的字体检查与组件库构建。
 
 首次运行浏览器测试需要 `npx playwright install chromium`；Linux 可能需要 `npx playwright install --with-deps chromium`。`npm run format` 和 `npm run lint:fix` 会修改文件，只在确认作用范围后使用。
 
@@ -109,7 +107,7 @@ GitHub Actions 对 pull request 与 `main` push 执行完整检查。本地 Husk
 
 状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`。修改场景素材时同步来源记录与完整接入下载文件。
 
-静态文档站与博客的输出、自动携带的字体声明和本地预览见[部署说明](docs/deployment.md)；代码、字体与素材的实际分发范围见[素材清单](docs/assets-and-distribution.md)。部署时保留构建中使用字体的现有声明，不把整个源码仓库作为静态站点根目录。
+静态文档站的输出、自动携带的字体声明和本地预览见[部署说明](docs/deployment.md)；代码、字体与素材的实际分发范围见[素材清单](docs/assets-and-distribution.md)。部署时保留构建中使用字体的现有声明，不把整个源码仓库作为静态站点根目录。
 
 ## 工程与设计参考
 

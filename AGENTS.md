@@ -19,7 +19,6 @@
 - src/internal/ 只放库内部共用实现，不作为公共 API 导出。
 - playground/ 只放展示页、演示状态与素材；src/ 不得反向依赖它。
 - tests/package-consumer/ 验证实际安装包；scripts/ 放工程脚本；docs/ 放使用文档。
-- examples/blog/ 是同仓库的完整网站示例，复用根目录工具链，不另建 package.json、workspace 或仓库。网站使用公开 exports；验收把同份源码复制到临时使用方实际安装 tgz，禁止用源码 alias 掩盖接入问题。
 - 内部模块直接导入具体文件，不从 src/index.ts 回引；库内相对 JS 模块路径使用 .js 扩展名。
 - React / ReactDOM 保持 peer dependencies；展示专用依赖与素材不得进入库产物。
 
@@ -36,9 +35,8 @@
 - 总览小样只使用公开组件及属性，不改内部样式、尺寸或交互；预览区使用 inert 与 aria-hidden，独立的卡片标题承载链接，避免嵌套交互。q/group 使用 replaceState 记录筛选，输入不触发路由聚焦或增加历史；返回恢复筛选，清空保留可用焦点。小样不计为新增公共组件或完整使用示例。
 - 文档完整接入提供原样 `Example.tsx` 和独立 CSS / ThemeProvider 入口 `App.tsx`，预览与展示源码同源，不另写一份近似示例。含素材时同时提供对应 artwork 文件，保留相对路径。
 - 场景素材只放在 `playground/src/examples/scenes/artwork/`，不进入 `src/` 或默认组件库产物。Button 与 Spinner 共用内部三墨点图形；环境动效不得拖慢操作反馈，减少动效时使用静帧。
-- `examples/blog/src/assets/` 可保存独立网站所需的素材副本和来源、字体声明，保持角色版本和字节，不从组件库反向引用示例或把副本放入组件库产物。
-- 小日常道具原稿仅维护在 `playground/src/examples/scenes/artwork/little-days/`；`npm run sync:artwork` 派生静态 / 动效文件、博客副本和原生书签图标，`npm run check:artwork` 防止分叉。下载资源使用 `?no-inline` 保留独立 SVG，真实等待结束即停止，静态博客不制造加载延迟。
-- 欢迎场景由 `scripts/build-friends-welcome.mjs` 从当前已确认的人物源派生，仅分离前爪动作，脸、身体比例和原模型保持。`FriendsWelcome.tsx` 使用原生 SVG 与真实暂停 / 继续，博客版本由同步脚本复制且只迁移资源导入路径，不另维护控制器。离屏、后台和系统减少动效时停止；重播只重建前爪，不重置环境时间线。
+- 小日常道具原稿仅维护在 `playground/src/examples/scenes/artwork/little-days/`；`npm run sync:artwork` 派生静态 / 动效文件，`npm run check:artwork` 防止分叉。下载资源使用 `?no-inline` 保留独立 SVG，真实等待结束即停止，不制造加载延迟。
+- 欢迎场景由 `scripts/build-friends-welcome.mjs` 从当前已确认的人物源派生，仅分离前爪动作，脸、身体比例和原模型保持。`FriendsWelcome.tsx` 使用原生 SVG 与真实暂停 / 继续。离屏、后台和系统减少动效时停止；重播只重建前爪，不重置环境时间线。
 - `playground/src/examples/design/` 展示默认实现，禁止通过 style、className、classNames 或内嵌 CSS 改写控件外观与几何。使用方的公开定制能力保留；专门的定制示例应说明范围，不能混进默认基准。
 - 保留导航链接、表格、pre / code 等合理的原生语义，不为组件复用把页面导航改为 Tabs 或把链接改为按钮。Portal 使用统一主题上下文，不复制带布局作用的页面 className。
 - 字体与素材许可统一见[第三方内容说明](THIRD_PARTY_NOTICES.md)；不虚构许可或未经验证的 React / SSR 兼容承诺。

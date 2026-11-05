@@ -13,4 +13,4 @@
 
 新增的 [小日常 SVG](little-days/README.md) 是独立绘制的生活道具，与上述 AI 角色插图分开记录。
 该目录是原始路径的唯一来源，`little-days-*.svg` 为脚本派生的示例文件；修改后执行
-`npm run sync:artwork`，并用 `npm run check:artwork` 检查静态、动效与博客副本一致性。
+`npm run sync:artwork`，并用 `npm run check:artwork` 检查静态与动效派生文件的一致性。
