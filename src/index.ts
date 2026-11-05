@@ -59,3 +59,24 @@ export {
 } from './components/dropdown-menu/index.js';
 export { Popover, type PopoverProps } from './components/popover/index.js';
 export { Tooltip, type TooltipProps } from './components/tooltip/index.js';
+export { Icon, type IconProps, type IconSize, type IconTone } from './components/icon/index.js';
+export {
+  SearchIcon,
+  CloseIcon,
+  BookmarkIcon,
+  CopyIcon,
+  CheckIcon,
+  PlusIcon,
+  EditIcon,
+  TrashIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ChevronDownIcon,
+  ExternalLinkIcon,
+  InfoIcon,
+  SuccessIcon,
+  WarningIcon,
+  ErrorIcon,
+  type GlyphProps,
+  type BookmarkIconProps,
+} from './components/icon/glyphs/index.js';

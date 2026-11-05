@@ -21,6 +21,7 @@ import { Basics } from './Basics.js';
 import { DesignContract } from './DesignContract.js';
 import { OverlayLifecycle } from './OverlayLifecycle.js';
 import { ThemeAliases } from './ThemeAliases.js';
+import { Icons } from './Icons.js';
 
 function Consumer() {
   const [theme, setTheme] = useState<ThemeName>('pink');
@@ -173,7 +174,9 @@ function Consumer() {
 }
 
 createRoot(document.getElementById('root')!).render(
-  new URLSearchParams(location.search).has('theme-aliases') ? (
+  new URLSearchParams(location.search).has('icons') ? (
+    <Icons />
+  ) : new URLSearchParams(location.search).has('theme-aliases') ? (
     <ThemeAliases />
   ) : new URLSearchParams(location.search).has('overlay-lifecycle') ? (
     <OverlayLifecycle />

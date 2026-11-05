@@ -24,6 +24,7 @@ import {
   verifyReviewRegressions,
 } from '../tests/package-consumer/edge-checks.mjs';
 import { verifyBasics } from '../tests/package-consumer/basics-checks.mjs';
+import { verifyIcons } from '../tests/package-consumer/icons-checks.mjs';
 import { verifyNavigation } from '../tests/package-consumer/navigation-checks.mjs';
 import { verifyFeedback } from '../tests/package-consumer/feedback-checks.mjs';
 import {
@@ -332,6 +333,7 @@ try {
       await verifyEdgeCases(browser, url);
       await verifyReviewRegressions(browser, url);
       await verifyBasics(browser, url);
+      await verifyIcons(browser, url);
       await verifyFeedback(browser, url);
     }
     await verifyDesignContract(browser, url);

@@ -1,0 +1,33 @@
+.icon {
+  display: inline-block;
+  width: var(--icon-size, 20px);
+  height: var(--icon-size, 20px);
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.icon[data-tone='default'] {
+  color: var(--yahha-ink, #49313d);
+}
+.icon[data-tone='muted'] {
+  color: var(--yahha-muted, #7a5c6d);
+}
+.icon[data-tone='accent'] {
+  color: var(--yahha-focus, #b04e78);
+}
+.icon[data-tone='success'] {
+  color: var(--yahha-success-ink, #506a3b);
+}
+.icon[data-tone='warning'] {
+  color: var(--yahha-warning-ink, #896329);
+}
+.icon[data-tone='error'] {
+  color: var(--yahha-error, #a33e4f);
+}
+.icon[data-tone='info'] {
+  color: var(--yahha-info-ink, #426f90);
+}
+@media (forced-colors: active) {
+  .icon[data-tone]:not([data-tone='inherit']) {
+    color: inherit;
+  }
+}
