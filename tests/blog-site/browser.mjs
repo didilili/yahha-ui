@@ -156,7 +156,10 @@ async function coreJourney(page, baseURL) {
     3,
   );
   await healthy(page, baseURL);
-  await page.getByRole('button', { name: '第 2 页', exact: true }).click();
+  const secondPage = page.getByRole('link', { name: '第 2 页', exact: true });
+  assert.equal(await secondPage.getAttribute('href'), '#/archive?page=2');
+  await touchTarget(secondPage);
+  await secondPage.click();
   await hashIs(page, '#/archive?page=2');
   await results(page, pageTwoIds, 12, 2, 3);
   await focused(page, 'archive-results-heading');

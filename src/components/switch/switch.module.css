@@ -13,6 +13,35 @@
   box-sizing: border-box;
   cursor: pointer;
 }
+.label:has(.loading) {
+  cursor: progress;
+}
+.label:has(.loading) .input::after {
+  transition: none;
+}
+.track {
+  display: inline-flex;
+  position: relative;
+  flex: 0 0 50px;
+  inline-size: 50px;
+  block-size: 30px;
+}
+.loading {
+  position: absolute;
+  inset-inline-start: 8px;
+  inset-block-start: 8px;
+  inline-size: 14px;
+  block-size: 14px;
+  color: var(--yahha-ink, #49313d);
+  pointer-events: none;
+  transition: none;
+}
+.input:checked ~ .loading {
+  inset-inline-start: 28px;
+}
+.input:disabled ~ .loading {
+  color: var(--yahha-muted, #7a5c6d);
+}
 .input {
   appearance: none;
   flex: 0 0 50px;
@@ -83,7 +112,7 @@
   padding-block: calc((30px - var(--yahha-leading-control, 20px)) / 2);
   line-height: var(--yahha-leading-control, 20px);
 }
-.input:disabled + .text {
+.label:has(.input:disabled) > .text {
   color: var(--yahha-muted, #7a5c6d);
 }
 .label:has(.input:disabled) {
@@ -105,7 +134,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .input,
-  .input::after {
+  .input::after,
+  .loading {
     transition: none;
   }
 }
@@ -119,5 +149,12 @@
   .input::after {
     display: none;
     box-shadow: none;
+  }
+  .loading {
+    color: CanvasText;
+    transition: none;
+  }
+  .input:disabled ~ .loading {
+    color: GrayText;
   }
 }

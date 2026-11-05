@@ -6,6 +6,8 @@ import styles from './button.module.css';
 export interface ButtonProps extends ComponentPropsWithRef<'button'> {
   /** Visual emphasis; defaults to primary. */
   variant?: 'primary' | 'secondary' | 'ghost';
+  /** Marks a destructive action visually; does not add confirmation or deletion behavior. @default false */
+  destructive?: boolean;
   /** Button dimensions; defaults to md. */
   size?: 'sm' | 'md' | 'lg';
   /** Shows a spinner and disables activation without replacing the accessible label. */
@@ -20,6 +22,7 @@ export interface ButtonProps extends ComponentPropsWithRef<'button'> {
 export function Button({
   variant = 'primary',
   size = 'md',
+  destructive = false,
   loading = false,
   startIcon,
   endIcon,
@@ -40,6 +43,7 @@ export function Button({
       className={cx(styles.button, className)}
       data-variant={variant}
       data-size={size}
+      data-destructive={destructive || undefined}
     >
       {hasStartIcon ? (
         <span className={styles.buttonIcon} data-loading={loading || undefined} aria-hidden="true">

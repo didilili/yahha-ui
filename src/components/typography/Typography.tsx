@@ -40,7 +40,11 @@ export function Link({ external = false, target, rel, className, children, ...pr
   );
 }
 
-export interface DividerProps extends ComponentPropsWithRef<'hr'> {
+/** Native hr attributes without content, because hr is a void element. */
+export interface DividerProps extends Omit<
+  ComponentPropsWithRef<'hr'>,
+  'children' | 'dangerouslySetInnerHTML'
+> {
   orientation?: 'horizontal' | 'vertical';
   decorative?: boolean;
 }

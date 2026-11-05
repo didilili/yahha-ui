@@ -14,7 +14,7 @@ export interface ThemeTokens {
   surface?: string;
   /** Text field background. @default '#ffffff' */
   fieldBackground?: string;
-  /** Text field error border, focus outline, text and Toast error icon color. @default '#a33e4f' */
+  /** Text field error border, focus outline, text, destructive buttons and Toast error icon color. @default '#a33e4f' */
   error?: string;
 }
 

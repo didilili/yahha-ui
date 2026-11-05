@@ -158,7 +158,7 @@ export async function verifyImageFallbackAppearance(page) {
 
 async function verifyReadingAppearance(page, theme) {
   for (const [size, dimension, name, initials] of [
-    ['sm', 32, '小林', '小林'],
+    ['sm', 32, '库米', '库米'],
     ['md', 44, 'Hachi', 'Ha'],
     ['lg', 64, '乌萨奇', '乌萨'],
   ]) {

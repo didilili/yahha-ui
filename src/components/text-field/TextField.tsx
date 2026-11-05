@@ -2,12 +2,14 @@ import { useId, type ComponentPropsWithRef, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.js';
 import styles from './text-field.module.css';
 
-/** Native input props, including style and ref, target the input. */
+/** Native props, including style and ref, target the input; explicit direction also aligns the slots. */
 export interface TextFieldProps extends Omit<ComponentPropsWithRef<'input'>, 'size'> {
   label: ReactNode;
   hint?: ReactNode;
   error?: ReactNode;
   leading?: ReactNode;
+  /** Trailing content; actions, naming and disabled state belong to the caller. */
+  trailing?: ReactNode;
   /** Class for the outer field container. */
   className?: string;
   /** Additional classes for individual parts; merged with the default styles. */
@@ -15,6 +17,7 @@ export interface TextFieldProps extends Omit<ComponentPropsWithRef<'input'>, 'si
     label?: string;
     inputWrapper?: string;
     leading?: string;
+    trailing?: string;
     input?: string;
     hint?: string;
     error?: string;
@@ -26,6 +29,7 @@ export function TextField({
   hint,
   error,
   leading,
+  trailing,
   id,
   className,
   classNames,
@@ -37,6 +41,7 @@ export function TextField({
   const hasHint = hint != null && hint !== '' && typeof hint !== 'boolean';
   const hasError = error != null && error !== '' && typeof error !== 'boolean';
   const hasLeading = leading != null && leading !== '' && typeof leading !== 'boolean';
+  const hasTrailing = trailing != null && trailing !== '' && typeof trailing !== 'boolean';
   const hintId = hasHint ? `${inputId}-hint` : undefined;
   const errorId = hasError ? `${inputId}-error` : undefined;
   const describedBy =
@@ -50,7 +55,11 @@ export function TextField({
       <label className={cx(styles.fieldLabel, classNames?.label)} htmlFor={inputId}>
         {label}
       </label>
-      <div className={cx(styles.inputWrap, classNames?.inputWrapper)}>
+      <div
+        className={cx(styles.inputWrap, classNames?.inputWrapper)}
+        dir={props.dir}
+        style={{ direction: props.style?.direction }}
+      >
         {hasLeading && (
           <span className={cx(styles.leading, classNames?.leading)} aria-hidden="true">
             {leading}
@@ -64,6 +73,9 @@ export function TextField({
           aria-invalid={hasError ? true : props['aria-invalid']}
           aria-describedby={describedBy}
         />
+        {hasTrailing && (
+          <span className={cx(styles.trailing, classNames?.trailing)}>{trailing}</span>
+        )}
       </div>
       {hasHint && (
         <div className={cx(styles.hint, classNames?.hint)} id={hintId}>

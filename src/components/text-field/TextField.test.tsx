@@ -7,6 +7,157 @@ import { TextField } from './TextField.js';
 afterEach(cleanup);
 
 describe('TextField', () => {
+  it.each([false, true])(
+    'aligns slot direction with native input props without replacing the input (trailing: %s)',
+    (hasTrailing) => {
+      const ref = createRef<HTMLInputElement>();
+      const slots = {
+        leading: '@',
+        trailing: hasTrailing ? <button type="button">复制</button> : undefined,
+      };
+      const { rerender } = render(
+        <div dir="ltr">
+          <TextField ref={ref} label="地址" defaultValue="hello world" dir="rtl" {...slots} />
+        </div>,
+      );
+      const input = screen.getByRole('textbox', { name: '地址' }) as HTMLInputElement;
+      const wrapper = input.parentElement!;
+      const label = screen.getByText('地址');
+      input.focus();
+      input.setSelectionRange(1, 5);
+
+      for (const [dir, direction] of [
+        ['rtl', undefined],
+        ['ltr', 'rtl'],
+        ['rtl', 'ltr'],
+        [undefined, undefined],
+      ] as const) {
+        rerender(
+          <div dir="ltr">
+            <TextField
+              ref={ref}
+              label="地址"
+              defaultValue="hello world"
+              dir={dir}
+              style={{ direction, color: 'red' }}
+              {...slots}
+            />
+          </div>,
+        );
+        expect(ref.current).toBe(input);
+        expect(input.parentElement).toBe(wrapper);
+        expect(input.getAttribute('dir')).toBe(dir ?? null);
+        expect(wrapper.getAttribute('dir')).toBe(dir ?? null);
+        expect(input.style.direction).toBe(direction ?? '');
+        expect(wrapper.style.direction).toBe(direction ?? '');
+        if (direction) {
+          expect(getComputedStyle(wrapper).direction).toBe(direction);
+          expect(getComputedStyle(input).direction).toBe(direction);
+        }
+        expect(input.style.color).toBe('red');
+        expect(wrapper.style.color).toBe('');
+        expect(label.getAttribute('dir')).toBe(null);
+        expect(label.style.direction).toBe('');
+        expect(input.value).toBe('hello world');
+        expect(document.activeElement).toBe(input);
+        expect([input.selectionStart, input.selectionEnd]).toEqual([1, 5]);
+      }
+    },
+  );
+
+  it('keeps the input, selection and native value when interactive slots change', async () => {
+    const user = userEvent.setup();
+    const ref = createRef<HTMLInputElement>();
+    const onClear = () => {
+      if (ref.current) ref.current.value = '';
+      ref.current?.focus();
+    };
+    const action = (
+      <button type="button" onClick={onClear}>
+        清空输入
+      </button>
+    );
+    const { rerender } = render(<TextField ref={ref} label="搜索" defaultValue="周末散步" />);
+    const input = screen.getByRole('textbox', { name: '搜索' }) as HTMLInputElement;
+    input.focus();
+    input.setSelectionRange(1, 3);
+    rerender(
+      <TextField
+        ref={ref}
+        label="搜索"
+        defaultValue="周末散步"
+        leading="⌕"
+        trailing={action}
+        classNames={{ trailing: 'custom-trailing' }}
+      />,
+    );
+    expect(ref.current).toBe(input);
+    expect(document.activeElement).toBe(input);
+    expect([input.selectionStart, input.selectionEnd]).toEqual([1, 3]);
+    expect(input.value).toBe('周末散步');
+    expect(input.hasAttribute('trailing')).toBe(false);
+    const button = screen.getByRole('button', { name: '清空输入' });
+    expect(button.closest('[aria-hidden="true"]')).toBe(null);
+    expect(button.parentElement?.classList.contains('custom-trailing')).toBe(true);
+    await user.tab();
+    expect(document.activeElement).toBe(button);
+    await user.keyboard('{Enter}');
+    expect(input.value).toBe('');
+    expect(document.activeElement).toBe(input);
+    rerender(<TextField ref={ref} label="搜索" defaultValue="周末散步" />);
+    expect(ref.current).toBe(input);
+    expect(input.value).toBe('');
+    expect(document.activeElement).toBe(input);
+  });
+
+  it('preserves native form reset and caller-owned trailing disabled behavior', async () => {
+    const user = userEvent.setup();
+    render(
+      <form aria-label="订阅设置">
+        <TextField
+          label="地址"
+          name="address"
+          defaultValue="原地址"
+          trailing={<button type="button">复制地址</button>}
+        />
+        <TextField
+          label="只读"
+          name="readonly"
+          value="公开地址"
+          readOnly
+          trailing={<button type="button">复制只读地址</button>}
+        />
+        <TextField
+          label="禁用"
+          name="disabled"
+          defaultValue="未提交"
+          disabled
+          trailing={
+            <button type="button" disabled>
+              禁用操作
+            </button>
+          }
+        />
+        <button type="reset">恢复字段</button>
+      </form>,
+    );
+    const input = screen.getByRole('textbox', { name: '地址' }) as HTMLInputElement;
+    await user.clear(input);
+    await user.type(input, '新地址');
+    const form = screen.getByRole('form', { name: '订阅设置' }) as HTMLFormElement;
+    expect([...new FormData(form)]).toEqual([
+      ['address', '新地址'],
+      ['readonly', '公开地址'],
+    ]);
+    expect(
+      (screen.getByRole('button', { name: '复制只读地址' }) as HTMLButtonElement).disabled,
+    ).toBe(false);
+    expect((screen.getByRole('button', { name: '禁用操作' }) as HTMLButtonElement).disabled).toBe(
+      true,
+    );
+    await user.click(screen.getByRole('button', { name: '恢复字段' }));
+    expect(input.value).toBe('原地址');
+  });
   it('associates descriptions and removes cleared hint, error and caller descriptions', () => {
     const { rerender } = render(
       <TextField label="邮箱" hint="用来接收回复" error="请填写完整邮箱" />,

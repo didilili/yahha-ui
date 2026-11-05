@@ -169,3 +169,132 @@
     transition: none;
   }
 }
+
+/* The optional trailing shell preserves the default input path without a slot. */
+.inputWrap:has(.trailing) {
+  box-sizing: border-box;
+  min-height: var(--yahha-control-height, 44px);
+  border-radius: var(--yahha-radius-field, 12px 16px 14px 11px);
+  background: var(--yahha-field-background, #ffffff);
+  box-shadow: inset 0 -3px 0 var(--yahha-neutral-surface, #f1f8ff);
+  transition: background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
+}
+.inputWrap:has(.trailing)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  border-radius: inherit;
+  pointer-events: none;
+  transition: border-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
+}
+.inputWrap:has(.trailing) .input {
+  flex: 1 1 0%;
+  align-self: stretch;
+  width: 0;
+  min-width: 0;
+  padding-block: max(0px, calc((var(--yahha-control-height, 44px) - var(--field-line-height)) / 2));
+  padding-inline: var(--yahha-space-4, 16px);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.inputWrap:has(.trailing):has(.leading) .input {
+  padding-inline-start: calc(
+    var(--yahha-control-height, 44px) + var(--yahha-control-border-width, 2px)
+  );
+}
+/* Native auto direction follows the value; reserve both sides around the fixed leading slot. */
+.inputWrap:has(.leading) .input[dir='auto'] {
+  padding-inline: var(--yahha-control-height, 44px);
+}
+.inputWrap:has(.trailing):has(.leading) .input[dir='auto'] {
+  padding-inline: calc(var(--yahha-control-height, 44px) + var(--yahha-control-border-width, 2px));
+}
+.trailing {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--yahha-control-height, 44px);
+  min-block-size: var(--yahha-control-height, 44px);
+}
+.inputWrap:has(.trailing):has(.input[readonly]) {
+  background: var(--yahha-neutral-surface, #f1f8ff);
+  box-shadow: none;
+}
+.inputWrap:has(.trailing):has(.input[readonly])::after {
+  border-color: var(--yahha-line, #c58ba1);
+}
+.inputWrap:has(.trailing):has(.input:focus-visible) {
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: var(--yahha-focus-offset, 2px);
+}
+.inputWrap:has(.trailing):has(.input:focus-visible)::after {
+  border-color: var(--yahha-focus, #b04e78);
+}
+.inputWrap:has(.trailing) .input:focus-visible {
+  outline: none;
+}
+.inputWrap:has(.trailing):has(.input[aria-invalid='true']:not(:disabled)) {
+  background: var(--yahha-error-field, #fffafb);
+  box-shadow: inset 0 -3px 0 var(--yahha-error-surface, #fff4f5);
+}
+.inputWrap:has(.trailing):has(.input[aria-invalid='true']:not(:disabled))::after {
+  border-color: var(--yahha-error, #a33e4f);
+}
+.inputWrap:has(.trailing):has(.input[aria-invalid='true']:focus-visible) {
+  outline-color: var(--yahha-error, #a33e4f);
+}
+.inputWrap:has(.trailing):has(.input:disabled) {
+  background: var(--yahha-disabled-surface, #f0f3f7);
+  cursor: not-allowed;
+  box-shadow: none;
+  transition: none;
+}
+.inputWrap:has(.trailing):has(.input:disabled)::after {
+  border-color: var(--yahha-line, #c58ba1);
+  transition: none;
+}
+@media (hover: hover) {
+  .inputWrap:has(.trailing):has(
+      .input:not(:disabled):not([readonly]):not([aria-invalid='true'])
+    ):hover::after {
+    border-color: var(--yahha-focus, #b04e78);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .inputWrap:has(.trailing),
+  .inputWrap:has(.trailing)::after {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .inputWrap:has(.trailing),
+  .inputWrap:has(.trailing):has(.input[readonly]),
+  .inputWrap:has(.trailing):has(.input[aria-invalid='true']:not(:disabled)),
+  .inputWrap:has(.trailing):has(.input:disabled) {
+    background: Canvas;
+    box-shadow: none;
+    transition: none;
+  }
+  .inputWrap:has(.trailing)::after,
+  .inputWrap:has(.trailing):has(.input[readonly])::after,
+  .inputWrap:has(.trailing):has(.input[aria-invalid='true']:not(:disabled))::after {
+    border-color: CanvasText;
+    transition: none;
+  }
+  .inputWrap:has(.trailing):has(.input:focus-visible),
+  .inputWrap:has(.trailing):has(.input[aria-invalid='true']:focus-visible) {
+    outline-color: Highlight;
+  }
+  .inputWrap:has(.trailing):has(.input:focus-visible)::after,
+  .inputWrap:has(.trailing):has(.input[aria-invalid='true']:focus-visible)::after {
+    border-color: Highlight;
+  }
+  .inputWrap:has(.trailing):has(.input:disabled)::after {
+    border-color: GrayText;
+  }
+}

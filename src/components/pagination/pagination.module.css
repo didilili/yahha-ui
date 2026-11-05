@@ -45,6 +45,7 @@
   font-weight: 600;
   line-height: var(--yahha-leading-control, 20px);
   overflow-wrap: anywhere;
+  text-decoration: none;
   cursor: pointer;
   touch-action: manipulation;
   transition:
@@ -68,14 +69,15 @@
     inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
     inset 0 -3px 0 color-mix(in srgb, var(--yahha-line, #c58ba1) 45%, transparent);
 }
-.button:not(:disabled):active {
+.button:not(:disabled):not([aria-disabled='true']):active {
   box-shadow: var(--yahha-shadow-selected, inset 0 2px 0 rgb(70 46 49 / 8%));
 }
 .button:focus-visible {
   outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
   outline-offset: var(--yahha-focus-offset, 2px);
 }
-.button:disabled {
+.button:disabled,
+.button[aria-disabled='true'] {
   border-color: transparent;
   background: transparent;
   color: var(--yahha-muted, #7a5c6d);
@@ -87,7 +89,7 @@
   color: var(--yahha-muted, #7a5c6d);
 }
 @media (hover: hover) {
-  .button:not(:disabled):not([aria-current='page']):hover {
+  .button:not(:disabled):not([aria-disabled='true']):not([aria-current='page']):hover {
     border-color: var(--yahha-contour, #684150);
     background: var(--yahha-accent-soft, #fff0f6);
   }
@@ -105,13 +107,14 @@
   .button,
   .pageGroup .button,
   .button[aria-current='page'],
-  .button:not(:disabled):active {
+  .button:not(:disabled):not([aria-disabled='true']):active {
     box-shadow: none;
   }
   .button[aria-current='page'] {
     border-color: Highlight;
   }
-  .button:disabled {
+  .button:disabled,
+  .button[aria-disabled='true'] {
     color: GrayText;
   }
 }

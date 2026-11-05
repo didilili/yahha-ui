@@ -1,7 +1,8 @@
 import { createRef, useState } from 'react';
 import type { Dialog as BaseDialog } from '@base-ui/react/dialog';
-import { afterEach, describe, expect, expectTypeOf, it } from 'vitest';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import userEvent from '@testing-library/user-event';
 import { Button } from '../button/Button.js';
 import { ThemeProvider } from '../../theme/ThemeProvider.js';
@@ -10,6 +11,154 @@ import { Dialog, type DialogProps } from './Dialog.js';
 afterEach(cleanup);
 
 describe('Dialog', () => {
+  it('preserves portal CSS inheritance when no direction is explicitly configured', () => {
+    const originalDirection = document.documentElement.style.direction;
+    document.documentElement.style.direction = 'rtl';
+    const view = render(
+      <Dialog open onOpenChange={() => {}} title="CSS 方向" trigger={<button>方向入口</button>} />,
+    );
+    try {
+      const popup = screen.getByRole('dialog', { name: 'CSS 方向' });
+      expect(popup.closest<HTMLElement>('[data-yahha-theme]')!.hasAttribute('dir')).toBe(false);
+      expect(popup.style.direction).toBe('');
+    } finally {
+      view.unmount();
+      document.documentElement.style.direction = originalDirection;
+    }
+  });
+
+  it.each(['ltr', 'rtl'] as const)(
+    'keeps an explicitly inherited %s direction before portal CSS',
+    (direction) => {
+      const originalDirection = document.documentElement.style.direction;
+      document.documentElement.style.direction = direction === 'ltr' ? 'rtl' : 'ltr';
+      const view = render(
+        <DirectionProvider direction={direction}>
+          <Dialog
+            open
+            onOpenChange={() => {}}
+            title="方向上下文"
+            trigger={<button>方向入口</button>}
+          />
+        </DirectionProvider>,
+      );
+      try {
+        const popup = screen.getByRole('dialog', { name: '方向上下文' });
+        expect(popup.closest<HTMLElement>('[data-yahha-theme]')!.dir).toBe(direction);
+      } finally {
+        view.unmount();
+        document.documentElement.style.direction = originalDirection;
+      }
+    },
+  );
+
+  it('keeps portal direction in sync with its trigger ancestry without remounting refs', async () => {
+    const user = userEvent.setup();
+    const release = vi.fn();
+    const triggerRef = vi.fn((node: HTMLButtonElement | null) => (node ? release : undefined));
+    const popupRef = createRef<HTMLDivElement>();
+    function Example() {
+      const [open, setOpen] = useState(false);
+      return (
+        <div dir="RTL" data-testid="reading-direction">
+          <Dialog
+            open={open}
+            onOpenChange={setOpen}
+            title="方向说明"
+            ref={popupRef}
+            trigger={<button ref={triggerRef}>方向设置</button>}
+          />
+        </div>
+      );
+    }
+    const view = render(<Example />);
+    const trigger = screen.getByRole('button', { name: '方向设置' });
+    await user.click(trigger);
+    const popup = await screen.findByRole('dialog', { name: '方向说明' });
+    const portal = popup.closest<HTMLElement>('[data-yahha-theme]')!;
+    await waitFor(() => expect(portal.dir).toBe('rtl'));
+    await act(async () => {
+      screen.getByTestId('reading-direction').dir = 'ltr';
+    });
+    await waitFor(() => expect(portal.dir).toBe('ltr'));
+    expect(popupRef.current).toBe(popup);
+    expect(screen.getByRole('dialog')).toBe(popup);
+    expect(triggerRef).toHaveBeenCalledTimes(1);
+    expect(release).not.toHaveBeenCalled();
+    view.unmount();
+    expect(release).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['ltr', 'rtl'] as const)(
+    'preserves explicit popup %s style before trigger direction',
+    async (direction) => {
+      const view = render(
+        <DirectionProvider direction={direction === 'ltr' ? 'rtl' : 'ltr'}>
+          <Dialog
+            open
+            onOpenChange={() => {}}
+            title="显式方向"
+            style={{ direction }}
+            trigger={<button dir={direction === 'ltr' ? 'rtl' : 'ltr'}>方向入口</button>}
+          />
+        </DirectionProvider>,
+      );
+      const popup = screen.getByRole('dialog', { name: '显式方向' });
+      await waitFor(() =>
+        expect(popup.closest<HTMLElement>('[data-yahha-theme]')!.dir).toBe(direction),
+      );
+      expect(popup.style.direction).toBe(direction);
+      view.unmount();
+    },
+  );
+
+  it('keeps programmatic dialogs free to inherit their native portal direction', () => {
+    const container = document.createElement('div');
+    container.dir = 'rtl';
+    container.style.direction = 'rtl';
+    document.body.append(container);
+    const view = render(
+      <Dialog open onOpenChange={() => {}} title="原生方向" portalContainer={container} />,
+    );
+    try {
+      const popup = screen.getByRole('dialog', { name: '原生方向' });
+      const theme = popup.closest<HTMLElement>('[data-yahha-theme]')!;
+      expect(container.contains(popup)).toBe(true);
+      expect(theme.hasAttribute('dir')).toBe(false);
+      expect(popup.style.direction).toBe('');
+    } finally {
+      view.unmount();
+      container.remove();
+    }
+  });
+
+  it('updates direction when a trigger is replaced and restores native inheritance when omitted', async () => {
+    const view = render(
+      <Dialog
+        open
+        onOpenChange={() => {}}
+        title="更换入口"
+        trigger={<Button dir="rtl">方向入口</Button>}
+      />,
+    );
+    const popup = screen.getByRole('dialog', { name: '更换入口' });
+    const theme = popup.closest<HTMLElement>('[data-yahha-theme]')!;
+    await waitFor(() => expect(theme.dir).toBe('rtl'));
+    view.rerender(
+      <Dialog
+        open
+        onOpenChange={() => {}}
+        title="更换入口"
+        trigger={<button dir="ltr">方向入口</button>}
+      />,
+    );
+    await waitFor(() => expect(theme.dir).toBe('ltr'));
+    expect(screen.getByRole('dialog')).toBe(popup);
+    view.rerender(<Dialog open onOpenChange={() => {}} title="更换入口" />);
+    await waitFor(() => expect(theme.hasAttribute('dir')).toBe(false));
+    expect(screen.getByRole('dialog')).toBe(popup);
+  });
+
   it('associates a numeric zero description and hides decorative zero content', () => {
     render(
       <Dialog open onOpenChange={() => {}} title="零值说明" description={0} illustration={0} />,

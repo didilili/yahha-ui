@@ -206,6 +206,7 @@ export default function ArchivePage({ route, savedIds, onToggleSave }: ArchivePa
             aria-label="手记归档分页"
             currentPage={currentPage}
             totalPages={totalPages}
+            getPageHref={(page) => archiveHref({ ...route, page })}
             onPageChange={(page) =>
               navigate(archiveHref({ ...route, page }), { focus: 'results', scroll: 'preserve' })
             }

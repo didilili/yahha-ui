@@ -24,16 +24,21 @@
       )
     )
     var(--button-inline-padding);
-  border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
+  border: var(--yahha-control-border-width, 2px) solid
+    var(--button-contour, var(--yahha-contour, #684150));
   border-radius: var(--yahha-radius-control, 22px 28px 24px 23px / 52% 48% 52% 48%);
-  background: var(--yahha-accent, #ffc3d9);
-  color: var(--yahha-ink, #49313d);
+  background: var(--button-accent, var(--yahha-accent, #ffc3d9));
+  color: var(--button-ink, var(--yahha-ink, #49313d));
   box-shadow:
-    inset 0 -3px 0 color-mix(in srgb, var(--yahha-contour, #684150) 8%, transparent),
+    inset 0 -3px 0
+      color-mix(in srgb, var(--button-contour, var(--yahha-contour, #684150)) 8%, transparent),
     var(
-      --yahha-shadow-action,
-      inset 0 2px 0 var(--yahha-accent-soft, #fff0f6),
-      0 3px 0 var(--yahha-line, #c58ba1)
+      --button-action-shadow,
+      var(
+        --yahha-shadow-action,
+        inset 0 2px 0 var(--button-accent-soft, var(--yahha-accent-soft, #fff0f6)),
+        0 3px 0 var(--button-line, var(--yahha-line, #c58ba1))
+      )
     );
   font-size: var(--yahha-font-size-md, 14px);
   line-height: var(--button-line-height);
@@ -51,6 +56,25 @@
     transform var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
 }
 
+.button[data-destructive='true'] {
+  --button-ink: var(--yahha-error, #a33e4f);
+  --button-contour: var(--yahha-error, #a33e4f);
+  --button-accent: var(--yahha-error-surface, #fff4f5);
+  --button-accent-hover: color-mix(
+    in srgb,
+    var(--yahha-error, #a33e4f) 8%,
+    var(--yahha-error-surface, #fff4f5)
+  );
+  --button-accent-soft: var(--yahha-error-surface, #fff4f5);
+  --button-line: var(--yahha-error, #a33e4f);
+  --button-neutral-surface: var(--yahha-error-surface, #fff4f5);
+  --button-focus: var(--yahha-error, #a33e4f);
+  --button-action-shadow:
+    inset 0 2px 0 var(--yahha-surface, #ffffff), 0 3px 0 var(--yahha-error, #a33e4f);
+  --button-action-pressed:
+    inset 0 1px 0 var(--yahha-surface, #ffffff), 0 1px 0 var(--yahha-error, #a33e4f);
+}
+
 .button[hidden]:not([hidden='until-found']) {
   display: none;
 }
@@ -63,14 +87,17 @@
 }
 .button[data-variant='primary']:not(:disabled):active {
   box-shadow: var(
-    --yahha-shadow-action-pressed,
-    inset 0 1px 0 var(--yahha-accent-soft, #fff0f6),
-    0 1px 0 var(--yahha-line, #c58ba1)
+    --button-action-pressed,
+    var(
+      --yahha-shadow-action-pressed,
+      inset 0 1px 0 var(--button-accent-soft, var(--yahha-accent-soft, #fff0f6)),
+      0 1px 0 var(--button-line, var(--yahha-line, #c58ba1))
+    )
   );
 }
 .button[data-variant='secondary'] {
   background: var(--yahha-surface, #ffffff);
-  box-shadow: inset 0 -2px 0 var(--yahha-neutral-surface, #f1f8ff);
+  box-shadow: inset 0 -2px 0 var(--button-neutral-surface, var(--yahha-neutral-surface, #f1f8ff));
 }
 .button[data-variant='ghost'] {
   background: transparent;
@@ -78,14 +105,14 @@
   box-shadow: none;
 }
 .button[aria-pressed='true'] {
-  background: var(--yahha-accent-hover, #ffb3cf);
-  border-color: var(--yahha-contour, #684150);
+  background: var(--button-accent-hover, var(--yahha-accent-hover, #ffb3cf));
+  border-color: var(--button-contour, var(--yahha-contour, #684150));
   box-shadow:
-    inset 0 2px 0 var(--yahha-line, #c58ba1),
-    inset 0 -1px 0 var(--yahha-accent-soft, #fff0f6);
+    inset 0 2px 0 var(--button-line, var(--yahha-line, #c58ba1)),
+    inset 0 -1px 0 var(--button-accent-soft, var(--yahha-accent-soft, #fff0f6));
 }
 .button[aria-pressed='true']:not(:disabled):active {
-  box-shadow: inset 0 3px 0 var(--yahha-line, #c58ba1);
+  box-shadow: inset 0 3px 0 var(--button-line, var(--yahha-line, #c58ba1));
 }
 .button[data-size='sm'] {
   --button-inline-padding: var(--yahha-space-4, 16px);
@@ -120,7 +147,7 @@
   cursor: progress;
 }
 .button:focus-visible {
-  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline: var(--yahha-focus-width, 2px) solid var(--button-focus, var(--yahha-focus, #b04e78));
   outline-offset: var(--yahha-focus-offset-outer, 3px);
 }
 
@@ -192,17 +219,17 @@
 
 @media (hover: hover) {
   .button:not(:disabled):hover {
-    border-color: var(--yahha-contour, #684150);
+    border-color: var(--button-contour, var(--yahha-contour, #684150));
   }
   .button[data-variant='primary']:not(:disabled):hover {
-    background: var(--yahha-accent-hover, #ffb3cf);
+    background: var(--button-accent-hover, var(--yahha-accent-hover, #ffb3cf));
   }
   .button[data-variant='secondary']:not(:disabled):hover,
   .button[data-variant='ghost']:not(:disabled):hover {
-    background: var(--yahha-accent-soft, #fff0f6);
+    background: var(--button-accent-soft, var(--yahha-accent-soft, #fff0f6));
   }
   .button[aria-pressed='true']:not(:disabled):hover {
-    background: var(--yahha-accent-hover, #ffb3cf);
+    background: var(--button-accent-hover, var(--yahha-accent-hover, #ffb3cf));
   }
   .button[data-variant='ghost']:not(:disabled):hover:not([aria-pressed='true']) {
     border-color: transparent;
@@ -219,6 +246,18 @@
 }
 
 @media (forced-colors: active) {
+  .button[data-destructive='true'] {
+    --button-ink: ButtonText;
+    --button-contour: ButtonBorder;
+    --button-accent: ButtonFace;
+    --button-accent-hover: ButtonFace;
+    --button-accent-soft: ButtonFace;
+    --button-line: ButtonText;
+    --button-neutral-surface: ButtonFace;
+    --button-focus: Highlight;
+    --button-action-shadow: none;
+    --button-action-pressed: none;
+  }
   .button {
     box-shadow: none;
   }

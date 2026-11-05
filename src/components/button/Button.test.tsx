@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -7,6 +8,75 @@ import { IconButton } from './IconButton.js';
 afterEach(cleanup);
 
 describe('Button', () => {
+  it.each(['primary', 'secondary', 'ghost'] as const)(
+    'keeps destructive %s actions native, explicitly opt-in and independent of emphasis',
+    async (variant) => {
+      const user = userEvent.setup();
+      const ref = createRef<HTMLButtonElement>();
+      const onSubmit = vi.fn((event: React.FormEvent<HTMLFormElement>) => event.preventDefault());
+      const view = (destructive?: boolean) => (
+        <form onSubmit={onSubmit}>
+          <Button
+            ref={ref}
+            variant={variant}
+            destructive={destructive}
+            type="submit"
+            name="action"
+            value="delete"
+          >
+            删除草稿
+          </Button>
+        </form>
+      );
+      const { rerender } = render(view(true));
+      const button = screen.getByRole('button', { name: '删除草稿' });
+      expect(ref.current).toBe(button);
+      expect(button.getAttribute('data-destructive')).toBe('true');
+      expect(button.hasAttribute('destructive')).toBe(false);
+      expect(button.getAttribute('data-variant')).toBe(variant);
+      expect(button.getAttribute('name')).toBe('action');
+      expect(button.getAttribute('value')).toBe('delete');
+      expect(button.hasAttribute('aria-invalid')).toBe(false);
+      await user.tab();
+      await user.keyboard('{Enter}');
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+      rerender(view(false));
+      expect(button.hasAttribute('data-destructive')).toBe(false);
+      rerender(view());
+      expect(button.hasAttribute('data-destructive')).toBe(false);
+    },
+  );
+
+  it('inherits destructive styling in IconButton while keeping loading and disabled activation guards', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const { rerender } = render(
+      <IconButton destructive aria-label="删除草稿" onClick={onClick}>
+        ×
+      </IconButton>,
+    );
+    const button = screen.getByRole('button', { name: '删除草稿' });
+    expect(button.getAttribute('data-destructive')).toBe('true');
+    await user.tab();
+    await user.keyboard(' ');
+    expect(onClick).toHaveBeenCalledTimes(1);
+    rerender(
+      <IconButton destructive aria-label="删除草稿" loading onClick={onClick}>
+        ×
+      </IconButton>,
+    );
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    expect(button.hasAttribute('disabled')).toBe(true);
+    await user.click(button);
+    rerender(
+      <IconButton destructive aria-label="删除草稿" disabled onClick={onClick}>
+        ×
+      </IconButton>,
+    );
+    await user.click(button);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
   it('prevents activation while a button is disabled or loading', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();

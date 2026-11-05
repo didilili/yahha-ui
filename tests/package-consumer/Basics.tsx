@@ -448,7 +448,7 @@ export function Basics() {
           </div>
           <Divider data-testid="reading-divider" />
           <div className="basics-actions">
-            <Avatar size="sm" name="小林" data-testid="reading-avatar-sm" />
+            <Avatar size="sm" name="库米" data-testid="reading-avatar-sm" />
             <Avatar name="Hachi" data-testid="reading-avatar-md" />
             <Avatar size="lg" name="乌萨奇" data-testid="reading-avatar-lg" />
             <Avatar

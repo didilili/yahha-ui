@@ -1,10 +1,13 @@
 import { useContext, type ComponentPropsWithRef, type ReactElement, type ReactNode } from 'react';
 import { Dialog as BaseDialog } from '@base-ui/react/dialog';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
+import { DirectionContext } from '@base-ui/react/internals/direction-context';
 import { IconButton } from '../button/IconButton.js';
 import { CloseMark } from '../../internal/CloseMark.js';
 import { renderInteractivePopup } from '../../internal/InteractivePopup.js';
 import { ThemeContext } from '../../theme/theme-context.js';
 import { cx } from '../../internal/cx.js';
+import { useTriggerDirection } from '../../internal/useTriggerDirection.js';
 import themeStyles from '../../theme/theme.module.css';
 import styles from './dialog.module.css';
 
@@ -53,56 +56,71 @@ export function Dialog({
   closeLabel = '关闭弹窗',
 }: DialogProps) {
   const { theme, style: themeStyle } = useContext(ThemeContext);
+  const { direction, nativeDirection, triggerRef } = useTriggerDirection();
+  // The unconfigured Base UI default is not an explicit override of portal CSS.
+  const inheritedDirection = useContext(DirectionContext)?.direction;
+  const explicitDirection =
+    style?.direction === 'ltr' || style?.direction === 'rtl'
+      ? style.direction
+      : (nativeDirection ?? inheritedDirection);
+  const popupDirection = explicitDirection ?? direction;
   return (
-    <BaseDialog.Root
-      open={open}
-      onOpenChange={onOpenChange}
-      disablePointerDismissal={disablePointerDismissal}
-    >
-      {trigger && <BaseDialog.Trigger render={trigger} />}
-      <BaseDialog.Portal container={portalContainer}>
-        <div className={themeStyles.theme} data-yahha-theme={theme} style={themeStyle}>
-          <BaseDialog.Backdrop className={styles.dialogBackdrop} />
-          <BaseDialog.Popup
-            render={renderInteractivePopup}
-            ref={ref}
-            className={cx(styles.dialog, className)}
-            style={style}
-            initialFocus={initialFocus}
-            finalFocus={finalFocus}
+    <DirectionProvider direction={popupDirection}>
+      <BaseDialog.Root
+        open={open}
+        onOpenChange={onOpenChange}
+        disablePointerDismissal={disablePointerDismissal}
+      >
+        {trigger && <BaseDialog.Trigger ref={triggerRef} render={trigger} />}
+        <BaseDialog.Portal container={portalContainer}>
+          <div
+            className={themeStyles.theme}
+            data-yahha-theme={theme}
+            style={themeStyle}
+            dir={trigger ? explicitDirection : undefined}
           >
-            <BaseDialog.Close
-              render={
-                <IconButton
-                  aria-label={closeLabel}
-                  variant="ghost"
-                  size="sm"
-                  className={styles.dialogClose}
-                >
-                  <CloseMark />
-                </IconButton>
-              }
-            />
-            {illustration != null && typeof illustration !== 'boolean' && illustration !== '' && (
-              <div className={styles.dialogIllustration} aria-hidden="true">
-                {illustration}
-              </div>
-            )}
-            <BaseDialog.Title className={styles.dialogTitle}>{title}</BaseDialog.Title>
-            {description != null && typeof description !== 'boolean' && description !== '' && (
-              <BaseDialog.Description className={styles.dialogDescription}>
-                {description}
-              </BaseDialog.Description>
-            )}
-            {children != null && typeof children !== 'boolean' && children !== '' && (
-              <div className={styles.dialogBody}>{children}</div>
-            )}
-            {footer != null && typeof footer !== 'boolean' && footer !== '' && (
-              <div className={styles.dialogFooter}>{footer}</div>
-            )}
-          </BaseDialog.Popup>
-        </div>
-      </BaseDialog.Portal>
-    </BaseDialog.Root>
+            <BaseDialog.Backdrop className={styles.dialogBackdrop} />
+            <BaseDialog.Popup
+              render={renderInteractivePopup}
+              ref={ref}
+              className={cx(styles.dialog, className)}
+              style={style}
+              initialFocus={initialFocus}
+              finalFocus={finalFocus}
+            >
+              <BaseDialog.Close
+                render={
+                  <IconButton
+                    aria-label={closeLabel}
+                    variant="ghost"
+                    size="sm"
+                    className={styles.dialogClose}
+                  >
+                    <CloseMark />
+                  </IconButton>
+                }
+              />
+              {illustration != null && typeof illustration !== 'boolean' && illustration !== '' && (
+                <div className={styles.dialogIllustration} aria-hidden="true">
+                  {illustration}
+                </div>
+              )}
+              <BaseDialog.Title className={styles.dialogTitle}>{title}</BaseDialog.Title>
+              {description != null && typeof description !== 'boolean' && description !== '' && (
+                <BaseDialog.Description className={styles.dialogDescription}>
+                  {description}
+                </BaseDialog.Description>
+              )}
+              {children != null && typeof children !== 'boolean' && children !== '' && (
+                <div className={styles.dialogBody}>{children}</div>
+              )}
+              {footer != null && typeof footer !== 'boolean' && footer !== '' && (
+                <div className={styles.dialogFooter}>{footer}</div>
+              )}
+            </BaseDialog.Popup>
+          </div>
+        </BaseDialog.Portal>
+      </BaseDialog.Root>
+    </DirectionProvider>
   );
 }

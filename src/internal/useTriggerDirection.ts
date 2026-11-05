@@ -14,5 +14,5 @@ export function useTriggerDirection<Element extends HTMLElement = HTMLButtonElem
     return observeNativeDirection(triggerElement, setNativeDirection);
   }, [triggerElement]);
 
-  return { direction: nativeDirection ?? inheritedDirection, triggerRef };
+  return { direction: nativeDirection ?? inheritedDirection, nativeDirection, triggerRef };
 }

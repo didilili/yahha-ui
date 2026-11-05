@@ -11,3 +11,28 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+.surface[data-variant='note'] {
+  position: relative;
+  background: var(--yahha-accent-soft, #fff0f6);
+}
+.surface[data-variant='note']::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-end: 16px;
+  inline-size: 12px;
+  block-size: 12px;
+  background: var(--yahha-accent, #ffc3d9);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+
+@media (forced-colors: active) {
+  .surface[data-variant='note'] {
+    background: Canvas;
+  }
+  .surface[data-variant='note']::after {
+    display: none;
+  }
+}

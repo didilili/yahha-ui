@@ -89,7 +89,7 @@ export async function verifySelectionContract(page, scope, hasTouch) {
   const track = await toggle.boundingBox();
   near(track.width, 50);
   near(track.height, 30);
-  near((await toggle.locator('..').boundingBox()).height, 44);
+  near((await toggle.locator('xpath=ancestor::label[1]').boundingBox()).height, 44);
   assert.equal(await mixed.getAttribute('aria-checked'), 'mixed');
   assert.equal(await mixed.evaluate((node) => node.indeterminate), true);
   const long = scope.getByTestId('selection-long');
@@ -115,7 +115,9 @@ export async function verifySelectionContract(page, scope, hasTouch) {
       'A long choice keeps its mark centered on the first rendered text line.',
     );
     assert(
-      await input.locator('..').evaluate((node) => node.scrollWidth <= node.clientWidth + 1),
+      await input
+        .locator('xpath=ancestor::label[1]')
+        .evaluate((node) => node.scrollWidth <= node.clientWidth + 1),
       'A long Chinese choice must wrap inside its label.',
     );
   }
@@ -136,10 +138,10 @@ export async function verifySelectionContract(page, scope, hasTouch) {
     const before = await toggle.evaluate((node) => getComputedStyle(node).borderTopColor);
     const disabled = scope.getByTestId('selection-switch-disabled');
     const disabledBefore = await disabled.evaluate((node) => getComputedStyle(node).borderTopColor);
-    await toggle.locator('..').hover();
+    await toggle.locator('xpath=ancestor::label[1]').hover();
     const after = await toggle.evaluate((node) => getComputedStyle(node).borderTopColor);
     assert.notEqual(after, before, 'Hovering the label also acknowledges the enabled switch.');
-    await disabled.locator('..').hover();
+    await disabled.locator('xpath=ancestor::label[1]').hover();
     assert.equal(
       await disabled.evaluate((node) => getComputedStyle(node).borderTopColor),
       disabledBefore,

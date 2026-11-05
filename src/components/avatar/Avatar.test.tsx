@@ -33,8 +33,8 @@ describe('Avatar', () => {
     expect(screen.getByRole('img', { name: '匿名用户' }).textContent).toBe('?');
   });
   it('treats a whitespace source as a missing picture', () => {
-    const { container } = render(<Avatar name="小林" src={' \n '} />);
-    expect(screen.getByRole('img', { name: '小林' }).textContent).toBe('小林');
+    const { container } = render(<Avatar name="库米" src={' \n '} />);
+    expect(screen.getByRole('img', { name: '库米' }).textContent).toBe('库米');
     expect(container.querySelector('img')).toBeNull();
   });
   it('preserves a readable name when a picture fails and recovers on a new source', () => {
