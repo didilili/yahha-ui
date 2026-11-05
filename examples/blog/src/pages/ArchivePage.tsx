@@ -88,12 +88,14 @@ export default function ArchivePage({ route, savedIds, onToggleSave }: ArchivePa
       <header className="blog-archive-intro">
         <div className="blog-page-intro-copy">
           <Text size="sm" tone="muted">
-            和朋友们，一起翻翻从前
+            库米和朋友们的手记
           </Text>
           <Heading level={1} id="page-heading" tabIndex={-1}>
             手记归档
           </Heading>
-          <Text tone="muted">留给朋友的热汤、一起读过的书，都好好记在这里。</Text>
+          <Text tone="muted">
+            做饭、读书、出门散步，都记在这里。可以按分类找，也可以搜个关键词。
+          </Text>
         </div>
         <img className="blog-archive-peek" src={artwork.peek} alt="" width={180} height={120} />
       </header>
@@ -105,7 +107,7 @@ export default function ArchivePage({ route, savedIds, onToggleSave }: ArchivePa
             id="archive-search"
             type="search"
             label="搜索手记"
-            placeholder="找一件小事、一本书……"
+            placeholder="例如：河边、书店、面包"
             value={route.query}
             leading={<Search />}
             onChange={(event) => updateFilters({ query: event.currentTarget.value }, true)}
@@ -190,8 +192,8 @@ export default function ArchivePage({ route, savedIds, onToggleSave }: ArchivePa
             title={emptyCollection ? '还没有收藏的手记' : '未找到相关手记'}
             description={
               emptyCollection
-                ? '收藏喜欢的手记后，就可以在这里找到。清空筛选，去看看所有手记吧。'
-                : '试试其他关键词或分类，或清空筛选查看全部手记。'
+                ? '点过「收藏」的手记会出现在这里。先清空筛选，看看有哪些想再读的文章。'
+                : '当前关键词或分类没有匹配的手记。换个条件，或清空筛选查看全部手记。'
             }
             action={
               <Button variant="secondary" onClick={resetFilters}>

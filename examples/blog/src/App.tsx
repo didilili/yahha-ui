@@ -234,7 +234,7 @@ export default function App() {
             <Heading level={1} id="blog-not-found-heading" tabIndex={-1}>
               页面未找到
             </Heading>
-            <Text tone="muted">这个地址没有对应的页面。回到首页，朋友们还在那里等你。</Text>
+            <Text tone="muted">这个地址没有对应的页面。返回首页，可以从最新的一篇手记读起。</Text>
             <SiteLink to="#/" className="blog-action-link">
               返回首页 →
             </SiteLink>
@@ -245,7 +245,7 @@ export default function App() {
         <div>
           <strong>{siteName}</strong>
           <Text size="sm" tone="muted">
-            散步、读书，还有一些值得记下的小事。
+            做饭、读书、出门散步，回来接着记。
           </Text>
         </div>
         <div className="blog-footer-note">

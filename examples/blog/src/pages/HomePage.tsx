@@ -19,20 +19,20 @@ const categories = [
   {
     id: 'daily',
     motif: 'flower',
-    description: '煮一碗热汤，分半块面包，和朋友把一天过好。',
-    note: '饭桌旁，留一个位置',
+    description: '煮汤、烤面包、收拾桌角，记下家里发生的事。',
+    note: '从厨房记到桌边',
   },
   {
     id: 'reading',
     motif: 'star',
-    description: '把喜欢的句子记下来，下次见面，一起读一遍。',
-    note: '这一页，想和你一起读',
+    description: '读过的书、夹着的纸条，还有没弄明白的问题。',
+    note: '翻到哪儿，记到哪儿',
   },
   {
     id: 'walk',
     motif: 'sprout',
-    description: '沿着熟悉的小路走走，回来讲讲今天遇见了什么。',
-    note: '带一片落叶回家',
+    description: '去河边、逛早市，回来讲讲路上的新发现。',
+    note: '今天换条路走',
   },
 ] as const;
 
@@ -64,14 +64,14 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
             <Heading level={1} id="blog-home-heading">
               和朋友们，
               <br />
-              记下小小的日常。
+              把今天记下来。
             </Heading>
             <Text className="blog-home-intro">
-              你好呀，给你留了一个位置。
+              欢迎来翻翻我们的手记。
               <br />
-              这里有读到一半的书、刚煮好的汤，
+              这里有读到一半的书、还没出锅的汤，
               <br className="blog-home-desktop-break" />
-              和朋友们想讲给你听的小小日常。
+              还有路上遇见、回来才想起记下的事。
             </Text>
             <div className="blog-home-hero-actions">
               <SiteLink
@@ -81,7 +81,7 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
                 从最新一篇读起 <span aria-hidden="true">↗</span>
               </SiteLink>
               <Text size="sm" tone="muted">
-                不着急，慢慢看。
+                也可以按日常、读书和散步来找。
               </Text>
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
             </div>
             <div className="blog-home-hero-note">
               <Motif name="flower" />
-              <span>今天，也有值得记住的小事。</span>
+              <span>今天的事，趁还记得先写下来。</span>
             </div>
           </div>
         </div>
@@ -110,14 +110,14 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
           <div className="blog-home-section-heading">
             <div>
               <Text size="sm" tone="muted" className="blog-home-section-kicker">
-                趁还记得，先写给你看
+                这几天发生的事
               </Text>
               <Heading level={2} id="blog-home-latest-heading">
                 最近写下的
               </Heading>
             </div>
             <SiteLink to={archiveHref({})} className="blog-home-all-posts">
-              翻翻全部手记 <span aria-hidden="true">→</span>
+              查看全部手记 <span aria-hidden="true">→</span>
             </SiteLink>
           </div>
 
@@ -154,7 +154,7 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
                   <div className="blog-home-author-signature">
                     <span aria-hidden="true">{authorName}</span>
                     <Text size="sm" tone="muted">
-                      下次来，再讲一件小事
+                      出门遇见的，回来写给你看
                     </Text>
                   </div>
                 </Surface>
@@ -177,11 +177,11 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
                 <div className="blog-home-now-photo">
                   <Image
                     src={artwork.reading}
-                    alt="朋友们在温暖的小角落里，安静地一起读书。"
+                    alt="小八、吉伊和乌萨奇凑在一起，读一本绿色封面的书。"
                     aspectRatio="3 / 2"
                   />
                   <Text size="sm" className="blog-home-photo-caption">
-                    翻到有趣的一页，就叫朋友来看。
+                    书还没读完，苹果倒先吃完了。
                   </Text>
                 </div>
                 {readingPost && (
@@ -206,10 +206,10 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
               <Image src={artwork.peek} alt="" className="blog-home-peek-image" />
             </div>
             <Text size="sm" tone="muted">
-              今天想读哪一种小事？
+              按日常、读书和散步来找
             </Text>
             <Heading level={2} id="blog-home-categories-heading">
-              日子里的小口袋
+              手记分成这三类
             </Heading>
           </div>
           <div className="blog-home-category-list">
@@ -246,9 +246,9 @@ export default function HomePage({ savedIds, onToggleSave }: HomePageProps) {
           </div>
           <div className="blog-home-saved-copy">
             <Heading level={3} id="blog-home-saved-heading">
-              想留住的，就先收好。
+              想再读的，放进收藏
             </Heading>
-            <Text tone="muted">读到喜欢的手记，点一下「收藏」，以后可以在收藏中找到。</Text>
+            <Text tone="muted">点一下手记旁的「收藏」，下次在这个浏览器里就能找到。</Text>
           </div>
           <SiteLink to={archiveHref({ savedOnly: true })} className="blog-home-saved-link">
             查看收藏 · {savedIds.size} 篇 <span aria-hidden="true">→</span>

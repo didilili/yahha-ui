@@ -100,9 +100,7 @@ export default function ArticlePage({ post, returnTo, savedIds, onToggleSave }: 
                 loading="eager"
                 style={{ objectFit: 'contain' }}
               />
-              <figcaption className="blog-article-caption">
-                把步子放慢一点，就会发现身边的小小日常。
-              </figcaption>
+              <figcaption className="blog-article-caption">吉伊、小八和乌萨奇的日常。</figcaption>
             </figure>
 
             <div className="blog-article-prose">
@@ -127,8 +125,8 @@ export default function ArticlePage({ post, returnTo, savedIds, onToggleSave }: 
               </ul>
               <div className="blog-article-save-row">
                 <div className="blog-article-save-copy">
-                  <Heading level={2}>谢谢你，读到这里</Heading>
-                  <Text tone="muted">想留住这件小事，就收藏这篇手记吧。下次来，再一起翻翻。</Text>
+                  <Heading level={2}>这篇还想再读吗？</Heading>
+                  <Text tone="muted">收藏这篇手记，下次可以在当前浏览器的收藏列表里找到。</Text>
                 </div>
                 <Button
                   id={`save-${post.id}`}
@@ -182,7 +180,7 @@ export default function ArticlePage({ post, returnTo, savedIds, onToggleSave }: 
                   </Heading>
                   {contentsList}
                   <Text size="sm" tone="muted">
-                    不用着急，读到哪儿都很好。
+                    选择一个标题，跳到对应段落。
                   </Text>
                 </>
               )}
