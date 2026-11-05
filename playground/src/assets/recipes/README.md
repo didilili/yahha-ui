@@ -5,6 +5,8 @@
 
 2026-11-02 随状态说明修订刷新 `loading.png`（默认加载成功）与 `not-found.png`，取自相同视口下的实际示例，组件布局与角色素材未改。
 
+2026-11-04 随四张场景插画正式采用刷新 `empty.png`。沿用上述截图设置，截取默认“首次没有内容”的真实区域，保留示例布局与原生 PNG 编码。
+
 | 文件 | 文档路由 |
 | --- | --- |
 | reading.png | `#/guides/reading?section=reading-example` |

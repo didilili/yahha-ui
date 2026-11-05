@@ -145,10 +145,47 @@ test('the derived welcome scene drops unused expressions and retains its paw mas
     readFile(new URL('friends-hero.svg', artwork), 'utf8'),
   ]);
   const document = documentOf(createWelcomeScene(models, hero));
-  assert.equal(document.querySelectorAll('defs [id]').length, 17);
-  assert.equal(document.getElementById('chiikawa-face-smile'), null);
+  for (const id of ['chiikawa-face-smile', 'hachiware-face-bright', 'usagi-face-smile']) {
+    assert.equal(document.getElementById(id), null);
+    assert.ok(documentOf(models).getElementById(id), 'Pruning must not modify the input models.');
+  }
   assert.equal(document.querySelector('[mask]').getAttribute('mask'), 'url(#fw-left-paw-cut)');
   assert.ok(document.getElementById('fw-left-paw-cut'));
+  assert.ok(document.getElementById('hachiware-left-paw'));
   assert.match(document.querySelector('style').textContent, /@keyframes fw-wave-hello/);
-  assert.equal(documentOf(models).querySelectorAll('defs [id]').length, 26);
+});
+
+test('welcome motion follows the reviewed paw geometry and origin instead of an old coordinate string', async () => {
+  const artwork = new URL(
+    '../playground/src/examples/scenes/artwork/friends-preview/',
+    import.meta.url,
+  );
+  const [models, hero] = await Promise.all([
+    readFile(new URL('source/characters.svg', artwork), 'utf8'),
+    readFile(new URL('friends-hero.svg', artwork), 'utf8'),
+  ]);
+  const source = documentOf(models);
+  const paw = source.getElementById('hachiware-left-paw');
+  const changedPath = paw.getAttribute('d').replace('M-65 79', 'M-65 80');
+  paw.setAttribute('d', changedPath);
+  paw.setAttribute('data-wave-origin', '-60 70');
+  const changedModels = new source.defaultView.XMLSerializer().serializeToString(source);
+  const document = documentOf(createWelcomeScene(changedModels, hero));
+  assert.equal(
+    document.querySelector('[data-part="wave-arm"] path').getAttribute('d'),
+    changedPath,
+  );
+  assert.match(document.querySelector('style').textContent, /transform-origin: -60px 70px/);
+  assert.equal(
+    document.getElementById('hachiware-face-smile').outerHTML,
+    source.getElementById('hachiware-face-smile').outerHTML,
+    'Moving the paw must leave the approved face unchanged.',
+  );
+  paw.remove();
+  assert.throws(
+    () =>
+      createWelcomeScene(new source.defaultView.XMLSerializer().serializeToString(source), hero),
+    /hachiware-left-paw/,
+    'An unrigged model must fail instead of silently reusing the previous paw.',
+  );
 });

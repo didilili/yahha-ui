@@ -28,8 +28,8 @@
   <ellipse cx="134" cy="275" rx="48" ry="7" fill="#d9dfbf" stroke="none" />
   <ellipse cx="232" cy="278" rx="47" ry="7" fill="#d9dfbf" stroke="none" />
   <ellipse cx="341" cy="274" rx="45" ry="7" fill="#d9dfbf" stroke="none" />
-  <use href="#hachiware-smile" transform="translate(134 181) rotate(-4) scale(.62)" />
-  <use href="#usagi-surprised" transform="translate(341 181) rotate(3) scale(.61)" />
+  <use href="#hachiware-smile" transform="translate(134 194) rotate(-4) scale(.62)" />
+  <use href="#usagi-surprised" transform="translate(341 191) rotate(3) scale(.61)" />
   <use href="#chiikawa-bright" transform="translate(232 188) scale(.64)" />
   <g stroke-width="2.2">
     <path d="m150 229 51-8 55 9 54-10 10 59-57 10-56-9-51 9Z" fill="#fffefa" />

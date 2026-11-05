@@ -147,15 +147,15 @@ for (const drawing of drawings) {
   }
 }
 
+const authorPortrait = await readFile(
+  join(root, 'playground/src/examples/scenes/artwork/friends-preview/portraits/chiikawa-smile.svg'),
+  'utf8',
+);
+assert.match(authorPortrait, /<svg\b[^>]*\bviewBox="[^"]+"/);
+// Keep the reviewed model intact; a square head crop avoids empty space in 44/64px avatars.
 await output(
   'examples/blog/src/assets/author.svg',
-  await readFile(
-    join(
-      root,
-      'playground/src/examples/scenes/artwork/friends-preview/portraits/chiikawa-smile.svg',
-    ),
-    'utf8',
-  ),
+  authorPortrait.replace(/(<svg\b[^>]*\bviewBox=")[^"]+(")/, '$1-108 -98 216 216$2'),
 );
 
 await output(

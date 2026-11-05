@@ -16,6 +16,7 @@ import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { JSDOM } from 'jsdom';
 
 const repository = fileURLToPath(new URL('..', import.meta.url));
 const execute = promisify(execFile);
@@ -142,12 +143,24 @@ test('artwork synchronization keeps the complete documentation set and only used
     [...documentationAssets].sort(),
   );
   assert.deepEqual((await readdir(join(root, blogDirectory))).sort(), [...blogAssets].sort());
-  assert.equal(
+  const author = new JSDOM(
     await readFile(join(root, 'examples/blog/src/assets/author.svg'), 'utf8'),
+    { contentType: 'image/svg+xml' },
+  ).window.document.documentElement;
+  const portrait = new JSDOM(
     await readFile(
       join(root, artworkDirectory, 'friends-preview/portraits/chiikawa-smile.svg'),
       'utf8',
     ),
+    { contentType: 'image/svg+xml' },
+  ).window.document.documentElement;
+  assert.equal(author.getAttribute('viewBox'), '-108 -98 216 216');
+  assert.equal(portrait.getAttribute('viewBox'), '-120 -210 240 380');
+  author.setAttribute('viewBox', portrait.getAttribute('viewBox'));
+  assert.equal(
+    author.outerHTML,
+    portrait.outerHTML,
+    'Avatar composition must retain the same reviewed model.',
   );
   assert.equal(
     await readFile(join(root, 'examples/blog/src/assets/peek.svg'), 'utf8'),

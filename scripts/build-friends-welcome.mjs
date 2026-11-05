@@ -15,6 +15,16 @@ export function createWelcomeScene(characterSource, heroSource) {
     root.localName === 'svg' && definitions && reviewed,
     'Welcome scene needs both SVG sources.',
   );
+  const body = models.getElementById('hachiware-body');
+  const paw = body?.querySelector('#hachiware-left-paw');
+  assert(paw, 'The reviewed model must expose its hachiware-left-paw contour.');
+  const leftArm = paw.getAttribute('d');
+  const origin = paw.getAttribute('data-wave-origin')?.trim().split(/\s+/).map(Number);
+  assert(leftArm && /^M/.test(leftArm), 'The reviewed paw needs its own path start.');
+  assert(
+    origin?.length === 2 && origin.every(Number.isFinite),
+    'The reviewed paw needs a two-coordinate wave origin.',
+  );
 
   function element(name, attributes = {}, children = []) {
     const node = document.createElementNS(namespace, name);
@@ -48,7 +58,7 @@ export function createWelcomeScene(characterSource, heroSource) {
     svg[data-artwork="friends-welcome"][data-motion="on"] .fw-flower-one { transform-origin: 123.2px 460.7px; animation: fw-flower-breeze 5.4s .5s ease-in-out infinite; }
     svg[data-artwork="friends-welcome"][data-motion="on"] .fw-flower-two { transform-origin: 652.7px 472.4px; animation: fw-flower-breeze 5.9s 1s ease-in-out infinite; }
     svg[data-artwork="friends-welcome"][data-motion="on"] .fw-flower-three { transform-origin: 604.9px 498.4px; animation: fw-flower-breeze 6.2s 1.2s ease-in-out infinite; }
-    svg[data-artwork="friends-welcome"][data-motion="on"] .fw-wave { transform-origin: -63px 73px; animation: fw-wave-hello 1.8s ease-in-out 1 both; }
+    svg[data-artwork="friends-welcome"][data-motion="on"] .fw-wave { transform-origin: ${origin[0]}px ${origin[1]}px; animation: fw-wave-hello 1.8s ease-in-out 1 both; }
     svg[data-artwork="friends-welcome"][data-motion="on"][data-paused="true"] .fw-moving { animation-play-state: paused; }
     @keyframes fw-cloud-near { 0%,100% { transform: translateX(0); } 50% { transform: translateX(18px); } }
     @keyframes fw-cloud-far { 0%,100% { transform: translateX(0); } 50% { transform: translateX(14px); } }
@@ -113,16 +123,8 @@ export function createWelcomeScene(characterSource, heroSource) {
     );
   }
 
-  const body = models.getElementById('hachiware-body');
-  const arms = [...body.querySelectorAll('path')].find((path) =>
-    path.getAttribute('d').startsWith('M-62 65'),
-  );
-  assert(arms, 'The reviewed model must expose the existing two-paw contour.');
-  const leftArm = arms.getAttribute('d').split('M65 67')[0];
-  assert(leftArm.endsWith('17 10'), 'The reviewed left-paw boundary has changed.');
-
-  // Erase only the old paw from the filled silhouette and its ink contour.
-  // The source body and face remain untouched. A local white shoulder joins the moving paw.
+  // Separate the named, reviewed paw from the silhouette without changing the face.
+  // A local white shoulder keeps the moving root connected to the shorter body.
   definitions.append(
     element(
       'mask',
@@ -162,12 +164,12 @@ export function createWelcomeScene(characterSource, heroSource) {
         element('use', { href: '#hachiware-body' }),
       ]),
       element('path', {
-        d: 'M-69 63Q-62 62-57 71L-60 90Q-68 89-73 82Z',
+        d: 'M-73 54Q-61 54-59 65L-59 87Q-66 87-71 80Z',
         fill: '#fffdfb',
         stroke: 'none',
       }),
       element('path', {
-        d: 'M-71 84c6 2 10 7 11 13',
+        d: 'M-65 79c3 17 13 34 31 43',
         fill: 'none',
         stroke: '#50312e',
         'stroke-width': 3.8,

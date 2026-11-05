@@ -1,7 +1,7 @@
 {
   "created": "2026-10-24",
   "tool": "Codex built-in image_gen",
-  "type": "Non-official fan illustration generated from the project concept sheet",
+  "type": "Non-official fan illustration with approved scene edits aligned to the project character models",
   "rights_status": "Project contributions are MIT; see ../../../../../THIRD_PARTY_NOTICES.md.",
   "distribution": "Optional playground examples; not included in the default library package.",
   "assets": [
@@ -9,9 +9,57 @@
       "file": "empty.png",
       "width": 1448,
       "height": 1086,
-      "bytes": 713773,
-      "sha256": "baf7c805f90221ae0b6d162a86f1a1e4d8876ec4960b5dcc9019352e50669be1"
+      "bytes": 807237,
+      "sha256": "f944adbf552b6be325c11f857388ba7564f108007f8acfefd5dae2f0d6ba061c",
+      "tool": "Codex built-in image_gen",
+      "approvedAt": "2026-11-04",
+      "revision": "scene-model-consistency",
+      "characters": ["hachiware", "usagi"],
+      "editMethod": "Editing the existing two-character transparent picnic scene; not automatic SVG rendering.",
+      "previousSha256": "baf7c805f90221ae0b6d162a86f1a1e4d8876ec4960b5dcc9019352e50669be1",
+      "previousGitSource": "4d7642f01f30c4b7bf7b2aa8dab69577f97554d3:playground/src/examples/scenes/artwork/empty.png",
+      "editTargetSha256": "41c29801da0212c3c2351ab19cc72fcc268becda98d86c620cdbe86e5ce5da3a",
+      "prompt": "Use case: precise-object-edit.\nAsset type: transparent PNG scene illustration for Yahha UI.\nInput image 1 is the EDIT TARGET, an earlier scene candidate with a round-cheek Hachiware cat. Input 2 is a CHARACTER IDENTITY AND PROPORTION REFERENCE ONLY for Usagi; do not copy their standing poses/canvas into the scene. Preserve the input scene's original warm-brown rounded outlines, gentle pastel finish, original framing and transparency.\nScene: ONLY TWO friends waiting by an empty blue-and-white picnic blanket and an open blank notebook. Blue-and-white Hachiware sits LEFT; yellow long-eared Usagi peeks over a green bush at upper RIGHT. There is NO Chiikawa in this scene; do not add one.\nPrimary request: refine ONLY the yellow Usagi on the RIGHT so it belongs to the approved Usagi model. Keep the bush-peeking gesture and amused surprised mood. Use full rounded cheeks with vertical facial depth, rounded long ear tips and smoothly rounded pink inset ends with yellow margins, continuous natural ear/head roots, curved brows, round dark-brown eyes with upper white highlight and a fine lower highlight arc, small compact W mouth plus curved lower-lip mark. Preserve the tilt and eye direction and two yellow paws gripping the bush with believable attachment. Keep the tiny three expressive brown strokes next to his head; they are separate from the cheek hatches. Preserve the LEFT Hachiware, picnic blanket checks and corner stitches, notebook pages and binding, grass tufts, bush shape, composition and empty waiting place exactly.\nGlobal invariants: preserve the blue-and-white Hachiware cat's existing rounded head, split blue fringe, dot eyebrows, exactly three hatch marks per visible pink cheek, existing facial expression and body pose; preserve props, overlaps, original character order, canvas balance and generous margins. No horizontal/vertical squashing of the whole image, no added characters, captions, logos, watermarks, frame, photorealism, 3D shading, painted checkerboard or solid backdrop. Keep all ears, tails, feet and props inside the canvas. Output actual transparent alpha, clean edges with no new glow/vignette.\nOutput one complete wide 4:3 image, ideally 1448x1086, with real transparent alpha and the whole picnic blanket and all grasses in frame. No large ground rectangle.\n",
+      "refinementPrompt": "Use case: precise-object-edit. Image 1 is the edit target: a completed transparent PNG illustration of two friends waiting at a picnic blanket. Make ONE edge-quality cleanup ONLY. Remove the unnatural bright neon GREEN and RED thin fringe/speckles around the outer contour of the grass tufts, bush, notebook, picnic mat, Hachiware's bottom/feet and Usagi. These are unwanted matte contamination, not part of the design. Reconstruct only the nearest natural warm-brown outline or green leaf edge with clean antialiasing and genuinely transparent pixels outside it. There must be no glowing green/red outline when displayed over white, pale blue or dark backgrounds. Do not change any character shape, face, eye, cheek strokes, ear shape/inner ear, mouth, pose, colors, props, notebook/blanket pattern, placement, scale, margins or composition. Keep exactly two characters: blue-and-white Hachiware on the left and yellow Usagi peeking from the bush on right, no third character. Retain the original 4:3 full canvas (1448x1086 if possible) and real transparent alpha. Do not add shadow, blur, glow, backdrop, painted checkerboard, caption or watermark. This is precision contour cleanup, not a redraw.\n",
+      "history": [
+        {
+          "file": "empty.png",
+          "width": 1448,
+          "height": 1086,
+          "bytes": 713773,
+          "sha256": "baf7c805f90221ae0b6d162a86f1a1e4d8876ec4960b5dcc9019352e50669be1",
+          "stage": "Original project-concept scene",
+          "created": "2026-10-24",
+          "tool": "Codex built-in image_gen",
+          "type": "Non-official fan illustration generated from the project concept sheet",
+          "generationConstraints": "Non-official Chiikawa fan illustration; simple two-dimensional dark-brown rounded linework, white/light-blue/pale-yellow characters, pink cheeks and sparse grass; no 3D/plastic look, paper backdrop, letters/titles/numbers/watermark; real transparent background with an empty notebook and picnic blanket."
+        },
+        {
+          "stage": "Hachiware round-cheek calibration used as the intermediate edit target for the adopted scene",
+          "width": 1448,
+          "height": 1086,
+          "bytes": 788168,
+          "sha256": "41c29801da0212c3c2351ab19cc72fcc268becda98d86c620cdbe86e5ce5da3a",
+          "tool": "Codex built-in image_gen",
+          "inputSha256": "baf7c805f90221ae0b6d162a86f1a1e4d8876ec4960b5dcc9019352e50669be1",
+          "characterReference": "Hachiware round-cheek r1 plus the approved reading PNG before this batch.",
+          "readingReferenceSha256": "d7238e865a91e40832e9995373defc8d44ebf87cc851030b0a96633756ce1716",
+          "prompt": "Use case: precise-object-edit. This is an edit of an existing transparent PNG illustration for the Yahha UI example website. Input image 1 is the EDIT TARGET. Input image 2 is ONLY the approved round-cheek r1 Hachiware character-geometry reference. Input image 3 is ONLY the user-approved reading-scene PNG reference for the corrected Hachiware identity and illustration finish. Do not transplant the reading scene, book, extra characters, or frontal portrait pose into the edit target. Preserve the target composition, other characters, all props and contact/overlap relationships. Focus the correction on Hachiware only. Match his full soft lower cheeks, balanced blue split-cat fringe and central inverted-V white forehead division, small dot eyebrows, small W-shaped closed cat smile with a tiny lower lip dash, pink oval cheek blush with exactly THREE short brown hatch strokes per cheek. No vertical squash, no stretched or elongated face, no giant eyes, no new characters or props, no captions, no watermark, no painted checkerboard. Keep genuine transparent alpha around the complete artwork and preserve the original warm rounded linework, pastel color and rendering finish.\nScene-specific request: preserve this EMPTY PICNIC SCENE: a sitting blue-and-white Hachiware on the left, a yellow long-eared Usagi peeking over the green shrub on the right, an OPEN EMPTY NOTEBOOK and an EMPTY blue-white checkered picnic cloth, with sparse grass. There are exactly TWO characters; do NOT add Chiikawa. Hachiware is seated, so keep the sitting silhouette, small body and paws in front, and blue tail. Refine his cheek fullness, blue fringe, dot eyebrows, small highlighted rounded eyes and small closed W cat smile to the approved reference, adapted to his gentle original head tilt. Preserve Usagi, the bush and paws, the empty notebook pages and empty blanket pattern, their relative placement, line thickness, scale and crop. This target canvas is 1448x1086, a 4:3 landscape composition: preserve that exact 4:3 canvas and framing, preferably the original 1448x1086 pixels. Do NOT convert it to the 3:2 composition of the reading reference. Output actual transparent alpha; no solid background or opaque glow.\n",
+          "adoption": "This intermediate was not separately adopted; the final scene edit was approved on 2026-11-04.",
+          "refinementPrompt": "Use case: precise-object-edit. Edit this existing transparent 1448x1086 PNG only to clean the alpha/matte edges around the grass tufts and green shrub. Preserve the entire character drawing and composition, especially Hachiware's current approved rounded cheeks, blue forehead division, dot eyebrows, eyes, closed W mouth, three cheek hatches, body and paws; preserve Usagi's face/ears/paws, the open empty notebook, picnic cloth and all positions. Remove the tiny stray fluorescent yellow-green fringe speckles OUTSIDE the intended grass and shrub contours, leaving smooth clean antialiased edges into true transparency. Keep intentional green fills and strokes within each tuft, natural dark-brown contour where already present, no fuzzy luminous rim and no solid background. Do not repaint the characters, do not add objects, no extra text, no frame or watermark. Retain 1448x1086 complete 4:3 canvas and the same margins. This is a subtle edge cleanup, not a style or proportion change.\n"
+        }
+      ],
+      "changeScope": "Retains only the original two friends. Includes the earlier Hachiware calibration, Usagi model-language refinement and final alpha-edge cleanup."
     }
   ],
-  "original_contributions_license": "MIT"
+  "original_contributions_license": "MIT",
+  "updated": "2026-11-04",
+  "characterModel": {
+    "source": "playground/src/examples/scenes/artwork/friends-preview/source/characters.svg",
+    "sha256": "8828a18c124bc855224b4798c614000e91154c08cbde519295b7b87d73bdb03c",
+    "approvedAt": "2026-11-04",
+    "use": "Character identity and proportion reference; scene poses and expressions are adapted in the raster painting, not exported from SVG.",
+    "characters": ["hachiware", "usagi"]
+  },
+  "maintenance": "The adopted PNG is the reusable raster source. Inline edit prompts and revision history remain available without ignored planning files or local generated-image directories; generation is not guaranteed pixel-identical. npm run sync:artwork manages the separately maintained SVG assets."
 }

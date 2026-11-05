@@ -1,0 +1,127 @@
+{
+  "updated": "2026-11-04",
+  "assets": [
+    {
+      "file": "reading.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1336599,
+      "sha256": "aa9cc29ad41d6344b3c63412c691dd6ef78d6497b34ec30fb71ec34960f96859",
+      "tool": "Codex built-in image_gen",
+      "approvedAt": "2026-11-04",
+      "revision": "scene-model-consistency",
+      "characterReference": "2026-11-04 approved Chiikawa and Usagi models; Hachiware round-cheek r1. Scene-specific poses and expressions are retained.",
+      "editMethod": "Editing an existing transparent PNG scene with character-model references; not automatic SVG rendering.",
+      "previousSha256": "d7238e865a91e40832e9995373defc8d44ebf87cc851030b0a96633756ce1716",
+      "editTargetSha256": "d7238e865a91e40832e9995373defc8d44ebf87cc851030b0a96633756ce1716",
+      "prompt": "Use case: precise-object-edit.\nAsset type: transparent PNG reading-scene illustration for Yahha UI.\nImage 1 is the EDIT TARGET: the current accepted wide scene of three friends sharing a green open book. Image 2 is a CHARACTER MODEL REFERENCE ONLY for the central white round-eared Chiikawa. Image 3 is a CHARACTER MODEL REFERENCE ONLY for the yellow long-eared Usagi on the right. Do not copy the references' standing pose or canvas into the reading scene.\nPrimary request: carefully refine ONLY Chiikawa and Usagi in image 1 to follow the newly approved face/ear proportions of images 2 and 3. Chiikawa needs a full round lower-cheek silhouette with genuine vertical facial depth, round ears, soft curved brows, dark warm-brown rounded eyes with one upper white highlight and a tiny lower highlight, pink oval cheeks, a small compact W cat smile and tiny lip dash. Preserve the existing peeking-over-book pose, centered low face and two naturally attached white paws; do not flatten or widen the whole face. Usagi needs full rounded cheeks, rounded ear tips and pink inset ends with yellow margins, a continuous natural ear-to-head connection, curved brows and a small compact cat mouth with its curved lower-lip mark; use the reference's eyes and expression language, but retain the reading head tilt, sideways seated short soft body, visible feet/tail and attached paw holding the book. Keep ears naturally following the scene pose. Character-model coherence should be visible without making a new composition.\nINVARIANTS: the accepted blue-and-white Hachiware cat on the left MUST remain visually unchanged: same rounded cheek shape, blue split fringe, dot brows, round highlighted eyes, exactly three brown hatch strokes inside each pink cheek, small closed W smile and lip dash, same paw/body/tail/pose and placement. Keep the existing green book, center binding, page marks, overlaps, hand-to-book contacts, character order, original warm brown rounded linework, gentle flat pastel/soft illustration finish and generous transparent margins. Keep the overall illustration's size and placement; no whole-scene rescaling. Do not replace the other elements, add props or characters, or change to 3D.\nOutput: one complete 3:2 wide illustration, 1536x1024, with real transparent alpha around the artwork. Preserve transparency; no solid white/black background, no painted checkerboard, no new glow or vignette, no text, caption, watermark, frame, or extra pupils. All ears/tails/book fit inside the canvas. This is a focused edit, not an independently redrawn scene.\n",
+      "history": [
+        {
+          "file": "reading.png",
+          "width": 1536,
+          "height": 1024,
+          "sha256": "d7238e865a91e40832e9995373defc8d44ebf87cc851030b0a96633756ce1716",
+          "bytes": 1324598,
+          "tool": "Codex built-in image_gen",
+          "approvedAt": "2026-11-04",
+          "characterReference": "User-approved Hachiware round-cheek r1; existing Chiikawa and Usagi retained as visual scene references.",
+          "previousSha256": "cc31174729fec3dd9cde8f179442d3dfcb41c64e2d91810e66cde0d0b5791a6a",
+          "previousGitSource": "1f63e801f656c429949f8c92efd4b25fe6159963:playground/src/assets/reading.png",
+          "prompt": "Use case: precise-object-edit.\nAsset type: transparent PNG reading-scene illustration for the Yahha UI example blog.\nInput image 1 is the EDIT TARGET: the existing wide illustration of three Chiikawa friends reading a green book.\nInput image 2 is a SUPPORTING CHARACTER REFERENCE ONLY: the user-approved round-cheek r1 Hachiware / 小八 model, rendered from the project's SVG. Do not copy its canvas or standing/waving pose into the scene.\n\nPrimary request: edit the Hachiware character on the LEFT of image 1 so its character identity matches image 2, while keeping the existing reading scene. This is a restrained model-consistency correction, not a new composition.\nHachiware details to transfer: a full rounded lower cheek silhouette, clear balanced blue split-cat fringe with the central inverted-V white forehead division, small dot eyebrows, rounded dark-brown eyes with one upper white highlight and a fine lower highlight arc, soft pink oval cheeks with three brown hatch marks, a small closed W-shaped cat smile with a tiny lower lip dash. Replace the original open tongue mouth with this small closed smile. Keep a naturally gentle reading head tilt; adapt the approved face to this pose rather than making a flat pasted-on frontal head. Keep the body small and soft and the visible paw holding the book convincingly attached.\nInvariants: preserve the central white Chiikawa and right yellow long-eared Usagi identities, their faces and poses, the three-character order, green open book, page lines and center binding, overlaps, paw-to-book contacts, original overall scale/placement and generous margins, original warm brown rounded linework and pastel rendering. Do not redesign the other two friends or the book. Do not squash the character vertically or stretch it horizontally. Do not make Hachiware's face long or rectangular.\nOutput: one complete wide 3:2 illustration, preferably 1536 by 1024 pixels, with genuine transparent alpha around the artwork, preserving the original transparency. No solid white or black background, no checkerboard painted into the image, no frame, no extra characters, no caption, no watermark. Keep all ears, tails and book inside the canvas. Preserve the original gentle illustration finish while letting the corrected Hachiware geometry and facial features read clearly at thumbnail size.",
+          "refinementPrompt": "Use case: precise-object-edit. Edit the supplied existing transparent reading-scene PNG. Make ONE tiny correction only: on the blue-and-white Hachiware cat at the LEFT, the pink cheek patch on the viewer's LEFT currently has four brown short hatch strokes. Remove the extra outermost stroke and leave exactly THREE neat brown hatch strokes entirely inside that pink oval, matching the three strokes on his other cheek. Preserve all other pixels and visual details as closely as possible: same approved rounded head and blue fringe, same dot eyebrows and round highlighted eyes, same small closed W cat smile and lip dash, same body, paws, two other friends, book, lines, original layout, colors, soft finish and transparent alpha. Do not redraw or reinterpret the scene, do not change the mouth or other faces. Same 1536x1024, 3:2 complete canvas. Output actual transparent background, no painted checkerboard, no solid background, no caption, no frame, no watermark.",
+          "stage": "Previously approved Hachiware reading-scene correction; reused as this batch edit target"
+        }
+      ],
+      "changeScope": "Refined Chiikawa and Usagi; retained the already approved Hachiware drawing as the invariant."
+    },
+    {
+      "file": "rest.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1316408,
+      "sha256": "a3e4ee9c575c12d85a58996c28b6cc1d09e83dc1165b496da17898c6462a2512",
+      "tool": "Codex built-in image_gen",
+      "approvedAt": "2026-11-04",
+      "revision": "scene-model-consistency",
+      "characterReference": "2026-11-04 approved Chiikawa and Usagi models; Hachiware round-cheek r1. Scene-specific poses and expressions are retained.",
+      "editMethod": "Editing an existing transparent PNG scene with character-model references; not automatic SVG rendering.",
+      "previousSha256": "630248145a3cc3aa5aba6b28610064d14c460758540c77307609f98a83df3e81",
+      "editTargetSha256": "954aef46c48ace53331083d004c0c8496967f142c60beb037e7779f40f344d0f",
+      "prompt": "Use case: precise-object-edit.\nAsset type: transparent PNG scene illustration for Yahha UI.\nInput image 1 is the EDIT TARGET, an earlier scene candidate with a round-cheek Hachiware cat. Inputs 2 and 3 are CHARACTER IDENTITY AND PROPORTION REFERENCES ONLY for Chiikawa and Usagi; do not copy their standing poses/canvas into the scene. Preserve the input scene's original warm-brown rounded outlines, gentle pastel finish, original framing and transparency.\nScene: three friends sleeping side by side under a soft green quilt, with a closed green notebook in front. White round-eared Chiikawa on the LEFT, blue-and-white Hachiware in the MIDDLE, yellow long-eared Usagi on the RIGHT.\nPrimary request: subtly align only the LEFT Chiikawa and RIGHT Usagi to their approved models. Chiikawa has full rounded cheeks with real facial depth, round ears, a small compact W cat mouth and tiny lip mark. Keep both eyes peacefully closed and maintain the relaxed sleeping head tilt and paws peeking from the quilt. Usagi has rounded ear tips with rounded pink inner ears and yellow margins, softly full cheeks, a small W mouth with its curved lower-lip mark. Keep both eyes closed, the sideways leaning sleeping pose, the ears swept to the left rather than upright, existing fluffy tail and quilt contact. Adapt the reference shape to sleep instead of pasting on a frontal awake head. Preserve the MIDDLE Hachiware exactly as the edit target, including his closed eyes and compact smile. Keep the green quilt folds/scallops and notebook unchanged.\nGlobal invariants: preserve the blue-and-white Hachiware cat's existing rounded head, split blue fringe, dot eyebrows, exactly three hatch marks per visible pink cheek, existing facial expression and body pose; preserve props, overlaps, original character order, canvas balance and generous margins. No horizontal/vertical squashing of the whole image, no added characters, captions, logos, watermarks, frame, photorealism, 3D shading, painted checkerboard or solid backdrop. Keep all ears, tails, feet and props inside the canvas. Output actual transparent alpha, clean edges with no new glow/vignette.\nOutput one complete 1536x1024 3:2 image.\n",
+      "history": [
+        {
+          "stage": "Existing project illustration before Hachiware and scene-model edits",
+          "width": 1536,
+          "height": 1024,
+          "bytes": 1272499,
+          "sha256": "630248145a3cc3aa5aba6b28610064d14c460758540c77307609f98a83df3e81",
+          "gitSource": "9bc175d1a8135e75dc369e7c9192c5c9fbb5c7c8:playground/src/assets/rest.png",
+          "sourceNote": "Original author and generation tool are not independently documented here."
+        },
+        {
+          "stage": "Hachiware round-cheek calibration used as the intermediate edit target for the adopted scene",
+          "width": 1536,
+          "height": 1024,
+          "bytes": 1372564,
+          "sha256": "954aef46c48ace53331083d004c0c8496967f142c60beb037e7779f40f344d0f",
+          "tool": "Codex built-in image_gen",
+          "inputSha256": "630248145a3cc3aa5aba6b28610064d14c460758540c77307609f98a83df3e81",
+          "characterReference": "Hachiware round-cheek r1 plus the approved reading PNG before this batch.",
+          "readingReferenceSha256": "d7238e865a91e40832e9995373defc8d44ebf87cc851030b0a96633756ce1716",
+          "prompt": "Use case: precise-object-edit. This is an edit of an existing transparent PNG illustration for the Yahha UI example website. Input image 1 is the EDIT TARGET. Input image 2 is ONLY the approved round-cheek r1 Hachiware character-geometry reference. Input image 3 is ONLY the user-approved reading-scene PNG reference for the corrected Hachiware identity and illustration finish. Do not transplant the reading scene, book, extra characters, or frontal portrait pose into the edit target. Preserve the target composition, other characters, all props and contact/overlap relationships. Focus the correction on Hachiware only. Match his full soft lower cheeks, balanced blue split-cat fringe and central inverted-V white forehead division, small dot eyebrows, small W-shaped closed cat smile with a tiny lower lip dash, pink oval cheek blush with exactly THREE short brown hatch strokes per cheek. No vertical squash, no stretched or elongated face, no giant eyes, no new characters or props, no captions, no watermark, no painted checkerboard. Keep genuine transparent alpha around the complete artwork and preserve the original warm rounded linework, pastel color and rendering finish.\nScene-specific request: the target is THREE FRIENDS SLEEPING UNDER A GREEN BLANKET, with a closed green notebook at the front. Hachiware is the BLUE-AND-WHITE CAT IN THE MIDDLE. Preserve his relaxed sleeping head tilt, CLOSED sleeping eyes as simple curved strokes, and calm closed cat mouth. Use the geometry reference for cheeks/fringe but DO NOT OPEN HIS EYES, do not add eye highlights to closed eyes, do not make him wave or sit upright. Preserve the white Chiikawa sleeping at the left, yellow Usagi sleeping at the right with folded long ears, blanket folds, visible small paws and notebook. Keep the original complete 3:2 composition and 1536x1024 canvas if possible.\n",
+          "adoption": "This intermediate was not separately adopted; the final scene edit was approved on 2026-11-04."
+        }
+      ],
+      "previousGitSource": "9bc175d1a8135e75dc369e7c9192c5c9fbb5c7c8:playground/src/assets/rest.png",
+      "changeScope": "Includes the preceding Hachiware round-cheek calibration and this batch Chiikawa/Usagi model-language refinements."
+    },
+    {
+      "file": "lounge.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1370726,
+      "sha256": "d78e1f6523b0ca7c5d5d58ab8036c8dbb0ef665bddfc6526abcc2d801b21117c",
+      "tool": "Codex built-in image_gen",
+      "approvedAt": "2026-11-04",
+      "revision": "scene-model-consistency",
+      "characterReference": "2026-11-04 approved Chiikawa and Usagi models; Hachiware round-cheek r1. Scene-specific poses and expressions are retained.",
+      "editMethod": "Editing an existing transparent PNG scene with character-model references; not automatic SVG rendering.",
+      "previousSha256": "cc81a5d8440bb4353833268cbad952736e111587bac06e3bea5949bb189ed470",
+      "editTargetSha256": "70023d3d88b939b553c950e8ab00448629c56cb60bfb0da6369d6ad4244a41cc",
+      "prompt": "Use case: precise-object-edit.\nAsset type: transparent PNG scene illustration for Yahha UI.\nInput image 1 is the EDIT TARGET, an earlier scene candidate with a round-cheek Hachiware cat. Inputs 2 and 3 are CHARACTER IDENTITY AND PROPORTION REFERENCES ONLY for Chiikawa and Usagi; do not copy their standing poses/canvas into the scene. Preserve the input scene's original warm-brown rounded outlines, gentle pastel finish, original framing and transparency.\nScene: three friends together behind a pale yellow laptop with a simple </> code symbol, green notebook at lower right. Blue-and-white Hachiware LEFT, white round-eared Chiikawa CENTER, yellow long-eared Usagi RIGHT.\nPrimary request: carefully align ONLY the CENTER Chiikawa and RIGHT Usagi to approved models. Chiikawa should have a fuller circular cheek contour with vertical depth, round ears, gentle curved brows, warm-brown round highlighted eyes, soft pink oval cheeks and a small compact W smile with tiny lower lip. Keep its paws attached naturally to the laptop rim and the lower body hidden. Usagi should have rounded long ear tips and rounded pink inset ends with yellow margins, a clean continuous ear/head root, full rounded cheeks, long curved brows, round warm-brown eyes with an upper white highlight and fine lower highlight arc. Preserve the cheerful small open smile as a compact expression with a lower-lip mark, the existing head tilt/short reclining body/tail and visible paw resting at the computer. Do not flatten faces or change the laptop/notebook/Hachiware. The LEFT Hachiware's already round cheeks, pupils, three-hatch cheek patches, small closed cat smile and pose must remain unchanged.\nGlobal invariants: preserve the blue-and-white Hachiware cat's existing rounded head, split blue fringe, dot eyebrows, exactly three hatch marks per visible pink cheek, existing facial expression and body pose; preserve props, overlaps, original character order, canvas balance and generous margins. No horizontal/vertical squashing of the whole image, no added characters, captions, logos, watermarks, frame, photorealism, 3D shading, painted checkerboard or solid backdrop. Keep all ears, tails, feet and props inside the canvas. Output actual transparent alpha, clean edges with no new glow/vignette.\nOutput one complete 1536x1024 3:2 image.\n",
+      "history": [
+        {
+          "stage": "Existing project illustration before Hachiware and scene-model edits",
+          "width": 1536,
+          "height": 1024,
+          "bytes": 1319997,
+          "sha256": "cc81a5d8440bb4353833268cbad952736e111587bac06e3bea5949bb189ed470",
+          "gitSource": "9bc175d1a8135e75dc369e7c9192c5c9fbb5c7c8:playground/src/assets/lounge.png",
+          "sourceNote": "Original author and generation tool are not independently documented here."
+        },
+        {
+          "stage": "Hachiware round-cheek calibration used as the intermediate edit target for the adopted scene",
+          "width": 1536,
+          "height": 1024,
+          "bytes": 1408273,
+          "sha256": "70023d3d88b939b553c950e8ab00448629c56cb60bfb0da6369d6ad4244a41cc",
+          "tool": "Codex built-in image_gen",
+          "inputSha256": "cc81a5d8440bb4353833268cbad952736e111587bac06e3bea5949bb189ed470",
+          "characterReference": "Hachiware round-cheek r1 plus the approved reading PNG before this batch.",
+          "readingReferenceSha256": "d7238e865a91e40832e9995373defc8d44ebf87cc851030b0a96633756ce1716",
+          "prompt": "Use case: precise-object-edit. This is an edit of an existing transparent PNG illustration for the Yahha UI example website. Input image 1 is the EDIT TARGET. Input image 2 is ONLY the approved round-cheek r1 Hachiware character-geometry reference. Input image 3 is ONLY the user-approved reading-scene PNG reference for the corrected Hachiware identity and illustration finish. Do not transplant the reading scene, book, extra characters, or frontal portrait pose into the edit target. Preserve the target composition, other characters, all props and contact/overlap relationships. Focus the correction on Hachiware only. Match his full soft lower cheeks, balanced blue split-cat fringe and central inverted-V white forehead division, small dot eyebrows, small W-shaped closed cat smile with a tiny lower lip dash, pink oval cheek blush with exactly THREE short brown hatch strokes per cheek. No vertical squash, no stretched or elongated face, no giant eyes, no new characters or props, no captions, no watermark, no painted checkerboard. Keep genuine transparent alpha around the complete artwork and preserve the original warm rounded linework, pastel color and rendering finish.\nScene-specific request: the target is THREE FRIENDS AROUND A YELLOW LAPTOP with the literal code mark \"</>\" on the laptop and a closed green book at the lower right. Hachiware is the blue-and-white cat at the LEFT. Adjust his eyes to round dark-brown eyes with a single upper white highlight and a thin lower arc like the approved reading image, dot eyebrows and the small closed W cat smile (replace his current open tongue mouth). Keep his slightly tilted head round and full, preserve original body pose, paws attached to the body and touching the laptop, blue tail, white Chiikawa in the middle and yellow long-eared Usagi on the right. Preserve the two other friends' existing expressions, laptop angle, \"</>\" mark, book, overlaps and generous margins. Keep original 1536x1024 complete 3:2 canvas.\n",
+          "adoption": "This intermediate was not separately adopted; the final scene edit was approved on 2026-11-04."
+        }
+      ],
+      "previousGitSource": "9bc175d1a8135e75dc369e7c9192c5c9fbb5c7c8:playground/src/assets/lounge.png",
+      "changeScope": "Includes the preceding Hachiware round-cheek calibration and this batch Chiikawa/Usagi model-language refinements."
+    }
+  ],
+  "characterModel": {
+    "source": "playground/src/examples/scenes/artwork/friends-preview/source/characters.svg",
+    "sha256": "8828a18c124bc855224b4798c614000e91154c08cbde519295b7b87d73bdb03c",
+    "approvedAt": "2026-11-04",
+    "use": "Character identity and proportion reference; scene poses and expressions are adapted in the raster painting, not exported from SVG."
+  },
+  "maintenance": "The adopted PNG files are the reusable raster assets. Inline prompts and history document editing inputs and revisions; image generation is not a promise of pixel-identical regeneration. No local .planning or .codex path is required to read the records. npm run sync:artwork manages SVG derivatives only."
+}

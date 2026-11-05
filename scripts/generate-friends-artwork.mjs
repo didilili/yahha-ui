@@ -67,8 +67,8 @@ const hero = svg(
 <g stroke="#725b50" stroke-width="2.2" stroke-linecap="round"><path d="m179 173 6 5m-6 0 6-5m281-34 5 2m-4-5 2 8"/></g>
 <path fill="#dce9bf" d="M84 460c6-25 46-42 93-37 42-34 105-26 148-11 72-20 126-10 174-2 74-22 154 2 167 24 27 3 42 17 38 31-7 27-88 36-142 31-86 18-154 9-204 4-67 15-130 3-160 2-53 3-109-13-114-42Z"/>
 <g fill="#b8ce99"><ellipse cx="216" cy="460" rx="70" ry="14"/><ellipse cx="382" cy="466" rx="70" ry="14"/><ellipse cx="557" cy="458" rx="67" ry="14"/></g>
-<use href="#hachiware-smile" transform="translate(213 309) rotate(-4) scale(1.03)"/>
-<use href="#usagi-surprised" transform="translate(553 308) rotate(4) scale(1.01)"/>
+<use href="#hachiware-smile" transform="translate(213 330) rotate(-4) scale(1.03)"/>
+<use href="#usagi-surprised" transform="translate(553 324) rotate(4) scale(1.01)"/>
 <use href="#chiikawa-bright" transform="translate(383 298) scale(1.08)"/>
 <g stroke="#50312e" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round">
   <path fill="#e0bf94" d="m269 369 260-5 5 109-10 10-239 4-12-10Z"/>
@@ -121,7 +121,7 @@ for (const character of characters) {
       `portraits/${character}-${expression}.svg`,
       svg(
         `${names[character]}：${moods[expression]}。`,
-        '-110 -205 220 310',
+        '-120 -210 240 380',
         `<use href="#${character}-${expression}"/>`,
       ),
     );

@@ -22,8 +22,8 @@
 
 PNG 不进入组件安装包；实际引用的图片会进入对应网站的静态构建。
 
-- `examples/blog/src/assets/reading.png`、`rest.png`、`lounge.png` 是博客当前使用的既有插图，由博客直接维护，没有自动生成流程。现有[博客素材说明](../examples/blog/src/assets/README.md)记录实际维护入口，不补写未经核实的作者或生成工具。
-- `playground/src/examples/scenes/artwork/empty.png` 有[生成说明](../playground/src/examples/scenes/artwork/README.md)及 [sources.json](../playground/src/examples/scenes/artwork/sources.json)，记录 Codex 内置 image_gen、生成日期、尺寸、字节数和 SHA-256，仍用于部分示例。
+- `examples/blog/src/assets/reading.png`、`rest.png`、`lounge.png` 于 2026-11-04 使用 Codex 内置 image_gen 按已确认的人物模型编辑，并经用户确认采用。[博客来源记录](../examples/blog/src/assets/sources.json)保留尺寸、哈希、采用日期、输入版本和当前及历史提示词；原始插图未核实的作者或生成工具不补写。三张 PNG 按场景姿态改绘，不从 SVG 自动生成，维护入口见[博客素材说明](../examples/blog/src/assets/README.md)。
+- `playground/src/examples/scenes/artwork/empty.png` 最初于 2026-10-24 生成，2026-11-04 经人物校准与透明边缘精修后确认采用。它仍只包含小八与乌萨奇，用于文档空状态示例；[生成说明](../playground/src/examples/scenes/artwork/README.md)及 [sources.json](../playground/src/examples/scenes/artwork/sources.json)保留当前成品、编辑提示词和原版本记录，不依赖本机临时路径。
 
 生成说明将该状态图记录为非官方同人样张，具体来源、尺寸与哈希保留在原目录。
 

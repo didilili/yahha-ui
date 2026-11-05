@@ -26,7 +26,7 @@
 ## 组件与样式
 
 - 保持既有公开 API，默认外观、尺度、字阶、图标、轮廓、状态与动效遵循[设计语言](docs/design-language.md)。新增配置应有具体使用场景，不在示例中另设一套默认规范。
-- 站点品牌、基础组件与角色素材分层维护。`playground/src/site/` 组织天空、草地、群像和章节图案；组件安装包不带场景图片、字体或站点布局。人物以 v3 为基线，保持现有人物造型；变更角色造型须先单独评审确认。
+- 站点品牌、基础组件与角色素材分层维护。`playground/src/site/` 组织天空、草地、群像和章节图案；组件安装包不带场景图片、字体或站点布局。三位角色采用用户于 2026-11-04 确认的造型：小八保留圆颊 r1，吉伊与乌萨奇采用同日独立评审确认的脸颊、头身与表情细化稿；原扁平 v4 仍不采用。三位角色仅维护 `playground/src/examples/scenes/artwork/friends-preview/source/characters.svg` 这一完整造型源，评审候选不作为第二份维护源，后续变更角色造型须先单独评审确认。
 - `src/theme/theme.module.css` 是共享默认视觉 token 的唯一值源；使用正确语义族，fallback 与默认值一致。默认控件 44px，Button / IconButton 已有 36 / 44 / 52px 三档，不增加一次性的 45 / 46px 档位。局部图形的精确例外需记录用途，不为每个数字新建全局 token 或整文件豁免。
 - 保留各组件的语义分工与默认造型；不引入整行信签边框、开关勾号或虚线分段托盘，不将内容、字段和动作全部改为同等重量的深墨卡片。具体绘制与尺寸规则统一维护在设计语言中。
 - 明确受控状态、ref、原生属性和 className 的作用目标，并同步 Props 注释与文档。视觉改动不得改变尺寸、点击区域、键盘、焦点、选中语义或业务状态；禁用、减少动效和强制颜色均保留可用的静态结果。
@@ -38,7 +38,7 @@
 - 场景素材只放在 `playground/src/examples/scenes/artwork/`，不进入 `src/` 或默认组件库产物。Button 与 Spinner 共用内部三墨点图形；环境动效不得拖慢操作反馈，减少动效时使用静帧。
 - `examples/blog/src/assets/` 可保存独立网站所需的素材副本和来源、字体声明，保持角色版本和字节，不从组件库反向引用示例或把副本放入组件库产物。
 - 小日常道具原稿仅维护在 `playground/src/examples/scenes/artwork/little-days/`；`npm run sync:artwork` 派生静态 / 动效文件、博客副本和原生书签图标，`npm run check:artwork` 防止分叉。下载资源使用 `?no-inline` 保留独立 SVG，真实等待结束即停止，静态博客不制造加载延迟。
-- 欢迎场景由 `scripts/build-friends-welcome.mjs` 从既有 v3 派生，仅分离前爪动作，脸、身体比例和原模型保持。`FriendsWelcome.tsx` 使用原生 SVG 与真实暂停 / 继续，博客版本由同步脚本复制且只迁移资源导入路径，不另维护控制器。离屏、后台和系统减少动效时停止；重播只重建前爪，不重置环境时间线。
+- 欢迎场景由 `scripts/build-friends-welcome.mjs` 从当前已确认的人物源派生，仅分离前爪动作，脸、身体比例和原模型保持。`FriendsWelcome.tsx` 使用原生 SVG 与真实暂停 / 继续，博客版本由同步脚本复制且只迁移资源导入路径，不另维护控制器。离屏、后台和系统减少动效时停止；重播只重建前爪，不重置环境时间线。
 - `playground/src/examples/design/` 展示默认实现，禁止通过 style、className、classNames 或内嵌 CSS 改写控件外观与几何。使用方的公开定制能力保留；专门的定制示例应说明范围，不能混进默认基准。
 - 保留导航链接、表格、pre / code 等合理的原生语义，不为组件复用把页面导航改为 Tabs 或把链接改为按钮。Portal 使用统一主题上下文，不复制带布局作用的页面 className。
 - 字体与素材许可统一见[第三方内容说明](THIRD_PARTY_NOTICES.md)；不虚构许可或未经验证的 React / SSR 兼容承诺。
