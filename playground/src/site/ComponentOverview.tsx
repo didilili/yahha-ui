@@ -296,7 +296,7 @@ export default function ComponentOverview({
         <Motif name="letter" />
         <div>
           <h2 id={`${overviewId}-next`}>接入与组合示例</h2>
-          <p>先完成安装，再查看阅读、编辑场景中的组件组合和完整博客示例。</p>
+          <p>先完成安装，再查看阅读、编辑场景中的组件组合。</p>
           <nav aria-label="总览相关指南">
             <Link href="#/guides/getting-started">
               安装与接入 <ArrowRight size={15} aria-hidden="true" />
@@ -306,9 +306,6 @@ export default function ComponentOverview({
             </Link>
             <Link href="#/guides/states?section=article-actions">
               文章编辑场景 <ArrowRight size={15} aria-hidden="true" />
-            </Link>
-            <Link href="#/guides/getting-started?section=blog-example">
-              完整博客示例 <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </nav>
         </div>

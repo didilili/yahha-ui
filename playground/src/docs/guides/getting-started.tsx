@@ -1,6 +1,5 @@
-import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'yahha-ui';
-import { blogHref, feedbackHref, repositoryHref } from '../../site/site-links';
+import { feedbackHref, repositoryHref } from '../../site/site-links';
 import GettingStarted from '../../examples/GettingStarted';
 import gettingStartedSource from '../../examples/GettingStarted.tsx?raw';
 import { CodeBlock } from '../CodeBlock';
@@ -26,9 +25,7 @@ const page: DocPage = {
             </Link>
           </nav>
           <p className="getting-started-related">
-            其他示例与资源：
-            <Link href="#/guides/getting-started?section=blog-example">完整博客示例</Link>
-            {' · '}
+            素材资源：
             <Link href="#/guides/artwork?section=artwork-language">图标与插画</Link>
           </p>
         </>
@@ -181,37 +178,6 @@ const page: DocPage = {
             <Link href="#/guides/artwork?section=artwork-language">查看素材预览与下载</Link>
             ；需要暂停与重播时，使用
             <Link href="#/guides/artwork?section=artwork-welcome">欢迎场景的完整接入</Link>。
-          </p>
-        </>
-      ),
-    },
-    {
-      id: 'blog-example',
-      title: '完整博客示例',
-      toc: false,
-      disclosure: '查看博客运行方式',
-      content: (
-        <>
-          <p>
-            「小小日常」把组件组合成首页、文章归档与阅读详情。在仓库根目录完成 <code>npm ci</code>{' '}
-            后运行：
-          </p>
-          <CodeBlock language="sh" source="npm run dev:blog" />
-          <p>
-            <Link href={blogHref} target="_blank" rel="noopener noreferrer">
-              体验示例网站 <ArrowUpRight size={16} aria-hidden="true" />
-              <span className="sr-only">（新标签页打开）</span>
-            </Link>
-          </p>
-          <p>使用以下命令导出独立博客项目：</p>
-          <CodeBlock language="sh" source="npm run create:starter -- --example blog" />
-          <p>
-            进入生成目录，运行 <code>npm install</code> 与 <code>npm run dev</code>。
-            修改文章、站点资料和部署方式见{' '}
-            <Link href={`${repositoryHref}/tree/main/examples/blog`} external>
-              博客说明
-            </Link>
-            。
           </p>
         </>
       ),

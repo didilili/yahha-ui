@@ -15,16 +15,14 @@ export async function verifyResponsiveFocus(page, baseURL) {
   );
   await page.setViewportSize({ width: 390, height: 844 });
   await menu.click();
-  const example = page
-    .getByRole('navigation', { name: '示例入口', exact: true })
-    .getByRole('link', { name: /^示例网站/ });
-  await example.focus();
+  const closeMenu = page.getByRole('button', { name: '关闭文档目录', exact: true });
+  await closeMenu.focus();
   await page.setViewportSize({ width: 961, height: 900 });
   await page.waitForFunction(
     (node) => document.activeElement === node,
     await search.elementHandle(),
   );
-  assert.equal(await example.isVisible(), false);
+  assert.equal(await closeMenu.isVisible(), false);
   assert.equal(await page.locator('.docs-sidebar').isVisible(), true);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page

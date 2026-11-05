@@ -1,11 +1,10 @@
 import { useState, type Ref } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, Code2 } from 'lucide-react';
+import { ArrowDown, ArrowRight, Code2 } from 'lucide-react';
 import { Badge, Button, Checkbox, Link, Popover, Surface, Tabs, Text, TextField } from 'yahha-ui';
 import Motif from './Motif';
 import BookmarkMark from './BookmarkMark';
 import HomeScenes from './HomeScenes';
 import HomeTheme from './HomeTheme';
-import { blogHref } from './site-links';
 import FriendsWelcome from '../examples/scenes/FriendsWelcome';
 import peek from '../examples/scenes/artwork/friends-preview/friends-peek.svg';
 import './home-page.css';
@@ -45,15 +44,6 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
               </Link>
               <Link className="home-text-link" href="#/components">
                 浏览组件 <ArrowRight size={16} aria-hidden="true" />
-              </Link>
-              <Link
-                className="home-text-link"
-                href={blogHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                体验示例网站 <ArrowUpRight size={16} aria-hidden="true" />
-                <span className="sr-only">（新标签页打开）</span>
               </Link>
             </div>
             <p className="home-local-note">

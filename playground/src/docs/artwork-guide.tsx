@@ -251,17 +251,17 @@ export const artworkGuide: DocPage = {
           <ul>
             <li>
               <strong>组件安装包：</strong>包含组件实现、类型与样式，以及包信息和 README。 独立
-              SVG、PNG、字体、文档站、博客源码和截图不随组件包安装。
+              SVG、PNG、字体、文档站和截图不随组件包安装。
             </li>
             <li>
               <strong>SVG 道具与场景：</strong>
               书签、热茶和状态图案由本项目绘制；找路与欢迎场景还组合了既有角色模型。
             </li>
             <li>
-              <strong>PNG 插图：</strong>博客配图保留既有素材记录；空态示例的图片另有生成说明。
+              <strong>PNG 插图：</strong>空态示例的图片保留生成说明。
             </li>
             <li>
-              <strong>站点字体：</strong>文档站与博客使用 LXGW Marker Gothic Regular 和 LXGW WenKai
+              <strong>站点字体：</strong>文档站使用 LXGW Marker Gothic Regular 和 LXGW WenKai
               Regular，组件本身继承应用字体。现有 SIL Open Font License 1.1 声明见{' '}
               <Link href={markerFontNotice} target="_blank" rel="noopener noreferrer">
                 Marker 字体声明（新标签页）

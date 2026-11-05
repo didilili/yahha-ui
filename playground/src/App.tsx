@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowUpRight, ChevronLeft, ChevronRight, Menu, Search, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Menu, Search, X } from 'lucide-react';
 import {
   Alert,
   Button,
@@ -41,7 +41,7 @@ import Motif from './site/Motif';
 import CategoryIcon from './site/CategoryIcon';
 import SectionIcon from './site/SectionIcon';
 import { categoryIconFor } from './site/category-icons';
-import { blogHref, repositoryHref } from './site/site-links';
+import { repositoryHref } from './site/site-links';
 import './site/guide-layout.css';
 
 /* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- API tables need keyboard focus for horizontal scrolling on narrow screens. */
@@ -493,10 +493,6 @@ export default function App() {
               {item.name}
             </Link>
           ))}
-          <Link href={blogHref} className="header-link" target="_blank" rel="noopener noreferrer">
-            示例网站 <ArrowUpRight size={16} aria-hidden="true" />
-            <span className="sr-only">（新标签页打开）</span>
-          </Link>
         </nav>
         <IconButton
           ref={menuButton}
@@ -681,17 +677,6 @@ export default function App() {
                   />
                 </div>
               )}
-              <nav className="mobile-site-links" aria-label="示例入口">
-                <Link
-                  href={blogHref}
-                  className="sidebar-blog"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  示例网站 <ArrowUpRight size={16} aria-hidden="true" />
-                  <span className="sr-only">（新标签页打开）</span>
-                </Link>
-              </nav>
             </div>
           </div>
         </aside>

@@ -110,8 +110,7 @@
   margin-block-start: 6px;
 }
 
-.docs-cartoon .nav-group a:focus-visible,
-.docs-cartoon .sidebar-blog:focus-visible {
+.docs-cartoon .nav-group a:focus-visible {
   outline-offset: 1px;
 }
 

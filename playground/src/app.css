@@ -174,17 +174,6 @@ svg {
 .nav-group {
   margin-top: 26px;
 }
-.mobile-site-links {
-  display: none;
-}
-.sidebar-blog {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  padding: 8px 12px;
-  font-size: var(--yahha-font-size-md, 14px);
-}
 .nav-group > p {
   margin: 0 10px 8px;
   color: var(--yahha-muted, #9a8376);
@@ -866,10 +855,6 @@ h3:hover .heading-anchor,
     display: inline-flex;
     flex: 0 0 auto;
     margin-left: auto;
-  }
-  .mobile-site-links {
-    display: block;
-    margin-top: 26px;
   }
   .docs-content {
     max-width: 850px;

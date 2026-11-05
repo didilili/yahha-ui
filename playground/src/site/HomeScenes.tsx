@@ -1,9 +1,8 @@
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'yahha-ui';
 import archivePreview from '../assets/recipes/archive.png';
 import editingPreview from '../assets/recipes/editing.png';
 import readingPreview from '../assets/recipes/reading.png';
-import { blogHref } from './site-links';
 import './home-scenes.css';
 
 export default function HomeScenes() {
@@ -79,21 +78,7 @@ export default function HomeScenes() {
         </div>
 
         <div className="home-scenes-footer">
-          <div>
-            <p className="home-scenes-boundary">
-              示例使用演示数据与当前页面状态。用到自己的项目时，需要接入数据和保存逻辑。
-            </p>
-            <p>完整博客示例包含首页、手记归档与文章详情。</p>
-          </div>
-          <Link
-            className="home-scenes-blog-link"
-            href={blogHref}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            体验示例网站 <ArrowUpRight size={17} aria-hidden="true" />
-            <span className="sr-only">（新标签页打开）</span>
-          </Link>
+          <p>示例使用演示数据与当前页面状态。用到自己的项目时，需要接入数据和保存逻辑。</p>
         </div>
       </div>
     </section>

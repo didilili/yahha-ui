@@ -5,7 +5,6 @@ import emptyPreview from '../assets/recipes/empty.png';
 import loadingPreview from '../assets/recipes/loading.png';
 import notFoundPreview from '../assets/recipes/not-found.png';
 import readingPreview from '../assets/recipes/reading.png';
-import { blogHref } from '../site/site-links';
 import type { DocPage } from './types';
 import { guideMetadata } from './guide-catalog';
 
@@ -207,23 +206,6 @@ export const recipeGuide: DocPage = {
             <Link href="#/components/select?section=select-portal-customization">下拉面板定制</Link>
             。
           </p>
-        </>
-      ),
-    },
-    {
-      id: 'blog',
-      title: '完整博客',
-      content: (
-        <>
-          <p>
-            「小小日常」是完整的博客示例，包含首页、手记归档与文章详情，支持分类、搜索、分页和当前浏览器收藏。
-          </p>
-          <div className="guide-actions">
-            <Link href={blogHref} target="_blank" rel="noopener noreferrer">
-              体验示例网站<span className="sr-only">（新标签页打开）</span>
-            </Link>
-            <Link href="#/guides/getting-started?section=blog-example">运行与定制说明</Link>
-          </div>
         </>
       ),
     },
