@@ -25,9 +25,22 @@ export interface ApiRow {
   description: string;
 }
 
+export type DocSectionKind =
+  | 'usage'
+  | 'examples'
+  | 'integration'
+  | 'api'
+  | 'accessibility'
+  | 'behavior'
+  | 'styling'
+  | 'related'
+  | 'guidance';
+
 interface DocSection {
   id: string;
   title: string;
+  /** Optional visual identity; unassigned guide headings remain text-only. */
+  kind?: DocSectionKind;
   content?: ReactNode;
   examples?: DocExample[];
   api?: { name: string; rows: ApiRow[] }[];

@@ -62,7 +62,7 @@ export async function verifyArticleActions(page, baseURL) {
   );
   const help = dialog.getByRole('button', { name: '写作提示', exact: true });
   await help.click();
-  const note = page.getByRole('dialog', { name: '给摘要留一点余地', exact: true });
+  const note = page.getByRole('dialog', { name: '摘要写什么', exact: true });
   await note.waitFor();
   await page.keyboard.press('Escape');
   await note.waitFor({ state: 'hidden' });

@@ -204,8 +204,12 @@
   position: relative;
   align-items: center;
   gap: 9px;
-  margin-inline-start: 38px;
+  margin-inline-start: 0;
   color: var(--site-ink);
+}
+
+.docs-cartoon .section-title.has-section-icon {
+  margin-inline-start: 38px;
 }
 
 .docs-cartoon .section-title > svg {

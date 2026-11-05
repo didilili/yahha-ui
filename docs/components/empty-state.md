@@ -2,7 +2,7 @@
 
 # EmptyState 空状态
 
-当列表或搜索没有内容时，解释原因，并给出合适的下一步。
+用于列表为空、搜索无结果等情况，提供说明与操作插槽。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { EmptyState } from 'yahha-ui';
 
 ## 何时使用
 
-用于已经确认没有内容的情况，例如首次使用、搜索无结果或列表为空。标题说明原因，描述和操作引导下一步；仍在加载或请求失败时，应展示对应状态，避免让用户误以为内容不存在。
+用于首次使用、列表为空或搜索无结果等已确认没有内容的情况。加载和请求失败应分别使用对应状态。
 
 <a id="examples"></a>
 
@@ -55,7 +55,7 @@ export default function EmptyBasic() {
           <Heading level={3} id={headingId} ref={headingRef} tabIndex={-1}>
             第一篇示例文章已创建
           </Heading>
-          <Text>今天也有一件想记住的小事。写下第一段之后，再慢慢补上下一句。</Text>
+          <Text>今天路过面包店，发现菜单多了一种红豆包。买回来尝了，准备下次带给朋友。</Text>
           <div>
             <Button
               variant="secondary"
@@ -94,7 +94,7 @@ export default function EmptyBasic() {
 
 ### 搜索无结果与清空条件
 
-搜索本地文章，无结果时清空条件恢复列表。
+搜索本地文章，无结果时可清空条件恢复列表。
 
 [查看示例文件](../../playground/src/examples/feedback/EmptySearch.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -178,6 +178,6 @@ action 使用 Button 或链接等可交互元素，创建内容、清空筛选�
 
 ## 相关组件
 
-- [Spinner 加载指示](spinner.md)：表达正在进行的等待，提供可读的状态文字。
+- [Spinner 加载指示](spinner.md)：表示正在进行的加载或等待，提供可读的状态文字。
 - [Skeleton 骨架占位](skeleton.md)：为即将出现的内容预留形状，减少布局跳动。
-- [Alert 提示条](alert.md)：持续展示阅读说明、完成结果或需要处理的问题。
+- [Alert 提示条](alert.md)：用于页面内持续显示的信息、结果、警告或错误提示。

@@ -67,7 +67,7 @@ export default function EmptyScene() {
               ))}
             </ul>
             <Text size="sm" tone="muted">
-              示例状态仅保留在当前页面。
+              示例状态仅保留在当前页面，刷新后恢复。
             </Text>
           </div>
         ) : (
@@ -109,7 +109,7 @@ export default function EmptyScene() {
                 }}
               >
                 {scene === 'search'
-                  ? '清空筛选'
+                  ? '清空搜索'
                   : scene === 'saved'
                     ? '浏览示例文章'
                     : '创建示例手记'}

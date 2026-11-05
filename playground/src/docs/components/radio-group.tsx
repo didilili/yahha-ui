@@ -22,7 +22,7 @@ export default defineComponentPage('radio-group', {
       title: '何时使用',
       content: (
         <p>
-          从少量互斥选项中选择一项，尤其适合需要同时阅读标签和补充说明的表单。简短的紧凑筛选使用{' '}
+          从少量互斥选项中选择一项，适合需要同时展示标签和补充说明的表单。简短的紧凑筛选使用{' '}
           <a href="#/components/segmented-control">SegmentedControl</a>；需要收起选项时使用{' '}
           <a href="#/components/select">Select</a>；切换独立内容面板使用{' '}
           <a href="#/components/tabs">Tabs</a>。

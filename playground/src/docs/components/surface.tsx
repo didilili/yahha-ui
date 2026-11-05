@@ -17,7 +17,7 @@ export default defineComponentPage('surface', {
       content: (
         <p>
           用于组织文章摘要、作者介绍和阅读提示等内容。Surface
-          提供平面纸面与轻边框，标题、正文和操作在容器内按内容需要组合。
+          提供平整纸面与轻边框，标题、正文和操作可按内容需要组合。
         </p>
       ),
     },

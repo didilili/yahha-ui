@@ -2,7 +2,7 @@
 
 # Switch 开关
 
-切换即时生效的阅读偏好或显示选项，开与关都有清楚含义。
+打开或关闭即时生效的设置，例如显示文章摘要。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -321,5 +321,5 @@ export default function SwitchReadingPreference() {
 
 ## 相关组件
 
-- [Checkbox 复选框](checkbox.md)：用于多项选择、订阅选项和需要主动确认的轻量表单。
-- [RadioGroup 单选组](radio-group.md)：将互斥选项和说明完整展示，适合订阅频率、可见范围等少量选择。
+- [Checkbox 复选框](checkbox.md)：用于独立选择、多项选择或确认事项，支持半选状态。
+- [RadioGroup 单选组](radio-group.md)：用于在一组互斥选项中选择单个值，可为选项提供说明。

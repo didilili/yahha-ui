@@ -24,23 +24,23 @@ const articles = [
     category: '日常',
     title: '沿着河边，慢慢走',
     date: '2026-10-18',
-    summary: '朋友的鞋带散了，我们就在河边等一等。',
+    summary: '说好沿河散步，小八却先闻到了面包香。',
     paragraphs: [
-      '周末在 Yahha 星球的河边散步，小八走着走着停了下来。原来鞋带散了，大家就在桥边等他，顺手数了数水面上的叶子。',
-      '路边小店门口还是那张旧木椅。我们挤着坐了一会儿，把带来的饼干掰成几份，也给迟到的朋友留下一份。',
-      '回家才发现，今天没有走多远。不过等到了朋友，也记下了饼干掉进衣领的事，已经够写一页。',
+      '周末沿着 Yahha 星球的河边散步，小八忽然转了个弯。大家跟过去，才发现他已经站在面包店的橱窗前，连想买哪块都挑好了。',
+      '吉伊对着菜单犹豫，小八把喜欢的口味一个个指给他看。乌萨奇已经叼着纸袋往河边走，袋口露出一截刚出炉的法棍。',
+      '回家才发现，口袋里的散步路线画得很认真，面包店却根本不在上面。下次得补上，不然小八又要负责带路。',
     ],
   },
   {
     id: 'weekend',
     category: '读书',
-    title: '给周末留一页空白',
+    title: '读了三遍的那一页',
     date: '2026-10-12',
-    summary: '书读到一半，先给打瞌睡的朋友留个书签。',
+    summary: '窗外的麻雀太忙，书里的故事只好停一停。',
     paragraphs: [
-      '窗边的读书会才开始没多久，就有朋友抱着书睡着了。大家把声音放轻，在读到的地方夹上书签。',
-      '我的笔记只写了两行，还画歪了一只小猫。旁边的朋友说，留点空白吧，下次可以一起画。',
-      '今天先记到这里。没读完的那一段，等大家都醒着的时候，再接着读。',
+      '窗边读书，小八忽然说这一页好像读过。翻回去一看，书签还夹在昨天的位置，窗外的麻雀倒是已经搬了三趟草枝。',
+      '吉伊把看到的鸟画在笔记页边，画到脚爪时卡了壳。乌萨奇凑过来看，添了两条长腿，麻雀一下子像是要去参加长跑。',
+      '小八笑得忘了读到哪一句，又把这页从头念了一遍。今天的读书笔记多了一只长腿麻雀，书签还是没挪。',
     ],
   },
 ];
@@ -128,7 +128,7 @@ export default function ReadingExample() {
               <Text size="lg">
                 <strong>库米的星球手记</strong>
               </Text>
-              <Text tone="muted">在星球上散步，和朋友交换手记。</Text>
+              <Text tone="muted">散步常绕到面包店，读书常被窗外的小鸟打断。</Text>
             </div>
           </div>
           <div className="reading-author-actions">
@@ -141,8 +141,7 @@ export default function ReadingExample() {
               trigger={<Button variant="ghost">关于作者</Button>}
             >
               <Text>
-                你好，我是库米。我在 Yahha
-                星球记一点日常：有人迟到，留块饼干；有人读得慢，就把这一页留着。
+                你好，我是库米。喜欢沿河散步，出门常常忘带笔，倒记得哪家面包刚出炉。回家就把这些小事补进手记。
               </Text>
             </Dialog>
           </div>
@@ -233,13 +232,13 @@ export default function ReadingExample() {
               <div className="reading-body">
                 <Text>{active.paragraphs[0]}</Text>
                 <Heading level={3}>
-                  {active.id === 'river' ? '把沿途的小事留下' : '让想法慢慢展开'}
+                  {active.id === 'river' ? '路线图上没有的那一站' : '书签还是没挪'}
                 </Heading>
                 {active.paragraphs.slice(1).map((paragraph) => (
                   <Text key={paragraph}>{paragraph}</Text>
                 ))}
                 <Text>
-                  每篇手记都留下一点余地，
+                  这页还有一点补记，
                   <Link
                     href={`#${rootId}-note`}
                     onClick={(event) => {
@@ -250,7 +249,7 @@ export default function ReadingExample() {
                   >
                     读一读写在后面的话
                   </Link>
-                  ，再继续往前走。
+                  。
                 </Text>
               </div>
               <Surface
@@ -265,7 +264,7 @@ export default function ReadingExample() {
                   写在手记后面
                 </Heading>
                 <Text>
-                  不是每一天都有大事发生。有人把鞋带系好了，有人把半块饼干分给你，这一页也就有了想留下的事。
+                  写手记时总有人凑过来看。小八检查点心有没有写漏，吉伊添了一幅画，乌萨奇的字挤到了纸边。
                 </Text>
               </Surface>
               <Divider decorative className="reading-divider" />
@@ -299,7 +298,7 @@ export default function ReadingExample() {
         ) : (
           <EmptyState
             title="未找到相关手记"
-            description="换个词，或看看全部文章。"
+            description="当前分类中没有匹配的手记，换个关键词，或显示全部手记。"
             action={
               <Button
                 variant="secondary"

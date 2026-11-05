@@ -3,6 +3,7 @@ import {
   Alert,
   Badge,
   Button,
+  BookmarkIcon,
   Dialog,
   DropdownMenu,
   Heading,
@@ -19,7 +20,7 @@ import {
 const initialArticle = {
   title: '沿着河边，慢慢走',
   category: '日常',
-  summary: '走到桥边，等系好鞋带的朋友一起回家。',
+  summary: '说好沿河散步，小八却先闻到了面包香。',
 };
 
 export default function ArticleActions() {
@@ -32,7 +33,7 @@ export default function ArticleActions() {
   const [failNext, setFailNext] = useState(true);
   const [error, setError] = useState('');
   const [titleError, setTitleError] = useState('');
-  const [message, setMessage] = useState('这是一篇只保留在当前页面的示例手记。');
+  const [message, setMessage] = useState('示例手记仅在当前页面保留，刷新后恢复。');
   const [notice, setNotice] = useState<string | null>(null);
   const [announceInline, setAnnounceInline] = useState(true);
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -153,15 +154,15 @@ export default function ArticleActions() {
                   setNotice(null);
                   setAnnounceInline(true);
                   setSaved(!saved);
-                  setMessage(saved ? '已取消收藏，手记仍然保留。' : '手记已收藏，再按星星可取消。');
+                  setMessage(saved ? '已取消收藏，手记仍然保留。' : '手记已收藏，再次点击可取消。');
                 }}
               >
-                <span aria-hidden="true">{saved ? '★' : '☆'}</span>
+                <BookmarkIcon filled={saved} />
               </IconButton>
             }
           />
           <Text size="sm" tone="muted">
-            {saved ? '已收藏' : '星星按钮用于收藏'}
+            {saved ? '已收藏' : '可收藏这篇手记'}
           </Text>
         </div>
       </article>
@@ -244,11 +245,11 @@ export default function ArticleActions() {
                   写作提示
                 </Button>
               }
-              title="给摘要留一点余地"
+              title="摘要写什么"
             >
-              <Text>写一句文章的主题就好，不必把整篇内容挤在这里。</Text>
+              <Text>概括这篇手记最想说的一件事，详细经过留在正文。</Text>
               <Text size="sm" tone="muted">
-                这个便笺可以单独关闭，正在编辑的草稿仍会保留。
+                此弹出面板可单独关闭，正在编辑的草稿仍会保留。
               </Text>
             </Popover>
           </div>

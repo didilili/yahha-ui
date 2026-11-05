@@ -2,7 +2,7 @@
 
 # RadioGroup 单选组
 
-将互斥选项和说明完整展示，适合订阅频率、可见范围等少量选择。
+用于在一组互斥选项中选择单个值，可为选项提供说明。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { RadioGroup } from 'yahha-ui';
 
 ## 何时使用
 
-从少量互斥选项中选择一项，尤其适合需要同时阅读标签和补充说明的表单。简短的紧凑筛选使用 [SegmentedControl](segmented-control.md)；需要收起选项时使用 [Select](select.md)；切换独立内容面板使用 [Tabs](tabs.md)。
+从少量互斥选项中选择一项，适合需要同时展示标签和补充说明的表单。简短的紧凑筛选使用 [SegmentedControl](segmented-control.md)；需要收起选项时使用 [Select](select.md)；切换独立内容面板使用 [Tabs](tabs.md)。
 
 <a id="examples"></a>
 
@@ -270,9 +270,9 @@ const options = [
   { value: 'relaxed', label: '宽松', description: '加大行距与段落间距，让每一段更舒展。' },
 ] as const;
 const paragraphs = [
-  '傍晚买完菜，我没有立刻回家，而是沿着河边多走了一小段。风吹过树梢，水面上的光也跟着慢下来。',
-  '长椅旁开着几朵不知名字的小花。我把它们画在本子的角落，旁边留了一点空白，等下次路过再补上。',
-  '回家的时候天还亮着。今天没有什么特别的事，但这条绕远的小路，值得写进周末的手记里。',
+  '傍晚买完菜，我沿着河边多走了一段。风一吹，纸袋里的葱叶就扫到鼻尖，只好一路把它往外拨。',
+  '长椅旁边开着几朵小花。我想画下来，翻遍口袋才发现没带笔，倒是找出了早上买面包的小票。',
+  '回家以后凭记忆补画，花瓣多画了一片。小八说没关系，看起来像一颗煎得很好的荷包蛋。',
 ];
 
 export default function RadioGroupReadingLayout() {
@@ -339,7 +339,7 @@ import { useRef, useState } from 'react';
 import { Button, RadioGroup, Text, TextField } from 'yahha-ui';
 
 type Signature = 'nickname' | 'anonymous';
-const comment = '读到河边那一段，也想把周末留给一场慢慢的散步。谢谢你分享。';
+const comment = '读到小八在面包店门口站住，我也饿了。那张路线图记得把店名补上。';
 
 export default function RadioGroupCommentSignature() {
   const [signature, setSignature] = useState<Signature>('nickname');
@@ -490,6 +490,6 @@ export default function RadioGroupCommentSignature() {
 
 ## 相关组件
 
-- [Select 下拉选择器](select.md)：在有限的文章分类、排序或归档选项中选择一项。
-- [Checkbox 复选框](checkbox.md)：用于多项选择、订阅选项和需要主动确认的轻量表单。
-- [SegmentedControl 分段选择](segmented-control.md)：在少量互斥选项间切换，使用原生 radio 保留表单与键盘行为。
+- [Select 下拉选择器](select.md)：从文章分类、排序方式等固定选项中选一项。
+- [Checkbox 复选框](checkbox.md)：用于独立选择、多项选择或确认事项，支持半选状态。
+- [SegmentedControl 分段选择](segmented-control.md)：紧凑的受控单选组，适用于分类、排序等简短选项，保留原生 radio 的表单与键盘行为。

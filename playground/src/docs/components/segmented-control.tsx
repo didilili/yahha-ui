@@ -19,7 +19,7 @@ export default defineComponentPage('segmented-control', {
       title: '何时使用',
       content: (
         <p>
-          用一组紧凑的简短选项切换分类、排序等互斥值。选项需要补充说明或纵向比较时使用{' '}
+          用于在少量简短的互斥选项间切换分类、排序等值。选项需要补充说明或纵向比较时使用{' '}
           <Link href="#/components/radio-group">RadioGroup</Link>；需要收起选项时使用{' '}
           <Link href="#/components/select">Select</Link>；切换同一区域中对应的内容面板使用{' '}
           <Link href="#/components/tabs">Tabs</Link>。页面导航使用链接。
@@ -63,7 +63,7 @@ export default defineComponentPage('segmented-control', {
         {
           id: 'form',
           title: '原生表单与显式重置',
-          description: '读取必选值或重置为未选择，不重排文章。',
+          description: '选择后读取表单值，或重置为未选择；本例不重排文章。',
           toc: false,
           component: SegmentedForm,
           source: segmentedFormSource,

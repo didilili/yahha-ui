@@ -163,9 +163,11 @@ export default function LoadingScene() {
             <>
               <Badge tone="accent">周末手记</Badge>
               <Heading level={3} ref={resultHeading} tabIndex={-1}>
-                今天，也有一件想记住的小事。
+                一只纸袋，一路面包香
               </Heading>
-              <Text>朋友走得慢，就在桥边等一等。最后一块饼干，也可以掰开分。</Text>
+              <Text>
+                说好沿河散步，小八却先闻到了面包香。等大家反应过来，他已经在橱窗前挑好了。
+              </Text>
               <Button
                 ref={saveButton}
                 variant="secondary"
@@ -178,7 +180,7 @@ export default function LoadingScene() {
                 收藏这篇手记
               </Button>
               <Text size="sm" tone="muted">
-                {saved ? '已在当前示例中收藏。' : '收藏仅在当前演示页面生效。'}
+                {saved ? '已在当前示例中收藏。' : '收藏仅在当前演示页面生效，刷新后恢复。'}
               </Text>
             </>
           )}

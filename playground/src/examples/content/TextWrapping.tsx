@@ -7,7 +7,7 @@ export default function TextWrapping() {
     <div style={{ display: 'grid', gap: 12, maxWidth: '32ch' }}>
       <Text>
         我把这次散步的记录存成
-        PersonalJournalWithAVeryLongUnbrokenTitle，留给下个周末，和没赶上散步的朋友一起看。
+        PersonalJournalWithAVeryLongUnbrokenTitle，纸袋里装着刚出炉的面包，口袋里却找不到准备记路线的笔。
       </Text>
       <Text>
         段落参考：

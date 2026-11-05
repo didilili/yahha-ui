@@ -60,7 +60,7 @@ export default function AlertReadingNotice() {
         </div>
       </Alert>
       <Text>那天下午，我们沿着河岸走了一段。朋友在桥边停下来，给鞋带重新打了一个结。</Text>
-      <Text>回家时天还亮着。把路边的小花和等朋友的时间，一起记进这页手记。</Text>
+      <Text>回家时天还亮着。口袋里除了路线图，还多出一张面包店的小票。</Text>
     </article>
   );
 }

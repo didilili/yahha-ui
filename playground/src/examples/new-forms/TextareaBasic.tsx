@@ -6,7 +6,7 @@ export default function TextareaBasic() {
       <Textarea
         label="给作者留言"
         name="message"
-        placeholder="想说的话，可以慢慢写……"
+        placeholder="写下想对作者说的话"
         rows={4}
         hint="桌面端可拖动角落的调整手柄。"
       />

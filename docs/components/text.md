@@ -2,7 +2,7 @@
 
 # Text 正文
 
-为段落提供统一的字号、行高和语义文字颜色。
+用于正文、摘要和辅助说明，统一字号、行高与语义颜色。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -73,7 +73,7 @@ export default function TextTones() {
           <Text size="sm" tone="muted">
             {tone === 'default' ? '主要文字' : '次要文字'}
           </Text>
-          <Text tone={tone}>今天沿着河边散步，走到桥边时，停下来等了等还在系鞋带的朋友。</Text>
+          <Text tone={tone}>河边散步走了一半，小八先闻到了面包香。</Text>
         </div>
       ))}
     </div>
@@ -129,7 +129,7 @@ export default function TextWrapping() {
     <div style={{ display: 'grid', gap: 12, maxWidth: '32ch' }}>
       <Text>
         我把这次散步的记录存成
-        PersonalJournalWithAVeryLongUnbrokenTitle，留给下个周末，和没赶上散步的朋友一起看。
+        PersonalJournalWithAVeryLongUnbrokenTitle，纸袋里装着刚出炉的面包，口袋里却找不到准备记路线的笔。
       </Text>
       <Text>
         段落参考：
@@ -174,9 +174,9 @@ export default function TextQuotation() {
           }}
         >
           <Text>
-            回家才发现，今天没有走多远。不过<em>等到了朋友</em>，也记下了饼干掉进衣领的事，
+            回家才发现，口袋里的散步路线画得很认真，<em>面包店却根本不在上面</em>。下次得补上，
             <mark style={{ color: 'inherit', background: 'var(--yahha-accent-soft, #fff0f6)' }}>
-              已经够写一页
+              不然小八又要负责带路
             </mark>
             。
           </Text>
@@ -192,7 +192,7 @@ export default function TextQuotation() {
         </figcaption>
       </figure>
       <Text size="sm" tone="muted">
-        <strong>读后批注：</strong>等朋友的那一会儿，也成了这次散步的一部分。
+        <strong>读后批注：</strong>原来最管用的路线图，是小八的鼻子。
       </Text>
     </div>
   );
@@ -232,6 +232,6 @@ Text 默认行高为 1.8，段落不带外边距；栏宽、段距和章节留�
 
 ## 相关组件
 
-- [Heading 标题](heading.md)：通过真实 h1–h6 元素建立清楚的文档层级。
-- [Link 链接](link.md)：保留原生链接行为，统一下划线与键盘焦点。
-- [Badge 状态标记](badge.md)：在文章标题、分类或阅读信息旁展示紧凑的静态标记。
+- [Heading 标题](heading.md)：通过原生 h1–h6 元素定义页面、文章与章节的标题层级。
+- [Link 链接](link.md)：用于页面导航和资源跳转，保留原生链接行为、下划线与焦点样式。
+- [Badge 状态标记](badge.md)：用于展示分类、标签或当前状态的静态标记。

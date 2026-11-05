@@ -1,18 +1,18 @@
 # Yahha UI
 
-**一起做，全宇宙最可爱的 UI 组件库。**
+**把可爱，搭进你的世界。**
 
 Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页与内容网站。
 
-组件采用暖墨轮廓、白纸内容面、粉色强调与浅蓝纸边，提供交互示例、API 和可复制的网站组合。
+提供可交互的组件示例、API 参考与完整页面组合，支持复制示例接入 React 项目。
 
 [开始使用](#构建与本地安装) · [组件文档](https://github.com/didilili/yahha-ui/blob/main/docs/README.md) · [完整博客示例](https://github.com/didilili/yahha-ui/tree/main/examples/blog) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues) · [变更记录](https://github.com/didilili/yahha-ui/blob/main/CHANGELOG.md)
 
-**v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 29 个 UI 组件与 ThemeProvider · 当前通过本地安装包试用，尚未发布 npm
+**v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 30 个 UI 组件与 ThemeProvider · 本仓库当前工作版本通过本地安装包试用
 
 ## 把可爱，搭进你的世界
 
-站点以 **Yahha 星球** 组织首页与示例场景；基础组件可独立使用，不依赖角色图案。
+我们想一起做，全宇宙最可爱的 UI 组件库。**Yahha 星球**是首页与示例故事的舞台，基础组件也可以独立使用，不依赖角色图案。
 
 - **为内容网站准备**：阅读、分类、搜索、收藏与轻量表单可以组合成完整小站。[博客示例](examples/blog/README.md)提供库米的首页、手记归档与文章详情。
 - **每次操作，都好好回应**：组件继承使用方字体，提供清晰的焦点、选中与加载状态；键盘、表单和减少动效的用法见各组件文档。

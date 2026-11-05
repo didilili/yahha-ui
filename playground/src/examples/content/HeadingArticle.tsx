@@ -85,7 +85,7 @@ export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: stri
         <Heading level={2}>云朵邮局的第一封来信</Heading>
         <Text>
           Yahha
-          星球的云朵邮局，今天收到一封字歪歪的来信。小八念给大家听，吉伊找来彩色铅笔，乌萨奇把邮票排成一行。
+          星球的云朵邮局今天收到一封信。小八读着读着笑出了声：朋友寄来的照片里，乌萨奇的耳朵刚好挡住了整张脸。
         </Text>
       </section>
       <section style={{ display: 'grid', gap: 12 }}>
@@ -95,14 +95,16 @@ export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: stri
         <Heading level={3} id={replyId} ref={replyRef} tabIndex={-1}>
           给远方的朋友写封回信
         </Heading>
-        <Text>信纸上画一张草地野餐图，给还没来过的朋友也留一个位置。邮票贴歪了，就再按一按。</Text>
+        <Text>
+          吉伊想重画一张合照，画到乌萨奇时，把耳朵缩短了些。乌萨奇凑过来看，又替自己添上一副墨镜。
+        </Text>
         <div style={{ display: 'grid', gap: 8, marginTop: 8 }}>
           <Text size="sm" tone="muted">
             小节内标题 h4
           </Text>
-          <Heading level={4}>在信里给朋友留个位置</Heading>
+          <Heading level={4}>这回总能看清脸了</Heading>
           <Text size="sm" tone="muted">
-            “下次一起吃点心吧。”大家画了三块饼干，又添上一块。
+            小八把回信读了一遍，读到“下次再拍一张”时，乌萨奇已经摆好了姿势。
           </Text>
         </div>
       </section>
@@ -111,9 +113,11 @@ export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: stri
           长标题 h3
         </Text>
         <Heading level={3} id={journalId} ref={journalRef} tabIndex={-1}>
-          把云朵邮局里借来的铅笔、贴歪的邮票和分给朋友的半块饼干，写进今天的长手记
+          把云朵邮局里借来的铅笔、画歪的墨镜和贴到手背上的邮票，写进今天的长手记
         </Heading>
-        <Text>有些字擦了又写，信封也折得不太齐。寄出去之前，大家还是认认真真签上了名字。</Text>
+        <Text>
+          信封封好以后，才发现邮票还贴在乌萨奇手背上。它举着手看了一会儿，像是在等谁把自己寄出去。
+        </Text>
         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <Link href={`${hrefPrefix}${journalId}`}>本节永久链接</Link>
           <Button ref={copyRef} variant="ghost" onClick={copySectionAddress}>

@@ -2,7 +2,7 @@
 
 # DropdownMenu 下拉菜单
 
-将文章操作或轻量工具收进一组可通过键盘操作的动作菜单。
+用于展示单层操作菜单，支持键盘导航与禁用项。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -22,13 +22,13 @@ import { DropdownMenu } from 'yahha-ui';
 
 ## 代码演示
 
-示例仅更新本页状态，不连接后台；基础例只回显选择，不执行收藏或生成摘要。
+示例只更新本页状态，不连接后台；基础例会显示选中的操作，不实际收藏或生成摘要。
 
 <a id="basic"></a>
 
 ### 基础用法
 
-选择菜单项，查看最新选择。
+选择菜单项后显示当前操作。
 
 [查看示例文件](../../playground/src/examples/floating/MenuBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -205,7 +205,7 @@ export default function MenuControlled() {
           ) : (
             <>
               <Heading level={3}>{title}</Heading>
-              <Text>留一点空白，记录散步、翻书和下一次想写的小事。</Text>
+              <Text>散步时拐进面包店，回家才发现路线图一笔也没记。</Text>
             </>
           )}
           <div style={{ justifySelf: 'start' }}>
@@ -327,6 +327,6 @@ Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，�
 
 ## 相关组件
 
-- [Select 下拉选择器](select.md)：在有限的文章分类、排序或归档选项中选择一项。
-- [Popover 弹出面板](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
-- [Dialog 弹窗](dialog.md)：需要用户暂时集中注意力时，显示一段独立内容或简短表单。
+- [Select 下拉选择器](select.md)：从文章分类、排序方式等固定选项中选一项。
+- [Popover 弹出面板](popover.md)：锚定到触发器的非模态面板，可包含说明、链接或短表单。
+- [Dialog 弹窗](dialog.md)：用于模态展示确认、简短表单或补充内容，管理弹窗焦点。

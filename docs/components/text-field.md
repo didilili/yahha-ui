@@ -2,7 +2,7 @@
 
 # TextField 单行输入
 
-带可见标签的单行输入框，用于站内搜索、个人资料和轻量表单。
+带可见标签、辅助说明和错误反馈的单行输入框。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -670,5 +670,5 @@ export default function TextFieldCustomization() {
 
 ## 相关组件
 
-- [Textarea 多行输入](textarea.md)：用于留言、评论、个人简介和需要换行的轻量表单。
-- [Select 下拉选择器](select.md)：在有限的文章分类、排序或归档选项中选择一项。
+- [Textarea 多行输入](textarea.md)：用于留言、评论、个人简介等多行纯文本输入。
+- [Select 下拉选择器](select.md)：从文章分类、排序方式等固定选项中选一项。

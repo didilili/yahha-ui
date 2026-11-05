@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { revealExample } from './reveal-example.mjs';
 
 const titles = [
-  '沿河的那条小路，留到周末再走',
+  '沿河走到面包店的那条小路',
   'ReadingNotesForASlowWeekend：还没读完的两页书',
   '花店门口，写给朋友的一张纸条',
 ];
@@ -255,7 +255,7 @@ export async function verifyCheckboxReadingList(page, example) {
     await requireList([]);
     assert.equal(await example.getByRole('checkbox', { includeHidden: true }).count(), 0);
     assert.equal(
-      await example.getByRole('heading', { name: '稍后阅读清单已整理好', exact: true }).count(),
+      await example.getByRole('heading', { name: '稍后阅读清单已清空', exact: true }).count(),
       1,
     );
     assert.equal(

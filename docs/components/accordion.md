@@ -2,7 +2,7 @@
 
 # Accordion 折叠面板
 
-展开 FAQ 和补充说明，提供单项或多项展开，使用语义标题和按钮。
+用于可展开和收起的内容面板，支持单项或多项展开。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Accordion } from 'yahha-ui';
 
 ## 何时使用
 
-按需展开帮助、FAQ 和次要说明，在一个页面保留多个条目的入口。需要对照阅读时开启 multiple；多个栏目轮流占用同一内容区域时使用 [Tabs](tabs.md)。主要内容、错误信息和必要告知应始终可见。
+用于按需展开 FAQ 和补充说明。需要对照阅读时开启 multiple；多个栏目轮流占用同一内容区域时使用 [Tabs](tabs.md)。主要内容、错误信息和必要告知应始终可见。
 
 <a id="examples"></a>
 
@@ -24,7 +24,7 @@ import { Accordion } from 'yahha-ui';
 
 ### 单项展开与收起
 
-默认展开一项，选择另一项时收起前一项。
+默认展开一项，展开另一项时收起前一项。
 
 [查看示例文件](../../playground/src/examples/navigation/AccordionBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -256,5 +256,5 @@ export default function AccordionControlled() {
 
 ## 相关组件
 
-- [Tabs 标签页](tabs.md)：在同一页面的相关内容面板之间切换，用于栏目说明、作者资料和内容分区。
-- [Heading 标题](heading.md)：通过真实 h1–h6 元素建立清楚的文档层级。
+- [Tabs 标签页](tabs.md)：用于在同一区域切换相关内容面板，建立标签与面板的语义关联。
+- [Heading 标题](heading.md)：通过原生 h1–h6 元素定义页面、文章与章节的标题层级。

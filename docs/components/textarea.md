@@ -2,7 +2,7 @@
 
 # Textarea 多行输入
 
-用于留言、评论、个人简介和需要换行的轻量表单。
+用于留言、评论、个人简介等多行纯文本输入。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Textarea } from 'yahha-ui';
 
 ## 何时使用
 
-收集留言、文章摘要、反馈等需要换行的纯文本。只需昵称、邮箱等单行内容时使用 [TextField](text-field.md)。
+用于收集留言、文章摘要、反馈等多行纯文本。只需昵称、邮箱等单行内容时使用 [TextField](text-field.md)。
 
 <a id="examples"></a>
 
@@ -39,7 +39,7 @@ export default function TextareaBasic() {
       <Textarea
         label="给作者留言"
         name="message"
-        placeholder="想说的话，可以慢慢写……"
+        placeholder="写下想对作者说的话"
         rows={4}
         hint="桌面端可拖动角落的调整手柄。"
       />
@@ -67,7 +67,7 @@ export default function TextareaAutoSize() {
       <Textarea
         label="文章摘要"
         name="summary"
-        defaultValue="把今天的小事，慢慢写进手记。"
+        defaultValue="小八说沿河走一会儿，结果先带大家拐进了面包店。"
         autoSize={{ minRows: 2, maxRows: 8 }}
       />
     </div>
@@ -142,9 +142,14 @@ import { Textarea } from 'yahha-ui';
 export default function TextareaReadonlyDisabled() {
   return (
     <div style={{ display: 'grid', gap: 20, maxWidth: 480 }}>
-      <Textarea label="已发布简介" value="认真记录生活里的小事情。" readOnly rows={2} />
+      <Textarea
+        label="已发布简介"
+        value="写散步时的发现，也写没忍住多买的点心。"
+        readOnly
+        rows={2}
+      />
       <fieldset disabled style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
-        <Textarea label="暂时关闭留言" defaultValue="稍后再来看看吧。" rows={2} />
+        <Textarea label="暂时关闭留言" defaultValue="留言暂时关闭，当前内容不可编辑。" rows={2} />
       </fieldset>
     </div>
   );
@@ -202,7 +207,7 @@ export default function TextareaStates() {
 import { useRef, useState } from 'react';
 import { Button, Text, Textarea } from 'yahha-ui';
 
-const draft = '这篇散步手记让我也想出门走走。\n谢谢你分享沿途的小花。';
+const draft = '小八的鼻子比路线图还管用。\n下次也想沿着河边找找那家面包店。';
 
 export default function TextareaCommentDraft() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -225,7 +230,7 @@ export default function TextareaCommentDraft() {
         event.preventDefault();
         const message = String(new FormData(event.currentTarget).get('comment') ?? '');
         if (!message.trim()) {
-          setError('写下一点想法再预览。');
+          setError('请填写留言后再预览。');
           inputRef.current?.focus();
           return;
         }
@@ -311,5 +316,5 @@ export default function TextareaCommentDraft() {
 
 ## 相关组件
 
-- [TextField 单行输入](text-field.md)：带可见标签的单行输入框，用于站内搜索、个人资料和轻量表单。
-- [Button 按钮](button.md)：用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。
+- [TextField 单行输入](text-field.md)：带可见标签、辅助说明和错误反馈的单行输入框。
+- [Button 按钮](button.md)：用于触发操作，支持不同强调程度、禁用、加载和切换状态。

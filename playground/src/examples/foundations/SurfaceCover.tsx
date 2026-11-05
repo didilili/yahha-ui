@@ -28,7 +28,7 @@ export default function SurfaceCover() {
           <Heading level={3} id={titleId}>
             <Link href="#/guides/reading?section=reading-example">沿着河边，慢慢走</Link>
           </Heading>
-          <Text>朋友的鞋带散了，我们就在河边等一等。</Text>
+          <Text>说好沿河散步，小八却先闻到了面包香。</Text>
         </div>
       </Surface>
     </article>

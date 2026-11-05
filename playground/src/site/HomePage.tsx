@@ -11,7 +11,7 @@ import peek from '../examples/scenes/artwork/friends-preview/friends-peek.svg';
 import './home-page.css';
 
 export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingElement> }) {
-  const [name, setName] = useState('给晚到的朋友留块饼干');
+  const [name, setName] = useState('饼干保管员');
   const [saved, setSaved] = useState(false);
   const [showDate, setShowDate] = useState(true);
   const [sceneRunning, setSceneRunning] = useState(false);
@@ -26,23 +26,19 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
           <div className="home-hero-copy">
             <p className="home-welcome">
               <Motif name="flower" />
-              欢迎来到 Yahha 星球。
+              来搭你的小站吧。
             </p>
             <h1 id="home-title" className="home-title" tabIndex={-1} ref={headingRef}>
-              一起做，
+              把可爱，
               <br />
-              全宇宙最可爱的
-              <br />
-              <span>UI 组件库。</span>
+              <span>搭进你的世界。</span>
             </h1>
             <p className="home-hero-description">
-              漫画手账风的 React 组件库，
+              一套漫画手账风的 React 组件库。
               <br className="home-desktop-break" />
-              用来搭博客、个人主页与内容小站。
+              从一个按钮开始，
             </p>
-            <p className="home-hero-detail">
-              按钮、字段与浮层延续暖墨轮廓和纸面细节，附阅读、归档与编辑示例。
-            </p>
+            <p className="home-hero-detail">搭起自己的博客、主页或内容小站。</p>
             <div className="home-hero-actions">
               <Link className="home-primary-link" href="#/guides/getting-started">
                 开始使用 <ArrowRight size={18} aria-hidden="true" />
@@ -106,13 +102,11 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
             {/* The route moves focus here after section navigation without adding a tab stop. */}
             {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
             <h2 id="home-little-site" tabIndex={-1}>
-              修改标题，试试收藏
+              标题编辑与收藏
             </h2>
           </div>
         </div>
-        <p className="home-section-intro">
-          暖墨轮廓、白纸字段和粉色强调，延续到按钮、页签与便笺浮层里。试试修改内容、切换页签和打开补充说明。
-        </p>
+        <p className="home-section-intro">修改手记标题、切换正文与后记，并切换收藏状态。</p>
         <div className="home-site-window">
           <div className="home-window-bar">
             <div aria-hidden="true">
@@ -139,9 +133,9 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
                     label: '正文',
                     content: (
                       <Text>
-                        大家数了数，还差一位朋友。
+                        最后一块饼干，要留给还没到的朋友。
                         <br />
-                        最后一块饼干，先替你留在盘子里。
+                        乌萨奇把盘子推远了一点，又把椅子往前挪了一点。
                       </Text>
                     ),
                   },
@@ -150,7 +144,7 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
                     label: '后记',
                     content: (
                       <Surface>
-                        <Text>第二天，大家带来了新的点心，又在同一张桌边坐下。</Text>
+                        <Text>你带来了一袋新的。它先接过饼干，才想起来给你让座。</Text>
                       </Surface>
                     ),
                   },
@@ -176,7 +170,7 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
             <div className="home-site-settings">
               <p className="home-settings-title">
                 <Code2 size={18} aria-hidden="true" />
-                修改内容，看看组件如何响应
+                标题与显示设置
               </p>
               <TextField
                 label="手记标题"
@@ -220,8 +214,8 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
           <img src={peek} width="440" height="170" alt="" />
         </div>
         <div>
-          <h2 id="home-next-title">从第一个组件开始</h2>
-          <p>在已有项目中接入，或从最小项目开始，再复制需要的组合示例。</p>
+          <h2 id="home-next-title">安装与接入</h2>
+          <p>在已有 React 项目中安装组件，或运行最小项目。组合示例提供可复制的接入代码。</p>
           <nav className="home-next-links" aria-label="开始搭建">
             <Link href="#/guides/getting-started">
               安装与接入 <ArrowRight size={16} aria-hidden="true" />

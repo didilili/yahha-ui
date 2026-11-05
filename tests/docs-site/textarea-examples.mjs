@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { revealExample } from './reveal-example.mjs';
 
-const initialDraft = '这篇散步手记让我也想出门走走。\n谢谢你分享沿途的小花。';
+const initialDraft = '小八的鼻子比路线图还管用。\n下次也想沿着河边找找那家面包店。';
 const previewMessage = '预览已更新，内容未发送。';
-const errorMessage = '写下一点想法再预览。';
+const errorMessage = '请填写留言后再预览。';
 
 async function requireFocus(page, locator) {
   await page.waitForFunction(

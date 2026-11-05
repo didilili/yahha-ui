@@ -13,8 +13,10 @@ const page: DocPage = {
       content: (
         <>
           <p>Yahha UI 是一套漫画手账风 React 组件库，面向个人博客、个人主页与内容网站。</p>
-          <p>组件提供按钮、字段、内容排版和状态反馈，页面布局与业务数据由应用管理。</p>
-          <p className="guide-status">当前通过本地安装包试用，尚未发布 npm 包。</p>
+          <p>
+            组件可组合成文章页、作者介绍和归档列表；组件负责交互与外观，页面布局与业务数据由应用管理。
+          </p>
+          <p className="guide-status">本仓库当前工作版本通过本地安装包试用。</p>
           <div className="guide-actions">
             <Link className="guide-primary" href="#/guides/getting-started">
               开始使用 <ArrowUpRight size={16} />
@@ -27,17 +29,22 @@ const page: DocPage = {
             <div>
               <MousePointer2 size={21} />
               <h3>原生语义与焦点管理</h3>
-              <p>原生按钮、输入与单选语义；弹窗使用 Base UI 的焦点管理。</p>
+              <p>
+                按钮、输入框和单选项保留原生语义；弹窗使用 Base UI 管理焦点，具体操作见各页说明。
+              </p>
             </div>
             <div>
               <BookOpen size={21} />
               <h3>文章与内容展示</h3>
-              <p>组合文字、图片、收藏操作和表单，搭建文章页、归档列表与编辑界面。</p>
+              <p>组合示例包含正文、配图、收藏、搜索与编辑，提供交互预览和可复制源码。</p>
             </div>
             <div>
               <Layers size={21} />
-              <h3>独立提供的展示素材</h3>
-              <p>CSS 单独导入。角色插画、字体和文档站工具不进入组件包，可按需另行接入。</p>
+              <h3>可选插画与字体</h3>
+              <p>
+                组件 CSS
+                单独导入，默认继承应用字体。角色插画、字体和文档站工具另行提供，不进入组件包。
+              </p>
             </div>
           </div>
         </>
@@ -50,15 +57,15 @@ const page: DocPage = {
         <nav className="guide-paths" aria-label="内容场景">
           <Link href="#/guides/reading?section=reading">
             <strong>阅读与收藏示例 →</strong>
-            <span>在正文、配图和文末便笺之间，体验阅读与收藏。</span>
+            <span>演示文章切换、配图显隐、后记导航与收藏操作。</span>
           </Link>
           <Link href="#/guides/states?section=archive">
             <strong>文章归档示例 →</strong>
-            <span>切换栏目、搜索和翻页，看看列表与空结果如何恢复。</span>
+            <span>演示栏目筛选、搜索、分页与无结果恢复。</span>
           </Link>
           <Link href="#/guides/states?section=article-actions">
             <strong>文章编辑示例 →</strong>
-            <span>从菜单进入编辑，体验取消、保存失败与重试。</span>
+            <span>演示标题编辑、保存失败后的草稿保留与重试。</span>
           </Link>
         </nav>
       ),
@@ -70,7 +77,7 @@ const page: DocPage = {
         <div className="component-overview">
           <Link href="#/components">
             <strong>浏览组件 →</strong>
-            <span>按分类找到需要的组件，查看交互示例、使用方法与 API。</span>
+            <span>按分类查看组件用法、示例与 API，支持展开和复制代码。</span>
           </Link>
           {componentCatalog.map(({ id, name, description }) => (
             <Link key={id} href={`#/components/${id}`}>
@@ -90,8 +97,8 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            当前版本为 0.0.1，尚未发布到 npm。通过本地打包安装，在 React / React DOM ^19.3.1
-            的浏览器项目中验证；React 18 与服务端渲染兼容性尚未验证。
+            npm 已提供 0.0.1。本指南按本仓库源码说明用法，当前工作版本通过本地打包安装，在 React /
+            React DOM ^19.3.1 的浏览器项目中验证；React 18 与服务端渲染兼容性尚未验证。
           </p>
           <p>
             项目自有内容采用 MIT，第三方内容见{' '}
@@ -118,7 +125,7 @@ const page: DocPage = {
             >
               Animal Island UI
             </Link>
-            ，按本库实际支持的能力提供示例和 API。
+            ，示例与 API 按 Yahha UI 当前的实际用法编写。
           </p>
         </>
       ),

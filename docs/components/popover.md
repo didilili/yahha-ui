@@ -2,7 +2,7 @@
 
 # Popover 弹出面板
 
-锚定到按钮的补充面板，适合简短说明和轻量交互。
+锚定到触发器的非模态面板，可包含说明、链接或短表单。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -40,9 +40,9 @@ export default function PopoverBasic() {
     <Popover
       trigger={<Button variant="secondary">关于这份手记</Button>}
       title="手记说明"
-      description="在 Yahha 星球，散步也能攒出一页故事。"
+      description="这是一篇虚构的散步手记。"
     >
-      <p>有时是大家在桥边等人，有时是把最后一块饼干分着吃。字写歪一点，也先记下来。</p>
+      <p>路走到一半，先被面包香带进小店；回家再把店名补到路线图上。</p>
     </Popover>
   );
 }
@@ -52,7 +52,7 @@ export default function PopoverBasic() {
 
 ### 内嵌表单
 
-在面板内校验名称，保存或取消；修改只保留在当前示例。
+在面板内校验名称，支持保存或取消；修改仅保留在当前示例。
 
 [查看示例文件](../../playground/src/examples/floating/PopoverForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -172,7 +172,7 @@ export default function PopoverCollection() {
         <Heading level={3} ref={articleHeading} tabIndex={-1}>
           沿着河边，慢慢走
         </Heading>
-        <Text>走到桥边，等系好鞋带的朋友一起回家。</Text>
+        <Text>说好沿河散步，小八却先闻到了面包香。</Text>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
           <Popover
             trigger={
@@ -304,6 +304,6 @@ Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，�
 
 ## 相关组件
 
-- [Tooltip 文字提示](tooltip.md)：悬停或聚焦时，为已有操作补充简短的视觉文字标签。
-- [Dialog 弹窗](dialog.md)：需要用户暂时集中注意力时，显示一段独立内容或简短表单。
-- [DropdownMenu 下拉菜单](dropdown-menu.md)：将文章操作或轻量工具收进一组可通过键盘操作的动作菜单。
+- [Tooltip 文字提示](tooltip.md)：悬停或聚焦时显示简短的视觉文字提示，不替代触发器的可访问名称。
+- [Dialog 弹窗](dialog.md)：用于模态展示确认、简短表单或补充内容，管理弹窗焦点。
+- [DropdownMenu 下拉菜单](dropdown-menu.md)：用于展示单层操作菜单，支持键盘导航与禁用项。

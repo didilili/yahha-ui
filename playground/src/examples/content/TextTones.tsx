@@ -8,7 +8,7 @@ export default function TextTones() {
           <Text size="sm" tone="muted">
             {tone === 'default' ? '主要文字' : '次要文字'}
           </Text>
-          <Text tone={tone}>今天沿着河边散步，走到桥边时，停下来等了等还在系鞋带的朋友。</Text>
+          <Text tone={tone}>河边散步走了一半，小八先闻到了面包香。</Text>
         </div>
       ))}
     </div>

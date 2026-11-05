@@ -5,6 +5,7 @@
 ## 组件代码与安装包
 
 - 源码位于 `src/`，公共入口为 `src/index.ts`。构建生成 `dist/index.js`、类型声明与 `dist/style.css`；按钮的三墨点及代码内基础图形随组件实现构建。
+- `Icon` 与十六个命名功能图标属于公开组件能力，随安装包提供，可从 `yahha-ui` 按需导入；不依赖图标字体、远端资源或文档站素材。分类、章节图案和角色场景继续留在站点层。
 - [package.json](../package.json) 的分发白名单为 `dist/`。本地 `.tgz` 另附包元信息、根 README、`LICENSE` 与 `THIRD_PARTY_NOTICES.md`，不包含文档站、博客源码、独立角色 SVG、PNG、字体或截图目录。
 - React / React DOM 由使用方提供，`@base-ui/react` 是运行时依赖。
 

@@ -24,8 +24,8 @@ export default defineComponentPage('select', {
       title: '何时使用',
       content: (
         <p>
-          从固定列表中选择一项，例如文章分类或排列方式，适合将选项收在下拉列表中。
-          选项较少且要直接比较说明时使用 <a href="#/components/radio-group">RadioGroup</a>
+          用于单值选择，以下拉列表展示文章分类、排列方式等固定选项。 选项较少且要直接比较说明时使用{' '}
+          <a href="#/components/radio-group">RadioGroup</a>
           ；少量简短的互斥筛选值使用 <a href="#/components/segmented-control">SegmentedControl</a>
           ；切换对应内容面板使用 <a href="#/components/tabs">Tabs</a>。当前 Select
           支持单选和键盘前缀匹配，需要输入搜索或多选时应选择适合该交互的组件。

@@ -29,7 +29,7 @@ export default function ThemeTokensExample() {
           description="每月一封阅读推荐，分享文章与书单。"
           footer={<Button onClick={() => setOpen(false)}>明白了</Button>}
         >
-          <p>给自己留一点安静的阅读时间。</p>
+          <p>本例只预览订阅界面，不会发送邮件。</p>
         </Dialog>
       </Surface>
     </ThemeProvider>

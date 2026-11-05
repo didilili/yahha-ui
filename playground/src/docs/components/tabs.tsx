@@ -17,7 +17,7 @@ export default defineComponentPage('tabs', {
       title: '何时使用',
       content: (
         <p>
-          多个内容面板共享同一块空间时使用，组件建立标签与对应面板的语义关联。只改变一个简短筛选值时使用{' '}
+          用于在同一区域切换相关内容面板，建立标签与面板的语义关联。只改变一个简短筛选值时使用{' '}
           <Link href="#/components/segmented-control">SegmentedControl</Link>
           ；填写带说明的单选答案时使用 <Link href="#/components/radio-group">RadioGroup</Link>
           ；需要收起选项时使用 <Link href="#/components/select">Select</Link>。跨页面导航使用链接。

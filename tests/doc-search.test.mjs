@@ -86,11 +86,11 @@ test('example titles and descriptions link to the actual example anchor', async 
     '#/components/dialog?section=external',
   );
   assert.equal(
-    searchDocumentation(index, '未保存时的关闭选择')[0]?.href,
+    searchDocumentation(index, '未保存修改的关闭确认')[0]?.href,
     '#/components/dialog?section=form',
   );
   assert.equal(
-    searchDocumentation(index, 'Dialog 未保存时的关闭选择')[0]?.href,
+    searchDocumentation(index, 'Dialog 未保存修改的关闭确认')[0]?.href,
     '#/components/dialog?section=form',
   );
 });

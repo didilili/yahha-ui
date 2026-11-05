@@ -2,7 +2,7 @@
 
 # Alert 提示条
 
-持续展示阅读说明、完成结果或需要处理的问题。
+用于页面内持续显示的信息、结果、警告或错误提示。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Alert } from 'yahha-ui';
 
 ## 何时使用
 
-用于页面内持续可见的提示、限制或需要恢复操作的失败说明。Alert 跟随文档布局，适合让用户阅读原因后继续处理。
+用于页面内持续可见的信息、使用限制或失败说明，提示随文档布局显示。
 
 <a id="examples"></a>
 
@@ -34,7 +34,7 @@ import { Alert } from 'yahha-ui';
 import { Alert, Text } from 'yahha-ui';
 
 const notices = [
-  { tone: 'info', title: '阅读提示', description: '这篇文章包含一些个人记录，可以慢慢读。' },
+  { tone: 'info', title: '阅读提示', description: '这篇文章包含个人生活记录。' },
   { tone: 'success', title: '草稿已保存', description: '下次打开时可以继续编辑。' },
   { tone: 'warning', title: '还有一项没有填写', description: '补充联系邮箱后再提交。' },
   { tone: 'error', title: '发送失败', description: '内容仍保留在输入框中，请稍后重试。' },
@@ -75,7 +75,7 @@ export default function AlertExample() {
 
 ### 失败提示与重试
 
-首次模拟失败，重试成功；选择保留，不实际订阅。
+首次模拟订阅失败，重试后成功；保留已选项，不实际订阅。
 
 [查看示例文件](../../playground/src/examples/content/AlertAction.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -249,7 +249,7 @@ export default function AlertReadingNotice() {
         </div>
       </Alert>
       <Text>那天下午，我们沿着河岸走了一段。朋友在桥边停下来，给鞋带重新打了一个结。</Text>
-      <Text>回家时天还亮着。把路边的小花和等朋友的时间，一起记进这页手记。</Text>
+      <Text>回家时天还亮着。口袋里除了路线图，还多出一张面包店的小票。</Text>
     </article>
   );
 }
@@ -289,5 +289,5 @@ export default function AlertReadingNotice() {
 
 ## 相关组件
 
-- [Toast 提示消息](toast.md)：在页面中反馈保存、完成或失败等操作结果，支持说明与补充操作。
-- [EmptyState 空状态](empty-state.md)：当列表或搜索没有内容时，解释原因，并给出合适的下一步。
+- [Toast 提示消息](toast.md)：用于反馈操作结果，支持说明与操作插槽，由调用方管理显示状态。
+- [EmptyState 空状态](empty-state.md)：用于列表为空、搜索无结果等情况，提供说明与操作插槽。

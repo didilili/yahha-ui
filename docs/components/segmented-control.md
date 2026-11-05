@@ -2,7 +2,7 @@
 
 # SegmentedControl 分段选择
 
-在少量互斥选项间切换，使用原生 radio 保留表单与键盘行为。
+紧凑的受控单选组，适用于分类、排序等简短选项，保留原生 radio 的表单与键盘行为。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { SegmentedControl } from 'yahha-ui';
 
 ## 何时使用
 
-用一组紧凑的简短选项切换分类、排序等互斥值。选项需要补充说明或纵向比较时使用 [RadioGroup](radio-group.md)；需要收起选项时使用 [Select](select.md)；切换同一区域中对应的内容面板使用 [Tabs](tabs.md)。页面导航使用链接。
+用于在少量简短的互斥选项间切换分类、排序等值。选项需要补充说明或纵向比较时使用 [RadioGroup](radio-group.md)；需要收起选项时使用 [Select](select.md)；切换同一区域中对应的内容面板使用 [Tabs](tabs.md)。页面导航使用链接。
 
 <a id="examples"></a>
 
@@ -156,13 +156,13 @@ const articles = [
   {
     id: 'favorite-words',
     title: '把今天喜欢的句子记下来',
-    summary: '把读到的几句话抄进本子，留给以后的自己慢慢读。',
+    summary: '抄到第三句才发现，前面两句漏了同一个字。',
     category: 'notes',
   },
   {
     id: 'simple-dinner',
     title: '给自己做一顿简单的晚饭',
-    summary: '用冰箱里的食材煮一碗热汤，让忙碌的一天好好收尾。',
+    summary: '用冰箱里的食材煮一碗热汤，盛好才发现汤勺还没洗。',
     category: 'journal',
   },
 ] as const;
@@ -268,7 +268,7 @@ export default function SegmentedFiltering() {
 
 ### 原生表单与显式重置
 
-读取必选值或重置为未选择，不重排文章。
+选择后读取表单值，或重置为未选择；本例不重排文章。
 
 [查看示例文件](../../playground/src/examples/forms/SegmentedForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -459,6 +459,6 @@ export default function SegmentedLongLabels() {
 
 ## 相关组件
 
-- [RadioGroup 单选组](radio-group.md)：将互斥选项和说明完整展示，适合订阅频率、可见范围等少量选择。
-- [Select 下拉选择器](select.md)：在有限的文章分类、排序或归档选项中选择一项。
-- [Tabs 标签页](tabs.md)：在同一页面的相关内容面板之间切换，用于栏目说明、作者资料和内容分区。
+- [RadioGroup 单选组](radio-group.md)：用于在一组互斥选项中选择单个值，可为选项提供说明。
+- [Select 下拉选择器](select.md)：从文章分类、排序方式等固定选项中选一项。
+- [Tabs 标签页](tabs.md)：用于在同一区域切换相关内容面板，建立标签与面板的语义关联。

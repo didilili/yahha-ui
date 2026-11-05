@@ -20,7 +20,7 @@ export default defineComponentPage('textarea', {
       title: '何时使用',
       content: (
         <p>
-          收集留言、文章摘要、反馈等需要换行的纯文本。只需昵称、邮箱等单行内容时使用{' '}
+          用于收集留言、文章摘要、反馈等多行纯文本。只需昵称、邮箱等单行内容时使用{' '}
           <a href="#/components/text-field">TextField</a>。
         </p>
       ),

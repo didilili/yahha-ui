@@ -2,7 +2,7 @@
 
 # Surface 内容容器
 
-提供背景、边框、圆角与内边距的平面容器，用于组织轻量内容。
+用于组织文章摘要、作者介绍等内容，提供背景、边框、圆角与内边距。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Surface } from 'yahha-ui';
 
 ## 何时使用
 
-用于组织文章摘要、作者介绍和阅读提示等内容。Surface 提供平面纸面与轻边框，标题、正文和操作在容器内按内容需要组合。
+用于组织文章摘要、作者介绍和阅读提示等内容。Surface 提供平整纸面与轻边框，标题、正文和操作可按内容需要组合。
 
 <a id="examples"></a>
 
@@ -74,7 +74,7 @@ export default function SurfaceNotes() {
           写在手记后面
         </Heading>
         <Text>
-          不是每一天都有大事发生。有人把鞋带系好了，有人把半块饼干分给你，这一页也就有了想留下的事。
+          写手记时总有人凑过来看。小八检查点心有没有写漏，吉伊添了一幅画，乌萨奇的字挤到了纸边。
         </Text>
       </Surface>
     </div>
@@ -113,9 +113,9 @@ export default function SurfaceComposition() {
       <header style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
         <Badge>生活随笔</Badge>
         <Heading level={3} id={headingId}>
-          沿着河边，等一等朋友
+          路线图上没有的面包店
         </Heading>
-        <Text>一篇约 5 分钟的手记：有人系鞋带，大家就站在桥边等一等。</Text>
+        <Text>原本打算沿河散步，走到一半，小八已经选好了面包。</Text>
       </header>
       <div style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
         <Button
@@ -175,7 +175,7 @@ export default function SurfaceCover() {
           <Heading level={3} id={titleId}>
             <Link href="#/guides/reading?section=reading-example">沿着河边，慢慢走</Link>
           </Heading>
-          <Text>朋友的鞋带散了，我们就在河边等一等。</Text>
+          <Text>说好沿河散步，小八却先闻到了面包香。</Text>
         </div>
       </Surface>
     </article>
@@ -219,6 +219,6 @@ Surface 默认是普通 div。内容确实构成需要单独导航的区域时�
 
 ## 相关组件
 
-- [Divider 分隔线](divider.md)：用细线区分内容，支持水平、垂直和纯装饰模式。
-- [Text 正文](text.md)：为段落提供统一的字号、行高和语义文字颜色。
-- [Dialog 弹窗](dialog.md)：需要用户暂时集中注意力时，显示一段独立内容或简短表单。
+- [Divider 分隔线](divider.md)：用于内容的主题或视觉分隔，支持水平、垂直和装饰模式。
+- [Text 正文](text.md)：用于正文、摘要和辅助说明，统一字号、行高与语义颜色。
+- [Dialog 弹窗](dialog.md)：用于模态展示确认、简短表单或补充内容，管理弹窗焦点。

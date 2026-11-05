@@ -2,7 +2,7 @@
 
 # ThemeProvider 主题配置
 
-设置默认配色、可选颜色预设与语义颜色，并在浮层 Portal 中保持一致。
+配置配色预设与语义颜色，并向浮层 Portal 传递主题。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -112,7 +112,7 @@ export default function ThemeTokensExample() {
           description="每月一封阅读推荐，分享文章与书单。"
           footer={<Button onClick={() => setOpen(false)}>明白了</Button>}
         >
-          <p>给自己留一点安静的阅读时间。</p>
+          <p>本例只预览订阅界面，不会发送邮件。</p>
         </Dialog>
       </Surface>
     </ThemeProvider>
@@ -209,6 +209,6 @@ tokens 会传到 Dialog、Select、Popover、Tooltip 与 DropdownMenu 的 Portal
 
 ## 相关组件
 
-- [Button 按钮](button.md)：用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。
-- [Surface 内容容器](surface.md)：提供背景、边框、圆角与内边距的平面容器，用于组织轻量内容。
-- [Popover 弹出面板](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
+- [Button 按钮](button.md)：用于触发操作，支持不同强调程度、禁用、加载和切换状态。
+- [Surface 内容容器](surface.md)：用于组织文章摘要、作者介绍等内容，提供背景、边框、圆角与内边距。
+- [Popover 弹出面板](popover.md)：锚定到触发器的非模态面板，可包含说明、链接或短表单。

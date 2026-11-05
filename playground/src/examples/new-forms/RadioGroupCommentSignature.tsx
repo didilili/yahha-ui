@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Button, RadioGroup, Text, TextField } from 'yahha-ui';
 
 type Signature = 'nickname' | 'anonymous';
-const comment = '读到河边那一段，也想把周末留给一场慢慢的散步。谢谢你分享。';
+const comment = '读到小八在面包店门口站住，我也饿了。那张路线图记得把店名补上。';
 
 export default function RadioGroupCommentSignature() {
   const [signature, setSignature] = useState<Signature>('nickname');

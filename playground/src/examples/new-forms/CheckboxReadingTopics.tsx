@@ -13,19 +13,19 @@ const notes: { id: string; title: string; summary: string; topics: TopicId[] }[]
   {
     id: 'half-a-book',
     title: '把周末留给半本书',
-    summary: '读到喜欢的段落就停一停，把一句话抄进随身的小本子。',
+    summary: '读到半页才发现，旁边的批注比原文还长。',
     topics: ['reading'],
   },
   {
     id: 'riverside',
     title: '绕到河边再回家',
-    summary: '比平时多走一条小路，记下水面上的晚霞和新开的花。',
+    summary: '绕过桥边的积水，鞋底还是沾了一片甩不掉的叶子。',
     topics: ['walking'],
   },
   {
     id: 'park-book',
     title: '带一本书去公园',
-    summary: '树荫下读几页，再沿着小径走走，不急着把这一天排满。',
+    summary: '本来只想在树荫下读书，结果盯着一只搬面包屑的蚂蚁看了半天。',
     topics: ['reading', 'walking'],
   },
 ];

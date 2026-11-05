@@ -14,14 +14,14 @@ export default function App() {
           <Text size="sm" tone="muted">
             Yahha UI · 把可爱，搭进你的世界。
           </Text>
-          <Heading level={1}>你好，Yahha UI</Heading>
-          <Text>修改手记标题，试试输入框；点击收藏按钮，查看选中状态。</Text>
+          <Heading level={1}>你的小站，从这里开始</Heading>
+          <Text>给手记起个名字，再试试收藏。</Text>
         </header>
         <TextField
           label="手记标题"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          hint="试着写下自己的标题，下面的文字会一起更新。"
+          hint="输入标题时，下面的预览会一起更新。"
         />
         <Text>正在写：{title.trim() || '还没起名字的手记'}</Text>
         <div className="starter-action">

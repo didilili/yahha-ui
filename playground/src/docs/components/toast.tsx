@@ -17,7 +17,7 @@ export default defineComponentPage('toast', {
       content: (
         <>
           <p>
-            用于保存成功、内容已归档等不需要中断当前操作的短结果提示。需要持续阅读的说明或错误可使用{' '}
+            用于保存成功、文章已归档等不需要中断当前操作的短结果提示。需要持续阅读的说明或错误可使用{' '}
             <a href="#/components/alert">Alert</a> 或直接留在页面中。
           </p>
           <p>
@@ -41,7 +41,7 @@ export default defineComponentPage('toast', {
         {
           id: 'tones',
           title: '三种反馈类型',
-          description: '对比三种反馈样本，并关闭或恢复提示。',
+          description: '对比三种反馈类型，支持关闭与恢复提示。',
           component: ToastTones,
           source: toastTonesSource,
         },

@@ -2,7 +2,7 @@
 
 # Image 图片
 
-为图片提供明确的替代文字、比例容器与失败回退。
+用于内容图片和封面，支持替代文字、比例容器与失败回退。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -64,7 +64,7 @@ export default function ImageExample() {
 
 ### 失败回退与恢复
 
-切换图片地址，查看失败回退和加载结果。
+切换图片地址，展示加载失败时的回退与恢复。
 
 [查看示例文件](../../playground/src/examples/content/ImageFallback.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -149,7 +149,7 @@ import { Button, Dialog, Image, Text } from 'yahha-ui';
 import teaCup from './artwork/little-days-tea-cup.svg?no-inline';
 
 const alternativeText = '冒着热气的茶杯插画';
-const caption = '一杯热茶，陪你慢慢读手记。';
+const caption = '刚倒好的茶，还冒着热气。';
 
 export default function ImageDetail() {
   const [open, setOpen] = useState(false);
@@ -250,5 +250,5 @@ export default function ImageDetail() {
 
 ## 相关组件
 
-- [Avatar 头像](avatar.md)：展示作者图片，并在缺图或失败时保留姓名缩写。
+- [Avatar 头像](avatar.md)：展示作者头像，支持姓名缩写、自定义回退与图片加载失败处理。
 - [Skeleton 骨架占位](skeleton.md)：为即将出现的内容预留形状，减少布局跳动。

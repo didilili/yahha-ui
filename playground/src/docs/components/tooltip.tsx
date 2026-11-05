@@ -15,7 +15,7 @@ export default defineComponentPage('tooltip', {
       content: (
         <>
           <p>
-            用于给图标操作补充简短的视觉文字。trigger
+            用于在悬停或聚焦时为图标操作补充简短的视觉文字。trigger
             必须自带可访问名称，用户应能直接理解并执行操作；悬停提示只作补充。content 仅接受纯文字。
           </p>
           <p>

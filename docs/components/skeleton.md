@@ -115,7 +115,7 @@ export default function SkeletonExample() {
               <Skeleton width="80%" height={summaryLineHeight} />
             </div>
           ) : (
-            <Text>朋友走得慢一点，就在桥边等一等。</Text>
+            <Text>说好沿河散步，小八却先闻到了面包香。</Text>
           )}
         </div>
       </section>
@@ -163,5 +163,5 @@ Skeleton 固定为 aria-hidden，不接受 children。将 aria-busy 放在正在
 
 ## 相关组件
 
-- [Spinner 加载指示](spinner.md)：表达正在进行的等待，提供可读的状态文字。
-- [Image 图片](image.md)：为图片提供明确的替代文字、比例容器与失败回退。
+- [Spinner 加载指示](spinner.md)：表示正在进行的加载或等待，提供可读的状态文字。
+- [Image 图片](image.md)：用于内容图片和封面，支持替代文字、比例容器与失败回退。

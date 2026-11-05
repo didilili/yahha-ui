@@ -12,17 +12,17 @@ const page: DocPage = {
   sections: [
     {
       id: 'choose-path',
-      title: '选择接入方式',
+      title: '接入方式',
       content: (
         <>
           <nav className="guide-paths getting-started-paths" aria-label="接入路径">
             <Link href="#/guides/getting-started?section=install">
-              <strong>在自己的项目里使用组件 →</strong>
-              <span>已有 React 项目时，安装本地包，再加载样式与主题。</span>
+              <strong>在现有项目中使用组件 →</strong>
+              <span>在现有 React 项目中安装本地组件包、导入样式并配置主题。</span>
             </Link>
             <Link href="#/guides/getting-started?section=starter-project">
               <strong>运行最小项目 →</strong>
-              <span>没有现成项目时，导出包含本地包和组件用法的独立项目。</span>
+              <span>没有现有项目时，可导出包含本地组件包和基础示例的独立项目。</span>
             </Link>
           </nav>
           <p className="getting-started-related">
@@ -52,7 +52,7 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            当前通过本地安装包试用，尚未发布 npm。在自己的 React 项目根目录执行，
+            本指南使用本仓库当前工作版本的本地安装包。在 React 项目根目录执行，
             将路径替换为安装包的实际位置：
           </p>
           <CodeBlock language="sh" source={'npm install /absolute/path/yahha-ui-0.0.1.tgz'} />
@@ -68,11 +68,10 @@ const page: DocPage = {
         <>
           <p>
             在应用入口导入一次 <code>yahha-ui/style.css</code>，用 <code>ThemeProvider</code>{' '}
-            包住组件区域，并显式设置 <code>theme="pink"</code>。
+            包裹组件区域，并显式设置 <code>theme="pink"</code>。
           </p>
           <p>
-            将下例保存为 <code>App.tsx</code>。启动自己的应用后，点击或按 Space
-            切换收藏状态，即可确认样式与交互正常。
+            将下例保存为 <code>App.tsx</code>，然后启动应用。
           </p>
         </>
       ),
@@ -81,7 +80,7 @@ const page: DocPage = {
           id: 'first-button',
           title: '第一个按钮',
           toc: false,
-          description: '示例包含完整的样式导入、主题设置与收藏状态。',
+          description: '点击或按 Space 切换收藏状态；示例包含样式导入、主题设置和状态管理。',
           component: GettingStarted,
           source: gettingStartedSource,
           themeScope: 'explicit',
@@ -155,11 +154,11 @@ const page: DocPage = {
             在本仓库根目录完成 <code>npm ci</code> 后执行：
           </p>
           <CodeBlock language="sh" source={'npm run create:starter'} />
-          <p>命令生成包含组件安装包与基础示例的独立项目，终端会显示目录路径。</p>
+          <p>终端会输出生成目录的路径，其中包含组件安装包和基础示例。</p>
           <p>进入生成的项目目录后执行：</p>
           <CodeBlock language="sh" source={'npm install\nnpm run dev'} />
           <p>
-            打开终端显示的地址即可试用。组件用法在 <code>src/App.tsx</code>，页面布局在{' '}
+            打开终端输出的地址运行示例。组件用法见 <code>src/App.tsx</code>，页面布局见{' '}
             <code>src/styles.css</code>；完成修改后，运行 <code>npm run build</code> 构建页面。
           </p>
           <p>
@@ -194,7 +193,7 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            「小小日常」展示组件组成的首页、文章归档与阅读详情。在仓库根目录完成 <code>npm ci</code>{' '}
+            「小小日常」把组件组合成首页、文章归档与阅读详情。在仓库根目录完成 <code>npm ci</code>{' '}
             后运行：
           </p>
           <CodeBlock language="sh" source="npm run dev:blog" />
@@ -204,7 +203,7 @@ const page: DocPage = {
               <span className="sr-only">（新标签页打开）</span>
             </Link>
           </p>
-          <p>需要独立修改这个网站时，导出博客项目：</p>
+          <p>使用以下命令导出独立博客项目：</p>
           <CodeBlock language="sh" source="npm run create:starter -- --example blog" />
           <p>
             进入生成目录，运行 <code>npm install</code> 与 <code>npm run dev</code>。
@@ -219,12 +218,12 @@ const page: DocPage = {
     },
     {
       id: 'next',
-      title: '接下来',
+      title: '相关文档',
       content: (
         <>
           <ul>
             <li>
-              <Link href="#/components">组件总览</Link>：按分类找到组件，查看完整示例与 API。
+              <Link href="#/components">组件总览</Link>：按分类查看组件用法、示例与 API。
             </li>
             <li>
               <Link href="#/components/theme-provider">ThemeProvider</Link>

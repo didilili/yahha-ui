@@ -2,7 +2,7 @@
 
 # Divider 分隔线
 
-用细线区分内容，支持水平、垂直和纯装饰模式。
+用于内容的主题或视觉分隔，支持水平、垂直和装饰模式。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Divider } from 'yahha-ui';
 
 ## 何时使用
 
-用于标出内容主题的转折，或在并列元信息之间作视觉分隔。前者保留默认 hr 语义，后者设置 decorative。
+内容主题发生转折时，保留默认 hr 语义；只需分开并列元信息时，设置 decorative。
 
 <a id="examples"></a>
 
@@ -94,11 +94,13 @@ export default function DividerExample() {
         .yahha-divider-meta span { min-width: 0; overflow-wrap: anywhere; }
         @media (max-width: 480px) { .yahha-divider-meta .yahha-divider-meta-line { display: none; } }
       `}</style>
-      <Text>夕阳落到桥边时，大家把剩下的半块饼干分着吃，等朋友系好鞋带再一起回家。</Text>
+      <Text>
+        夕阳落到桥边时，小八还在翻面包袋。乌萨奇举起最后一截法棍，吉伊刚好画完今天的路线。
+      </Text>
       <Divider />
       <ul className="yahha-divider-meta" aria-label="手记信息">
         <li>
-          <span>作者：库米，一位喜欢散步、阅读和记录日常生活的手记作者</span>
+          <span>作者：库米，散步时常绕到面包店，回家再写手记</span>
         </li>
         <li>
           <Divider
@@ -160,5 +162,5 @@ orientation 只决定方向；垂直线也需要按内容判断是否保留语�
 
 ## 相关组件
 
-- [Surface 内容容器](surface.md)：提供背景、边框、圆角与内边距的平面容器，用于组织轻量内容。
-- [Heading 标题](heading.md)：通过真实 h1–h6 元素建立清楚的文档层级。
+- [Surface 内容容器](surface.md)：用于组织文章摘要、作者介绍等内容，提供背景、边框、圆角与内边距。
+- [Heading 标题](heading.md)：通过原生 h1–h6 元素定义页面、文章与章节的标题层级。

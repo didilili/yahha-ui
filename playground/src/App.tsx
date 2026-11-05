@@ -39,6 +39,7 @@ import HomePage from './site/HomePage';
 import DocScene from './site/DocScene';
 import Motif from './site/Motif';
 import CategoryIcon from './site/CategoryIcon';
+import SectionIcon from './site/SectionIcon';
 import { categoryIconFor } from './site/category-icons';
 import { blogHref, repositoryHref } from './site/site-links';
 import './site/guide-layout.css';
@@ -646,7 +647,7 @@ export default function App() {
                   />
                 )}
               </nav>
-              {hasQuery && !searchIndex && !searchFailed && <p role="status">正在加载搜索索引…</p>}
+              {hasQuery && !searchIndex && !searchFailed && <p role="status">正在准备搜索…</p>}
               {hasQuery && searchFailed && (
                 <Alert tone="error" title="搜索暂时不可用">
                   <p>请重试，或清空搜索浏览目录。</p>
@@ -665,7 +666,7 @@ export default function App() {
                 <div role="status" className="search-empty">
                   <EmptyState
                     title="未找到相关文档"
-                    description="试试其他关键词，或清空搜索返回目录。"
+                    description="换个关键词，或清空搜索查看目录。"
                     action={
                       <Button
                         variant="secondary"
@@ -757,12 +758,12 @@ export default function App() {
                 <section className="doc-section" key={section.id}>
                   <Heading
                     level={2}
-                    className="section-title"
+                    className={`section-title${section.kind ? ' has-section-icon' : ''}`}
                     id={section.id}
                     data-doc-heading
                     tabIndex={-1}
                   >
-                    <Motif name={section.id === 'examples' ? 'flower' : 'star'} />
+                    {section.kind && <SectionIcon name={section.kind} />}
                     {section.title}
                     <a
                       className="heading-anchor"
@@ -940,7 +941,7 @@ export default function App() {
                   }
                   className="doc-load-error"
                 >
-                  <Text>请重试，或刷新页面后再试。</Text>
+                  <Text>请重新加载；如果仍未打开，再刷新页面试试。</Text>
                   <Button
                     variant="secondary"
                     className="doc-retry"

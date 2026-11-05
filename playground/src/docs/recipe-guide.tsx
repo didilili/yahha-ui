@@ -17,7 +17,7 @@ export const recipeGuide: DocPage = {
       title: '选择场景',
       content: (
         <>
-          <p>按用途选择场景，进入后可体验操作、查看原始 TSX 和完整接入说明。</p>
+          <p>按用途查看组合示例，每个示例均提供交互预览、原始 TSX 和完整接入说明。</p>
           <dl className="recipe-list recipe-grid">
             <div>
               <dt>
@@ -36,8 +36,8 @@ export const recipeGuide: DocPage = {
                 </Link>
               </dt>
               <dd>
-                <p className="recipe-purpose">适合文章详情与个人手记。</p>
-                <p className="recipe-actions">搜索与切换文章、显示或隐藏配图，再收藏当前文章。</p>
+                <p className="recipe-purpose">适用于文章详情与个人手记。</p>
+                <p className="recipe-actions">支持按关键词搜索、切换文章、配图显隐和文章收藏。</p>
                 <p className="recipe-components">
                   组合组件：Text、Heading、Avatar、Image、Button 等。
                 </p>
@@ -60,8 +60,10 @@ export const recipeGuide: DocPage = {
                 </Link>
               </dt>
               <dd>
-                <p className="recipe-purpose">适合带分类与搜索的文章列表。</p>
-                <p className="recipe-actions">切换栏目、搜索和翻页；无结果时可清空筛选恢复文章。</p>
+                <p className="recipe-purpose">适用于包含栏目筛选、搜索和分页的文章列表。</p>
+                <p className="recipe-actions">
+                  演示栏目筛选、搜索与分页；无匹配结果时可清空筛选恢复列表。
+                </p>
                 <p className="recipe-components">
                   组合组件：TextField、Tabs、Pagination、Accordion、EmptyState。
                 </p>
@@ -84,8 +86,8 @@ export const recipeGuide: DocPage = {
                 </Link>
               </dt>
               <dd>
-                <p className="recipe-purpose">适合带编辑、归档与收藏的文章操作区。</p>
-                <p className="recipe-actions">编辑后保存，体验首次失败、保留草稿和重试成功。</p>
+                <p className="recipe-purpose">适用于文章编辑、归档与收藏操作区。</p>
+                <p className="recipe-actions">编辑后保存，演示首次保存失败、草稿保留与重试成功。</p>
                 <p className="recipe-components">
                   组合组件：DropdownMenu、Popover、Dialog、TextField、Alert、Toast 等。
                 </p>
@@ -108,9 +110,9 @@ export const recipeGuide: DocPage = {
                 </Link>
               </dt>
               <dd>
-                <p className="recipe-purpose">适合内容加载与失败恢复。</p>
+                <p className="recipe-purpose">适用于内容加载、失败与结果恢复。</p>
                 <p className="recipe-actions">
-                  选择下次结果并重新加载，体验失败重试、无结果恢复与收藏撤销。
+                  选择下次加载结果并重新加载，演示失败重试、无结果恢复与收藏撤销。
                 </p>
                 <p className="recipe-components">
                   组合组件：Spinner、Alert、EmptyState、Toast 等。
@@ -134,8 +136,10 @@ export const recipeGuide: DocPage = {
                 </Link>
               </dt>
               <dd>
-                <p className="recipe-purpose">适合首次无内容、暂无收藏与搜索无结果。</p>
-                <p className="recipe-actions">切换空态，创建示例手记、浏览文章或清空筛选。</p>
+                <p className="recipe-purpose">适用于首次无内容、暂无收藏与搜索无结果。</p>
+                <p className="recipe-actions">
+                  切换空状态，分别执行创建示例手记、浏览文章和清空筛选。
+                </p>
                 <p className="recipe-components">组合组件：EmptyState、Button 等。</p>
               </dd>
             </div>
@@ -156,7 +160,7 @@ export const recipeGuide: DocPage = {
                 </Link>
               </dt>
               <dd>
-                <p className="recipe-purpose">适合地址不存在时的页面导航。</p>
+                <p className="recipe-purpose">为没有对应页面的地址提供返回入口。</p>
                 <p className="recipe-actions">通过链接前往开始使用或组件总览。</p>
                 <p className="recipe-components">组合组件：Heading、Text 与原生导航链接。</p>
               </dd>
@@ -190,7 +194,7 @@ export const recipeGuide: DocPage = {
       content: (
         <>
           <p>
-            这些场景由页面状态驱动，不连接后台。保存、搜索、分页、计时和数据持久化按各示例的说明实现，不是所有组件都自动提供的能力。
+            这些场景由页面状态驱动，不连接后台。保存、搜索、分页、计时和数据持久化由示例实现；接入时需按各例说明配置应用逻辑。
           </p>
           <p>
             组件继承项目字体；角色、插画和文档站字体不在组件安装包内。含素材示例使用 Vite
@@ -212,13 +216,13 @@ export const recipeGuide: DocPage = {
       content: (
         <>
           <p>
-            「小小日常」把首页、手记归档和文章详情连在一起，包含分类、搜索、分页和当前浏览器收藏。适合从完整网站开始修改。
+            「小小日常」是完整的博客示例，包含首页、手记归档与文章详情，支持分类、搜索、分页和当前浏览器收藏。
           </p>
           <div className="guide-actions">
             <Link href={blogHref} target="_blank" rel="noopener noreferrer">
               体验示例网站<span className="sr-only">（新标签页打开）</span>
             </Link>
-            <Link href="#/guides/getting-started?section=blog-example">运行与改站说明</Link>
+            <Link href="#/guides/getting-started?section=blog-example">运行与定制说明</Link>
           </div>
         </>
       ),

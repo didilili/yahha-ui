@@ -11,7 +11,7 @@ const page: DocPage = {
       title: '文章阅读与收藏',
       content: (
         <p>
-          此示例组合作者信息、文章列表、搜索、正文、配图与收藏。可关闭配图、切换文章、搜索标题或内容，并通过正文链接定位到文末后记。示例不依赖角色图片或文档站字体。
+          此示例组合作者信息、正文、配图和收藏操作，支持按标题或内容搜索、查看后记及切换配图显示。不依赖角色图片或文档站字体。
         </p>
       ),
       examples: [
@@ -19,7 +19,7 @@ const page: DocPage = {
           id: 'reading-example',
           title: '个人手记',
           description:
-            '文章与作者为演示内容，收藏只保留在当前页面。切换文章后定位到标题；清空无结果搜索后回到搜索框。',
+            '支持文章切换和正文到后记的锚点导航。切换文章后焦点移到标题，清空无结果搜索后焦点返回搜索框。文章与作者为演示内容，收藏仅保留在当前页面。',
           component: ReadingExample,
           source: readingSource,
           themeScope: 'explicit',

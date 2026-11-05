@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Heading, Pagination, Text } from 'yahha-ui';
 
 const entries = [
-  { title: '沿着河边散步', summary: '把小花、晚风和今天走过的路，记进这一页。' },
-  { title: '窗边的一点阅读时间', summary: '翻到喜欢的段落时，先停下来读一会儿。' },
-  { title: '留给周末的小小计划', summary: '去买面包、整理书架，也给没有安排的时间留一点空白。' },
+  { title: '沿着河边散步', summary: '拐弯去买面包，回家才想起本来是去散步。' },
+  { title: '窗边的一点阅读时间', summary: '窗外的鸟忙着搭窝，我把同一段读了三遍。' },
+  { title: '周末的购物单', summary: '原本只打算买牛奶，回来时却多了一袋刚出炉的红豆包。' },
 ];
 
 export default function PaginationArchive() {

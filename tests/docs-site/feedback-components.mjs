@@ -11,7 +11,7 @@ async function choose(page, select, label) {
 export async function verifyFeedbackFlow(page, baseURL) {
   await page.goto(`${baseURL}#/guides/states?section=loading`);
   const scene = page.locator('#scene-loading .example-preview');
-  const ready = scene.getByRole('heading', { name: '今天，也有一件想记住的小事。', exact: true });
+  const ready = scene.getByRole('heading', { name: '一只纸袋，一路面包香', exact: true });
   await ready.waitFor();
   const next = scene.getByRole('combobox', { name: '下次加载结果', exact: true });
   const reload = scene.getByRole('button', { name: '重新加载文章', exact: true });
@@ -20,9 +20,7 @@ export async function verifyFeedbackFlow(page, baseURL) {
   await scene.getByText('文章加载失败', { exact: true }).waitFor();
   await scene.getByRole('button', { name: '重试加载', exact: true }).click();
   await ready.waitFor();
-  await page.waitForFunction(
-    () => document.activeElement?.textContent === '今天，也有一件想记住的小事。',
-  );
+  await page.waitForFunction(() => document.activeElement?.textContent === '一只纸袋，一路面包香');
   const save = scene.getByRole('button', { name: '收藏这篇手记', exact: true });
   await save.click();
   assert.equal(await save.getAttribute('aria-pressed'), 'true');
@@ -38,9 +36,7 @@ export async function verifyFeedbackFlow(page, baseURL) {
   await scene.getByRole('heading', { name: '这次没有找到手记', exact: true }).waitFor();
   await scene.getByRole('button', { name: '查看示例手记', exact: true }).click();
   await ready.waitFor();
-  await page.waitForFunction(
-    () => document.activeElement?.textContent === '今天，也有一件想记住的小事。',
-  );
+  await page.waitForFunction(() => document.activeElement?.textContent === '一只纸袋，一路面包香');
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
 }
 

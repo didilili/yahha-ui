@@ -147,7 +147,7 @@ export async function verifyAvatarAuthor(page, example) {
       assert.equal(
         await dialog
           .getByText(
-            '你好，我是库米。我喜欢沿河散步，也喜欢把读到的句子抄进手记。回家以后，再给一路遇见的小事留一页。',
+            '你好，我是库米。散步时会记下花店几点开门，也常常被面包香带着拐弯。手记里有路边的发现，偶尔也有点心的碎屑。',
             { exact: true },
           )
           .count(),

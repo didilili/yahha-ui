@@ -2,7 +2,7 @@
 
 # Button 按钮
 
-用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。
+用于触发操作，支持不同强调程度、禁用、加载和切换状态。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Button } from 'yahha-ui';
 
 ## 何时使用
 
-主操作用 primary，配合动作用 secondary，辅助动作用 ghost（文字）。跳转使用 [Link](link.md)，纯图标使用 [IconButton](icon-button.md)。
+主要操作使用 primary，次要操作使用 secondary，低强调辅助操作使用 ghost（文字）。页面跳转使用 [Link](link.md)，纯图标使用 [IconButton](icon-button.md)。
 
 <a id="examples"></a>
 
@@ -24,7 +24,7 @@ import { Button } from 'yahha-ui';
 
 ### 基础用法
 
-点击按钮，更新相邻文字中的问候次数。
+点击按钮更新相邻文字中的问候次数。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -293,7 +293,7 @@ export default function ButtonToggle() {
 
 ### 异步加载与重试
 
-模拟保存首次失败，再次点击重试；状态仅保留在当前示例。
+模拟首次保存失败与重试成功；状态仅保留在当前示例。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonAsync.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -522,5 +522,5 @@ disabled 或 loading 为真时都会设置原生 disabled，按钮不可聚焦�
 
 ## 相关组件
 
-- [IconButton 图标按钮](icon-button.md)：为关闭、收藏等仅用图标表达的操作提供方形点击区域与明确的可访问名称。
-- [Link 链接](link.md)：保留原生链接行为，统一下划线与键盘焦点。
+- [IconButton 图标按钮](icon-button.md)：用于仅以图标呈现的操作，提供方形点击区域，并要求明确的可访问名称。
+- [Link 链接](link.md)：用于页面导航和资源跳转，保留原生链接行为、下划线与焦点样式。

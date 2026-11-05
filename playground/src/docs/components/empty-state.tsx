@@ -12,7 +12,7 @@ export default defineComponentPage('empty-state', {
       title: '何时使用',
       content: (
         <p>
-          用于已经确认没有内容的情况，例如首次使用、搜索无结果或列表为空。标题说明原因，描述和操作引导下一步；仍在加载或请求失败时，应展示对应状态，避免让用户误以为内容不存在。
+          用于首次使用、列表为空或搜索无结果等已确认没有内容的情况。加载和请求失败应分别使用对应状态。
         </p>
       ),
     },
@@ -30,7 +30,7 @@ export default defineComponentPage('empty-state', {
         {
           id: 'search',
           title: '搜索无结果与清空条件',
-          description: '搜索本地文章，无结果时清空条件恢复列表。',
+          description: '搜索本地文章，无结果时可清空条件恢复列表。',
           component: EmptySearch,
           source: emptySearchSource,
         },

@@ -273,7 +273,7 @@ async function stateArtworkJourney(page, baseURL) {
 
   await example.getByRole('radio', { name: '加载失败', exact: true }).check();
   await picture.getByRole('heading', { name: '加载失败', exact: true }).waitFor();
-  assert.match(await picture.innerText(), /内容仍然保留.*重新尝试/s);
+  assert.match(await picture.innerText(), /加载失败的示例画面.*重试或返回入口/s);
   assert.match(await image.getAttribute('src'), /load-error-motion/);
   const beforeRetryReplay = await image.elementHandle();
   await replay.click();
@@ -286,7 +286,7 @@ async function stateArtworkJourney(page, baseURL) {
 
   await example.getByRole('radio', { name: '页面未找到（404）', exact: true }).check();
   await picture.getByRole('heading', { name: '页面未找到', exact: true }).waitFor();
-  assert.match(await picture.innerText(), /从首页或目录重新出发/);
+  assert.match(await picture.innerText(), /从首页或组件总览重新查找/);
   assert.match(await image.getAttribute('src'), /friends-lost[^/]*\.svg/);
   assert.equal(await image.getAttribute('width'), '480');
   assert.equal(await image.getAttribute('height'), '320');
@@ -341,11 +341,11 @@ export async function verifyArtwork(browser, baseURL) {
       assert.equal(await bookmark.getAttribute('aria-pressed'), 'false');
       await bookmark.click();
       assert.equal(await bookmark.getAttribute('aria-pressed'), 'true');
-      await example.getByRole('status').getByText('这枚纸签已经收好。', { exact: true }).waitFor();
+      await example.getByRole('status').getByText('已选中收藏纸签。', { exact: true }).waitFor();
       await focused(page, bookmark);
       await bookmark.click();
       assert.equal(await bookmark.getAttribute('aria-pressed'), 'false');
-      await example.getByRole('status').getByText('纸签还没有收藏。', { exact: true }).waitFor();
+      await example.getByRole('status').getByText('未选中收藏纸签。', { exact: true }).waitFor();
 
       const tea = example.getByRole('checkbox', { name: '播放热茶动效', exact: true });
       const teaImage = example.locator('img[src*="tea-cup"]');
@@ -377,10 +377,10 @@ export async function verifyArtwork(browser, baseURL) {
       assert.equal(await waitingImage.getAttribute('src'), staticWaiting);
       await example
         .getByRole('status')
-        .getByText('等待演示已结束，手记停在这一页。', { exact: true })
+        .getByText('等待演示已结束，当前显示静态图。', { exact: true })
         .waitFor();
       await focused(page, toggle);
-      await example.getByRole('heading', { name: '还没收进小口袋', exact: true }).waitFor();
+      await example.getByRole('heading', { name: '还没有收藏手记', exact: true }).waitFor();
       await healthy(page, example, baseURL);
 
       await stateArtworkJourney(page, baseURL);

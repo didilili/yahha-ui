@@ -12,8 +12,8 @@ const page: DocPage = {
         <>
           <p>
             颜色优先通过 <Link href="#/components/theme-provider">ThemeProvider 的 tokens</Link>{' '}
-            定制；布局使用调用方容器或组件公开的 className / style。每页 API
-            明确它们作用的元素，不依赖内部 CSS Modules 类名或 DOM 层级。
+            定制；栏宽、分栏和间距由应用容器控制，也可使用组件公开的 className /
+            style。局部样式的作用元素以每页 API 说明为准，避免依赖内部 CSS Modules 类名或 DOM 层级。
           </p>
           <p>
             例如，TextField 的 className 作用于整个字段，style 和 ref 作用于 input；Dialog 的
@@ -41,7 +41,7 @@ const page: DocPage = {
     },
     {
       id: 'state',
-      title: '状态由谁管理',
+      title: '状态管理',
       content: (
         <>
           <ul>
@@ -75,10 +75,9 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            每个预览与展开后的代码来自同一份 TSX 文件。展开代码会显示原始示例，保存为
-            Example.tsx；「完整接入」另给出
-            App.tsx，包含样式导入与默认主题配置。两个文件放在同一目录即可组合使用。示例自身已配置主题时，入口不会再次包裹
-            Provider。
+            接入示例时，展开代码并保存为 Example.tsx；再打开「完整接入」，保存
+            App.tsx。两个文件放在同一目录，入口已包含样式导入与默认主题配置。预览与代码来自同一份
+            TSX；示例自身已配置主题时，入口不会再次包裹 Provider。
           </p>
           <p>
             API 中「—」表示组件不设置该值。原生元素继承的全部属性不逐项罗列，请以对应 React

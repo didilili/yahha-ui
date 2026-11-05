@@ -1,62 +1,65 @@
 # 组件文档
 
-这里收录 Yahha UI 的 29 个 UI 组件、ThemeProvider 及其示例与 API。首次使用请先按[本地安装说明](../README.md#构建与本地安装)完成安装、样式导入和主题设置；没有现成项目可[导出最小项目](../README.md#导出最小项目)。
+首次使用请参考[本地安装说明](../README.md#构建与本地安装)，完成安装、样式导入和主题设置。没有现成 React 项目时，可[导出最小项目](../README.md#导出最小项目)。
+
+本文档收录 30 个 UI 组件、ThemeProvider 及其用途、示例与 API。
 
 在组件库根目录完成 `npm ci` 后运行 `npm run dev`，即可在本地文档站操作示例。下面的链接可直接在 GitHub 阅读，站内组件总览位于 `#/components`。
 
 ## 通用
 
-- [Button](components/button.md)：触发动作、提交、加载与切换状态。
-- [IconButton](components/icon-button.md)：仅有图标的操作与可访问名称。
+- [Button](components/button.md)：用于触发操作，支持不同强调程度、禁用与加载状态。
+- [IconButton](components/icon-button.md)：仅以图标呈现的操作按钮，必须提供可访问名称。
+- [Icon 图标](components/icon.md)：显示自定义 SVG，或按需导入搜索、收藏、关闭等手绘功能图标。
 
 ## 排版
 
-- [Text](components/text.md)：正文大小、行高和语义颜色。
+- [Text](components/text.md)：正文、摘要和辅助说明的字号、行高与语义颜色。
 - [Heading](components/heading.md)：原生 h1–h6 标题层级。
-- [Link](components/link.md)：原生链接、下划线和焦点表现。
+- [Link](components/link.md)：前往页面、文章和外部资源，保留原生链接行为。
 
 ## 布局
 
-- [Surface](components/surface.md)：内容容器。
+- [Surface](components/surface.md)：用于组织内容的容器，提供背景、边框和内边距。
 - [Divider](components/divider.md)：水平、垂直和装饰性分隔线。
 
 ## 表单
 
-- [TextField 单行输入](components/text-field.md)：标签、提示、错误与原生单行输入属性。
-- [Textarea](components/textarea.md)：多行输入、原生表单与垂直调整高度。
-- [Select](components/select.md)：单值下拉选择、选项禁用、表单提交与重置；不含输入搜索和多选。
+- [TextField 单行输入](components/text-field.md)：单行输入、标签、辅助说明与错误反馈。
+- [Textarea](components/textarea.md)：输入留言、简介等多行文字，保留原生表单行为，可垂直调整高度。
+- [Select](components/select.md)：从固定选项里选一项，支持禁用选项、表单提交与重置，不含输入搜索和多选。
 - [Checkbox](components/checkbox.md)：原生复选、半选与必选约束。
-- [RadioGroup](components/radio-group.md)：带说明的受控单选组。
-- [Switch](components/switch.md)：即时生效的开关与原生 checkbox 状态。
+- [RadioGroup](components/radio-group.md)：带选项说明的受控单选组。
+- [Switch](components/switch.md)：打开或关闭即时生效的设置，使用原生 checkbox 状态。
 - [SegmentedControl 分段选择](components/segmented-control.md)：紧凑的受控单选组与表单提交。
 
 ## 内容展示
 
-- [Badge](components/badge.md)：行内状态标记。
-- [Avatar](components/avatar.md)：作者头像、姓名缩写与失败回退。
-- [Image](components/image.md)：图片替代文字、比例容器与失败回退。
-- [Accordion](components/accordion.md)：FAQ 和补充内容的展开收起。
+- [Badge](components/badge.md)：分类、标签与状态的静态标记。
+- [Avatar](components/avatar.md)：作者头像、姓名缩写与图片失败回退。
+- [Image](components/image.md)：展示封面或配图，设置替代文字、预留比例与失败回退。
+- [Accordion](components/accordion.md)：FAQ 和补充说明的展开与收起。
 
 ## 导航
 
-- [Tabs](components/tabs.md)：标签与对应内容面板。
-- [Pagination](components/pagination.md)：按钮模式分页，由调用方更新列表，不生成路由链接。
+- [Tabs](components/tabs.md)：在同一区域切换标签对应的内容面板。
+- [Pagination](components/pagination.md)：列表分页，支持按钮或真实链接；列表与网址更新由应用管理。
 
 ## 浮层
 
-- [DropdownMenu](components/dropdown-menu.md)：可通过键盘操作的单层动作菜单，不承担值选择。
+- [DropdownMenu](components/dropdown-menu.md)：可通过键盘操作的单层动作菜单；值选择使用 Select。
 
-- [Dialog](components/dialog.md)：受控模态弹窗、焦点和 Portal。
-- [Popover 弹出面板](components/popover.md)：带标题的非模态补充面板和短表单。
+- [Dialog](components/dialog.md)：在受控模态弹窗中完成编辑或确认，由组件管理焦点与 Portal。
+- [Popover 弹出面板](components/popover.md)：在按钮旁展开补充说明或短表单，允许继续操作页面。
 - [Tooltip](components/tooltip.md)：视觉文字补充；沿用 Base UI 1.9 约定，触发器须有自身可访问名称。
 
 ## 反馈
 
-- [Alert 提示条](components/alert.md)：留在页面内的说明、结果与错误提示。
-- [Toast](components/toast.md)：由调用方管理显示状态的提示消息。
-- [EmptyState](components/empty-state.md)：空内容、说明与操作插槽。
+- [Alert 提示条](components/alert.md)：页面内持续可见的信息、结果与错误提示。
+- [Toast](components/toast.md)：反馈保存等操作结果，显示与关闭由调用方管理。
+- [EmptyState](components/empty-state.md)：列表为空或搜索无结果时的说明与操作入口。
 - [Spinner](components/spinner.md)：带可读状态文字的加载指示。
-- [Skeleton](components/skeleton.md)：内容形状占位，不独立播报加载状态。
+- [Skeleton](components/skeleton.md)：按内容形状预留加载空间，不独立播报状态。
 
 ## 主题配置
 
@@ -68,11 +71,11 @@
 
 组件从 `yahha-ui` 导入，样式在应用入口通过 `yahha-ui/style.css` 加载一次，组件区域使用 `ThemeProvider theme="pink"` 包裹。
 
-站内示例的“完整接入”提供 `Example.tsx` 与 `App.tsx`。需要复制组合时，将两份文件放在同一目录；若列出素材清单，将对应文件保存到同级 `artwork/` 目录，保留文件名和相对路径。
+复制示例时，在示例下展开“完整接入”，将 `Example.tsx` 与 `App.tsx` 放在同一目录；若列出素材清单，将对应文件保存到同级 `artwork/` 目录，保留文件名和相对路径。
 
 ## 站内指南
 
-启动文档站后，按以下路由继续查看用法与组合示例。
+启动文档站后，可通过以下路由查阅指南和组合示例。
 
 - `#/guides/getting-started`：安装、样式与第一个组件。
 - `#/guides/styling`：使用与定制，包括颜色、布局、插槽、状态管理与键盘约定。

@@ -2,7 +2,7 @@
 
 # Tabs 标签页
 
-在同一页面的相关内容面板之间切换，用于栏目说明、作者资料和内容分区。
+用于在同一区域切换相关内容面板，建立标签与面板的语义关联。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Tabs } from 'yahha-ui';
 
 ## 何时使用
 
-多个内容面板共享同一块空间时使用，组件建立标签与对应面板的语义关联。只改变一个简短筛选值时使用 [SegmentedControl](segmented-control.md)；填写带说明的单选答案时使用 [RadioGroup](radio-group.md)；需要收起选项时使用 [Select](select.md)。跨页面导航使用链接。
+用于在同一区域切换相关内容面板，建立标签与面板的语义关联。只改变一个简短筛选值时使用 [SegmentedControl](segmented-control.md)；填写带说明的单选答案时使用 [RadioGroup](radio-group.md)；需要收起选项时使用 [Select](select.md)。跨页面导航使用链接。
 
 <a id="examples"></a>
 
@@ -44,7 +44,7 @@ export default function TabsBasic() {
           content: (
             <article>
               <h3 style={{ marginTop: 0 }}>沿着河岸，慢慢走回家</h3>
-              <p style={{ marginBottom: 0 }}>把今天看见的树影和晚霞记下来，留给以后翻阅。</p>
+              <p style={{ marginBottom: 0 }}>走到桥边才发现，手里还攥着面包店的小票。</p>
             </article>
           ),
         },
@@ -122,7 +122,7 @@ export default function TabsStates() {
         {
           value: 'about',
           label: '关于这个小站与慢慢更新的日常记录',
-          content: <p>这里收集散步、阅读和窗边的小小日常。</p>,
+          content: <p>这里记下散步绕过的路、书里的句子和没忍住多买的点心。</p>,
         },
         {
           value: 'contact',
@@ -292,6 +292,6 @@ export default function TabsControlled() {
 
 ## 相关组件
 
-- [SegmentedControl 分段选择](segmented-control.md)：在少量互斥选项间切换，使用原生 radio 保留表单与键盘行为。
-- [Accordion 折叠面板](accordion.md)：展开 FAQ 和补充说明，提供单项或多项展开，使用语义标题和按钮。
-- [Pagination 分页](pagination.md)：在文章列表和归档中切换页码，保留首页、末页和当前页附近的页码。
+- [SegmentedControl 分段选择](segmented-control.md)：紧凑的受控单选组，适用于分类、排序等简短选项，保留原生 radio 的表单与键盘行为。
+- [Accordion 折叠面板](accordion.md)：用于可展开和收起的内容面板，支持单项或多项展开。
+- [Pagination 分页](pagination.md)：用于列表分页，显示首页、末页和当前页附近的页码。

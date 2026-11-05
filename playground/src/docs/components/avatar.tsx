@@ -14,9 +14,7 @@ export default defineComponentPage('avatar', {
       id: 'usage',
       title: '何时使用',
       content: (
-        <p>
-          用于文章署名、作者介绍和个人资料，以姓名或图片标识人物。需要进入作者页面时，在身份行中提供明确的链接。
-        </p>
+        <p>用于文章署名、作者介绍和个人资料，以图片或姓名标识人物。作者页导航通过独立链接提供。</p>
       ),
     },
     {
@@ -33,7 +31,7 @@ export default defineComponentPage('avatar', {
         example(
           'avatar-picture',
           '图片失败与恢复',
-          '模拟图片失效并恢复，查看姓名回退。',
+          '模拟图片失效与恢复，展示姓名回退。',
           AvatarPicture,
           avatarPictureSource,
         ),

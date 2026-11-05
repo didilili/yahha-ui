@@ -4,7 +4,11 @@ import { Heading, Pagination, Text } from 'yahha-ui';
 const articles = [
   { id: 'leaf', title: '把一片叶子夹进手记', summary: '河边捡到的叶子，刚好替今天留下一个书签。' },
   { id: 'bread', title: '面包店开门以前', summary: '和朋友站在门口，等第一炉面包的香气飘出来。' },
-  { id: 'window', title: '窗边空出来的一把椅子', summary: '把椅子往旁边挪一点，留给晚到的朋友。' },
+  {
+    id: 'window',
+    title: '窗边那把会吱呀的椅子',
+    summary: '乌萨奇刚坐下，椅子就响了一声；它站起来看了看，又坐了一次。',
+  },
   { id: 'soup', title: '晚饭多煮了一碗汤', summary: '原本只想煮一人份，最后还是多放了一把面。' },
   {
     id: 'margin',
@@ -14,8 +18,8 @@ const articles = [
   { id: 'rain', title: '等雨停的十分钟', summary: '躲在屋檐下，听朋友讲完昨天没说完的故事。' },
   {
     id: 'postcard',
-    title: '明信片上还留着一行空白',
-    summary: '最后一行先空着，等见到你时再一起填上。',
+    title: '明信片上的地址写大了',
+    summary: '字写得太大，收件地址差点挤到邮票下面。',
   },
   { id: 'tea', title: '茶凉下来之前', summary: '手里的杯子还暖着，窗外的小路已经亮起了灯。' },
   { id: 'moon', title: '走到路口再抬头看看', summary: '朋友说今晚月亮很圆，我们就多站了一会儿。' },

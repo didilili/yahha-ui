@@ -2,7 +2,7 @@
 
 # Checkbox 复选框
 
-用于多项选择、订阅选项和需要主动确认的轻量表单。
+用于独立选择、多项选择或确认事项，支持半选状态。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Checkbox } from 'yahha-ui';
 
 ## 何时使用
 
-用于可独立勾选的事项、允许多选的偏好和需要提交确认的同意项。互斥选择使用 [RadioGroup](radio-group.md)；打开或关闭一个即时生效的设置使用 [Switch](switch.md)。汇总一组子项时，可用 indeterminate 表达部分已选。
+用于可独立勾选的选项、多项偏好和需要主动确认的同意事项。互斥选择使用 [RadioGroup](radio-group.md)；打开或关闭一个即时生效的设置使用 [Switch](switch.md)。汇总一组子项时，可用 indeterminate 表达部分已选。
 
 <a id="examples"></a>
 
@@ -65,7 +65,7 @@ export default function CheckboxDisabled() {
 
 ### 受控选择与半选
 
-全选联动分类，查看半选与数量变化。
+逐项勾选或全选分类，查看半选状态和已选数量。
 
 [查看示例文件](../../playground/src/examples/new-forms/CheckboxMixed.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -251,19 +251,19 @@ const notes: { id: string; title: string; summary: string; topics: TopicId[] }[]
   {
     id: 'half-a-book',
     title: '把周末留给半本书',
-    summary: '读到喜欢的段落就停一停，把一句话抄进随身的小本子。',
+    summary: '读到半页才发现，旁边的批注比原文还长。',
     topics: ['reading'],
   },
   {
     id: 'riverside',
     title: '绕到河边再回家',
-    summary: '比平时多走一条小路，记下水面上的晚霞和新开的花。',
+    summary: '绕过桥边的积水，鞋底还是沾了一片甩不掉的叶子。',
     topics: ['walking'],
   },
   {
     id: 'park-book',
     title: '带一本书去公园',
-    summary: '树荫下读几页，再沿着小径走走，不急着把这一天排满。',
+    summary: '本来只想在树荫下读书，结果盯着一只搬面包屑的蚂蚁看了半天。',
     topics: ['reading', 'walking'],
   },
 ];
@@ -379,7 +379,7 @@ export default function CheckboxReadingTopics() {
 
 ### 批量选择与失败重试
 
-全选或部分选择后确认移出；本地模拟失败时保留选择并可重试。
+选择文章后确认移出；本地模拟失败时保留选择，支持重试。
 
 [查看示例文件](../../playground/src/examples/new-forms/CheckboxReadingList.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -392,18 +392,18 @@ import { Alert, Button, Checkbox, Dialog, EmptyState, Text } from 'yahha-ui';
 const initialItems = [
   {
     id: 'river',
-    title: '沿河的那条小路，留到周末再走',
-    summary: '等朋友系好鞋带，再一起走过桥。',
+    title: '沿河走到面包店的那条小路',
+    summary: '说好沿河散步，小八却先闻到了面包香。',
   },
   {
     id: 'reading',
     title: 'ReadingNotesForASlowWeekend：还没读完的两页书',
-    summary: '把喜欢的书页夹好，等下次慢慢读。',
+    summary: '书签没动，页边却多了一只长腿麻雀。',
   },
   {
     id: 'flower',
     title: '花店门口，写给朋友的一张纸条',
-    summary: '记下今天路过的小花，留给晚一点来的朋友。',
+    summary: '把花名写在纸条上，带回家才发现忘记问价钱。',
   },
 ];
 
@@ -620,10 +620,7 @@ export default function CheckboxReadingList() {
           </ul>
         </fieldset>
       ) : (
-        <EmptyState
-          title="稍后阅读清单已整理好"
-          description="这里只移出了清单，文章内容仍然保留。"
-        />
+        <EmptyState title="稍后阅读清单已清空" description="这里只移出了清单，文章内容仍然保留。" />
       )}
       <div className="yahha-checkbox-reading-list-actions">
         <Button
@@ -760,5 +757,5 @@ export default function CheckboxReadingList() {
 
 ## 相关组件
 
-- [RadioGroup 单选组](radio-group.md)：将互斥选项和说明完整展示，适合订阅频率、可见范围等少量选择。
-- [Switch 开关](switch.md)：切换即时生效的阅读偏好或显示选项，开与关都有清楚含义。
+- [RadioGroup 单选组](radio-group.md)：用于在一组互斥选项中选择单个值，可为选项提供说明。
+- [Switch 开关](switch.md)：打开或关闭即时生效的设置，例如显示文章摘要。

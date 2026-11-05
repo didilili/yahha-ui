@@ -15,7 +15,7 @@ export default function SurfaceNotes() {
           写在手记后面
         </Heading>
         <Text>
-          不是每一天都有大事发生。有人把鞋带系好了，有人把半块饼干分给你，这一页也就有了想留下的事。
+          写手记时总有人凑过来看。小八检查点心有没有写漏，吉伊添了一幅画，乌萨奇的字挤到了纸边。
         </Text>
       </Surface>
     </div>

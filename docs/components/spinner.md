@@ -2,7 +2,7 @@
 
 # Spinner 加载指示
 
-表达正在进行的等待，提供可读的状态文字。
+表示正在进行的加载或等待，提供可读的状态文字。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -87,7 +87,7 @@ export default function SpinnerWaiting() {
         style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 36 }}
       >
         {loading && <Spinner role="presentation" aria-hidden="true" />}
-        <Text>{loading ? '稍等一下，文章还在路上。' : '文章已准备好，可以继续阅读。'}</Text>
+        <Text>{loading ? '正在加载文章…' : '文章已准备好，可以继续阅读。'}</Text>
       </div>
       <div>
         <Button variant="secondary" onClick={() => setLoading(!loading)}>
@@ -133,5 +133,5 @@ export default function SpinnerWaiting() {
 ## 相关组件
 
 - [Skeleton 骨架占位](skeleton.md)：为即将出现的内容预留形状，减少布局跳动。
-- [Button 按钮](button.md)：用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。
-- [EmptyState 空状态](empty-state.md)：当列表或搜索没有内容时，解释原因，并给出合适的下一步。
+- [Button 按钮](button.md)：用于触发操作，支持不同强调程度、禁用、加载和切换状态。
+- [EmptyState 空状态](empty-state.md)：用于列表为空、搜索无结果等情况，提供说明与操作插槽。

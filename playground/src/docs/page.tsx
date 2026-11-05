@@ -1,10 +1,12 @@
 import { componentCatalog } from './component-catalog';
+import { componentSectionKind } from './component-section-kinds';
 import type { DocPage } from './types';
 
 /** Select by purpose, including components from a different navigation group. */
 const relatedComponents: Record<string, readonly string[]> = {
   button: ['icon-button', 'link'],
-  'icon-button': ['button', 'tooltip'],
+  'icon-button': ['button', 'icon', 'tooltip'],
+  icon: ['icon-button', 'button', 'text-field'],
   text: ['heading', 'link', 'badge'],
   heading: ['text', 'divider'],
   link: ['button', 'text', 'pagination'],
@@ -56,12 +58,16 @@ export function defineComponentPage(
     description,
     ...content,
     sections: [
-      ...content.sections,
+      ...content.sections.map((section) => ({
+        ...section,
+        kind: section.kind ?? componentSectionKind(id, section.id),
+      })),
       ...(related.length
         ? [
             {
               id: 'related',
               title: '相关组件',
+              kind: 'related' as const,
               content: (
                 <ul>
                   {related.map((item) => (

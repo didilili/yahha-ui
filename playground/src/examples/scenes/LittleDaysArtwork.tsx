@@ -63,7 +63,7 @@ export default function LittleDaysArtwork() {
             </div>
           </div>
           <Text size="sm" tone="muted" role="status">
-            {saved ? '这枚纸签已经收好。' : '纸签还没有收藏。'}
+            {saved ? '已选中收藏纸签。' : '未选中收藏纸签。'}
           </Text>
         </section>
 
@@ -97,8 +97,8 @@ export default function LittleDaysArtwork() {
             {waiting
               ? '等待演示进行中。'
               : waitingPhase === 'stopped'
-                ? '等待演示已结束，手记停在这一页。'
-                : '手记已经摊开，随时可以开始。'}
+                ? '等待演示已结束，当前显示静态图。'
+                : '等待演示尚未开始。'}
           </Text>
         </div>
         <div
@@ -123,8 +123,8 @@ export default function LittleDaysArtwork() {
           <Heading level={3}>收藏夹</Heading>
         </div>
         <EmptyState
-          title="还没收进小口袋"
-          description="喜欢的手记可以慢慢收集，先去翻翻朋友们的日常吧。"
+          title="还没有收藏手记"
+          description="先浏览归档示例，看看有哪些手记。"
           illustration={
             <img
               className="little-days-scene-image"

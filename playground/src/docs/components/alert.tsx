@@ -13,12 +13,7 @@ export default defineComponentPage('alert', {
     {
       id: 'usage',
       title: '何时使用',
-      content: (
-        <p>
-          用于页面内持续可见的提示、限制或需要恢复操作的失败说明。Alert
-          跟随文档布局，适合让用户阅读原因后继续处理。
-        </p>
-      ),
+      content: <p>用于页面内持续可见的信息、使用限制或失败说明，提示随文档布局显示。</p>,
     },
     {
       id: 'examples',
@@ -43,7 +38,7 @@ export default defineComponentPage('alert', {
           ...example(
             'alert-action',
             '失败提示与重试',
-            '首次模拟失败，重试成功；选择保留，不实际订阅。',
+            '首次模拟订阅失败，重试后成功；保留已选项，不实际订阅。',
             AlertAction,
             alertActionSource,
           ),

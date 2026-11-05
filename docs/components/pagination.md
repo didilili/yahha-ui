@@ -2,7 +2,7 @@
 
 # Pagination 分页
 
-在文章列表和归档中切换页码，保留首页、末页和当前页附近的页码。
+用于列表分页，显示首页、末页和当前页附近的页码。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Pagination } from 'yahha-ui';
 
 ## 何时使用
 
-将文章列表、搜索结果等分成多页阅读时使用。默认按钮式分页更新当前列表；需要复制页码地址或在新标签打开时，使用 getPageHref 提供真实链接。数据切片、请求和网址更新由调用方处理。
+用于文章列表、搜索结果等内容的分页。默认通过按钮更新当前列表；需要复制页码地址或在新标签打开时，使用 getPageHref 提供真实链接。数据切片、请求和网址更新由调用方处理。
 
 <a id="examples"></a>
 
@@ -82,9 +82,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Heading, Pagination, Text } from 'yahha-ui';
 
 const entries = [
-  { title: '沿着河边散步', summary: '把小花、晚风和今天走过的路，记进这一页。' },
-  { title: '窗边的一点阅读时间', summary: '翻到喜欢的段落时，先停下来读一会儿。' },
-  { title: '留给周末的小小计划', summary: '去买面包、整理书架，也给没有安排的时间留一点空白。' },
+  { title: '沿着河边散步', summary: '拐弯去买面包，回家才想起本来是去散步。' },
+  { title: '窗边的一点阅读时间', summary: '窗外的鸟忙着搭窝，我把同一段读了三遍。' },
+  { title: '周末的购物单', summary: '原本只打算买牛奶，回来时却多了一袋刚出炉的红豆包。' },
 ];
 
 export default function PaginationArchive() {
@@ -184,7 +184,11 @@ import { Heading, Pagination, Text } from 'yahha-ui';
 const articles = [
   { id: 'leaf', title: '把一片叶子夹进手记', summary: '河边捡到的叶子，刚好替今天留下一个书签。' },
   { id: 'bread', title: '面包店开门以前', summary: '和朋友站在门口，等第一炉面包的香气飘出来。' },
-  { id: 'window', title: '窗边空出来的一把椅子', summary: '把椅子往旁边挪一点，留给晚到的朋友。' },
+  {
+    id: 'window',
+    title: '窗边那把会吱呀的椅子',
+    summary: '乌萨奇刚坐下，椅子就响了一声；它站起来看了看，又坐了一次。',
+  },
   { id: 'soup', title: '晚饭多煮了一碗汤', summary: '原本只想煮一人份，最后还是多放了一把面。' },
   {
     id: 'margin',
@@ -194,8 +198,8 @@ const articles = [
   { id: 'rain', title: '等雨停的十分钟', summary: '躲在屋檐下，听朋友讲完昨天没说完的故事。' },
   {
     id: 'postcard',
-    title: '明信片上还留着一行空白',
-    summary: '最后一行先空着，等见到你时再一起填上。',
+    title: '明信片上的地址写大了',
+    summary: '字写得太大，收件地址差点挤到邮票下面。',
   },
   { id: 'tea', title: '茶凉下来之前', summary: '手里的杯子还暖着，窗外的小路已经亮起了灯。' },
   { id: 'moon', title: '走到路口再抬头看看', summary: '朋友说今晚月亮很圆，我们就多站了一会儿。' },
@@ -336,5 +340,5 @@ PaginationProps 支持原生 nav 属性，children 除外。
 
 ## 相关组件
 
-- [Link 链接](link.md)：保留原生链接行为，统一下划线与键盘焦点。
-- [Tabs 标签页](tabs.md)：在同一页面的相关内容面板之间切换，用于栏目说明、作者资料和内容分区。
+- [Link 链接](link.md)：用于页面导航和资源跳转，保留原生链接行为、下划线与焦点样式。
+- [Tabs 标签页](tabs.md)：用于在同一区域切换相关内容面板，建立标签与面板的语义关联。

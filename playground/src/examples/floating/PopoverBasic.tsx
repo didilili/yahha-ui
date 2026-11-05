@@ -5,9 +5,9 @@ export default function PopoverBasic() {
     <Popover
       trigger={<Button variant="secondary">关于这份手记</Button>}
       title="手记说明"
-      description="在 Yahha 星球，散步也能攒出一页故事。"
+      description="这是一篇虚构的散步手记。"
     >
-      <p>有时是大家在桥边等人，有时是把最后一块饼干分着吃。字写歪一点，也先记下来。</p>
+      <p>路走到一半，先被面包香带进小店；回家再把店名补到路线图上。</p>
     </Popover>
   );
 }

@@ -9,11 +9,13 @@ export default function DividerExample() {
         .yahha-divider-meta span { min-width: 0; overflow-wrap: anywhere; }
         @media (max-width: 480px) { .yahha-divider-meta .yahha-divider-meta-line { display: none; } }
       `}</style>
-      <Text>夕阳落到桥边时，大家把剩下的半块饼干分着吃，等朋友系好鞋带再一起回家。</Text>
+      <Text>
+        夕阳落到桥边时，小八还在翻面包袋。乌萨奇举起最后一截法棍，吉伊刚好画完今天的路线。
+      </Text>
       <Divider />
       <ul className="yahha-divider-meta" aria-label="手记信息">
         <li>
-          <span>作者：库米，一位喜欢散步、阅读和记录日常生活的手记作者</span>
+          <span>作者：库米，散步时常绕到面包店，回家再写手记</span>
         </li>
         <li>
           <Divider

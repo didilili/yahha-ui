@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { componentCatalog } from '../../playground/src/docs/component-catalog.ts';
 
 const expectedEntries = Object.fromEntries(
-  `button:Button icon-button:IconButton badge:Badge surface:Surface
+  `button:Button icon-button:IconButton icon:Icon badge:Badge surface:Surface
    theme-provider:ThemeProvider text-field:TextField segmented-control:SegmentedControl
    select:Select textarea:Textarea checkbox:Checkbox radio-group:RadioGroup switch:Switch
    text:Text heading:Heading link:Link divider:Divider avatar:Avatar image:Image
@@ -40,7 +40,7 @@ async function expectIds(page, expected) {
     .innerText();
   assert.match(
     status.replace(/\s/g, ''),
-    new RegExp(`找到${expected.length}项/共30项`),
+    new RegExp(`找到${expected.length}项/共31项`),
     'Visible result counts agree with rendered cards.',
   );
 }
@@ -244,7 +244,7 @@ async function verifyLegacyCategoryNavigation(page, baseURL) {
     await catalog(page).getByRole('button', { name: '清空组件搜索', exact: true }).click();
     await expectIds(page, expected);
     await category(page, '通用').check();
-    await expectIds(page, ['button', 'icon-button']);
+    await expectIds(page, ['button', 'icon-button', 'icon']);
     await page.waitForFunction(
       () => new URLSearchParams(location.hash.split('?')[1]).get('group') === '通用',
     );
@@ -345,7 +345,7 @@ async function verifyKeyboardPreviewIsolation(page) {
         card: node?.closest('[data-component-id]')?.getAttribute('data-component-id'),
       };
     });
-    assert.equal(active.preview, false, 'Tab skips all thirty visual previews.');
+    assert.equal(active.preview, false, 'Tab skips all thirty-one visual previews.');
     if (!active.inOverview) break;
     if (active.card) visited.push(active.card);
   }
@@ -543,7 +543,7 @@ export async function verifyComponentOverview(browser, baseURL) {
       );
       assert.deepEqual(errors, [], 'Overview has no runtime errors.');
       console.log(
-        `Browser: ${viewport.width}px component overview, thirty inert previews/document links, filters, default geometry, navigation and lazy entry passed.`,
+        `Browser: ${viewport.width}px component overview, thirty-one inert previews/document links, filters, default geometry, navigation and lazy entry passed.`,
       );
     } finally {
       await context.close();

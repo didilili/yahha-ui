@@ -11,7 +11,7 @@ export default function TabsBasic() {
           content: (
             <article>
               <h3 style={{ marginTop: 0 }}>沿着河岸，慢慢走回家</h3>
-              <p style={{ marginBottom: 0 }}>把今天看见的树影和晚霞记下来，留给以后翻阅。</p>
+              <p style={{ marginBottom: 0 }}>走到桥边才发现，手里还攥着面包店的小票。</p>
             </article>
           ),
         },

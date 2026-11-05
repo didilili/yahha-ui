@@ -14,13 +14,13 @@ const articles = [
   {
     id: 'favorite-words',
     title: '把今天喜欢的句子记下来',
-    summary: '把读到的几句话抄进本子，留给以后的自己慢慢读。',
+    summary: '抄到第三句才发现，前面两句漏了同一个字。',
     category: 'notes',
   },
   {
     id: 'simple-dinner',
     title: '给自己做一顿简单的晚饭',
-    summary: '用冰箱里的食材煮一碗热汤，让忙碌的一天好好收尾。',
+    summary: '用冰箱里的食材煮一碗热汤，盛好才发现汤勺还没洗。',
     category: 'journal',
   },
 ] as const;

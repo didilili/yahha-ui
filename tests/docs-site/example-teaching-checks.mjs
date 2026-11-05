@@ -88,7 +88,7 @@ export async function verifyTeachingExamples(page, baseURL) {
     const contents = headingExample.getByRole('navigation', { name: '手记目录', exact: true });
     for (const [name, title] of [
       ['写封回信', '给远方的朋友写封回信'],
-      ['长手记', '把云朵邮局里借来的铅笔、贴歪的邮票和分给朋友的半块饼干，写进今天的长手记'],
+      ['长手记', '把云朵邮局里借来的铅笔、画歪的墨镜和贴到手背上的邮票，写进今天的长手记'],
     ]) {
       const link = contents.getByRole('link', { name, exact: true });
       const target = headingExample.getByRole('heading', { level: 3, name: title, exact: true });
@@ -164,7 +164,7 @@ export async function verifyTeachingExamples(page, baseURL) {
       assert.equal(await basicMenu.locator('blockquote').count(), 0);
     }
 
-    await page.goto(`${baseURL}#/components/segmented-control`);
+    await page.goto(`${baseURL}#/components/segmented-control?section=filtering`);
     const filtering = page.locator('#filtering');
     const articles = filtering.getByRole('list', { name: '筛选后的文章', exact: true });
     await articles.waitFor();

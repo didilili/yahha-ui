@@ -13,12 +13,7 @@ export default defineComponentPage('divider', {
     {
       id: 'usage',
       title: '何时使用',
-      content: (
-        <p>
-          用于标出内容主题的转折，或在并列元信息之间作视觉分隔。前者保留默认 hr 语义，后者设置
-          decorative。
-        </p>
-      ),
+      content: <p>内容主题发生转折时，保留默认 hr 语义；只需分开并列元信息时，设置 decorative。</p>,
     },
     {
       id: 'examples',

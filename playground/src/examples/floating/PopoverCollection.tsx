@@ -22,7 +22,7 @@ export default function PopoverCollection() {
         <Heading level={3} ref={articleHeading} tabIndex={-1}>
           沿着河边，慢慢走
         </Heading>
-        <Text>走到桥边，等系好鞋带的朋友一起回家。</Text>
+        <Text>说好沿河散步，小八却先闻到了面包香。</Text>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
           <Popover
             trigger={

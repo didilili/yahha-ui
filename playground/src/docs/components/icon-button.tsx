@@ -40,7 +40,7 @@ export default defineComponentPage('icon-button', {
         {
           id: 'icon-button-basic',
           title: '基础用法',
-          description: '关闭提示后可重新显示；示例会将焦点移到可用的按钮。',
+          description: '关闭提示后可重新显示；示例将焦点移到可用按钮。',
           component: IconButtonBasic,
           source: iconButtonBasicSource,
         },

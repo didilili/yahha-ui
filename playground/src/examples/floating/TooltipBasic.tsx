@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconButton, Text, Tooltip } from 'yahha-ui';
+import { BookmarkIcon, IconButton, Text, Tooltip } from 'yahha-ui';
 
 export default function TooltipBasic() {
   const [saved, setSaved] = useState(false);
@@ -15,7 +15,7 @@ export default function TooltipBasic() {
             aria-pressed={saved}
             onClick={() => setSaved((value) => !value)}
           >
-            <span aria-hidden="true">{saved ? '★' : '☆'}</span>
+            <BookmarkIcon filled={saved} />
           </IconButton>
         }
       />

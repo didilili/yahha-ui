@@ -35,7 +35,7 @@ export default defineComponentPage('image', {
         example(
           'image-failure',
           '失败回退与恢复',
-          '切换图片地址，查看失败回退和加载结果。',
+          '切换图片地址，展示加载失败时的回退与恢复。',
           ImageFallback,
           imageFallbackSource,
         ),

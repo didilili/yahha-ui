@@ -119,7 +119,7 @@ export async function verifyDesignBaseline(page, baseURL) {
   await page.locator('#reading').locator('..').locator('.doc-disclosure > summary').click();
   const reading = page.getByRole('region', { name: '规范阅读', exact: true });
   const body = reading.getByText(
-    '傍晚在 Yahha 星球散步，吉伊在河边遇到一颗打瞌睡的小星星。它揉揉眼睛，说自己忘了回家的方向。',
+    '窗台上的葱又长出一截。吉伊搬来椅子，想把它画进手记；刚画好花盆，就发现葱叶少了一段。',
     { exact: true },
   );
   assert.equal(await body.evaluate((element) => getComputedStyle(element).fontSize), '16px');
@@ -128,13 +128,13 @@ export async function verifyDesignBaseline(page, baseURL) {
   await page.waitForFunction(() => document.activeElement?.tagName === 'H4');
   await reading.getByRole('button', { name: '收藏这篇手记', pressed: false, exact: true }).click();
   await reading.getByRole('tab', { name: '看目录', exact: true }).click();
-  await reading.getByRole('button', { name: '给周末留一页空白', exact: true }).click();
-  await reading.getByRole('article', { name: '给周末留一页空白', exact: true }).waitFor();
+  await reading.getByRole('button', { name: '杯底多了一个圆', exact: true }).click();
+  await reading.getByRole('article', { name: '杯底多了一个圆', exact: true }).waitFor();
   await page.waitForFunction(() => document.activeElement?.tagName === 'H4');
   await reading.getByRole('radio', { name: '已收藏', exact: true }).check();
-  await reading.getByRole('article', { name: '把迷路的小星星送回家', exact: true }).waitFor();
+  await reading.getByRole('article', { name: '窗台上的葱又长高了', exact: true }).waitFor();
   assert.equal(
-    await reading.getByRole('article', { name: '给周末留一页空白', exact: true }).count(),
+    await reading.getByRole('article', { name: '杯底多了一个圆', exact: true }).count(),
     0,
   );
   await reading.getByRole('link', { name: '关于这篇示例', exact: true }).click();

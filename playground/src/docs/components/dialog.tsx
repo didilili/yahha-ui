@@ -62,7 +62,7 @@ export default defineComponentPage('dialog', {
         {
           id: 'form',
           title: '未保存修改的关闭确认',
-          description: '修改标题，试试未保存时的关闭选择。',
+          description: '存在未保存修改时，关闭操作提供继续编辑或放弃修改的选择。',
           component: DialogForm,
           source: dialogFormSource,
           toc: false,

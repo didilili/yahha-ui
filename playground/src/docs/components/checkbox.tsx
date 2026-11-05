@@ -22,7 +22,7 @@ export default defineComponentPage('checkbox', {
       title: '何时使用',
       content: (
         <p>
-          用于可独立勾选的事项、允许多选的偏好和需要提交确认的同意项。互斥选择使用{' '}
+          用于可独立勾选的选项、多项偏好和需要主动确认的同意事项。互斥选择使用{' '}
           <a href="#/components/radio-group">RadioGroup</a>；打开或关闭一个即时生效的设置使用{' '}
           <a href="#/components/switch">Switch</a>。汇总一组子项时，可用 indeterminate
           表达部分已选。
@@ -50,7 +50,7 @@ export default defineComponentPage('checkbox', {
         {
           id: 'mixed',
           title: '受控选择与半选',
-          description: '全选联动分类，查看半选与数量变化。',
+          description: '逐项勾选或全选分类，查看半选状态和已选数量。',
           component: CheckboxMixed,
           source: CheckboxMixedSource,
         },
@@ -90,7 +90,7 @@ export default defineComponentPage('checkbox', {
           id: 'checkbox-reading-list',
           toc: false,
           title: '批量选择与失败重试',
-          description: '全选或部分选择后确认移出；本地模拟失败时保留选择并可重试。',
+          description: '选择文章后确认移出；本地模拟失败时保留选择，支持重试。',
           component: CheckboxReadingList,
           source: CheckboxReadingListSource,
         },

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Button, Text, Textarea } from 'yahha-ui';
 
-const draft = '这篇散步手记让我也想出门走走。\n谢谢你分享沿途的小花。';
+const draft = '小八的鼻子比路线图还管用。\n下次也想沿着河边找找那家面包店。';
 
 export default function TextareaCommentDraft() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -24,7 +24,7 @@ export default function TextareaCommentDraft() {
         event.preventDefault();
         const message = String(new FormData(event.currentTarget).get('comment') ?? '');
         if (!message.trim()) {
-          setError('写下一点想法再预览。');
+          setError('请填写留言后再预览。');
           inputRef.current?.focus();
           return;
         }

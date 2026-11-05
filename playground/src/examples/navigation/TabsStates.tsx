@@ -8,7 +8,7 @@ export default function TabsStates() {
         {
           value: 'about',
           label: '关于这个小站与慢慢更新的日常记录',
-          content: <p>这里收集散步、阅读和窗边的小小日常。</p>,
+          content: <p>这里记下散步绕过的路、书里的句子和没忍住多买的点心。</p>,
         },
         {
           value: 'contact',

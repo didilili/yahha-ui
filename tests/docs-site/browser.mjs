@@ -5,6 +5,8 @@ import { verifyArtwork } from './artwork-checks.mjs';
 import { verifyWelcome } from './welcome-checks.mjs';
 import { verifyComponentOverview } from './overview-checks.mjs';
 import { verifyExampleHeadings } from './example-teaching-checks.mjs';
+import { verifySectionIcons } from './section-icon-checks.mjs';
+import { verifyIconExamples } from './icon-examples.mjs';
 import { verifyBrand } from './brand-checks.mjs';
 import { verifyAdoption } from './adoption-checks.mjs';
 import { verifySectionNavigation } from './section-navigation-checks.mjs';
@@ -127,6 +129,7 @@ export async function verifyDocs(browser, baseURL) {
     const ids = [
       'button',
       'icon-button',
+      'icon',
       'badge',
       'surface',
       'theme-provider',
@@ -165,6 +168,8 @@ export async function verifyDocs(browser, baseURL) {
       assert.equal(examples > 0, true, `${id} examples`);
       totalExamples += examples;
       await verifyExampleHeadings(page);
+      await verifySectionIcons(page);
+      if (id === 'icon') await verifyIconExamples(page);
       if (id === 'text-field') {
         await verifyTextFieldSearch(page, page.locator('#text-field-search .example-preview'));
         await verifyTextFieldCopy(page, page.locator('#text-field-copy .example-preview'));
@@ -296,7 +301,7 @@ export async function verifyDocs(browser, baseURL) {
         );
       }
     }
-    assert.equal(totalExamples, 128, 'The 30 component documents provide 128 focused examples.');
+    assert.equal(totalExamples, 132, 'The 31 component documents provide 132 focused examples.');
 
     // Reorganized chapters retain their existing deep links and keyboard destination.
     await page.goto(`${baseURL}#/components/text`);
@@ -347,9 +352,10 @@ export async function verifyDocs(browser, baseURL) {
       await waitForGuideReady(page, title);
       guideExamples += await page.locator('.example-block').count();
       await verifyExampleHeadings(page);
+      await verifySectionIcons(page, 'guide');
     }
     assert.equal(guideExamples, 12, 'The guides must retain all twelve integration examples.');
-    assert.equal(totalExamples + guideExamples, 140, 'The public site provides 140 examples.');
+    assert.equal(totalExamples + guideExamples, 144, 'The public site provides 144 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
     await waitForGuideReady(page, '开始使用');
     assert.match(await page.locator('main').innerText(), /npm pack/);
@@ -365,7 +371,7 @@ export async function verifyDocs(browser, baseURL) {
     await page.locator('.not-found').getByRole('link', { name: '浏览组件', exact: true }).click();
     await page.getByRole('heading', { level: 1, name: '组件总览', exact: true }).waitFor();
     await page.locator('.component-overview-page').waitFor();
-    assert.equal(await page.locator('[data-component-id]').count(), 30);
+    assert.equal(await page.locator('[data-component-id]').count(), 31);
 
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 844 });
@@ -396,6 +402,8 @@ export async function verifyDocs(browser, baseURL) {
         await page.goto(`${baseURL}#/components/${id}`);
         await page.locator('.example-block').first().waitFor();
         await verifyExampleHeadings(page);
+        await verifySectionIcons(page);
+        if (id === 'icon') await verifyIconExamples(page);
         assert.equal(
           await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
           true,

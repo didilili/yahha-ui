@@ -14,9 +14,9 @@ export default function SurfaceComposition() {
       <header style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
         <Badge>生活随笔</Badge>
         <Heading level={3} id={headingId}>
-          沿着河边，等一等朋友
+          路线图上没有的面包店
         </Heading>
-        <Text>一篇约 5 分钟的手记：有人系鞋带，大家就站在桥边等一等。</Text>
+        <Text>原本打算沿河散步，走到一半，小八已经选好了面包。</Text>
       </header>
       <div style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
         <Button

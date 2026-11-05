@@ -32,13 +32,15 @@ export default defineComponentPage('dropdown-menu', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>示例仅更新本页状态，不连接后台；基础例只回显选择，不执行收藏或生成摘要。</p>,
+      content: (
+        <p>示例只更新本页状态，不连接后台；基础例会显示选中的操作，不实际收藏或生成摘要。</p>
+      ),
       examples: [
         {
           id: 'basic',
           previewAlign: 'center',
           title: '基础用法',
-          description: '选择菜单项，查看最新选择。',
+          description: '选择菜单项后显示当前操作。',
           component: MenuBasic,
           source: menuBasicSource,
         },

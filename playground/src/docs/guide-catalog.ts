@@ -17,7 +17,7 @@ export const guideCatalog = [
     group: '开始使用',
     area: 'getting-started',
     presentation: 'compact',
-    description: '安装组件、加载样式，先把第一个按钮放进你的页面。',
+    description: '组件安装、样式导入、主题配置与基础用法。',
   },
   {
     id: 'styling',
@@ -26,7 +26,7 @@ export const guideCatalog = [
     group: '开始使用',
     area: 'getting-started',
     presentation: 'compact',
-    description: '通过公开颜色、样式和插槽配置组件，了解状态管理与键盘操作。',
+    description: '组件的颜色、布局、内容插槽与状态管理，以及公开定制方式。',
   },
   {
     id: 'recipes',
@@ -35,7 +35,7 @@ export const guideCatalog = [
     group: '开始使用',
     area: 'recipes',
     presentation: 'gallery',
-    description: '用现有组件搭文章、归档和编辑界面。按用途查看预览、代码与接入文件。',
+    description: '文章页、归档和编辑界面的组件组合，提供预览、源码与接入说明。',
   },
   {
     id: 'reading',
@@ -43,7 +43,7 @@ export const guideCatalog = [
     chinese: '',
     group: '开始使用',
     area: 'recipes',
-    description: '用作者信息、正文、配图和收藏组成文章页，查看交互预览与完整接入。',
+    description: '由作者信息、正文、配图和收藏操作组成的文章阅读示例。',
   },
   {
     id: 'states',
@@ -51,7 +51,7 @@ export const guideCatalog = [
     chinese: '',
     group: '开始使用',
     area: 'recipes',
-    description: '文章归档、编辑、加载与空状态的完整组合，提供交互预览、源码和接入说明。',
+    description: '文章归档、编辑、加载、错误和空状态的组合示例。',
   },
   {
     id: 'design-baseline',
@@ -60,7 +60,7 @@ export const guideCatalog = [
     group: '开始使用',
     area: 'design',
     presentation: 'compact',
-    description: '查看配色、文字层级、控件尺寸与状态，按相同规则组合页面。',
+    description: '配色、文字层级、控件尺寸与状态的设计规范。',
   },
   {
     id: 'artwork',
@@ -68,7 +68,7 @@ export const guideCatalog = [
     chinese: '',
     group: '开始使用',
     area: 'design',
-    description: '用于收藏、加载、空状态和首页的 SVG 素材，提供预览、下载与组件组合示例。',
+    description: '收藏、加载、空状态和首页欢迎场景的 SVG 素材，提供预览、下载与组合示例。',
   },
 ] as const satisfies readonly Omit<DocPage, 'sections'>[];
 

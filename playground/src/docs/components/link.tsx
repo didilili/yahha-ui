@@ -25,7 +25,7 @@ export default defineComponentPage('link', {
         example(
           'link-external',
           '外部链接',
-          '使用 external 在新标签页打开，并保留安全 rel。',
+          '用 external 在新标签页打开，组件会补充 noopener noreferrer。',
           LinkExternal,
           linkExternalSource,
         ),

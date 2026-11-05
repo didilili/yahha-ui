@@ -29,8 +29,8 @@ export default defineComponentPage('button', {
       title: '何时使用',
       content: (
         <p>
-          主操作用 primary，配合动作用 secondary，辅助动作用 ghost（文字）。跳转使用{' '}
-          <a href="#/components/link">Link</a>，纯图标使用{' '}
+          主要操作使用 primary，次要操作使用 secondary，低强调辅助操作使用
+          ghost（文字）。页面跳转使用 <a href="#/components/link">Link</a>，纯图标使用{' '}
           <a href="#/components/icon-button">IconButton</a>。
         </p>
       ),
@@ -43,7 +43,7 @@ export default defineComponentPage('button', {
           id: 'button-basic',
           previewAlign: 'center',
           title: '基础用法',
-          description: '点击按钮，更新相邻文字中的问候次数。',
+          description: '点击按钮更新相邻文字中的问候次数。',
           component: ButtonBasic,
           source: buttonBasicSource,
         },
@@ -99,7 +99,7 @@ export default defineComponentPage('button', {
         {
           id: 'button-async',
           title: '异步加载与重试',
-          description: '模拟保存首次失败，再次点击重试；状态仅保留在当前示例。',
+          description: '模拟首次保存失败与重试成功；状态仅保留在当前示例。',
           toc: false,
           component: ButtonAsync,
           source: buttonAsyncSource,

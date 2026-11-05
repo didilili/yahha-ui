@@ -16,7 +16,7 @@ const groupOptions = [
   ...groups.map((group) => ({ value: group, label: group })),
 ];
 const groupDescriptions: Record<ComponentCatalogGroup, string> = {
-  通用: '按钮与图标按钮，用于触发操作。',
+  通用: '按钮用于触发操作，图标用于辅助识别。',
   排版: '标题、正文与链接，用于组织文字内容。',
   布局: '内容容器与分隔线，用于划分页面区域。',
   表单: '输入、选择与切换，用于收集信息和设置偏好。',
@@ -149,7 +149,7 @@ export default function ComponentOverview({
           <h1 ref={headingRef} tabIndex={-1}>
             组件总览
           </h1>
-          <p className="overview-description">按分类浏览组件，查看交互示例、用法与 API。</p>
+          <p className="overview-description">按分类浏览组件，查看交互示例、使用方法与 API。</p>
           <div className="overview-hero-notes">
             <Badge tone="accent">{uiCount} 个 UI 组件</Badge>
             <span className="overview-inventory-note">
@@ -195,7 +195,7 @@ export default function ComponentOverview({
               )}
             </div>
             <p className="overview-search-hint" id={descriptionId}>
-              支持英文名、中文名和用途关键词。
+              支持英文名、中文名和用途关键词，例如“收藏”“搜索”。
             </p>
           </div>
           <div className="overview-categories">
@@ -218,7 +218,7 @@ export default function ComponentOverview({
             找到 <strong>{matches.length}</strong> 项 / 共 {componentCatalog.length} 项
             {filters.group !== 'all' && <span> · {legacyGroup?.label ?? filters.group}</span>}
           </p>
-          <p className="overview-preview-note">选择组件，查看交互示例与 API。</p>
+          <p className="overview-preview-note">打开组件文档，查看示例、用法与 API。</p>
         </div>
       </section>
 

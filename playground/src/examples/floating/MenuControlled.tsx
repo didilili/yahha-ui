@@ -82,7 +82,7 @@ export default function MenuControlled() {
           ) : (
             <>
               <Heading level={3}>{title}</Heading>
-              <Text>留一点空白，记录散步、翻书和下一次想写的小事。</Text>
+              <Text>散步时拐进面包店，回家才发现路线图一笔也没记。</Text>
             </>
           )}
           <div style={{ justifySelf: 'start' }}>

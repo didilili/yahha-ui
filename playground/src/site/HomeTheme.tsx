@@ -31,9 +31,9 @@ export default function HomeTheme() {
         {/* Route navigation focuses this heading without adding a tab stop. */}
         {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
         <h2 id="home-theme" tabIndex={-1}>
-          三种配色，同一套组件
+          主题配色
         </h2>
-        <p>在下方示例中选择粉色、浅蓝或浅黄。配色改变，控件的尺寸、形状与交互保持一致。</p>
+        <p>支持粉色、浅蓝和浅黄三种配色。切换配色不改变控件尺寸、形状与交互。</p>
       </header>
       <div className="home-theme-layout">
         <ThemeProvider theme={theme} className="home-theme-preview">
@@ -64,7 +64,7 @@ export default function HomeTheme() {
         </ThemeProvider>
         <div className="home-theme-code">
           <h3>当前配色代码</h3>
-          <p>切换预设会同步更新这段代码。先完成安装和样式导入，再在项目中使用。</p>
+          <p>代码随所选配色同步更新。使用前需完成组件安装与样式导入。</p>
           <CodeBlock source={source} />
           <p className="home-theme-link">
             <Link href="#/components/theme-provider?section=theme-tokens">主题预设与颜色定制</Link>

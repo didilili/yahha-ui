@@ -12,6 +12,9 @@ import {
   EmptyState,
   Heading,
   IconButton,
+  SearchIcon,
+  BookmarkIcon,
+  InfoIcon,
   Image,
   Link,
   Pagination,
@@ -62,6 +65,14 @@ function InfoGlyph() {
 /** Visual samples only; the overview owns their inert and aria-hidden boundary. */
 export default function ComponentPreview({ id }: { id: string }): ReactNode {
   switch (id) {
+    case 'icon':
+      return (
+        <div style={row}>
+          <SearchIcon />
+          <BookmarkIcon filled />
+          <InfoIcon tone="info" />
+        </div>
+      );
     case 'button':
       return (
         <div style={row}>
@@ -92,9 +103,9 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
       return (
         <Surface>
           <div style={stack}>
-            <Heading level={4}>草地上的空位</Heading>
+            <Heading level={4}>绕远路的散步</Heading>
             <Text size="sm" tone="muted">
-              新朋友还没到，点心先给它留着。
+              为了看清那只蜗牛，大家在路边蹲了好一会儿。
             </Text>
           </div>
         </Surface>
@@ -142,7 +153,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
         />
       );
     case 'textarea':
-      return <Textarea label="给朋友的话" rows={2} defaultValue="把小小的日常，慢慢写下来。" />;
+      return <Textarea label="给朋友的话" rows={2} defaultValue="你说的那家面包店，我找到啦。" />;
     case 'checkbox':
       return (
         <div style={stack}>
@@ -167,17 +178,17 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
     case 'text':
       return (
         <div style={stack}>
-          <Text>小星星问：还有我的位置吗？</Text>
+          <Text>出门前找了半天帽子。</Text>
           <Text size="sm" tone="muted">
-            大家挪了挪，给它腾出一块草地。
+            最后发现，帽子一直戴在头上。
           </Text>
         </div>
       );
     case 'heading':
       return (
         <div style={stack}>
-          <Heading>给日常留一页</Heading>
-          <Heading level={4}>今天，也有小小的发现。</Heading>
+          <Heading>今天去河边</Heading>
+          <Heading level={4}>石头下面住着谁？</Heading>
         </div>
       );
     case 'link':
@@ -222,14 +233,14 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
     case 'spinner':
       return (
         <div style={row}>
-          <Spinner label="正在翻下一页" />
+          <Spinner label="正在加载手记" />
           <Text size="sm" tone="muted">
-            正在翻下一页…
+            正在加载手记…
           </Text>
         </div>
       );
     case 'alert':
-      return <Alert title="阅读提示">这里记着一些小小的日常。</Alert>;
+      return <Alert title="阅读提示">下雨了，河边散步改到明天。</Alert>;
     case 'tabs':
       return (
         <Tabs
@@ -237,8 +248,16 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
           value="journal"
           onValueChange={noop}
           items={[
-            { value: 'journal', label: '日常', content: <Text size="sm">沿着河边，慢慢走。</Text> },
-            { value: 'reading', label: '读书', content: <Text size="sm">给周末留一页空白。</Text> },
+            {
+              value: 'journal',
+              label: '日常',
+              content: <Text size="sm">今天的路，被一只蜗牛拦住了。</Text>,
+            },
+            {
+              value: 'reading',
+              label: '读书',
+              content: <Text size="sm">书翻到一半，猫坐了上来。</Text>,
+            },
           ]}
         />
       );
@@ -275,7 +294,7 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
       );
     case 'popover':
       return (
-        <Popover trigger={<Button variant="secondary">写作提示</Button>} title="给摘要留一点余地">
+        <Popover trigger={<Button variant="secondary">写作提示</Button>} title="先写两句试试">
           <Text size="sm">先记下一两句，想好了再继续。</Text>
         </Popover>
       );

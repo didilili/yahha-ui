@@ -2,7 +2,7 @@
 
 # Select 下拉选择器
 
-在有限的文章分类、排序或归档选项中选择一项。
+从文章分类、排序方式等固定选项中选一项。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Select } from 'yahha-ui';
 
 ## 何时使用
 
-从固定列表中选择一项，例如文章分类或排列方式，适合将选项收在下拉列表中。 选项较少且要直接比较说明时使用 [RadioGroup](radio-group.md)；少量简短的互斥筛选值使用 [SegmentedControl](segmented-control.md)；切换对应内容面板使用 [Tabs](tabs.md)。当前 Select 支持单选和键盘前缀匹配，需要输入搜索或多选时应选择适合该交互的组件。
+用于单值选择，以下拉列表展示文章分类、排列方式等固定选项。 选项较少且要直接比较说明时使用 [RadioGroup](radio-group.md)；少量简短的互斥筛选值使用 [SegmentedControl](segmented-control.md)；切换对应内容面板使用 [Tabs](tabs.md)。当前 Select 支持单选和键盘前缀匹配，需要输入搜索或多选时应选择适合该交互的组件。
 
 <a id="examples"></a>
 
@@ -511,6 +511,6 @@ export default function SelectPortalCustomization() {
 
 ## 相关组件
 
-- [RadioGroup 单选组](radio-group.md)：将互斥选项和说明完整展示，适合订阅频率、可见范围等少量选择。
-- [SegmentedControl 分段选择](segmented-control.md)：在少量互斥选项间切换，使用原生 radio 保留表单与键盘行为。
-- [DropdownMenu 下拉菜单](dropdown-menu.md)：将文章操作或轻量工具收进一组可通过键盘操作的动作菜单。
+- [RadioGroup 单选组](radio-group.md)：用于在一组互斥选项中选择单个值，可为选项提供说明。
+- [SegmentedControl 分段选择](segmented-control.md)：紧凑的受控单选组，适用于分类、排序等简短选项，保留原生 radio 的表单与键盘行为。
+- [DropdownMenu 下拉菜单](dropdown-menu.md)：用于展示单层操作菜单，支持键盘导航与禁用项。

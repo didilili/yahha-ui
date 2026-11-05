@@ -21,7 +21,7 @@ async function requireHome(page) {
   await heading.waitFor();
   assert.equal(
     (await heading.innerText()).replace(/\s/g, ''),
-    '一起做，全宇宙最可爱的UI组件库。',
+    '把可爱，搭进你的世界。',
     'The default entry must show the public homepage.',
   );
   assert.equal(await page.locator('main h1').count(), 1);
@@ -208,7 +208,7 @@ export async function verifyHome(browser, baseURL) {
     assert.equal(await explore.getAttribute('href'), '#/?section=home-little-site');
     await explore.click();
     await requireFocus(
-      page.getByRole('heading', { name: '修改标题，试试收藏', exact: true }),
+      page.getByRole('heading', { name: '标题编辑与收藏', exact: true }),
       'Homepage section navigation must continue at the live component sample heading.',
     );
     await requireHome(page);
@@ -223,7 +223,7 @@ export async function verifyHome(browser, baseURL) {
     const name = main.getByRole('textbox', { name: '手记标题', exact: true });
     const date = main.getByText('生活记录 · 示例文章', { exact: true });
     const showDate = main.getByRole('checkbox', { name: '显示副标题', exact: true });
-    assert.equal(await name.inputValue(), '给晚到的朋友留块饼干');
+    assert.equal(await name.inputValue(), '饼干保管员');
     await name.fill('窗边的小小手记');
     await main.getByRole('heading', { name: '窗边的小小手记', exact: true }).waitFor();
     await name.fill('   ');
@@ -241,7 +241,7 @@ export async function verifyHome(browser, baseURL) {
     await main.getByRole('button', { name: '收藏手记', pressed: true, exact: true }).waitFor();
     await page.reload();
     await requireHome(page);
-    assert.equal(await name.inputValue(), '给晚到的朋友留块饼干');
+    assert.equal(await name.inputValue(), '饼干保管员');
     assert.equal(await showDate.isChecked(), true, 'Refreshing must reset this local sample.');
     await date.waitFor();
     await main.getByRole('button', { name: '收藏手记', pressed: false, exact: true }).waitFor();

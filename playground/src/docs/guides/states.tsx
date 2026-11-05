@@ -25,8 +25,8 @@ const page: DocPage = {
       title: '文章归档与页面导航',
       content: (
         <p>
-          Tabs 按栏目切换文章，Pagination 分页显示列表，Accordion
-          收纳归档说明。栏目、搜索和页码使用同一份本地数据。
+          此示例使用 Tabs 切换栏目、Pagination 翻页、Accordion
+          折叠归档说明，支持栏目筛选、搜索与分页；所有操作使用同一份本地数据。
         </p>
       ),
       examples: [
@@ -34,7 +34,7 @@ const page: DocPage = {
           id: 'scene-blog-archive',
           title: '个人博客归档',
           description:
-            '每页显示三篇手记，切换栏目或搜索后回到第一页；无结果时可清空筛选恢复文章。翻页后焦点移至本页标题。',
+            '每页显示三篇手记。切换栏目或搜索后返回第一页，翻页后焦点移到本页标题；无匹配结果时，可通过清空筛选恢复文章列表。',
           component: BlogArchive,
           source: blogArchiveSource,
         },
@@ -45,8 +45,8 @@ const page: DocPage = {
       title: '文章编辑与浮层组合',
       content: (
         <p>
-          DropdownMenu 选择操作，Dialog 编辑文章，Popover 显示写作提示，Tooltip
-          说明收藏图标。保存、取消、错误恢复和收藏状态由示例管理，接入时需连接应用的数据与保存逻辑。
+          此示例组合 DropdownMenu、Dialog、Popover 和
+          Tooltip，实现文章菜单、编辑弹窗、写作提示与操作提示；保存、取消、错误恢复及收藏状态由示例管理，接入应用时需配置数据与保存逻辑。
         </p>
       ),
       examples: [
@@ -54,7 +54,7 @@ const page: DocPage = {
           id: 'scene-article-actions',
           title: '文章编辑与管理',
           description:
-            '打开“手记操作”编辑、归档或恢复；在弹窗内选择分类、查看写作提示，再用 Escape 逐层返回。首次保存模拟失败，重试保留草稿，成功后显示可关闭的 Toast；星星按钮可以直接收藏。',
+            '通过“手记操作”编辑标题或分类。首次保存模拟失败并保留草稿，重试成功后显示可关闭的 Toast；支持归档、恢复和收藏，Escape 可逐层关闭提示与弹窗。',
           component: ArticleActions,
           source: articleActionsSource,
         },
@@ -65,8 +65,8 @@ const page: DocPage = {
       title: '加载、失败与恢复',
       content: (
         <p>
-          Spinner 表示等待，Alert 提供失败说明与重试，EmptyState
-          显示无结果。翻页插画为可选素材，减少动效时显示静止画面。加载、恢复与收藏流程由示例管理。
+          此示例使用 Spinner、Alert 和 EmptyState
+          分别呈现加载、失败与无结果状态；加载、恢复与收藏流程由示例管理。翻页插画可选，减少动效时显示静止画面。
         </p>
       ),
       examples: [
@@ -74,7 +74,7 @@ const page: DocPage = {
           id: 'scene-loading',
           title: '加载、失败与恢复',
           description:
-            '选择下次结果，再重新加载文章；可重试失败请求、恢复无结果内容、收藏并撤销。请求由 1.8 秒计时器模拟，不连接后台。',
+            '选择下次加载结果后，重新加载文章可切换正常、失败和无结果状态，并支持失败重试、无结果恢复与收藏撤销。请求通过 1.8 秒计时器模拟，不连接后台。',
           component: LoadingScene,
           source: loadingSceneSource,
           themeScope: 'explicit',
@@ -91,7 +91,7 @@ const page: DocPage = {
       title: '空状态与下一步',
       content: (
         <p>
-          按首次无内容、暂无收藏或搜索无结果显示对应说明，提供创建、浏览或清空筛选操作。插画可选，搜索无结果不显示大幅插画。
+          首次无内容、暂无收藏与搜索无结果分别提供创建、浏览文章和清空筛选操作。插画可选，搜索无结果时不显示大幅插画。
         </p>
       ),
       examples: [
@@ -99,7 +99,7 @@ const page: DocPage = {
           id: 'scene-empty',
           title: '三种空态与恢复操作',
           description:
-            '切换场景，创建示例手记、浏览文章或清空筛选。插画是可选素材，文字和操作始终由 HTML 呈现。',
+            '演示三种空状态及对应恢复操作。创建手记、浏览文章和清空筛选均由示例处理；插画可选，文字和操作由 HTML 呈现。',
           component: EmptyScene,
           source: emptySceneSource,
           themeScope: 'explicit',
@@ -135,8 +135,8 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            使用 Alert
-            说明加载失败并提供重试操作；需要保留的已有内容与输入值由应用管理。警告、错误和危险操作使用相应语义，文字说明发生了什么以及下一步操作。
+            加载失败时，用 Alert 说明原因，并给出重试入口。已有内容和输入值需要保留时，由应用管理；
+            警告、错误与危险操作使用相应语义，并说明原因、影响与可用操作。
           </p>
           <p>
             翻页、加载失败与收藏动效为本项目绘制的 SVG，404 插画包含角色、路牌与地图。空态 PNG 为 AI

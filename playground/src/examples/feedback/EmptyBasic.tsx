@@ -22,7 +22,7 @@ export default function EmptyBasic() {
           <Heading level={3} id={headingId} ref={headingRef} tabIndex={-1}>
             第一篇示例文章已创建
           </Heading>
-          <Text>今天也有一件想记住的小事。写下第一段之后，再慢慢补上下一句。</Text>
+          <Text>今天路过面包店，发现菜单多了一种红豆包。买回来尝了，准备下次带给朋友。</Text>
           <div>
             <Button
               variant="secondary"

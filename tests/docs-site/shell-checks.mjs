@@ -159,14 +159,14 @@ export async function verifyDocsNavigation(browser, baseURL) {
         'The directory keeps eight UI categories and a separate theme configuration group.',
       );
       const componentLinks = sidebar.locator('a[href^="#/components/"]');
-      assert.equal(await componentLinks.count(), 30);
+      assert.equal(await componentLinks.count(), 31);
       assert.equal(
         new Set(
           await componentLinks.evaluateAll((links) =>
             links.map((link) => link.getAttribute('href')),
           ),
         ).size,
-        30,
+        31,
         'Every document URL has exactly one directory entry.',
       );
       const geometry = await sidebar.locator('.nav-group a').evaluateAll((links) =>
@@ -415,7 +415,7 @@ export async function verifyDocsRouteIdentity(browser, baseURL) {
   const page = await context.newPage();
   page.setDefaultTimeout(4000);
   const routes = [
-    ['/', /^一起做，\s*全宇宙最可爱的\s*UI 组件库。$/, '#/'],
+    ['/', /^把可爱，\s*搭进你的世界。$/, '#/'],
     ['/guides/introduction', '项目介绍', '#/guides/getting-started'],
     ['/guides/getting-started', '开始使用', '#/guides/getting-started'],
     ['/guides/recipes', '场景总览', '#/guides/recipes'],
@@ -664,8 +664,8 @@ export async function verifyReadingExample(page, baseURL) {
   await reading.waitFor();
   const search = reading.getByRole('searchbox', { name: '搜索手记', exact: true });
   const river = reading.getByRole('button', { name: '沿着河边，慢慢走', exact: true });
-  const weekend = reading.getByRole('button', { name: '给周末留一页空白', exact: true });
-  await search.fill('叶子');
+  const weekend = reading.getByRole('button', { name: '读了三遍的那一页', exact: true });
+  await search.fill('面包');
   await river.waitFor();
   await weekend.waitFor({ state: 'hidden' });
   await search.fill('');
@@ -674,7 +674,7 @@ export async function verifyReadingExample(page, baseURL) {
   await river.waitFor({ state: 'hidden' });
   await weekend.click();
   await requireFocus(
-    reading.getByRole('heading', { level: 2, name: '给周末留一页空白', exact: true }),
+    reading.getByRole('heading', { level: 2, name: '读了三遍的那一页', exact: true }),
     'Selecting a reading entry must continue at its article heading.',
   );
   await reading.getByRole('button', { name: '收藏这篇文章', exact: true }).click();
@@ -719,7 +719,10 @@ export async function verifyReadingExample(page, baseURL) {
     assert.equal(await image.count(), 0, 'Reading must work without illustration.');
     await reading
       .getByRole('article')
-      .getByText('今天先记到这里。没读完的那一段，等大家都醒着的时候，再接着读。', { exact: true })
+      .getByText(
+        '小八笑得忘了读到哪一句，又把这页从头念了一遍。今天的读书笔记多了一只长腿麻雀，书签还是没挪。',
+        { exact: true },
+      )
       .waitFor();
     await illustration.check();
     await image.waitFor();
@@ -843,9 +846,7 @@ async function verifyStateSceneExamples(page, baseURL) {
     'The loading scene must resolve the new vector artwork.',
   );
   await status.getByText('文章已准备好', { exact: true }).waitFor();
-  await loading
-    .getByRole('heading', { name: '今天，也有一件想记住的小事。', exact: true })
-    .waitFor();
+  await loading.getByRole('heading', { name: '一只纸袋，一路面包香', exact: true }).waitFor();
   assert.equal(await reload.isEnabled(), true);
   const idleSize = await reload.boundingBox();
   await reload.click();
@@ -913,7 +914,7 @@ async function verifyStateSceneExamples(page, baseURL) {
   const search = empty.getByRole('textbox', { name: '搜索关键词', exact: true });
   assert.equal(await search.inputValue(), '海边');
   await empty.getByRole('heading', { name: '未找到相关文章', exact: true }).waitFor();
-  await empty.getByRole('button', { name: '清空筛选', exact: true }).click();
+  await empty.getByRole('button', { name: '清空搜索', exact: true }).click();
   assert.equal(await search.inputValue(), '');
   await requireFocus(search, 'Clearing scene filters must return focus to the query.');
   assert.equal(await empty.getByRole('listitem').count(), 2);

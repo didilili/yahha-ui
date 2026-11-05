@@ -3,6 +3,7 @@ import type { DocPage } from './types';
 const loaders: Record<string, () => Promise<{ default: DocPage }>> = {
   button: () => import('./components/button'),
   'icon-button': () => import('./components/icon-button'),
+  icon: () => import('./components/icon'),
   badge: () => import('./components/badge'),
   surface: () => import('./components/surface'),
   'theme-provider': () => import('./components/theme-provider'),

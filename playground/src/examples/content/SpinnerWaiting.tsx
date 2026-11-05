@@ -11,7 +11,7 @@ export default function SpinnerWaiting() {
         style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 36 }}
       >
         {loading && <Spinner role="presentation" aria-hidden="true" />}
-        <Text>{loading ? '稍等一下，文章还在路上。' : '文章已准备好，可以继续阅读。'}</Text>
+        <Text>{loading ? '正在加载文章…' : '文章已准备好，可以继续阅读。'}</Text>
       </div>
       <div>
         <Button variant="secondary" onClick={() => setLoading(!loading)}>

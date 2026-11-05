@@ -12,7 +12,7 @@ export default defineComponentPage('accordion', {
       title: '何时使用',
       content: (
         <p>
-          按需展开帮助、FAQ 和次要说明，在一个页面保留多个条目的入口。需要对照阅读时开启
+          用于按需展开 FAQ 和补充说明。需要对照阅读时开启
           multiple；多个栏目轮流占用同一内容区域时使用 <a href="#/components/tabs">Tabs</a>
           。主要内容、错误信息和必要告知应始终可见。
         </p>
@@ -25,7 +25,7 @@ export default defineComponentPage('accordion', {
         {
           id: 'basic',
           title: '单项展开与收起',
-          description: '默认展开一项，选择另一项时收起前一项。',
+          description: '默认展开一项，展开另一项时收起前一项。',
           component: AccordionBasic,
           source: accordionBasicSource,
         },

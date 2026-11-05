@@ -42,7 +42,7 @@ export default defineComponentPage('popover', {
         {
           id: 'form',
           title: '内嵌表单',
-          description: '在面板内校验名称，保存或取消；修改只保留在当前示例。',
+          description: '在面板内校验名称，支持保存或取消；修改仅保留在当前示例。',
           component: PopoverForm,
           source: popoverFormSource,
         },

@@ -2,7 +2,7 @@
 
 # Tooltip 文字提示
 
-悬停或聚焦时，为已有操作补充简短的视觉文字标签。
+悬停或聚焦时显示简短的视觉文字提示，不替代触发器的可访问名称。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -14,7 +14,7 @@ import { Tooltip } from 'yahha-ui';
 
 ## 何时使用
 
-用于给图标操作补充简短的视觉文字。trigger 必须自带可访问名称，用户应能直接理解并执行操作；悬停提示只作补充。content 仅接受纯文字。
+用于在悬停或聚焦时为图标操作补充简短的视觉文字。trigger 必须自带可访问名称，用户应能直接理解并执行操作；悬停提示只作补充。content 仅接受纯文字。
 
 重要说明直接显示在页面中，需要链接、按钮或表单的内容使用 [Popover](popover.md)。操作结果用可见状态文字或 Toast 表达。
 
@@ -36,7 +36,7 @@ import { Tooltip } from 'yahha-ui';
 
 ```tsx
 import { useState } from 'react';
-import { IconButton, Text, Tooltip } from 'yahha-ui';
+import { BookmarkIcon, IconButton, Text, Tooltip } from 'yahha-ui';
 
 export default function TooltipBasic() {
   const [saved, setSaved] = useState(false);
@@ -52,7 +52,7 @@ export default function TooltipBasic() {
             aria-pressed={saved}
             onClick={() => setSaved((value) => !value)}
           >
-            <span aria-hidden="true">{saved ? '★' : '☆'}</span>
+            <BookmarkIcon filled={saved} />
           </IconButton>
         }
       />
@@ -168,5 +168,5 @@ Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，�
 
 ## 相关组件
 
-- [Popover 弹出面板](popover.md)：锚定到按钮的补充面板，适合简短说明和轻量交互。
-- [IconButton 图标按钮](icon-button.md)：为关闭、收藏等仅用图标表达的操作提供方形点击区域与明确的可访问名称。
+- [Popover 弹出面板](popover.md)：锚定到触发器的非模态面板，可包含说明、链接或短表单。
+- [IconButton 图标按钮](icon-button.md)：用于仅以图标呈现的操作，提供方形点击区域，并要求明确的可访问名称。

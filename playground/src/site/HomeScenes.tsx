@@ -16,7 +16,7 @@ export default function HomeScenes() {
           <h2 id="home-scenes" tabIndex={-1}>
             阅读、归档与文章编辑
           </h2>
-          <p>查看页面组合，体验阅读、筛选与编辑，再复制对应示例。</p>
+          <p>提供阅读、归档和文章编辑的完整组合，包含交互预览与接入代码。</p>
         </header>
 
         <div className="home-scenes-grid">
@@ -36,7 +36,7 @@ export default function HomeScenes() {
                 阅读与收藏 <ArrowRight size={18} aria-hidden="true" />
               </h3>
             </Link>
-            <p>搜索与切换手记、显示或隐藏配图，阅读正文后收藏当前文章。</p>
+            <p>组合作者信息、正文、配图与收藏操作，展示文章页的实现。</p>
           </article>
 
           <article className="home-scene home-scene-archive">
@@ -55,7 +55,7 @@ export default function HomeScenes() {
                 归档与搜索 <ArrowRight size={18} aria-hidden="true" />
               </h3>
             </Link>
-            <p>按栏目筛选、搜索与翻页；无结果时清空筛选，恢复文章列表。</p>
+            <p>按分类筛选、关键词搜索与分页浏览手记，支持清空筛选恢复列表。</p>
           </article>
 
           <article className="home-scene home-scene-editing">
@@ -74,16 +74,16 @@ export default function HomeScenes() {
                 文章编辑与保存 <ArrowRight size={18} aria-hidden="true" />
               </h3>
             </Link>
-            <p>打开手记操作，编辑、归档或收藏；体验首次保存失败后保留草稿并重试。</p>
+            <p>通过操作菜单修改标题或摘要；首次保存失败后保留输入，支持重试。</p>
           </article>
         </div>
 
         <div className="home-scenes-footer">
           <div>
             <p className="home-scenes-boundary">
-              这些组合使用演示数据与本地页面状态，不连接后台。接入项目时需连接自己的数据与保存逻辑。
+              示例使用演示数据与当前页面状态。用到自己的项目时，需要接入数据和保存逻辑。
             </p>
-            <p>完整博客示例串起首页、手记归档与文章详情。</p>
+            <p>完整博客示例包含首页、手记归档与文章详情。</p>
           </div>
           <Link
             className="home-scenes-blog-link"

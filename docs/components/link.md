@@ -2,7 +2,7 @@
 
 # Link 链接
 
-保留原生链接行为，统一下划线与键盘焦点。
+用于页面导航和资源跳转，保留原生链接行为、下划线与焦点样式。
 
 首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
 
@@ -46,7 +46,7 @@ export default function LinkExample() {
 
 ### 外部链接
 
-使用 external 在新标签页打开，并保留安全 rel。
+用 external 在新标签页打开，组件会补充 noopener noreferrer。
 
 [查看示例文件](../../playground/src/examples/content/LinkExternal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -108,7 +108,7 @@ const readingList = [
   'Yahha UI 阅读清单',
   '',
   '1. 沿着河边，慢慢走',
-  '2. 给周末留一页空白',
+  '2. 读了三遍的那一页',
   '',
   '以上为 Yahha UI 原创示例手记。',
 ].join('\n');
@@ -195,6 +195,6 @@ export default function LinkDownload() {
 
 ## 相关组件
 
-- [Button 按钮](button.md)：用于提交、保存和收藏等操作，提供三种强调程度，支持禁用与加载状态。
-- [Text 正文](text.md)：为段落提供统一的字号、行高和语义文字颜色。
-- [Pagination 分页](pagination.md)：在文章列表和归档中切换页码，保留首页、末页和当前页附近的页码。
+- [Button 按钮](button.md)：用于触发操作，支持不同强调程度、禁用、加载和切换状态。
+- [Text 正文](text.md)：用于正文、摘要和辅助说明，统一字号、行高与语义颜色。
+- [Pagination 分页](pagination.md)：用于列表分页，显示首页、末页和当前页附近的页码。

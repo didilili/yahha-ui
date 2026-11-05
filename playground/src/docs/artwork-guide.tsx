@@ -63,14 +63,14 @@ const artworkGroups: { title: string; layout?: 'compact' | 'scene'; items: Artwo
     items: [
       {
         title: '收藏书签',
-        description: '用于收藏按钮，与“收藏 / 已收藏”文字一起使用。收藏状态由按钮表达。',
+        description: '用作收藏按钮的图标，搭配“收藏 / 已收藏”文字；实际收藏状态由按钮表达。',
         width: 24,
         height: 24,
         image: files.bookmark,
       },
       {
         title: '热茶',
-        description: '用于文章页或侧栏的装饰。动效为蒸汽循环，不表示加载进度。',
+        description: '放在文章页或侧栏作装饰。蒸汽循环不表示加载进度。',
         width: 96,
         height: 96,
         image: files.tea,
@@ -84,7 +84,7 @@ const artworkGroups: { title: string; layout?: 'compact' | 'scene'; items: Artwo
     items: [
       {
         title: '翻页等待',
-        description: '用于内容区加载。请求结束后切换为内容或结果；按钮内等待可使用 Spinner。',
+        description: '内容区正在加载时使用，请求结束后切换为内容或结果；按钮内等待可使用 Spinner。',
         width: 240,
         height: 168,
         image: files.wait,
@@ -94,21 +94,21 @@ const artworkGroups: { title: string; layout?: 'compact' | 'scene'; items: Artwo
       {
         title: '暂无收藏',
         description:
-          '用于尚未收藏任何内容的收藏夹，可搭配浏览文章的入口。搜索无匹配时使用“搜索无结果”。',
+          '收藏夹还没有内容时使用，可搭配浏览文章的入口。搜索没有匹配时，改用“搜索无结果”。',
         width: 240,
         height: 180,
         image: files.empty,
       },
       {
         title: '搜索无结果',
-        description: '已有关键词或筛选条件，但没有匹配内容。搭配修改关键词或清空筛选的入口。',
+        description: '关键词或筛选条件没有匹配内容时使用，旁边提供修改关键词或清空筛选的入口。',
         width: 240,
         height: 180,
         image: files.search,
       },
       {
         title: '收藏成功',
-        description: '用于收藏完成后的结果提示。动效播放一次，结束后保留完整图案。',
+        description: '收藏完成后显示结果。动效播放一次，结束后保留完整图案。',
         width: 240,
         height: 180,
         image: files.saved,
@@ -117,7 +117,7 @@ const artworkGroups: { title: string; layout?: 'compact' | 'scene'; items: Artwo
       },
       {
         title: '加载失败',
-        description: '用于请求失败、内容未能加载的情况。搭配错误原因和重试操作，与暂无内容区分。',
+        description: '内容加载失败时使用，搭配错误原因和重试操作，与暂无内容区分。',
         width: 240,
         height: 180,
         image: files.error,
@@ -126,7 +126,7 @@ const artworkGroups: { title: string; layout?: 'compact' | 'scene'; items: Artwo
       },
       {
         title: '页面不存在',
-        description: '用于失效链接或 404 页面。搭配返回首页或目录的入口，提示文字放在图片外。',
+        description: '地址失效或页面不存在时，搭配返回首页或目录的入口；提示文字放在图片外。',
         width: 480,
         height: 320,
         image: files.lost,
@@ -140,7 +140,7 @@ const artworkGroups: { title: string; layout?: 'compact' | 'scene'; items: Artwo
     items: [
       {
         title: '朋友们的欢迎场景',
-        description: '用于首页或介绍页。需要暂停、继续和挥手重播时，使用下方的欢迎动效示例。',
+        description: '用于首页或介绍页；暂停、继续与挥手重播由下方欢迎动效示例实现。',
         width: 760,
         height: 530,
         image: files.welcome,
@@ -222,10 +222,7 @@ export const artworkGuide: DocPage = {
       title: '素材预览与下载',
       content: (
         <>
-          <p>
-            这些 SVG
-            用于收藏、加载、空状态与首页欢迎场景。按用途选择图案，再查看图片引用或可控制动效的完整示例。
-          </p>
+          <p>提供收藏、加载、空状态和首页欢迎场景的 SVG 素材，以及图片引用和动效控制的接入示例。</p>
           <p>
             小日常系列共 9 种图案，其中 5
             种提供动效版。下方预览均为静态，静态与动效文件保留相同画幅。
@@ -291,7 +288,7 @@ export const artworkGuide: DocPage = {
           id: 'little-days-artwork-example',
           title: '收藏按钮、等待与空收藏夹',
           description:
-            '将图标放入 Button，将插画放入 EmptyState。试用收藏按钮、热茶动效和等待开关；操作仅更新本页演示。',
+            '演示 Button 图标与 EmptyState 插画的组合，以及收藏、热茶动效和等待状态切换；操作仅影响当前示例。',
           component: LittleDaysArtwork,
           source: littleDaysSource,
           assets: [
@@ -331,8 +328,8 @@ export const artworkGuide: DocPage = {
       title: '欢迎动效示例',
       content: (
         <p>
-          需要控制动效时，复制此示例与配套的静态 SVG。它支持暂停当前帧、继续播放和重播挥手，
-          并在离屏或切到后台时暂停。
+          欢迎动效示例支持暂停当前帧、继续播放和挥手重播，并在离屏或后台时暂停。
+          接入时需同时复制示例源码与配套静态 SVG。
         </p>
       ),
       examples: [
@@ -362,8 +359,8 @@ import picture from './artwork/little-days-search-empty.svg';
 export default function SearchEmpty() {
   return (
     <EmptyState
-      title="未找到相关文章"
-      description="试试其他关键词，或返回文章列表。"
+      title="没找到相关文章"
+      description="换个关键词，或返回文章列表。"
       illustration={
         <img src={picture} alt="" width={240} height={180}
           style={{ maxWidth: '100%', height: 'auto' }} />
@@ -374,7 +371,7 @@ export default function SearchEmpty() {
 }`}
           />
           <p>
-            将示例链接替换为自己网站的文章列表地址。样式与 ThemeProvider 按{' '}
+            将示例链接替换为应用的文章列表地址。样式与 ThemeProvider 按{' '}
             <Link href="#/guides/getting-started">开始使用</Link>
             配置；只有装饰需求时，直接使用上面的 <code>img</code> 即可。
           </p>

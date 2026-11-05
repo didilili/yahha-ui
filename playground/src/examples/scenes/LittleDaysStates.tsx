@@ -36,7 +36,7 @@ const scenes: Record<
   },
   saved: {
     title: '收藏成功',
-    description: '把喜欢的一页收进口袋。下一次想起时，还能回来慢慢读。',
+    description: '收藏完成的示例画面，不会实际保存文章。',
     image: collectionSaved,
     motion: collectionSavedMotion,
     width: 240,
@@ -44,7 +44,7 @@ const scenes: Record<
   },
   error: {
     title: '加载失败',
-    description: '加载没有完成，已经写下的内容仍然保留。可以重新尝试，也可以先看看其他页面。',
+    description: '加载失败的示例画面，实际页面可搭配重试或返回入口。',
     image: loadError,
     motion: loadErrorMotion,
     width: 240,
@@ -52,7 +52,7 @@ const scenes: Record<
   },
   'not-found': {
     title: '页面未找到',
-    description: '这条小路暂时没有页面。从首页或目录重新出发，还能找到其他有趣的内容。',
+    description: '这个地址没有对应的页面，可以从首页或组件总览重新查找。',
     image: friendsLost,
     width: 480,
     height: 320,

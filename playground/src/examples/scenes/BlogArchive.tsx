@@ -17,25 +17,25 @@ const articles = [
     id: 'river',
     category: 'daily',
     title: '沿着河边，慢慢走',
-    summary: '走到桥边，等系好鞋带的朋友一起回家。',
+    summary: '说好沿河散步，小八却先闻到了面包香。',
   },
   {
     id: 'book',
     category: 'reading',
     title: '读到喜欢的一句话',
-    summary: '把喜欢的那句话抄下来，夹进给朋友的信里。',
+    summary: '小八给喜欢的句子画了线，翻完才发现半页都是重点。',
   },
   {
     id: 'morning',
     category: 'daily',
     title: '早一点醒来的周末',
-    summary: '面包烤得有一点焦，大家还是分着吃完了。',
+    summary: '本来要配果酱，结果先忙着刮掉面包上的焦边。',
   },
   {
     id: 'rain',
     category: 'daily',
     title: '窗边听雨的小事',
-    summary: '云朵邮局的窗边挤着几位朋友，等雨停，也等一封回信。',
+    summary: '雨点敲得太响，小八把同一句话说了三遍，大家还是凑近了才听清。',
   },
   {
     id: 'margin',
@@ -47,13 +47,13 @@ const articles = [
     id: 'flower',
     category: 'daily',
     title: '路口那一朵小花',
-    summary: '小花长在路口，我们绕开一点，让它多晒一会儿太阳。',
+    summary: '吉伊蹲下画花，旁边的蚂蚁也顺便成了模特。',
   },
   {
     id: 'walk',
     category: 'daily',
     title: '换一条回家的路',
-    summary: '绕远一点，陪怕黑的朋友走到家门口。',
+    summary: '绕过积水时发现一条新巷子，墙边挤着几盆长得东倒西歪的薄荷。',
   },
   {
     id: 'reread',
@@ -64,26 +64,26 @@ const articles = [
   {
     id: 'tea',
     category: 'daily',
-    title: '等一杯茶慢慢凉下来',
-    summary: '茶还烫着。先给朋友搬把椅子，再一起吹一吹。',
+    title: '茶还烫，点心先少了一半',
+    summary: '茶还没凉，小八已经伸手拿第三块点心了。',
   },
   {
     id: 'letter',
     category: 'daily',
     title: '给下个月的自己一张明信片',
-    summary: '写下今天分到半块饼干的事，寄给下个月的自己。',
+    summary: '写了三行天气，最后认真提醒自己：别忘了取订好的蛋糕。',
   },
   {
     id: 'bookmark',
     category: 'reading',
     title: '今天的书签停在这里',
-    summary: '书签歪歪地夹着，等下次和朋友一起把故事读完。',
+    summary: '吉伊用车票做书签，小八翻开时，又认真看了一遍发车时间。',
   },
   {
     id: 'night',
     category: 'daily',
     title: '睡前记下一件开心的小事',
-    summary: '今天有人特意等了我。睡前把这件事记下来。',
+    summary: '睡前翻开口袋，找出两枚硬币、一颗糖，还有早上到处找的纽扣。',
   },
 ];
 
@@ -179,7 +179,7 @@ export default function BlogArchive() {
     >
       <div style={{ display: 'grid', gap: 12 }}>
         <Heading level={2}>手记归档</Heading>
-        <Text tone="muted">Yahha 星球的朋友们，把一起过的日子记在这里。</Text>
+        <Text tone="muted">散步、读书，还有总能拐到吃东西上的一天。</Text>
         <Text size="sm" tone="muted">
           这里有 12 篇本地示例摘要，每页显示 3 篇；不会读取或保存真实文章。
         </Text>

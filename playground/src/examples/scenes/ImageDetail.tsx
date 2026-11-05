@@ -3,7 +3,7 @@ import { Button, Dialog, Image, Text } from 'yahha-ui';
 import teaCup from './artwork/little-days-tea-cup.svg?no-inline';
 
 const alternativeText = '冒着热气的茶杯插画';
-const caption = '一杯热茶，陪你慢慢读手记。';
+const caption = '刚倒好的茶，还冒着热气。';
 
 export default function ImageDetail() {
   const [open, setOpen] = useState(false);

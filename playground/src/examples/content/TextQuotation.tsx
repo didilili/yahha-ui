@@ -15,9 +15,9 @@ export default function TextQuotation() {
           }}
         >
           <Text>
-            回家才发现，今天没有走多远。不过<em>等到了朋友</em>，也记下了饼干掉进衣领的事，
+            回家才发现，口袋里的散步路线画得很认真，<em>面包店却根本不在上面</em>。下次得补上，
             <mark style={{ color: 'inherit', background: 'var(--yahha-accent-soft, #fff0f6)' }}>
-              已经够写一页
+              不然小八又要负责带路
             </mark>
             。
           </Text>
@@ -33,7 +33,7 @@ export default function TextQuotation() {
         </figcaption>
       </figure>
       <Text size="sm" tone="muted">
-        <strong>读后批注：</strong>等朋友的那一会儿，也成了这次散步的一部分。
+        <strong>读后批注：</strong>原来最管用的路线图，是小八的鼻子。
       </Text>
     </div>
   );

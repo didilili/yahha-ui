@@ -4,18 +4,18 @@ import { Alert, Button, Checkbox, Dialog, EmptyState, Text } from 'yahha-ui';
 const initialItems = [
   {
     id: 'river',
-    title: '沿河的那条小路，留到周末再走',
-    summary: '等朋友系好鞋带，再一起走过桥。',
+    title: '沿河走到面包店的那条小路',
+    summary: '说好沿河散步，小八却先闻到了面包香。',
   },
   {
     id: 'reading',
     title: 'ReadingNotesForASlowWeekend：还没读完的两页书',
-    summary: '把喜欢的书页夹好，等下次慢慢读。',
+    summary: '书签没动，页边却多了一只长腿麻雀。',
   },
   {
     id: 'flower',
     title: '花店门口，写给朋友的一张纸条',
-    summary: '记下今天路过的小花，留给晚一点来的朋友。',
+    summary: '把花名写在纸条上，带回家才发现忘记问价钱。',
   },
 ];
 
@@ -232,10 +232,7 @@ export default function CheckboxReadingList() {
           </ul>
         </fieldset>
       ) : (
-        <EmptyState
-          title="稍后阅读清单已整理好"
-          description="这里只移出了清单，文章内容仍然保留。"
-        />
+        <EmptyState title="稍后阅读清单已清空" description="这里只移出了清单，文章内容仍然保留。" />
       )}
       <div className="yahha-checkbox-reading-list-actions">
         <Button

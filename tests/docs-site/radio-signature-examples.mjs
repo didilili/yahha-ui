@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { revealExample } from './reveal-example.mjs';
 
-const comment = '读到河边那一段，也想把周末留给一场慢慢的散步。谢谢你分享。';
+const comment = '读到小八在面包店门口站住，我也饿了。那张路线图记得把店名补上。';
 const errorMessage = '请填写昵称，或选择匿名预览。';
 const resultMessage = '预览已更新，内容未发布。';
 

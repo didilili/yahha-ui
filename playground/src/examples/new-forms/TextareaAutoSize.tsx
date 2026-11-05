@@ -6,7 +6,7 @@ export default function TextareaAutoSize() {
       <Textarea
         label="文章摘要"
         name="summary"
-        defaultValue="把今天的小事，慢慢写进手记。"
+        defaultValue="小八说沿河走一会儿，结果先带大家拐进了面包店。"
         autoSize={{ minRows: 2, maxRows: 8 }}
       />
     </div>
