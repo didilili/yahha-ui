@@ -11,20 +11,20 @@ async function fixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'yahha-static-server-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   const docs = join(root, 'docs');
-  const blog = join(root, 'blog');
+  const site = join(root, 'site');
   await mkdir(join(docs, 'assets'), { recursive: true });
   await mkdir(join(docs, 'notices'));
-  await mkdir(blog);
+  await mkdir(site);
   await mkdir(join(root, 'docs-private'));
   await writeFile(join(root, 'docs-private', 'secret.txt'), 'outside');
   await writeFile(join(docs, 'index.html'), '<h1>Docs</h1>');
-  await writeFile(join(blog, 'index.html'), '<h1>Blog</h1>');
+  await writeFile(join(site, 'index.html'), '<h1>Site</h1>');
   for (const extension of ['js', 'css', 'svg', 'png', 'woff2', 'bin'])
     await writeFile(join(docs, 'assets', `file.${extension}`), `asset ${extension}`);
   await writeFile(join(docs, 'space name.txt'), 'decoded name');
   await writeFile(join(docs, 'favicon.ico'), 'favicon');
   await writeFile(join(docs, 'notices', 'OFL-wenkai.txt'), '字体许可\n');
-  return { root, docs, blog };
+  return { root, docs, site };
 }
 
 function request(origin, path, agent = false) {
@@ -53,13 +53,13 @@ async function serve(t, mounts, options) {
 }
 
 test('nested mounts serve their own index and assets with the existing MIME types', async (t) => {
-  const { docs, blog } = await fixture(t);
+  const { docs, site } = await fixture(t);
   const { origin } = await serve(t, [
     { directory: docs, prefix: '/docs/' },
-    { directory: blog, prefix: '/blog/' },
+    { directory: site, prefix: '/site/' },
   ]);
   assert.equal((await request(origin, '/docs/')).body.toString(), '<h1>Docs</h1>');
-  assert.equal((await request(origin, '/blog/?preview=1')).body.toString(), '<h1>Blog</h1>');
+  assert.equal((await request(origin, '/site/?preview=1')).body.toString(), '<h1>Site</h1>');
   for (const [extension, type] of Object.entries({
     html: 'text/html',
     js: 'text/javascript',
@@ -104,13 +104,13 @@ test('decoded traversal cannot escape the mount or enter a sibling with the same
 });
 
 test('font mounts retain UTF-8 OFL notices and byte-accurate content lengths', async (t) => {
-  const { docs, blog } = await fixture(t);
-  await writeFile(join(blog, 'OFL-marker.txt'), 'Marker OFL');
+  const { docs, site } = await fixture(t);
+  await writeFile(join(site, 'OFL-marker.txt'), 'Marker OFL');
   const { origin } = await serve(
     t,
     [
       { directory: docs, prefix: '/font-regression/docs/' },
-      { directory: blog, prefix: '/font-regression/blog/' },
+      { directory: site, prefix: '/font-regression/site/' },
     ],
     {
       contentTypes: { ...siteContentTypes, '.txt': 'text/plain; charset=utf-8' },
@@ -119,7 +119,7 @@ test('font mounts retain UTF-8 OFL notices and byte-accurate content lengths', a
   );
   for (const [path, contents] of [
     ['/font-regression/docs/notices/OFL-wenkai.txt', '字体许可\n'],
-    ['/font-regression/blog/OFL-marker.txt', 'Marker OFL'],
+    ['/font-regression/site/OFL-marker.txt', 'Marker OFL'],
   ]) {
     const response = await request(origin, path);
     assert.equal(response.status, 200);

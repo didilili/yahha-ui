@@ -13,12 +13,6 @@ const sites = [
     prefix: '/font-regression/docs/',
     notices: resolve(root, 'playground/src/assets'),
   },
-  {
-    name: 'blog',
-    directory: resolve(root, 'examples/blog/dist'),
-    prefix: '/font-regression/blog/',
-    notices: resolve(root, 'examples/blog/src/assets'),
-  },
 ];
 
 const includesCodepoint = (range, codepoint) =>
@@ -145,9 +139,8 @@ async function verifySite(browser, site, width, origin) {
       downloaded.set(response.url(), Number(response.headers()['content-length'] || 0));
     });
     const baseURL = `${origin}${site.prefix}`;
-    const route = site.name === 'docs' ? '#/' : '#/posts/soup-afternoon';
-    await page.goto(`${baseURL}${route}`);
-    await page.locator(site.name === 'docs' ? '#home-title' : '#page-heading').waitFor();
+    await page.goto(`${baseURL}#/`);
+    await page.locator('#home-title').waitFor();
     await page.evaluate(() => document.fonts.ready);
     const initial = await renderedFonts(page);
     const required = requiredURLs(initial);
@@ -159,26 +152,20 @@ async function verifySite(browser, site, width, origin) {
     const client = await context.newCDPSession(page);
     await client.send('DOM.enable');
     await client.send('CSS.enable');
-    if (site.name === 'docs') {
-      await expectWebfont(page, client, '#home-little-site', 'LXGW WenKai');
-      await page.getByRole('textbox', { name: '手记标题' }).fill('橘子汽水与晚霞龘');
-      await expectWebfont(page, client, '.home-sample-article h3', 'LXGW WenKai');
-      const afterInput = await renderedFonts(page);
-      for (const url of requiredURLs(afterInput)) required.add(url);
-      const rareFace = afterInput.faces.find(
-        (face) => face.family === 'WenKai' && includesCodepoint(face.range, '龘'.codePointAt(0)),
-      );
-      assert(rareFace, 'The WenKai source must cover the new user-input character 龘.');
-      assert(
-        !initialURLs.has(rareFace.url),
-        '龘 must exercise a chunk outside the initial common download.',
-      );
-      assert(downloaded.has(rareFace.url), 'Typing 龘 must download its unicode-range chunk.');
-    } else {
-      await expectWebfont(page, client, '#page-heading', 'LXGW WenKai');
-      await expectWebfont(page, client, '.blog-article-prose > p', 'LXGW WenKai');
-      await expectWebfont(page, client, '.blog-footer strong', 'LXGW Marker Gothic');
-    }
+    await expectWebfont(page, client, '#home-little-site', 'LXGW WenKai');
+    await page.getByRole('textbox', { name: '手记标题' }).fill('橘子汽水与晚霞龘');
+    await expectWebfont(page, client, '.home-sample-article h3', 'LXGW WenKai');
+    const afterInput = await renderedFonts(page);
+    for (const url of requiredURLs(afterInput)) required.add(url);
+    const rareFace = afterInput.faces.find(
+      (face) => face.family === 'WenKai' && includesCodepoint(face.range, '龘'.codePointAt(0)),
+    );
+    assert(rareFace, 'The WenKai source must cover the new user-input character 龘.');
+    assert(
+      !initialURLs.has(rareFace.url),
+      '龘 must exercise a chunk outside the initial common download.',
+    );
+    assert(downloaded.has(rareFace.url), 'Typing 龘 must download its unicode-range chunk.');
     assert.deepEqual(failures, [], 'Every requested font must download successfully.');
     for (const url of downloaded.keys())
       assert(

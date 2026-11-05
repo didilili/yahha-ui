@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { lstat, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { format, resolveConfig } from 'prettier';
@@ -32,25 +32,6 @@ const animated = new Set([
   'load-error',
   'friends-welcome',
 ]);
-const blogArtwork = new Set([
-  'tea-cup',
-  'empty-collection',
-  'search-empty',
-  'collection-saved-motion',
-  'friends-lost',
-  'friends-welcome',
-]);
-// Only these previously generated files are retired; unrelated files stay untouched.
-const retiredBlogArtwork = [
-  'bookmark',
-  'tea-cup-motion',
-  'page-wait',
-  'page-wait-motion',
-  'collection-saved',
-  'load-error',
-  'load-error-motion',
-  'friends-welcome-motion',
-];
 let outputs = 0;
 
 async function output(path, source) {
@@ -125,76 +106,9 @@ for (const drawing of drawings) {
   for (const [name, svg] of versions) {
     const filename = drawing === 'friends-welcome' ? name : `little-days-${name}`;
     await output(`playground/src/examples/scenes/artwork/${filename}.svg`, svg);
-    if (blogArtwork.has(name))
-      await output(`examples/blog/src/assets/little-days/${name}.svg`, svg);
-  }
-  if (drawing === 'bookmark') {
-    const paths = source.match(/<path\b[^>]*\/>/g) ?? [];
-    assert(
-      paths.length === 2 && paths.every((path) => /^<path\s+d="[^"]+"\s*\/>$/.test(path)),
-      'The small bookmark must retain two simple paths; update the native icon export when its anatomy changes.',
-    );
-    const component =
-      `// Generated from artwork/little-days/bookmark.svg; run npm run sync:artwork.\n` +
-      `export default function BookmarkMark() {\n  return (\n` +
-      `    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">\n` +
-      paths.map((path) => `      ${path}`).join('\n') +
-      `\n    </svg>\n  );\n}\n`;
-    await output(
-      'examples/blog/src/components/BookmarkMark.tsx',
-      await format(component, { ...formatting, parser: 'typescript' }),
-    );
-  }
-}
-
-const authorPortrait = await readFile(
-  join(root, 'playground/src/examples/scenes/artwork/friends-preview/portraits/chiikawa-smile.svg'),
-  'utf8',
-);
-assert.match(authorPortrait, /<svg\b[^>]*\bviewBox="[^"]+"/);
-// Keep the reviewed model intact; a square head crop avoids empty space in 44/64px avatars.
-await output(
-  'examples/blog/src/assets/author.svg',
-  authorPortrait.replace(/(<svg\b[^>]*\bviewBox=")[^"]+(")/, '$1-108 -98 216 216$2'),
-);
-
-await output(
-  'examples/blog/src/assets/peek.svg',
-  await readFile(
-    join(root, 'playground/src/examples/scenes/artwork/friends-preview/friends-peek.svg'),
-    'utf8',
-  ),
-);
-
-const welcomeExample = await readFile(
-  join(root, 'playground/src/examples/scenes/FriendsWelcome.tsx'),
-  'utf8',
-);
-const welcomeImport = "'./artwork/friends-welcome.svg?raw'";
-assert.equal(
-  welcomeExample.split(welcomeImport).length,
-  2,
-  'The portable welcome scene must retain one canonical artwork import.',
-);
-await output(
-  'examples/blog/src/components/FriendsWelcome.tsx',
-  welcomeExample.replace(welcomeImport, "'../assets/little-days/friends-welcome.svg?raw'"),
-);
-
-for (const name of retiredBlogArtwork) {
-  const path = `examples/blog/src/assets/little-days/${name}.svg`;
-  const destination = join(root, path);
-  if (check) {
-    const retired = await lstat(destination).catch((error) => {
-      if (error.code === 'ENOENT') return null;
-      throw error;
-    });
-    assert.equal(retired, null, `${path} is a retired generated file; run npm run sync:artwork.`);
-  } else {
-    await rm(destination, { force: true });
   }
 }
 
 console.log(
-  `Little days artwork: ${outputs} derived/copy files ${check ? 'verified' : 'synchronized'}.`,
+  `Little days artwork: ${outputs} derived documentation files ${check ? 'verified' : 'synchronized'}.`,
 );

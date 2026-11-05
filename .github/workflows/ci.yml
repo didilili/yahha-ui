@@ -68,6 +68,3 @@ jobs:
 
       - name: Test documentation site
         run: npm run test:docs
-
-      - name: Test blog example with installed package
-        run: npm run test:blog

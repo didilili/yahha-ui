@@ -22,7 +22,7 @@ import { promisify } from 'node:util';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const exec = promisify(execFile);
 const usage =
-  '用法：node scripts/create-starter.mjs [--example starter|blog] [--output /absolute/path/project] [--with-docs] [--zip]';
+  '用法：node scripts/create-starter.mjs [--output /absolute/path/project] [--with-docs] [--zip]';
 
 async function exists(path) {
   try {
@@ -72,11 +72,11 @@ async function requireZip() {
 }
 
 function optionsFrom(args) {
-  const options = { example: 'starter', output: undefined, withDocs: false, zip: false };
+  const options = { output: undefined, withDocs: false, zip: false };
   const seen = new Set();
   for (let index = 0; index < args.length; index++) {
     const key = args[index];
-    if (!['--example', '--output', '--with-docs', '--zip'].includes(key) || seen.has(key))
+    if (!['--output', '--with-docs', '--zip'].includes(key) || seen.has(key))
       throw new Error(usage);
     seen.add(key);
     if (key === '--with-docs') options.withDocs = true;
@@ -87,7 +87,6 @@ function optionsFrom(args) {
       options[key.slice(2)] = value;
     }
   }
-  if (!['starter', 'blog'].includes(options.example)) throw new Error(usage);
   return options;
 }
 
@@ -95,20 +94,7 @@ async function buildDocumentationSnapshot(directory) {
   console.log('正在核对文档与字体，并生成配套静态文档…');
   await npm(['run', 'check:docs']);
   await npm(['run', 'check:fonts']);
-  await npm(['exec', '--', 'vite', 'build', '--outDir', directory, '--emptyOutDir'], {
-    VITE_BLOG_URL: './blog/',
-  });
-  await npm([
-    'exec',
-    '--',
-    'vite',
-    'build',
-    '--config',
-    'examples/blog/vite.config.ts',
-    '--outDir',
-    join(directory, 'blog'),
-    '--emptyOutDir',
-  ]);
+  await npm(['exec', '--', 'vite', 'build', '--outDir', directory, '--emptyOutDir']);
 }
 
 async function latestSourceTime(directory) {
@@ -139,7 +125,7 @@ async function ensureLibraryBuild() {
 async function main() {
   const options = optionsFrom(process.argv.slice(2));
   if (options.zip) await requireZip();
-  const name = options.example === 'blog' ? 'yahha-ui-blog' : 'yahha-ui-starter';
+  const name = 'yahha-ui-starter';
   const output = options.output ? resolve(options.output) : join(dirname(root), name);
   await assertEmpty(output);
   if (options.zip && (await exists(`${output}.zip`)))
@@ -169,11 +155,7 @@ async function main() {
       throw new Error(`请先同步 package.json 与 package-lock.json：${name}`);
     return exact;
   };
-  const dependencyNames = [
-    'react',
-    'react-dom',
-    ...(options.example === 'blog' ? ['lucide-react'] : []),
-  ];
+  const dependencyNames = ['react', 'react-dom'];
   const dependencies = Object.fromEntries(dependencyNames.map((name) => [name, version(name)]));
   const devDependencies = Object.fromEntries(
     [
@@ -191,26 +173,10 @@ async function main() {
     const projectParent = join(temporary, 'project');
     await mkdir(projectParent);
     const project = join(projectParent, basename(output));
-    if (options.example === 'blog') {
-      await cp(join(root, 'examples/blog'), project, {
-        recursive: true,
-        filter: (path) => !['dist', 'node_modules'].includes(basename(path)),
-      });
-      await copyFile(
-        join(root, 'scripts/starter-template/.gitignore'),
-        join(project, '.gitignore'),
-      );
-      await copyFile(join(root, 'scripts/blog-export-readme.md'), join(project, 'README.md'));
-      await copyFile(
-        join(root, 'scripts/blog-export-assets-readme.md'),
-        join(project, 'src/assets/README.md'),
-      );
-    } else {
-      await cp(join(root, 'scripts/starter-template'), project, {
-        recursive: true,
-        filter: (path) => basename(path) !== 'scripts',
-      });
-    }
+    await cp(join(root, 'scripts/starter-template'), project, {
+      recursive: true,
+      filter: (path) => basename(path) !== 'scripts',
+    });
     for (const path of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
       if (await exists(join(root, path))) await copyFile(join(root, path), join(project, path));
     }
@@ -244,13 +210,11 @@ async function main() {
     const tarball = `vendor/${packed.filename}`;
     const manifest = {
       createdAt: new Date().toISOString(),
-      example: options.example,
       ...(options.withDocs
         ? {
             documentation: {
               directory: 'documentation',
               entry: '#/components',
-              blog: 'documentation/blog/',
             },
           }
         : {}),
@@ -294,7 +258,7 @@ async function main() {
     let readme = await readFile(join(project, 'README.md'), 'utf8');
     if (options.withDocs)
       readme +=
-        '\n## 配套文档\n\n运行 `npm run docs`，打开终端输出的地址阅读组件文档和博客预览，无需先安装依赖。\n\n`documentation/` 是导出时的静态快照，`npm run build` 只更新自己的页面。需要新版组件与文档时，从源仓库重新导出，并保留自己修改的内容。字体声明位于 `documentation/notices/` 和 `documentation/blog/notices/`，部署自己的站点只使用 `dist/`。\n';
+        '\n## 配套文档\n\n运行 `npm run docs`，打开终端输出的地址阅读组件文档，无需先安装依赖。\n\n`documentation/` 是导出时的静态快照，`npm run build` 只更新自己的页面。需要新版组件与文档时，从源仓库重新导出，并保留自己修改的内容。字体声明位于 `documentation/notices/`，部署自己的站点只使用 `dist/`。\n';
     await writeFile(
       join(project, 'README.md'),
       readme.replaceAll('{{VERSION}}', pkg.version).replaceAll('{{NODE}}', pkg.engines.node),

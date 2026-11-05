@@ -1,69 +1,22 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, mkdir, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { join } from 'node:path';
 import { test } from 'node:test';
-import { syncFontDirectories } from '../scripts/sync-fonts.mjs';
 import { checkFontAssets, findMissingHan } from '../scripts/check-fonts.mjs';
 
 async function fixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'yahha-font-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = join(root, 'source', 'fonts');
-  const target = join(root, 'blog', 'fonts');
   await mkdir(source, { recursive: true });
-  await mkdir(target, { recursive: true });
   await writeFile(join(source, 'manifest.json'), '{"version":1}\n');
   await writeFile(join(source, 'wenkai.css'), '@font-face {}\n');
   await mkdir(join(source, 'wenkai'));
   await writeFile(join(source, 'wenkai', 'basic.woff2'), 'font bytes');
-  return { root, source, target };
+  return { root, source };
 }
-
-test('font synchronization copies canonical files and removes stale files only in its target', async (t) => {
-  const { root, source, target } = await fixture(t);
-  await writeFile(join(target, 'obsolete.woff2'), 'old font');
-  await writeFile(join(root, 'blog', 'OFL-wenkai.txt'), 'keep this notice');
-
-  await syncFontDirectories(source, target);
-
-  assert.equal(await readFile(join(target, 'wenkai', 'basic.woff2'), 'utf8'), 'font bytes');
-  assert.equal(await readFile(join(target, 'wenkai.css'), 'utf8'), '@font-face {}\n');
-  assert.deepEqual((await readdir(target)).sort(), ['manifest.json', 'wenkai', 'wenkai.css']);
-  assert.equal(await readFile(join(root, 'blog', 'OFL-wenkai.txt'), 'utf8'), 'keep this notice');
-  await syncFontDirectories(source, target, { check: true });
-});
-
-test('font synchronization check reports changed, missing and extra files without writing', async (t) => {
-  const { source, target } = await fixture(t);
-  await writeFile(join(target, 'wenkai.css'), 'changed');
-  await writeFile(join(target, 'extra.woff2'), 'extra');
-
-  await assert.rejects(syncFontDirectories(source, target, { check: true }), (error) => {
-    assert.match(error.message, /wenkai\.css/);
-    assert.match(error.message, /manifest\.json/);
-    assert.match(error.message, /extra\.woff2/);
-    return true;
-  });
-  assert.equal(await readFile(join(target, 'wenkai.css'), 'utf8'), 'changed');
-  assert.equal(await readFile(join(target, 'extra.woff2'), 'utf8'), 'extra');
-  assert.deepEqual((await readdir(target)).sort(), ['extra.woff2', 'wenkai.css']);
-});
-
-test('font synchronization refuses an incomplete source or a linked destination', async (t) => {
-  const { root, source, target } = await fixture(t);
-  await rm(join(source, 'manifest.json'));
-  await writeFile(join(target, 'keep.woff2'), 'keep');
-  await assert.rejects(syncFontDirectories(source, target), /manifest\.json/);
-  assert.equal(await readFile(join(target, 'keep.woff2'), 'utf8'), 'keep');
-
-  await writeFile(join(source, 'manifest.json'), '{"version":1}\n');
-  const linked = join(root, 'linked-fonts');
-  await symlink(target, linked);
-  await assert.rejects(syncFontDirectories(source, linked), /symbolic link/);
-  assert.equal(await readFile(join(target, 'keep.woff2'), 'utf8'), 'keep');
-});
 
 const hash = (value) => createHash('sha256').update(value).digest('hex');
 
@@ -163,22 +116,4 @@ test('source coverage reports missing Han with exact codepoints and source locat
   assert.deepEqual(missing, [
     { path: 'HomePage.tsx', line: 2, column: 2, character: '𠀁', codepoint: 'U+20001' },
   ]);
-});
-
-test('font notices must match byte for byte across both websites without changing either copy', async (t) => {
-  const { source, target } = await fixture(t);
-  const canonical = dirname(source);
-  const blog = dirname(target);
-  for (const name of ['OFL-wenkai.txt', 'OFL-marker.txt']) {
-    await writeFile(join(canonical, name), 'original notice\n');
-    await writeFile(join(blog, name), 'original notice\n');
-  }
-  const checker = await import('../scripts/check-fonts.mjs');
-  assert.equal(typeof checker.checkFontNotices, 'function');
-  await checker.checkFontNotices(canonical, blog);
-
-  await writeFile(join(blog, 'OFL-marker.txt'), 'changed notice\n');
-  await assert.rejects(checker.checkFontNotices(canonical, blog), /OFL-marker\.txt/);
-  assert.equal(await readFile(join(canonical, 'OFL-marker.txt'), 'utf8'), 'original notice\n');
-  assert.equal(await readFile(join(blog, 'OFL-marker.txt'), 'utf8'), 'changed notice\n');
 });

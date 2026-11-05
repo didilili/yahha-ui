@@ -69,7 +69,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     const server = await createDocumentationServer(directory);
     server.listen(0, '127.0.0.1', () => {
       console.log(`本地组件文档：http://127.0.0.1:${server.address().port}/#/components`);
-      console.log('包含 API、使用指南、素材下载和博客预览。按 Ctrl+C 停止。');
+      console.log('包含 API、使用指南和素材下载。按 Ctrl+C 停止。');
     });
   } catch (error) {
     console.error(`无法打开配套文档：${error.message}`);

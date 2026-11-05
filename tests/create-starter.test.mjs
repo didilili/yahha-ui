@@ -52,12 +52,12 @@ test('export refuses an existing zip instead of replacing it', async (t) => {
   assert.deepEqual(await readdir(output), []);
 });
 
-test('export rejects missing values, unknown options and unknown examples', async () => {
+test('export rejects missing values, unknown options and duplicate flags', async () => {
   for (const args of [
     ['--output'],
     ['--unknown'],
     ['--example'],
-    ['--example', 'missing'],
+    ['--example', 'starter'],
     ['--zip', '--zip'],
     ['--with-docs', '--with-docs'],
     ['--zip', 'true'],
@@ -90,44 +90,12 @@ async function exportFixture(t) {
   await cp(join(root, 'scripts/starter-template'), join(repository, 'scripts/starter-template'), {
     recursive: true,
   });
-  await cp(
-    join(root, 'scripts/blog-export-readme.md'),
-    join(repository, 'scripts/blog-export-readme.md'),
-  );
-  await cp(
-    join(root, 'scripts/blog-export-assets-readme.md'),
-    join(repository, 'scripts/blog-export-assets-readme.md'),
-  );
-  await mkdir(join(repository, 'examples/blog/src/assets/fonts'), { recursive: true });
-  await cp(
-    join(root, 'examples/blog/src/assets/README.md'),
-    join(repository, 'examples/blog/src/assets/README.md'),
-  );
-  for (const path of ['src/assets/OFL-marker.txt', 'src/assets/OFL-wenkai.txt'])
-    await writeFile(join(repository, 'examples/blog', path), `${path} fixture font license`);
-  const artwork = Buffer.from([0, 255, 12, 128]);
-  await writeFile(join(repository, 'examples/blog/src/assets/reading.png'), artwork);
-  for (const path of [
-    'src/assets.ts',
-    'src/data/site.ts',
-    'src/data/posts.ts',
-    'src/pages/HomePage.tsx',
-    'src/pages/ArchivePage.tsx',
-    'src/pages/ArticlePage.tsx',
-    'src/router.ts',
-    'index.html',
-  ]) {
-    const target = join(repository, 'examples/blog', path);
-    await mkdir(dirname(target), { recursive: true });
-    await writeFile(target, '');
-  }
   for (const path of ['LICENSE', 'THIRD_PARTY_NOTICES.md'])
     await writeFile(join(repository, path), 'Fixture notice.\n');
   const dependencies = Object.fromEntries(
     [
       'react',
       'react-dom',
-      'lucide-react',
       '@types/node',
       '@types/react',
       '@types/react-dom',
@@ -177,7 +145,7 @@ const args = process.argv.slice(2);
 await appendFile('npm-calls.jsonl', JSON.stringify(args) + '\\n');
 if (args[0] === 'run' && ['check:docs', 'check:fonts', 'build:lib'].includes(args[1])) {
   // The fixture already contains its small library outputs.
-} else if (args[0] === 'exec' && args.includes('--outDir')) {
+} else if (args[0] === 'exec' && args.includes('--outDir') && !args.includes('--config')) {
   const output = args[args.indexOf('--outDir') + 1];
   await mkdir(output, { recursive: true });
   await writeFile(join(output, 'index.html'), '<h1>Bundled snapshot</h1>');
@@ -197,16 +165,13 @@ if (args[0] === 'run' && ['check:docs', 'check:fonts', 'build:lib'].includes(arg
   );
   return {
     repository,
-    artwork,
-    async exportProject(name, example = 'starter', args = [], environment = {}) {
-      const output = join(directory, name ?? `yahha-ui-${example}`);
+    async exportProject(name, args = [], environment = {}) {
+      const output = join(directory, name ?? 'yahha-ui-starter');
       await exec(
         process.execPath,
         [
           join(repository, 'scripts/create-starter.mjs'),
           ...(name ? ['--output', output] : []),
-          '--example',
-          example,
           ...args,
         ],
         {
@@ -221,22 +186,21 @@ if (args[0] === 'run' && ['check:docs', 'check:fonts', 'build:lib'].includes(arg
 
 test('default exports run without zip or website builds and preserve an unrelated archive', async (t) => {
   const { repository, exportProject } = await exportFixture(t);
-  for (const example of ['starter', 'blog']) {
-    const output = join(dirname(repository), `yahha-ui-${example}`);
-    await writeFile(`${output}.zip`, 'existing archive');
-    assert.equal(await exportProject(undefined, example, [], { PATH: repository }), output);
-    const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
-    assert.ok(pkg.scripts.dev);
-    assert.ok(pkg.scripts.build);
-    assert.equal(pkg.scripts.docs, undefined);
-    for (const path of ['documentation', 'scripts/serve-documentation.mjs'])
-      await assert.rejects(readFile(join(output, path)), { code: 'ENOENT' });
-    assert.equal(await readFile(`${output}.zip`, 'utf8'), 'existing archive');
-    await assertLocalLinksExist(
-      join(output, 'README.md'),
-      await readFile(join(output, 'README.md'), 'utf8'),
-    );
-  }
+  const output = join(dirname(repository), 'yahha-ui-starter');
+  await writeFile(`${output}.zip`, 'existing archive');
+  assert.equal(await exportProject(undefined, [], { PATH: repository }), output);
+  const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
+  assert.ok(pkg.scripts.dev);
+  assert.ok(pkg.scripts.build);
+  assert.equal(pkg.scripts.docs, undefined);
+  assert.deepEqual(Object.keys(pkg.dependencies).sort(), ['react', 'react-dom', 'yahha-ui']);
+  for (const path of ['documentation', 'scripts/serve-documentation.mjs'])
+    await assert.rejects(readFile(join(output, path)), { code: 'ENOENT' });
+  assert.equal(await readFile(`${output}.zip`, 'utf8'), 'existing archive');
+  await assertLocalLinksExist(
+    join(output, 'README.md'),
+    await readFile(join(output, 'README.md'), 'utf8'),
+  );
   const calls = (await readFile(join(repository, 'npm-calls.jsonl'), 'utf8'))
     .trim()
     .split('\n')
@@ -246,22 +210,24 @@ test('default exports run without zip or website builds and preserve an unrelate
 
 test('offline documentation is opt-in without requiring a zip archive', async (t) => {
   const { repository, exportProject } = await exportFixture(t);
-  for (const example of ['starter', 'blog']) {
-    const output = await exportProject(`docs-${example}`, example, ['--with-docs'], {
-      PATH: repository,
-    });
-    const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
-    assert.equal(pkg.scripts.docs, 'node scripts/serve-documentation.mjs');
-    assert.match(await readFile(join(output, 'README.md'), 'utf8'), /npm run docs/);
-    assert.match(await readFile(join(output, 'documentation/blog/index.html'), 'utf8'), /Bundled/);
-    await readFile(join(output, 'scripts/serve-documentation.mjs'));
-    await assert.rejects(readFile(`${output}.zip`), { code: 'ENOENT' });
-  }
+  const output = await exportProject('docs-starter', ['--with-docs'], { PATH: repository });
+  const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
+  assert.equal(pkg.scripts.docs, 'node scripts/serve-documentation.mjs');
+  assert.match(await readFile(join(output, 'README.md'), 'utf8'), /npm run docs/);
+  assert.match(await readFile(join(output, 'documentation/index.html'), 'utf8'), /Bundled/);
+  assert.deepEqual((await readdir(join(output, 'documentation'))).sort(), [
+    'index.html',
+    'notices',
+  ]);
+  const manifest = JSON.parse(await readFile(join(output, 'starter-manifest.json'), 'utf8'));
+  assert.deepEqual(manifest.documentation, { directory: 'documentation', entry: '#/components' });
+  await readFile(join(output, 'scripts/serve-documentation.mjs'));
+  await assert.rejects(readFile(`${output}.zip`), { code: 'ENOENT' });
 });
 
 test('export preserves project and archive contents when the output directory is named starter.zip', async (t) => {
   const { exportProject } = await exportFixture(t);
-  const output = await exportProject('starter.zip', 'starter', ['--zip', '--with-docs']);
+  const output = await exportProject('starter.zip', ['--zip', '--with-docs']);
   const manifest = JSON.parse(await readFile(join(output, 'starter-manifest.json'), 'utf8'));
   assert.equal(manifest.library.tarball, 'vendor/yahha-ui-0.0.1.tgz');
   assert.equal(
@@ -273,7 +239,7 @@ test('export preserves project and archive contents when the output directory is
     'package.json',
     'src/App.tsx',
     'documentation/index.html',
-    'documentation/blog/index.html',
+    'documentation/notices/OFL-marker.txt',
     'starter-manifest.json',
     manifest.library.tarball,
   ]) {
@@ -285,17 +251,15 @@ test('export preserves project and archive contents when the output directory is
 test('exports still work when optional project notice files are absent', async (t) => {
   const { repository, exportProject } = await exportFixture(t);
   for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) await rm(join(repository, name));
-  for (const example of ['starter', 'blog']) {
-    const output = await exportProject(example, example, ['--zip']);
-    const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
-    assert.ok(pkg.scripts.build);
-    assert.equal(
-      await readFile(join(output, 'vendor/yahha-ui-0.0.1.tgz'), 'utf8'),
-      'fixture package bytes',
-    );
-    const { stdout } = await exec('unzip', ['-p', `${output}.zip`, `${example}/package.json`]);
-    assert.deepEqual(JSON.parse(stdout), pkg);
-  }
+  const output = await exportProject('starter', ['--zip']);
+  const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
+  assert.ok(pkg.scripts.build);
+  assert.equal(
+    await readFile(join(output, 'vendor/yahha-ui-0.0.1.tgz'), 'utf8'),
+    'fixture package bytes',
+  );
+  const { stdout } = await exec('unzip', ['-p', `${output}.zip`, 'starter/package.json']);
+  assert.deepEqual(JSON.parse(stdout), pkg);
 });
 
 async function assertLocalLinksExist(file, markdown) {
@@ -304,35 +268,6 @@ async function assertLocalLinksExist(file, markdown) {
     if (path && !/^[a-z]+:/i.test(path)) await readFile(join(dirname(file), path));
   }
 }
-
-test('blog export explains editable asset snapshots using only available project commands and links', async (t) => {
-  const { artwork, exportProject } = await exportFixture(t);
-  const output = await exportProject('my-blog', 'blog', ['--zip']);
-  const assetsPath = join(output, 'src/assets');
-  const notes = await readFile(join(assetsPath, 'README.md'), 'utf8');
-  const pkg = JSON.parse(await readFile(join(output, 'package.json'), 'utf8'));
-  const commands = [...notes.matchAll(/npm run ([\w:-]+)/g)].map((match) => match[1]);
-  assert.ok(
-    commands.length > 0,
-    'asset notes should explain how to build or read the exported project',
-  );
-  for (const command of commands)
-    assert.ok(
-      Object.hasOwn(pkg.scripts, command),
-      `${command} must be runnable in the exported project`,
-    );
-  await assertLocalLinksExist(join(assetsPath, 'README.md'), notes);
-  assert.match(notes, /快照/);
-  assert.match(notes, /修改|替换/);
-  assert.match(notes, /源仓库/);
-  assert.match(notes, /重新导出/);
-  assert.match(notes, /OFL-marker\.txt/);
-  assert.match(notes, /OFL-wenkai\.txt/);
-  assert.doesNotMatch(notes, /playground\/|local-archives\/|\.\.\/\.\.\/\.\.\/\.\.\/docs\//);
-  assert.deepEqual(await readFile(join(assetsPath, 'reading.png')), artwork);
-  const { stdout } = await exec('unzip', ['-p', `${output}.zip`, 'my-blog/src/assets/README.md']);
-  assert.equal(stdout, notes);
-});
 
 function request(origin, path) {
   return new Promise((resolve, reject) => {
@@ -351,13 +286,13 @@ function request(origin, path) {
   });
 }
 
-test('zero-dependency docs preview serves the snapshot and blog without exposing sibling files', async (t) => {
+test('zero-dependency docs preview serves nested pages without exposing sibling files', async (t) => {
   const directory = await fixture(t);
   const snapshot = join(directory, 'documentation');
-  await mkdir(join(snapshot, 'blog'), { recursive: true });
+  await mkdir(join(snapshot, 'guide'), { recursive: true });
   await mkdir(join(snapshot, 'assets'));
   await writeFile(join(snapshot, 'index.html'), '<h1>Component documentation</h1>');
-  await writeFile(join(snapshot, 'blog/index.html'), '<h1>Blog example</h1>');
+  await writeFile(join(snapshot, 'guide/index.html'), '<h1>Documentation guide</h1>');
   await writeFile(join(snapshot, 'assets/example.svg'), '<svg/>');
   await writeFile(join(directory, 'private.txt'), 'not documentation');
   await symlink(join(directory, 'private.txt'), join(snapshot, 'escaped.txt'));
@@ -373,8 +308,8 @@ test('zero-dependency docs preview serves the snapshot and blog without exposing
   );
   const origin = `http://127.0.0.1:${server.address().port}`;
   assert.match((await request(origin, '/')).body, /Component documentation/);
-  assert.match((await request(origin, '/blog/')).body, /Blog example/);
-  assert.equal((await request(origin, '/blog')).location, '/blog/');
+  assert.match((await request(origin, '/guide/')).body, /Documentation guide/);
+  assert.equal((await request(origin, '/guide')).location, '/guide/');
   assert.equal((await request(origin, '/assets/example.svg')).type, 'image/svg+xml');
   assert.equal((await request(origin, '/..%2fprivate.txt')).status, 403);
   assert.equal((await request(origin, '/escaped.txt')).status, 403);

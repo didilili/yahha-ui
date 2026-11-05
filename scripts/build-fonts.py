@@ -92,10 +92,9 @@ def site_characters():
     # also emitted, so new articles and user input do not depend on this corpus.
     characters = set(range(32, 127))
     extensions = {".ts", ".tsx", ".css", ".json", ".md"}
-    for directory in ("playground/src", "examples/blog/src"):
-        for path in sorted((ROOT / directory).rglob("*")):
-            if path.suffix in extensions and "fonts" not in path.parts:
-                characters.update(ord(character) for character in path.read_text())
+    for path in sorted((ROOT / "playground/src").rglob("*")):
+        if path.suffix in extensions and "fonts" not in path.parts:
+            characters.update(ord(character) for character in path.read_text())
     return characters
 
 

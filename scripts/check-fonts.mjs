@@ -3,7 +3,6 @@ import { createHash } from 'node:crypto';
 import { lstat, readFile, readdir } from 'node:fs/promises';
 import { extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { syncFontDirectories } from './sync-fonts.mjs';
 
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
@@ -186,34 +185,17 @@ export function findMissingHan(sources, ranges) {
   return missing;
 }
 
-export async function checkFontNotices(canonical, blog) {
-  for (const name of ['OFL-wenkai.txt', 'OFL-marker.txt']) {
-    const original = await readFile(join(canonical, name));
-    const copy = await readFile(join(blog, name));
-    assert(original.equals(copy), `${name}: blog font notice differs from the canonical notice.`);
-  }
-}
-
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   try {
     assert.equal(process.argv.length, 2, 'check-fonts does not accept arguments.');
     const root = fileURLToPath(new URL('..', import.meta.url));
     const canonical = join(root, 'playground/src/assets/fonts');
     const manifest = await checkFontAssets(canonical);
-    await syncFontDirectories(canonical, join(root, 'examples/blog/src/assets/fonts'), {
-      check: true,
-    });
-    await checkFontNotices(
-      join(root, 'playground/src/assets'),
-      join(root, 'examples/blog/src/assets'),
-    );
     const extensions = new Set(['.ts', '.tsx', '.css', '.json', '.md']);
     const sources = [];
-    for (const directory of ['playground/src', 'examples/blog/src']) {
-      for (const path of await filesUnder(join(root, directory))) {
-        if (extensions.has(extname(path)))
-          sources.push({ path: relative(root, path), text: await readFile(path, 'utf8') });
-      }
+    for (const path of await filesUnder(join(root, 'playground/src'))) {
+      if (extensions.has(extname(path)))
+        sources.push({ path: relative(root, path), text: await readFile(path, 'utf8') });
     }
     const missing = findMissingHan(
       sources,
