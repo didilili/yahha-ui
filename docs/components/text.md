@@ -22,9 +22,9 @@ import { Text } from 'yahha-ui';
 
 <a id="text-sizes"></a>
 
-### 字号与文字色调
+### 字号
 
-分别比较三档字号，以及主要文字与次要文字的色调。
+用相同文字比较三档字号。
 
 [查看示例文件](../../playground/src/examples/content/TextExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -37,9 +37,6 @@ export default function TextExample() {
   return (
     <div style={{ display: 'grid', gap: 28, maxWidth: '65ch' }}>
       <section aria-label="字号对照" style={{ display: 'grid', gap: 16 }}>
-        <Text size="sm" tone="muted">
-          字号
-        </Text>
         {(['sm', 'md', 'lg'] as const).map((size) => (
           <div key={size} style={{ display: 'grid', gap: 4 }}>
             <Text size="sm" tone="muted">
@@ -50,20 +47,35 @@ export default function TextExample() {
           </div>
         ))}
       </section>
-      <section aria-label="文字色调对照" style={{ display: 'grid', gap: 16 }}>
-        <Text size="sm" tone="muted">
-          文字色调
-        </Text>
-        {(['default', 'muted'] as const).map((tone) => (
-          <div key={tone} style={{ display: 'grid', gap: 4 }}>
-            <Text size="sm" tone="muted">
-              {tone === 'default' ? '主要文字' : '次要文字'}
-              {tone === 'default' ? '（默认）' : ''}
-            </Text>
-            <Text tone={tone}>今天沿着河边散步，走到桥边时，停下来等了等还在系鞋带的朋友。</Text>
-          </div>
-        ))}
-      </section>
+    </div>
+  );
+}
+```
+
+<a id="text-tones"></a>
+
+### 文字色调
+
+比较主要文字与次要文字。
+
+[查看示例文件](../../playground/src/examples/content/TextTones.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/TextTones.tsx -->
+
+```tsx
+import { Text } from 'yahha-ui';
+
+export default function TextTones() {
+  return (
+    <div style={{ display: 'grid', gap: 20, maxWidth: '65ch' }}>
+      {(['default', 'muted'] as const).map((tone) => (
+        <div key={tone} style={{ display: 'grid', gap: 4 }}>
+          <Text size="sm" tone="muted">
+            {tone === 'default' ? '主要文字' : '次要文字'}
+          </Text>
+          <Text tone={tone}>今天沿着河边散步，走到桥边时，停下来等了等还在系鞋带的朋友。</Text>
+        </div>
+      ))}
     </div>
   );
 }
@@ -71,9 +83,9 @@ export default function TextExample() {
 
 <a id="text-inline-composition"></a>
 
-### 行内组合与换行
+### 行内组合
 
-段落内的强调、纸签和链接，以及窄栏中的长词与地址换行。
+在段落中组合强调、纸签和链接。
 
 [查看示例文件](../../playground/src/examples/content/TextComposition.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -82,36 +94,106 @@ export default function TextExample() {
 ```tsx
 import { Badge, Link, Text } from 'yahha-ui';
 
-const paragraphReference = 'https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/p';
-
 export default function TextComposition() {
   return (
     <div style={{ display: 'grid', gap: 28, maxWidth: '65ch' }}>
       <section aria-label="行内组合" style={{ display: 'grid', gap: 8 }}>
-        <Text size="sm" tone="muted">
-          行内组合
-        </Text>
         <Text>
           <strong>这篇手记</strong>标记为 <Badge tone="accent">阅读中</Badge>
           。可以先读完这一段，再去
           <Link href="#/guides/reading?section=reading-example">看看完整的阅读组合</Link>。
         </Text>
       </section>
-      <section aria-label="长词换行" style={{ display: 'grid', gap: 8, maxWidth: '32ch' }}>
-        <Text size="sm" tone="muted">
-          窄栏换行
-        </Text>
-        <Text>
-          我把这次散步的记录存成 PersonalJournalWithAVeryLongUnbrokenTitle，
-          留给下个周末，和没赶上散步的朋友一起看。
-        </Text>
-        <Text>
-          段落参考：
-          <Link href={paragraphReference} external>
-            {paragraphReference}（新标签页）
-          </Link>
-        </Text>
-      </section>
+    </div>
+  );
+}
+```
+
+<a id="text-wrapping"></a>
+
+### 长词与地址换行
+
+观察窄栏中的中英文长词和完整地址换行。
+
+[查看示例文件](../../playground/src/examples/content/TextWrapping.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/TextWrapping.tsx -->
+
+```tsx
+import { Link, Text } from 'yahha-ui';
+
+const paragraphReference = 'https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/p';
+
+export default function TextWrapping() {
+  return (
+    <div style={{ display: 'grid', gap: 12, maxWidth: '32ch' }}>
+      <Text>
+        我把这次散步的记录存成
+        PersonalJournalWithAVeryLongUnbrokenTitle，留给下个周末，和没赶上散步的朋友一起看。
+      </Text>
+      <Text>
+        段落参考：
+        <Link href={paragraphReference} external>
+          {paragraphReference}（新标签页）
+        </Link>
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
+<a id="text-quotation"></a>
+
+### 引用与出处
+
+组合引用段落、行内标记与出处链接。
+
+[查看示例文件](../../playground/src/examples/content/TextQuotation.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/TextQuotation.tsx -->
+
+```tsx
+import { Link, Text } from 'yahha-ui';
+
+const source = '#/guides/reading?section=reading-example';
+
+export default function TextQuotation() {
+  return (
+    <div style={{ display: 'grid', gap: 24, minWidth: 0, maxWidth: '65ch' }}>
+      <figure style={{ display: 'grid', gap: 12, margin: 0, minWidth: 0 }}>
+        <blockquote
+          cite={source}
+          style={{
+            margin: 0,
+            paddingInlineStart: 20,
+            borderInlineStart: '1px solid var(--yahha-paper-line, #c9deec)',
+          }}
+        >
+          <Text>
+            回家才发现，今天没有走多远。不过<em>等到了朋友</em>，也记下了饼干掉进衣领的事，
+            <mark style={{ color: 'inherit', background: 'var(--yahha-accent-soft, #fff0f6)' }}>
+              已经够写一页
+            </mark>
+            。
+          </Text>
+        </blockquote>
+        <figcaption>
+          <Text size="sm" tone="muted">
+            出自 Yahha UI 原创示例手记《
+            <cite>
+              <Link href={source}>沿着河边，慢慢走</Link>
+            </cite>
+            》
+          </Text>
+        </figcaption>
+      </figure>
+      <Text size="sm" tone="muted">
+        <strong>读后批注：</strong>等朋友的那一会儿，也成了这次散步的一部分。
+      </Text>
     </div>
   );
 }
@@ -143,6 +225,8 @@ Text 默认行高为 1.8，段落不带外边距；栏宽、段距和章节留�
 ## 段落与行内内容
 
 多个段落分别使用 Text；不要在其中嵌套 div、另一个 p 或标题。列表、图片与其他内容区块放在段落之外，行内链接和纸签保持各自语义。需要截断或展开长文时，由页面提供相应布局和操作。
+
+引用使用外层 blockquote，出处放在引用之外；cite 标记作品名。引用示例摘自本库已有的原创手记， 接入时将出处链接替换为自己的原文地址。纸边与留白由外层容器设置，Text 保持默认字阶与行高。
 
 <a id="related"></a>
 

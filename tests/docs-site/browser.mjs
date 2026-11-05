@@ -10,6 +10,39 @@ import { verifyAdoption } from './adoption-checks.mjs';
 import { verifySectionNavigation } from './section-navigation-checks.mjs';
 import { verifySearch } from './search-checks.mjs';
 import { verifyGuideLoading, waitForGuideReady } from './guide-loading-checks.mjs';
+import { verifyTextFieldSearch, verifyTextFieldCopy } from './text-field-examples.mjs';
+import { verifyTextareaDraft } from './textarea-examples.mjs';
+import { verifySelectCollection, verifySelectAvailability } from './select-examples.mjs';
+import { verifyCheckboxFormReset } from './checkbox-form-examples.mjs';
+import { verifyCheckboxTopics } from './checkbox-topics-examples.mjs';
+import { verifyCheckboxReadingList } from './checkbox-reading-list-examples.mjs';
+import { verifyRadioReadingLayout } from './radio-layout-examples.mjs';
+import { verifyRadioSignature } from './radio-signature-examples.mjs';
+import {
+  verifySwitchExamples,
+  verifySwitchPreference,
+  verifySwitchPreferenceUnmount,
+} from './switch-preference-examples.mjs';
+import { verifySegmentedContent } from './segmented-content-examples.mjs';
+import { verifyBadgeSummary } from './badge-summary-examples.mjs';
+import {
+  verifyAvatarBasics,
+  verifyAvatarAuthor,
+  verifyAvatarPicture,
+} from './avatar-author-examples.mjs';
+import { verifyTabsPostcard } from './tabs-postcard-examples.mjs';
+import { verifyPaginationLinks } from './pagination-links-examples.mjs';
+import { verifyMenuDraft } from './menu-draft-examples.mjs';
+import { verifyDialogDraft } from './dialog-draft-examples.mjs';
+import { verifyPopoverCollection } from './popover-collection-examples.mjs';
+import { verifyAlertReadingNotice } from './alert-reading-examples.mjs';
+import { verifyToastReadingList } from './toast-reading-examples.mjs';
+import { verifyAccordionReading, verifyAccordionBasic } from './accordion-reading-examples.mjs';
+import {
+  verifyImageDetail,
+  verifyImageFallback,
+  verifyImageAssetDownload,
+} from './image-detail-examples.mjs';
 
 export async function verifyDocs(browser, baseURL) {
   await verifyGuideLoading(browser, baseURL);
@@ -132,6 +165,90 @@ export async function verifyDocs(browser, baseURL) {
       assert.equal(examples > 0, true, `${id} examples`);
       totalExamples += examples;
       await verifyExampleHeadings(page);
+      if (id === 'text-field') {
+        await verifyTextFieldSearch(page, page.locator('#text-field-search .example-preview'));
+        await verifyTextFieldCopy(page, page.locator('#text-field-copy .example-preview'));
+      }
+      if (id === 'textarea') {
+        await verifyTextareaDraft(page, page.locator('#textarea-comment-draft .example-preview'));
+      }
+      if (id === 'select') {
+        await verifySelectCollection(page, page.locator('#select-collection .example-preview'));
+        await verifySelectAvailability(
+          page,
+          page.locator('#select-available-collections .example-preview'),
+        );
+      }
+      if (id === 'checkbox') {
+        await verifyCheckboxFormReset(page, page.locator('#form .example-preview'));
+        await verifyCheckboxTopics(page);
+        await verifyCheckboxReadingList(
+          page,
+          page.locator('#checkbox-reading-list .example-preview'),
+        );
+      }
+      if (id === 'radio-group') {
+        await verifyRadioReadingLayout(
+          page,
+          page.locator('#radio-reading-layout .example-preview'),
+        );
+        await verifyRadioSignature(page, page.locator('#radio-comment-signature .example-preview'));
+      }
+      if (id === 'switch') {
+        await verifySwitchExamples(page);
+        await verifySwitchPreference(
+          page,
+          page.locator('#switch-reading-preference .example-preview'),
+        );
+        await verifySwitchPreferenceUnmount(
+          page,
+          page.locator('#switch-reading-preference .example-preview'),
+        );
+      }
+      if (id === 'segmented-control') {
+        await verifySegmentedContent(page, page.locator('#filtering .example-preview'));
+      }
+      if (id === 'badge') {
+        await verifyBadgeSummary(page, page.locator('#badge-status .example-preview'));
+      }
+      if (id === 'avatar') {
+        await verifyAvatarBasics(page, page.locator('#avatar-fallback .example-preview'));
+        await verifyAvatarAuthor(page, page.locator('#avatar-author .example-preview'));
+        await verifyAvatarPicture(page, page.locator('#avatar-picture .example-preview'));
+      }
+      if (id === 'image') {
+        await verifyImageDetail(page, page.locator('#image-detail .example-preview'));
+        await verifyImageFallback(page, page.locator('#image-failure .example-preview'));
+        await verifyImageAssetDownload(page, page.locator('#image-detail'));
+      }
+      if (id === 'accordion') {
+        await verifyAccordionReading(page, page.locator('#controlled .example-preview'));
+        await verifyAccordionBasic(page, page.locator('#basic .example-preview'));
+      }
+      if (id === 'tabs') {
+        await verifyTabsPostcard(page, page.locator('#controlled .example-preview'));
+      }
+      if (id === 'pagination') {
+        await verifyPaginationLinks(page, page.locator('#links .example-preview'));
+      }
+      if (id === 'dropdown-menu') {
+        await verifyMenuDraft(page, page.locator('#controlled .example-preview'));
+      }
+      if (id === 'dialog') {
+        await verifyDialogDraft(page, page.locator('#form .example-preview'));
+      }
+      if (id === 'popover') {
+        await verifyPopoverCollection(page, page.locator('#popover-collection .example-preview'));
+      }
+      if (id === 'toast') {
+        await verifyToastReadingList(page, page.locator('#basic .example-preview'));
+      }
+      if (id === 'alert') {
+        await verifyAlertReadingNotice(
+          page,
+          page.locator('#alert-reading-notice .example-preview'),
+        );
+      }
       assert.equal(
         await page.locator('.docs-sidebar .nav-group a[aria-current="page"]').count(),
         1,
@@ -179,7 +296,7 @@ export async function verifyDocs(browser, baseURL) {
         );
       }
     }
-    assert.equal(totalExamples, 85, 'The 30 component documents provide 85 focused examples.');
+    assert.equal(totalExamples, 128, 'The 30 component documents provide 128 focused examples.');
 
     // Reorganized chapters retain their existing deep links and keyboard destination.
     await page.goto(`${baseURL}#/components/text`);
@@ -232,7 +349,7 @@ export async function verifyDocs(browser, baseURL) {
       await verifyExampleHeadings(page);
     }
     assert.equal(guideExamples, 12, 'The guides must retain all twelve integration examples.');
-    assert.equal(totalExamples + guideExamples, 97, 'The public site provides 97 examples.');
+    assert.equal(totalExamples + guideExamples, 140, 'The public site provides 140 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
     await waitForGuideReady(page, '开始使用');
     assert.match(await page.locator('main').innerText(), /npm pack/);

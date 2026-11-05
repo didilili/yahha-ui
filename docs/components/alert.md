@@ -65,11 +65,17 @@ export default function AlertExample() {
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+订阅流程仅在当前示例中模拟，不实际保存；阅读提醒只改变当前页面的显示状态。
+
 <a id="alert-action"></a>
 
-### 与操作组合
+### 失败提示与重试
 
-首次模拟保存失败，重试成功；只更新本例状态，不实际订阅。
+首次模拟失败，重试成功；选择保留，不实际订阅。
 
 [查看示例文件](../../playground/src/examples/content/AlertAction.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -170,6 +176,85 @@ export default function AlertAction() {
 }
 ```
 
+<a id="alert-reading-notice"></a>
+
+### 隐藏与恢复提示
+
+收起提示后，可从保留的外部入口再次展开。
+
+[查看示例文件](../../playground/src/examples/content/AlertReadingNotice.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/AlertReadingNotice.tsx -->
+
+```tsx
+import { useId, useRef, useState } from 'react';
+import { Alert, Button, Heading, Text } from 'yahha-ui';
+
+export default function AlertReadingNotice() {
+  const [visible, setVisible] = useState(true);
+  const id = useId();
+  const headingId = `${id}-heading`;
+  const toggleId = `${id}-toggle`;
+  const noticeId = `${id}-notice`;
+  const toggle = useRef<HTMLButtonElement>(null);
+  const notice = useRef<HTMLDivElement>(null);
+
+  function changeVisibility(next: boolean) {
+    const focusInside = notice.current?.contains(document.activeElement) ?? false;
+    setVisible(next);
+    if (!next && focusInside) toggle.current?.focus();
+  }
+
+  return (
+    <article
+      aria-labelledby={headingId}
+      style={{ display: 'grid', gap: 16, maxWidth: 540, minWidth: 0 }}
+    >
+      <header style={{ display: 'grid', gap: 8 }}>
+        <Heading level={3} id={headingId}>
+          那天沿着河岸，慢慢走回家
+        </Heading>
+        <Text size="sm" tone="muted">
+          <time dateTime="2022-04-16">2022年4月16日</time>
+        </Text>
+      </header>
+      <Button
+        ref={toggle}
+        id={toggleId}
+        variant="secondary"
+        aria-expanded={visible}
+        aria-controls={noticeId}
+        style={{ justifySelf: 'start' }}
+        onClick={() => changeVisibility(!visible)}
+      >
+        阅读提醒
+      </Button>
+      <Alert
+        ref={notice}
+        id={noticeId}
+        tone="warning"
+        title="读旧手记前，先看一眼"
+        aria-labelledby={toggleId}
+        hidden={!visible}
+      >
+        <div style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+          <p style={{ margin: 0 }}>
+            这篇手记记录的是2022年的一次散步，沿途店铺信息可能变化，出发前请再确认。
+          </p>
+          <div>
+            <Button variant="ghost" onClick={() => changeVisibility(false)}>
+              隐藏阅读提醒
+            </Button>
+          </div>
+        </div>
+      </Alert>
+      <Text>那天下午，我们沿着河岸走了一段。朋友在桥边停下来，给鞋带重新打了一个结。</Text>
+      <Text>回家时天还亮着。把路边的小花和等朋友的时间，一起记进这页手记。</Text>
+    </article>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 提示内容与恢复操作
@@ -198,7 +283,7 @@ export default function AlertAction() {
 
 默认 role="note"，tone 只改变说明类型，不会自动启动播报。紧急动态结果可显式使用 role="alert"；一般状态更新可由外层 status 或 aria-live 说明，同一结果避免多处重复播报。
 
-提示出现时不会主动移动焦点，也没有内置关闭按钮。需要允许关闭时，由页面提供按钮并更新显示状态；关闭包含操作的提示后，应把其中的焦点移到仍然存在的合理位置。
+提示出现时不会主动移动焦点，也没有内置关闭按钮。阅读提醒例由页面维护显示状态；仅隐藏包含当前焦点的提示时，回到持续存在的“阅读提醒”按钮。恢复时保留触发按钮焦点。
 
 <a id="related"></a>
 

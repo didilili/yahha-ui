@@ -1,3 +1,7 @@
+import DividerBasic from '../../examples/content/DividerBasic';
+import dividerBasicSource from '../../examples/content/DividerBasic.tsx?raw';
+import DividerVertical from '../../examples/content/DividerVertical';
+import dividerVerticalSource from '../../examples/content/DividerVertical.tsx?raw';
 import DividerExample from '../../examples/content/DividerExample';
 import dividerSource from '../../examples/content/DividerExample.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -21,9 +25,30 @@ export default defineComponentPage('divider', {
       title: '代码演示',
       examples: [
         example(
+          'divider-basic',
+          '基础用法',
+          '在两个内容段落之间标出主题转折。',
+          DividerBasic,
+          dividerBasicSource,
+        ),
+        example(
+          'divider-vertical',
+          '垂直分隔',
+          '用装饰性竖线分开并列短文字。',
+          DividerVertical,
+          dividerVerticalSource,
+        ),
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看长元信息组合',
+      examples: [
+        example(
           'divider-directions',
-          '水平与垂直',
-          '水平主题分隔与垂直装饰分隔。',
+          '响应式内容分隔',
+          '窄屏隐藏元信息之间的装饰线，保留完整文字。',
           DividerExample,
           dividerSource,
         ),
@@ -60,7 +85,16 @@ export default defineComponentPage('divider', {
               defaultValue: 'false',
               description: 'true 时 role=presentation、aria-hidden=true。',
             },
-            ...nativeRows('hr'),
+            ...nativeRows('hr').map((row) =>
+              row.name === '其他原生属性 / 事件'
+                ? {
+                    ...row,
+                    type: "Omit<ComponentPropsWithRef<'hr'>, 'children' | 'dangerouslySetInnerHTML'>",
+                    description:
+                      '支持有效 hr 事件、aria-*、data-* 等属性，不接收子内容或注入 HTML。',
+                  }
+                : row,
+            ),
           ],
         },
       ],
@@ -75,8 +109,13 @@ export default defineComponentPage('divider', {
             后，线条仍可见，但其分隔语义隐藏于辅助技术。
           </p>
           <p>
-            分隔线默认是静态内容，无需添加 tabIndex。Divider 不接收
-            children，需要分组标题时单独使用标题元素。
+            分隔线默认是静态内容，无需添加 tabIndex。Divider 不接收 children 或
+            dangerouslySetInnerHTML，需要分组标题时单独使用标题元素。 类型检查会拒绝这两种本就无效的
+            hr 用法；有效原生属性与运行时绘制保持。
+          </p>
+          <p>
+            装饰线与对应元信息成组排列，窄屏由进阶示例的布局隐藏竖线，保留完整文字；不改变 Divider
+            的方向或语义。
           </p>
         </>
       ),

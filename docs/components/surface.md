@@ -46,11 +46,51 @@ export default function SurfaceBasic() {
 }
 ```
 
+<a id="surface-notes"></a>
+
+### 便笺样式
+
+用 note 纸面呈现一段后记。
+
+[查看示例文件](../../playground/src/examples/foundations/SurfaceNotes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/SurfaceNotes.tsx -->
+
+```tsx
+import { useId } from 'react';
+import { Heading, Surface, Text } from 'yahha-ui';
+
+export default function SurfaceNotes() {
+  const id = useId();
+  return (
+    <div style={{ display: 'grid', gap: 24, maxWidth: 560 }}>
+      <Surface
+        variant="note"
+        role="note"
+        aria-labelledby={`${id}-afterword`}
+        style={{ display: 'grid', gap: 12 }}
+      >
+        <Heading level={3} id={`${id}-afterword`}>
+          写在手记后面
+        </Heading>
+        <Text>
+          不是每一天都有大事发生。有人把鞋带系好了，有人把半块饼干分给你，这一页也就有了想留下的事。
+        </Text>
+      </Surface>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
 <a id="surface-composition"></a>
 
-### 组合文章摘要
+### 内容与操作组合
 
-点击“收藏文章”切换状态，收藏仅保留在当前示例中。
+在容器中组合分类、标题、正文与独立操作区。
 
 [查看示例文件](../../playground/src/examples/foundations/SurfaceComposition.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -94,13 +134,64 @@ export default function SurfaceComposition() {
 }
 ```
 
+<a id="surface-cover"></a>
+
+### 贴边封面与内容分区
+
+封面贴齐容器边缘，正文保留内距。
+
+[查看示例文件](../../playground/src/examples/foundations/SurfaceCover.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/SurfaceCover.tsx -->
+
+```tsx
+import { useId } from 'react';
+import { Heading, Image, Link, Surface, Text } from 'yahha-ui';
+
+const cover =
+  'data:image/svg+xml,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="800" height="450" fill="#fff6f7"/><rect x="48" y="48" width="704" height="354" rx="12" fill="#fffefa" stroke="#d7c3c0"/><text x="400" y="215" text-anchor="middle" fill="#462e31" font-family="sans-serif" font-size="42">周末手记</text><text x="400" y="275" text-anchor="middle" fill="#79656a" font-family="sans-serif" font-size="22">给喜欢的事情，留一点位置。</text></svg>',
+  );
+
+export default function SurfaceCover() {
+  const titleId = useId();
+
+  return (
+    <article aria-labelledby={titleId} style={{ maxWidth: 560 }}>
+      <style>{`
+        .yahha-surface-cover-body { display: grid; gap: 16px; padding: 24px; }
+        @media (max-width: 480px) { .yahha-surface-cover-body { padding: 16px; } }
+      `}</style>
+      <Surface style={{ padding: '0', overflow: 'hidden' }}>
+        <Image
+          src={cover}
+          alt="写着周末手记的纸面封面"
+          aspectRatio="16 / 9"
+          loading="eager"
+          fallback="封面暂不可用，正文仍可阅读。"
+        />
+        <div className="yahha-surface-cover-body">
+          <Heading level={3} id={titleId}>
+            <Link href="#/guides/reading?section=reading-example">沿着河边，慢慢走</Link>
+          </Heading>
+          <Text>朋友的鞋带散了，我们就在河边等一等。</Text>
+        </div>
+      </Surface>
+    </article>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 内容布局
 
-默认内边距为 24px，容器宽度与内容间距由使用方安排。通过 style 或 className 设置 `maxWidth`、`display: grid` 与 `gap`，组织标题、正文与操作。
+默认内边距为 24px，容器宽度与内容间距由使用方安排。通过 style 或 className 设置 `maxWidth`、`display: grid` 与 `gap`，组织标题与正文。
 
 连续正文按阅读顺序排布，只在需要独立纸面时使用容器。完整用法见[阅读组合中的文末便笺](../README.md#站内指南)。
+
+paper 保留默认白纸；note 使用轻底便笺与一处纸角，字阶、轮廓和 24px 内边距保持。 封面示例通过公开 style 将 Surface 的 padding 设为 0，由内部内容区安排桌面 24px、窄屏 16px 留白；标题链接独立导航，图片区域保留 16:9 比例。
 
 <a id="api"></a>
 
@@ -108,12 +199,13 @@ export default function SurfaceComposition() {
 
 ### SurfaceProps
 
-| 属性                | 说明                                                                             | 类型                           | 默认值 |
-| ------------------- | -------------------------------------------------------------------------------- | ------------------------------ | ------ |
-| `children`          | 容器内容。                                                                       | `ReactNode`                    | —      |
-| `className / style` | 作用于根 div，可调整布局与外观。                                                 | `string / CSSProperties`       | —      |
-| `ref`               | 指向根 div。                                                                     | `Ref<HTMLDivElement>`          | —      |
-| `其余原生属性`      | 透传 div 属性，例如 role、aria-labelledby、id、data-\*。没有额外的组件专属属性。 | `ComponentPropsWithRef<'div'>` | —      |
+| 属性                | 说明                                                         | 类型                           | 默认值    |
+| ------------------- | ------------------------------------------------------------ | ------------------------------ | --------- |
+| `variant`           | 白纸或轻底便笺，仅影响视觉，不自动赋予 note 或 region 语义。 | `'paper' \| 'note'`            | `'paper'` |
+| `children`          | 容器内容。                                                   | `ReactNode`                    | —         |
+| `className / style` | 作用于根 div，可调整布局与外观。                             | `string / CSSProperties`       | —         |
+| `ref`               | 指向根 div。                                                 | `Ref<HTMLDivElement>`          | —         |
+| `其余原生属性`      | 透传 div 属性，例如 role、aria-labelledby、id、data-\*。     | `ComponentPropsWithRef<'div'>` | —         |
 
 <a id="accessibility"></a>
 

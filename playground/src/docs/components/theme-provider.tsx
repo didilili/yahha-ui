@@ -33,8 +33,8 @@ export default defineComponentPage('theme-provider', {
       examples: [
         {
           id: 'theme-variants',
-          title: '默认配色与强调色变体',
-          description: '对比粉色、浅蓝与浅黄三种强调色预设。',
+          title: '主题预设',
+          description: '对比粉色、浅蓝和浅黄三种预设。',
           component: ThemeVariants,
           source: themeVariantsSource,
           themeScope: 'explicit',
@@ -42,7 +42,7 @@ export default defineComponentPage('theme-provider', {
         {
           id: 'theme-tokens',
           title: '定制颜色与 Portal 传播',
-          description: '用 10 项颜色覆盖定制主题，打开弹窗查看 Portal 传播。',
+          description: '定制主题颜色，打开弹窗查看相同配色。',
           component: ThemeTokensExample,
           source: themeTokensSource,
           themeScope: 'explicit',
@@ -151,7 +151,7 @@ export default defineComponentPage('theme-provider', {
               type: 'string',
               defaultValue: '#a33e4f',
               description:
-                '输入框错误边框、错误时的焦点轮廓、错误文字与 Toast 错误图标，--yahha-error；错误背景固定，禁用背景优先。',
+                '输入框错误边框、错误时的焦点轮廓、错误文字、危险按钮与 Toast 错误图标，--yahha-error；错误背景固定，禁用背景优先。',
             },
           ],
         },

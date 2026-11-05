@@ -22,7 +22,7 @@ import { EmptyState } from 'yahha-ui';
 
 <a id="basic"></a>
 
-### 首次无内容与创建
+### 空状态与引导操作
 
 创建示例文章，或恢复初始空态；不实际发布。
 

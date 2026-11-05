@@ -27,19 +27,18 @@ export default defineComponentPage('tabs', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页状态和草稿仅保留在当前示例，不发送或持久保存。</p>,
       examples: [
         {
           id: 'basic',
-          title: '基本栏目与内容面板',
-          description: '切换栏目，查看对应内容面板。',
+          title: '基础用法',
+          description: '切换标签，查看对应内容面板。',
           component: TabsBasic,
           source: tabsBasicSource,
         },
         {
           id: 'controlled-value',
-          title: '受控栏目',
-          description: '切换栏目，查看同步更新的选中值。',
+          title: '受控切换',
+          description: '切换标签，同步显示当前选择。',
           component: TabsValue,
           source: tabsValueSource,
         },
@@ -50,12 +49,26 @@ export default defineComponentPage('tabs', {
           component: TabsStates,
           source: tabsStatesSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看面板状态保留与预览',
+      content: (
+        <p>
+          明信片例保持输入非受控，预览展示当前草稿原文；再次修改后切换预览会更新内容。
+          预览正文不重复播报，草稿只在当前示例，不发送或持久保存。
+        </p>
+      ),
+      examples: [
         {
           id: 'controlled',
-          title: '组合：切换栏目时保留草稿',
-          description: '切换栏目保留草稿，或返回明信片继续填写。',
+          title: '保留面板状态',
+          description: '切换到预览，再返回编辑；输入内容保持不变。',
           component: TabsControlled,
           source: tabsControlledSource,
+          toc: false,
         },
       ],
     },

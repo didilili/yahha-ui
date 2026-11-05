@@ -20,8 +20,6 @@ import { TextField } from 'yahha-ui';
 
 ## 代码演示
 
-本页示例只在本地操作，不发送或保存表单数据。
-
 <a id="basic"></a>
 
 ### 基础用法
@@ -50,9 +48,9 @@ export default function TextFieldBasic() {
 
 <a id="controlled"></a>
 
-### 受控输入与装饰图标
+### 受控输入
 
-输入关键词并查看当前值；本例不筛选文章。
+通过 value 与 onChange 管理输入内容。
 
 [查看示例文件](../../playground/src/examples/forms/TextFieldControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -68,29 +66,110 @@ export default function TextFieldControlled() {
   return (
     <div style={{ display: 'grid', gap: 12 }}>
       <TextField
-        label="搜索文章"
+        label="关键词"
         type="search"
         value={keyword}
         onChange={(event) => setKeyword(event.target.value)}
-        placeholder="输入文章标题"
-        leading={
+        placeholder="输入关键词"
+      />
+      <Text size="sm" tone="muted">
+        当前关键词：{keyword || '未填写'}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="text-field-slots"></a>
+
+### 前置图标与尾部操作
+
+前置图标仅作装饰，示例通过尾部按钮清空内容并回焦。
+
+[查看示例文件](../../playground/src/examples/forms/TextFieldSlots.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/forms/TextFieldSlots.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { IconButton, TextField } from 'yahha-ui';
+
+export default function TextFieldSlots() {
+  const [keyword, setKeyword] = useState('散步');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <TextField
+      ref={inputRef}
+      label="关键词"
+      value={keyword}
+      onChange={(event) => setKeyword(event.currentTarget.value)}
+      leading={
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m16 16 4.5 4.5" />
+        </svg>
+      }
+      trailing={
+        <IconButton
+          type="button"
+          variant="ghost"
+          aria-label="清空关键词"
+          disabled={!keyword}
+          onClick={() => {
+            setKeyword('');
+            inputRef.current?.focus();
+          }}
+        >
           <svg
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            aria-hidden="true"
+            focusable="false"
           >
-            <circle cx="10.5" cy="10.5" r="6.5" />
-            <path d="m16 16 4.5 4.5" />
+            <path d="m6 6 12 12M6 18 18 6" strokeLinecap="round" />
           </svg>
-        }
-        hint="可输入标题中的一部分。"
+        </IconButton>
+      }
+    />
+  );
+}
+```
+
+<a id="text-field-states"></a>
+
+### 只读与禁用
+
+对比只读可复制和禁用不可编辑两种状态。
+
+[查看示例文件](../../playground/src/examples/forms/TextFieldStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/forms/TextFieldStates.tsx -->
+
+```tsx
+import { TextField } from 'yahha-ui';
+
+export default function TextFieldStates() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <TextField label="暂不可编辑" disabled defaultValue="等待同步" />
+      <TextField
+        label="公开地址"
+        readOnly
+        defaultValue="https://example.com"
+        hint="可以复制此地址。"
       />
-      <Text size="sm" tone="muted">
-        当前关键词：{keyword || '未填写'}
-      </Text>
     </div>
   );
 }
@@ -158,11 +237,17 @@ export default function TextFieldValidation() {
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+以下示例只在本地操作，不发送或保存表单数据。
+
 <a id="native"></a>
 
-### 字段状态与原生输入类型
+### 原生输入类型
 
-对比只读、禁用与原生输入类型，可检查邮箱格式。
+查看邮箱、密码、日期与时间输入，可检查邮箱格式。
 
 [查看示例文件](../../playground/src/examples/forms/TextFieldNative.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -178,16 +263,6 @@ export default function TextFieldNative() {
 
   return (
     <div style={{ display: 'grid', gap: 20 }}>
-      <div style={{ display: 'grid', gap: 16 }}>
-        <p style={{ margin: 0 }}>禁用与只读</p>
-        <TextField label="暂不可编辑" disabled defaultValue="等待同步" />
-        <TextField
-          label="公开地址"
-          readOnly
-          defaultValue="https://example.com"
-          hint="可以复制此地址。"
-        />
-      </div>
       <div style={{ display: 'grid', gap: 16 }}>
         <p style={{ margin: 0 }}>邮箱与密码</p>
         <form
@@ -238,7 +313,7 @@ export default function TextFieldNative() {
 
 <a id="form"></a>
 
-### 表单提交与重置
+### 表单取值与重置
 
 读取本地表单或恢复初始值；编辑后清除上次读取结果。
 
@@ -292,6 +367,192 @@ export default function TextFieldForm() {
 }
 ```
 
+<a id="text-field-search"></a>
+
+### 中文输入与尾部清空
+
+组合输入时保留当前结果，结束后筛选本地手记；清空后回到输入框。
+
+[查看示例文件](../../playground/src/examples/forms/TextFieldSearch.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/forms/TextFieldSearch.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { IconButton, Text, TextField } from 'yahha-ui';
+
+const articles = ['周末的散步记录', '给小花换一个花盆', 'Weekend reading notes'];
+
+export default function TextFieldSearch() {
+  const [value, setValue] = useState('');
+  const [query, setQuery] = useState('');
+  const composing = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const matches = articles.filter((title) =>
+    title.toLowerCase().includes(query.trim().toLowerCase()),
+  );
+
+  return (
+    <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+      <TextField
+        ref={inputRef}
+        label="搜索本地手记"
+        type="text"
+        inputMode="search"
+        enterKeyHint="search"
+        autoComplete="off"
+        placeholder="试试“散步”或 Weekend"
+        value={value}
+        onCompositionStart={() => {
+          composing.current = true;
+        }}
+        onCompositionEnd={(event) => {
+          composing.current = false;
+          setValue(event.currentTarget.value);
+          setQuery(event.currentTarget.value);
+        }}
+        onChange={(event) => {
+          const nextValue = event.currentTarget.value;
+          setValue(nextValue);
+          if (!composing.current && !(event.nativeEvent as InputEvent).isComposing) {
+            setQuery(nextValue);
+          }
+        }}
+        leading={
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m16 16 5 5" strokeLinecap="round" />
+          </svg>
+        }
+        trailing={
+          <IconButton
+            type="button"
+            variant="ghost"
+            aria-label="清空手记搜索"
+            disabled={!value}
+            onClick={() => {
+              composing.current = false;
+              setValue('');
+              setQuery('');
+              inputRef.current?.focus();
+            }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="m6 6 12 12M6 18 18 6" strokeLinecap="round" />
+            </svg>
+          </IconButton>
+        }
+      />
+      <Text role="status" size="sm" tone="muted">
+        {query ? `“${query}”：` : ''}找到 {matches.length} 篇手记。
+      </Text>
+      {matches.length ? (
+        <ul aria-label="匹配的手记" style={{ margin: 0, paddingInlineStart: 24 }}>
+          {matches.map((title) => (
+            <li key={title}>{title}</li>
+          ))}
+        </ul>
+      ) : (
+        <Text>没有匹配的手记，可以换个关键词或清空搜索。</Text>
+      )}
+    </div>
+  );
+}
+```
+
+<a id="text-field-copy"></a>
+
+### 只读输入与尾部复制
+
+复制示例地址；浏览器拒绝时可选中文字，使用系统复制。
+
+[查看示例文件](../../playground/src/examples/forms/TextFieldCopy.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/forms/TextFieldCopy.tsx -->
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import { IconButton, Text, TextField } from 'yahha-ui';
+
+const address = 'https://example.com/notes/feed.xml';
+
+export default function TextFieldCopy() {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const request = useRef(0);
+  const [message, setMessage] = useState('');
+  useEffect(
+    () => () => {
+      request.current += 1;
+    },
+    [],
+  );
+
+  async function copyAddress() {
+    const currentRequest = ++request.current;
+    setMessage('');
+    try {
+      await navigator.clipboard.writeText(address);
+      if (currentRequest === request.current) setMessage('示例地址已复制。');
+    } catch {
+      if (currentRequest !== request.current) return;
+      if (document.activeElement === buttonRef.current) {
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      }
+      setMessage('未能复制，请选中地址后使用系统复制。');
+    }
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+      <TextField
+        ref={inputRef}
+        label="示例订阅地址"
+        value={address}
+        readOnly
+        hint="这是示例地址；也可直接选中文字，使用系统复制。"
+        trailing={
+          <IconButton
+            ref={buttonRef}
+            type="button"
+            variant="ghost"
+            aria-label="复制示例订阅地址"
+            onClick={copyAddress}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <rect x="8" y="8" width="12" height="13" rx="2" />
+              <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" />
+            </svg>
+          </IconButton>
+        }
+      />
+      <Text role="status" size="sm" tone="muted">
+        {message}
+      </Text>
+    </div>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 状态与表单
@@ -301,6 +562,9 @@ export default function TextFieldForm() {
 - readOnly 保留聚焦、选择、复制和提交能力；disabled 阻止交互并退出键盘顺序，字段也不参与提交。
 - type、autoComplete、required 等沿用原生 input 行为。required 启用浏览器约束，必填要求也应写在可见标签或提示中。
 - error 只显示错误，不执行校验。本地校验例使用 noValidate 跳过浏览器提交校验，由示例检查昵称并设置或清除 error；邮箱例保留浏览器必填与格式校验。
+- trailing 是可交互的尾部内容槽，与仅作装饰的 leading 分开。适合一个默认 44px 的 IconButton；组件只负责布局，操作名称、type="button"、disabled 和行为由使用方设置。 disabled 只禁用输入框，不递归修改槽内容；只读地址仍可提供复制操作。
+- 显式设置 `dir="ltr"` / `dir="rtl"` 或 `style.direction` 时，前后缀布局与输入框保持同向；标签和辅助文字仍跟随外层方向。
+- 原生 composition 事件直接传给输入框。搜索例立即更新编辑值，组合期间保留上一次筛选， 结束或取消后按输入框当前完整值更新结果；没有表单提交或远程请求。 该例使用 text + inputMode="search"，由一个命名按钮清空，避免与原生 search 取消按钮重复。
 
 <a id="api"></a>
 
@@ -316,6 +580,7 @@ export default function TextFieldForm() {
 | `hint`                       | 辅助说明，通过 aria-describedby 与 input 关联。                                                                           | `ReactNode`                            | —                |
 | `error`                      | 错误说明。有内容时设置 aria-invalid，不执行校验。                                                                         | `ReactNode`                            | —                |
 | `leading`                    | 18×18px 的装饰图标槽，超出内容会裁切；包装元素 aria-hidden，不放长前缀、交互控件或必要文字。                              | `ReactNode`                            | —                |
+| `trailing`                   | 尾部内容槽，可放命名操作；组件只布局，按钮的 type、disabled 与行为由使用方设置。                                          | `ReactNode`                            | —                |
 | `id`                         | input 的 ID，同时用于标签、提示和错误关联。                                                                               | `string`                               | `自动生成`       |
 | `value`                      | 受控值，需配合 onChange。不要与 defaultValue 同时使用。                                                                   | `TextFieldProps["value"]`              | —                |
 | `defaultValue`               | 非受控输入的初始值。不要在生命周期内切换受控模式。                                                                        | `TextFieldProps["defaultValue"]`       | —                |
@@ -335,14 +600,15 @@ export default function TextFieldForm() {
 
 ### classNames
 
-| 属性           | 说明                                    | 类型     | 默认值 |
-| -------------- | --------------------------------------- | -------- | ------ |
-| `label`        | 可见 label。                            | `string` | —      |
-| `inputWrapper` | 前缀与输入框的共同容器。                | `string` | —      |
-| `leading`      | 装饰性前缀的包装元素。                  | `string` | —      |
-| `input`        | 真实 input；与原生 style 作用目标相同。 | `string` | —      |
-| `hint`         | 辅助说明容器，仅在有内容时渲染。        | `string` | —      |
-| `error`        | 错误说明容器，仅在有内容时渲染。        | `string` | —      |
+| 属性           | 说明                                                           | 类型     | 默认值 |
+| -------------- | -------------------------------------------------------------- | -------- | ------ |
+| `label`        | 可见 label。                                                   | `string` | —      |
+| `inputWrapper` | 前缀、输入框与尾部内容的共同容器；有 trailing 时承载字段轮廓。 | `string` | —      |
+| `leading`      | 装饰性前缀的包装元素。                                         | `string` | —      |
+| `trailing`     | 尾部内容的包装元素，不隐藏交互语义。                           | `string` | —      |
+| `input`        | 真实 input；与原生 style 作用目标相同。                        | `string` | —      |
+| `hint`         | 辅助说明容器，仅在有内容时渲染。                               | `string` | —      |
+| `error`        | 错误说明容器，仅在有内容时渲染。                               | `string` | —      |
 
 <a id="keyboard"></a>
 

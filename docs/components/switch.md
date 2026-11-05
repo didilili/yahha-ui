@@ -20,13 +20,11 @@ import { Switch } from 'yahha-ui';
 
 ## 代码演示
 
-本页示例只在本地切换和读取，不保存设置或调用接口。
-
 <a id="basic"></a>
 
-### 基本状态
+### 基础用法
 
-切换开关，并对比禁用与长标签。
+点击或按空格切换。
 
 [查看示例文件](../../playground/src/examples/new-forms/SwitchBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -36,22 +34,51 @@ import { Switch } from 'yahha-ui';
 import { Switch } from 'yahha-ui';
 
 export default function SwitchBasic() {
+  return <Switch label="启用通知" />;
+}
+```
+
+<a id="switch-disabled"></a>
+
+### 禁用状态
+
+对比关闭与开启时的禁用外观。
+
+[查看示例文件](../../playground/src/examples/new-forms/SwitchDisabled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SwitchDisabled.tsx -->
+
+```tsx
+import { Switch } from 'yahha-ui';
+
+export default function SwitchDisabled() {
   return (
-    <div style={{ display: 'grid', gap: 24, maxWidth: 640 }}>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <p style={{ margin: 0 }}>默认关闭</p>
-        <Switch label="显示阅读时长" />
-      </div>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <p style={{ margin: 0 }}>初始开启与禁用状态</p>
-        <Switch label="显示文章封面" defaultChecked />
-        <Switch label="显示作者署名" disabled defaultChecked hint="已开启；此设置暂不可更改。" />
-        <Switch label="推送通知" disabled hint="已关闭；此功能尚未开放。" />
-      </div>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <p style={{ margin: 0 }}>长标签</p>
-        <Switch label="在个人主页展示文章封面、分类与阅读时长，让来访的人先看看内容，再决定从哪里读起" />
-      </div>
+    <div style={{ display: 'grid', gap: 12 }}>
+      <Switch label="邮件通知" disabled />
+      <Switch label="站内通知" defaultChecked disabled />
+    </div>
+  );
+}
+```
+
+<a id="switch-loading"></a>
+
+### 加载状态
+
+加载时保持当前状态，不能重复切换。
+
+[查看示例文件](../../playground/src/examples/new-forms/SwitchLoading.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SwitchLoading.tsx -->
+
+```tsx
+import { Switch } from 'yahha-ui';
+
+export default function SwitchLoading() {
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <Switch label="邮件通知" loading />
+      <Switch label="站内通知" defaultChecked loading />
     </div>
   );
 }
@@ -59,9 +86,9 @@ export default function SwitchBasic() {
 
 <a id="controlled"></a>
 
-### 控制内容显示
+### 受控状态
 
-切换文章摘要的显示，标题始终保留。
+通过 checked 与 onChange 管理状态。
 
 [查看示例文件](../../playground/src/examples/new-forms/SwitchControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -69,35 +96,36 @@ export default function SwitchBasic() {
 
 ```tsx
 import { useState } from 'react';
-import { Heading, Surface, Switch, Text } from 'yahha-ui';
+import { Switch, Text } from 'yahha-ui';
 
 export default function SwitchControlled() {
-  const [showExcerpt, setShowExcerpt] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   return (
-    <div style={{ display: 'grid', gap: 20 }}>
+    <div style={{ display: 'grid', gap: 12 }}>
       <Switch
-        label="显示文章摘要"
-        hint="开启后显示下方文章的摘要。"
-        checked={showExcerpt}
-        onChange={(event) => setShowExcerpt(event.target.checked)}
+        label="启用通知"
+        checked={enabled}
+        onChange={(event) => setEnabled(event.currentTarget.checked)}
       />
-      <Surface style={{ display: 'grid', gap: 12 }}>
-        <Heading level={3}>沿着河边，慢慢走</Heading>
-        {showExcerpt && <Text>记录今天散步时遇见的小小发现。</Text>}
-      </Surface>
-      <Text size="sm" tone="muted" role="status">
-        {showExcerpt ? '摘要已显示。' : '摘要已隐藏，文章标题仍然保留。'}
+      <Text size="sm" tone="muted">
+        {enabled ? '已开启' : '已关闭'}
       </Text>
     </div>
   );
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+表单例演示取值与重置；异步例由使用方管理本地模拟保存。
+
 <a id="form"></a>
 
-### 表单值与重置
+### 表单集成
 
-读取当前开关值或重置；切换后清除上次结果。
+读取开关值，或重置到初始状态。
 
 [查看示例文件](../../playground/src/examples/new-forms/SwitchForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -147,13 +175,115 @@ export default function SwitchForm() {
 }
 ```
 
+<a id="switch-reading-preference"></a>
+
+### 异步切换与失败恢复
+
+模拟保存时显示加载状态，首次失败后回滚，可再次切换重试。
+
+[查看示例文件](../../playground/src/examples/new-forms/SwitchReadingPreference.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SwitchReadingPreference.tsx -->
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import { Alert, Button, Switch, Text } from 'yahha-ui';
+
+export default function SwitchReadingPreference() {
+  const [enabled, setEnabled] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [message, setMessage] = useState('通知已关闭。');
+  const busyRef = useRef(false);
+  const committedRef = useRef(false);
+  const hasFailedRef = useRef(false);
+  const requestRef = useRef(0);
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      requestRef.current += 1;
+      busyRef.current = false;
+      if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    },
+    [],
+  );
+
+  function savePreference(next: boolean) {
+    if (busyRef.current || next === committedRef.current) return;
+    busyRef.current = true;
+    const request = ++requestRef.current;
+    const previous = committedRef.current;
+    setEnabled(next);
+    setBusy(true);
+    setFailed(false);
+    setMessage('正在本地模拟保存…');
+
+    timerRef.current = window.setTimeout(() => {
+      if (request !== requestRef.current) return;
+      timerRef.current = null;
+      busyRef.current = false;
+      setBusy(false);
+      if (!hasFailedRef.current) {
+        hasFailedRef.current = true;
+        setEnabled(previous);
+        setFailed(true);
+        setMessage('');
+      } else {
+        committedRef.current = next;
+        setMessage(`通知已${next ? '开启' : '关闭'}；仅当前示例生效。`);
+      }
+    }, 700);
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 16, minWidth: 0, maxWidth: 480 }}>
+      <Switch
+        label="启用通知"
+        checked={enabled}
+        loading={busy}
+        onChange={(event) => savePreference(event.currentTarget.checked)}
+      />
+      <Text size="sm" tone="muted" role="status">
+        {message}
+      </Text>
+      {failed && (
+        <Alert tone="error" role="alert" title="模拟保存失败">
+          已恢复为关闭，再次开启可重试。
+        </Alert>
+      )}
+      <div>
+        <Button
+          variant="secondary"
+          disabled={busy}
+          onClick={() => {
+            if (busyRef.current) return;
+            requestRef.current += 1;
+            if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+            timerRef.current = null;
+            committedRef.current = false;
+            hasFailedRef.current = false;
+            setEnabled(false);
+            setFailed(false);
+            setMessage('示例已重置，通知已关闭。');
+          }}
+        >
+          重置示例
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="design"></a>
 
-## 状态与表单
+## 状态与交互
 
-- checked / onChange 管理受控开关，defaultChecked 设置非受控初始状态；从 event.target.checked 读取开关结果，实际设置变化由调用方完成。
-- 设置 name 与 value 后，仅开启且未禁用时提交 name=value。非受控状态随原生表单重置，受控状态需在 onReset 中恢复 React 状态。
-- disabled 阻止操作并退出键盘顺序与提交，也支持父 fieldset 禁用。需要锁定设置时使用 disabled，Switch 不提供只读模式。
+- checked / onChange 管理受控状态，defaultChecked 设置初始状态；从 event.target.checked 读取结果。
+- loading 显示圆扣内的三墨点并阻止点击、空格切换，保留当前值、焦点和表单值。 请求、完成与失败处理由使用方控制，组件不自动发起保存。
+- disabled 使用原生禁用行为，退出键盘顺序且不参与表单提交，支持父 fieldset 禁用。 loading 不会自动设置原生 disabled；显式禁用仍按原生规则处理。
 
 <a id="api"></a>
 
@@ -167,8 +297,9 @@ export default function SwitchForm() {
 | `hint`                               | 通过 aria-describedby 关联的说明。                                                                                          | `ReactNode`                            | —                     |
 | `checked / defaultChecked`           | 分别用于受控状态与非受控初始状态。                                                                                          | `boolean`                              | `false（原生）`       |
 | `onChange`                           | 原生事件，从 event.target.checked 读取开启状态。                                                                            | `ChangeEventHandler<HTMLInputElement>` | —                     |
+| `loading`                            | 显示加载状态并阻止重复切换，保留 checked、焦点和表单值；同时设置 aria-busy 与 aria-disabled。                               | `boolean`                              | `false`               |
 | `disabled`                           | 禁用交互和提交，支持父 fieldset disabled。                                                                                  | `boolean`                              | `false（原生）`       |
-| `name / value / form / required`     | 原生 checkbox 表单能力；仅开启且未禁用时提交，required 要求开启。                                                           | `原生 input 对应属性`                  | `value 为 on（原生）` |
+| `name / value / form / required`     | 原生表单属性；开启且未禁用时提交，loading 不移除表单值，required 要求开启。                                                 | `原生 input 对应属性`                  | `value 为 on（原生）` |
 | `className`                          | 根字段 div 的附加类名。                                                                                                     | `string`                               | —                     |
 | `classNames`                         | 各部分附加类名，每个值为 string。                                                                                           | `{ label?, input?, text?, hint? }`     | —                     |
 | `ref / style / id / 其他 input 属性` | 作用于真实 input；固定 type=checkbox、role=switch，不提供 readOnly、children、aria-checked。可访问状态由原生 checked 提供。 | `ComponentPropsWithRef<"input">`       | `id 自动生成`         |

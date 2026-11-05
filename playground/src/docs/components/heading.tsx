@@ -24,10 +24,17 @@ export default defineComponentPage('heading', {
           HeadingExample,
           headingSource,
         ),
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看文章层级与章节链接',
+      examples: [
         example(
           'heading-reading-layout',
-          '文章结构与长标题',
-          '通过目录定位章节，查看标题层级与长标题换行。',
+          '文章层级与章节链接',
+          '定位章节、复制章节地址；复制失败时可手动复制。',
           () => <HeadingArticle hrefPrefix="#/components/heading?section=" />,
           headingArticleSource,
         ),
@@ -73,6 +80,12 @@ export default defineComponentPage('heading', {
           <p>
             目录链接引用标题在页面内唯一的 id。定位后的滚动与焦点由页面处理；上例通过 ref
             聚焦目标标题，并设置 tabIndex={-1}，使其可被聚焦而不额外加入 Tab 顺序。
+          </p>
+          <p>
+            章节分享属于页面任务。示例复用固定 id 与 hrefPrefix
+            生成永久链接；剪贴板失败时显示可选中的只读地址，
+            仍可用浏览器原生方式复制。接入自己的路由时替换 hrefPrefix，不由 Heading 自动生成地址。
+            页面定位时为固定页头保留滚动留白，接入自己的站点时按路由与页头布局处理。
           </p>
         </>
       ),

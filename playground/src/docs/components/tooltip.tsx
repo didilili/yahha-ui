@@ -33,7 +33,7 @@ export default defineComponentPage('tooltip', {
         {
           id: 'basic',
           previewAlign: 'center',
-          title: '图标操作的文字标签',
+          title: '悬停与聚焦提示',
           description: '悬停或聚焦查看提示，点击切换收藏。',
           component: TooltipBasic,
           source: tooltipBasicSource,

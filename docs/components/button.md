@@ -14,9 +14,7 @@ import { Button } from 'yahha-ui';
 
 ## 何时使用
 
-用于触发动作，例如提交表单、保存草稿和切换收藏。页面或地址跳转使用 [Link](link.md)；只有图标的操作使用 [IconButton](icon-button.md)。
-
-同一操作区域优先保留一个主要动作，例如“保存草稿”；“取消修改”等配合动作使用次要按钮， 低强调的辅助动作使用文字按钮。这里的 `ghost` 表示文字按钮， 不等同于其他组件库的透明描边按钮。
+主操作用 primary，配合动作用 secondary，辅助动作用 ghost（文字）。跳转使用 [Link](link.md)，纯图标使用 [IconButton](icon-button.md)。
 
 <a id="examples"></a>
 
@@ -70,6 +68,35 @@ export default function ButtonVariants() {
         <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
           <span>{variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}</span>
           <Button variant={variant}>保存草稿</Button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+<a id="button-destructive"></a>
+
+### 危险操作
+
+三种强调程度的危险按钮静态对照。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonDestructive.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonDestructive.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonDestructive() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+      {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
+        <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>{variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}</span>
+          <Button variant={variant} destructive>
+            删除草稿
+          </Button>
         </div>
       ))}
     </div>
@@ -184,95 +211,22 @@ export default function ButtonIcons() {
 
 <a id="button-states"></a>
 
-### 禁用与异步加载
+### 禁用与加载
 
-模拟保存：无图标示例保存成功，带图标示例首次失败，可再次点击重试；不发送请求。
+对比禁用与加载状态，加载时保留按钮名称。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
 <!-- example-source: playground/src/examples/foundations/ButtonStates.tsx -->
 
 ```tsx
-import { useEffect, useId, useState } from 'react';
-import { Button, Text } from 'yahha-ui';
-
-function AsyncAction({ withIcon = false }: { withIcon?: boolean }) {
-  const statusId = useId();
-  const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'success'>('idle');
-  const [attempt, setAttempt] = useState(0);
-  const loading = status === 'loading';
-
-  useEffect(() => {
-    if (!loading) return;
-    // 模拟保存：带图标的例子首次失败，重试成功；实际项目按请求结果更新状态。
-    const timer = window.setTimeout(() => {
-      setStatus(withIcon && attempt === 1 ? 'error' : 'success');
-    }, 1500);
-    return () => window.clearTimeout(timer);
-  }, [loading, withIcon, attempt]);
-
-  return (
-    <div
-      role="group"
-      aria-label={withIcon ? '带前图标的异步加载' : '无前图标的异步加载'}
-      style={{ display: 'grid', justifyItems: 'start', gap: 8 }}
-    >
-      <span>{withIcon ? '带前置图标 · 首次失败后重试' : '不带图标 · 保存成功'}</span>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
-        <Button
-          loading={loading}
-          aria-describedby={statusId}
-          startIcon={
-            withIcon ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M5 3h12l3 3v15H4V3h1Z" strokeWidth="1.8" strokeLinejoin="round" />
-                <path d="M8 3v6h8V3M8 21v-8h8v8" strokeWidth="1.8" strokeLinejoin="round" />
-              </svg>
-            ) : undefined
-          }
-          onClick={() => {
-            setAttempt((value) => value + 1);
-            setStatus('loading');
-          }}
-        >
-          保存草稿
-        </Button>
-        <Text id={statusId} size="sm" tone="muted" role="status">
-          {status === 'loading'
-            ? '正在保存…'
-            : status === 'success'
-              ? '草稿已保存'
-              : status === 'error'
-                ? '模拟保存失败，请再次点击“保存草稿”重试。'
-                : '尚未保存'}
-        </Text>
-      </div>
-    </div>
-  );
-}
+import { Button } from 'yahha-ui';
 
 export default function ButtonStates() {
-  const disabledReasonId = useId();
-
   return (
-    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-        {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
-          <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-            <span>
-              {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'} · 禁用
-            </span>
-            <Button variant={variant} disabled aria-describedby={disabledReasonId}>
-              保存草稿
-            </Button>
-          </div>
-        ))}
-      </div>
-      <Text id={disabledReasonId} size="sm" tone="muted">
-        请先选择一篇手记，再保存草稿。上方为静态禁用对照。
-      </Text>
-      <AsyncAction />
-      <AsyncAction withIcon />
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+      <Button disabled>保存草稿</Button>
+      <Button loading>保存草稿</Button>
     </div>
   );
 }
@@ -280,7 +234,7 @@ export default function ButtonStates() {
 
 <a id="button-toggle"></a>
 
-### 切换状态
+### 切换按钮
 
 点击按钮切换收藏状态，通过 aria-pressed 表达是否选中。
 
@@ -303,16 +257,20 @@ export default function ButtonToggle() {
         startIcon={
           <svg
             viewBox="0 0 24 24"
-            fill={saved ? 'currentColor' : 'none'}
+            fill="none"
             stroke="currentColor"
             strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             aria-hidden="true"
+            focusable="false"
           >
             <path
-              d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              d="M8 3.25h6.2l4.05 4.1v12.7c0 .6-.5.88-1 .57L12 17.4l-5.3 3.22c-.5.31-.95.02-.95-.57V5.6C5.75 4.15 6.5 3.25 8 3.25Z"
+              fill={saved ? 'currentColor' : 'none'}
+              fillOpacity="0.2"
             />
+            <path d="M14.2 3.5v3c0 .6.35.95.95.95h2.8" fill="none" />
           </svg>
         }
         onClick={() => setSaved((value) => !value)}
@@ -321,6 +279,152 @@ export default function ButtonToggle() {
       </Button>
       <Text size="sm" tone="muted" role="status">
         {saved ? '已加入收藏' : '尚未收藏'}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
+<a id="button-async"></a>
+
+### 异步加载与重试
+
+模拟保存首次失败，再次点击重试；状态仅保留在当前示例。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonAsync.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonAsync.tsx -->
+
+```tsx
+import { useEffect, useId, useState } from 'react';
+import { Button, Text } from 'yahha-ui';
+
+export default function ButtonAsync() {
+  const statusId = useId();
+  const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'success'>('idle');
+  const [attempt, setAttempt] = useState(0);
+  const loading = status === 'loading';
+
+  useEffect(() => {
+    if (!loading) return;
+    const timer = window.setTimeout(() => setStatus(attempt === 1 ? 'error' : 'success'), 700);
+    return () => window.clearTimeout(timer);
+  }, [loading, attempt]);
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
+      <Button
+        loading={loading}
+        aria-describedby={statusId}
+        startIcon={
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 3h12l3 3v15H4V3h1Z" strokeLinejoin="round" />
+            <path d="M8 3v6h8V3M8 21v-8h8v8" strokeLinejoin="round" />
+          </svg>
+        }
+        onClick={() => {
+          setAttempt((value) => value + 1);
+          setStatus('loading');
+        }}
+      >
+        保存草稿
+      </Button>
+      <Text id={statusId} size="sm" tone="muted" role="status">
+        {loading
+          ? '正在保存…'
+          : status === 'error'
+            ? '模拟保存失败，请重试。'
+            : status === 'success'
+              ? '草稿已保存'
+              : '尚未保存'}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="button-delete-draft"></a>
+
+### 删除确认与恢复
+
+确认后删除本地草稿，取消时保留，删除后可恢复。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonDeleteDraft.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonDeleteDraft.tsx -->
+
+```tsx
+import { useId, useRef, useState } from 'react';
+import { Button, Dialog, EmptyState, Heading, Text } from 'yahha-ui';
+
+export default function ButtonDeleteDraft() {
+  const [hasDraft, setHasDraft] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const draftTitleId = useId();
+  const actionRef = useRef<HTMLButtonElement>(null);
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <div style={{ display: 'grid', gap: 16, maxWidth: 520 }}>
+      {hasDraft ? (
+        <section aria-labelledby={draftTitleId} style={{ display: 'grid', gap: 8 }}>
+          <Heading level={3} id={draftTitleId}>
+            周末散步记录
+          </Heading>
+          <Text>沿河走了一小段，记下树影和路边新开的花。</Text>
+        </section>
+      ) : (
+        <EmptyState title="草稿已删除" description="这份散步记录仍可通过下方按钮恢复。" />
+      )}
+      <div>
+        <Button
+          ref={actionRef}
+          variant="secondary"
+          destructive={hasDraft}
+          onClick={() => {
+            if (hasDraft) {
+              setOpen(true);
+              return;
+            }
+            setHasDraft(true);
+            setMessage('草稿已恢复。');
+          }}
+        >
+          {hasDraft ? '删除草稿' : '恢复草稿'}
+        </Button>
+      </div>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        title="删除这份草稿？"
+        description="将移除当前演示中的「周末散步记录」，删除后仍可恢复。"
+        initialFocus={cancelRef}
+        finalFocus={actionRef}
+        footer={
+          <>
+            <Button ref={cancelRef} variant="secondary" onClick={() => setOpen(false)}>
+              取消
+            </Button>
+            <Button
+              destructive
+              onClick={() => {
+                setHasDraft(false);
+                setOpen(false);
+                setMessage('草稿已删除，可通过“恢复草稿”按钮恢复。');
+              }}
+            >
+              确认删除
+            </Button>
+          </>
+        }
+      />
+      <Text size="sm" tone="muted" role="status">
+        {message}
       </Text>
     </div>
   );
@@ -374,6 +478,8 @@ export default function ButtonForm() {
 
 ## 布局与定制
 
+`ghost` 在本库表示文字按钮，不是透明描边按钮。 删除等破坏性动作可设置 `destructive`，并用动作名称明确风险；它与`variant` 分开控制，不自动打开确认弹窗或执行删除。危险色使用既有错误语义色，[ThemeProvider](theme.md) 的 `tokens.error`也会影响危险按钮。
+
 全宽按钮可设置 `style={{ width: '100%' }}`，长名称会换行并撑高按钮。 具体写法见上方[尺寸、全宽与长文案](button.md#button-sizes)。
 
 多个按钮之间的间距和换行放在外层容器中设置，例如 `style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}`。 主次操作的可运行写法见[提交与重置](button.md#button-form)。 需要统一配色时，使用 [ThemeProvider](theme.md) 的主题配置。
@@ -386,6 +492,7 @@ export default function ButtonForm() {
 
 | 属性                  | 说明                                                                                     | 类型                                      | 默认值      |
 | --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----------- |
+| `destructive`         | 用危险色表达删除等破坏性动作，与 variant 分开控制；不自动确认或执行删除。                | `boolean`                                 | `false`     |
 | `variant`             | 主要、次要或文字按钮。                                                                   | `'primary' \| 'secondary' \| 'ghost'`     | `'primary'` |
 | `size`                | 最小高度依次为 36、44、52px；IconButton 对应为方形点击区域。                             | `'sm' \| 'md' \| 'lg'`                    | `'md'`      |
 | `loading`             | 显示加载图标并禁用按钮，设置 aria-busy。请求与完成状态由调用方管理。                     | `boolean`                                 | `false`     |

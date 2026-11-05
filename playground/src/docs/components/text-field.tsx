@@ -2,12 +2,20 @@ import TextFieldBasic from '../../examples/forms/TextFieldBasic';
 import textFieldBasicSource from '../../examples/forms/TextFieldBasic.tsx?raw';
 import TextFieldControlled from '../../examples/forms/TextFieldControlled';
 import textFieldControlledSource from '../../examples/forms/TextFieldControlled.tsx?raw';
+import TextFieldSlots from '../../examples/forms/TextFieldSlots';
+import textFieldSlotsSource from '../../examples/forms/TextFieldSlots.tsx?raw';
+import TextFieldStates from '../../examples/forms/TextFieldStates';
+import textFieldStatesSource from '../../examples/forms/TextFieldStates.tsx?raw';
 import TextFieldValidation from '../../examples/forms/TextFieldValidation';
 import textFieldValidationSource from '../../examples/forms/TextFieldValidation.tsx?raw';
 import TextFieldNative from '../../examples/forms/TextFieldNative';
 import textFieldNativeSource from '../../examples/forms/TextFieldNative.tsx?raw';
 import TextFieldForm from '../../examples/forms/TextFieldForm';
 import textFieldFormSource from '../../examples/forms/TextFieldForm.tsx?raw';
+import TextFieldSearch from '../../examples/forms/TextFieldSearch';
+import textFieldSearchSource from '../../examples/forms/TextFieldSearch.tsx?raw';
+import TextFieldCopy from '../../examples/forms/TextFieldCopy';
+import textFieldCopySource from '../../examples/forms/TextFieldCopy.tsx?raw';
 import TextFieldCustomization from '../../examples/customization/TextFieldCustomization';
 import textFieldCustomizationSource from '../../examples/customization/TextFieldCustomization.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -30,7 +38,6 @@ export default defineComponentPage('text-field', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页示例只在本地操作，不发送或保存表单数据。</p>,
       examples: [
         {
           id: 'basic',
@@ -41,10 +48,24 @@ export default defineComponentPage('text-field', {
         },
         {
           id: 'controlled',
-          title: '受控输入与装饰图标',
-          description: '输入关键词并查看当前值；本例不筛选文章。',
+          title: '受控输入',
+          description: '通过 value 与 onChange 管理输入内容。',
           component: TextFieldControlled,
           source: textFieldControlledSource,
+        },
+        {
+          id: 'text-field-slots',
+          title: '前置图标与尾部操作',
+          description: '前置图标仅作装饰，示例通过尾部按钮清空内容并回焦。',
+          component: TextFieldSlots,
+          source: textFieldSlotsSource,
+        },
+        {
+          id: 'text-field-states',
+          title: '只读与禁用',
+          description: '对比只读可复制和禁用不可编辑两种状态。',
+          component: TextFieldStates,
+          source: textFieldStatesSource,
         },
         {
           id: 'validation',
@@ -53,19 +74,45 @@ export default defineComponentPage('text-field', {
           component: TextFieldValidation,
           source: textFieldValidationSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看原生类型与表单组合',
+      content: <p>以下示例只在本地操作，不发送或保存表单数据。</p>,
+      examples: [
         {
           id: 'native',
-          title: '字段状态与原生输入类型',
-          description: '对比只读、禁用与原生输入类型，可检查邮箱格式。',
+          title: '原生输入类型',
+          description: '查看邮箱、密码、日期与时间输入，可检查邮箱格式。',
           component: TextFieldNative,
           source: textFieldNativeSource,
+          toc: false,
         },
         {
           id: 'form',
-          title: '表单提交与重置',
+          title: '表单取值与重置',
           description: '读取本地表单或恢复初始值；编辑后清除上次读取结果。',
           component: TextFieldForm,
           source: textFieldFormSource,
+          toc: false,
+        },
+        {
+          id: 'text-field-search',
+          title: '中文输入与尾部清空',
+          description: '组合输入时保留当前结果，结束后筛选本地手记；清空后回到输入框。',
+          component: TextFieldSearch,
+          source: textFieldSearchSource,
+          toc: false,
+        },
+        {
+          id: 'text-field-copy',
+          title: '只读输入与尾部复制',
+          description: '复制示例地址；浏览器拒绝时可选中文字，使用系统复制。',
+          component: TextFieldCopy,
+          source: textFieldCopySource,
+          toc: false,
         },
       ],
     },
@@ -93,6 +140,20 @@ export default defineComponentPage('text-field', {
           <li>
             error 只显示错误，不执行校验。本地校验例使用 noValidate
             跳过浏览器提交校验，由示例检查昵称并设置或清除 error；邮箱例保留浏览器必填与格式校验。
+          </li>
+          <li>
+            trailing 是可交互的尾部内容槽，与仅作装饰的 leading 分开。适合一个默认 44px 的
+            IconButton；组件只负责布局，操作名称、type="button"、disabled 和行为由使用方设置。
+            disabled 只禁用输入框，不递归修改槽内容；只读地址仍可提供复制操作。
+          </li>
+          <li>
+            显式设置 <code>dir="ltr"</code> / <code>dir="rtl"</code> 或 <code>style.direction</code>{' '}
+            时，前后缀布局与输入框保持同向；标签和辅助文字仍跟随外层方向。
+          </li>
+          <li>
+            原生 composition 事件直接传给输入框。搜索例立即更新编辑值，组合期间保留上一次筛选，
+            结束或取消后按输入框当前完整值更新结果；没有表单提交或远程请求。 该例使用 text +
+            inputMode="search"，由一个命名按钮清空，避免与原生 search 取消按钮重复。
           </li>
         </ul>
       ),
@@ -131,6 +192,12 @@ export default defineComponentPage('text-field', {
               type: 'ReactNode',
               description:
                 '18×18px 的装饰图标槽，超出内容会裁切；包装元素 aria-hidden，不放长前缀、交互控件或必要文字。',
+            },
+            {
+              name: 'trailing',
+              type: 'ReactNode',
+              description:
+                '尾部内容槽，可放命名操作；组件只布局，按钮的 type、disabled 与行为由使用方设置。',
             },
             {
               name: 'id',
@@ -225,8 +292,17 @@ export default defineComponentPage('text-field', {
           name: 'classNames',
           rows: [
             { name: 'label', type: 'string', description: '可见 label。' },
-            { name: 'inputWrapper', type: 'string', description: '前缀与输入框的共同容器。' },
+            {
+              name: 'inputWrapper',
+              type: 'string',
+              description: '前缀、输入框与尾部内容的共同容器；有 trailing 时承载字段轮廓。',
+            },
             { name: 'leading', type: 'string', description: '装饰性前缀的包装元素。' },
+            {
+              name: 'trailing',
+              type: 'string',
+              description: '尾部内容的包装元素，不隐藏交互语义。',
+            },
             {
               name: 'input',
               type: 'string',

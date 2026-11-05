@@ -16,55 +16,47 @@ import { Toast } from 'yahha-ui';
 
 用于保存成功、内容已归档等不需要中断当前操作的短结果提示。需要持续阅读的说明或错误可使用 [Alert](alert.md) 或直接留在页面中。
 
-Toast 是受控展示组件，显示在调用方放置的位置。调用方管理消息内容、open、关闭时机与多条消息的排列；下方示例只更新本地状态，不实际保存或归档文章。
+Toast 是受控展示组件，显示在调用方放置的位置。调用方管理消息内容、open、关闭时机与多条消息的排列。
 
 <a id="examples"></a>
 
 ## 代码演示
 
-<a id="basic"></a>
+<a id="toast-simple"></a>
 
-### 受控显示与关闭
+### 基础用法
 
-显示模拟保存结果，关闭后可再次显示。
+显示并关闭提示，关闭后可重新显示。
 
-[查看示例文件](../../playground/src/examples/feedback/ToastBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/ToastSimple.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
-<!-- example-source: playground/src/examples/feedback/ToastBasic.tsx -->
+<!-- example-source: playground/src/examples/feedback/ToastSimple.tsx -->
 
 ```tsx
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, Toast } from 'yahha-ui';
 
-export default function ToastBasic() {
-  const [open, setOpen] = useState(false);
-  const trigger = useRef<HTMLButtonElement>(null);
+export default function ToastSimple() {
+  const [open, setOpen] = useState(true);
   const message = useRef<HTMLDivElement>(null);
-  const returnFocus = useRef(false);
-
-  useEffect(() => {
-    if (open || !returnFocus.current) return;
-    returnFocus.current = false;
-    if (document.activeElement === document.body) trigger.current?.focus();
-  }, [open]);
+  const show = useRef<HTMLButtonElement>(null);
 
   return (
-    <div style={{ display: 'grid', gap: 20 }}>
-      <div>
-        <Button ref={trigger} onClick={() => setOpen(true)}>
-          显示保存结果
-        </Button>
-      </div>
+    <div style={{ display: 'grid', gap: 16, maxWidth: 480 }}>
       <div ref={message}>
         <Toast
           open={open}
+          title="这是一条提示。"
           onClose={() => {
-            returnFocus.current = message.current?.contains(document.activeElement) ?? false;
+            if (message.current?.contains(document.activeElement)) show.current?.focus();
             setOpen(false);
           }}
-          title="保存成功"
-          description="标题和正文已保存在草稿中。"
         />
+      </div>
+      <div>
+        <Button ref={show} variant="secondary" onClick={() => setOpen(true)}>
+          显示提示
+        </Button>
       </div>
     </div>
   );
@@ -154,11 +146,127 @@ export default function ToastTones() {
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+示例只操作本地清单或文章状态。重要操作保留常驻入口，提示关闭后仍可继续访问或恢复。
+
+<a id="basic"></a>
+
+### 带操作的提示
+
+点击提示内的操作查看清单，关闭后仍可从常驻入口访问。
+
+[查看示例文件](../../playground/src/examples/feedback/ToastBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/ToastBasic.tsx -->
+
+```tsx
+import { useEffect, useId, useRef, useState } from 'react';
+import { Button, Heading, Text, Toast } from 'yahha-ui';
+
+const article = {
+  title: '窗边那半本书，留给周末的一页',
+  summary: '把读到一半的段落留给周末，先将手记收进稍后阅读清单。',
+};
+
+export default function ToastBasic() {
+  const [saved, setSaved] = useState(false);
+  const [open, setOpen] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const message = useRef<HTMLDivElement>(null);
+  const listHeading = useRef<HTMLHeadingElement>(null);
+  const returnFocus = useRef(false);
+  const listId = useId();
+
+  useEffect(() => {
+    if (open || !returnFocus.current) return;
+    returnFocus.current = false;
+    if (document.activeElement === document.body) trigger.current?.focus();
+  }, [open]);
+
+  function viewList() {
+    returnFocus.current = false;
+    setOpen(false);
+    listHeading.current?.focus();
+    listHeading.current?.scrollIntoView({ block: 'nearest' });
+  }
+
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gap: 20,
+        maxWidth: 640,
+        minWidth: 0,
+        overflowWrap: 'anywhere',
+      }}
+    >
+      <article aria-label="示例手记" style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+        <Heading level={3}>{article.title}</Heading>
+        <Text>{article.summary}</Text>
+        <Text size="sm" tone="muted">
+          {saved ? '已在稍后阅读清单中。' : '尚未加入稍后阅读。'}
+        </Text>
+      </article>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+        <Button
+          ref={trigger}
+          onClick={() => {
+            returnFocus.current = false;
+            setSaved((current) => !current);
+            setOpen(true);
+          }}
+        >
+          {saved ? '移出稍后阅读' : '加入稍后阅读'}
+        </Button>
+        <Button variant="secondary" onClick={viewList}>
+          查看阅读清单
+        </Button>
+      </div>
+      <div ref={message}>
+        <Toast
+          open={open}
+          onClose={() => {
+            returnFocus.current = message.current?.contains(document.activeElement) ?? false;
+            setOpen(false);
+          }}
+          tone={saved ? 'success' : 'info'}
+          title={saved ? '已加入稍后阅读' : '已移出稍后阅读'}
+          description={article.title}
+          action={
+            <Button variant="ghost" onClick={viewList}>
+              查看阅读清单
+            </Button>
+          }
+        />
+      </div>
+      <section aria-labelledby={listId} style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+        <Heading id={listId} ref={listHeading} level={3} tabIndex={-1}>
+          稍后阅读清单
+        </Heading>
+        <Text size="sm" tone="muted">
+          共 {saved ? 1 : 0} 篇手记。
+        </Text>
+        {saved ? (
+          <ul style={{ margin: 0, paddingInlineStart: 24, minWidth: 0 }}>
+            <li>{article.title}</li>
+          </ul>
+        ) : (
+          <Text>还没有稍后阅读的手记。</Text>
+        )}
+      </section>
+    </div>
+  );
+}
+```
+
 <a id="timer-and-action"></a>
 
-### 调用方计时与撤销操作
+### 计时关闭与撤销
 
-归档后体验 8 秒提示与撤销，关闭后仍可恢复文章。
+示例控制 8 秒关闭，可撤销归档；提示关闭后仍可恢复文章。
 
 [查看示例文件](../../playground/src/examples/feedback/ToastTimer.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -262,7 +370,9 @@ export default function ToastTimer() {
 
 ## 自动关闭与恢复入口
 
-自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；示例等待 8 秒后关闭，悬停或聚焦时暂停，离开后重新计满 8 秒。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
+自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；计时与撤销示例等待 8 秒后关闭，悬停或聚焦时暂停，离开后重新计满 8 秒。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
+
+带操作的提示例保留清单入口；查看操作聚焦常驻清单标题，关闭提示不会丢失已加入的内容。
 
 <a id="api"></a>
 

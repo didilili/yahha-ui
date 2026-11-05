@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { revealExample } from './reveal-example.mjs';
 
 export async function verifyBlogArchive(page, baseURL) {
   await page.goto(`${baseURL}#/guides/states?section=archive`);
@@ -68,9 +69,10 @@ export async function verifyBlogArchive(page, baseURL) {
 export async function verifyNavigationExamples(page, baseURL) {
   await page.goto(`${baseURL}#/components/tabs?section=controlled`);
   const tabs = page.locator('#controlled .example-preview');
+  await revealExample(tabs);
   const draft = tabs.getByRole('textbox', { name: '明信片草稿', exact: true });
   await draft.fill('留给周末的一句问候');
-  await tabs.getByRole('tab', { name: '明信片说明', exact: true }).click();
+  await tabs.getByRole('tab', { name: '预览明信片', exact: true }).click();
   await tabs.getByRole('button', { name: '回到明信片', exact: true }).click();
   await page.waitForFunction(
     (node) => document.activeElement === node,
@@ -81,6 +83,7 @@ export async function verifyNavigationExamples(page, baseURL) {
 
   await page.goto(`${baseURL}#/components/accordion?section=controlled`);
   const accordion = page.locator('#controlled .example-preview');
+  await revealExample(accordion);
   const expand = accordion.getByRole('button', { name: '展开可用说明', exact: true });
   // WebKit may leave a pointer-clicked button unfocused. Exercise keyboard focus retention.
   await expand.focus();

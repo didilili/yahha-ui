@@ -45,7 +45,7 @@ export async function verifyAdoption(browser, baseURL) {
 
     await page.goto(`${baseURL}#/components/text-field?section=text-field-customization`);
     const field = page.locator('#text-field-customization');
-    await field.getByRole('textbox', { name: '手记署名', exact: true }).fill('小林');
+    await field.getByRole('textbox', { name: '手记署名', exact: true }).fill('库米');
     assert.ok((await field.locator('.yahha-example-nickname-field').boundingBox()).width <= 360);
     assert.equal(
       await field

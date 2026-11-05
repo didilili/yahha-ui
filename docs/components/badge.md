@@ -22,7 +22,7 @@ import { Badge } from 'yahha-ui';
 
 <a id="badge-tones"></a>
 
-### 标记类型、行内组合与长标签
+### 标记类型与组合
 
 对比三种标记、行内组合和长标签换行。
 
@@ -73,32 +73,98 @@ export default function BadgeTones() {
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+摘要例将分类与检查状态分开展示，只检查当前摘要是否为空；编辑后撤销旧检查结果。 校验和预览由示例管理，标记不代表内容已保存或发布。
+
 <a id="badge-status"></a>
 
-### 展示动态状态
+### 表单校验状态组合
 
-点击按钮切换已读状态；状态仅保留在当前示例。
+根据摘要检查结果切换标记。
 
 [查看示例文件](../../playground/src/examples/foundations/BadgeStatus.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
 <!-- example-source: playground/src/examples/foundations/BadgeStatus.tsx -->
 
 ```tsx
-import { useState } from 'react';
-import { Badge, Button } from 'yahha-ui';
+import { useRef, useState } from 'react';
+import { Badge, Button, Heading, Surface, Text, TextField } from 'yahha-ui';
+
+type Phase = 'unchecked' | 'editing' | 'missing' | 'checked';
+const labels = {
+  unchecked: '未检查',
+  editing: '待检查',
+  missing: '需补充',
+  checked: '已检查',
+};
 
 export default function BadgeStatus() {
-  const [read, setRead] = useState(false);
+  const [phase, setPhase] = useState<Phase>('unchecked');
+  const [preview, setPreview] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const tone = phase === 'checked' ? 'success' : phase === 'editing' ? 'accent' : 'neutral';
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
-      <span role="status">
-        <Badge tone={read ? 'success' : 'neutral'}>{read ? '已读' : '未读'}</Badge>
-      </span>
-      <Button variant="secondary" aria-pressed={read} onClick={() => setRead((value) => !value)}>
-        标记为已读
-      </Button>
-    </div>
+    <Surface style={{ display: 'grid', gap: 24, minWidth: 0, maxWidth: 560 }}>
+      <header style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
+        <Badge>生活手记</Badge>
+        <Heading level={3}>沿着河边，慢慢走</Heading>
+      </header>
+      <form
+        noValidate
+        style={{ display: 'grid', gap: 16, minWidth: 0 }}
+        onInput={() => {
+          setPhase('editing');
+          setPreview(null);
+        }}
+        onReset={() => {
+          setPhase('unchecked');
+          setPreview(null);
+        }}
+        onSubmit={(event) => {
+          event.preventDefault();
+          const summary = String(new FormData(event.currentTarget).get('summary') ?? '');
+          if (!summary.trim()) {
+            setPhase('missing');
+            setPreview(null);
+            inputRef.current?.focus();
+            return;
+          }
+          setPhase('checked');
+          setPreview(summary);
+        }}
+      >
+        <TextField
+          ref={inputRef}
+          label="手记摘要"
+          name="summary"
+          defaultValue=""
+          required
+          hint="必填，写下一两句手记的内容。"
+          error={phase === 'missing' ? '请先填写摘要。' : undefined}
+        />
+        <div>
+          <Badge tone={tone}>{labels[phase]}</Badge>
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+          <Button type="submit">检查摘要</Button>
+          <Button type="reset" variant="secondary">
+            恢复示例
+          </Button>
+        </div>
+        <Text role="status" size="sm" tone="muted">
+          {phase === 'checked' ? '摘要检查通过，预览已更新；内容未保存或发布。' : ''}
+        </Text>
+        {preview !== null && (
+          <section aria-label="摘要预览" style={{ whiteSpace: 'pre-wrap' }}>
+            <Text>{preview}</Text>
+          </section>
+        )}
+      </form>
+    </Surface>
   );
 }
 ```
@@ -127,7 +193,7 @@ export default function BadgeStatus() {
 
 ## 更新标记与状态播报
 
-分类和既有状态通常直接显示即可。需要通知保存、发布等操作结果时，可像示例一样由外层 role="status" 承担温和播报；Badge 本身不会自动播报，同一结果只保留一处播报。
+分类和既有状态通常直接显示即可。需要通知检查等操作结果时，可像示例一样由外层 role="status" 承担温和播报；Badge 本身不会自动播报，同一结果只保留一处播报。
 
 <a id="related"></a>
 

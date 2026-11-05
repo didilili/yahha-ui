@@ -1,5 +1,7 @@
 import AvatarExample from '../../examples/content/AvatarExample';
 import avatarSource from '../../examples/content/AvatarExample.tsx?raw';
+import AvatarAuthor from '../../examples/content/AvatarAuthor';
+import avatarAuthorSource from '../../examples/content/AvatarAuthor.tsx?raw';
 import AvatarPicture from '../../examples/content/AvatarPicture';
 import avatarPictureSource from '../../examples/content/AvatarPicture.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -23,8 +25,8 @@ export default defineComponentPage('avatar', {
       examples: [
         example(
           'avatar-fallback',
-          '尺寸与文字回退',
-          '对比三档尺寸、完整署名与匿名回退。',
+          '尺寸与姓名回退',
+          '比较三档尺寸、空姓名与自定义回退。',
           AvatarExample,
           avatarSource,
         ),
@@ -35,6 +37,21 @@ export default defineComponentPage('avatar', {
           AvatarPicture,
           avatarPictureSource,
         ),
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看作者身份与弹窗组合',
+      examples: [
+        {
+          id: 'avatar-author',
+          title: '作者身份与弹窗',
+          description: '通过独立按钮查看介绍，关闭后返回入口。',
+          component: AvatarAuthor,
+          source: avatarAuthorSource,
+          toc: false,
+        },
       ],
     },
     {
@@ -101,6 +118,7 @@ export default defineComponentPage('avatar', {
         <ul>
           {[
             'name 为整个头像提供可访问名称，内部图片和回退内容均为装饰。空白姓名的可访问名称为“匿名用户”，默认显示问号。',
+            '作者行已有完整姓名时，可将头像设为 aria-hidden，避免重复表达同一身份；介绍操作使用独立按钮，关闭后返回该入口。',
             '缺图、加载中和加载失败时保留回退内容；更换 src 后重新加载，新图片就绪后移除回退，透明图片不会透出姓名。头像尺寸在这个过程中保持不变。',
             '默认按完整字素取姓名的前两项；不支持 Intl.Segmenter 的旧环境按 Unicode 码点降级，需要固定缩写时可显式传入 fallback。',
             'fallback 只放展示内容，不放链接或按钮。头像不接收 children，也不透传原生 img 属性。',

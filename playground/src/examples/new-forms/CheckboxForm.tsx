@@ -7,7 +7,7 @@ export default function CheckboxForm() {
   return (
     <form
       style={{ display: 'grid', gap: 16, maxWidth: 440 }}
-      onChange={() => setResult('')}
+      onInput={() => setResult('')}
       onSubmit={(event) => {
         event.preventDefault();
         setResult(new FormData(event.currentTarget).getAll('topics').join('、') || '未选择分类');
@@ -34,8 +34,8 @@ export default function CheckboxForm() {
           setAgreementError(true);
           event.currentTarget.focus();
         }}
-        onChange={(event) => {
-          if (event.target.checked) setAgreementError(false);
+        onInput={(event) => {
+          if (event.currentTarget.checked) setAgreementError(false);
         }}
       />
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>

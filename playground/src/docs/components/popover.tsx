@@ -3,6 +3,8 @@ import PopoverBasic from '../../examples/floating/PopoverBasic';
 import popoverBasicSource from '../../examples/floating/PopoverBasic.tsx?raw';
 import PopoverForm from '../../examples/floating/PopoverForm';
 import popoverFormSource from '../../examples/floating/PopoverForm.tsx?raw';
+import PopoverCollection from '../../examples/floating/PopoverCollection';
+import popoverCollectionSource from '../../examples/floating/PopoverCollection.tsx?raw';
 import { defineComponentPage } from '../page';
 import { stateRows, popupRows } from '../page-helpers';
 
@@ -28,22 +30,42 @@ export default defineComponentPage('popover', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>名称仅保留在当前示例，不连接后台。</p>,
       examples: [
         {
           id: 'basic',
           previewAlign: 'center',
-          title: '基本说明',
-          description: '打开手记的补充说明。',
+          title: '基础用法',
+          description: '打开并关闭补充说明面板。',
           component: PopoverBasic,
           source: popoverBasicSource,
         },
         {
           id: 'form',
-          title: '修改并保存收藏夹名称',
-          description: '修改收藏夹名称，保存或取消修改。',
+          title: '内嵌表单',
+          description: '在面板内校验名称，保存或取消；修改只保留在当前示例。',
           component: PopoverForm,
           source: popoverFormSource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看嵌套选择器与分层关闭',
+      content: (
+        <p>
+          内嵌选择器时，Escape 先收起 Select，再关闭 Popover。
+          确认后才更新当前示例的收藏位置，未确认关闭不会保存选择。
+        </p>
+      ),
+      examples: [
+        {
+          id: 'popover-collection',
+          title: '内嵌选择器与分层关闭',
+          description: '在面板内展开 Select，按 Escape 逐层关闭。',
+          component: PopoverCollection,
+          source: popoverCollectionSource,
+          toc: false,
         },
       ],
     },

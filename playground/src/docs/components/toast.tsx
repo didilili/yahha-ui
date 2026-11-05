@@ -1,3 +1,5 @@
+import ToastSimple from '../../examples/feedback/ToastSimple';
+import toastSimpleSource from '../../examples/feedback/ToastSimple.tsx?raw';
 import ToastBasic from '../../examples/feedback/ToastBasic';
 import toastBasicSource from '../../examples/feedback/ToastBasic.tsx?raw';
 import ToastTones from '../../examples/feedback/ToastTones';
@@ -20,7 +22,7 @@ export default defineComponentPage('toast', {
           </p>
           <p>
             Toast
-            是受控展示组件，显示在调用方放置的位置。调用方管理消息内容、open、关闭时机与多条消息的排列；下方示例只更新本地状态，不实际保存或归档文章。
+            是受控展示组件，显示在调用方放置的位置。调用方管理消息内容、open、关闭时机与多条消息的排列。
           </p>
         </>
       ),
@@ -30,11 +32,11 @@ export default defineComponentPage('toast', {
       title: '代码演示',
       examples: [
         {
-          id: 'basic',
-          title: '受控显示与关闭',
-          description: '显示模拟保存结果，关闭后可再次显示。',
-          component: ToastBasic,
-          source: toastBasicSource,
+          id: 'toast-simple',
+          title: '基础用法',
+          description: '显示并关闭提示，关闭后可重新显示。',
+          component: ToastSimple,
+          source: toastSimpleSource,
         },
         {
           id: 'tones',
@@ -43,12 +45,31 @@ export default defineComponentPage('toast', {
           component: ToastTones,
           source: toastTonesSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看提示操作与计时撤销',
+      content: (
+        <p>示例只操作本地清单或文章状态。重要操作保留常驻入口，提示关闭后仍可继续访问或恢复。</p>
+      ),
+      examples: [
+        {
+          id: 'basic',
+          title: '带操作的提示',
+          description: '点击提示内的操作查看清单，关闭后仍可从常驻入口访问。',
+          component: ToastBasic,
+          source: toastBasicSource,
+          toc: false,
+        },
         {
           id: 'timer-and-action',
-          title: '调用方计时与撤销操作',
-          description: '归档后体验 8 秒提示与撤销，关闭后仍可恢复文章。',
+          title: '计时关闭与撤销',
+          description: '示例控制 8 秒关闭，可撤销归档；提示关闭后仍可恢复文章。',
           component: ToastTimer,
           source: toastTimerSource,
+          toc: false,
         },
       ],
     },
@@ -56,11 +77,16 @@ export default defineComponentPage('toast', {
       id: 'design',
       title: '自动关闭与恢复入口',
       content: (
-        <p>
-          自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；示例等待 8
-          秒后关闭，悬停或聚焦时暂停，离开后重新计满 8
-          秒。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
-        </p>
+        <>
+          <p>
+            自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；计时与撤销示例等待 8
+            秒后关闭，悬停或聚焦时暂停，离开后重新计满 8
+            秒。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
+          </p>
+          <p>
+            带操作的提示例保留清单入口；查看操作聚焦常驻清单标题，关闭提示不会丢失已加入的内容。
+          </p>
+        </>
       ),
     },
     {

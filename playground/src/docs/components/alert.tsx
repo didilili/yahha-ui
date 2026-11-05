@@ -2,6 +2,8 @@ import AlertExample from '../../examples/content/AlertExample';
 import alertSource from '../../examples/content/AlertExample.tsx?raw';
 import AlertAction from '../../examples/content/AlertAction';
 import alertActionSource from '../../examples/content/AlertAction.tsx?raw';
+import AlertReadingNotice from '../../examples/content/AlertReadingNotice';
+import alertReadingNoticeSource from '../../examples/content/AlertReadingNotice.tsx?raw';
 import { defineComponentPage } from '../page';
 import { example } from '../page-helpers';
 
@@ -29,13 +31,34 @@ export default defineComponentPage('alert', {
           AlertExample,
           alertSource,
         ),
-        example(
-          'alert-action',
-          '与操作组合',
-          '首次模拟保存失败，重试成功；只更新本例状态，不实际订阅。',
-          AlertAction,
-          alertActionSource,
-        ),
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看重试与隐藏恢复示例',
+      content: <p>订阅流程仅在当前示例中模拟，不实际保存；阅读提醒只改变当前页面的显示状态。</p>,
+      examples: [
+        {
+          ...example(
+            'alert-action',
+            '失败提示与重试',
+            '首次模拟失败，重试成功；选择保留，不实际订阅。',
+            AlertAction,
+            alertActionSource,
+          ),
+          toc: false,
+        },
+        {
+          ...example(
+            'alert-reading-notice',
+            '隐藏与恢复提示',
+            '收起提示后，可从保留的外部入口再次展开。',
+            AlertReadingNotice,
+            alertReadingNoticeSource,
+          ),
+          toc: false,
+        },
       ],
     },
     {
@@ -101,7 +124,7 @@ export default defineComponentPage('alert', {
             role="alert"；一般状态更新可由外层 status 或 aria-live 说明，同一结果避免多处重复播报。
           </p>
           <p>
-            提示出现时不会主动移动焦点，也没有内置关闭按钮。需要允许关闭时，由页面提供按钮并更新显示状态；关闭包含操作的提示后，应把其中的焦点移到仍然存在的合理位置。
+            提示出现时不会主动移动焦点，也没有内置关闭按钮。阅读提醒例由页面维护显示状态；仅隐藏包含当前焦点的提示时，回到持续存在的“阅读提醒”按钮。恢复时保留触发按钮焦点。
           </p>
         </>
       ),

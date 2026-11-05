@@ -1,9 +1,17 @@
 import CheckboxBasic from '../../examples/new-forms/CheckboxBasic';
 import CheckboxBasicSource from '../../examples/new-forms/CheckboxBasic.tsx?raw';
+import CheckboxDisabled from '../../examples/new-forms/CheckboxDisabled';
+import checkboxDisabledSource from '../../examples/new-forms/CheckboxDisabled.tsx?raw';
+import CheckboxLongLabel from '../../examples/new-forms/CheckboxLongLabel';
+import checkboxLongLabelSource from '../../examples/new-forms/CheckboxLongLabel.tsx?raw';
 import CheckboxMixed from '../../examples/new-forms/CheckboxMixed';
 import CheckboxMixedSource from '../../examples/new-forms/CheckboxMixed.tsx?raw';
 import CheckboxForm from '../../examples/new-forms/CheckboxForm';
 import CheckboxFormSource from '../../examples/new-forms/CheckboxForm.tsx?raw';
+import CheckboxReadingTopics from '../../examples/new-forms/CheckboxReadingTopics';
+import CheckboxReadingTopicsSource from '../../examples/new-forms/CheckboxReadingTopics.tsx?raw';
+import CheckboxReadingList from '../../examples/new-forms/CheckboxReadingList';
+import CheckboxReadingListSource from '../../examples/new-forms/CheckboxReadingList.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('checkbox', {
@@ -24,14 +32,20 @@ export default defineComponentPage('checkbox', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页示例只在本地勾选和读取，不实际订阅或保存设置。</p>,
       examples: [
         {
           id: 'basic',
-          title: '基本状态',
-          description: '切换勾选状态，并对比禁用与长标签。',
+          title: '基础用法',
+          description: '点击或按空格切换勾选。',
           component: CheckboxBasic,
           source: CheckboxBasicSource,
+        },
+        {
+          id: 'checkbox-disabled',
+          title: '禁用状态',
+          description: '对比禁用时未勾选与已勾选的外观。',
+          component: CheckboxDisabled,
+          source: checkboxDisabledSource,
         },
         {
           id: 'mixed',
@@ -40,12 +54,45 @@ export default defineComponentPage('checkbox', {
           component: CheckboxMixed,
           source: CheckboxMixedSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看长标签、表单与列表组合',
+      content: <p>兴趣条件记录在当前地址中；清单和表单操作只保留在当前示例。</p>,
+      examples: [
+        {
+          id: 'checkbox-long-label',
+          title: '长标签换行',
+          description: '窄栏中保留完整标签。',
+          component: CheckboxLongLabel,
+          source: checkboxLongLabelSource,
+          toc: false,
+        },
         {
           id: 'form',
+          toc: false,
           title: '表单提交、必选与重置',
           description: '读取已勾选分类或重置；改选后清除上次读取结果。',
           component: CheckboxForm,
           source: CheckboxFormSource,
+        },
+        {
+          id: 'checkbox-reading-topics',
+          toc: false,
+          title: '多选筛选与地址同步',
+          description: '勾选多项筛选内容，通过链接或浏览器返回恢复条件。',
+          component: CheckboxReadingTopics,
+          source: CheckboxReadingTopicsSource,
+        },
+        {
+          id: 'checkbox-reading-list',
+          toc: false,
+          title: '批量选择与失败重试',
+          description: '全选或部分选择后确认移出；本地模拟失败时保留选择并可重试。',
+          component: CheckboxReadingList,
+          source: CheckboxReadingListSource,
         },
       ],
     },
@@ -69,6 +116,17 @@ export default defineComponentPage('checkbox', {
           <li>
             required 逐项要求勾选；一组中“至少选一项”的规则由调用方校验，并维护 error。
             需要锁定选择时使用 disabled，Checkbox 不提供只读模式。
+          </li>
+          <li>
+            表单例使用 onInput 清除旧读取结果，确认项勾选后清除该项错误；原生重置继续恢复初始勾选。
+          </li>
+          <li>
+            兴趣例按任一所选主题匹配，未选择时显示全部；地址仅使用专属 query
+            键记录条件，保留其他参数和当前路由。 返回、前进与分享链接恢复条件，URL 管理由示例完成。
+          </li>
+          <li>
+            清单例只从稍后阅读移出，文章内容仍保留。确认、首次失败、重试与取消等待均由示例管理，
+            成功后聚焦仍存在的复选项或恢复入口。
           </li>
         </ul>
       ),

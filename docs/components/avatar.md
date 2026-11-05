@@ -22,9 +22,9 @@ import { Avatar } from 'yahha-ui';
 
 <a id="avatar-fallback"></a>
 
-### 尺寸与文字回退
+### 尺寸与姓名回退
 
-对比三档尺寸、完整署名与匿名回退。
+比较三档尺寸、空姓名与自定义回退。
 
 [查看示例文件](../../playground/src/examples/content/AvatarExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -52,20 +52,19 @@ export default function AvatarExample() {
           </div>
         ))}
       </div>
-      <div style={{ display: 'flex', alignItems: 'start', gap: 12 }}>
-        <Avatar name="把散步写成手记的作者小林" fallback="林" />
-        <div style={{ minWidth: 0 }}>
-          <Text>把散步写成手记的作者小林</Text>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <Avatar name=" " />
           <Text size="sm" tone="muted">
-            手记作者
+            空姓名
           </Text>
         </div>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <Avatar name=" " />
-        <Text size="sm" tone="muted">
-          匿名用户
-        </Text>
+        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <Avatar name="把散步写成手记的作者库米" fallback="米" />
+          <Text size="sm" tone="muted">
+            自定义回退
+          </Text>
+        </div>
       </div>
     </div>
   );
@@ -110,6 +109,79 @@ export default function AvatarPicture() {
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+<a id="avatar-author"></a>
+
+### 作者身份与弹窗
+
+通过独立按钮查看介绍，关闭后返回入口。
+
+[查看示例文件](../../playground/src/examples/content/AvatarAuthor.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/AvatarAuthor.tsx -->
+
+```tsx
+import { useId, useRef, useState } from 'react';
+import { Avatar, Button, Dialog, Text } from 'yahha-ui';
+
+export default function AvatarAuthor() {
+  const [open, setOpen] = useState(false);
+  const authorNameId = useId();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <div style={{ display: 'grid', gap: 24, maxWidth: 480 }}>
+      <div
+        role="group"
+        aria-labelledby={authorNameId}
+        style={{ display: 'grid', gap: 12, minWidth: 0 }}
+      >
+        <div style={{ display: 'flex', alignItems: 'start', gap: 12 }}>
+          <Avatar name="把散步写成手记的作者库米" fallback="米" aria-hidden="true" />
+          <div style={{ minWidth: 0 }}>
+            <Text id={authorNameId}>把散步写成手记的作者库米</Text>
+            <Text size="sm" tone="muted">
+              手记作者
+            </Text>
+          </div>
+        </div>
+        <div>
+          <Button
+            ref={triggerRef}
+            variant="ghost"
+            aria-haspopup="dialog"
+            onClick={() => setOpen(true)}
+          >
+            查看作者介绍
+          </Button>
+        </div>
+      </div>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        title="关于库米"
+        description="散步、阅读与日常手记。"
+        initialFocus={closeRef}
+        finalFocus={triggerRef}
+        footer={
+          <Button ref={closeRef} variant="secondary" onClick={() => setOpen(false)}>
+            关闭介绍
+          </Button>
+        }
+      >
+        <Text>
+          你好，我是库米。我喜欢沿河散步，也喜欢把读到的句子抄进手记。回家以后，再给一路遇见的小事留一页。
+        </Text>
+      </Dialog>
+    </div>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 头像与完整署名
@@ -137,6 +209,7 @@ export default function AvatarPicture() {
 ## 姓名、图片回退与恢复
 
 - name 为整个头像提供可访问名称，内部图片和回退内容均为装饰。空白姓名的可访问名称为“匿名用户”，默认显示问号。
+- 作者行已有完整姓名时，可将头像设为 aria-hidden，避免重复表达同一身份；介绍操作使用独立按钮，关闭后返回该入口。
 - 缺图、加载中和加载失败时保留回退内容；更换 src 后重新加载，新图片就绪后移除回退，透明图片不会透出姓名。头像尺寸在这个过程中保持不变。
 - 默认按完整字素取姓名的前两项；不支持 Intl.Segmenter 的旧环境按 Unicode 码点降级，需要固定缩写时可显式传入 fallback。
 - fallback 只放展示内容，不放链接或按钮。头像不接收 children，也不透传原生 img 属性。

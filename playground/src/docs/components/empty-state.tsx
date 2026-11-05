@@ -22,7 +22,7 @@ export default defineComponentPage('empty-state', {
       examples: [
         {
           id: 'basic',
-          title: '首次无内容与创建',
+          title: '空状态与引导操作',
           description: '创建示例文章，或恢复初始空态；不实际发布。',
           component: EmptyBasic,
           source: emptyBasicSource,

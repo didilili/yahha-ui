@@ -2,6 +2,10 @@ import SurfaceBasic from '../../examples/foundations/SurfaceBasic';
 import surfaceBasicSource from '../../examples/foundations/SurfaceBasic.tsx?raw';
 import SurfaceComposition from '../../examples/foundations/SurfaceComposition';
 import surfaceCompositionSource from '../../examples/foundations/SurfaceComposition.tsx?raw';
+import SurfaceCover from '../../examples/foundations/SurfaceCover';
+import surfaceCoverSource from '../../examples/foundations/SurfaceCover.tsx?raw';
+import SurfaceNotes from '../../examples/foundations/SurfaceNotes';
+import surfaceNotesSource from '../../examples/foundations/SurfaceNotes.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('surface', {
@@ -29,11 +33,34 @@ export default defineComponentPage('surface', {
           source: surfaceBasicSource,
         },
         {
+          id: 'surface-notes',
+          title: '便笺样式',
+          description: '用 note 纸面呈现一段后记。',
+          component: SurfaceNotes,
+          source: surfaceNotesSource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看内容组合与贴边封面',
+      examples: [
+        {
           id: 'surface-composition',
-          title: '组合文章摘要',
-          description: '点击“收藏文章”切换状态，收藏仅保留在当前示例中。',
+          title: '内容与操作组合',
+          description: '在容器中组合分类、标题、正文与独立操作区。',
           component: SurfaceComposition,
           source: surfaceCompositionSource,
+          toc: false,
+        },
+        {
+          id: 'surface-cover',
+          title: '贴边封面与内容分区',
+          description: '封面贴齐容器边缘，正文保留内距。',
+          component: SurfaceCover,
+          source: surfaceCoverSource,
+          toc: false,
         },
       ],
     },
@@ -45,11 +72,16 @@ export default defineComponentPage('surface', {
           <p>
             默认内边距为 24px，容器宽度与内容间距由使用方安排。通过 style 或 className 设置{' '}
             <code>maxWidth</code>、<code>display: grid</code> 与 <code>gap</code>
-            ，组织标题、正文与操作。
+            ，组织标题与正文。
           </p>
           <p>
             连续正文按阅读顺序排布，只在需要独立纸面时使用容器。完整用法见
             <a href="#/guides/reading?section=reading-example">阅读组合中的文末便笺</a>。
+          </p>
+          <p>
+            paper 保留默认白纸；note 使用轻底便笺与一处纸角，字阶、轮廓和 24px 内边距保持。
+            封面示例通过公开 style 将 Surface 的 padding 设为 0，由内部内容区安排桌面 24px、窄屏
+            16px 留白；标题链接独立导航，图片区域保留 16:9 比例。
           </p>
         </>
       ),
@@ -61,6 +93,12 @@ export default defineComponentPage('surface', {
         {
           name: 'SurfaceProps',
           rows: [
+            {
+              name: 'variant',
+              type: "'paper' | 'note'",
+              defaultValue: "'paper'",
+              description: '白纸或轻底便笺，仅影响视觉，不自动赋予 note 或 region 语义。',
+            },
             { name: 'children', type: 'ReactNode', description: '容器内容。' },
             {
               name: 'className / style',
@@ -71,8 +109,7 @@ export default defineComponentPage('surface', {
             {
               name: '其余原生属性',
               type: "ComponentPropsWithRef<'div'>",
-              description:
-                '透传 div 属性，例如 role、aria-labelledby、id、data-*。没有额外的组件专属属性。',
+              description: '透传 div 属性，例如 role、aria-labelledby、id、data-*。',
             },
           ],
         },

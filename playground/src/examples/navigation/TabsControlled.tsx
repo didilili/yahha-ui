@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Tabs, Text, TextField } from 'yahha-ui';
+import { Button, Heading, Surface, Tabs, Text, TextField } from 'yahha-ui';
 
 export default function TabsControlled() {
   const [value, setValue] = useState<string | null>('write');
+  const [preview, setPreview] = useState('');
   const [focusDraft, setFocusDraft] = useState(false);
   const draft = useRef<HTMLInputElement>(null);
   const currentLabel =
-    value === 'write' ? '写一张明信片' : value === 'about' ? '明信片说明' : '未选择';
+    value === 'write' ? '写一张明信片' : value === 'about' ? '预览明信片' : '未选择';
 
   useEffect(() => {
     if (!focusDraft || value !== 'write') return;
@@ -20,10 +21,11 @@ export default function TabsControlled() {
   return (
     <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
       <Tabs
-        label="联系与阅读说明"
+        label="明信片编辑与预览"
         value={value}
         onValueChange={(nextValue) => {
           setFocusDraft(false);
+          if (nextValue === 'about') setPreview(draft.current?.value ?? '');
           setValue(nextValue);
         }}
         keepMounted
@@ -37,9 +39,20 @@ export default function TabsControlled() {
           },
           {
             value: 'about',
-            label: '明信片说明',
+            label: '预览明信片',
             content: (
-              <p style={{ margin: 0 }}>写下最近读到的一句话，或者分享今天路上遇到的小事。</p>
+              <article aria-label="明信片预览" style={{ minWidth: 0 }}>
+                <Surface style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+                  <Heading level={3}>写给朋友的明信片</Heading>
+                  {preview === '' ? (
+                    <Text tone="muted">还没有写下明信片内容。</Text>
+                  ) : (
+                    <div style={{ whiteSpace: 'pre-wrap' }}>
+                      <Text>{preview}</Text>
+                    </div>
+                  )}
+                </Surface>
+              </article>
             ),
           },
         ]}

@@ -26,9 +26,9 @@ import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
 
 <a id="theme-variants"></a>
 
-### 默认配色与强调色变体
+### 主题预设
 
-对比粉色、浅蓝与浅黄三种强调色预设。
+对比粉色、浅蓝和浅黄三种预设。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -74,7 +74,7 @@ export default function ThemeVariants() {
 
 ### 定制颜色与 Portal 传播
 
-用 10 项颜色覆盖定制主题，打开弹窗查看 Portal 传播。
+定制主题颜色，打开弹窗查看相同配色。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeTokens.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -170,18 +170,18 @@ export default function ThemeNested() {
 
 ### ThemeTokens
 
-| 属性              | 说明                                                                                                     | 类型     | 默认值                                       |
-| ----------------- | -------------------------------------------------------------------------------------------------------- | -------- | -------------------------------------------- |
-| `ink`             | 正文与主要文字，--yahha-ink。                                                                            | `string` | `#49313d`                                    |
-| `muted`           | 次要文字，--yahha-muted。                                                                                | `string` | `#7a5c6d`                                    |
-| `accent`          | 主题强调色，--yahha-accent。                                                                             | `string` | `粉色 #ffc3d9 / 浅蓝 #d7eaf5 / 浅黄 #f8e5a7` |
-| `accentHover`     | 强调色的悬停状态，--yahha-accent-hover。                                                                 | `string` | `粉色 #ffb3cf / 浅蓝 #c3dfee / 浅黄 #f3da89` |
-| `accentSoft`      | 轻量强调背景，--yahha-accent-soft。                                                                      | `string` | `粉色 #fff0f6 / 浅蓝 #f2f8fc / 浅黄 #fffaf0` |
-| `line`            | 常规边框，--yahha-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。                                     | `string` | `粉色 #c58ba1 / 浅蓝 #b9cedb / 浅黄 #daca9f` |
-| `focus`           | 键盘焦点轮廓，--yahha-focus。                                                                            | `string` | `粉色 #b04e78 / 浅蓝 #386d93 / 浅黄 #896329` |
-| `surface`         | 内容面与浮层等共用背景，--yahha-surface。                                                                | `string` | `#ffffff`                                    |
-| `fieldBackground` | 输入框默认背景，--yahha-field-background；错误和禁用状态保留各自背景。                                   | `string` | `#ffffff`                                    |
-| `error`           | 输入框错误边框、错误时的焦点轮廓、错误文字与 Toast 错误图标，--yahha-error；错误背景固定，禁用背景优先。 | `string` | `#a33e4f`                                    |
+| 属性              | 说明                                                                                                               | 类型     | 默认值                                       |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------ | -------- | -------------------------------------------- |
+| `ink`             | 正文与主要文字，--yahha-ink。                                                                                      | `string` | `#49313d`                                    |
+| `muted`           | 次要文字，--yahha-muted。                                                                                          | `string` | `#7a5c6d`                                    |
+| `accent`          | 主题强调色，--yahha-accent。                                                                                       | `string` | `粉色 #ffc3d9 / 浅蓝 #d7eaf5 / 浅黄 #f8e5a7` |
+| `accentHover`     | 强调色的悬停状态，--yahha-accent-hover。                                                                           | `string` | `粉色 #ffb3cf / 浅蓝 #c3dfee / 浅黄 #f3da89` |
+| `accentSoft`      | 轻量强调背景，--yahha-accent-soft。                                                                                | `string` | `粉色 #fff0f6 / 浅蓝 #f2f8fc / 浅黄 #fffaf0` |
+| `line`            | 常规边框，--yahha-line；显式指定时也覆盖按钮轮廓、按压底边与轻纸边。                                               | `string` | `粉色 #c58ba1 / 浅蓝 #b9cedb / 浅黄 #daca9f` |
+| `focus`           | 键盘焦点轮廓，--yahha-focus。                                                                                      | `string` | `粉色 #b04e78 / 浅蓝 #386d93 / 浅黄 #896329` |
+| `surface`         | 内容面与浮层等共用背景，--yahha-surface。                                                                          | `string` | `#ffffff`                                    |
+| `fieldBackground` | 输入框默认背景，--yahha-field-background；错误和禁用状态保留各自背景。                                             | `string` | `#ffffff`                                    |
+| `error`           | 输入框错误边框、错误时的焦点轮廓、错误文字、危险按钮与 Toast 错误图标，--yahha-error；错误背景固定，禁用背景优先。 | `string` | `#a33e4f`                                    |
 
 <a id="theme-names"></a>
 

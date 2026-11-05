@@ -19,20 +19,19 @@ export default function AvatarExample() {
           </div>
         ))}
       </div>
-      <div style={{ display: 'flex', alignItems: 'start', gap: 12 }}>
-        <Avatar name="把散步写成手记的作者小林" fallback="林" />
-        <div style={{ minWidth: 0 }}>
-          <Text>把散步写成手记的作者小林</Text>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <Avatar name=" " />
           <Text size="sm" tone="muted">
-            手记作者
+            空姓名
           </Text>
         </div>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <Avatar name=" " />
-        <Text size="sm" tone="muted">
-          匿名用户
-        </Text>
+        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <Avatar name="把散步写成手记的作者库米" fallback="米" />
+          <Text size="sm" tone="muted">
+            自定义回退
+          </Text>
+        </div>
       </div>
     </div>
   );

@@ -4,6 +4,12 @@ import SwitchControlled from '../../examples/new-forms/SwitchControlled';
 import SwitchControlledSource from '../../examples/new-forms/SwitchControlled.tsx?raw';
 import SwitchForm from '../../examples/new-forms/SwitchForm';
 import SwitchFormSource from '../../examples/new-forms/SwitchForm.tsx?raw';
+import SwitchReadingPreference from '../../examples/new-forms/SwitchReadingPreference';
+import SwitchReadingPreferenceSource from '../../examples/new-forms/SwitchReadingPreference.tsx?raw';
+import SwitchDisabled from '../../examples/new-forms/SwitchDisabled';
+import SwitchDisabledSource from '../../examples/new-forms/SwitchDisabled.tsx?raw';
+import SwitchLoading from '../../examples/new-forms/SwitchLoading';
+import SwitchLoadingSource from '../../examples/new-forms/SwitchLoading.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('switch', {
@@ -23,47 +29,81 @@ export default defineComponentPage('switch', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页示例只在本地切换和读取，不保存设置或调用接口。</p>,
       examples: [
         {
           id: 'basic',
-          title: '基本状态',
-          description: '切换开关，并对比禁用与长标签。',
+          title: '基础用法',
+          description: '点击或按空格切换。',
           component: SwitchBasic,
           source: SwitchBasicSource,
+          previewAlign: 'center',
+        },
+        {
+          id: 'switch-disabled',
+          title: '禁用状态',
+          description: '对比关闭与开启时的禁用外观。',
+          component: SwitchDisabled,
+          source: SwitchDisabledSource,
+          previewAlign: 'center',
+        },
+        {
+          id: 'switch-loading',
+          title: '加载状态',
+          description: '加载时保持当前状态，不能重复切换。',
+          component: SwitchLoading,
+          source: SwitchLoadingSource,
+          previewAlign: 'center',
         },
         {
           id: 'controlled',
-          title: '控制内容显示',
-          description: '切换文章摘要的显示，标题始终保留。',
+          title: '受控状态',
+          description: '通过 checked 与 onChange 管理状态。',
           component: SwitchControlled,
           source: SwitchControlledSource,
+          previewAlign: 'center',
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看表单与异步示例',
+      content: <p>表单例演示取值与重置；异步例由使用方管理本地模拟保存。</p>,
+      examples: [
         {
           id: 'form',
-          title: '表单值与重置',
-          description: '读取当前开关值或重置；切换后清除上次结果。',
+          title: '表单集成',
+          description: '读取开关值，或重置到初始状态。',
           component: SwitchForm,
           source: SwitchFormSource,
+          toc: false,
+        },
+        {
+          id: 'switch-reading-preference',
+          title: '异步切换与失败恢复',
+          description: '模拟保存时显示加载状态，首次失败后回滚，可再次切换重试。',
+          component: SwitchReadingPreference,
+          source: SwitchReadingPreferenceSource,
+          toc: false,
         },
       ],
     },
     {
       id: 'design',
-      title: '状态与表单',
+      title: '状态与交互',
       content: (
         <ul>
           <li>
-            checked / onChange 管理受控开关，defaultChecked 设置非受控初始状态；从
-            event.target.checked 读取开关结果，实际设置变化由调用方完成。
+            checked / onChange 管理受控状态，defaultChecked 设置初始状态；从 event.target.checked
+            读取结果。
           </li>
           <li>
-            设置 name 与 value 后，仅开启且未禁用时提交
-            name=value。非受控状态随原生表单重置，受控状态需在 onReset 中恢复 React 状态。
+            loading 显示圆扣内的三墨点并阻止点击、空格切换，保留当前值、焦点和表单值。
+            请求、完成与失败处理由使用方控制，组件不自动发起保存。
           </li>
           <li>
-            disabled 阻止操作并退出键盘顺序与提交，也支持父 fieldset 禁用。需要锁定设置时使用
-            disabled，Switch 不提供只读模式。
+            disabled 使用原生禁用行为，退出键盘顺序且不参与表单提交，支持父 fieldset 禁用。 loading
+            不会自动设置原生 disabled；显式禁用仍按原生规则处理。
           </li>
         </ul>
       ),
@@ -98,6 +138,13 @@ export default defineComponentPage('switch', {
               description: '原生事件，从 event.target.checked 读取开启状态。',
             },
             {
+              name: 'loading',
+              type: 'boolean',
+              description:
+                '显示加载状态并阻止重复切换，保留 checked、焦点和表单值；同时设置 aria-busy 与 aria-disabled。',
+              defaultValue: 'false',
+            },
+            {
               name: 'disabled',
               type: 'boolean',
               description: '禁用交互和提交，支持父 fieldset disabled。',
@@ -106,7 +153,8 @@ export default defineComponentPage('switch', {
             {
               name: 'name / value / form / required',
               type: '原生 input 对应属性',
-              description: '原生 checkbox 表单能力；仅开启且未禁用时提交，required 要求开启。',
+              description:
+                '原生表单属性；开启且未禁用时提交，loading 不移除表单值，required 要求开启。',
               defaultValue: 'value 为 on（原生）',
             },
             { name: 'className', type: 'string', description: '根字段 div 的附加类名。' },

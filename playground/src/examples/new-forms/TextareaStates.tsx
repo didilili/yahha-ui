@@ -10,16 +10,6 @@ export default function TextareaStates() {
         rows={3}
         hint="修改后点击重置，恢复初始内容。"
       />
-      <Textarea
-        label="已发布简介"
-        value="认真记录生活里的小事情。"
-        readOnly
-        rows={2}
-        style={{ resize: 'none' }}
-      />
-      <fieldset disabled style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
-        <Textarea label="暂时关闭留言" defaultValue="稍后再来看看吧。" rows={2} />
-      </fieldset>
       <Button type="reset" variant="secondary">
         重置草稿
       </Button>

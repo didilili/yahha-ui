@@ -123,10 +123,10 @@ export default function ReadingExample() {
       <div className="reading-example">
         <div className="reading-author">
           <div className="reading-author-identity">
-            <Avatar name="小林" />
+            <Avatar name="库米" />
             <div className="reading-author-copy">
               <Text size="lg">
-                <strong>小林的星球手记</strong>
+                <strong>库米的星球手记</strong>
               </Text>
               <Text tone="muted">在星球上散步，和朋友交换手记。</Text>
             </div>
@@ -141,7 +141,7 @@ export default function ReadingExample() {
               trigger={<Button variant="ghost">关于作者</Button>}
             >
               <Text>
-                你好，我是小林。我在 Yahha
+                你好，我是库米。我在 Yahha
                 星球记一点日常：有人迟到，留块饼干；有人读得慢，就把这一页留着。
               </Text>
             </Dialog>
@@ -203,7 +203,7 @@ export default function ReadingExample() {
                 <div className="reading-meta">
                   <Badge tone="accent">{active.category}</Badge>
                   <Text size="sm" tone="muted">
-                    <time dateTime={active.date}>{active.date}</time> · 小林 · 约 2 分钟
+                    <time dateTime={active.date}>{active.date}</time> · 库米 · 约 2 分钟
                   </Text>
                 </div>
                 <Heading level={2} id={`${rootId}-article`} ref={articleRef} tabIndex={-1}>

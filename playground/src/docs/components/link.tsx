@@ -1,5 +1,11 @@
 import LinkExample from '../../examples/content/LinkExample';
 import linkSource from '../../examples/content/LinkExample.tsx?raw';
+import LinkExternal from '../../examples/content/LinkExternal';
+import linkExternalSource from '../../examples/content/LinkExternal.tsx?raw';
+import LinkWrapping from '../../examples/content/LinkWrapping';
+import linkWrappingSource from '../../examples/content/LinkWrapping.tsx?raw';
+import LinkDownload from '../../examples/content/LinkDownload';
+import linkDownloadSource from '../../examples/content/LinkDownload.tsx?raw';
 import { defineComponentPage } from '../page';
 import { nativeRows, example } from '../page-helpers';
 
@@ -15,12 +21,27 @@ export default defineComponentPage('link', {
       id: 'examples',
       title: '代码演示',
       examples: [
+        example('link-native', '基础用法', '通过链接打开入门指南。', LinkExample, linkSource),
         example(
-          'link-native',
-          '站内与外部链接',
-          '站内导航、新标签页外链与窄栏中的长地址换行。',
-          LinkExample,
-          linkSource,
+          'link-external',
+          '外部链接',
+          '使用 external 在新标签页打开，并保留安全 rel。',
+          LinkExternal,
+          linkExternalSource,
+        ),
+        example(
+          'link-wrapping',
+          '长地址换行',
+          '在窄栏中保留完整地址与下划线。',
+          LinkWrapping,
+          linkWrappingSource,
+        ),
+        example(
+          'link-download',
+          '文件下载',
+          '下载 TXT 清单，或在新标签页阅读同一份文本。',
+          LinkDownload,
+          linkDownloadSource,
         ),
       ],
     },
@@ -68,6 +89,7 @@ export default defineComponentPage('link', {
             'external 只设置默认打开方式，不根据 href 判断是否为外部地址；外部网站也可以在当前页打开。',
             '在链接文字或相邻说明中交代新窗口行为，让用户在打开前知道会离开当前阅读环境。',
             '没有 disabled 模式。不可访问的目标应由页面提供说明或不渲染链接。',
+            'download 沿用原生 anchor 属性，适用于同源、blob 和 data 地址；浏览器决定实际保存方式。示例在卸载时释放 Blob URL，该地址仅用于当前实例，不作为永久资源地址。',
           ].map((note) => (
             <li key={note}>{note}</li>
           ))}

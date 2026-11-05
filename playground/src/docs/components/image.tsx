@@ -2,6 +2,9 @@ import ImageExample from '../../examples/content/ImageExample';
 import imageSource from '../../examples/content/ImageExample.tsx?raw';
 import ImageFallback from '../../examples/content/ImageFallback';
 import imageFallbackSource from '../../examples/content/ImageFallback.tsx?raw';
+import ImageDetail from '../../examples/scenes/ImageDetail';
+import imageDetailSource from '../../examples/scenes/ImageDetail.tsx?raw';
+import teaCupAsset from '../../examples/scenes/artwork/little-days-tea-cup.svg?no-inline';
 import { defineComponentPage } from '../page';
 import { example } from '../page-helpers';
 
@@ -24,29 +27,53 @@ export default defineComponentPage('image', {
       examples: [
         example(
           'image-cover',
-          '文章封面',
-          '封面与图注组合，预留 16:9 图片区域。',
+          '固定比例与图注',
+          '使用 16:9 比例预留图片区域，并搭配图注。',
           ImageExample,
           imageSource,
         ),
         example(
           'image-failure',
-          '失败与新地址恢复',
-          '切换失效与有效图片，查看回退和加载结果。',
+          '失败回退与恢复',
+          '切换图片地址，查看失败回退和加载结果。',
           ImageFallback,
           imageFallbackSource,
         ),
       ],
     },
     {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看大图预览与素材接入',
+      content: (
+        <p>
+          使用独立按钮打开 Dialog，缩略图与大图使用同一素材。完整接入提供原样源码和 SVG，保留
+          artwork 目录及相对导入路径。
+        </p>
+      ),
+      examples: [
+        {
+          id: 'image-detail',
+          title: '缩略图与大图预览',
+          description: '通过独立按钮打开同一图片的大图，关闭后返回入口。',
+          component: ImageDetail,
+          source: imageDetailSource,
+          toc: false,
+          assets: [{ name: 'little-days-tea-cup.svg', href: teaCupAsset }],
+        },
+      ],
+    },
+    {
       id: 'design',
       title: '加载前后保持图片区域',
       content: (
-        <p>
-          封面可以用 aspectRatio 统一比例并预留空间，图片会按 cover
-          裁切。需要完整展示的正文图片可以不设比例，保留自然尺寸。原生 width / height
-          不能为失败回退预留相同比例；加载失败后仍需保持版面时，应显式设置 aspectRatio。
-        </p>
+        <>
+          <p>
+            封面可以用 aspectRatio 统一比例并预留空间，图片会按 cover
+            裁切。需要完整展示的正文图片可以不设比例，保留自然尺寸。原生 width / height
+            不能为失败回退预留相同比例；加载失败后仍需保持版面时，应显式设置 aspectRatio。
+          </p>
+        </>
       ),
     },
     {

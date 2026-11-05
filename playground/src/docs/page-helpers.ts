@@ -48,6 +48,12 @@ export const buttonNativeRows: ApiRow[] = [
 
 export const buttonVariantRows: ApiRow[] = [
   {
+    name: 'destructive',
+    type: 'boolean',
+    defaultValue: 'false',
+    description: '用危险色表达删除等破坏性动作，与 variant 分开控制；不自动确认或执行删除。',
+  },
+  {
     name: 'variant',
     type: "'primary' | 'secondary' | 'ghost'",
     defaultValue: "'primary'",

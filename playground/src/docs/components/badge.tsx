@@ -22,17 +22,31 @@ export default defineComponentPage('badge', {
       examples: [
         {
           id: 'badge-tones',
-          title: '标记类型、行内组合与长标签',
+          title: '标记类型与组合',
           description: '对比三种标记、行内组合和长标签换行。',
           component: BadgeTones,
           source: badgeTonesSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看表单与状态组合',
+      content: (
+        <p>
+          摘要例将分类与检查状态分开展示，只检查当前摘要是否为空；编辑后撤销旧检查结果。
+          校验和预览由示例管理，标记不代表内容已保存或发布。
+        </p>
+      ),
+      examples: [
         {
           id: 'badge-status',
-          title: '展示动态状态',
-          description: '点击按钮切换已读状态；状态仅保留在当前示例。',
+          title: '表单校验状态组合',
+          description: '根据摘要检查结果切换标记。',
           component: BadgeStatus,
           source: badgeStatusSource,
+          toc: false,
         },
       ],
     },
@@ -83,8 +97,8 @@ export default defineComponentPage('badge', {
       title: '更新标记与状态播报',
       content: (
         <p>
-          分类和既有状态通常直接显示即可。需要通知保存、发布等操作结果时，可像示例一样由外层
-          role="status" 承担温和播报；Badge 本身不会自动播报，同一结果只保留一处播报。
+          分类和既有状态通常直接显示即可。需要通知检查等操作结果时，可像示例一样由外层 role="status"
+          承担温和播报；Badge 本身不会自动播报，同一结果只保留一处播报。
         </p>
       ),
     },

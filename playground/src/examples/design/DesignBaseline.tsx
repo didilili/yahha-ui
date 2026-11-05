@@ -23,7 +23,7 @@ const categories = [
 
 /** Canonical defaults: layout belongs to the example; appearance belongs to the library. */
 export default function DesignBaseline() {
-  const [nickname, setNickname] = useState('小林');
+  const [nickname, setNickname] = useState('库米');
   const [email, setEmail] = useState('hello@');
   const [category, setCategory] = useState<string | null>('journal');
   const [bio, setBio] = useState('');
@@ -193,7 +193,7 @@ export default function DesignBaseline() {
               variant="secondary"
               disabled={saving}
               onClick={() => {
-                setNickname('小林');
+                setNickname('库米');
                 setEmail('hello@');
                 setCategory('journal');
                 setBio('');

@@ -1,9 +1,17 @@
 import RadioGroupBasic from '../../examples/new-forms/RadioGroupBasic';
 import RadioGroupBasicSource from '../../examples/new-forms/RadioGroupBasic.tsx?raw';
+import RadioGroupDescriptions from '../../examples/new-forms/RadioGroupDescriptions';
+import RadioGroupDescriptionsSource from '../../examples/new-forms/RadioGroupDescriptions.tsx?raw';
+import RadioGroupStatus from '../../examples/new-forms/RadioGroupStatus';
+import RadioGroupStatusSource from '../../examples/new-forms/RadioGroupStatus.tsx?raw';
 import RadioGroupForm from '../../examples/new-forms/RadioGroupForm';
 import RadioGroupFormSource from '../../examples/new-forms/RadioGroupForm.tsx?raw';
 import RadioGroupStates from '../../examples/new-forms/RadioGroupStates';
 import RadioGroupStatesSource from '../../examples/new-forms/RadioGroupStates.tsx?raw';
+import RadioGroupReadingLayout from '../../examples/new-forms/RadioGroupReadingLayout';
+import RadioGroupReadingLayoutSource from '../../examples/new-forms/RadioGroupReadingLayout.tsx?raw';
+import RadioGroupCommentSignature from '../../examples/new-forms/RadioGroupCommentSignature';
+import RadioGroupCommentSignatureSource from '../../examples/new-forms/RadioGroupCommentSignature.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('radio-group', {
@@ -24,14 +32,43 @@ export default defineComponentPage('radio-group', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页示例只在本地选择和读取，不实际订阅或保存设置。</p>,
       examples: [
         {
           id: 'basic',
-          title: '标签与选项说明',
-          description: '选择来信频率，比较各选项说明。',
+          title: '基础用法',
+          description: '在两个短选项间切换，使用受控值管理选择。',
           component: RadioGroupBasic,
           source: RadioGroupBasicSource,
+        },
+        {
+          id: 'radio-descriptions',
+          title: '选项说明',
+          description: '为选项提供补充说明，并说明单项禁用原因。',
+          component: RadioGroupDescriptions,
+          source: RadioGroupDescriptionsSource,
+        },
+        {
+          id: 'radio-status',
+          title: '错误与禁用',
+          description: '选择后清除错误，并对比整组禁用状态。',
+          component: RadioGroupStatus,
+          source: RadioGroupStatusSource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看长标签、表单与联动示例',
+      content: <p>选择只影响当前示例；阅读设置与留言均不会保存或发布。</p>,
+      examples: [
+        {
+          id: 'states',
+          title: '长标签与状态组合',
+          description: '对比长标签换行、错误与父 fieldset 禁用。',
+          component: RadioGroupStates,
+          source: RadioGroupStatesSource,
+          toc: false,
         },
         {
           id: 'form',
@@ -39,13 +76,23 @@ export default defineComponentPage('radio-group', {
           description: '读取必选项或重置；改选后清除上次读取结果。',
           component: RadioGroupForm,
           source: RadioGroupFormSource,
+          toc: false,
         },
         {
-          id: 'states',
-          title: '长标签、错误与禁用',
-          description: '选择范围清除预设错误，并对比长标签与整组禁用。',
-          component: RadioGroupStates,
-          source: RadioGroupStatesSource,
+          id: 'radio-reading-layout',
+          title: '选项联动预览',
+          description: '切换标准和宽松选项，比较相同内容的行距与段距。',
+          component: RadioGroupReadingLayout,
+          source: RadioGroupReadingLayoutSource,
+          toc: false,
+        },
+        {
+          id: 'radio-comment-signature',
+          title: '条件字段与表单值',
+          description: '切换选项控制昵称字段，再按实际表单值预览署名。',
+          component: RadioGroupCommentSignature,
+          source: RadioGroupCommentSignatureSource,
+          toc: false,
         },
       ],
     },
@@ -69,6 +116,14 @@ export default defineComponentPage('radio-group', {
           <li>
             disabled 禁用整组，options 中的 disabled 禁用单项，也支持父 fieldset
             禁用。禁用项不参与切换或提交；锁定选择应使用禁用状态。
+          </li>
+          <li>
+            阅读版式例只调整下方正文的行距与段落间距，不改变控件尺寸；键盘切换时焦点随原生单选项移动，
+            不跳到正文或状态提示。
+          </li>
+          <li>
+            署名例在匿名时禁用昵称字段并取消必填，保留草稿供切回；预览读取当时的 FormData，
+            禁用的昵称不参与提交。条件字段与预览放在单选标签之外。
           </li>
         </ul>
       ),

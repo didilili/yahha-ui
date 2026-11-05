@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { verifyHeadingShare } from './heading-examples.mjs';
 
 /** Readers should know each example's purpose before reaching its controls. */
 export async function verifyExampleHeadings(page) {
@@ -83,6 +84,7 @@ export async function verifyTeachingExamples(page, baseURL) {
 
     await page.goto(`${baseURL}#/components/heading`);
     const headingExample = page.locator('#heading-reading-layout');
+    await verifyHeadingShare(page, headingExample.locator('.example-preview'));
     const contents = headingExample.getByRole('navigation', { name: '手记目录', exact: true });
     for (const [name, title] of [
       ['写封回信', '给远方的朋友写封回信'],
@@ -169,7 +171,10 @@ export async function verifyTeachingExamples(page, baseURL) {
     assert.equal(await articles.getByRole('listitem').count(), 3);
     await filtering.getByRole('radio', { name: '随手记', exact: true }).check();
     assert.equal(await articles.getByRole('listitem').count(), 1);
-    await filtering.getByRole('status').getByText('随手记 · 1 篇文章', { exact: true }).waitFor();
+    await filtering
+      .getByRole('status')
+      .getByText('随手记 · 1 篇文章 · 列表视图', { exact: true })
+      .waitFor();
   }
   console.log(
     'Examples passed: keyboard close/reopen focus, Heading links and new-tab focus, minimal controlled Tabs/Menu, replacement of the latest action result and local article filtering at desktop/mobile widths.',

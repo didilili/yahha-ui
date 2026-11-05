@@ -7,11 +7,17 @@ import buttonSizesSource from '../../examples/foundations/ButtonSizes.tsx?raw';
 import ButtonIcons from '../../examples/foundations/ButtonIcons';
 import buttonIconsSource from '../../examples/foundations/ButtonIcons.tsx?raw';
 import ButtonStates from '../../examples/foundations/ButtonStates';
+import ButtonAsync from '../../examples/foundations/ButtonAsync';
+import buttonAsyncSource from '../../examples/foundations/ButtonAsync.tsx?raw';
 import buttonStatesSource from '../../examples/foundations/ButtonStates.tsx?raw';
 import ButtonToggle from '../../examples/foundations/ButtonToggle';
 import buttonToggleSource from '../../examples/foundations/ButtonToggle.tsx?raw';
 import ButtonForm from '../../examples/foundations/ButtonForm';
 import buttonFormSource from '../../examples/foundations/ButtonForm.tsx?raw';
+import ButtonDestructive from '../../examples/foundations/ButtonDestructive';
+import buttonDestructiveSource from '../../examples/foundations/ButtonDestructive.tsx?raw';
+import ButtonDeleteDraft from '../../examples/foundations/ButtonDeleteDraft';
+import buttonDeleteDraftSource from '../../examples/foundations/ButtonDeleteDraft.tsx?raw';
 import { defineComponentPage } from '../page';
 import { buttonNativeRows, buttonVariantRows } from '../page-helpers';
 
@@ -22,18 +28,11 @@ export default defineComponentPage('button', {
       id: 'usage',
       title: '何时使用',
       content: (
-        <>
-          <p>
-            用于触发动作，例如提交表单、保存草稿和切换收藏。页面或地址跳转使用{' '}
-            <a href="#/components/link">Link</a>；只有图标的操作使用{' '}
-            <a href="#/components/icon-button">IconButton</a>。
-          </p>
-          <p>
-            同一操作区域优先保留一个主要动作，例如“保存草稿”；“取消修改”等配合动作使用次要按钮，
-            低强调的辅助动作使用文字按钮。这里的 <code>ghost</code> 表示文字按钮，
-            不等同于其他组件库的透明描边按钮。
-          </p>
-        </>
+        <p>
+          主操作用 primary，配合动作用 secondary，辅助动作用 ghost（文字）。跳转使用{' '}
+          <a href="#/components/link">Link</a>，纯图标使用{' '}
+          <a href="#/components/icon-button">IconButton</a>。
+        </p>
       ),
     },
     {
@@ -56,6 +55,13 @@ export default defineComponentPage('button', {
           source: buttonVariantsSource,
         },
         {
+          id: 'button-destructive',
+          title: '危险操作',
+          description: '三种强调程度的危险按钮静态对照。',
+          component: ButtonDestructive,
+          source: buttonDestructiveSource,
+        },
+        {
           id: 'button-sizes',
           title: '尺寸、全宽与长文案',
           description: '三档尺寸、全宽与窄栏长文案的静态对照，长文案可自然换行。',
@@ -71,21 +77,44 @@ export default defineComponentPage('button', {
         },
         {
           id: 'button-states',
-          title: '禁用与异步加载',
-          description:
-            '模拟保存：无图标示例保存成功，带图标示例首次失败，可再次点击重试；不发送请求。',
+          title: '禁用与加载',
+          description: '对比禁用与加载状态，加载时保留按钮名称。',
           component: ButtonStates,
           source: buttonStatesSource,
         },
         {
           id: 'button-toggle',
-          title: '切换状态',
+          title: '切换按钮',
           description: '点击按钮切换收藏状态，通过 aria-pressed 表达是否选中。',
           component: ButtonToggle,
           source: buttonToggleSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看异步、确认与表单示例',
+      examples: [
+        {
+          id: 'button-async',
+          title: '异步加载与重试',
+          description: '模拟保存首次失败，再次点击重试；状态仅保留在当前示例。',
+          toc: false,
+          component: ButtonAsync,
+          source: buttonAsyncSource,
+        },
+        {
+          id: 'button-delete-draft',
+          toc: false,
+          title: '删除确认与恢复',
+          description: '确认后删除本地草稿，取消时保留，删除后可恢复。',
+          component: ButtonDeleteDraft,
+          source: buttonDeleteDraftSource,
+        },
         {
           id: 'button-form',
+          toc: false,
           title: '提交与重置',
           description: '填写称呼后提交，或重置输入与结果；不发送请求。',
           component: ButtonForm,
@@ -98,6 +127,13 @@ export default defineComponentPage('button', {
       title: '布局与定制',
       content: (
         <>
+          <p>
+            <code>ghost</code> 在本库表示文字按钮，不是透明描边按钮。 删除等破坏性动作可设置{' '}
+            <code>destructive</code>，并用动作名称明确风险；它与
+            <code>variant</code> 分开控制，不自动打开确认弹窗或执行删除。危险色使用既有错误语义色，
+            <a href="#/components/theme-provider">ThemeProvider</a> 的 <code>tokens.error</code>
+            也会影响危险按钮。
+          </p>
           <p>
             全宽按钮可设置 <code>{"style={{ width: '100%' }}"}</code>，长名称会换行并撑高按钮。
             具体写法见上方<a href="#/components/button?section=button-sizes">尺寸、全宽与长文案</a>

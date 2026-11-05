@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { revealExample } from './reveal-example.mjs';
+import { verifyTextareaDraft } from './textarea-examples.mjs';
+import { verifyCheckboxFormReset } from './checkbox-form-examples.mjs';
 
 export async function verifySelectionComponents(page, baseURL) {
   for (const width of [1280, 320]) {
@@ -23,6 +26,7 @@ export async function verifySelectionComponents(page, baseURL) {
     await mixed.getByRole('button', { name: '恢复初始选择', exact: true }).click();
     assert.equal(await all.getAttribute('aria-checked'), 'mixed');
     const checkboxForm = page.locator('#form');
+    await revealExample(checkboxForm);
     const agreement = checkboxForm.getByRole('checkbox', {
       name: '我确认读取以上订阅分类',
       exact: true,
@@ -40,9 +44,11 @@ export async function verifySelectionComponents(page, baseURL) {
     await checkboxForm.getByRole('button', { name: '重置', exact: true }).click();
     assert.equal(await agreement.isChecked(), false);
     await verifySource(checkboxForm, 'new-forms/CheckboxForm.tsx');
+    await verifyCheckboxFormReset(page, checkboxForm.locator('.example-preview'));
 
     await page.goto(`${baseURL}#/components/radio-group`);
     const radioForm = page.locator('#form');
+    await revealExample(radioForm);
     await radioForm.getByRole('button', { name: '读取表单', exact: true }).click();
     const weekly = radioForm.getByRole('radio', { name: '每周', exact: true });
     assert.equal(
@@ -77,18 +83,17 @@ export async function verifySelectionComponents(page, baseURL) {
 
     await page.goto(`${baseURL}#/components/switch`);
     const controlled = page.locator('#controlled');
-    const summary = controlled.getByRole('switch', { name: '显示文章摘要', exact: true });
-    await summary.waitFor();
-    await summary.uncheck();
-    await controlled
-      .getByRole('status')
-      .getByText('摘要已隐藏，文章标题仍然保留。', { exact: true })
-      .waitFor();
-    assert.equal(
-      await controlled.getByRole('heading', { name: '沿着河边，慢慢走', exact: true }).isVisible(),
-      true,
-    );
+    const notification = controlled.getByRole('switch', { name: '启用通知', exact: true });
+    await notification.waitFor();
+    await notification.check();
+    await controlled.getByText('已开启', { exact: true }).waitFor();
+    await notification.uncheck();
+    await controlled.getByText('已关闭', { exact: true }).waitFor();
+    assert.equal(await controlled.locator('.example-preview').getByRole('status').count(), 0);
     const switchForm = page.locator('#form');
+    const closedDetails = switchForm.locator('xpath=ancestor::details[not(@open)]');
+    if (await closedDetails.count())
+      await closedDetails.first().locator(':scope > summary').click();
     await switchForm.getByRole('switch', { name: '文章封面', exact: true }).uncheck();
     await switchForm.getByRole('button', { name: '读取偏好', exact: true }).click();
     assert.match(
@@ -104,6 +109,7 @@ export async function verifySelectionComponents(page, baseURL) {
 
     await page.goto(`${baseURL}#/components/segmented-control`);
     const segmented = page.locator('#form');
+    await revealExample(segmented);
     await segmented.getByRole('button', { name: '读取排序值', exact: true }).click();
     await segmented.getByRole('alert').waitFor();
     await segmented.getByRole('radio', { name: '最多阅读', exact: true }).check();
@@ -194,25 +200,28 @@ export async function verifyTextareaExamples(page, baseURL) {
     await verifySource(controlled, 'new-forms/TextareaControlled.tsx');
 
     const native = page.locator('#native');
+    await revealExample(native);
     const draft = native.getByRole('textbox', { name: '草稿', exact: true });
     const initial = await draft.inputValue();
     await draft.fill('修改后的草稿\n保留换行。');
     assert.deepEqual(await draft.evaluate((node) => [...new FormData(node.form)]), [
       ['draft', '修改后的草稿\n保留换行。'],
     ]);
-    const readonly = native.getByRole('textbox', { name: '已发布简介', exact: true });
+    const states = page.locator('#textarea-states');
+    const readonly = states.getByRole('textbox', { name: '已发布简介', exact: true });
     assert.equal(await readonly.getAttribute('readonly'), '');
-    assert.equal(await readonly.evaluate((node) => getComputedStyle(node).resize), 'none');
+    assert.equal(await readonly.evaluate((node) => getComputedStyle(node).resize), 'vertical');
     await readonly.focus();
     const published = await readonly.inputValue();
     await readonly.press('x');
     assert.equal(await readonly.inputValue(), published);
-    const disabled = native.getByRole('textbox', { name: '暂时关闭留言', exact: true });
+    const disabled = states.getByRole('textbox', { name: '暂时关闭留言', exact: true });
     assert.equal(await disabled.isDisabled(), true);
     await native.getByRole('button', { name: '重置草稿', exact: true }).click();
     assert.equal(await draft.inputValue(), initial);
     assert.equal(await readonly.inputValue(), published);
     await verifySource(native, 'new-forms/TextareaStates.tsx');
+    await verifyTextareaDraft(page, page.locator('#textarea-comment-draft .example-preview'));
   }
 }
 

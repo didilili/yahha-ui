@@ -26,7 +26,7 @@ import { Tooltip } from 'yahha-ui';
 
 <a id="basic"></a>
 
-### 图标操作的文字标签
+### 悬停与聚焦提示
 
 悬停或聚焦查看提示，点击切换收藏。
 

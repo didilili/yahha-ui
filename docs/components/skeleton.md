@@ -20,6 +20,49 @@ import { Skeleton } from 'yahha-ui';
 
 ## 代码演示
 
+<a id="skeleton-shapes"></a>
+
+### 基本形状
+
+对比文本、矩形与圆形占位。
+
+[查看示例文件](../../playground/src/examples/content/SkeletonShapes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/SkeletonShapes.tsx -->
+
+```tsx
+import { Skeleton, Text } from 'yahha-ui';
+
+export default function SkeletonShapes() {
+  return (
+    <div style={{ display: 'grid', gap: 20, maxWidth: 320, minWidth: 0 }}>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <Text size="sm" tone="muted">
+          文本
+        </Text>
+        <Skeleton variant="text" width="80%" />
+      </div>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <Text size="sm" tone="muted">
+          矩形
+        </Text>
+        <Skeleton variant="rect" width={160} height={64} />
+      </div>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <Text size="sm" tone="muted">
+          圆形
+        </Text>
+        <Skeleton variant="circle" width={44} height={44} />
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
 本例手动切换占位与内容，不发起请求。
 
 <a id="skeleton-content"></a>
@@ -55,7 +98,7 @@ export default function SkeletonExample() {
               style={{ borderRadius: '40% 45% 42% 38%' }}
             />
           ) : (
-            <Avatar name="小林" />
+            <Avatar name="库米" />
           )}
         </div>
         <div style={{ display: 'grid', minHeight: titleHeight }}>

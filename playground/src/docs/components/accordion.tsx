@@ -24,17 +24,26 @@ export default defineComponentPage('accordion', {
       examples: [
         {
           id: 'basic',
-          title: '常见问题',
-          description: '逐项展开常见问题，再次点击收起。',
+          title: '单项展开与收起',
+          description: '默认展开一项，选择另一项时收起前一项。',
           component: AccordionBasic,
           source: accordionBasicSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看筛选与多项展开示例',
+      content: <p>筛选和展开状态仅保留在当前示例。</p>,
+      examples: [
         {
           id: 'controlled',
-          title: '受控的多项展开',
-          description: '展开读书会说明对照阅读，也可全部收起。',
+          title: '筛选与多项展开',
+          description: '搜索标题并展开当前可用项；筛掉的展开项会收起。',
           component: AccordionControlled,
           source: accordionControlledSource,
+          toc: false,
         },
       ],
     },
@@ -56,6 +65,10 @@ export default defineComponentPage('accordion', {
           </li>
           <li>
             可禁用单项或整组，已展开内容仍保持可见。外部“全部展开”等操作保留当前操作位置，需要进入具体内容时再显式移动焦点。
+          </li>
+          <li>
+            筛选例从同一份数据计算可见条目与可展开值，并清理被隐藏的展开项。
+            清空搜索恢复说明列表，不会重新打开已被筛走的项目；批量展开只作用当前可见且可用的说明。
           </li>
         </ul>
       ),

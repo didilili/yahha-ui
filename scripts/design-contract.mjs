@@ -131,6 +131,20 @@ designExceptions.push(
 /** Baseline examples can demonstrate these specific public customization behaviors. */
 export const exampleExceptions = [
   {
+    path: 'playground/src/examples/foundations/SurfaceCover.tsx',
+    component: 'Surface',
+    property: 'padding',
+    value: '0',
+    reason: 'An explicit full-bleed cover composition owns its content padding separately.',
+  },
+  {
+    path: 'playground/src/examples/foundations/SurfaceCover.tsx',
+    component: 'Surface',
+    property: 'overflow',
+    value: 'hidden',
+    reason: 'Clip the edge-to-edge cover to the existing Surface contour; controls remain inset.',
+  },
+  {
     path: 'playground/src/examples/content/SkeletonExample.tsx',
     component: 'Skeleton',
     property: 'border-radius',

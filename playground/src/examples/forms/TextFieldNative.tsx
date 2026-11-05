@@ -8,16 +8,6 @@ export default function TextFieldNative() {
   return (
     <div style={{ display: 'grid', gap: 20 }}>
       <div style={{ display: 'grid', gap: 16 }}>
-        <p style={{ margin: 0 }}>禁用与只读</p>
-        <TextField label="暂不可编辑" disabled defaultValue="等待同步" />
-        <TextField
-          label="公开地址"
-          readOnly
-          defaultValue="https://example.com"
-          hint="可以复制此地址。"
-        />
-      </div>
-      <div style={{ display: 'grid', gap: 16 }}>
         <p style={{ margin: 0 }}>邮箱与密码</p>
         <form
           style={{ display: 'grid', gap: 16 }}

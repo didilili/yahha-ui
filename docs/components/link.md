@@ -22,9 +22,9 @@ import { Link } from 'yahha-ui';
 
 <a id="link-native"></a>
 
-### 站内与外部链接
+### 基础用法
 
-站内导航、新标签页外链与窄栏中的长地址换行。
+通过链接打开入门指南。
 
 [查看示例文件](../../playground/src/examples/content/LinkExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -35,28 +35,125 @@ import { Link, Text } from 'yahha-ui';
 
 export default function LinkExample() {
   return (
-    <div style={{ display: 'grid', gap: 12 }}>
-      <Text>
-        <Link href="#/guides/getting-started">阅读入门指南</Link>，继续了解组件的使用方式。
+    <Text>
+      <Link href="#/guides/getting-started">阅读入门指南</Link>，了解组件的使用方式。
+    </Text>
+  );
+}
+```
+
+<a id="link-external"></a>
+
+### 外部链接
+
+使用 external 在新标签页打开，并保留安全 rel。
+
+[查看示例文件](../../playground/src/examples/content/LinkExternal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/LinkExternal.tsx -->
+
+```tsx
+import { Link } from 'yahha-ui';
+
+export default function LinkExternal() {
+  return (
+    <Link href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a" external>
+      MDN 链接元素（新标签页）
+    </Link>
+  );
+}
+```
+
+<a id="link-wrapping"></a>
+
+### 长地址换行
+
+在窄栏中保留完整地址与下划线。
+
+[查看示例文件](../../playground/src/examples/content/LinkWrapping.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/LinkWrapping.tsx -->
+
+```tsx
+import { Link } from 'yahha-ui';
+
+const address = 'https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a';
+
+export default function LinkWrapping() {
+  return (
+    <div style={{ maxWidth: '32ch', minWidth: 0 }}>
+      <Link href={address} external>
+        {address}（新标签页）
+      </Link>
+    </div>
+  );
+}
+```
+
+<a id="link-download"></a>
+
+### 文件下载
+
+下载 TXT 清单，或在新标签页阅读同一份文本。
+
+[查看示例文件](../../playground/src/examples/content/LinkDownload.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/LinkDownload.tsx -->
+
+```tsx
+import { useEffect, useState } from 'react';
+import { Link, Text } from 'yahha-ui';
+
+const readingList = [
+  'Yahha UI 阅读清单',
+  '',
+  '1. 沿着河边，慢慢走',
+  '2. 给周末留一页空白',
+  '',
+  '以上为 Yahha UI 原创示例手记。',
+].join('\n');
+
+export default function LinkDownload() {
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    const address = URL.createObjectURL(
+      new Blob([readingList], { type: 'text/plain;charset=utf-8' }),
+    );
+    // Browser-owned URLs are created and released with this instance, rather than during render.
+    // oxlint-disable-next-line react/set-state-in-effect
+    setUrl(address);
+    return () => URL.revokeObjectURL(address);
+  }, []);
+
+  return (
+    <div style={{ display: 'grid', gap: 12, maxWidth: '65ch', minWidth: 0 }}>
+      <Text>阅读清单</Text>
+      <Text size="sm" tone="muted">
+        TXT · UTF-8
       </Text>
-      <Text>
-        链接的原生用法见
-        <Link
-          href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a"
-          external
-        >
-          MDN 链接元素（新标签页打开）
-        </Link>
-        。
-      </Text>
-      <Text size="sm" tone="muted" style={{ maxWidth: '32ch' }}>
-        <Link
-          href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a"
-          external
-        >
-          https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/a（新标签页打开）
-        </Link>
-      </Text>
+      {url && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'baseline' }}>
+          <Link href={url} download="yahha-reading-list.txt">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              aria-hidden="true"
+              style={{ verticalAlign: 'text-bottom', marginInlineEnd: 4 }}
+            >
+              <path d="M7 3h7l4 4v14H6V3h1Zm7 0v5h4M9 12h6m-6 4h6" strokeLinejoin="round" />
+            </svg>
+            下载阅读清单（TXT）
+          </Link>
+          <Link href={url} external>
+            在线阅读（新标签页）
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
@@ -92,6 +189,7 @@ export default function LinkExample() {
 - external 只设置默认打开方式，不根据 href 判断是否为外部地址；外部网站也可以在当前页打开。
 - 在链接文字或相邻说明中交代新窗口行为，让用户在打开前知道会离开当前阅读环境。
 - 没有 disabled 模式。不可访问的目标应由页面提供说明或不渲染链接。
+- download 沿用原生 anchor 属性，适用于同源、blob 和 data 地址；浏览器决定实际保存方式。示例在卸载时释放 Blob URL，该地址仅用于当前实例，不作为永久资源地址。
 
 <a id="related"></a>
 

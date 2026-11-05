@@ -1,72 +1,42 @@
 import { IconButton } from 'yahha-ui';
 
-function Star() {
+function Bookmark() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-      <path
-        d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M8 3.25h6.2l4.05 4.1v12.7c0 .6-.5.88-1 .57L12 17.4l-5.3 3.22c-.5.31-.95.02-.95-.57V5.6C5.75 4.15 6.5 3.25 8 3.25Z" />
+      <path d="M14.2 3.5v3c0 .6.35.95.95.95h2.8" fill="none" />
     </svg>
   );
 }
 
 export default function IconButtonSizes() {
   return (
-    <div style={{ display: 'grid', gap: 24 }}>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <span>尺寸</span>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-          {(
-            [
-              ['sm', '小号'],
-              ['md', '中号'],
-              ['lg', '大号'],
-            ] as const
-          ).map(([size, label]) => (
-            <div key={size} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-              <span>
-                {label} {size}
-              </span>
-              <IconButton size={size} aria-label={`${size} 尺寸收藏样本`}>
-                <Star />
-              </IconButton>
-            </div>
-          ))}
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+      {(
+        [
+          ['sm', '小号'],
+          ['md', '中号'],
+          ['lg', '大号'],
+        ] as const
+      ).map(([size, label]) => (
+        <div key={size} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>
+            {label} {size}
+          </span>
+          <IconButton size={size} aria-label={`${size} 尺寸收藏样本`}>
+            <Bookmark />
+          </IconButton>
         </div>
-      </div>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <span>强调程度</span>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-          {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
-            <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-              <span>
-                {variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '低强调'}
-              </span>
-              <IconButton variant={variant} aria-label={`${variant} 变体收藏样本`}>
-                <Star />
-              </IconButton>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <span>可用与禁用</span>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-          {[false, true].map((disabled) => (
-            <div key={String(disabled)} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-              <span>{disabled ? '禁用' : '可用'}</span>
-              <IconButton
-                disabled={disabled}
-                aria-label={disabled ? '禁用收藏样本' : '可用收藏样本'}
-              >
-                <Star />
-              </IconButton>
-            </div>
-          ))}
-        </div>
-      </div>
+      ))}
     </div>
   );
 }

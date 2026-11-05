@@ -5,6 +5,8 @@ import PaginationArchive from '../../examples/navigation/PaginationArchive';
 import paginationArchiveSource from '../../examples/navigation/PaginationArchive.tsx?raw';
 import PaginationEmpty from '../../examples/navigation/PaginationEmpty';
 import paginationEmptySource from '../../examples/navigation/PaginationEmpty.tsx?raw';
+import PaginationLinks from '../../examples/navigation/PaginationLinks';
+import paginationLinksSource from '../../examples/navigation/PaginationLinks.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('pagination', {
@@ -15,27 +17,26 @@ export default defineComponentPage('pagination', {
       title: '何时使用',
       content: (
         <p>
-          将文章列表、搜索结果等分成多页阅读时使用。组件提供受控的按钮式分页，适合在当前页面更新列表；数据切片与请求由调用方处理。需要可复制地址、在新标签打开等真实
-          URL 导航时，应使用链接式分页。
+          将文章列表、搜索结果等分成多页阅读时使用。默认按钮式分页更新当前列表；需要复制页码地址或在新标签打开时，使用
+          getPageHref 提供真实链接。数据切片、请求和网址更新由调用方处理。
         </p>
       ),
     },
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页示例只更新本地内容，不请求数据或改变网址。</p>,
       examples: [
         {
           id: 'basic',
-          title: '对文章列表分页',
-          description: '翻页查看每页三篇文章。',
+          title: '基础用法',
+          description: '通过页码按钮切换列表，每页显示三篇文章。',
           component: PaginationBasic,
           source: paginationBasicSource,
         },
         {
           id: 'archive',
-          title: '较多页码与翻页阅读',
-          description: '用三篇摘要模拟 80 页归档，翻页后聚焦本页标题。',
+          title: '多页码与翻页焦点',
+          description: '用三条摘要模拟 80 页，翻页后聚焦本页标题。',
           component: PaginationArchive,
           source: paginationArchiveSource,
         },
@@ -45,6 +46,22 @@ export default defineComponentPage('pagination', {
           description: '空列表隐藏数字页码，翻页按钮不可用。',
           component: PaginationEmpty,
           source: paginationEmptySource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看链接分页与地址同步示例',
+      content: <p>示例使用本地内容，当前页码保留在网址中。</p>,
+      examples: [
+        {
+          id: 'links',
+          title: '链接分页与地址同步',
+          description: '用真实链接翻页，支持浏览器返回和新标签页打开。',
+          toc: false,
+          component: PaginationLinks,
+          source: paginationLinksSource,
         },
       ],
     },
@@ -66,6 +83,15 @@ export default defineComponentPage('pagination', {
             切页后的
             URL、焦点和滚动位置由调用方安排。可把焦点移到新一页的标题，让阅读从更新后的内容开始；实际组合见{' '}
             <Link href="#/guides/states?section=archive">个人博客归档</Link>。
+          </li>
+          <li>
+            getPageHref 只生成有效页码的地址；普通主键点击与 Enter 会阻止默认跳转，仍由 onPageChange
+            更新内容及网址。修饰键和中键保留浏览器原生导航，不调用回调。
+            当前页普通激活不回调；不可用的前后入口不带 href，也不进入 Tab 顺序。
+          </li>
+          <li>
+            链接例在网址中保存当前页，刷新或返回可恢复，并保留其他参数和片段。
+            完整博客复用自身归档路由保留搜索、分类、排序和收藏筛选。
           </li>
         </ul>
       ),
@@ -96,7 +122,14 @@ export default defineComponentPage('pagination', {
               name: 'onPageChange',
               type: '(page: number) => void',
               required: true,
-              description: '激活不同的可用页码后调用；点击当前页不回调。',
+              description:
+                '普通激活不同的可用页码后调用；点击当前页不回调。链接模式同样必需，由调用方同步网址。',
+            },
+            {
+              name: 'getPageHref',
+              type: '(page: number) => string',
+              description:
+                '为有效页码生成真实链接；不传时保持按钮。普通激活走 onPageChange，修饰键或中键按原生链接导航。',
             },
             {
               name: 'siblingCount',
@@ -113,7 +146,7 @@ export default defineComponentPage('pagination', {
             {
               name: 'classNames',
               type: '{ list?: string; button?: string; ellipsis?: string }',
-              description: '列表、所有按钮、省略号的附加类名。',
+              description: '列表、所有页码入口（按钮或链接）、省略号的附加类名。',
             },
             {
               name: 'ref / className / style',
@@ -136,6 +169,10 @@ export default defineComponentPage('pagination', {
           <li>
             原生按钮通过 Tab 聚焦、Enter / Space
             激活；第一页禁用上一页，末页禁用下一页，禁用按钮退出键盘顺序。
+          </li>
+          <li>
+            链接通过 Tab 聚焦、Enter 激活，Space 保持浏览器的滚动行为。 Cmd / Ctrl
+            点击或中键可在新标签打开；是否打开窗口等行为遵循浏览器设置。
           </li>
           <li>
             各个可见页码按钮都在 Tab 顺序中，不使用方向键切换。省略号不可操作，并对辅助技术隐藏。

@@ -20,7 +20,7 @@ export default function SkeletonExample() {
               style={{ borderRadius: '40% 45% 42% 38%' }}
             />
           ) : (
-            <Avatar name="小林" />
+            <Avatar name="库米" />
           )}
         </div>
         <div style={{ display: 'grid', minHeight: titleHeight }}>

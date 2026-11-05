@@ -8,6 +8,10 @@ import SelectForm from '../../examples/new-forms/SelectForm';
 import SelectFormSource from '../../examples/new-forms/SelectForm.tsx?raw';
 import SelectLongOptions from '../../examples/new-forms/SelectLongOptions';
 import SelectLongOptionsSource from '../../examples/new-forms/SelectLongOptions.tsx?raw';
+import SelectCollection from '../../examples/new-forms/SelectCollection';
+import SelectCollectionSource from '../../examples/new-forms/SelectCollection.tsx?raw';
+import SelectAvailableCollections from '../../examples/new-forms/SelectAvailableCollections';
+import SelectAvailableCollectionsSource from '../../examples/new-forms/SelectAvailableCollections.tsx?raw';
 import SelectPortalCustomization from '../../examples/customization/SelectPortalCustomization';
 import selectPortalCustomizationSource from '../../examples/customization/SelectPortalCustomization.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -31,7 +35,6 @@ export default defineComponentPage('select', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页示例只在本地选择和读取，不发送或保存数据，也不筛选、重排文章。</p>,
       examples: [
         {
           id: 'basic',
@@ -55,9 +58,25 @@ export default defineComponentPage('select', {
           source: SelectStatesSource,
         },
         {
+          id: 'select-collection',
+          title: '自定义选项内容',
+          description: '选项与选中值均显示名称和辅助说明。',
+          component: SelectCollection,
+          source: SelectCollectionSource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看表单、长选项与动态数据示例',
+      content: <p>示例在本地运行，状态只保留在当前示例。</p>,
+      examples: [
+        {
           id: 'form',
           title: '必选表单与重置',
           description: '读取必选分类或重置为未选择。',
+          toc: false,
           component: SelectForm,
           source: SelectFormSource,
         },
@@ -65,8 +84,17 @@ export default defineComponentPage('select', {
           id: 'long-options',
           title: '长列表与长选项',
           description: '查看长选项换行与列表滚动。',
+          toc: false,
           component: SelectLongOptions,
           source: SelectLongOptionsSource,
+        },
+        {
+          id: 'select-available-collections',
+          title: '动态选项与空状态',
+          description: '恢复可选项，移除选中项后清空选择；空列表保留恢复入口。',
+          toc: false,
+          component: SelectAvailableCollections,
+          source: SelectAvailableCollectionsSource,
         },
       ],
     },
@@ -91,6 +119,15 @@ export default defineComponentPage('select', {
           <li>
             required 保留原生必选约束。校验规则、error
             的设置和选择后的错误清除由调用方维护，必选要求还应提供可见说明。
+          </li>
+          <li>
+            复杂 label 同时用于选项和当前值显示，使用非交互行内内容；textValue
+            提供稳定的可见标题，让键盘前缀匹配不受说明文字干扰。
+          </li>
+          <li>
+            空数据时，可用 disabled、placeholder 和 hint 说明原因，在字段旁提供创建或恢复入口。
+            options 动态变化时，由调用方同步维护有效 value 并清除旧结果；移除当前项时可显式置为
+            null，让用户重新选择。
           </li>
         </ul>
       ),
@@ -190,7 +227,7 @@ export default defineComponentPage('select', {
             {
               name: 'label',
               type: 'ReactNode',
-              description: '选项内容；避免嵌套交互元素。',
+              description: '选项及当前值显示的内容；使用非交互行内节点。',
               required: true,
             },
             {

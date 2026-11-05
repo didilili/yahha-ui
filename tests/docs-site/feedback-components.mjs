@@ -1,4 +1,6 @@
+import { verifyToastSimple } from './toast-reading-examples.mjs';
 import assert from 'node:assert/strict';
+import { revealExample } from './reveal-example.mjs';
 
 async function choose(page, select, label) {
   await select.click();
@@ -52,6 +54,7 @@ async function focused(page, locator) {
 export async function verifyFeedbackExamples(page, baseURL) {
   await page.goto(`${baseURL}#/components/alert`);
   const alert = page.locator('#alert-action .example-preview');
+  await revealExample(alert);
   const checkbox = alert.getByRole('checkbox', { name: '接收每周阅读推荐', exact: true });
   await checkbox.uncheck();
   const save = alert.getByRole('button', { name: '保存订阅偏好', exact: true });
@@ -84,12 +87,14 @@ export async function verifyFeedbackExamples(page, baseURL) {
 
   await page.goto(`${baseURL}#/components/skeleton`);
   const skeleton = page.locator('#skeleton-content .example-preview');
+  await revealExample(skeleton);
   const region = skeleton.getByRole('region', { name: '文章摘要', exact: true });
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     const loading = await region.boundingBox();
     await skeleton.getByRole('button', { name: '显示内容', exact: true }).click();
     assert.equal(await region.getAttribute('aria-busy'), 'false');
+    assert.equal(await region.getByRole('img', { name: '库米', exact: true }).isVisible(), true);
     const loaded = await region.boundingBox();
     assert.ok(
       Math.abs(loading.height - loaded.height) < 0.1,
@@ -108,8 +113,10 @@ export async function verifyFeedbackExamples(page, baseURL) {
     .waitFor();
 
   await page.goto(`${baseURL}#/components/toast`);
+  await verifyToastSimple(page);
   const basicToast = page.locator('#basic .example-preview');
-  const trigger = basicToast.getByRole('button', { name: '显示保存结果', exact: true });
+  await revealExample(basicToast);
+  const trigger = basicToast.getByRole('button', { name: /^(加入|移出)稍后阅读$/ });
   await trigger.click();
   await focused(page, trigger);
   await trigger.click();
@@ -125,6 +132,7 @@ export async function verifyFeedbackExamples(page, baseURL) {
   assert.equal(await tones.getByRole('status').count(), 3);
 
   const timer = page.locator('#timer-and-action .example-preview');
+  await revealExample(timer);
   const archive = timer.getByRole('button', { name: '归档文章', exact: true });
   const restore = timer.getByRole('button', { name: '恢复文章', exact: true });
   await archive.click();

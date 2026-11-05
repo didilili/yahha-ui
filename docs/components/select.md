@@ -20,8 +20,6 @@ import { Select } from 'yahha-ui';
 
 ## 代码演示
 
-本页示例只在本地选择和读取，不发送或保存数据，也不筛选、重排文章。
-
 <a id="basic"></a>
 
 ### 基础用法
@@ -148,6 +146,66 @@ export default function SelectStates() {
 }
 ```
 
+<a id="select-collection"></a>
+
+### 自定义选项内容
+
+选项与选中值均显示名称和辅助说明。
+
+[查看示例文件](../../playground/src/examples/new-forms/SelectCollection.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectCollection.tsx -->
+
+```tsx
+import { Select } from 'yahha-ui';
+
+const collections = [
+  { value: 'journal', title: 'Journal 日常手记', description: '散步、天气和日常的小事。' },
+  { value: 'reading', title: 'Reading 阅读摘记', description: '读过的文章与想留下的句子。' },
+  {
+    value: 'archive',
+    title: 'Archive 已归档',
+    description: '已归档，暂不接收新手记。',
+    disabled: true,
+  },
+];
+const options = collections.map((collection) => ({
+  value: collection.value,
+  textValue: collection.title,
+  disabled: collection.disabled,
+  label: (
+    <span>
+      <span style={{ display: 'block' }}>{collection.title}</span>
+      <span
+        style={{
+          display: 'block',
+          fontSize: 'var(--yahha-font-size-sm, 12px)',
+          fontWeight: 400,
+          lineHeight: 'var(--yahha-leading-caption, 1.6)',
+          color: 'var(--yahha-muted, #7a5c6d)',
+        }}
+      >
+        {collection.description}
+      </span>
+    </span>
+  ),
+}));
+
+export default function SelectCollection() {
+  return (
+    <div style={{ maxWidth: 480 }}>
+      <Select label="收藏夹" defaultValue="journal" placeholder="请选择收藏夹" options={options} />
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
+示例在本地运行，状态只保留在当前示例。
+
 <a id="form"></a>
 
 ### 必选表单与重置
@@ -251,6 +309,95 @@ export default function SelectLongOptions() {
 }
 ```
 
+<a id="select-available-collections"></a>
+
+### 动态选项与空状态
+
+恢复可选项，移除选中项后清空选择；空列表保留恢复入口。
+
+[查看示例文件](../../playground/src/examples/new-forms/SelectAvailableCollections.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectAvailableCollections.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Button, Select, Text } from 'yahha-ui';
+
+const exampleCollections = [
+  { value: 'journal', label: 'Journal 日常手记' },
+  { value: 'reading', label: 'Reading 阅读摘记' },
+];
+
+export default function SelectAvailableCollections() {
+  const [options, setOptions] = useState<typeof exampleCollections>([]);
+  const [value, setValue] = useState<string | null>(null);
+  const [result, setResult] = useState('');
+
+  return (
+    <form
+      style={{ display: 'grid', gap: 16, maxWidth: 480 }}
+      onSubmit={(event) => event.preventDefault()}
+      onReset={() => {
+        setValue(null);
+        setResult('');
+      }}
+    >
+      <Select
+        label="可用收藏夹"
+        name="collection"
+        options={options}
+        value={value}
+        disabled={options.length === 0}
+        placeholder={options.length === 0 ? '暂无可用收藏夹' : '请选择收藏夹'}
+        hint={
+          options.length === 0 ? '没有可选项，请先恢复示例选项。' : '移除选中项后，选择值同步清空。'
+        }
+        onValueChange={(next) => {
+          if (next === value) return;
+          setValue(next);
+          setResult('');
+        }}
+      />
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => {
+            setOptions(exampleCollections);
+            setValue(null);
+            setResult(`已恢复 ${exampleCollections.length} 个示例选项，请选择一个。`);
+          }}
+        >
+          恢复选项
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          disabled={value === null}
+          onClick={() => {
+            if (value === null) return;
+            const removed = options.find((option) => option.value === value);
+            const remaining = options.filter((option) => option.value !== value);
+            setOptions(remaining);
+            setValue(null);
+            setResult(
+              remaining.length > 0
+                ? `已移除「${removed?.label ?? '当前收藏夹'}」，请重新选择。`
+                : '已移除最后一个选项，可恢复示例选项后再选择。',
+            );
+          }}
+        >
+          移除选中项
+        </Button>
+      </div>
+      <Text size="sm" tone="muted" role="status">
+        {result}
+      </Text>
+    </form>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 状态与表单
@@ -259,6 +406,8 @@ export default function SelectLongOptions() {
 - name 将选中值加入 FormData，form 可关联外部表单。非受控选择随表单重置到初始值；受控选择需由调用方在 onReset 中恢复 value。
 - readOnly 允许打开并浏览选项，保留提交值但阻止修改；disabled 阻止交互与提交。单个 disabled 选项保留在列表中但不可选择。
 - required 保留原生必选约束。校验规则、error 的设置和选择后的错误清除由调用方维护，必选要求还应提供可见说明。
+- 复杂 label 同时用于选项和当前值显示，使用非交互行内内容；textValue 提供稳定的可见标题，让键盘前缀匹配不受说明文字干扰。
+- 空数据时，可用 disabled、placeholder 和 hint 说明原因，在字段旁提供创建或恢复入口。 options 动态变化时，由调用方同步维护有效 value 并清除旧结果；移除当前项时可显式置为 null，让用户重新选择。
 
 <a id="api"></a>
 
@@ -288,7 +437,7 @@ export default function SelectLongOptions() {
 | 属性             | 说明                                           | 类型        | 默认值         |
 | ---------------- | ---------------------------------------------- | ----------- | -------------- |
 | `value` **必填** | 唯一非空字符串，作为提交值。                   | `string`    | —              |
-| `label` **必填** | 选项内容；避免嵌套交互元素。                   | `ReactNode` | —              |
+| `label` **必填** | 选项及当前值显示的内容；使用非交互行内节点。   | `ReactNode` | —              |
 | `disabled`       | 禁用该选项。                                   | `boolean`   | `false`        |
 | `textValue`      | 带图标或复杂内容时提供明确的键盘前缀匹配文字。 | `string`    | `读取选项文字` |
 

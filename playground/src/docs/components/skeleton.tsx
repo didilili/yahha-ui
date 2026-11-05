@@ -1,5 +1,7 @@
 import SkeletonExample from '../../examples/content/SkeletonExample';
 import skeletonSource from '../../examples/content/SkeletonExample.tsx?raw';
+import SkeletonShapes from '../../examples/content/SkeletonShapes';
+import skeletonShapesSource from '../../examples/content/SkeletonShapes.tsx?raw';
 import { defineComponentPage } from '../page';
 import { example } from '../page-helpers';
 
@@ -18,15 +20,32 @@ export default defineComponentPage('skeleton', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本例手动切换占位与内容，不发起请求。</p>,
       examples: [
         example(
-          'skeleton-content',
-          '从占位到内容',
-          '切换文章摘要的占位与内容，观察预留空间。',
-          SkeletonExample,
-          skeletonSource,
+          'skeleton-shapes',
+          '基本形状',
+          '对比文本、矩形与圆形占位。',
+          SkeletonShapes,
+          skeletonShapesSource,
         ),
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看占位与内容切换示例',
+      content: <p>本例手动切换占位与内容，不发起请求。</p>,
+      examples: [
+        {
+          ...example(
+            'skeleton-content',
+            '从占位到内容',
+            '切换文章摘要的占位与内容，观察预留空间。',
+            SkeletonExample,
+            skeletonSource,
+          ),
+          toc: false,
+        },
       ],
     },
     {

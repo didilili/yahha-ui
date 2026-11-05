@@ -8,7 +8,7 @@ export default function TextareaBasic() {
         name="message"
         placeholder="想说的话，可以慢慢写……"
         rows={4}
-        hint="支持换行；桌面端可拖动角落的调整手柄。"
+        hint="桌面端可拖动角落的调整手柄。"
       />
     </div>
   );

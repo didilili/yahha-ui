@@ -30,9 +30,6 @@ export default defineComponentPage('dialog', {
     {
       id: 'examples',
       title: '代码演示',
-      content: (
-        <p>表单结果仅保留在当前示例，不连接后台；取消或关闭后重开会从上次保存值重新开始。</p>
-      ),
       examples: [
         {
           id: 'basic',
@@ -43,18 +40,32 @@ export default defineComponentPage('dialog', {
           source: dialogBasicSource,
         },
         {
-          id: 'form',
-          title: '修改并保存站点标题',
-          description: '修改站点标题，保存或取消本次修改。',
-          component: DialogForm,
-          source: dialogFormSource,
-        },
-        {
           id: 'external',
           title: '外部按钮打开与焦点返回',
           description: '从外部按钮打开阅读提醒，关闭后返回原按钮。',
           component: DialogExternal,
           source: dialogExternalSource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看未保存修改的关闭保护',
+      content: (
+        <p>
+          修改标题后，取消、Escape、关闭按钮和外点共用退出策略：继续编辑或明确放弃。
+          结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
+        </p>
+      ),
+      examples: [
+        {
+          id: 'form',
+          title: '未保存修改的关闭确认',
+          description: '修改标题，试试未保存时的关闭选择。',
+          component: DialogForm,
+          source: dialogFormSource,
+          toc: false,
         },
       ],
     },
@@ -209,8 +220,10 @@ export default defineComponentPage('dialog', {
             不固定在底部。复杂表单或长篇正文更适合独立页面，避免把必要操作埋在长滚动区中。
           </p>
           <p>
-            弹窗文字与布局方向跟随 Portal 目标；仅设置触发器所在容器的 dir，不会影响 body
-            中的弹窗。需要局部 RTL 时，可使用带 dir="rtl" 的 portalContainer。
+            有触发器时，弹窗跟随触发器自身或祖先明确的 dir，未指定时继承方向上下文；
+            没有显式方向配置时，保留 Portal 目标及页面的 CSS direction 继承。触发器仅使用局部 CSS
+            direction 或 dir="auto" 时，请同时提供明确的 dir。style.direction
+            可显式覆盖弹窗方向。省略触发器、由外部程序打开时，继续继承 Portal 目标及页面的原生方向。
           </p>
           <p>
             Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，不复制页面布局类。

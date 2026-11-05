@@ -29,7 +29,6 @@ export default defineComponentPage('segmented-control', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页使用本地状态和文章，不请求接口或保存设置。</p>,
       examples: [
         {
           id: 'basic',
@@ -39,23 +38,33 @@ export default defineComponentPage('segmented-control', {
           source: segmentedBasicSource,
         },
         {
-          id: 'filtering',
-          title: '筛选本地文章',
-          description: '按类型筛选文章，查看列表与数量变化。',
-          component: SegmentedFiltering,
-          source: segmentedFilteringSource,
-        },
-        {
           id: 'disabled',
           title: '禁用选项与整组禁用',
           description: '对比单项与整组禁用，并切换整组可用状态。',
           component: SegmentedDisabled,
           source: segmentedDisabledSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看内容筛选、表单与长标签示例',
+      content: <p>示例使用本地状态和文章，不请求接口或保存设置。</p>,
+      examples: [
+        {
+          id: 'filtering',
+          title: '筛选与视图切换',
+          description: '按类型筛选同一批文章，再切换列表与卡片。',
+          toc: false,
+          component: SegmentedFiltering,
+          source: segmentedFilteringSource,
+        },
         {
           id: 'form',
           title: '原生表单与显式重置',
-          description: '选择必选排序值后读取，或恢复为未选择；不重排文章。',
+          description: '读取必选值或重置为未选择，不重排文章。',
+          toc: false,
           component: SegmentedForm,
           source: segmentedFormSource,
         },
@@ -63,6 +72,7 @@ export default defineComponentPage('segmented-control', {
           id: 'long-labels',
           title: '长标签与窄容器',
           description: '在窄栏中切换专题，查看选项如何换行排列。',
+          toc: false,
           component: SegmentedLongLabels,
           source: segmentedLongLabelsSource,
         },
@@ -90,6 +100,10 @@ export default defineComponentPage('segmented-control', {
           <li>
             选择变化后的筛选、正文更新与 URL
             同步由调用方处理；需要可见的校验错误时，在组旁提供说明，并用 aria-describedby 关联。
+          </li>
+          <li>
+            文章例使用两组独立选择：分类决定文章集合，视图只调整同一集合的呈现。
+            切换列表与卡片会保留当前分类和文章顺序，不模拟重新加载。
           </li>
         </ul>
       ),

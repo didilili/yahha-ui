@@ -88,7 +88,7 @@ try {
     browser = await chromium.launch({ headless: true });
     await verifyDocs(browser, baseURL);
     console.log(
-      'Documentation passed: homepage interactions, routes, all APIs/97 examples, SVG states and welcome motion controls, copy fallback, search, dialog, mobile navigation and nested deployment.',
+      'Documentation passed: homepage interactions, routes, all APIs/140 examples, SVG states and welcome motion controls, copy fallback, search, dialog, mobile navigation and nested deployment.',
     );
   }
 } finally {

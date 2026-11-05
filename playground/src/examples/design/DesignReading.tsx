@@ -147,7 +147,7 @@ export default function DesignReading() {
                 <article aria-label={active.title} style={{ display: 'grid', gap: 24 }}>
                   <header style={{ display: 'grid', gap: 12 }}>
                     <Text size="sm" tone="muted">
-                      <time dateTime={active.date}>{active.date}</time> · 小林的星球手记
+                      <time dateTime={active.date}>{active.date}</time> · 库米的星球手记
                     </Text>
                     <Heading level={4} ref={articleRef} tabIndex={-1}>
                       {active.title}

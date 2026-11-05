@@ -10,28 +10,35 @@ export default function MenuControlled() {
   const [draftTitle, setDraftTitle] = useState(title);
   const trigger = useRef<HTMLButtonElement>(null);
   const editor = useRef<HTMLInputElement>(null);
-  const [focusTarget, setFocusTarget] = useState<'editor' | 'trigger' | null>(null);
+  const recovery = useRef<HTMLButtonElement>(null);
+  const [focusTarget, setFocusTarget] = useState<'editor' | 'trigger' | 'recovery' | null>(null);
 
   useEffect(() => {
     if (!focusTarget) return;
-    // 先等菜单关闭并完成默认回焦，再继续到新操作的目标。
     const frame = requestAnimationFrame(() => {
-      (focusTarget === 'editor' ? editor.current : trigger.current)?.focus();
+      const target =
+        focusTarget === 'editor'
+          ? editor.current
+          : focusTarget === 'recovery'
+            ? recovery.current
+            : trigger.current;
+      target?.focus();
       setFocusTarget(null);
     });
     return () => cancelAnimationFrame(frame);
   }, [focusTarget]);
 
   function restore() {
+    setOpen(false);
     setRemoved(false);
     setMessage('草稿已恢复，内容没有丢失');
     setFocusTarget('trigger');
   }
 
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
+    <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
       {!removed && (
-        <article aria-label="示例草稿">
+        <article aria-label="示例草稿" style={{ display: 'grid', gap: 16, minWidth: 0 }}>
           {editing ? (
             <form
               style={{ display: 'grid', gap: 12 }}
@@ -78,52 +85,54 @@ export default function MenuControlled() {
               <Text>留一点空白，记录散步、翻书和下一次想写的小事。</Text>
             </>
           )}
+          <div style={{ justifySelf: 'start' }}>
+            <DropdownMenu
+              trigger={
+                <Button ref={trigger} variant="secondary" aria-label={`操作草稿：${title}`}>
+                  草稿操作
+                </Button>
+              }
+              open={open}
+              onOpenChange={setOpen}
+              align="end"
+              items={[
+                {
+                  id: 'edit',
+                  label: '继续编辑',
+                  onSelect: () => {
+                    if (!editing) setDraftTitle(title);
+                    setEditing(true);
+                    setFocusTarget('editor');
+                    setMessage('正在编辑草稿');
+                  },
+                },
+                {
+                  id: 'publish',
+                  label: '发布（等待审核）',
+                  disabled: true,
+                  onSelect: () => setMessage('已发布'),
+                },
+                {
+                  id: 'remove',
+                  label: '移出草稿列表',
+                  destructive: true,
+                  onSelect: () => {
+                    setOpen(false);
+                    setRemoved(true);
+                    setMessage('已从示例列表中移出，可恢复原草稿');
+                    setFocusTarget('recovery');
+                  },
+                },
+              ]}
+            />
+          </div>
         </article>
       )}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        <DropdownMenu
-          trigger={
-            <Button ref={trigger} variant="secondary">
-              草稿操作
-            </Button>
-          }
-          open={open}
-          onOpenChange={setOpen}
-          align="end"
-          items={
-            removed
-              ? [{ id: 'restore', label: '恢复草稿', onSelect: restore }]
-              : [
-                  {
-                    id: 'edit',
-                    label: '继续编辑',
-                    onSelect: () => {
-                      if (!editing) setDraftTitle(title);
-                      setEditing(true);
-                      setFocusTarget('editor');
-                      setMessage('正在编辑草稿');
-                    },
-                  },
-                  {
-                    id: 'publish',
-                    label: '发布（等待审核）',
-                    disabled: true,
-                    onSelect: () => setMessage('已发布'),
-                  },
-                  {
-                    id: 'remove',
-                    label: '移出草稿列表',
-                    destructive: true,
-                    onSelect: () => {
-                      setRemoved(true);
-                      setMessage('已从示例列表中移出，可恢复原草稿');
-                    },
-                  },
-                ]
-          }
-        />
-        {removed && <Button onClick={restore}>恢复草稿</Button>}
-      </div>
+      {removed && (
+        <Button ref={recovery} onClick={restore} style={{ justifySelf: 'start' }}>
+          恢复草稿
+        </Button>
+      )}
       <Text size="sm" tone="muted" role="status">
         {message}
       </Text>

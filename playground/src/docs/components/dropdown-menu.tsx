@@ -37,7 +37,7 @@ export default defineComponentPage('dropdown-menu', {
         {
           id: 'basic',
           previewAlign: 'center',
-          title: '基本操作',
+          title: '基础用法',
           description: '选择菜单项，查看最新选择。',
           component: MenuBasic,
           source: menuBasicSource,
@@ -50,12 +50,26 @@ export default defineComponentPage('dropdown-menu', {
           component: MenuOpen,
           source: menuOpenSource,
         },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看草稿编辑与触发器恢复',
+      content: (
+        <p>
+          操作入口随草稿一起移出时，焦点转到仍存在的恢复按钮；恢复后回到新挂载的入口。
+          菜单名称包含已保存标题，未提交的编辑内容在移出和恢复后继续保留。
+        </p>
+      ),
+      examples: [
         {
           id: 'controlled',
-          title: '组合：编辑、移出与恢复草稿',
-          description: '编辑、移出与恢复草稿；保存或取消后返回操作按钮。',
+          title: '触发器移除后的焦点恢复',
+          description: '移出草稿时转到恢复入口，恢复后返回新菜单按钮。',
           component: MenuControlled,
           source: menuControlledSource,
+          toc: false,
         },
       ],
     },

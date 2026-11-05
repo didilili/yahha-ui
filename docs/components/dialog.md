@@ -22,8 +22,6 @@ Dialog 使用受控状态，调用方必须保存 open 并响应 onOpenChange。
 
 ## 代码演示
 
-表单结果仅保留在当前示例，不连接后台；取消或关闭后重开会从上次保存值重新开始。
-
 <a id="basic"></a>
 
 ### 基础用法
@@ -51,86 +49,6 @@ export default function DialogBasic() {
     >
       <p>文章较长时，可以按章节分次阅读。</p>
     </Dialog>
-  );
-}
-```
-
-<a id="form"></a>
-
-### 修改并保存站点标题
-
-修改站点标题，保存或取消本次修改。
-
-[查看示例文件](../../playground/src/examples/feedback/DialogForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/feedback/DialogForm.tsx -->
-
-```tsx
-import { useId, useRef, useState, type FormEvent } from 'react';
-import { Button, Dialog, Text, TextField } from 'yahha-ui';
-
-export default function DialogForm() {
-  const [open, setOpen] = useState(false);
-  const [saved, setSaved] = useState('');
-  const [error, setError] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
-  const formId = useId();
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const title = String(data.get('title') ?? '').trim();
-    if (!title) {
-      setError('请输入站点标题，不能只填写空格。');
-      inputRef.current?.focus();
-      return;
-    }
-    setSaved(title);
-    setOpen(false);
-  }
-
-  return (
-    <div style={{ display: 'grid', gap: 16 }}>
-      <Dialog
-        open={open}
-        onOpenChange={(nextOpen) => {
-          setError('');
-          setOpen(nextOpen);
-        }}
-        trigger={<Button>修改站点标题</Button>}
-        title="站点标题"
-        description="为这间阅读室取一个喜欢的名字。"
-        initialFocus={inputRef}
-        footer={
-          <>
-            <Button variant="secondary" onClick={() => setOpen(false)}>
-              取消
-            </Button>
-            <Button type="submit" form={formId}>
-              保存标题
-            </Button>
-          </>
-        }
-      >
-        <form id={formId} onSubmit={handleSubmit}>
-          <TextField
-            ref={inputRef}
-            label="站点标题"
-            name="title"
-            defaultValue={saved}
-            placeholder="例如：小小阅读室"
-            required
-            maxLength={30}
-            hint="请输入 1–30 个字符。"
-            error={error}
-            onChange={() => setError('')}
-          />
-        </form>
-      </Dialog>
-      <Text size="sm" tone="muted" role="status">
-        {saved ? `当前标题：${saved}` : '尚未保存标题。'}
-      </Text>
-    </div>
   );
 }
 ```
@@ -169,6 +87,177 @@ export default function DialogExternal() {
       >
         <p>长文章可以分几次读完。先找一个舒服的位置，按照自己的节奏慢慢读。</p>
       </Dialog>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
+修改标题后，取消、Escape、关闭按钮和外点共用退出策略：继续编辑或明确放弃。 结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
+
+<a id="form"></a>
+
+### 未保存修改的关闭确认
+
+修改标题，试试未保存时的关闭选择。
+
+[查看示例文件](../../playground/src/examples/feedback/DialogForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/DialogForm.tsx -->
+
+```tsx
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
+import { Alert, Button, Dialog, Text, TextField } from 'yahha-ui';
+
+export default function DialogForm() {
+  const [open, setOpen] = useState(false);
+  const [saved, setSaved] = useState('');
+  const [draft, setDraft] = useState('');
+  const [confirming, setConfirming] = useState(false);
+  const [error, setError] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const continueRef = useRef<HTMLButtonElement>(null);
+  const focusFrame = useRef<number | null>(null);
+  const closeAttempt = useRef(0);
+  const formId = useId();
+
+  useEffect(
+    () => () => {
+      closeAttempt.current += 1;
+      if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    },
+    [],
+  );
+
+  function cancelPendingFocus() {
+    closeAttempt.current += 1;
+    if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    focusFrame.current = null;
+  }
+
+  function changeOpen(nextOpen: boolean) {
+    cancelPendingFocus();
+    if (nextOpen) {
+      setDraft(saved);
+      setConfirming(false);
+      setError('');
+      setOpen(true);
+      return;
+    }
+    if (draft !== saved) {
+      setConfirming(true);
+      const attempt = closeAttempt.current;
+      focusFrame.current = requestAnimationFrame(() => {
+        focusFrame.current = null;
+        if (attempt !== closeAttempt.current) return;
+        const popup = popupRef.current;
+        if (popup && !popup.contains(document.activeElement)) continueRef.current?.focus();
+      });
+      return;
+    }
+    setError('');
+    setOpen(false);
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const title = String(new FormData(event.currentTarget).get('title') ?? '').trim();
+    if (!title) {
+      setError('请输入站点标题，不能只填写空格。');
+      inputRef.current?.focus();
+      return;
+    }
+    cancelPendingFocus();
+    setSaved(title);
+    setDraft(title);
+    setError('');
+    setConfirming(false);
+    setOpen(false);
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Dialog
+        ref={popupRef}
+        open={open}
+        onOpenChange={changeOpen}
+        trigger={<Button>修改站点标题</Button>}
+        title="站点标题"
+        description="为这间阅读室取一个喜欢的名字。"
+        initialFocus={inputRef}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => changeOpen(false)}>
+              取消
+            </Button>
+            <Button type="submit" form={formId}>
+              保存标题
+            </Button>
+          </>
+        }
+      >
+        <form id={formId} onSubmit={handleSubmit}>
+          <TextField
+            ref={inputRef}
+            label="站点标题"
+            name="title"
+            value={draft}
+            placeholder="例如：小小阅读室"
+            required
+            maxLength={30}
+            hint="请输入 1–30 个字符。"
+            error={error}
+            onChange={(event) => {
+              const next = event.target.value;
+              setDraft(next);
+              setError('');
+              if (next === saved) {
+                cancelPendingFocus();
+                setConfirming(false);
+              }
+            }}
+          />
+        </form>
+        {confirming && (
+          <div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
+            <Alert role="alert" tone="warning" title="还有未保存的修改">
+              你可以继续编辑或保存，也可以放弃这次修改并关闭。
+            </Alert>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              <Button
+                ref={continueRef}
+                variant="secondary"
+                onClick={() => {
+                  cancelPendingFocus();
+                  setConfirming(false);
+                  inputRef.current?.focus();
+                }}
+              >
+                继续编辑
+              </Button>
+              <Button
+                destructive
+                onClick={() => {
+                  cancelPendingFocus();
+                  setDraft(saved);
+                  setConfirming(false);
+                  setError('');
+                  setOpen(false);
+                }}
+              >
+                放弃修改并关闭
+              </Button>
+            </div>
+          </div>
+        )}
+      </Dialog>
+      <Text size="sm" tone="muted" role="status">
+        {saved ? `当前标题：${saved}` : '尚未保存标题。'}
+      </Text>
     </div>
   );
 }
@@ -223,7 +312,7 @@ export default function DialogExternal() {
 
 长标题自动换行，内容超出可用高度时整个弹窗滚动，footer 不固定在底部。复杂表单或长篇正文更适合独立页面，避免把必要操作埋在长滚动区中。
 
-弹窗文字与布局方向跟随 Portal 目标；仅设置触发器所在容器的 dir，不会影响 body 中的弹窗。需要局部 RTL 时，可使用带 dir="rtl" 的 portalContainer。
+有触发器时，弹窗跟随触发器自身或祖先明确的 dir，未指定时继承方向上下文； 没有显式方向配置时，保留 Portal 目标及页面的 CSS direction 继承。触发器仅使用局部 CSS direction 或 dir="auto" 时，请同时提供明确的 dir。style.direction 可显式覆盖弹窗方向。省略触发器、由外部程序打开时，继续继承 Portal 目标及页面的原生方向。
 
 Portal 默认挂载到 body，继承最近 ThemeProvider 的主题与 tokens，不复制页面布局类。 自定义 portalContainer 时，需检查容器的层叠与裁切，确保遮罩和弹窗都能正确覆盖页面。
 

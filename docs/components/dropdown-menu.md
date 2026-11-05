@@ -26,7 +26,7 @@ import { DropdownMenu } from 'yahha-ui';
 
 <a id="basic"></a>
 
-### 基本操作
+### 基础用法
 
 选择菜单项，查看最新选择。
 
@@ -104,11 +104,17 @@ export default function MenuOpen() {
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+操作入口随草稿一起移出时，焦点转到仍存在的恢复按钮；恢复后回到新挂载的入口。 菜单名称包含已保存标题，未提交的编辑内容在移出和恢复后继续保留。
+
 <a id="controlled"></a>
 
-### 组合：编辑、移出与恢复草稿
+### 触发器移除后的焦点恢复
 
-编辑、移出与恢复草稿；保存或取消后返回操作按钮。
+移出草稿时转到恢复入口，恢复后返回新菜单按钮。
 
 [查看示例文件](../../playground/src/examples/floating/MenuControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -127,28 +133,35 @@ export default function MenuControlled() {
   const [draftTitle, setDraftTitle] = useState(title);
   const trigger = useRef<HTMLButtonElement>(null);
   const editor = useRef<HTMLInputElement>(null);
-  const [focusTarget, setFocusTarget] = useState<'editor' | 'trigger' | null>(null);
+  const recovery = useRef<HTMLButtonElement>(null);
+  const [focusTarget, setFocusTarget] = useState<'editor' | 'trigger' | 'recovery' | null>(null);
 
   useEffect(() => {
     if (!focusTarget) return;
-    // 先等菜单关闭并完成默认回焦，再继续到新操作的目标。
     const frame = requestAnimationFrame(() => {
-      (focusTarget === 'editor' ? editor.current : trigger.current)?.focus();
+      const target =
+        focusTarget === 'editor'
+          ? editor.current
+          : focusTarget === 'recovery'
+            ? recovery.current
+            : trigger.current;
+      target?.focus();
       setFocusTarget(null);
     });
     return () => cancelAnimationFrame(frame);
   }, [focusTarget]);
 
   function restore() {
+    setOpen(false);
     setRemoved(false);
     setMessage('草稿已恢复，内容没有丢失');
     setFocusTarget('trigger');
   }
 
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
+    <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
       {!removed && (
-        <article aria-label="示例草稿">
+        <article aria-label="示例草稿" style={{ display: 'grid', gap: 16, minWidth: 0 }}>
           {editing ? (
             <form
               style={{ display: 'grid', gap: 12 }}
@@ -195,52 +208,54 @@ export default function MenuControlled() {
               <Text>留一点空白，记录散步、翻书和下一次想写的小事。</Text>
             </>
           )}
+          <div style={{ justifySelf: 'start' }}>
+            <DropdownMenu
+              trigger={
+                <Button ref={trigger} variant="secondary" aria-label={`操作草稿：${title}`}>
+                  草稿操作
+                </Button>
+              }
+              open={open}
+              onOpenChange={setOpen}
+              align="end"
+              items={[
+                {
+                  id: 'edit',
+                  label: '继续编辑',
+                  onSelect: () => {
+                    if (!editing) setDraftTitle(title);
+                    setEditing(true);
+                    setFocusTarget('editor');
+                    setMessage('正在编辑草稿');
+                  },
+                },
+                {
+                  id: 'publish',
+                  label: '发布（等待审核）',
+                  disabled: true,
+                  onSelect: () => setMessage('已发布'),
+                },
+                {
+                  id: 'remove',
+                  label: '移出草稿列表',
+                  destructive: true,
+                  onSelect: () => {
+                    setOpen(false);
+                    setRemoved(true);
+                    setMessage('已从示例列表中移出，可恢复原草稿');
+                    setFocusTarget('recovery');
+                  },
+                },
+              ]}
+            />
+          </div>
         </article>
       )}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        <DropdownMenu
-          trigger={
-            <Button ref={trigger} variant="secondary">
-              草稿操作
-            </Button>
-          }
-          open={open}
-          onOpenChange={setOpen}
-          align="end"
-          items={
-            removed
-              ? [{ id: 'restore', label: '恢复草稿', onSelect: restore }]
-              : [
-                  {
-                    id: 'edit',
-                    label: '继续编辑',
-                    onSelect: () => {
-                      if (!editing) setDraftTitle(title);
-                      setEditing(true);
-                      setFocusTarget('editor');
-                      setMessage('正在编辑草稿');
-                    },
-                  },
-                  {
-                    id: 'publish',
-                    label: '发布（等待审核）',
-                    disabled: true,
-                    onSelect: () => setMessage('已发布'),
-                  },
-                  {
-                    id: 'remove',
-                    label: '移出草稿列表',
-                    destructive: true,
-                    onSelect: () => {
-                      setRemoved(true);
-                      setMessage('已从示例列表中移出，可恢复原草稿');
-                    },
-                  },
-                ]
-          }
-        />
-        {removed && <Button onClick={restore}>恢复草稿</Button>}
-      </div>
+      {removed && (
+        <Button ref={recovery} onClick={restore} style={{ justifySelf: 'start' }}>
+          恢复草稿
+        </Button>
+      )}
       <Text size="sm" tone="muted" role="status">
         {message}
       </Text>

@@ -10,8 +10,6 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 
 **v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 29 个 UI 组件与 ThemeProvider · 当前通过本地安装包试用，尚未发布 npm
 
-![Yahha UI 文档站首页：一起做全宇宙最可爱的 UI 组件库](docs/images/yahha-home.png)
-
 ## 把可爱，搭进你的世界
 
 站点以 **Yahha 星球** 组织首页与示例场景；基础组件可独立使用，不依赖角色图案。
@@ -87,8 +85,6 @@ npm run dev
 
 组件总览按通用、排版、布局、表单、内容展示、导航、浮层和反馈分类；主题配置单列。进入组件文档后，可操作示例、复制代码并查阅 API。
 
-![组件视觉总览：真实按钮、字段、排版与容器小样](docs/images/yahha-components.png)
-
 [查阅组件示例与 API](docs/README.md) · [查看设计规则和尺寸规范](docs/design-language.md)
 
 ## 让 AI 使用 Yahha UI
@@ -123,9 +119,7 @@ npm run dev:blog
 
 打开终端输出的博客地址，体验搜索、分类、分页、收藏与阅读返回。示例文章为虚构内容，收藏保存在当前浏览器。
 
-![小小日常博客：首页、朋友群像和最近的手记](docs/images/yahha-blog.png)
-
-[博客运行与改站说明](examples/blog/README.md) · [手机阅读实拍](docs/images/yahha-mobile-reading.png) · [截图来源与更新方式](docs/images/README.md)
+[博客运行与改站说明](examples/blog/README.md)
 
 ## 构建与静态部署
 

@@ -69,7 +69,7 @@ export async function verifyDesignBaseline(page, baseURL) {
   assert.deepEqual(
     await email.evaluate((node) => Object.fromEntries(new FormData(node.form))),
     {
-      nickname: '小林',
+      nickname: '库米',
       category: 'reading',
       email: 'hello@example.com',
       site: 'weekend.example',
@@ -87,7 +87,7 @@ export async function verifyDesignBaseline(page, baseURL) {
   assert.equal(during.height, before.height);
   await controls
     .getByRole('status')
-    .getByText('已在本页保存「小林」的读书笔记设置。', { exact: true })
+    .getByText('已在本页保存「库米」的读书笔记设置。', { exact: true })
     .waitFor();
   assert.notEqual(await save.getAttribute('aria-busy'), 'true');
   await controls.getByRole('button', { name: '收藏示例', exact: true }).click();

@@ -22,9 +22,9 @@ import { Accordion } from 'yahha-ui';
 
 <a id="basic"></a>
 
-### 常见问题
+### 单项展开与收起
 
-逐项展开常见问题，再次点击收起。
+默认展开一项，选择另一项时收起前一项。
 
 [查看示例文件](../../playground/src/examples/navigation/AccordionBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -63,66 +63,135 @@ export default function AccordionBasic() {
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+筛选和展开状态仅保留在当前示例。
+
 <a id="controlled"></a>
 
-### 受控的多项展开
+### 筛选与多项展开
 
-展开读书会说明对照阅读，也可全部收起。
+搜索标题并展开当前可用项；筛掉的展开项会收起。
 
 [查看示例文件](../../playground/src/examples/navigation/AccordionControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
 <!-- example-source: playground/src/examples/navigation/AccordionControlled.tsx -->
 
 ```tsx
-import { useState } from 'react';
-import { Accordion, Button, Text } from 'yahha-ui';
+import { useRef, useState } from 'react';
+import { Accordion, Button, EmptyState, Text, TextField } from 'yahha-ui';
+
+const items = [
+  {
+    value: 'preparation',
+    title: '参加周末读书会前，需要带些什么？',
+    content: (
+      <div style={{ display: 'grid', gap: 12 }}>
+        <Text>带一本愿意分享的书，以及记录喜欢段落的小本子。</Text>
+        <Text>不需要准备完整讲稿，挑一段想读给大家听的文字就好。</Text>
+      </div>
+    ),
+  },
+  {
+    value: 'meeting',
+    title: '到达后在哪里集合？',
+    content: (
+      <p style={{ margin: 0 }}>先到书店门口的小桌签到，再一起去窗边的阅读区。请提前十分钟到达。</p>
+    ),
+  },
+  {
+    value: 'rain',
+    title: '雨天安排（确认中）',
+    content: <p>确认后会补充当天的集合安排。</p>,
+    disabled: true,
+  },
+];
+
+function filterItems(query: string) {
+  const normalized = query.trim().toLowerCase();
+  return items.filter((item) => item.title.toLowerCase().includes(normalized));
+}
 
 export default function AccordionControlled() {
   const [value, setValue] = useState<string[]>([]);
+  const [editing, setEditing] = useState('');
+  const [query, setQuery] = useState('');
+  const composing = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const visibleItems = filterItems(query);
+  const availableKeys = visibleItems.filter((item) => !item.disabled).map((item) => item.value);
+
+  function applyQuery(nextQuery: string) {
+    const nextKeys = filterItems(nextQuery)
+      .filter((item) => !item.disabled)
+      .map((item) => item.value);
+    setQuery(nextQuery);
+    setValue((current) => current.filter((key) => nextKeys.includes(key)));
+  }
+
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
+    <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+      <TextField
+        ref={inputRef}
+        label="搜索说明标题"
+        type="text"
+        inputMode="search"
+        enterKeyHint="search"
+        autoComplete="off"
+        value={editing}
+        onCompositionStart={() => {
+          composing.current = true;
+        }}
+        onCompositionEnd={(event) => {
+          composing.current = false;
+          setEditing(event.currentTarget.value);
+          applyQuery(event.currentTarget.value);
+        }}
+        onChange={(event) => {
+          const next = event.currentTarget.value;
+          setEditing(next);
+          if (!composing.current && !(event.nativeEvent as InputEvent).isComposing) {
+            applyQuery(next);
+          }
+        }}
+      />
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-        <Button variant="secondary" onClick={() => setValue(['preparation', 'meeting'])}>
+        <Button
+          variant="secondary"
+          disabled={availableKeys.length === 0}
+          onClick={() => setValue(availableKeys)}
+        >
           展开可用说明
         </Button>
         <Button variant="ghost" onClick={() => setValue([])}>
           全部收起
         </Button>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            composing.current = false;
+            setEditing('');
+            applyQuery('');
+            inputRef.current?.focus();
+          }}
+        >
+          清空搜索
+        </Button>
       </div>
-      <Accordion
-        multiple
-        value={value}
-        onValueChange={setValue}
-        items={[
-          {
-            value: 'preparation',
-            title: '参加周末读书会前，需要带些什么？',
-            content: (
-              <div style={{ display: 'grid', gap: 12 }}>
-                <Text>带一本愿意分享的书，以及记录喜欢段落的小本子。</Text>
-                <Text>不需要准备完整讲稿，挑一段想读给大家听的文字就好。</Text>
-              </div>
-            ),
-          },
-          {
-            value: 'meeting',
-            title: '到达后在哪里集合？',
-            content: (
-              <p style={{ margin: 0 }}>
-                先到书店门口的小桌签到，再一起去窗边的阅读区。请提前十分钟到达。
-              </p>
-            ),
-          },
-          {
-            value: 'rain',
-            title: '雨天安排（确认中）',
-            content: <p>确认后会补充当天的集合安排。</p>,
-            disabled: true,
-          },
-        ]}
-      />
+      {visibleItems.length > 0 ? (
+        <Accordion
+          multiple
+          value={value}
+          onValueChange={(next) => setValue(next.filter((key) => availableKeys.includes(key)))}
+          items={visibleItems}
+        />
+      ) : (
+        <EmptyState title="没有匹配的说明" description="换个关键词，或清空搜索查看全部说明。" />
+      )}
       <Text size="sm" tone="muted" role="status">
-        已展开 {value.length} 项说明。
+        找到 {visibleItems.length} 条说明 · 已展开 {value.length} 项。
       </Text>
     </div>
   );
@@ -137,6 +206,7 @@ export default function AccordionControlled() {
 - 单项模式只使用值数组的第一项。从多项切回单项时，非受控状态保留第一项；受控状态需由调用方同步维护数组和有效的项目值。
 - 默认卸载关闭内容，keepMounted 可保留输入草稿等局部状态，隐藏内容不参与键盘顺序。保留的表单字段不会自动禁用，仍可能参与提交和校验。
 - 可禁用单项或整组，已展开内容仍保持可见。外部“全部展开”等操作保留当前操作位置，需要进入具体内容时再显式移动焦点。
+- 筛选例从同一份数据计算可见条目与可展开值，并清理被隐藏的展开项。 清空搜索恢复说明列表，不会重新打开已被筛走的项目；批量展开只作用当前可见且可用的说明。
 
 <a id="api"></a>
 

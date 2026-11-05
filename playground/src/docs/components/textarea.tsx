@@ -1,9 +1,15 @@
 import TextareaBasic from '../../examples/new-forms/TextareaBasic';
 import TextareaBasicSource from '../../examples/new-forms/TextareaBasic.tsx?raw';
+import TextareaAutoSize from '../../examples/new-forms/TextareaAutoSize';
+import TextareaAutoSizeSource from '../../examples/new-forms/TextareaAutoSize.tsx?raw';
+import TextareaReadonlyDisabled from '../../examples/new-forms/TextareaReadonlyDisabled';
+import TextareaReadonlyDisabledSource from '../../examples/new-forms/TextareaReadonlyDisabled.tsx?raw';
 import TextareaControlled from '../../examples/new-forms/TextareaControlled';
 import TextareaControlledSource from '../../examples/new-forms/TextareaControlled.tsx?raw';
 import TextareaStates from '../../examples/new-forms/TextareaStates';
 import TextareaStatesSource from '../../examples/new-forms/TextareaStates.tsx?raw';
+import TextareaCommentDraft from '../../examples/new-forms/TextareaCommentDraft';
+import TextareaCommentDraftSource from '../../examples/new-forms/TextareaCommentDraft.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('textarea', {
@@ -22,7 +28,6 @@ export default defineComponentPage('textarea', {
     {
       id: 'examples',
       title: '代码演示',
-      content: <p>本页示例只在本地操作，不发送或保存留言。</p>,
       examples: [
         {
           id: 'basic',
@@ -32,6 +37,13 @@ export default defineComponentPage('textarea', {
           source: TextareaBasicSource,
         },
         {
+          id: 'textarea-auto-size',
+          title: '自动调整高度',
+          description: '内容在二至八行间自动增减高度，超出后在框内滚动。',
+          component: TextareaAutoSize,
+          source: TextareaAutoSizeSource,
+        },
+        {
           id: 'controlled',
           title: '受控内容与校验',
           description: '检查留言，查看输入长度与校验结果。',
@@ -39,11 +51,35 @@ export default defineComponentPage('textarea', {
           source: TextareaControlledSource,
         },
         {
+          id: 'textarea-states',
+          title: '只读与禁用',
+          description: '对比只读可复制和禁用不可编辑两种状态。',
+          component: TextareaReadonlyDisabled,
+          source: TextareaReadonlyDisabledSource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看原生重置与草稿预览',
+      content: <p>以下示例只在本地操作，不发送或保存留言。</p>,
+      examples: [
+        {
           id: 'native',
-          title: '原生重置、只读与禁用',
-          description: '修改草稿后重置，并对比只读与禁用状态。',
+          title: '原生重置',
+          description: '修改非受控草稿后，通过原生表单重置恢复初始内容。',
           component: TextareaStates,
           source: TextareaStatesSource,
+          toc: false,
+        },
+        {
+          id: 'textarea-comment-draft',
+          title: '草稿预览与恢复',
+          description: '校验并预览当前草稿，保留原文换行；可恢复初始内容。',
+          component: TextareaCommentDraft,
+          source: TextareaCommentDraftSource,
+          toc: false,
         },
       ],
     },
@@ -66,6 +102,13 @@ export default defineComponentPage('textarea', {
               description: '辅助和错误说明，与 aria-describedby 合并；error 设置 aria-invalid。',
             },
             { name: 'rows', type: 'number', description: '原生可见行数。', defaultValue: '4' },
+            {
+              name: 'autoSize',
+              type: 'boolean | { minRows?: number; maxRows?: number }',
+              description:
+                '按内容自动调整高度，可限制行数；true 或空对象以 rows 为最小值，无最大值。',
+              defaultValue: 'false',
+            },
             {
               name: 'value / defaultValue',
               type: 'string | readonly string[] | number',
@@ -97,7 +140,8 @@ export default defineComponentPage('textarea', {
             {
               name: 'ref / style',
               type: 'Ref<HTMLTextAreaElement> / CSSProperties',
-              description: '作用于真实 textarea。默认 resize: vertical，style 可覆盖。',
+              description:
+                '作用于真实 textarea。默认 resize: vertical；开启 autoSize 时 height、resize、overflowY 由自动高度管理。',
             },
             {
               name: 'id',
@@ -146,6 +190,15 @@ export default defineComponentPage('textarea', {
             readOnly 仍可聚焦、复制并参与提交；disabled
             不可编辑或聚焦，也不参与提交。必填要求应同时提供可见说明。
           </li>
+          <li>
+            autoSize 默认关闭。开启后随内容、可用宽度及重置调整高度，达到 maxRows 后内部滚动，
+            不改变文字、原生事件或 Enter 换行。受控内容仍由调用方恢复，取消原生重置时保留当前内容。
+          </li>
+          <li>
+            minRows 未给时采用有效的 rows，未传 rows 则为 4；行数取正有限数，向下取整后至少为 1，
+            非法 minRows 回退 rows，非法 maxRows 视为无上限，maxRows 小于 minRows 时以 minRows
+            为界。
+          </li>
         </ul>
       ),
     },
@@ -155,13 +208,9 @@ export default defineComponentPage('textarea', {
       content: (
         <>
           <p>
-            使用 rows 设置初始可见行数，默认四行；内容超出后滚动，不会随输入自动增高。通过 style 或
-            classNames.textarea 调整高度、minHeight 与 resize；字段宽度由 className
-            或外层容器控制。默认允许用户垂直拖动，固定高度前应考虑长内容的编辑需要。
-          </p>
-          <p>
-            只读例通过 <code>{"style={{ resize: 'none' }}"}</code>{' '}
-            关闭拖动；只读与拖动方式分别设置。
+            默认用 rows 设置初始可见行数并允许垂直拖动，内容超出后滚动。 开启 autoSize 时组件接管
+            height、resize、overflowY；关闭后交还当前 style。 minHeight / maxHeight 仍是额外的 CSS
+            约束，与行数上下限冲突时会影响实际可见行数。 字段宽度由 className 或外层容器控制。
           </p>
         </>
       ),

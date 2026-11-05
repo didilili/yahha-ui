@@ -22,13 +22,11 @@ import { Popover } from 'yahha-ui';
 
 ## 代码演示
 
-名称仅保留在当前示例，不连接后台。
-
 <a id="basic"></a>
 
-### 基本说明
+### 基础用法
 
-打开手记的补充说明。
+打开并关闭补充说明面板。
 
 [查看示例文件](../../playground/src/examples/floating/PopoverBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -52,9 +50,9 @@ export default function PopoverBasic() {
 
 <a id="form"></a>
 
-### 修改并保存收藏夹名称
+### 内嵌表单
 
-修改收藏夹名称，保存或取消修改。
+在面板内校验名称，保存或取消；修改只保留在当前示例。
 
 [查看示例文件](../../playground/src/examples/floating/PopoverForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -127,6 +125,120 @@ export default function PopoverForm() {
       </Popover>
       <Text size="sm" tone="muted" role="status">
         当前名称：{savedName}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
+内嵌选择器时，Escape 先收起 Select，再关闭 Popover。 确认后才更新当前示例的收藏位置，未确认关闭不会保存选择。
+
+<a id="popover-collection"></a>
+
+### 内嵌选择器与分层关闭
+
+在面板内展开 Select，按 Escape 逐层关闭。
+
+[查看示例文件](../../playground/src/examples/floating/PopoverCollection.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/floating/PopoverCollection.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { Button, Heading, Popover, Select, Text } from 'yahha-ui';
+
+const collections = [
+  { value: 'journal', label: '周末慢读' },
+  { value: 'reading', label: '想再读一遍' },
+  { value: 'archive', label: '已归档（暂不接收）', disabled: true },
+];
+
+export default function PopoverCollection() {
+  const [open, setOpen] = useState(false);
+  const [assigned, setAssigned] = useState<string | null>(null);
+  const [draft, setDraft] = useState<string | null>(null);
+  const [invalid, setInvalid] = useState(false);
+  const select = useRef<HTMLButtonElement>(null);
+  const articleHeading = useRef<HTMLHeadingElement>(null);
+  const assignedTitle = collections.find((item) => item.value === assigned)?.label;
+
+  return (
+    <div style={{ display: 'grid', gap: 20, maxWidth: 540, minWidth: 0 }}>
+      <article style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+        <Heading level={3} ref={articleHeading} tabIndex={-1}>
+          沿着河边，慢慢走
+        </Heading>
+        <Text>走到桥边，等系好鞋带的朋友一起回家。</Text>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+          <Popover
+            trigger={
+              <Button variant="secondary" aria-label="为这篇手记选择收藏夹">
+                放进收藏夹
+              </Button>
+            }
+            title="手记收藏位置"
+            open={open}
+            onOpenChange={(next) => {
+              if (next) {
+                setDraft(assigned);
+                setInvalid(false);
+              }
+              setOpen(next);
+            }}
+            initialFocus={select}
+          >
+            <form
+              noValidate
+              style={{ display: 'grid', gap: 16, minWidth: 0 }}
+              onSubmit={(event) => {
+                event.preventDefault();
+                const submitted = new FormData(event.currentTarget).get('collection');
+                const match = collections.find(
+                  (option) => option.value === submitted && !option.disabled,
+                );
+                if (!match) {
+                  setInvalid(true);
+                  select.current?.focus();
+                  return;
+                }
+                setAssigned(match.value);
+                setInvalid(false);
+                setOpen(false);
+              }}
+            >
+              <Select
+                ref={select}
+                label="收藏夹"
+                name="collection"
+                options={collections}
+                value={draft}
+                required
+                placeholder="请选择收藏夹"
+                error={invalid ? '请选择一个可用收藏夹。' : undefined}
+                onValueChange={(next) => {
+                  setDraft(next);
+                  setInvalid(false);
+                }}
+              />
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <Button type="submit">放进收藏夹</Button>
+                <Button variant="secondary" onClick={() => setOpen(false)}>
+                  取消
+                </Button>
+              </div>
+            </form>
+          </Popover>
+          <Button variant="ghost" onClick={() => articleHeading.current?.focus()}>
+            继续阅读
+          </Button>
+        </div>
+      </article>
+      <Text role="status" size="sm" tone="muted">
+        当前收藏位置：{assignedTitle ?? '尚未加入'}。
       </Text>
     </div>
   );

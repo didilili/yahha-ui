@@ -22,9 +22,9 @@ import { Image } from 'yahha-ui';
 
 <a id="image-cover"></a>
 
-### 文章封面
+### 固定比例与图注
 
-封面与图注组合，预留 16:9 图片区域。
+使用 16:9 比例预留图片区域，并搭配图注。
 
 [查看示例文件](../../playground/src/examples/content/ImageExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -62,9 +62,9 @@ export default function ImageExample() {
 
 <a id="image-failure"></a>
 
-### 失败与新地址恢复
+### 失败回退与恢复
 
-切换失效与有效图片，查看回退和加载结果。
+切换图片地址，查看失败回退和加载结果。
 
 [查看示例文件](../../playground/src/examples/content/ImageFallback.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -122,6 +122,90 @@ export default function ImageFallback() {
           {recovered ? '再次模拟失败' : '恢复图片'}
         </Button>
       </div>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
+使用独立按钮打开 Dialog，缩略图与大图使用同一素材。完整接入提供原样源码和 SVG，保留 artwork 目录及相对导入路径。
+
+<a id="image-detail"></a>
+
+### 缩略图与大图预览
+
+通过独立按钮打开同一图片的大图，关闭后返回入口。
+
+[查看示例文件](../../playground/src/examples/scenes/ImageDetail.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/scenes/ImageDetail.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { Button, Dialog, Image, Text } from 'yahha-ui';
+import teaCup from './artwork/little-days-tea-cup.svg?no-inline';
+
+const alternativeText = '冒着热气的茶杯插画';
+const caption = '一杯热茶，陪你慢慢读手记。';
+
+export default function ImageDetail() {
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16, minWidth: 0 }}>
+      <figure
+        style={{ display: 'grid', gap: 8, margin: 0, width: '100%', maxWidth: 160, minWidth: 0 }}
+      >
+        <Image
+          src={teaCup}
+          alt={alternativeText}
+          width={96}
+          height={96}
+          aspectRatio="1"
+          loading="eager"
+        />
+        <figcaption>
+          <Text size="sm" tone="muted">
+            {caption}
+          </Text>
+        </figcaption>
+      </figure>
+      <Button ref={triggerRef} aria-haspopup="dialog" onClick={() => setOpen(true)}>
+        查看热茶插画大图
+      </Button>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        title="热茶插画"
+        initialFocus={closeRef}
+        finalFocus={triggerRef}
+        footer={
+          <Button ref={closeRef} variant="secondary" onClick={() => setOpen(false)}>
+            关闭大图
+          </Button>
+        }
+      >
+        <figure style={{ display: 'grid', gap: 8, margin: 0, minWidth: 0 }}>
+          <Image
+            src={teaCup}
+            alt={alternativeText}
+            width={96}
+            height={96}
+            aspectRatio="1"
+            loading="eager"
+          />
+          <figcaption>
+            <Text size="sm" tone="muted">
+              {caption}
+            </Text>
+          </figcaption>
+        </figure>
+      </Dialog>
     </div>
   );
 }

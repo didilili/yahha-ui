@@ -1,11 +1,50 @@
-import { useRef, type MouseEvent } from 'react';
-import { Heading, Link, Text } from 'yahha-ui';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { Button, Heading, Link, Text, TextField } from 'yahha-ui';
 
 export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: string }) {
   const replyId = 'heading-article-reply';
   const journalId = 'heading-article-journal';
   const replyRef = useRef<HTMLHeadingElement>(null);
   const journalRef = useRef<HTMLHeadingElement>(null);
+  const addressRef = useRef<HTMLInputElement>(null);
+  const copyRef = useRef<HTMLButtonElement>(null);
+  const copyRequest = useRef(0);
+  const [copyMessage, setCopyMessage] = useState('');
+  const [manualCopy, setManualCopy] = useState<{
+    address: string;
+    request: number;
+    restoreFocus: boolean;
+  } | null>(null);
+
+  useEffect(
+    () => () => {
+      copyRequest.current += 1;
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!manualCopy?.restoreFocus || manualCopy.request !== copyRequest.current) return;
+    addressRef.current?.focus();
+    addressRef.current?.select();
+  }, [manualCopy]);
+
+  async function copySectionAddress() {
+    const request = ++copyRequest.current;
+    setCopyMessage('');
+    setManualCopy(null);
+    const address = new URL(`${hrefPrefix}${journalId}`, window.location.href).href;
+
+    try {
+      await navigator.clipboard.writeText(address);
+      if (request !== copyRequest.current) return;
+      setCopyMessage('章节地址已复制。');
+    } catch {
+      if (request !== copyRequest.current) return;
+      setCopyMessage('未能复制，请选中下方地址手动复制。');
+      setManualCopy({ address, request, restoreFocus: document.activeElement === copyRef.current });
+    }
+  }
 
   function focusHeading(event: MouseEvent<HTMLAnchorElement>, heading: HTMLHeadingElement | null) {
     if (
@@ -75,6 +114,18 @@ export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: stri
           把云朵邮局里借来的铅笔、贴歪的邮票和分给朋友的半块饼干，写进今天的长手记
         </Heading>
         <Text>有些字擦了又写，信封也折得不太齐。寄出去之前，大家还是认认真真签上了名字。</Text>
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+          <Link href={`${hrefPrefix}${journalId}`}>本节永久链接</Link>
+          <Button ref={copyRef} variant="ghost" onClick={copySectionAddress}>
+            复制本节地址
+          </Button>
+        </div>
+        <Text size="sm" tone="muted" role="status">
+          {copyMessage}
+        </Text>
+        {manualCopy && (
+          <TextField ref={addressRef} label="章节地址" readOnly value={manualCopy.address} />
+        )}
       </section>
     </div>
   );

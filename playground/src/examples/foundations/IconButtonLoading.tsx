@@ -27,16 +27,20 @@ export default function IconButtonLoading() {
         >
           <svg
             viewBox="0 0 24 24"
-            fill={saved ? 'currentColor' : 'none'}
+            fill="none"
             stroke="currentColor"
             strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             aria-hidden="true"
+            focusable="false"
           >
             <path
-              d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              d="M8 3.25h6.2l4.05 4.1v12.7c0 .6-.5.88-1 .57L12 17.4l-5.3 3.22c-.5.31-.95.02-.95-.57V5.6C5.75 4.15 6.5 3.25 8 3.25Z"
+              fill={saved ? 'currentColor' : 'none'}
+              fillOpacity="0.2"
             />
+            <path d="M14.2 3.5v3c0 .6.35.95.95.95h2.8" fill="none" />
           </svg>
         </IconButton>
         <Text id={statusId} size="sm" tone="muted" role="status">

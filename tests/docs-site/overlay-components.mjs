@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
+import { revealExample } from './reveal-example.mjs';
 
 export async function verifyDialogForm(page, baseURL) {
   await page.goto(`${baseURL}#/components/dialog?section=form`);
   const example = page.locator('#form .example-preview');
+  await revealExample(example);
   const trigger = example.getByRole('button', { name: '修改站点标题', exact: true });
   await trigger.click();
   const dialog = page.getByRole('dialog', { name: '站点标题', exact: true });
@@ -20,6 +22,9 @@ export async function verifyDialogForm(page, baseURL) {
   assert.equal(await name.inputValue(), '小小阅读室');
   await name.fill('未保存的草稿');
   await dialog.getByRole('button', { name: '取消', exact: true }).click();
+  await dialog.getByRole('alert').waitFor();
+  assert.equal(await name.inputValue(), '未保存的草稿');
+  await dialog.getByRole('button', { name: '放弃修改并关闭', exact: true }).click();
   await dialog.waitFor({ state: 'hidden' });
   await trigger.click();
   assert.equal(await name.inputValue(), '小小阅读室');
@@ -145,7 +150,8 @@ export async function verifyOverlayExamples(page, baseURL) {
 
   await page.goto(`${baseURL}#/components/dropdown-menu?section=controlled`);
   const menuExample = page.locator('#controlled .example-preview');
-  const menu = menuExample.getByRole('button', { name: '草稿操作', exact: true });
+  await revealExample(menuExample);
+  const menu = menuExample.getByRole('button', { name: /^操作草稿：/ });
   await menu.click();
   await page.getByRole('menuitem', { name: '继续编辑', exact: true }).click();
   const draft = menuExample.getByRole('textbox', { name: '草稿标题', exact: true });

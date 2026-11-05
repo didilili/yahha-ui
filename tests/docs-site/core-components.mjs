@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
+import { revealExample } from './reveal-example.mjs';
 import { readFile } from 'node:fs/promises';
 import { verifyButtonExamples } from './button-examples.mjs';
+import { revealIconButtonExample, verifyIconButtonReadingList } from './icon-button-examples.mjs';
+import { verifyTextFieldSearch, verifyTextFieldCopy } from './text-field-examples.mjs';
+import { verifySelectCollection, verifySelectAvailability } from './select-examples.mjs';
 
 export async function verifyCoreComponents(page, baseURL) {
   for (const width of [1280, 320]) {
@@ -29,14 +33,15 @@ export async function verifyCoreComponents(page, baseURL) {
     assert.equal(await nickname.getAttribute('aria-invalid'), 'true');
     assert.equal(await nickname.evaluate((node) => document.activeElement === node), true);
     assert.equal(await nickname.inputValue(), '这是一段超过十二个字符的昵称文本');
-    await nickname.fill('小林');
+    await nickname.fill('库米');
     await validation.getByRole('button', { name: '检查昵称', exact: true }).click();
     await validation
       .getByRole('status')
-      .getByText('检查结果：昵称“小林”符合要求。', { exact: true })
+      .getByText('检查结果：昵称“库米”符合要求。', { exact: true })
       .waitFor();
     assert.equal(await nickname.getAttribute('aria-invalid'), null);
     const native = page.locator('#native');
+    await revealExample(native);
     const password = native.getByLabel('示例密码', { exact: true });
     await password.fill('demo-only');
     assert.equal(await password.getAttribute('type'), 'password');
@@ -49,6 +54,8 @@ export async function verifyCoreComponents(page, baseURL) {
       true,
     );
     await verifySource(native, 'forms/TextFieldNative.tsx');
+    await verifyTextFieldSearch(page, page.locator('#text-field-search .example-preview'));
+    await verifyTextFieldCopy(page, page.locator('#text-field-copy .example-preview'));
     const email = native.getByLabel('联系邮箱', { exact: true });
     const checkEmail = native.getByRole('button', { name: '检查邮箱格式', exact: true });
     await checkEmail.click();
@@ -77,6 +84,7 @@ export async function verifyCoreComponents(page, baseURL) {
     assert.equal(await category.getAttribute('aria-invalid'), null);
     assert.equal(await selectStates.getByText('请先选择文章分类。', { exact: true }).count(), 0);
     const form = page.locator('#form');
+    await revealExample(form);
     const archive = form.getByRole('combobox', { name: '归档分类', exact: true });
     await form.getByRole('button', { name: '读取表单', exact: true }).click();
     assert.equal(await archive.getAttribute('aria-invalid'), 'true');
@@ -96,6 +104,7 @@ export async function verifyCoreComponents(page, baseURL) {
     await verifySource(form, 'new-forms/SelectForm.tsx');
 
     const longOptions = page.locator('#long-options');
+    await revealExample(longOptions);
     const longSelect = longOptions.getByRole('combobox', { name: '浏览归档分类', exact: true });
     await longSelect.focus();
     await page.keyboard.press('Enter');
@@ -114,6 +123,11 @@ export async function verifyCoreComponents(page, baseURL) {
     await page.getByRole('listbox').waitFor({ state: 'hidden' });
     assert.equal(await longSelect.innerText(), '值得再看的收藏');
     await verifySource(longOptions, 'new-forms/SelectLongOptions.tsx');
+    await verifySelectCollection(page, page.locator('#select-collection .example-preview'));
+    await verifySelectAvailability(
+      page,
+      page.locator('#select-available-collections .example-preview'),
+    );
   }
 }
 
@@ -140,6 +154,7 @@ export async function verifyCoreControlEdges(page, baseURL) {
 
     await page.goto(`${baseURL}#/components/icon-button`);
     const example = page.locator('#icon-button-loading');
+    await revealIconButtonExample(example);
     const icon = example.getByRole('button', { name: '收藏文章', exact: true });
     await icon.waitFor();
     const iconGlyph = await icon.locator('svg').boundingBox();
@@ -158,9 +173,11 @@ export async function verifyCoreControlEdges(page, baseURL) {
     assert.equal((await icon.boundingBox()).width, 44);
     assert.equal((await icon.boundingBox()).height, 44);
     await example.getByRole('status').getByText('已收藏', { exact: true }).waitFor();
+    await verifyIconButtonReadingList(page);
 
     await page.goto(`${baseURL}#/components/text-field`);
     const native = page.locator('#native');
+    await revealExample(native);
     for (const [name, value] of [
       ['记录日期', '2026-10-28'],
       ['记录时间', '09:30'],
