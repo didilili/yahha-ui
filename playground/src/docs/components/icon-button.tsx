@@ -4,6 +4,8 @@ import IconButtonSizes from '../../examples/foundations/IconButtonSizes';
 import iconButtonSizesSource from '../../examples/foundations/IconButtonSizes.tsx?raw';
 import IconButtonVariants from '../../examples/foundations/IconButtonVariants';
 import iconButtonVariantsSource from '../../examples/foundations/IconButtonVariants.tsx?raw';
+import IconButtonSoftActions from '../../examples/foundations/IconButtonSoftActions';
+import iconButtonSoftActionsSource from '../../examples/foundations/IconButtonSoftActions.tsx?raw';
 import IconButtonStates from '../../examples/foundations/IconButtonStates';
 import iconButtonStatesSource from '../../examples/foundations/IconButtonStates.tsx?raw';
 import IconButtonLoading from '../../examples/foundations/IconButtonLoading';
@@ -50,6 +52,14 @@ export default defineComponentPage('icon-button', {
           description: '对比主要、次要和低强调三种外观。',
           component: IconButtonVariants,
           source: iconButtonVariantsSource,
+        },
+        {
+          id: 'icon-button-decorations',
+          title: '软团操作与状态',
+          description:
+            '对比常规与软团外观、默认三墨点与显式小花饼；点击书签切换收藏，状态仅保留在当前示例。',
+          component: IconButtonSoftActions,
+          source: iconButtonSoftActionsSource,
         },
         {
           id: 'icon-button-sizes',
@@ -107,7 +117,8 @@ export default defineComponentPage('icon-button', {
             {
               name: 'children',
               type: 'ReactNode',
-              description: '图标内容。建议装饰图标设置 aria-hidden="true"，加载时此内容被替换。',
+              description:
+                '图标内容。建议装饰图标设置 aria-hidden="true"，加载时由居中的加载图形替换。',
             },
             ...buttonVariantRows.map((row) =>
               row.name === 'variant'
@@ -150,9 +161,16 @@ export default defineComponentPage('icon-button', {
       content: (
         <>
           <p>
+            不传 <code>appearance</code> 时使用常规外观。<code>appearance="soft"</code>{' '}
+            使用软团轮廓和按压层次，功能图标保持居中。收藏等切换操作使用 <code>aria-pressed</code>{' '}
+            与图标填色表达当前值，<code>aria-label</code> 保持稳定的动作名称。
+          </p>
+          <p>
             按钮组的间距由外层 flex / grid 容器设置；在 flex 行中，可设置{' '}
             <code>{"style={{ marginInlineStart: 'auto' }}"}</code> 将按钮推到行尾。 直接传入 SVG
-            图标时保留 viewBox，组件会按 size 调整图框。统一配色使用{' '}
+            图标时保留 viewBox，组件会按 size 调整图框。加载默认使用三墨点，显式设置{' '}
+            <code>loadingVariant="biscuit"</code> 选择小花饼，与 <code>appearance</code>{' '}
+            独立；两种图形沿用 18 / 20 / 22px 图框并保持居中，按钮宽高不变。统一配色使用{' '}
             <a href="#/components/theme-provider">ThemeProvider</a>。
           </p>
           <p>

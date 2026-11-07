@@ -24,7 +24,7 @@ import { Select } from 'yahha-ui';
 
 ### 基础用法
 
-从三个分类中选择一项。
+从三个分类中选择一项，对比默认勾与显式纸章装饰。
 
 [查看示例文件](../../playground/src/examples/new-forms/SelectBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -34,16 +34,19 @@ import { Select } from 'yahha-ui';
 import { Select } from 'yahha-ui';
 
 export default function SelectBasic() {
+  const options = [
+    { value: 'journal', label: '生活手记' },
+    { value: 'reading', label: '读书笔记' },
+    { value: 'photos', label: '散步相册' },
+  ];
   return (
-    <div style={{ maxWidth: 340 }}>
+    <div style={{ display: 'grid', gap: 24, maxWidth: 340 }}>
+      <Select label="文章分类" defaultValue="journal" options={options} />
       <Select
-        label="文章分类"
-        placeholder="选择一个分类"
-        options={[
-          { value: 'journal', label: '生活手记' },
-          { value: 'reading', label: '读书笔记' },
-          { value: 'photos', label: '散步相册' },
-        ]}
+        label="文章分类（纸章装饰）"
+        defaultValue="journal"
+        options={options}
+        selectedIndicator="stamp"
       />
     </div>
   );
@@ -402,6 +405,7 @@ export default function SelectAvailableCollections() {
 
 ## 状态与表单
 
+- 选中项默认使用普通勾，显式设置 `selectedIndicator="stamp"` 为勾增加白纸底、边框与轻影。两种形式均保留选中背景、键盘高亮与禁用反馈。
 - value / onValueChange 管理受控选择，null 表示未选择；defaultValue 设置非受控初始值。选项值须为唯一的非空字符串。
 - name 将选中值加入 FormData，form 可关联外部表单。非受控选择随表单重置到初始值；受控选择需由调用方在 onReset 中恢复 value。
 - readOnly 允许打开并浏览选项，保留提交值但阻止修改；disabled 阻止交互与提交。单个 disabled 选项保留在列表中但不可选择。
@@ -427,6 +431,7 @@ export default function SelectAvailableCollections() {
 | `name / form`                     | 提交字段名及外部表单 ID；传给内部表单输入。form 也作用于触发按钮。                                 | `string`                                                                            | —               |
 | `disabled / required / readOnly`  | 禁用、必选、只读。只读允许浏览选项但阻止修改。                                                     | `boolean`                                                                           | `false`         |
 | `autoComplete`                    | 内部表单输入的浏览器自动填充提示。                                                                 | `string`                                                                            | —               |
+| `selectedIndicator`               | 选中标记外观；默认普通勾，stamp 显式增加白纸章装饰。                                               | `"check" \| "stamp"`                                                                | `check`         |
 | `portalContainer`                 | 列表的挂载目标；弹出列表保留当前 ThemeProvider 的主题配置。                                        | `HTMLElement \| ShadowRoot \| RefObject<HTMLElement \| ShadowRoot \| null> \| null` | `document.body` |
 | `className`                       | 根字段 div 的附加类名。                                                                            | `string`                                                                            | —               |
 | `classNames`                      | 各部分附加类名；每个值为 string。popup / option 位于 Portal。                                      | `{ label?, trigger?, value?, popup?, option?, hint?, error? }`                      | —               |

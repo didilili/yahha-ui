@@ -195,13 +195,27 @@ export async function verifyDialogDraft(page, scope = page.locator('#form .examp
       };
       assert.equal(await dialog.evaluate((node, old) => node === old, retained.dialog), true);
       assert.equal(await input.evaluate((node, old) => node === old, retained.input), true);
-      assert.equal(await cancel.evaluate((node, old) => node === old, retained.cancel), true);
+      assert.equal(await proceed.evaluate((node, old) => node === old, retained.cancel), true);
       assert.equal(await save.evaluate((node, old) => node === old, retained.save), true);
       assert.equal(
         await dialog.evaluate((node) => node.inert || node.hasAttribute('data-ending-style')),
         false,
       );
       assert.equal(await warning.count(), 1);
+      assert.deepEqual(
+        await save.evaluate((button) =>
+          [...button.parentElement.querySelectorAll('button')].map((action) =>
+            action.textContent.trim(),
+          ),
+        ),
+        ['继续编辑', '保存标题', '放弃修改并关闭'],
+        'Dirty-close choices belong to one footer action area without a second cancel action.',
+      );
+      assert.equal(await cancel.count(), 0);
+      assert.equal(
+        await dialog.getByRole('button', { name: /^(继续编辑|保存标题|放弃修改并关闭)$/ }).count(),
+        3,
+      );
       assert.equal(await page.getByRole('dialog').count(), 1);
       assert.equal(await dialog.getByRole('status').count(), 0);
       assert.equal(await dialog.locator('[aria-live]').count(), 0);
@@ -296,6 +310,17 @@ export async function verifyDialogDraft(page, scope = page.locator('#form .examp
       await Promise.all(Object.values(retained).map((node) => node.dispose()));
     }
 
+    stage = 'confirmation save submits the same native form and returns focus';
+    await input.fill(`  ${workingSaved}  `);
+    await input.press('Escape');
+    await proceed.waitFor();
+    await closeWith(async () => {
+      await save.focus();
+      await save.press('Enter');
+    });
+    await requireStatus(workingSaved);
+    await open(workingSaved);
+
     stage = 'explicit discard closes and reopens the saved value';
     await input.fill('这次明确放弃的修改');
     await input.press('Escape');
@@ -327,7 +352,9 @@ export async function verifyDialogDraft(page, scope = page.locator('#form .examp
       if (await dialog.count()) {
         const popup = await dialog.elementHandle();
         try {
-          await cancel.click();
+          if (await proceed.count()) {
+            await discard.click();
+          } else await cancel.click();
           await page.waitForFunction(
             (node) => !node.isConnected || node.querySelector('[role="alert"]') !== null,
             popup,

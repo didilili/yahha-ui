@@ -32,14 +32,18 @@
     inset 0 -3px 0 color-mix(in srgb, var(--yahha-line, #c58ba1) 35%, transparent);
 }
 .badge[data-tone='success'] {
-  align-items: baseline;
   border-color: var(--yahha-success-line, #c6d8b8);
-  border-style: dashed;
   background: var(--yahha-success-surface, #f3f8ed);
   color: var(--yahha-success-ink, #506a3b);
   box-shadow: inset 0 0 0 1px var(--yahha-field-background, #ffffff);
 }
-.badge[data-tone='success']::before {
+.badge[data-appearance='stamp'] {
+  border-style: dashed;
+}
+.badge[data-tone='success'][data-appearance='stamp'] {
+  align-items: baseline;
+}
+.badge[data-tone='success'][data-appearance='stamp']::before {
   content: '';
   flex: 0 0 auto;
   inline-size: 6px;

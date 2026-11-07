@@ -51,6 +51,50 @@ export default function HeadingExample() {
 }
 ```
 
+<a id="heading-decoration"></a>
+
+### 普通与短墨线
+
+同一标题层级可独立选择装饰；默认不绘制短墨线，也不预留装饰空间。
+
+[查看示例文件](../../playground/src/examples/content/HeadingDecoration.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/HeadingDecoration.tsx -->
+
+```tsx
+import { Heading, Text } from 'yahha-ui';
+
+export default function HeadingDecoration() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
+        gap: 24,
+      }}
+    >
+      {(['none', 'underline'] as const).map((decoration) => (
+        <section
+          key={decoration}
+          style={{ display: 'grid', alignContent: 'start', gap: 16, minWidth: 0 }}
+        >
+          <Text size="sm" tone="muted">
+            {decoration === 'none' ? '普通（默认）' : '短墨线'}
+          </Text>
+          <Heading level={2} decoration={decoration}>
+            星球上的点心时间
+          </Heading>
+          <Heading level={3} decoration={decoration}>
+            星球上的点心时间
+          </Heading>
+          <Text>标题层级决定语义与字号；短墨线只为开启装饰的标题预留底部空间。</Text>
+        </section>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="integration"></a>
 
 ## 进阶用法
@@ -208,7 +252,7 @@ export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: stri
 
 ## 标题间距与长标题
 
-标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。长标题会自然换行，应保留完整文字；不要仅为缩小字号而改变标题层级。
+标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。默认 decoration="none"，不绘制短墨线；显式设置 underline 时，任意层级均增加短墨线及 0.48em 底部留白。长标题会自然换行，应保留完整文字；不要仅为缩小字号或改变装饰而调整标题层级。
 
 <a id="api"></a>
 
@@ -216,13 +260,14 @@ export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: stri
 
 ### HeadingProps
 
-| 属性                  | 说明                                                                      | 类型                                 | 默认值 |
-| --------------------- | ------------------------------------------------------------------------- | ------------------------------------ | ------ |
-| `level`               | 渲染的标题层级，默认字号依次为 32 / 24 / 20 / 18 / 16 / 14px。            | `1 \| 2 \| 3 \| 4 \| 5 \| 6`         | `2`    |
-| `children`            | 标题内容。                                                                | `ReactNode`                          | —      |
-| `className / style`   | 作用于根 h1–h6 标题 元素。                                                | `string / CSSProperties`             | —      |
-| `ref`                 | 指向真实 h1–h6 标题 元素。                                                | `ComponentPropsWithRef<'h2'>['ref']` | —      |
-| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。 | `ComponentPropsWithRef<'h2'>`        | —      |
+| 属性                  | 说明                                                                      | 类型                                 | 默认值   |
+| --------------------- | ------------------------------------------------------------------------- | ------------------------------------ | -------- |
+| `level`               | 渲染的标题层级，默认字号依次为 32 / 24 / 20 / 18 / 16 / 14px。            | `1 \| 2 \| 3 \| 4 \| 5 \| 6`         | `2`      |
+| `children`            | 标题内容。                                                                | `ReactNode`                          | —        |
+| `decoration`          | 可选短曲墨线，独立于语义层级；仅 underline 预留装饰所需底部空间。         | `'none' \| 'underline'`              | `'none'` |
+| `className / style`   | 作用于根 h1–h6 标题 元素。                                                | `string / CSSProperties`             | —        |
+| `ref`                 | 指向真实 h1–h6 标题 元素。                                                | `ComponentPropsWithRef<'h2'>['ref']` | —        |
+| `其他原生属性 / 事件` | 支持对应原生元素的事件、aria-\*、data-\* 等属性；组件声明的同名属性优先。 | `ComponentPropsWithRef<'h2'>`        | —        |
 
 <a id="behavior"></a>
 

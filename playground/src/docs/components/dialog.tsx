@@ -54,7 +54,7 @@ export default defineComponentPage('dialog', {
       disclosure: '查看未保存修改的关闭保护',
       content: (
         <p>
-          修改标题后，取消、Escape、关闭按钮和外点共用退出策略：继续编辑或明确放弃。
+          修改标题后，取消、Escape、关闭按钮和外点共用退出策略；确认态在同一操作区提供继续编辑、保存标题或明确放弃。
           结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
         </p>
       ),
@@ -62,7 +62,7 @@ export default defineComponentPage('dialog', {
         {
           id: 'form',
           title: '未保存修改的关闭确认',
-          description: '存在未保存修改时，关闭操作提供继续编辑或放弃修改的选择。',
+          description: '存在未保存修改时，在同一操作区继续编辑、保存标题或放弃修改。',
           component: DialogForm,
           source: dialogFormSource,
           toc: false,
@@ -215,6 +215,10 @@ export default defineComponentPage('dialog', {
       content: (
         <>
           <p>底部操作区空间不足时，按钮会换行；窄屏改为纵向排列。</p>
+          <p>
+            插画区为关闭按钮和焦点轮廓保留两侧留白。图片或 SVG
+            保持居中、完整显示，宽幅插画会按比例缩小；插画区高度仍为 124px。
+          </p>
           <p>
             长标题自动换行，内容超出可用高度时整个弹窗滚动，footer
             不固定在底部。复杂表单或长篇正文更适合独立页面，避免把必要操作埋在长滚动区中。

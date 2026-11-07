@@ -26,6 +26,21 @@
   animation-delay: 320ms;
 }
 
+.biscuit > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  transform-origin: center;
+  animation: biscuit-turn 1.6s linear infinite;
+}
+
+@keyframes biscuit-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes soft-beat {
   0%,
   65%,
@@ -48,6 +63,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .biscuit > svg {
+    animation: none;
+  }
   .dot {
     animation: none;
     opacity: 0.75;
@@ -56,6 +74,21 @@
 }
 
 @media (forced-colors: active) {
+  .biscuit > svg {
+    animation: none;
+  }
+  .biscuit [data-biscuit-shell] {
+    fill: Canvas;
+    stroke: ButtonText;
+  }
+  .biscuit [data-biscuit-crumb] {
+    fill: Canvas;
+    stroke: none;
+  }
+  .biscuit [data-biscuit-jam] {
+    fill: ButtonText;
+    stroke: ButtonText;
+  }
   .dot {
     animation: none;
     box-sizing: border-box;

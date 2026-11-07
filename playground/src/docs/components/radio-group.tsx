@@ -36,7 +36,7 @@ export default defineComponentPage('radio-group', {
         {
           id: 'basic',
           title: '基础用法',
-          description: '在两个短选项间切换，使用受控值管理选择。',
+          description: '对比默认圆点与显式整行高亮；两组共用受控值，便于比较同一状态。',
           component: RadioGroupBasic,
           source: RadioGroupBasicSource,
         },
@@ -102,6 +102,11 @@ export default defineComponentPage('radio-group', {
       content: (
         <ul>
           <li>
+            选项标题保持固定字重，避免窄栏中的长标题因选中加粗而重新换行；默认通过圆点和白环表达选中。
+            显式设置 <code>highlightSelected</code>{' '}
+            为可用选中行增加轻纸色与内底缘，不改变行高或表单值。
+          </li>
+          <li>
             使用 value / onValueChange 管理受控选择，空字符串可表示待选择；在回调中更新
             value，选项值须保持唯一。用空字符串表示未选择时，不再将其作为有效选项值。
           </li>
@@ -111,7 +116,8 @@ export default defineComponentPage('radio-group', {
           </li>
           <li>
             required 将必选约束传给原生 radio；hint 和 error
-            用于组级说明与错误，选择后的错误清除由调用方处理。
+            用于组级说明与错误，选择后的错误清除由调用方处理。错误说明带装饰性提醒标记，
+            长文字换行齐文字起点；标记不单独命名或播报。
           </li>
           <li>
             disabled 禁用整组，options 中的 disabled 禁用单项，也支持父 fieldset
@@ -180,6 +186,12 @@ export default defineComponentPage('radio-group', {
               name: 'required / disabled',
               type: 'boolean',
               description: '原生必选或整组禁用；也支持父 fieldset disabled。',
+              defaultValue: 'false',
+            },
+            {
+              name: 'highlightSelected',
+              type: 'boolean',
+              description: '为可用选中行增加轻纸色与内底缘；圆点、焦点和表单行为始终保留。',
               defaultValue: 'false',
             },
             {

@@ -21,6 +21,7 @@ import {
   SegmentedControl,
   Skeleton,
   Spinner,
+  Surface,
   Switch,
   Tabs,
   Text,
@@ -54,6 +55,7 @@ export function Basics() {
   const [fullRangePage, setFullRangePage] = useState(Number.MAX_SAFE_INTEGER - 2);
   const [message, setMessage] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [illustratedDialogOpen, setIllustratedDialogOpen] = useState(false);
   const [source, setSource] = useState('data:text/plain,unavailable');
   const [authorSource, setAuthorSource] = useState('data:text/plain,unavailable');
   const [feedbackOpen, setFeedbackOpen] = useState(true);
@@ -217,6 +219,33 @@ export function Basics() {
             },
           ]}
         />
+        <section data-testid="navigation-clipped-accordion">
+          <button type="button">Before clipped questions</button>
+          <Surface style={{ padding: 0, overflow: 'hidden' }} data-testid="question-card">
+            <Accordion
+              defaultValue={['subscription']}
+              items={[
+                {
+                  value: 'subscription',
+                  title: 'Subscribe to these notes',
+                  content: <a href="#subscription">Read subscription details</a>,
+                },
+                {
+                  value: 'long-question',
+                  title: '如果周末下雨，朋友们的读书会还会照常举行吗？需要提前准备什么？',
+                  content: '雨天在书店窗边集合。',
+                },
+                {
+                  value: 'unavailable',
+                  title: 'Next gathering is being confirmed',
+                  content: 'Details to follow.',
+                  disabled: true,
+                },
+              ]}
+            />
+          </Surface>
+          <button type="button">After clipped questions</button>
+        </section>
         <Pagination currentPage={page} totalPages={20} onPageChange={setPage} />
         <output aria-label="Basic current page">{page}</output>
         <Pagination
@@ -317,6 +346,12 @@ export function Basics() {
             className="logical-end-tooltip"
           />
           <Tooltip
+            trigger={<IconButton aria-label="Short help">?</IconButton>}
+            content="收藏文章"
+            delay={0}
+            className="short-tooltip"
+          />
+          <Tooltip
             trigger={
               <IconButton size="sm" aria-label="Compact help">
                 +
@@ -377,6 +412,25 @@ export function Basics() {
             </Text>
           </Dialog>
         </ThemeProvider>
+        <Dialog
+          open={illustratedDialogOpen}
+          onOpenChange={setIllustratedDialogOpen}
+          title="Illustrated reading note: keep the complete title readable beside the close action"
+          trigger={<Button>Open illustrated dialog</Button>}
+          illustration={
+            <svg
+              data-testid="dialog-wide-illustration"
+              width="372"
+              height="124"
+              viewBox="0 0 372 124"
+            >
+              <rect width="372" height="124" fill="currentColor" />
+            </svg>
+          }
+          footer={<Button onClick={() => setIllustratedDialogOpen(false)}>Keep reading</Button>}
+        >
+          <Text>The illustration stays decorative and leaves the close action clear.</Text>
+        </Dialog>
         <section className="basics-content">
           <Button hidden data-testid="hidden-button">
             Hidden button
@@ -385,7 +439,7 @@ export function Basics() {
             ×
           </IconButton>
           <Avatar hidden data-testid="hidden-avatar" name="Hidden author" />
-          <Badge hidden data-testid="hidden-badge">
+          <Badge hidden data-testid="hidden-badge" appearance="stamp">
             Hidden badge
           </Badge>
           <SegmentedControl
@@ -498,6 +552,7 @@ export function Basics() {
           {(['success', 'info', 'error'] as const).map((tone) => (
             <div key={tone} data-testid={`feedback-toast-${tone}`}>
               <Toast
+                appearance="receipt"
                 open={feedbackOpen}
                 onClose={() => setFeedbackOpen(false)}
                 tone={tone}
@@ -523,6 +578,57 @@ export function Basics() {
               }
             />
           </div>
+          <section data-testid="skeleton-circle-sizing">
+            <button type="button">Before skeleton circles</button>
+            {([24, 32, 44] as const).map((width) => (
+              <div key={`block-${width}`} style={{ width }}>
+                <Skeleton variant="circle" data-testid={`skeleton-circle-block-${width}`} />
+              </div>
+            ))}
+            {([24, 32] as const).map((width) => (
+              <div key={`grid-${width}`} style={{ display: 'grid', width }}>
+                <Skeleton variant="circle" data-testid={`skeleton-circle-grid-${width}`} />
+              </div>
+            ))}
+            {(['stretch', 'center'] as const).map((alignItems) => (
+              <div key={alignItems} style={{ display: 'flex', alignItems, width: 100, height: 64 }}>
+                <Skeleton variant="circle" data-testid={`skeleton-circle-flex-${alignItems}`} />
+              </div>
+            ))}
+            <div style={{ width: 64 }}>
+              <Skeleton
+                variant="circle"
+                width={32}
+                height={20}
+                data-testid="skeleton-circle-custom-size"
+              />
+            </div>
+            <div style={{ width: 64 }}>
+              <Skeleton variant="circle" width={32} data-testid="skeleton-circle-width-only" />
+            </div>
+            <div style={{ width: 64 }}>
+              <Skeleton
+                variant="circle"
+                style={{ width: 28, height: 18 }}
+                data-testid="skeleton-circle-style-size"
+              />
+            </div>
+            <div style={{ width: 64 }}>
+              <Skeleton
+                variant="circle"
+                style={{ inlineSize: 32 }}
+                data-testid="skeleton-circle-inline-size"
+              />
+            </div>
+            <div style={{ width: 64 }}>
+              <Skeleton
+                variant="circle"
+                style={{ blockSize: 20 }}
+                data-testid="skeleton-circle-block-size"
+              />
+            </div>
+            <button type="button">After skeleton circles</button>
+          </section>
           <div className="basics-actions">
             {(['sm', 'md', 'lg'] as const).map((size) => (
               <Spinner

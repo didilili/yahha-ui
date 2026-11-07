@@ -12,7 +12,8 @@ import blogArchiveSource from '../../examples/scenes/BlogArchive.tsx?raw';
 import loadingArtwork from '../../examples/scenes/artwork/little-days-page-wait-motion.svg?no-inline';
 import loadErrorArtwork from '../../examples/scenes/artwork/little-days-load-error-motion.svg?no-inline';
 import savedArtwork from '../../examples/scenes/artwork/little-days-collection-saved-motion.svg?no-inline';
-import emptyArtwork from '../../examples/scenes/artwork/empty.png';
+import emptyCollectionArtwork from '../../examples/scenes/artwork/little-days-empty-collection.svg?no-inline';
+import emptySearchArtwork from '../../examples/scenes/artwork/little-days-search-empty.svg?no-inline';
 import notFoundArtwork from '../../examples/scenes/artwork/little-days-friends-lost.svg?no-inline';
 import type { DocPage } from '../types';
 import { guideMetadata } from '../guide-catalog';
@@ -91,7 +92,7 @@ const page: DocPage = {
       title: '空状态与下一步',
       content: (
         <p>
-          首次无内容、暂无收藏与搜索无结果分别提供创建、浏览文章和清空筛选操作。插画可选，搜索无结果时不显示大幅插画。
+          首次无内容、暂无收藏与搜索无结果分别提供创建、浏览文章和清空筛选操作。普通场景使用小纸页，收藏和搜索可选用对应的道具插画。
         </p>
       ),
       examples: [
@@ -103,7 +104,10 @@ const page: DocPage = {
           component: EmptyScene,
           source: emptySceneSource,
           themeScope: 'explicit',
-          assets: [{ name: 'empty.png', href: emptyArtwork }],
+          assets: [
+            { name: 'little-days-empty-collection.svg', href: emptyCollectionArtwork },
+            { name: 'little-days-search-empty.svg', href: emptySearchArtwork },
+          ],
         },
       ],
     },
@@ -139,8 +143,8 @@ const page: DocPage = {
             警告、错误与危险操作使用相应语义，并说明原因、影响与可用操作。
           </p>
           <p>
-            翻页、加载失败与收藏动效为本项目绘制的 SVG，404 插画包含角色、路牌与地图。空态 PNG 为 AI
-            生成展示资源。这些素材单独下载，不进入组件库默认产物；来源与许可状态见
+            翻页、空收藏、搜索无结果、加载失败与收藏动效为本项目绘制的 SVG，404
+            插画包含角色、路牌与地图。 这些素材单独下载，不进入组件库默认产物；来源与许可状态见
             <Link href="#/guides/artwork">图标与插画</Link>。
           </p>
         </>

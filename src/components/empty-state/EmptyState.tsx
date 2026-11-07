@@ -7,7 +7,9 @@ export interface EmptyStateProps {
   title: ReactNode;
   /** Supporting content, rendered inside a paragraph. */
   description?: ReactNode;
-  /** Decorative artwork; the entire illustration slot is hidden from assistive technology. */
+  /** Built-in decorative motif, used only when illustration is undefined. @default 'none' */
+  motif?: 'none' | 'paper';
+  /** Decorative artwork, hidden from assistive technology. null/false suppress the motif. */
   illustration?: ReactNode;
   /** Caller-provided action, such as a Button. */
   action?: ReactNode;
@@ -18,6 +20,7 @@ export interface EmptyStateProps {
 export function EmptyState({
   title,
   description,
+  motif = 'none',
   illustration,
   action,
   className,
@@ -30,9 +33,9 @@ export function EmptyState({
         <div className={styles.emptyIllustration} aria-hidden="true">
           {illustration}
         </div>
-      ) : (
+      ) : illustration === undefined && motif === 'paper' ? (
         <span className={styles.emptyMotif} aria-hidden="true" />
-      )}
+      ) : null}
       <h3 className={styles.emptyTitle}>{title}</h3>
       {description != null && typeof description !== 'boolean' && description !== '' && (
         <p className={styles.emptyDescription}>{description}</p>

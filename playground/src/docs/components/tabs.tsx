@@ -7,6 +7,10 @@ import TabsStates from '../../examples/navigation/TabsStates';
 import tabsStatesSource from '../../examples/navigation/TabsStates.tsx?raw';
 import TabsControlled from '../../examples/navigation/TabsControlled';
 import tabsControlledSource from '../../examples/navigation/TabsControlled.tsx?raw';
+import TabsCounts from '../../examples/navigation/TabsCounts';
+import tabsCountsSource from '../../examples/navigation/TabsCounts.tsx?raw';
+import TabsAppearance from '../../examples/navigation/TabsAppearance';
+import tabsAppearanceSource from '../../examples/navigation/TabsAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('tabs', {
@@ -36,6 +40,13 @@ export default defineComponentPage('tabs', {
           source: tabsBasicSource,
         },
         {
+          id: 'appearance',
+          title: '普通与墨线',
+          description: '普通标签保留直线选中标记；ink 增加倾斜墨线与选中纸面。',
+          component: TabsAppearance,
+          source: tabsAppearanceSource,
+        },
+        {
           id: 'controlled-value',
           title: '受控切换',
           description: '切换标签，同步显示当前选择。',
@@ -54,7 +65,7 @@ export default defineComponentPage('tabs', {
     {
       id: 'integration',
       title: '进阶用法',
-      disclosure: '查看面板状态保留与预览',
+      disclosure: '查看数量标记与面板状态保留',
       content: (
         <p>
           明信片例保持输入非受控，预览展示当前草稿原文；再次修改后切换预览会更新内容。
@@ -62,6 +73,14 @@ export default defineComponentPage('tabs', {
         </p>
       ),
       examples: [
+        {
+          id: 'counts',
+          title: '标签数量与列表同步',
+          description: '归档清单中的手记，数量标记与两个面板同步更新。',
+          component: TabsCounts,
+          source: tabsCountsSource,
+          toc: false,
+        },
         {
           id: 'controlled',
           title: '保留面板状态',
@@ -104,6 +123,12 @@ export default defineComponentPage('tabs', {
         {
           name: 'TabsProps',
           rows: [
+            {
+              name: 'appearance',
+              type: "'default' | 'ink'",
+              defaultValue: "'default'",
+              description: '普通直线选中标记，或倾斜墨线与选中纸面；不改变选择和键盘行为。',
+            },
             {
               name: 'label',
               type: 'string',

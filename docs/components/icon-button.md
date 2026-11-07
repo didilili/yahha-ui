@@ -135,6 +135,78 @@ export default function IconButtonVariants() {
 }
 ```
 
+<a id="icon-button-decorations"></a>
+
+### 软团操作与状态
+
+对比常规与软团外观、默认三墨点与显式小花饼；点击书签切换收藏，状态仅保留在当前示例。
+
+[查看示例文件](../../playground/src/examples/foundations/IconButtonSoftActions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconButtonSoftActions.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { BookmarkIcon, IconButton, Text } from 'yahha-ui';
+
+export default function IconButtonSoftActions() {
+  const [saved, setSaved] = useState(false);
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>常规</span>
+          <IconButton aria-label="收藏文章">
+            <BookmarkIcon />
+          </IconButton>
+        </div>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>软团</span>
+          <IconButton aria-label="收藏文章" appearance="soft">
+            <BookmarkIcon />
+          </IconButton>
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
+        <IconButton
+          aria-label="收藏这篇文章"
+          appearance="soft"
+          variant="secondary"
+          aria-pressed={saved}
+          onClick={() => setSaved((value) => !value)}
+        >
+          <BookmarkIcon filled={saved} />
+        </IconButton>
+        <Text size="sm" tone="muted" role="status">
+          {saved ? '已收藏' : '尚未收藏'}
+        </Text>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>禁用</span>
+          <IconButton aria-label="收藏文章" appearance="soft" disabled>
+            <BookmarkIcon />
+          </IconButton>
+        </div>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>默认三墨点</span>
+          <IconButton aria-label="收藏文章" appearance="soft" loading>
+            <BookmarkIcon />
+          </IconButton>
+        </div>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>可选小花饼</span>
+          <IconButton aria-label="收藏文章" appearance="soft" loading loadingVariant="biscuit">
+            <BookmarkIcon />
+          </IconButton>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="icon-button-sizes"></a>
 
 ### 尺寸
@@ -488,11 +560,13 @@ export default function IconButtonReadingList() {
 | 属性                  | 说明                                                                                     | 类型                                      | 默认值      |
 | --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----------- |
 | `aria-label` **必填** | 必填的可访问名称，描述动作，例如“关闭提示”。                                             | `string`                                  | —           |
-| `children`            | 图标内容。建议装饰图标设置 aria-hidden="true"，加载时此内容被替换。                      | `ReactNode`                               | —           |
+| `children`            | 图标内容。建议装饰图标设置 aria-hidden="true"，加载时由居中的加载图形替换。              | `ReactNode`                               | —           |
 | `destructive`         | 用危险色表达删除等破坏性动作，与 variant 分开控制；不自动确认或执行删除。                | `boolean`                                 | `false`     |
 | `variant`             | 主要、次要或低强调图标按钮。                                                             | `'primary' \| 'secondary' \| 'ghost'`     | `'primary'` |
+| `appearance`          | 常规外观或软团外观，与 variant 的强调程度分开控制。                                      | `'default' \| 'soft'`                     | `'default'` |
 | `size`                | 最小高度依次为 36、44、52px；IconButton 对应为方形点击区域。                             | `'sm' \| 'md' \| 'lg'`                    | `'md'`      |
 | `loading`             | 显示加载图标并禁用按钮，设置 aria-busy。请求与完成状态由调用方管理。                     | `boolean`                                 | `false`     |
+| `loadingVariant`      | 加载图形，默认三墨点；biscuit 显式选择小花饼，与 appearance 分开控制。                   | `'dots' \| 'biscuit'`                     | `'dots'`    |
 | `type`                | 原生按钮类型。提交表单时显式传入 submit。                                                | `'button' \| 'submit' \| 'reset'`         | `'button'`  |
 | `disabled`            | 禁用按钮。loading 为 true 时也会禁用，不可通过 disabled={false} 覆盖。                   | `boolean`                                 | `false`     |
 | `onClick`             | 原生点击事件；键盘 Enter / Space 激活同样触发。                                          | `MouseEventHandler<HTMLButtonElement>`    | —           |
@@ -517,7 +591,9 @@ disabled 或 loading 为真时，按钮退出键盘顺序且不能激活。加�
 
 ## 布局与定制
 
-按钮组的间距由外层 flex / grid 容器设置；在 flex 行中，可设置 `style={{ marginInlineStart: 'auto' }}` 将按钮推到行尾。 直接传入 SVG 图标时保留 viewBox，组件会按 size 调整图框。统一配色使用 [ThemeProvider](theme.md)。
+不传 `appearance` 时使用常规外观。`appearance="soft"` 使用软团轮廓和按压层次，功能图标保持居中。收藏等切换操作使用 `aria-pressed` 与图标填色表达当前值，`aria-label` 保持稳定的动作名称。
+
+按钮组的间距由外层 flex / grid 容器设置；在 flex 行中，可设置 `style={{ marginInlineStart: 'auto' }}` 将按钮推到行尾。 直接传入 SVG 图标时保留 viewBox，组件会按 size 调整图框。加载默认使用三墨点，显式设置 `loadingVariant="biscuit"` 选择小花饼，与 `appearance` 独立；两种图形沿用 18 / 20 / 22px 图框并保持居中，按钮宽高不变。统一配色使用 [ThemeProvider](theme.md)。
 
 阅读列表中的收藏使用 ghost 保持低强调，选中后沿用主题色与实心图标；不改变 44px 默认点击区域。需要标记删除等危险操作时，可使用继承自 Button 的 destructive。
 

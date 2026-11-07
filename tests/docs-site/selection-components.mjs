@@ -196,7 +196,7 @@ export async function verifyTextareaExamples(page, baseURL) {
       200,
       'Native maxLength limits typing.',
     );
-    await controlled.getByText('必填，已输入 200 / 200', { exact: true }).waitFor();
+    await controlled.getByText('已输入 200 / 200', { exact: true }).waitFor();
     await verifySource(controlled, 'new-forms/TextareaControlled.tsx');
 
     const native = page.locator('#native');

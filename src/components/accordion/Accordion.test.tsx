@@ -12,6 +12,29 @@ const items = [
 ];
 
 describe('Accordion', () => {
+  it('keeps expanded content, focus and draft state when soft appearance changes', async () => {
+    const user = userEvent.setup();
+    const ref = createRef<HTMLDivElement>();
+    const formItems = [{ value: 'draft', title: '留言草稿', content: <input aria-label="草稿" /> }];
+    const { rerender } = render(<Accordion ref={ref} keepMounted items={formItems} />);
+    const root = ref.current;
+    const trigger = screen.getByRole('button', { name: '留言草稿' });
+    expect(root?.getAttribute('data-appearance')).toBe('default');
+    await user.click(trigger);
+    await user.type(screen.getByRole('textbox'), '保留这份草稿');
+    trigger.focus();
+    rerender(<Accordion ref={ref} keepMounted appearance="soft" items={formItems} />);
+    expect(ref.current).toBe(root);
+    expect(root?.getAttribute('data-appearance')).toBe('soft');
+    expect(root?.hasAttribute('appearance')).toBe(false);
+    expect(document.activeElement).toBe(trigger);
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    expect((screen.getByRole('textbox') as HTMLInputElement).value).toBe('保留这份草稿');
+    await user.keyboard('{Enter}');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(screen.queryByRole('textbox')).toBeNull();
+  });
+
   it('expands and collapses a semantic heading trigger with linked content', async () => {
     const user = userEvent.setup();
     const ref = createRef<HTMLDivElement>();

@@ -1,3 +1,4 @@
+import { verifyTabsCounts } from './tabs-counts-examples.mjs';
 import assert from 'node:assert/strict';
 import { revealExample } from './reveal-example.mjs';
 
@@ -67,6 +68,7 @@ export async function verifyBlogArchive(page, baseURL) {
 }
 
 export async function verifyNavigationExamples(page, baseURL) {
+  await verifyTabsCounts(page, baseURL);
   await page.goto(`${baseURL}#/components/tabs?section=controlled`);
   const tabs = page.locator('#controlled .example-preview');
   await revealExample(tabs);

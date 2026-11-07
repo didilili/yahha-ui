@@ -6,10 +6,42 @@ import userEvent from '@testing-library/user-event';
 import { IconButton } from '../button/IconButton.js';
 import { ThemeProvider } from '../../theme/ThemeProvider.js';
 import { Tooltip } from './Tooltip.js';
+import styles from './tooltip.module.css';
 
 afterEach(cleanup);
 
 describe('Tooltip', () => {
+  it('omits the optional arrow without disabling focus, content or Escape behavior', async () => {
+    const user = userEvent.setup();
+    const view = render(
+      <Tooltip
+        showArrow={false}
+        side="bottom"
+        sideOffset={20}
+        content="阅读说明"
+        trigger={<button>阅读说明</button>}
+      />,
+    );
+    await user.tab();
+    const popup = await screen.findByText('阅读说明', { selector: 'div' });
+    expect(popup.parentElement?.querySelector(`.${styles.arrow}`)).toBeNull();
+    expect(screen.getByRole('button', { name: '阅读说明' })).toBe(document.activeElement);
+    view.rerender(
+      <Tooltip
+        side="bottom"
+        sideOffset={20}
+        content="阅读说明"
+        trigger={<button>阅读说明</button>}
+      />,
+    );
+    await waitFor(() =>
+      expect(popup.parentElement?.querySelector(`.${styles.arrow}`)).not.toBeNull(),
+    );
+    await user.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByText('阅读说明', { selector: 'div' })).toBeNull());
+    expect(screen.getByRole('button', { name: '阅读说明' })).toBe(document.activeElement);
+  });
+
   it('keeps portal direction in sync with its native ancestor without remounting trigger refs', async () => {
     const release = vi.fn();
     const triggerRef = vi.fn((node: HTMLButtonElement | null) => (node ? release : undefined));

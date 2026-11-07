@@ -14,6 +14,8 @@ export interface ToastProps {
   description?: ReactNode;
   /** Visual feedback type; defaults to success and retains role=status. */
   tone?: 'success' | 'info' | 'error';
+  /** Optional receipt stamp and action paper; status feedback is always retained. @default 'default' */
+  appearance?: 'default' | 'receipt';
   action?: ReactNode;
   /** Applied to the status container; positioning is controlled by the caller. */
   className?: string;
@@ -50,12 +52,19 @@ export function Toast({
   title,
   description,
   tone = 'success',
+  appearance = 'default',
   action,
   className,
 }: ToastProps) {
   if (!open) return null;
   return (
-    <div role="status" aria-atomic="true" className={cx(styles.toast, className)} data-tone={tone}>
+    <div
+      role="status"
+      aria-atomic="true"
+      className={cx(styles.toast, className)}
+      data-tone={tone}
+      data-appearance={appearance}
+    >
       <span className={styles.toastIcon}>
         <StatusMark tone={tone} />
       </span>

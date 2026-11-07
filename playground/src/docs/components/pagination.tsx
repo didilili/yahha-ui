@@ -7,6 +7,8 @@ import PaginationEmpty from '../../examples/navigation/PaginationEmpty';
 import paginationEmptySource from '../../examples/navigation/PaginationEmpty.tsx?raw';
 import PaginationLinks from '../../examples/navigation/PaginationLinks';
 import paginationLinksSource from '../../examples/navigation/PaginationLinks.tsx?raw';
+import PaginationAppearance from '../../examples/navigation/PaginationAppearance';
+import paginationAppearanceSource from '../../examples/navigation/PaginationAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('pagination', {
@@ -32,6 +34,13 @@ export default defineComponentPage('pagination', {
           description: '通过页码按钮切换列表，每页显示三篇文章。',
           component: PaginationBasic,
           source: paginationBasicSource,
+        },
+        {
+          id: 'appearance',
+          title: '普通与圈选',
+          description: '两组分页同步当前页；普通当前页保留边框与底色，circled 增加不规则圈选。',
+          component: PaginationAppearance,
+          source: paginationAppearanceSource,
         },
         {
           id: 'archive',
@@ -77,7 +86,10 @@ export default defineComponentPage('pagination', {
           <li>
             显示页码会归一化到可用范围，但不会因此触发
             onPageChange。筛选后列表缩减时，调用方需同步修正自身页码；总页数为 0
-            时隐藏数字并禁用两侧按钮。
+            时隐藏数字并禁用前后页按钮。
+          </li>
+          <li>
+            页码排在前，上一页与下一页成组排在末尾；窄屏时整组换行，方向入口保持相邻，键盘顺序与视觉顺序一致。
           </li>
           <li>
             切页后的
@@ -101,6 +113,13 @@ export default defineComponentPage('pagination', {
         {
           name: 'PaginationProps',
           rows: [
+            {
+              name: 'appearance',
+              type: "'default' | 'circled'",
+              defaultValue: "'default'",
+              description:
+                '普通当前页外观或不规则圈选；两者均保留当前页语义、对比与 44px 点击目标。',
+            },
             {
               name: 'currentPage',
               type: 'number',

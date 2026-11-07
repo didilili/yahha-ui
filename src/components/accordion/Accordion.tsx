@@ -30,6 +30,8 @@ export interface AccordionProps extends Omit<
   keepMounted?: boolean;
   /** Match the surrounding document heading structure. @default 3 */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
+  /** Adds a circular chevron knob and stronger expanded paper fill. @default 'default' */
+  appearance?: 'default' | 'soft';
   classNames?: Partial<Record<'item' | 'heading' | 'trigger' | 'panel', string>>;
 }
 
@@ -42,6 +44,7 @@ export function Accordion({
   disabled = false,
   keepMounted = false,
   headingLevel = 3,
+  appearance = 'default',
   className,
   classNames,
   ...props
@@ -58,6 +61,7 @@ export function Accordion({
     <BaseAccordion.Root
       {...props}
       className={cx(styles.root, className)}
+      data-appearance={appearance}
       value={multiple ? openValue : openValue.slice(0, 1)}
       onValueChange={(nextValue: string[]) => {
         onValueChange?.(nextValue);

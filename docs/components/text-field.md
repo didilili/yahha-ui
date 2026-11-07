@@ -561,7 +561,7 @@ export default function TextFieldCopy() {
 - 设置 name 后可用 FormData 读取内容，form 可关联外部表单。非受控输入随原生表单重置；受控输入需在 onReset 中恢复 React 状态。
 - readOnly 保留聚焦、选择、复制和提交能力；disabled 阻止交互并退出键盘顺序，字段也不参与提交。
 - type、autoComplete、required 等沿用原生 input 行为。required 启用浏览器约束，必填要求也应写在可见标签或提示中。
-- error 只显示错误，不执行校验。本地校验例使用 noValidate 跳过浏览器提交校验，由示例检查昵称并设置或清除 error；邮箱例保留浏览器必填与格式校验。
+- error 以文字和装饰性提醒标记呈现错误，不执行校验；标记不另行命名或播报。本地校验例使用 noValidate 跳过浏览器提交校验，由示例检查昵称并设置或清除 error；邮箱例保留浏览器必填与格式校验。
 - trailing 是可交互的尾部内容槽，与仅作装饰的 leading 分开。适合一个默认 44px 的 IconButton；组件只负责布局，操作名称、type="button"、disabled 和行为由使用方设置。 disabled 只禁用输入框，不递归修改槽内容；只读地址仍可提供复制操作。
 - 显式设置 `dir="ltr"` / `dir="rtl"` 或 `style.direction` 时，前后缀布局与输入框保持同向；标签和辅助文字仍跟随外层方向。
 - 原生 composition 事件直接传给输入框。搜索例立即更新编辑值，组合期间保留上一次筛选， 结束或取消后按输入框当前完整值更新结果；没有表单提交或远程请求。 该例使用 text + inputMode="search"，由一个命名按钮清空，避免与原生 search 取消按钮重复。

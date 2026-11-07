@@ -36,7 +36,7 @@ export default defineComponentPage('checkbox', {
         {
           id: 'basic',
           title: '基础用法',
-          description: '点击或按空格切换勾选。',
+          description: '对比默认勾选与显式整行高亮，点击或按空格分别切换。',
           component: CheckboxBasic,
           source: CheckboxBasicSource,
         },
@@ -102,6 +102,12 @@ export default defineComponentPage('checkbox', {
       content: (
         <ul>
           <li>
+            默认通过方框内的勾或半选短横表达选择，整条标签可点击。显式设置{' '}
+            <code>highlightSelected</code>{' '}
+            后，已选和半选的可用标签行增加轻纸色；禁用项保留勾或短横，但取消活跃纸色。
+            错误说明带装饰性提醒标记，长文字换行齐文字起点，标记不单独命名或播报。
+          </li>
+          <li>
             checked / onChange 用于受控状态，defaultChecked 设置非受控初始状态。原生变化事件通过
             event.target.checked 读取是否勾选。
           </li>
@@ -164,6 +170,12 @@ export default defineComponentPage('checkbox', {
               name: 'indeterminate',
               type: 'boolean',
               description: '受控半选状态，向辅助技术表达部分选择；不改变 checked 或提交值。',
+              defaultValue: 'false',
+            },
+            {
+              name: 'highlightSelected',
+              type: 'boolean',
+              description: '为可用的已选和半选标签行增加轻纸色；不改变勾选、焦点或表单值。',
               defaultValue: 'false',
             },
             {

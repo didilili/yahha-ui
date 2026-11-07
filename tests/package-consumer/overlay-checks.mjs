@@ -219,6 +219,117 @@ export async function verifyTooltipGeometry(popup, trigger, label) {
   return geometry;
 }
 
+export async function verifyDialogIllustrationClearance(page, label) {
+  const trigger = page.getByRole('button', { name: 'Open illustrated dialog', exact: true });
+  await trigger.press('Enter');
+  const dialog = page.getByRole('dialog', { name: /^Illustrated reading note:/ });
+  await dialog.waitFor();
+  await painted(dialog);
+  const close = dialog.getByRole('button', { name: '关闭弹窗', exact: true });
+  await page.waitForFunction(
+    (node) => document.activeElement === node && node.matches(':focus-visible'),
+    await close.elementHandle(),
+  );
+  const geometry = await dialog.getByTestId('dialog-wide-illustration').evaluate((node) => {
+    const popup = node.closest('[role="dialog"]');
+    const button = popup.querySelector('button');
+    const art = node.getBoundingClientRect();
+    const holder = node.parentElement.getBoundingClientRect();
+    const action = button.getBoundingClientRect();
+    const focus = getComputedStyle(button);
+    const extent = Math.max(0, parseFloat(focus.outlineWidth) + parseFloat(focus.outlineOffset));
+    const range = document.createRange();
+    range.selectNodeContents(popup.querySelector('h2'));
+    const lines = [...range.getClientRects()];
+    return {
+      closeWidth: action.width,
+      closeHeight: action.height,
+      focusExtent: extent,
+      clearance: Math.max(
+        art.left - action.right - extent,
+        action.left - extent - art.right,
+        art.top - action.bottom - extent,
+        action.top - extent - art.bottom,
+      ),
+      artWidth: art.width,
+      artHeight: art.height,
+      holderHeight: holder.height,
+      artContained:
+        art.left >= holder.left - 0.1 &&
+        art.right <= holder.right + 0.1 &&
+        art.top >= holder.top - 0.1 &&
+        art.bottom <= holder.bottom + 0.1,
+      titleClear: lines.every(
+        (line) =>
+          line.right <= action.left ||
+          line.left >= action.right ||
+          line.bottom <= action.top ||
+          line.top >= action.bottom,
+      ),
+    };
+  });
+  assert(
+    geometry.closeWidth >= 44 && geometry.closeHeight >= 44,
+    `${label}: the illustrated dialog keeps its 44px close target.`,
+  );
+  assert(
+    geometry.clearance >= 0.25,
+    `${label}: the illustration clears the close action and its focus ring: ${JSON.stringify(geometry)}.`,
+  );
+  assert.equal(
+    geometry.holderHeight,
+    124,
+    `${label}: the illustration slot keeps its 124px height.`,
+  );
+  assert(
+    geometry.artWidth > 0 &&
+      geometry.artHeight > 0 &&
+      geometry.artWidth <= 372.1 &&
+      geometry.artHeight <= 124.1 &&
+      Math.abs(geometry.artWidth / geometry.artHeight - 3) <= 0.01 &&
+      geometry.artContained,
+    `${label}: the complete illustration scales within its slot without changing aspect ratio.`,
+  );
+  assert(geometry.titleClear, `${label}: the illustrated title does not collide with closing.`);
+  await page.keyboard.press('Escape');
+  await dialog.waitFor({ state: 'hidden' });
+  await page.waitForFunction(
+    (node) => document.activeElement === node,
+    await trigger.elementHandle(),
+  );
+}
+
+export async function verifyShortTooltipAlignment(page, label) {
+  const trigger = page.getByRole('button', { name: 'Short help', exact: true });
+  await trigger.evaluate((node) => node.scrollIntoView({ block: 'center' }));
+  await trigger.press('ArrowDown');
+  const popup = page.locator('.short-tooltip');
+  await popup.waitFor();
+  await painted(popup);
+  const text = await popup.evaluate((node) => {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    const lines = [...range.getClientRects()];
+    const box = node.getBoundingClientRect();
+    return {
+      lines: lines.length,
+      height: box.height,
+      offset: Math.abs((lines[0].top + lines[0].bottom) / 2 - (box.top + box.bottom) / 2),
+    };
+  });
+  assert.equal(text.lines, 1, `${label}: the short help text stays on one line.`);
+  assert.equal(text.height, 48, `${label}: the short dialogue keeps its 48px minimum height.`);
+  assert(
+    text.offset <= 2,
+    `${label}: short help text is vertically balanced: ${JSON.stringify(text)}.`,
+  );
+  await verifyTooltipSeam(popup, label);
+  await verifyTooltipGeometry(popup, trigger, label);
+  await page.keyboard.press('Escape');
+  await popup.waitFor({ state: 'hidden' });
+  assert(await trigger.evaluate((node) => document.activeElement === node));
+}
+
 async function verifyCompactTooltip(page, label) {
   const trigger = page.getByRole('button', { name: 'Compact help', exact: true });
   await trigger.evaluate((node) => node.scrollIntoView({ block: 'center' }));
@@ -816,6 +927,20 @@ export async function verifyFloatingScrollbars(browser, url) {
       assert.equal(native.track, 'rgba(0, 0, 0, 0)', `${name}: the track is transparent.`);
       assert.equal(native.inset, '16px', `${name}: its own corners retain their inset.`);
       await verifyNativeScrollbarPaint(popup, name);
+      if (name === 'Long scrolling tooltip') {
+        assert(
+          await popup.evaluate((node) => {
+            const range = document.createRange();
+            range.setStart(node.firstChild, 0);
+            range.setEnd(node.firstChild, 1);
+            return (
+              node.scrollTop === 0 &&
+              range.getBoundingClientRect().top >= node.getBoundingClientRect().top
+            );
+          }),
+          'An overflowing tooltip starts with its first character visible.',
+        );
+      }
       const box = await popup.boundingBox();
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
       await page.mouse.wheel(0, 10000);
@@ -827,6 +952,18 @@ export async function verifyFloatingScrollbars(browser, url) {
         () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
       );
       await verifyNativeScrollbarPaint(popup, `${name} bottom`);
+      if (name === 'Long scrolling tooltip') {
+        assert(
+          await popup.evaluate((node) => {
+            const text = node.firstChild;
+            const range = document.createRange();
+            range.setStart(text, text.textContent.length - 1);
+            range.setEnd(text, text.textContent.length);
+            return range.getBoundingClientRect().bottom <= node.getBoundingClientRect().bottom;
+          }),
+          'The final tooltip character remains reachable by native scrolling.',
+        );
+      }
       await page.keyboard.press('Escape');
       await popup.waitFor({ state: 'hidden' });
       await page.waitForFunction(
@@ -1004,6 +1141,8 @@ export async function verifyOverlayAppearance(page, theme) {
       await verifyLogicalTooltipDirection(page, label);
     }
   }
+  await verifyShortTooltipAlignment(page, label);
+  await verifyDialogIllustrationClearance(page, label);
   console.log(
     `Browser overlay geometry passed: ${label}, multiline menu/note, form, and tooltip arrow.`,
   );

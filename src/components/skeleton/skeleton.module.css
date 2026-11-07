@@ -17,6 +17,12 @@
   height: 44px;
   border-radius: 50%;
 }
+.skeleton[data-variant='circle'][data-auto-circle] {
+  min-width: 0;
+  width: min(44px, 100%);
+  height: max-content;
+  aspect-ratio: 1;
+}
 .skeleton[hidden]:not([hidden='until-found']) {
   display: none;
 }

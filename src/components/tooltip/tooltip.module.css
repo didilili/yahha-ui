@@ -10,6 +10,7 @@
   --native-scrollbar-inset: var(--yahha-space-4, 16px);
   box-sizing: border-box;
   position: relative;
+  align-content: safe center;
   max-width: min(260px, var(--available-width), calc(100vw - var(--yahha-space-6, 24px)));
   max-height: var(--available-height);
   min-height: 48px;

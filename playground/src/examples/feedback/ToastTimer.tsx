@@ -1,15 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Text, Toast } from 'yahha-ui';
+import { Button, Progress, Text, Toast } from 'yahha-ui';
+
+const undoDuration = 8000;
 
 export default function ToastTimer() {
   const [archived, setArchived] = useState(false);
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [hidden, setHidden] = useState(() => document.hidden);
+  const [elapsed, setElapsed] = useState(0);
+  const remaining = useRef(undoDuration);
   const archiveButton = useRef<HTMLButtonElement>(null);
   const restoreButton = useRef<HTMLButtonElement>(null);
   const message = useRef<HTMLDivElement>(null);
   const pendingFocus = useRef<'archive' | 'restore' | null>(null);
+
+  useEffect(() => {
+    const updateVisibility = () => setHidden(document.hidden);
+    document.addEventListener('visibilitychange', updateVisibility);
+    return () => document.removeEventListener('visibilitychange', updateVisibility);
+  }, []);
 
   useEffect(() => {
     const destination = pendingFocus.current;
@@ -25,16 +36,29 @@ export default function ToastTimer() {
   }, [archived, open]);
 
   useEffect(() => {
-    if (!open || hovered || focused) return;
-    const timer = window.setTimeout(() => setOpen(false), 8000);
-    return () => window.clearTimeout(timer);
-  }, [open, hovered, focused]);
+    if (!open || hovered || focused || hidden) return;
+    const started = performance.now();
+    const previousRemaining = remaining.current;
+    const updateElapsed = () => {
+      setElapsed(undoDuration - Math.max(0, previousRemaining - (performance.now() - started)));
+    };
+    const timer = window.setTimeout(() => setOpen(false), previousRemaining);
+    const display = window.setInterval(updateElapsed, 100);
+    return () => {
+      remaining.current = Math.max(0, previousRemaining - (performance.now() - started));
+      setElapsed(undoDuration - remaining.current);
+      window.clearTimeout(timer);
+      window.clearInterval(display);
+    };
+  }, [open, hovered, focused, hidden]);
 
   function archive() {
     if (document.activeElement === archiveButton.current) pendingFocus.current = 'restore';
     setArchived(true);
     setHovered(false);
     setFocused(false);
+    remaining.current = undoDuration;
+    setElapsed(0);
     setOpen(true);
   }
 
@@ -64,6 +88,7 @@ export default function ToastTimer() {
       </div>
       <div
         ref={message}
+        style={{ display: 'grid', gap: 12, maxWidth: 400 }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onFocusCapture={() => setFocused(true)}
@@ -72,6 +97,7 @@ export default function ToastTimer() {
         }}
       >
         <Toast
+          appearance="receipt"
           open={open}
           onClose={() => {
             if (message.current?.contains(document.activeElement)) pendingFocus.current = 'restore';
@@ -85,6 +111,14 @@ export default function ToastTimer() {
             </Button>
           }
         />
+        {open && (
+          <Progress
+            label="提示显示时间"
+            value={elapsed}
+            max={undoDuration}
+            valueText={`剩余 ${Math.ceil((undoDuration - elapsed) / 1000)} 秒${hovered || focused || hidden ? '（已暂停）' : ''}`}
+          />
+        )}
       </div>
     </div>
   );

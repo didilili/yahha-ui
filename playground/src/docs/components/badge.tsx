@@ -2,6 +2,8 @@ import BadgeTones from '../../examples/foundations/BadgeTones';
 import badgeTonesSource from '../../examples/foundations/BadgeTones.tsx?raw';
 import BadgeStatus from '../../examples/foundations/BadgeStatus';
 import badgeStatusSource from '../../examples/foundations/BadgeStatus.tsx?raw';
+import BadgeAppearance from '../../examples/foundations/BadgeAppearance';
+import badgeAppearanceSource from '../../examples/foundations/BadgeAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('badge', {
@@ -26,6 +28,13 @@ export default defineComponentPage('badge', {
           description: '对比三种标记、行内组合和长标签换行。',
           component: BadgeTones,
           source: badgeTonesSource,
+        },
+        {
+          id: 'badge-appearance',
+          title: '普通与印章',
+          description: '对比相同语义颜色的普通标记与印章；只有成功色印章附带小勾。',
+          component: BadgeAppearance,
+          source: badgeAppearanceSource,
         },
       ],
     },
@@ -55,7 +64,9 @@ export default defineComponentPage('badge', {
       title: '用文字表达分类与状态',
       content: (
         <p>
-          用“草稿”“已发布”等明确文案表达状态，颜色和小勾只作辅助。纸签适合短标签；长文案虽然可以换行，详细原因仍适合放在相邻正文中。
+          用“草稿”“已发布”等明确文案表达状态。默认使用普通实线标记，success
+          保留绿色语义；appearance="stamp" 增加虚线轮廓，仅 success
+          印章附带辅助小勾。标记适合短标签；长文案虽然可以换行，详细原因仍适合放在相邻正文中。
         </p>
       ),
     },
@@ -66,6 +77,13 @@ export default defineComponentPage('badge', {
         {
           name: 'BadgeProps',
           rows: [
+            {
+              name: 'appearance',
+              type: "'default' | 'stamp'",
+              defaultValue: "'default'",
+              description:
+                '普通实线标记或虚线印章；印章可搭配任意 tone，只有 success 印章显示小勾。',
+            },
             {
               name: 'tone',
               type: "'neutral' | 'accent' | 'success'",

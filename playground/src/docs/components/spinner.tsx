@@ -25,8 +25,8 @@ export default defineComponentPage('spinner', {
       examples: [
         example(
           'spinner-sizes',
-          '尺寸对照',
-          '对比小号、中号和大号等待标记。',
+          '样式与尺寸',
+          '对比默认三墨点与可选小花饼的三档尺寸。',
           SpinnerExample,
           spinnerSource,
         ),
@@ -44,7 +44,7 @@ export default defineComponentPage('spinner', {
       title: '等待标记与可见说明',
       content: (
         <p>
-          区块等待应配合可见文字说明正在加载什么。三枚墨点仅表示等待，不表达完成百分比；减少动效时保持静止，等待信息仍由文字传达。
+          区块等待应配合可见文字说明正在加载什么。默认三墨点与可选小花饼均只表示等待，不表达完成百分比；减少动效时保持静止，等待信息仍由文字传达。
         </p>
       ),
     },
@@ -66,6 +66,12 @@ export default defineComponentPage('spinner', {
               type: "'sm' | 'md' | 'lg'",
               defaultValue: "'md'",
               description: '默认 16 / 24 / 36px。',
+            },
+            {
+              name: 'variant',
+              type: "'dots' | 'biscuit'",
+              defaultValue: "'dots'",
+              description: '默认三墨点或可选小花饼，仅切换等待图形。',
             },
             {
               name: 'role',

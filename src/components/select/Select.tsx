@@ -41,6 +41,8 @@ export interface SelectProps extends Omit<
   required?: boolean;
   readOnly?: boolean;
   autoComplete?: string;
+  /** Selected check mark; stamp adds an opt-in paper border and background. @default check */
+  selectedIndicator?: 'check' | 'stamp';
   portalContainer?: BaseSelect.Portal.Props['container'];
   classNames?: {
     label?: string;
@@ -68,6 +70,7 @@ export function Select({
   required,
   readOnly,
   autoComplete,
+  selectedIndicator = 'check',
   disabled,
   ref,
   portalContainer,
@@ -214,7 +217,10 @@ export function Select({
                       label={option.textValue}
                       className={cx(styles.option, classNames?.option)}
                     >
-                      <BaseSelect.ItemIndicator className={styles.indicator}>
+                      <BaseSelect.ItemIndicator
+                        className={styles.indicator}
+                        data-selected-indicator={selectedIndicator}
+                      >
                         <svg
                           viewBox="0 0 16 16"
                           width="16"

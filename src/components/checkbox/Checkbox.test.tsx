@@ -7,6 +7,42 @@ import { Checkbox } from './Checkbox.js';
 afterEach(cleanup);
 
 describe('Checkbox', () => {
+  it('opts into selected-row highlighting without changing mixed state, form values or reset', async () => {
+    const user = userEvent.setup();
+    const view = (highlightSelected?: boolean) => (
+      <form aria-label="偏好">
+        <Checkbox
+          label="全选分类"
+          name="all"
+          value="yes"
+          defaultChecked
+          indeterminate
+          highlightSelected={highlightSelected}
+        />
+        <button type="reset">重置</button>
+      </form>
+    );
+    const { rerender } = render(view());
+    const input = screen.getByRole('checkbox', { name: '全选分类' }) as HTMLInputElement;
+    const label = input.closest('label')!;
+    expect(label.hasAttribute('data-highlight-selected')).toBe(false);
+    rerender(view(true));
+    expect(label.getAttribute('data-highlight-selected')).toBe('true');
+    expect(input.hasAttribute('highlightselected')).toBe(false);
+    expect(input.getAttribute('aria-checked')).toBe('mixed');
+    expect(input.indeterminate).toBe(true);
+    expect(new FormData(screen.getByRole('form') as HTMLFormElement).get('all')).toBe('yes');
+    await user.click(label);
+    expect(input.checked).toBe(false);
+    expect(input.indeterminate).toBe(true);
+    await user.click(screen.getByRole('button', { name: '重置' }));
+    expect(input.checked).toBe(true);
+    expect(input.indeterminate).toBe(true);
+    rerender(view(false));
+    expect(label.hasAttribute('data-highlight-selected')).toBe(false);
+    expect(input.checked).toBe(true);
+  });
+
   it('uses native checked state, label click, required validation and form reset', async () => {
     const user = userEvent.setup();
     const ref = createRef<HTMLInputElement>();

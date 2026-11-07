@@ -92,7 +92,17 @@
 .hint {
   color: var(--yahha-muted, #7a5c6d);
 }
+.hint + .error {
+  margin-block-start: calc(0px - var(--yahha-space-1, 4px));
+}
+.errorMark {
+  position: absolute;
+  inset-inline-start: var(--yahha-space-1, 4px);
+  inset-block-start: calc((1em * var(--yahha-leading-caption, 1.6) - 16px) / 2);
+}
 .error {
+  position: relative;
+  padding-inline-start: var(--yahha-space-6, 24px);
   color: var(--yahha-error, #a33e4f);
 }
 @media (hover: hover) {

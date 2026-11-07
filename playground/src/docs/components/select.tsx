@@ -39,7 +39,7 @@ export default defineComponentPage('select', {
         {
           id: 'basic',
           title: '基础用法',
-          description: '从三个分类中选择一项。',
+          description: '从三个分类中选择一项，对比默认勾与显式纸章装饰。',
           component: SelectBasic,
           source: SelectBasicSource,
         },
@@ -103,6 +103,10 @@ export default defineComponentPage('select', {
       title: '状态与表单',
       content: (
         <ul>
+          <li>
+            选中项默认使用普通勾，显式设置 <code>selectedIndicator="stamp"</code>{' '}
+            为勾增加白纸底、边框与轻影。两种形式均保留选中背景、键盘高亮与禁用反馈。
+          </li>
           <li>
             value / onValueChange 管理受控选择，null 表示未选择；defaultValue
             设置非受控初始值。选项值须为唯一的非空字符串。
@@ -193,6 +197,12 @@ export default defineComponentPage('select', {
               name: 'autoComplete',
               type: 'string',
               description: '内部表单输入的浏览器自动填充提示。',
+            },
+            {
+              name: 'selectedIndicator',
+              type: '"check" | "stamp"',
+              description: '选中标记外观；默认普通勾，stamp 显式增加白纸章装饰。',
+              defaultValue: 'check',
             },
             {
               name: 'portalContainer',

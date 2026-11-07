@@ -6,17 +6,20 @@ import styles from './spinner.module.css';
 export interface SpinnerProps extends Omit<ComponentPropsWithRef<'span'>, 'children'> {
   label?: string;
   size?: 'sm' | 'md' | 'lg';
+  /** Waiting mark only; neither variant represents a completion percentage. @default 'dots' */
+  variant?: 'dots' | 'biscuit';
 }
 export function Spinner({
   label = '加载中',
   size = 'md',
+  variant = 'dots',
   className,
   role = 'status',
   ...props
 }: SpinnerProps) {
   return (
     <span {...props} className={cx(styles.spinner, className)} data-size={size} role={role}>
-      <LoadingMark />
+      <LoadingMark variant={variant} />
       <span className={styles.srOnly}>{label}</span>
     </span>
   );

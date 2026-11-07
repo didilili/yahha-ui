@@ -2,6 +2,10 @@ import ButtonBasic from '../../examples/foundations/ButtonBasic';
 import buttonBasicSource from '../../examples/foundations/ButtonBasic.tsx?raw';
 import ButtonVariants from '../../examples/foundations/ButtonVariants';
 import buttonVariantsSource from '../../examples/foundations/ButtonVariants.tsx?raw';
+import ButtonAppearance from '../../examples/foundations/ButtonAppearance';
+import buttonAppearanceSource from '../../examples/foundations/ButtonAppearance.tsx?raw';
+import ButtonSoftActions from '../../examples/foundations/ButtonSoftActions';
+import buttonSoftActionsSource from '../../examples/foundations/ButtonSoftActions.tsx?raw';
 import ButtonSizes from '../../examples/foundations/ButtonSizes';
 import buttonSizesSource from '../../examples/foundations/ButtonSizes.tsx?raw';
 import ButtonIcons from '../../examples/foundations/ButtonIcons';
@@ -53,6 +57,21 @@ export default defineComponentPage('button', {
           description: '三种强调程度的静态外观对照。',
           component: ButtonVariants,
           source: buttonVariantsSource,
+        },
+        {
+          id: 'button-appearance',
+          title: '常规与软团外观',
+          description: '对比常规与软团外观，并展示软团外观的三档尺寸。',
+          component: ButtonAppearance,
+          source: buttonAppearanceSource,
+        },
+        {
+          id: 'button-decorations',
+          title: '软团操作与状态',
+          description:
+            '点击书签切换收藏，对比软团外观下的默认三墨点与显式小花饼加载；收藏仅保留在当前示例。',
+          component: ButtonSoftActions,
+          source: buttonSoftActionsSource,
         },
         {
           id: 'button-destructive',
@@ -128,6 +147,18 @@ export default defineComponentPage('button', {
       content: (
         <>
           <p>
+            不传 <code>appearance</code> 时使用常规外观。<code>appearance="soft"</code>{' '}
+            增加饱满轮廓、短高光和按压层次，可与三种强调程度组合。
+            <code>startIcon</code> 和 <code>endIcon</code>{' '}
+            用于补充动作含义，例如用书签表示收藏；操作名称和结果文字始终保留。
+          </p>
+          <p>
+            加载默认使用三墨点，设置 <code>loadingVariant="biscuit"</code> 可选择小花饼，与{' '}
+            <code>appearance</code> 独立。两种加载图形与前置图标使用相同的 16 / 18 / 20px
+            图框，与文字间隔 8px，两侧内边距保持不变。 已有 <code>startIcon</code>{' '}
+            时，加载图形替换原图标槽位，按钮宽度保持稳定；纯文字按钮加载时增加图标槽位和间距，宽度自然增长。
+          </p>
+          <p>
             <code>ghost</code> 在本库表示文字按钮，不是透明描边按钮。 删除等破坏性动作可设置{' '}
             <code>destructive</code>，并用动作名称明确风险；它与
             <code>variant</code> 分开控制，不自动打开确认弹窗或执行删除。危险色使用既有错误语义色，
@@ -178,7 +209,7 @@ export default defineComponentPage('button', {
           </p>
           <p>
             disabled 或 loading 为真时都会设置原生 disabled，按钮不可聚焦、不可激活。loading
-            保留文案并设置
+            显示所选加载图形、保留文案并设置
             aria-busy；请求执行、加载结束和成功或失败提示由调用方处理，结果应在按钮之外清楚呈现。
             系统启用减少动效时，按压位移和加载动画停止。
           </p>

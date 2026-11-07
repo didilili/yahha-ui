@@ -4,8 +4,9 @@
 
 ## 组件代码与安装包
 
-- 源码位于 `src/`，公共入口为 `src/index.ts`。构建生成 `dist/index.js`、类型声明与 `dist/style.css`；按钮的三墨点及代码内基础图形随组件实现构建。
+- 源码位于 `src/`，公共入口为 `src/index.ts`。构建生成 `dist/index.js`、类型声明与 `dist/style.css`；加载图形及代码内基础图形随组件实现构建。
 - `Icon` 与十六个命名功能图标属于公开组件能力，随安装包提供，可从 `yahha-ui` 按需导入；不依赖图标字体、远端资源或文档站素材。分类、章节图案和角色场景继续留在站点层。
+- Button / IconButton 的可选软团外观由组件 CSS 绘制轮廓、短高光与按压底边，功能图标通过现有图标属性或子元素传入；小花饼加载图形维护在 `src/internal/BiscuitLoadingGlyph.tsx`，随组件代码进入安装包。角色 SVG 继续作为下文的独立场景素材维护。
 - [package.json](../package.json) 的分发白名单为 `dist/`。本地 `.tgz` 另附包元信息、根 README、`LICENSE` 与 `THIRD_PARTY_NOTICES.md`，不包含文档站、独立角色 SVG、PNG、字体或截图目录。
 - React / React DOM 由使用方提供，`@base-ui/react` 是运行时依赖。
 
@@ -18,6 +19,12 @@
 - **朋友场景与人物模型**：原稿及当前场景位于 `playground/src/examples/scenes/artwork/friends-preview/`。完整造型源为 `source/characters.svg`，生成群像、探头图与九张人物样张；生成成品只保留实际引用的定义及其传递依赖。当前素材、用途与生成方式见[朋友 SVG 说明](../playground/src/examples/scenes/artwork/friends-preview/README.md)。这些素材为非官方绘制。
 - **小日常道具**：原稿位于 `playground/src/examples/scenes/artwork/little-days/`，包括书签、热茶、翻页、口袋和状态图案。道具由本项目绘制，找路与欢迎场景还会组合既有角色模型；不能把整组素材统称为不含角色的独立道具。见[源文件、派生与动作说明](../playground/src/examples/scenes/artwork/little-days/README.md)。
 - **静态与动效**：`npm run sync:artwork` 先生成当前人物成品，再通过 [sync-little-days-artwork.mjs](../scripts/sync-little-days-artwork.mjs) 从原稿派生场景，欢迎场景另复用 [build-friends-welcome.mjs](../scripts/build-friends-welcome.mjs)。文档保留十四份扁平 SVG。人物成品、定义裁剪与派生文件可用 `npm run check:artwork` 检查，下载和接入见文档站 `#/guides/artwork`。
+
+## 可选装饰元素
+
+`playground/src/examples/scenes/artwork/decorative-elements/` 保存六种背景纹样、四种无文字标题底形、五条装饰分隔线与六枚小图案。原始图形由本项目绘制；下载目录由同目录 `catalog.json` 维护。首页与阅读组合按需引用，不进入组件包。
+
+同目录 `friends/` 的三枚贴纸、朋友纸签和稀疏背景由 `scripts/build-friends-decorations.mjs` 从当前 `friends-preview/source/characters.svg` 派生，保留被引用人物定义；构图与贴纸边是独立绘制。它们纳入 `sync:artwork` / `check:artwork`，预览与下载位于 `#/guides/artwork?section=artwork-decorations`。可复制示例同时提供 SVG，并列出与原始源码一致的保存路径。
 
 ## PNG 插图
 

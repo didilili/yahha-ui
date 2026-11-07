@@ -60,6 +60,12 @@ export const buttonVariantRows: ApiRow[] = [
     description: '主要、次要或文字按钮。',
   },
   {
+    name: 'appearance',
+    type: "'default' | 'soft'",
+    defaultValue: "'default'",
+    description: '常规外观或软团外观，与 variant 的强调程度分开控制。',
+  },
+  {
     name: 'size',
     type: "'sm' | 'md' | 'lg'",
     defaultValue: "'md'",
@@ -70,6 +76,12 @@ export const buttonVariantRows: ApiRow[] = [
     type: 'boolean',
     defaultValue: 'false',
     description: '显示加载图标并禁用按钮，设置 aria-busy。请求与完成状态由调用方管理。',
+  },
+  {
+    name: 'loadingVariant',
+    type: "'dots' | 'biscuit'",
+    defaultValue: "'dots'",
+    description: '加载图形，默认三墨点；biscuit 显式选择小花饼，与 appearance 分开控制。',
   },
 ];
 

@@ -74,7 +74,7 @@ export default defineComponentPage('skeleton', {
               name: 'width / height',
               type: 'CSSProperties 尺寸',
               description:
-                '文本默认 100% × 1em，矩形默认 100% × 100px，圆形默认 44 × 44px；style 中的同名属性优先。',
+                '文本默认 100% × 1em，矩形默认 100% × 100px。未指定尺寸的圆形默认 44 × 44px，在窄容器内等比缩小；指定 width、height 或 style 尺寸时沿用自定义尺寸，style 中的同名属性优先。',
             },
             {
               name: 'aria-hidden',

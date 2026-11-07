@@ -6,6 +6,8 @@ import ToastTones from '../../examples/feedback/ToastTones';
 import toastTonesSource from '../../examples/feedback/ToastTones.tsx?raw';
 import ToastTimer from '../../examples/feedback/ToastTimer';
 import toastTimerSource from '../../examples/feedback/ToastTimer.tsx?raw';
+import ToastAppearance from '../../examples/feedback/ToastAppearance';
+import toastAppearanceSource from '../../examples/feedback/ToastAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('toast', {
@@ -45,6 +47,13 @@ export default defineComponentPage('toast', {
           component: ToastTones,
           source: toastTonesSource,
         },
+        {
+          id: 'appearance',
+          title: '普通与回执外观',
+          description: '对比相同内容与操作；回执显式加入印签和浅色操作纸面，撤销只更新本地示例。',
+          component: ToastAppearance,
+          source: toastAppearanceSource,
+        },
       ],
     },
     {
@@ -66,7 +75,8 @@ export default defineComponentPage('toast', {
         {
           id: 'timer-and-action',
           title: '计时关闭与撤销',
-          description: '示例控制 8 秒关闭，可撤销归档；提示关闭后仍可恢复文章。',
+          description:
+            '8 秒撤销窗口中，进度条表示已用时；悬停、聚焦或页面进入后台时暂停，恢复后继续剩余时间。',
           component: ToastTimer,
           source: toastTimerSource,
           toc: false,
@@ -80,8 +90,9 @@ export default defineComponentPage('toast', {
         <>
           <p>
             自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；计时与撤销示例等待 8
-            秒后关闭，悬停或聚焦时暂停，离开后重新计满 8
-            秒。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
+            秒后关闭，悬停、聚焦或页面进入后台时暂停，恢复后只计剩余时间。示例将 Progress 放在 Toast
+            的 status
+            外，避免每次计时更新重复播报提示。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
           </p>
           <p>
             带操作的提示例保留清单入口；查看操作聚焦常驻清单标题，关闭提示不会丢失已加入的内容。
@@ -126,6 +137,13 @@ export default defineComponentPage('toast', {
               description: '反馈视觉类型，决定颜色与状态图标，不改变播报优先级。',
             },
             {
+              name: 'appearance',
+              type: "'default' | 'receipt'",
+              defaultValue: "'default'",
+              description:
+                '默认保留状态图标与操作；receipt 额外加入印签边框和带虚线分隔的浅色操作纸面。',
+            },
+            {
               name: 'action',
               type: 'ReactNode',
               description: '补充操作插槽；行为、关闭与后续状态由调用方实现。',
@@ -162,10 +180,16 @@ export default defineComponentPage('toast', {
       id: 'styling',
       title: '放置提示',
       content: (
-        <p>
-          默认在文档流中显示。需要固定在屏幕角落时，由外层容器设置定位、窄屏边距与多条消息的排列，并避免遮挡当前操作；Toast
-          不创建 Portal 或全局消息队列。
-        </p>
+        <>
+          <p>
+            默认在文档流中显示。需要固定在屏幕角落时，由外层容器设置定位、窄屏边距与多条消息的排列，并避免遮挡当前操作；Toast
+            不创建 Portal 或全局消息队列。
+          </p>
+          <p>
+            默认使用普通外观，需要回执纸章时显式设置 appearance="receipt"。
+            两种外观均保留状态图标、文字、操作和关闭入口，并继承外层容器的阅读方向。
+          </p>
+        </>
       ),
     },
   ],

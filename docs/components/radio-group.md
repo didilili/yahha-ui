@@ -24,7 +24,7 @@ import { RadioGroup } from 'yahha-ui';
 
 ### 基础用法
 
-在两个短选项间切换，使用受控值管理选择。
+对比默认圆点与显式整行高亮；两组共用受控值，便于比较同一状态。
 
 [查看示例文件](../../playground/src/examples/new-forms/RadioGroupBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -36,16 +36,24 @@ import { RadioGroup } from 'yahha-ui';
 
 export default function RadioGroupBasic() {
   const [frequency, setFrequency] = useState('weekly');
+  const options = [
+    { value: 'weekly', label: '每周一封' },
+    { value: 'monthly', label: '每月精选' },
+  ];
   return (
-    <div style={{ maxWidth: 440 }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
       <RadioGroup
         label="来信频率"
         value={frequency}
         onValueChange={setFrequency}
-        options={[
-          { value: 'weekly', label: '每周一封' },
-          { value: 'monthly', label: '每月精选' },
-        ]}
+        options={options}
+      />
+      <RadioGroup
+        label="来信频率（整行高亮）"
+        value={frequency}
+        onValueChange={setFrequency}
+        options={options}
+        highlightSelected
       />
     </div>
   );
@@ -438,9 +446,10 @@ export default function RadioGroupCommentSignature() {
 
 ## 状态与表单
 
+- 选项标题保持固定字重，避免窄栏中的长标题因选中加粗而重新换行；默认通过圆点和白环表达选中。 显式设置 `highlightSelected` 为可用选中行增加轻纸色与内底缘，不改变行高或表单值。
 - 使用 value / onValueChange 管理受控选择，空字符串可表示待选择；在回调中更新 value，选项值须保持唯一。用空字符串表示未选择时，不再将其作为有效选项值。
 - 显式设置 name 后，FormData 可读取已选值；同一表单内的独立组使用不同 name。form 同时关联 fieldset 和组内 radio。重置时需在 onReset 中恢复 React 状态。
-- required 将必选约束传给原生 radio；hint 和 error 用于组级说明与错误，选择后的错误清除由调用方处理。
+- required 将必选约束传给原生 radio；hint 和 error 用于组级说明与错误，选择后的错误清除由调用方处理。错误说明带装饰性提醒标记， 长文字换行齐文字起点；标记不单独命名或播报。
 - disabled 禁用整组，options 中的 disabled 禁用单项，也支持父 fieldset 禁用。禁用项不参与切换或提交；锁定选择应使用禁用状态。
 - 阅读版式例只调整下方正文的行距与段落间距，不改变控件尺寸；键盘切换时焦点随原生单选项移动， 不跳到正文或状态提示。
 - 署名例在匿名时禁用昵称字段并取消必填，保留草稿供切回；预览读取当时的 FormData， 禁用的昵称不参与提交。条件字段与预览放在单选标签之外。
@@ -461,6 +470,7 @@ export default function RadioGroupCommentSignature() {
 | `name`                                         | 组内 radio 共用名称，显式设置后可读取 FormData。                                                                                                                | `string`                                                                      | `自动生成唯一名称` |
 | `form`                                         | 同时关联 fieldset 与全部 radio 的外部表单 ID。                                                                                                                  | `string`                                                                      | —                  |
 | `required / disabled`                          | 原生必选或整组禁用；也支持父 fieldset disabled。                                                                                                                | `boolean`                                                                     | `false`            |
+| `highlightSelected`                            | 为可用选中行增加轻纸色与内底缘；圆点、焦点和表单行为始终保留。                                                                                                  | `boolean`                                                                     | `false`            |
 | `classNames`                                   | 各部分附加类名，每个值为 string。                                                                                                                               | `{ legend?, options?, option?, input?, label?, description?, hint?, error? }` | —                  |
 | `className / style / ref / 其他 fieldset 属性` | 作用于 fieldset；ref 为 Ref<HTMLFieldSetElement>。不提供 children、defaultValue 或 defaultChecked。选项由 options 提供，组级说明使用 hint；其他内容放在组件外。 | `ComponentPropsWithRef<"fieldset">`                                           | —                  |
 

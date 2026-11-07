@@ -16,11 +16,20 @@ export function Skeleton({
   className,
   ...props
 }: SkeletonProps) {
+  const autoCircle =
+    variant === 'circle' &&
+    width == null &&
+    height == null &&
+    style?.width == null &&
+    style?.height == null &&
+    style?.inlineSize == null &&
+    style?.blockSize == null;
   return (
     <span
       {...props}
       className={cx(styles.skeleton, className)}
       data-variant={variant}
+      data-auto-circle={autoCircle ? '' : undefined}
       style={{ width, height, ...style }}
       aria-hidden="true"
     />

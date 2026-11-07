@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import { cx } from '../../internal/cx.js';
+import { WarningIcon } from '../icon/glyphs/WarningIcon.js';
 import styles from './checkbox.module.css';
 
 /** Uses native checked/defaultChecked/onChange; ref and style target the input. */
@@ -19,6 +20,8 @@ export interface CheckboxProps extends Omit<
   error?: ReactNode;
   /** Controlled mixed appearance; independent of the submitted checked value. @default false */
   indeterminate?: boolean;
+  /** Adds a paper tint to enabled checked or mixed label rows. @default false */
+  highlightSelected?: boolean;
   classNames?: { label?: string; input?: string; text?: string; hint?: string; error?: string };
 }
 
@@ -27,6 +30,7 @@ export function Checkbox({
   hint,
   error,
   indeterminate = false,
+  highlightSelected = false,
   id,
   ref,
   className,
@@ -58,7 +62,11 @@ export function Checkbox({
   const errorId = hasError ? `${inputId}-error` : undefined;
   return (
     <div className={cx(styles.field, className)}>
-      <label htmlFor={inputId} className={cx(styles.label, classNames?.label)}>
+      <label
+        htmlFor={inputId}
+        className={cx(styles.label, classNames?.label)}
+        data-highlight-selected={highlightSelected || undefined}
+      >
         <input
           {...props}
           ref={inputRef}
@@ -84,6 +92,7 @@ export function Checkbox({
       )}
       {hasError && (
         <div id={errorId} className={cx(styles.error, classNames?.error)}>
+          <WarningIcon size={16} className={styles.errorMark} />
           {error}
         </div>
       )}

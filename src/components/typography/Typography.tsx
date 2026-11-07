@@ -13,11 +13,13 @@ export function Text({ size = 'md', tone = 'default', className, ...props }: Tex
 
 export interface HeadingProps extends ComponentPropsWithRef<'h2'> {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
+  /** Optional short ink underline, independent of the semantic level. @default 'none' */
+  decoration?: 'none' | 'underline';
 }
 /** Heading level is semantic and determines the rendered native element. */
-export function Heading({ level = 2, className, ...props }: HeadingProps) {
+export function Heading({ level = 2, decoration = 'none', className, ...props }: HeadingProps) {
   const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-  return <Tag {...props} className={cx(styles.heading, className)} />;
+  return <Tag {...props} className={cx(styles.heading, className)} data-decoration={decoration} />;
 }
 
 export interface LinkProps extends ComponentPropsWithRef<'a'> {

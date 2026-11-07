@@ -79,7 +79,7 @@ export default function TextareaAutoSize() {
 
 ### 受控内容与校验
 
-检查留言，查看输入长度与校验结果。
+输入时显示当前长度，检查留言后查看校验结果。
 
 [查看示例文件](../../playground/src/examples/new-forms/TextareaControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -114,7 +114,21 @@ export default function TextareaControlled() {
         }}
         required
         maxLength={200}
-        hint={`必填，已输入 ${message.length} / 200`}
+        hint={
+          <span style={{ display: 'flex', flexWrap: 'wrap', columnGap: 12, rowGap: 4 }}>
+            <span>必填</span>
+            <span
+              style={{
+                marginInlineStart: 'auto',
+                flexShrink: 0,
+                whiteSpace: 'nowrap',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              已输入 {message.length} / 200
+            </span>
+          </span>
+        }
         error={error}
       />
       <Button type="submit">检查留言</Button>
@@ -276,7 +290,7 @@ export default function TextareaCommentDraft() {
 | 属性                                           | 说明                                                                                                    | 类型                                                | 默认值          |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | --------------- |
 | `label` **必填**                               | 可见标签，自动关联 textarea。                                                                           | `ReactNode`                                         | —               |
-| `hint / error`                                 | 辅助和错误说明，与 aria-describedby 合并；error 设置 aria-invalid。                                     | `ReactNode`                                         | —               |
+| `hint / error`                                 | 辅助和错误说明，与 aria-describedby 合并；error 设置 aria-invalid，并在错误文字前显示提醒标记。         | `ReactNode`                                         | —               |
 | `rows`                                         | 原生可见行数。                                                                                          | `number`                                            | `4`             |
 | `autoSize`                                     | 按内容自动调整高度，可限制行数；true 或空对象以 rows 为最小值，无最大值。                               | `boolean \| { minRows?: number; maxRows?: number }` | `false`         |
 | `value / defaultValue`                         | 沿用 React textarea 原生值类型；受控模式搭配 onChange。通常使用 string。                                | `string \| readonly string[] \| number`             | —               |
@@ -293,7 +307,7 @@ export default function TextareaCommentDraft() {
 ## 可访问性与键盘
 
 - label 自动关联 textarea，点击标签或按 Tab 聚焦；保留原生的文字选择、复制和多行编辑行为。Enter 插入换行。
-- placeholder 只提供补充示例，标签应保持可见。自定义校验失败时，用 error 说明如何修正，并可通过 ref 聚焦输入区域；错误的设置与清除由调用方处理。
+- placeholder 只提供补充示例，标签应保持可见。自定义校验失败时，用 error 说明如何修正，并可通过 ref 聚焦输入区域；提醒标记辅助识别错误，不单独播报，错误的设置与清除由调用方处理。
 
 <a id="limits"></a>
 

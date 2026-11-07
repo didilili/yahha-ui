@@ -191,7 +191,7 @@ export default function SurfaceCover() {
 
 连续正文按阅读顺序排布，只在需要独立纸面时使用容器。完整用法见[阅读组合中的文末便笺](../README.md#站内指南)。
 
-paper 保留默认白纸；note 使用轻底便笺与一处纸角，字阶、轮廓和 24px 内边距保持。 封面示例通过公开 style 将 Surface 的 padding 设为 0，由内部内容区安排桌面 24px、窄屏 16px 留白；标题链接独立导航，图片区域保留 16:9 比例。
+paper 保留默认白纸；note 使用轻底便笺与一处纸角，字阶、轮廓和 24px 内边距保持。纸角跟随文字方向镜像，支持继承的 dir 与 style.direction。 封面示例通过公开 style 将 Surface 的 padding 设为 0，由内部内容区安排桌面 24px、窄屏 16px 留白；标题链接独立导航，图片区域保留 16:9 比例。
 
 <a id="api"></a>
 

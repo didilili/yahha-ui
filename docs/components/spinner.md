@@ -24,9 +24,9 @@ import { Spinner } from 'yahha-ui';
 
 <a id="spinner-sizes"></a>
 
-### 尺寸对照
+### 样式与尺寸
 
-对比小号、中号和大号等待标记。
+对比默认三墨点与可选小花饼的三档尺寸。
 
 [查看示例文件](../../playground/src/examples/content/SpinnerExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -38,26 +38,29 @@ import { Spinner, Text } from 'yahha-ui';
 export default function SpinnerExample() {
   return (
     <div style={{ display: 'grid', gap: 24 }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'end', gap: 24 }}>
-        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
-          <Spinner size="sm" label="小号示例正在加载" />
+      {(['dots', 'biscuit'] as const).map((variant) => (
+        <div key={variant} style={{ display: 'grid', gap: 12 }}>
           <Text size="sm" tone="muted">
-            小号 sm
+            {variant === 'dots' ? '三墨点（默认）' : '小花饼'}
           </Text>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'end', gap: 24 }}>
+            {(
+              [
+                { size: 'sm', label: '小号 sm' },
+                { size: 'md', label: '中号 md（默认）' },
+                { size: 'lg', label: '大号 lg' },
+              ] as const
+            ).map(({ size, label }) => (
+              <div key={size} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+                <Spinner variant={variant} size={size} label={`${label}示例正在加载`} />
+                <Text size="sm" tone="muted">
+                  {label}
+                </Text>
+              </div>
+            ))}
+          </div>
         </div>
-        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
-          <Spinner label="中号示例正在加载" />
-          <Text size="sm" tone="muted">
-            中号 md（默认）
-          </Text>
-        </div>
-        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
-          <Spinner size="lg" label="大号示例正在加载" />
-          <Text size="sm" tone="muted">
-            大号 lg
-          </Text>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
@@ -103,7 +106,7 @@ export default function SpinnerWaiting() {
 
 ## 等待标记与可见说明
 
-区块等待应配合可见文字说明正在加载什么。三枚墨点仅表示等待，不表达完成百分比；减少动效时保持静止，等待信息仍由文字传达。
+区块等待应配合可见文字说明正在加载什么。默认三墨点与可选小花饼均只表示等待，不表达完成百分比；减少动效时保持静止，等待信息仍由文字传达。
 
 <a id="api"></a>
 
@@ -115,6 +118,7 @@ export default function SpinnerWaiting() {
 | --------------------- | ----------------------------------------------------------- | ------------------------------------------------- | ---------- |
 | `label`               | 在 status 内提供的屏幕阅读器文字。                          | `string`                                          | `加载中`   |
 | `size`                | 默认 16 / 24 / 36px。                                       | `'sm' \| 'md' \| 'lg'`                            | `'md'`     |
+| `variant`             | 默认三墨点或可选小花饼，仅切换等待图形。                    | `'dots' \| 'biscuit'`                             | `'dots'`   |
 | `role`                | 原生角色，通常保留 status。                                 | `AriaRole`                                        | `'status'` |
 | `className / style`   | 作用于根 span。                                             | `string / CSSProperties`                          | —          |
 | `ref`                 | 指向根 span。                                               | `Ref<HTMLSpanElement>`                            | —          |

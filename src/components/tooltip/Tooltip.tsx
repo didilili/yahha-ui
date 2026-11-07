@@ -26,7 +26,9 @@ export interface TooltipProps extends Pick<
   side?: BaseTooltip.Positioner.Props['side'];
   /** @default 'center' */
   align?: BaseTooltip.Positioner.Props['align'];
-  /** Popup border distance, leaving room for the arrow and trigger focus ring. @default 12 */
+  /** Shows the directional arrow without changing tooltip behavior. @default true */
+  showArrow?: boolean;
+  /** Popup border distance, independent of showArrow. @default 12 */
   sideOffset?: number;
   portalContainer?: BaseTooltip.Portal.Props['container'];
 }
@@ -41,6 +43,7 @@ export function Tooltip({
   delay = 400,
   side = 'top',
   align = 'center',
+  showArrow = true,
   sideOffset = 12,
   portalContainer,
   className,
@@ -67,13 +70,13 @@ export function Tooltip({
                 align={align}
                 sideOffset={sideOffset}
                 collisionPadding={12}
-                arrowPadding={20}
+                arrowPadding={28}
                 className={styles.positioner}
               >
                 <BaseTooltip.Popup ref={ref} className={cx(styles.popup, className)} style={style}>
                   {content}
                 </BaseTooltip.Popup>
-                <BaseTooltip.Arrow dir={direction} className={styles.arrow} />
+                {showArrow && <BaseTooltip.Arrow dir={direction} className={styles.arrow} />}
               </BaseTooltip.Positioner>
             </PortalTheme>
           </BaseTooltip.Portal>

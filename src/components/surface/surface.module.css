@@ -21,10 +21,10 @@
   position: absolute;
   inset-block-start: 12px;
   inset-inline-end: 16px;
-  inline-size: 12px;
-  block-size: 12px;
-  background: var(--yahha-accent, #ffc3d9);
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  inline-size: 0;
+  block-size: 0;
+  border-block-start: 12px solid var(--yahha-accent, #ffc3d9);
+  border-inline-start: 12px solid transparent;
   pointer-events: none;
 }
 

@@ -1,5 +1,6 @@
 import { useId, type ComponentPropsWithRef, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.js';
+import { WarningIcon } from '../icon/glyphs/WarningIcon.js';
 import styles from './text-field.module.css';
 
 /** Native props, including style and ref, target the input; explicit direction also aligns the slots. */
@@ -84,6 +85,7 @@ export function TextField({
       )}
       {hasError && (
         <div className={cx(styles.error, classNames?.error)} id={errorId}>
+          <WarningIcon size={16} className={styles.errorMark} />
           {error}
         </div>
       )}

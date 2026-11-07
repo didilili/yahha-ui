@@ -11,7 +11,14 @@
   box-sizing: border-box;
   padding-block: max(0px, calc((var(--yahha-control-height, 44px) - 22px) / 2));
   padding-inline: var(--yahha-space-1, 4px);
+  border-radius: var(--yahha-radius-option, 8px 12px 9px 7px);
   cursor: pointer;
+  transition: background-color var(--yahha-duration-fast, 150ms) var(--yahha-ease, ease);
+}
+.label[data-highlight-selected='true']:has(
+    > .input:enabled:is(:checked, :indeterminate, [aria-checked='mixed'])
+  ) {
+  background: var(--yahha-accent-soft, #fff0f6);
 }
 .input {
   box-sizing: border-box;
@@ -111,6 +118,7 @@
 }
 .label:has(.input:disabled) {
   cursor: not-allowed;
+  transition: none;
 }
 .input:disabled + .text {
   color: var(--yahha-muted, #7a5c6d);
@@ -124,7 +132,19 @@
 .hint {
   color: var(--yahha-muted, #7a5c6d);
 }
+.hint + .error {
+  margin-block-start: var(--yahha-space-1, 4px);
+}
+.errorMark {
+  position: absolute;
+  inset-inline-start: calc(var(--yahha-space-1, 4px) + 22px + var(--yahha-space-3, 12px));
+  inset-block-start: calc((1em * var(--yahha-leading-caption, 1.6) - 16px) / 2);
+}
 .error {
+  position: relative;
+  padding-inline-start: calc(
+    var(--yahha-space-1, 4px) + 22px + var(--yahha-space-3, 12px) + var(--yahha-space-5, 20px)
+  );
   color: var(--yahha-error, #a33e4f);
 }
 @media (hover: hover) and (pointer: fine) {
@@ -139,6 +159,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .label,
   .input,
   .input::before,
   .input::after {
@@ -146,6 +167,9 @@
   }
 }
 @media (forced-colors: active) {
+  .label {
+    transition: none;
+  }
   .input {
     appearance: auto;
     transition: none;

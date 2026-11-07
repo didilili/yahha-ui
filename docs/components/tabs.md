@@ -65,6 +65,53 @@ export default function TabsBasic() {
 }
 ```
 
+<a id="appearance"></a>
+
+### 普通与墨线
+
+普通标签保留直线选中标记；ink 增加倾斜墨线与选中纸面。
+
+[查看示例文件](../../playground/src/examples/navigation/TabsAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/TabsAppearance.tsx -->
+
+```tsx
+import { Tabs, Text } from 'yahha-ui';
+
+const items = [
+  { value: 'notes', label: '日常随笔', content: '走到桥边才发现，手里还攥着面包店的小票。' },
+  { value: 'photos', label: '窗边相册', content: '雨停之后，书页上落着一小片阳光。' },
+];
+
+export default function TabsAppearance() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+        gap: 24,
+      }}
+    >
+      {(['default', 'ink'] as const).map((appearance) => (
+        <div
+          key={appearance}
+          style={{ display: 'grid', alignContent: 'start', gap: 12, minWidth: 0 }}
+        >
+          <Text size="sm" tone="muted">
+            {appearance === 'default' ? '普通（默认）' : '墨线'}
+          </Text>
+          <Tabs
+            appearance={appearance}
+            label={appearance === 'default' ? '普通栏目' : '墨线栏目'}
+            items={items}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="controlled-value"></a>
 
 ### 受控切换
@@ -146,6 +193,146 @@ export default function TabsStates() {
 ## 进阶用法
 
 明信片例保持输入非受控，预览展示当前草稿原文；再次修改后切换预览会更新内容。 预览正文不重复播报，草稿只在当前示例，不发送或持久保存。
+
+<a id="counts"></a>
+
+### 标签数量与列表同步
+
+归档清单中的手记，数量标记与两个面板同步更新。
+
+[查看示例文件](../../playground/src/examples/navigation/TabsCounts.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/TabsCounts.tsx -->
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import { Badge, Button, Heading, Tabs, Text } from 'yahha-ui';
+
+const initialNotes = [
+  { id: 'rain', title: '雨天的读书笔记' },
+  { id: 'walk', title: '周末散步的小发现' },
+  { id: 'window', title: '窗边的植物记录' },
+];
+
+export default function TabsCounts() {
+  const [archivedIds, setArchivedIds] = useState<string[]>([]);
+  const [message, setMessage] = useState('');
+  const buttons = useRef(new Map<string, HTMLButtonElement>());
+  const pendingHeading = useRef<HTMLHeadingElement>(null);
+  const pendingFocus = useRef<{ id?: string } | null>(null);
+  const pendingNotes = initialNotes.filter((note) => !archivedIds.includes(note.id));
+  const archivedNotes = initialNotes.filter((note) => archivedIds.includes(note.id));
+
+  useEffect(() => {
+    const destination = pendingFocus.current;
+    if (!destination) return;
+    pendingFocus.current = null;
+    if (document.activeElement === document.body) {
+      (destination.id ? buttons.current.get(destination.id) : pendingHeading.current)?.focus();
+    }
+  }, [archivedIds]);
+
+  function archive(id: string, button: HTMLButtonElement) {
+    const index = pendingNotes.findIndex((note) => note.id === id);
+    const remaining = pendingNotes.filter((note) => note.id !== id);
+    if (document.activeElement === button) {
+      pendingFocus.current = { id: (remaining[index] ?? remaining[index - 1])?.id };
+    }
+    setArchivedIds((current) => [...current, id]);
+    setMessage(`已归档《${initialNotes.find((note) => note.id === id)?.title}》。`);
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+      <Tabs
+        label="手记整理"
+        items={[
+          {
+            value: 'pending',
+            label: (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                待整理 <Badge>{pendingNotes.length}</Badge>
+              </span>
+            ),
+            content: (
+              <div style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+                {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+                <Heading level={3} ref={pendingHeading} tabIndex={-1}>
+                  待整理手记
+                </Heading>
+                {pendingNotes.length === 0 ? (
+                  <Text tone="muted">当前清单已整理完。</Text>
+                ) : (
+                  <ul
+                    style={{ display: 'grid', gap: 12, padding: 0, margin: 0, listStyle: 'none' }}
+                  >
+                    {pendingNotes.map((note) => (
+                      <li
+                        key={note.id}
+                        style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}
+                      >
+                        <Text style={{ flex: '1 1 140px', margin: 0 }}>{note.title}</Text>
+                        <Button
+                          ref={(node) => {
+                            if (node) buttons.current.set(note.id, node);
+                            else buttons.current.delete(note.id);
+                          }}
+                          variant="secondary"
+                          aria-label={`归档《${note.title}》`}
+                          onClick={(event) => archive(note.id, event.currentTarget)}
+                        >
+                          归档
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ),
+          },
+          {
+            value: 'archived',
+            label: (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                已归档 <Badge tone="success">{archivedNotes.length}</Badge>
+              </span>
+            ),
+            content: (
+              <div style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+                <Heading level={3}>已归档手记</Heading>
+                {archivedNotes.length === 0 ? (
+                  <Text tone="muted">还没有归档的手记。</Text>
+                ) : (
+                  <ul style={{ margin: 0, paddingInlineStart: 24 }}>
+                    {archivedNotes.map((note) => (
+                      <li key={note.id}>{note.title}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ),
+          },
+        ]}
+      />
+      <Button
+        variant="ghost"
+        style={{ justifySelf: 'start' }}
+        onClick={() => {
+          setArchivedIds([]);
+          setMessage('已恢复示例清单。');
+        }}
+      >
+        恢复示例清单
+      </Button>
+      {message && (
+        <Text size="sm" tone="muted" role="status">
+          {message}
+        </Text>
+      )}
+    </div>
+  );
+}
+```
 
 <a id="controlled"></a>
 
@@ -254,6 +441,7 @@ export default function TabsControlled() {
 
 | 属性                      | 说明                                                                      | 类型                                              | 默认值       |
 | ------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------- | ------------ |
+| `appearance`              | 普通直线选中标记，或倾斜墨线与选中纸面；不改变选择和键盘行为。            | `'default' \| 'ink'`                              | `'default'`  |
 | `label` **必填**          | 标签列表 tablist 的可访问名称。                                           | `string`                                          | —            |
 | `items` **必填**          | 标签及其对应内容面板。value 组内唯一。                                    | `TabItem[]`                                       | —            |
 | `value`                   | 受控选中值；null 不选中任何面板。                                         | `string \| null`                                  | —            |

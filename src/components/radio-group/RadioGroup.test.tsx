@@ -7,6 +7,44 @@ import { RadioGroup } from './RadioGroup.js';
 afterEach(cleanup);
 
 describe('RadioGroup', () => {
+  it('opts into row highlighting without changing native radio selection or submitted values', async () => {
+    const user = userEvent.setup();
+    function Example({ highlightSelected }: { highlightSelected?: boolean }) {
+      const [value, setValue] = useState('weekly');
+      return (
+        <form aria-label="订阅">
+          <RadioGroup
+            label="频率"
+            name="frequency"
+            value={value}
+            onValueChange={setValue}
+            highlightSelected={highlightSelected}
+            options={[
+              { value: 'weekly', label: '每周' },
+              { value: 'daily', label: '每天', disabled: true },
+              { value: 'monthly', label: '每月' },
+            ]}
+          />
+        </form>
+      );
+    }
+    const { rerender } = render(<Example />);
+    const group = screen.getByRole('group', { name: '频率' });
+    expect(group.hasAttribute('data-highlight-selected')).toBe(false);
+    rerender(<Example highlightSelected />);
+    expect(group.getAttribute('data-highlight-selected')).toBe('true');
+    expect(group.hasAttribute('highlightselected')).toBe(false);
+    await user.click(screen.getByText('每天'));
+    expect((screen.getByRole('radio', { name: '每周' }) as HTMLInputElement).checked).toBe(true);
+    await user.click(screen.getByText('每月'));
+    expect(new FormData(screen.getByRole('form') as HTMLFormElement).get('frequency')).toBe(
+      'monthly',
+    );
+    rerender(<Example highlightSelected={false} />);
+    expect(group.hasAttribute('data-highlight-selected')).toBe(false);
+    expect((screen.getByRole('radio', { name: '每月' }) as HTMLInputElement).checked).toBe(true);
+  });
+
   it('associates a visible legend and descriptions, submits a controlled value and skips disabled options', async () => {
     const user = userEvent.setup();
     const ref = createRef<HTMLFieldSetElement>();

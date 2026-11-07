@@ -8,6 +8,144 @@ import { IconButton } from './IconButton.js';
 afterEach(cleanup);
 
 describe('Button', () => {
+  it.each([false, true])(
+    'defaults to dots and opts into biscuit loading with leading slot=%s without changing actions',
+    async (withIcon) => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+      const view = (loading: boolean, loadingVariant?: 'dots' | 'biscuit') => (
+        <Button
+          appearance="soft"
+          loading={loading}
+          loadingVariant={loadingVariant}
+          startIcon={withIcon ? <svg data-testid="leading-icon" /> : undefined}
+          onClick={onClick}
+        >
+          保存草稿
+        </Button>
+      );
+      const { rerender } = render(view(true));
+      const button = screen.getByRole('button', { name: '保存草稿' });
+      expect(button.querySelector('[data-loading-mark="biscuit"]')).toBeNull();
+      expect(button.getAttribute('aria-busy')).toBe('true');
+      expect(button.hasAttribute('disabled')).toBe(true);
+      rerender(view(true, 'biscuit'));
+      expect(button.querySelector('[data-loading-mark="biscuit"] svg')).toBeTruthy();
+      expect(button.hasAttribute('loadingvariant')).toBe(false);
+      expect(button.getAttribute('data-appearance')).toBe('soft');
+      expect(Boolean(screen.queryByTestId('leading-icon'))).toBe(withIcon);
+      await user.click(button);
+      expect(onClick).not.toHaveBeenCalled();
+      rerender(view(false, 'biscuit'));
+      expect(button.querySelector('[data-loading-mark="biscuit"]')).toBeNull();
+      await user.click(button);
+      expect(onClick).toHaveBeenCalledTimes(1);
+    },
+  );
+
+  it('inherits the loading choice in IconButton without coupling it to soft appearance', () => {
+    const view = (loadingVariant?: 'dots' | 'biscuit') => (
+      <IconButton aria-label="收藏文章" loading loadingVariant={loadingVariant}>
+        <svg data-testid="action-glyph" />
+      </IconButton>
+    );
+    const { rerender } = render(view());
+    const button = screen.getByRole('button', { name: '收藏文章' });
+    expect(button.querySelector('[data-loading-mark="biscuit"]')).toBeNull();
+    expect(screen.queryByTestId('action-glyph')).toBeNull();
+    rerender(view('biscuit'));
+    expect(button.querySelector('[data-loading-mark="biscuit"] svg')).toBeTruthy();
+    expect(button.hasAttribute('loadingvariant')).toBe(false);
+    expect(button.hasAttribute('data-appearance')).toBe(false);
+    expect(button.hasAttribute('disabled')).toBe(true);
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    rerender(view('dots'));
+    expect(button.querySelector('[data-loading-mark="biscuit"]')).toBeNull();
+  });
+
+  it.each(['default', 'soft'] as const)(
+    'keeps the %s appearance named and connected to its native form action',
+    async (appearance) => {
+      const user = userEvent.setup();
+      const ref = createRef<HTMLButtonElement>();
+      const submit = vi.fn((event: React.FormEvent<HTMLFormElement>) => event.preventDefault());
+      render(
+        <form onSubmit={submit}>
+          <Button ref={ref} appearance={appearance} type="submit" name="save" value="draft">
+            保存草稿
+          </Button>
+        </form>,
+      );
+      const button = screen.getByRole('button', { name: '保存草稿' });
+      expect(ref.current).toBe(button);
+      expect(button.hasAttribute('appearance')).toBe(false);
+      expect(screen.queryByRole('img')).toBeNull();
+      await user.tab();
+      await user.keyboard('{Enter}');
+      expect(submit).toHaveBeenCalledTimes(1);
+      expect([...new FormData(button.closest('form')!, button as HTMLButtonElement)]).toEqual([
+        ['save', 'draft'],
+      ]);
+    },
+  );
+
+  it('keeps soft button icons, selection and loading guards independent', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const view = (loading: boolean) => (
+      <Button
+        appearance="soft"
+        variant="secondary"
+        aria-pressed
+        loading={loading}
+        onClick={onClick}
+        startIcon={<svg data-testid="action-icon" aria-hidden="true" />}
+      >
+        收藏文章
+      </Button>
+    );
+    const { rerender } = render(view(false));
+    const button = screen.getByRole('button', { name: '收藏文章' });
+    await user.tab();
+    await user.keyboard(' ');
+    expect(onClick).toHaveBeenCalledTimes(1);
+    rerender(view(true));
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    expect(screen.getByTestId('action-icon')).toBeTruthy();
+    await user.click(button);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps a soft IconButton named and replaces its action glyph only while loading', async () => {
+    const user = userEvent.setup();
+    const ref = createRef<HTMLButtonElement>();
+    const onClick = vi.fn();
+    const view = (loading = false) => (
+      <IconButton
+        ref={ref}
+        appearance="soft"
+        aria-label="收藏文章"
+        loading={loading}
+        onClick={onClick}
+      >
+        <svg data-testid="bookmark-icon" aria-hidden="true" />
+      </IconButton>
+    );
+    const { rerender } = render(view());
+    const button = screen.getByRole('button', { name: '收藏文章' });
+    expect(ref.current).toBe(button);
+    expect(screen.getByTestId('bookmark-icon')).toBeTruthy();
+    await user.tab();
+    await user.keyboard('{Enter}');
+    expect(onClick).toHaveBeenCalledTimes(1);
+    rerender(view(true));
+    expect(screen.queryByTestId('bookmark-icon')).toBeNull();
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    await user.click(button);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
   it.each(['primary', 'secondary', 'ghost'] as const)(
     'keeps destructive %s actions native, explicitly opt-in and independent of emphasis',
     async (variant) => {

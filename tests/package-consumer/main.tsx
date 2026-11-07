@@ -22,6 +22,8 @@ import { DesignContract } from './DesignContract.js';
 import { OverlayLifecycle } from './OverlayLifecycle.js';
 import { ThemeAliases } from './ThemeAliases.js';
 import { Icons } from './Icons.js';
+import { ProgressConsumer } from './Progress.js';
+import { OptionalDecorations } from './OptionalDecorations.js';
 
 function Consumer() {
   const [theme, setTheme] = useState<ThemeName>('pink');
@@ -174,7 +176,11 @@ function Consumer() {
 }
 
 createRoot(document.getElementById('root')!).render(
-  new URLSearchParams(location.search).has('icons') ? (
+  new URLSearchParams(location.search).has('optional-decorations') ? (
+    <OptionalDecorations />
+  ) : new URLSearchParams(location.search).has('progress') ? (
+    <ProgressConsumer />
+  ) : new URLSearchParams(location.search).has('icons') ? (
     <Icons />
   ) : new URLSearchParams(location.search).has('theme-aliases') ? (
     <ThemeAliases />

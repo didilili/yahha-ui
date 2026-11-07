@@ -144,14 +144,14 @@ export default function SkeletonExample() {
 
 ### SkeletonProps
 
-| 属性                  | 说明                                                                                     | 类型                                              | 默认值   |
-| --------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------- | -------- |
-| `variant`             | 文本行、矩形或圆形。                                                                     | `'text' \| 'rect' \| 'circle'`                    | `'text'` |
-| `width / height`      | 文本默认 100% × 1em，矩形默认 100% × 100px，圆形默认 44 × 44px；style 中的同名属性优先。 | `CSSProperties 尺寸`                              | —        |
-| `aria-hidden`         | 固定隐藏于辅助技术，不能通过同名属性覆盖。                                               | `true`                                            | `true`   |
-| `className / style`   | 作用于根 span。                                                                          | `string / CSSProperties`                          | —        |
-| `ref`                 | 指向根 span。                                                                            | `Ref<HTMLSpanElement>`                            | —        |
-| `其他原生属性 / 事件` | 事件、data-\* 等作用于根 span；不接收 children。                                         | `Omit<ComponentPropsWithRef<"span">, "children">` | —        |
+| 属性                  | 说明                                                                                                                                                                       | 类型                                              | 默认值   |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------- |
+| `variant`             | 文本行、矩形或圆形。                                                                                                                                                       | `'text' \| 'rect' \| 'circle'`                    | `'text'` |
+| `width / height`      | 文本默认 100% × 1em，矩形默认 100% × 100px。未指定尺寸的圆形默认 44 × 44px，在窄容器内等比缩小；指定 width、height 或 style 尺寸时沿用自定义尺寸，style 中的同名属性优先。 | `CSSProperties 尺寸`                              | —        |
+| `aria-hidden`         | 固定隐藏于辅助技术，不能通过同名属性覆盖。                                                                                                                                 | `true`                                            | `true`   |
+| `className / style`   | 作用于根 span。                                                                                                                                                            | `string / CSSProperties`                          | —        |
+| `ref`                 | 指向根 span。                                                                                                                                                              | `Ref<HTMLSpanElement>`                            | —        |
+| `其他原生属性 / 事件` | 事件、data-\* 等作用于根 span；不接收 children。                                                                                                                           | `Omit<ComponentPropsWithRef<"span">, "children">` | —        |
 
 <a id="behavior"></a>
 

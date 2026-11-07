@@ -80,12 +80,37 @@ export default function DialogForm() {
         initialFocus={inputRef}
         footer={
           <>
-            <Button variant="secondary" onClick={() => changeOpen(false)}>
-              取消
+            <Button
+              ref={continueRef}
+              variant="secondary"
+              onClick={() => {
+                if (confirming) {
+                  cancelPendingFocus();
+                  setConfirming(false);
+                  inputRef.current?.focus();
+                } else changeOpen(false);
+              }}
+            >
+              {confirming ? '继续编辑' : '取消'}
             </Button>
             <Button type="submit" form={formId}>
               保存标题
             </Button>
+            {confirming && (
+              <Button
+                variant="ghost"
+                destructive
+                onClick={() => {
+                  cancelPendingFocus();
+                  setDraft(saved);
+                  setConfirming(false);
+                  setError('');
+                  setOpen(false);
+                }}
+              >
+                放弃修改并关闭
+              </Button>
+            )}
           </>
         }
       >
@@ -112,35 +137,10 @@ export default function DialogForm() {
           />
         </form>
         {confirming && (
-          <div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
+          <div style={{ marginTop: 16 }}>
             <Alert role="alert" tone="warning" title="还有未保存的修改">
               你可以继续编辑或保存，也可以放弃这次修改并关闭。
             </Alert>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              <Button
-                ref={continueRef}
-                variant="secondary"
-                onClick={() => {
-                  cancelPendingFocus();
-                  setConfirming(false);
-                  inputRef.current?.focus();
-                }}
-              >
-                继续编辑
-              </Button>
-              <Button
-                destructive
-                onClick={() => {
-                  cancelPendingFocus();
-                  setDraft(saved);
-                  setConfirming(false);
-                  setError('');
-                  setOpen(false);
-                }}
-              >
-                放弃修改并关闭
-              </Button>
-            </div>
           </div>
         )}
       </Dialog>

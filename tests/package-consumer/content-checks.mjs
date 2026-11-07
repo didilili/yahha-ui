@@ -1,7 +1,70 @@
 import assert from 'node:assert/strict';
 
+/** An automatic ratio has no reserved height: failure copy must stay in normal flow. */
+export async function verifyAutoRatioFallback(page) {
+  const host = page.getByTestId('content-auto-image');
+  const fallback = host.getByRole('img', { name: 'Content auto cover', exact: true });
+  await fallback.waitFor({ state: 'attached' });
+  const geometry = await fallback.evaluate((node) => {
+    const host = node.closest('[data-testid="content-auto-image"]');
+    const frame = node.parentElement;
+    const bounds = node.getBoundingClientRect();
+    const hostBounds = host.getBoundingClientRect();
+    const frameBounds = frame.getBoundingClientRect();
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    const lines = [];
+    for (let text = walker.nextNode(); text; text = walker.nextNode()) {
+      if (!text.textContent.trim()) continue;
+      const range = document.createRange();
+      range.selectNodeContents(text);
+      lines.push(...range.getClientRects());
+    }
+    return {
+      hostWidth: hostBounds.width,
+      hostHeight: hostBounds.height,
+      frameHeight: frameBounds.height,
+      fallbackHeight: bounds.height,
+      copyFits:
+        lines.length > 0 &&
+        lines.every(
+          (line) =>
+            line.top >= bounds.top - 1 &&
+            line.bottom <= bounds.bottom + 1 &&
+            line.left >= bounds.left - 1 &&
+            line.right <= bounds.right + 1,
+        ),
+      scrolls: node.scrollHeight > node.clientHeight + 1,
+      tabIndex: node.tabIndex,
+    };
+  });
+  assert(
+    geometry.hostWidth > 0 && geometry.hostWidth <= 160,
+    'The automatic-ratio cover fits its 160px host.',
+  );
+  for (const part of ['hostHeight', 'frameHeight', 'fallbackHeight']) {
+    assert(geometry[part] >= 100, `${part}: an automatic ratio must not collapse the failure.`);
+  }
+  assert(
+    geometry.frameHeight > 100,
+    'A long automatic-ratio explanation grows beyond the minimum fallback height.',
+  );
+  assert(
+    Math.abs(geometry.hostHeight - geometry.frameHeight) < 1,
+    'The automatic-ratio fallback participates in its host layout.',
+  );
+  assert(geometry.copyFits, 'Every line of automatic-ratio failure copy remains visible.');
+  assert.equal(
+    geometry.scrolls,
+    false,
+    'Natural failure copy grows instead of requiring scrolling.',
+  );
+  assert.equal(geometry.tabIndex, -1, 'Visible natural failure copy adds no scrolling tab stop.');
+  return geometry;
+}
+
 /** Content fixtures use the installed package, with no component-style overrides. */
 export async function verifyContentResources(page) {
+  await verifyAutoRatioFallback(page);
   for (const [size, pixels] of [
     ['sm', 32],
     ['md', 44],

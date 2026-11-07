@@ -18,6 +18,29 @@ const directionItems = ['A', 'B', 'C'].map((label) => ({
 }));
 
 describe('Tabs', () => {
+  it('keeps selection, focus, panel state and root ref when ink appearance changes', async () => {
+    const user = userEvent.setup();
+    const ref = createRef<HTMLDivElement>();
+    const formItems = [
+      { value: 'edit', label: '编辑', content: <input aria-label="草稿" /> },
+      { value: 'preview', label: '预览', content: '预览内容' },
+    ];
+    const { rerender } = render(<Tabs ref={ref} label="手记" keepMounted items={formItems} />);
+    const root = ref.current;
+    expect(root?.getAttribute('data-appearance')).toBe('default');
+    await user.type(screen.getByRole('textbox'), '保留草稿');
+    const preview = screen.getByRole('tab', { name: '预览' });
+    await user.click(preview);
+    rerender(<Tabs ref={ref} label="手记" keepMounted appearance="ink" items={formItems} />);
+    expect(ref.current).toBe(root);
+    expect(root?.getAttribute('data-appearance')).toBe('ink');
+    expect(root?.hasAttribute('appearance')).toBe(false);
+    expect(document.activeElement).toBe(preview);
+    expect(preview.getAttribute('aria-selected')).toBe('true');
+    await user.keyboard('{ArrowLeft}{Enter}');
+    expect((screen.getByRole('textbox') as HTMLInputElement).value).toBe('保留草稿');
+  });
+
   it.each([false, true])(
     'follows stable child slot reassignment and new ancestors with activateOnFocus=%s',
     async (activateOnFocus) => {

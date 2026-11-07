@@ -1,5 +1,6 @@
 import { useId, type ComponentPropsWithRef, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.js';
+import { WarningIcon } from '../icon/glyphs/WarningIcon.js';
 import styles from './radio-group.module.css';
 
 export interface RadioOption<T extends string> {
@@ -20,6 +21,8 @@ export interface RadioGroupProps<T extends string> extends Omit<
   hint?: ReactNode;
   error?: ReactNode;
   required?: boolean;
+  /** Adds a paper tint and inset edge to enabled selected rows. @default false */
+  highlightSelected?: boolean;
   classNames?: {
     legend?: string;
     options?: string;
@@ -43,6 +46,7 @@ export function RadioGroup<T extends string>({
   name,
   form,
   required,
+  highlightSelected = false,
   disabled,
   className,
   classNames,
@@ -65,6 +69,7 @@ export function RadioGroup<T extends string>({
       form={form}
       disabled={disabled}
       className={cx(styles.group, className)}
+      data-highlight-selected={highlightSelected || undefined}
       aria-describedby={describedBy}
       aria-invalid={hasError ? true : props['aria-invalid']}
     >
@@ -120,6 +125,7 @@ export function RadioGroup<T extends string>({
       )}
       {hasError && (
         <div id={errorId} className={cx(styles.error, classNames?.error)}>
+          <WarningIcon size={16} className={styles.errorMark} />
           {error}
         </div>
       )}

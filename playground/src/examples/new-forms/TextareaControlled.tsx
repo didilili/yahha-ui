@@ -26,7 +26,21 @@ export default function TextareaControlled() {
         }}
         required
         maxLength={200}
-        hint={`必填，已输入 ${message.length} / 200`}
+        hint={
+          <span style={{ display: 'flex', flexWrap: 'wrap', columnGap: 12, rowGap: 4 }}>
+            <span>必填</span>
+            <span
+              style={{
+                marginInlineStart: 'auto',
+                flexShrink: 0,
+                whiteSpace: 'nowrap',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              已输入 {message.length} / 200
+            </span>
+          </span>
+        }
         error={error}
       />
       <Button type="submit">检查留言</Button>

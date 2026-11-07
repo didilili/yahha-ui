@@ -1,3 +1,4 @@
+import { verifyProgress } from '../tests/package-consumer/progress-checks.mjs';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import {
@@ -13,7 +14,7 @@ import {
 } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { basename, join, resolve, sep } from 'node:path';
+import { basename, dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { verifyConsumer } from '../tests/package-consumer/browser.mjs';
@@ -33,6 +34,7 @@ import {
   verifyOverlays,
 } from '../tests/package-consumer/overlay-checks.mjs';
 import { verifyDesignContract } from '../tests/package-consumer/design-checks.mjs';
+import { verifyOptionalDecorations } from '../tests/package-consumer/optional-decoration-checks.mjs';
 import { createExampleEntry } from '../playground/src/docs/example-source.ts';
 import { markdownExamples } from './documentation-contract.mjs';
 import { startStaticServer } from './static-server.mjs';
@@ -44,6 +46,7 @@ const npmEntry = process.env.npm_execpath;
 assert(npmEntry, 'Run this acceptance script with npm run test:package.');
 const temporary = await realpath(await mkdtemp(join(tmpdir(), 'yahha-ui-consumer-')));
 const consumer = join(temporary, 'consumer');
+const keepConsumer = process.argv.includes('--keep-consumer');
 let browser;
 let server;
 
@@ -170,9 +173,19 @@ try {
         }
         for (const [, assetImport] of source
           .toString()
-          .matchAll(/from\s+['"](\.\/artwork\/[^'"]+)['"]/g)) {
+          .matchAll(/from\s+['"](\.\/(?:[^'"]+\/)?artwork\/[^'"]+)['"]/g)) {
           // Vite's ?no-inline keeps downloadable SVGs as files; it is not part of the filename.
           const asset = assetImport.split('?')[0];
+          // Root-level reading examples preserve their ./scenes/artwork imports too.
+          if (!asset.startsWith('./artwork/')) {
+            const target = resolve(setupDirectory, asset);
+            assert(
+              target.startsWith(`${setupDirectory}${sep}`),
+              'Artwork must remain inside the complete example.',
+            );
+            await mkdir(dirname(target), { recursive: true });
+            await cp(join(directory, asset), target);
+          }
           artworkCopies.push([
             join(directory, asset),
             join(siteDirectory, asset),
@@ -300,7 +313,10 @@ try {
   });
   const { chromium, firefox, webkit } = await import('playwright');
   const url = `${server.origin}/`;
-  if (process.argv.includes('--scrollbar-only')) {
+  if (process.argv.includes('--optional-decorations-only')) {
+    browser = await chromium.launch({ headless: true });
+    await verifyOptionalDecorations(browser, url);
+  } else if (process.argv.includes('--scrollbar-only')) {
     browser = await chromium.launch({ headless: true, ignoreDefaultArgs: ['--hide-scrollbars'] });
     await verifyDialogScrollbar(browser, url);
     await verifyFloatingScrollbars(browser, url);
@@ -334,14 +350,17 @@ try {
       await verifyReviewRegressions(browser, url);
       await verifyBasics(browser, url);
       await verifyIcons(browser, url);
+      await verifyProgress(browser, new URL('?progress', url).href);
       await verifyFeedback(browser, url);
     }
     await verifyDesignContract(browser, url);
+    await verifyOptionalDecorations(browser, url);
   }
   if (
     !process.argv.includes('--scrollbar-only') &&
     !process.argv.includes('--feedback-only') &&
     !process.argv.includes('--navigation-only') &&
+    !process.argv.includes('--optional-decorations-only') &&
     !process.argv.includes('--design-only')
   ) {
     await browser?.close();
@@ -350,17 +369,19 @@ try {
     await verifyFloatingScrollbars(browser, url);
   }
   console.log(
-    process.argv.includes('--scrollbar-only')
-      ? 'Package overlay scrollbars passed: independent install and visible native scrollbar interaction.'
-      : process.argv.includes('--feedback-only')
-        ? 'Package feedback passed: independent install, types, docs compilation, all themes and three browser engines.'
-        : process.argv.includes('--navigation-only')
-          ? 'Package navigation passed: independent install, types, docs compilation, all themes and three browser engines.'
-          : process.argv.includes('--overlays-only')
-            ? 'Package overlays passed: independent install, types, docs compilation, all themes and three browser engines.'
-            : process.argv.includes('--design-only')
-              ? 'Package design contract passed: independent install, types, docs compilation, dimensions, and forced colors.'
-              : 'Package consumer passed: independent install, types, docs, CSS, refs, keyboard, and edge cases.',
+    process.argv.includes('--optional-decorations-only')
+      ? 'Package optional decorations passed: independent install, types, all thirteen APIs, native behavior and computed CSS.'
+      : process.argv.includes('--scrollbar-only')
+        ? 'Package overlay scrollbars passed: independent install and visible native scrollbar interaction.'
+        : process.argv.includes('--feedback-only')
+          ? 'Package feedback passed: independent install, types, docs compilation, all themes and three browser engines.'
+          : process.argv.includes('--navigation-only')
+            ? 'Package navigation passed: independent install, types, docs compilation, all themes and three browser engines.'
+            : process.argv.includes('--overlays-only')
+              ? 'Package overlays passed: independent install, types, docs compilation, all themes and three browser engines.'
+              : process.argv.includes('--design-only')
+                ? 'Package design contract passed: independent install, types, docs compilation, dimensions, and forced colors.'
+                : 'Package consumer passed: independent install, types, docs, CSS, refs, keyboard, and edge cases.',
   );
 } finally {
   try {
@@ -369,7 +390,8 @@ try {
     try {
       await server?.close();
     } finally {
-      await rm(temporary, { recursive: true, force: true });
+      if (keepConsumer) console.log(`Retained installed package consumer: ${consumer}`);
+      else await rm(temporary, { recursive: true, force: true });
     }
   }
 }

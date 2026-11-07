@@ -24,7 +24,7 @@ import { Checkbox } from 'yahha-ui';
 
 ### 基础用法
 
-点击或按空格切换勾选。
+对比默认勾选与显式整行高亮，点击或按空格分别切换。
 
 [查看示例文件](../../playground/src/examples/new-forms/CheckboxBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -34,7 +34,18 @@ import { Checkbox } from 'yahha-ui';
 import { Checkbox } from 'yahha-ui';
 
 export default function CheckboxBasic() {
-  return <Checkbox label="接收每月阅读来信" />;
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span>默认</span>
+        <Checkbox label="接收每月阅读来信" defaultChecked />
+      </div>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span>可选整行高亮</span>
+        <Checkbox label="接收每月阅读来信" defaultChecked highlightSelected />
+      </div>
+    </div>
+  );
 }
 ```
 
@@ -713,6 +724,7 @@ export default function CheckboxReadingList() {
 
 ## 状态与表单
 
+- 默认通过方框内的勾或半选短横表达选择，整条标签可点击。显式设置 `highlightSelected` 后，已选和半选的可用标签行增加轻纸色；禁用项保留勾或短横，但取消活跃纸色。 错误说明带装饰性提醒标记，长文字换行齐文字起点，标记不单独命名或播报。
 - checked / onChange 用于受控状态，defaultChecked 设置非受控初始状态。原生变化事件通过 event.target.checked 读取是否勾选。
 - 设置 name 与 value 后，只有勾选且未禁用的项参与提交；同名多项使用 FormData.getAll 读取。非受控勾选随表单重置，受控勾选需在 onReset 中恢复。
 - indeterminate 表达部分选择，由调用方根据子项计算；它与 checked 独立，实际提交仍由 checked 决定，重置时也应同步父子状态。
@@ -734,6 +746,7 @@ export default function CheckboxReadingList() {
 | `checked / defaultChecked`           | 分别用于受控状态或非受控初始状态。                                                | `boolean`                                                 | `false（原生）`       |
 | `onChange`                           | 原生事件，从 event.target.checked 读取状态。                                      | `ChangeEventHandler<HTMLInputElement>`                    | —                     |
 | `indeterminate`                      | 受控半选状态，向辅助技术表达部分选择；不改变 checked 或提交值。                   | `boolean`                                                 | `false`               |
+| `highlightSelected`                  | 为可用的已选和半选标签行增加轻纸色；不改变勾选、焦点或表单值。                    | `boolean`                                                 | `false`               |
 | `name / value / form`                | 原生表单入口。仅勾选且未禁用时提交，通常传字符串 value。                          | `string / string \| number \| readonly string[] / string` | `value 为 on（原生）` |
 | `disabled / required`                | 原生禁用与必选；支持父 fieldset disabled。                                        | `boolean`                                                 | `false（原生）`       |
 | `className`                          | 根字段 div 的附加类名。                                                           | `string`                                                  | —                     |

@@ -75,6 +75,124 @@ export default function ButtonVariants() {
 }
 ```
 
+<a id="button-appearance"></a>
+
+### 常规与软团外观
+
+对比常规与软团外观，并展示软团外观的三档尺寸。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonAppearance.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonAppearance() {
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>常规</span>
+          <Button>打个招呼</Button>
+        </div>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>软团</span>
+          <Button appearance="soft">打个招呼</Button>
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        {(
+          [
+            ['sm', '小号'],
+            ['md', '中号'],
+            ['lg', '大号'],
+          ] as const
+        ).map(([size, label]) => (
+          <div key={size} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+            <span>
+              {label} {size}
+            </span>
+            <Button appearance="soft" size={size}>
+              打个招呼
+            </Button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="button-decorations"></a>
+
+### 软团操作与状态
+
+点击书签切换收藏，对比软团外观下的默认三墨点与显式小花饼加载；收藏仅保留在当前示例。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonSoftActions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonSoftActions.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { BookmarkIcon, Button, Text } from 'yahha-ui';
+
+export default function ButtonSoftActions() {
+  const [saved, setSaved] = useState(false);
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 24, width: '100%' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
+        <Button
+          appearance="soft"
+          variant="secondary"
+          startIcon={<BookmarkIcon filled={saved} />}
+          aria-pressed={saved}
+          onClick={() => setSaved((value) => !value)}
+        >
+          收藏文章
+        </Button>
+        <Text size="sm" tone="muted" role="status">
+          {saved ? '已收藏' : '尚未收藏'}
+        </Text>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>禁用</span>
+          <Button appearance="soft" disabled>
+            保存草稿
+          </Button>
+        </div>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>默认三墨点</span>
+          <Button appearance="soft" loading>
+            保存草稿
+          </Button>
+        </div>
+        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>可选小花饼</span>
+          <Button appearance="soft" loading loadingVariant="biscuit">
+            保存草稿
+          </Button>
+        </div>
+      </div>
+      <div style={{ display: 'grid', gap: 8, width: 'min(100%, 240px)' }}>
+        <span>长文案</span>
+        <Button
+          appearance="soft"
+          variant="secondary"
+          startIcon={<BookmarkIcon />}
+          style={{ width: '100%' }}
+        >
+          将这篇周末散步记录加入稍后阅读
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="button-destructive"></a>
 
 ### 危险操作
@@ -478,6 +596,10 @@ export default function ButtonForm() {
 
 ## 布局与定制
 
+不传 `appearance` 时使用常规外观。`appearance="soft"` 增加饱满轮廓、短高光和按压层次，可与三种强调程度组合。`startIcon` 和 `endIcon` 用于补充动作含义，例如用书签表示收藏；操作名称和结果文字始终保留。
+
+加载默认使用三墨点，设置 `loadingVariant="biscuit"` 可选择小花饼，与 `appearance` 独立。两种加载图形与前置图标使用相同的 16 / 18 / 20px 图框，与文字间隔 8px，两侧内边距保持不变。 已有 `startIcon` 时，加载图形替换原图标槽位，按钮宽度保持稳定；纯文字按钮加载时增加图标槽位和间距，宽度自然增长。
+
 `ghost` 在本库表示文字按钮，不是透明描边按钮。 删除等破坏性动作可设置 `destructive`，并用动作名称明确风险；它与`variant` 分开控制，不自动打开确认弹窗或执行删除。危险色使用既有错误语义色，[ThemeProvider](theme.md) 的 `tokens.error`也会影响危险按钮。
 
 全宽按钮可设置 `style={{ width: '100%' }}`，长名称会换行并撑高按钮。 具体写法见上方[尺寸、全宽与长文案](button.md#button-sizes)。
@@ -494,8 +616,10 @@ export default function ButtonForm() {
 | --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----------- |
 | `destructive`         | 用危险色表达删除等破坏性动作，与 variant 分开控制；不自动确认或执行删除。                | `boolean`                                 | `false`     |
 | `variant`             | 主要、次要或文字按钮。                                                                   | `'primary' \| 'secondary' \| 'ghost'`     | `'primary'` |
+| `appearance`          | 常规外观或软团外观，与 variant 的强调程度分开控制。                                      | `'default' \| 'soft'`                     | `'default'` |
 | `size`                | 最小高度依次为 36、44、52px；IconButton 对应为方形点击区域。                             | `'sm' \| 'md' \| 'lg'`                    | `'md'`      |
 | `loading`             | 显示加载图标并禁用按钮，设置 aria-busy。请求与完成状态由调用方管理。                     | `boolean`                                 | `false`     |
+| `loadingVariant`      | 加载图形，默认三墨点；biscuit 显式选择小花饼，与 appearance 分开控制。                   | `'dots' \| 'biscuit'`                     | `'dots'`    |
 | `startIcon / endIcon` | 装饰内容。加载时 spinner 替换 startIcon，endIcon 与 children 仍保留。                    | `ReactNode`                               | —           |
 | `children`            | 按钮内容。普通 Button 应包含可读的操作名称。                                             | `ReactNode`                               | —           |
 | `type`                | 原生按钮类型。提交表单时显式传入 submit。                                                | `'button' \| 'submit' \| 'reset'`         | `'button'`  |
@@ -512,7 +636,7 @@ export default function ButtonForm() {
 
 按 Tab 聚焦，Enter / Space 激活。切换操作用 aria-pressed 表达状态，并保持操作名称稳定， 例如用“收藏文章”同时表示收藏和取消收藏。
 
-disabled 或 loading 为真时都会设置原生 disabled，按钮不可聚焦、不可激活。loading 保留文案并设置 aria-busy；请求执行、加载结束和成功或失败提示由调用方处理，结果应在按钮之外清楚呈现。 系统启用减少动效时，按压位移和加载动画停止。
+disabled 或 loading 为真时都会设置原生 disabled，按钮不可聚焦、不可激活。loading 显示所选加载图形、保留文案并设置 aria-busy；请求执行、加载结束和成功或失败提示由调用方处理，结果应在按钮之外清楚呈现。 系统启用减少动效时，按压位移和加载动画停止。
 
 按钮进入原生禁用状态后，键盘焦点可能离开按钮；加载结束不会自动恢复焦点。 应由调用方按任务安排去向，例如失败后聚焦需要修正的字段，或在原操作仍需继续时返回按钮。 如果用户已转到其他位置，不要抢回焦点。结果文字应保留一份可访问的状态播报。
 

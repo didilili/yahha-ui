@@ -19,7 +19,92 @@ async function textFits(locator, label) {
   assert(geometry.blockFits, `${label}: the complete text block fits its reserved height.`);
 }
 
+export async function verifyToastMirroredSpacing(page, label) {
+  for (const tone of ['success', 'info', 'error']) {
+    const wrapper = page.getByTestId(`feedback-toast-${tone}`);
+    const originalDirection = await wrapper.getAttribute('dir');
+    const spacing = {};
+    try {
+      for (const direction of ['ltr', 'rtl']) {
+        await wrapper.evaluate((node, value) => (node.dir = value), direction);
+        spacing[direction] = await wrapper.getByRole('status').evaluate((node) => {
+          const bounds = node.getBoundingClientRect();
+          const stamp = node.firstElementChild.getBoundingClientRect();
+          const close = node.lastElementChild.getBoundingClientRect();
+          const rtl = getComputedStyle(node).direction === 'rtl';
+          return {
+            stampStart: rtl ? bounds.right - stamp.right : stamp.left - bounds.left,
+            closeEnd: rtl ? close.left - bounds.left : bounds.right - close.right,
+          };
+        });
+      }
+      assert(
+        Math.abs(spacing.rtl.stampStart - spacing.ltr.stampStart) <= 0.1 &&
+          Math.abs(spacing.rtl.closeEnd - spacing.ltr.closeEnd) <= 0.1,
+        `${label}: ${tone} Toast mirrors its reading-edge spacing: ${JSON.stringify(spacing)}.`,
+      );
+    } finally {
+      await wrapper.evaluate((node, original) => {
+        if (original === null) node.removeAttribute('dir');
+        else node.setAttribute('dir', original);
+      }, originalDirection);
+    }
+  }
+}
+
+export async function verifySkeletonCircleSizing(page, label) {
+  const samples = page.getByTestId('skeleton-circle-sizing');
+  const sizes = [
+    ['block-24', 24, 24],
+    ['block-32', 32, 32],
+    ['block-44', 44, 44],
+    ['grid-24', 24, 24],
+    ['grid-32', 32, 32],
+    ['flex-stretch', 44, 44],
+    ['flex-center', 44, 44],
+    ['custom-size', 32, 20],
+    ['width-only', 32, 44],
+    ['style-size', 28, 18],
+    ['inline-size', 32, 44],
+    ['block-size', 44, 20],
+  ];
+  for (const [sample, width, height] of sizes) {
+    const geometry = await samples.getByTestId(`skeleton-circle-${sample}`).evaluate((node) => {
+      const bounds = node.getBoundingClientRect();
+      const host = node.parentElement.getBoundingClientRect();
+      return {
+        size: [bounds.width, bounds.height],
+        fits: bounds.left >= host.left - 0.1 && bounds.right <= host.right + 0.1,
+        hidden: node.getAttribute('aria-hidden'),
+        tabIndex: node.tabIndex,
+      };
+    });
+    assert.deepEqual(
+      geometry.size,
+      [width, height],
+      `${label}: ${sample} keeps its intended circle or custom dimensions.`,
+    );
+    assert(geometry.fits, `${label}: ${sample} stays inside its column.`);
+    assert.equal(geometry.hidden, 'true');
+    assert.equal(geometry.tabIndex, -1);
+  }
+  await samples
+    .getByRole('button', { name: 'Before skeleton circles', exact: true })
+    .press(
+      process.platform === 'darwin' && page.context().browser()?.browserType().name() === 'webkit'
+        ? 'Alt+Tab'
+        : 'Tab',
+    );
+  await page.waitForFunction(
+    (node) => document.activeElement === node,
+    await samples
+      .getByRole('button', { name: 'After skeleton circles', exact: true })
+      .elementHandle(),
+  );
+}
+
 export async function verifyFeedbackAppearance(page, label) {
+  await verifyToastMirroredSpacing(page, label);
   for (const id of ['feedback-long-alert', 'feedback-untitled-alert']) {
     const alert = page.getByTestId(id);
     const geometry = await alert.evaluate((node) => {
@@ -34,7 +119,10 @@ export async function verifyFeedbackAppearance(page, label) {
           icon.y +
           icon.height / 2 -
           (content.y + parseFloat(getComputedStyle(first).lineHeight) / 2),
-        separate: icon.right <= content.left,
+        separate:
+          getComputedStyle(node).direction === 'rtl'
+            ? content.right <= icon.left
+            : icon.right <= content.left,
         fits: node.scrollWidth <= node.clientWidth + 1,
       };
     });
@@ -65,7 +153,10 @@ export async function verifyFeedbackAppearance(page, label) {
         close: [close.width, close.height],
         iconOffset: Math.abs(icon.y + icon.height / 2 - firstLine),
         closeOffset: Math.abs(close.y + close.height / 2 - firstLine),
-        separate: icon.right <= heading.left && heading.right <= close.left + 1,
+        separate:
+          getComputedStyle(node).direction === 'rtl'
+            ? close.right <= heading.left + 1 && heading.right <= icon.left
+            : icon.right <= heading.left && heading.right <= close.left + 1,
         fits: node.scrollWidth <= node.clientWidth + 1,
         actionLine: [
           getComputedStyle(action).borderTopStyle,
@@ -137,6 +228,7 @@ export async function verifyFeedbackAppearance(page, label) {
     'The consumer can close the controlled receipt from its keyboard target.',
   );
   await page.getByRole('button', { name: 'Restore feedback receipts' }).click();
+  await verifySkeletonCircleSizing(page, label);
 }
 
 async function verifyLoadingMark(page) {

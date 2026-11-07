@@ -19,6 +19,12 @@ export const baselineExamples = ['playground/src/examples'];
 /** Exact declarations only; functional marks are distinct from shared component radii. */
 export const designExceptions = [
   [
+    'button',
+    ".button[data-appearance='soft'][data-variant='primary']::before",
+    '50%',
+    'The opt-in soft button uses a short rounded highlight, independent of its control silhouette.',
+  ],
+  [
     'checkbox',
     '.input',
     '7px 8px 7px 6px',
@@ -47,8 +53,14 @@ export const designExceptions = [
   [
     'tabs',
     '.tab::after',
+    '2px',
+    'The ordinary selected-tab underline has small rounded functional ends.',
+  ],
+  [
+    'tabs',
+    ".root[data-appearance='ink'] > .list > .tab::after",
     '4px 3px 4px 2px',
-    'The short ink underline is local graphical geometry.',
+    'The opt-in short ink underline is local graphical geometry.',
   ],
   [
     'typography',
@@ -60,7 +72,7 @@ export const designExceptions = [
   ['radio-group', '.input::after', '50%', 'The persistent radio ink dot remains circular.'],
   [
     'typography',
-    'h2.heading::after',
+    ".heading[data-decoration='underline']::after",
     '0 0 48% 55%',
     'The heading underline is a short irregular ink curve.',
   ],
@@ -71,10 +83,15 @@ export const designExceptions = [
     'The documented circular placeholder variant remains circular.',
   ],
   ['switch', '.input::after', '50%', 'The moving switch thumb is a circular native-state marker.'],
-  ['accordion', '.chevron', '50%', 'The chevron uses a compact circular reading marker.'],
+  [
+    'accordion',
+    ".root[data-appearance='soft'] > .item > .heading > .trigger > .chevron",
+    '50%',
+    'The opt-in soft chevron uses a compact circular reading marker.',
+  ],
   [
     'pagination',
-    ".button[aria-current='page']",
+    ".root[data-appearance='circled'] > .list > .pageGroup > .button[aria-current='page']",
     '48% 52% 50% 46%',
     'The current-page sign is intentionally a small ink circle.',
   ],
@@ -209,3 +226,53 @@ export const exampleCssExceptions = [
       'The explicit option-slot example demonstrates text emphasis while preserving semantic option colors.',
   },
 ];
+
+// These explicit chapter compositions customize a real hr with the one existing
+// flower SVG; the library's ordinary and vertical Divider remain unchanged.
+for (const { path, selector, artwork } of [
+  {
+    path: 'playground/src/examples/scenes/DividerChapter.tsx',
+    selector: '.yahha-chapter-divider',
+    artwork: '--chapter-flower-art',
+  },
+  {
+    path: 'playground/src/examples/ReadingExample.tsx',
+    selector: '.reading-flower-divider',
+    artwork: '--reading-chapter-art',
+  },
+]) {
+  exampleCssExceptions.push(
+    ...[
+      [
+        'border',
+        '0',
+        'The chapter SVG replaces the default drawn edge in this explicit composition.',
+      ],
+      [
+        'block-size',
+        '48px',
+        'The chapter SVG keeps its 48px artwork height so the central flower stays readable on narrow screens.',
+      ],
+      [
+        'background',
+        `var(${artwork}) center / 600px 48px no-repeat`,
+        'The existing flower artwork stays centered and crops only its outer line ends.',
+      ],
+      [
+        'block-size',
+        '0',
+        'Forced colors return the chapter composition to a simple semantic rule.',
+      ],
+      [
+        'border-block-start',
+        'var(--yahha-border-width, 1px) solid CanvasText',
+        'The forced-color rule keeps one visible system-color edge.',
+      ],
+      [
+        'background',
+        'none',
+        'Forced colors remove the multicolor chapter SVG in favor of the system-color rule.',
+      ],
+    ].map(([property, value, reason]) => ({ path, selector, property, value, reason })),
+  );
+}

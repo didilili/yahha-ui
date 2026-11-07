@@ -17,6 +17,11 @@ import {
   verifyOverlayExamples,
 } from './overlay-components.mjs';
 import { readFile } from 'node:fs/promises';
+import {
+  measureTextButton,
+  verifyTextButtonLoading,
+  verifyTextButtonRestored,
+} from './loading-layout.mjs';
 
 async function isFocused(locator) {
   return locator.evaluate((element) => element === document.activeElement);
@@ -385,8 +390,8 @@ export async function verifyDocsLoading(browser, baseURL) {
       page.getByRole('heading', { level: 1, name: 'Tabs 标签页', exact: true }),
       'Retrying a failed document must restore a usable heading after the retry control unmounts.',
     );
-    await page.getByRole('tab', { name: '窗边相册', exact: true }).click();
-    await page.getByRole('tabpanel', { name: '窗边相册', exact: true }).waitFor();
+    await page.locator('#basic').getByRole('tab', { name: '窗边相册', exact: true }).click();
+    await page.locator('#basic').getByRole('tabpanel', { name: '窗边相册', exact: true }).waitFor();
     assert.equal(await loading.count(), 0);
     assert.equal(await failure.count(), 0);
     assert.equal(await page.title(), 'Tabs 标签页 · Yahha UI');
@@ -850,18 +855,12 @@ async function verifyStateSceneExamples(page, baseURL) {
   await status.getByText('文章已准备好', { exact: true }).waitFor();
   await loading.getByRole('heading', { name: '一只纸袋，一路面包香', exact: true }).waitFor();
   assert.equal(await reload.isEnabled(), true);
-  const idleSize = await reload.boundingBox();
+  const idleLayout = await measureTextButton(reload);
   await reload.click();
   await status.getByText('正在加载文章…', { exact: true }).waitFor();
-  const busySize = await reload.boundingBox();
-  assert.ok(
-    idleSize &&
-      busySize &&
-      Math.abs(idleSize.width - busySize.width) < 1 &&
-      Math.abs(idleSize.height - busySize.height) < 1,
-    'Entering loading must retain the action dimensions.',
-  );
+  verifyTextButtonLoading(idleLayout, await measureTextButton(reload));
   await status.getByText('文章已准备好', { exact: true }).waitFor();
+  verifyTextButtonRestored(idleLayout, await measureTextButton(reload));
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await reload.click();
   await status.getByText('正在加载文章…', { exact: true }).waitFor();
@@ -947,7 +946,11 @@ async function verifyStateSceneExamples(page, baseURL) {
         'little-days-collection-saved-motion.svg',
       ],
     ],
-    ['scene-empty', 'EmptyScene', ['empty.png']],
+    [
+      'scene-empty',
+      'EmptyScene',
+      ['little-days-empty-collection.svg', 'little-days-search-empty.svg'],
+    ],
     ['scene-not-found', 'NotFoundScene', ['little-days-friends-lost.svg']],
   ]) {
     const example = page.locator(`#${id}`);

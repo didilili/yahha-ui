@@ -75,6 +75,49 @@ export async function verifyCheckboxMarks(scope) {
   }
 }
 
+/** Selecting a long title must not reflow its text or shift the following option. */
+async function verifyLongRadioSelection(scope) {
+  const group = scope.getByTestId('selection-radio-long');
+  const weekend = group.getByRole('radio', { name: 'Weekend reading notes', exact: true });
+  const monthly = group.getByRole('radio', { name: 'Monthly notes', exact: true });
+  const geometry = () =>
+    group.evaluate((node) => {
+      const inputs = node.querySelectorAll('input[type="radio"]');
+      const row = inputs[0].closest('label');
+      const title = document.getElementById(inputs[0].getAttribute('aria-labelledby'));
+      const bounds = node.getBoundingClientRect();
+      return {
+        width: bounds.width,
+        rowHeight: row.getBoundingClientRect().height,
+        titleHeight: title.getBoundingClientRect().height,
+        followingY: inputs[1].closest('label').getBoundingClientRect().top - bounds.top,
+        fits: node.scrollWidth <= node.clientWidth + 1,
+      };
+    });
+
+  await monthly.check();
+  try {
+    const before = await geometry();
+    assert(before.width > 0 && before.width <= 200, 'The narrow radio host fits its container.');
+    await weekend.check();
+    assert.equal(await weekend.isChecked(), true);
+    const selected = await geometry();
+    for (const property of ['rowHeight', 'titleHeight', 'followingY']) {
+      near(selected[property], before[property]);
+    }
+    assert(selected.fits, 'Selecting a long title keeps the group inside its narrow host.');
+
+    await weekend.press('ArrowRight');
+    assert.equal(await monthly.isChecked(), true, 'Native arrows still select the next option.');
+    const restored = await geometry();
+    for (const property of ['rowHeight', 'titleHeight', 'followingY']) {
+      near(restored[property], before[property]);
+    }
+  } finally {
+    await monthly.check();
+  }
+}
+
 export async function verifySelectionContract(page, scope, hasTouch) {
   await verifyCheckboxMarks(scope);
   const checkbox = scope.getByTestId('selection-checkbox');
@@ -124,16 +167,59 @@ export async function verifySelectionContract(page, scope, hasTouch) {
 
   const label = checkbox.locator('..');
   const row = await label.boundingBox();
+  const selectedRowColor = await label.evaluate((node) => getComputedStyle(node).backgroundColor);
+  const mixedRowColor = await mixed
+    .locator('..')
+    .evaluate((node) => getComputedStyle(node).backgroundColor);
+  assert.equal(
+    mixedRowColor,
+    selectedRowColor,
+    'Checked and mixed options share a quiet selection row.',
+  );
+  const disabledRowColor = await scope
+    .getByTestId('selection-disabled')
+    .locator('..')
+    .evaluate((node) => getComputedStyle(node).backgroundColor);
+  assert.notEqual(
+    disabledRowColor,
+    selectedRowColor,
+    'Disabled choices keep their value without an active row tint.',
+  );
   await label.click({ position: { x: row.width - 3, y: row.height / 2 } });
   assert.equal(
     await checkbox.isChecked(),
     false,
     'The far side of the label is an actual click target.',
   );
+  assert.notEqual(
+    await label.evaluate((node) => getComputedStyle(node).backgroundColor),
+    selectedRowColor,
+    'Clearing a check also clears the row tint.',
+  );
+  near((await label.boundingBox()).height, row.height);
   await checkbox.focus();
   await page.keyboard.press('Space');
   assert.equal(await checkbox.isChecked(), true);
   if (!hasTouch) {
+    for (const id of ['selection-switch-pending-off', 'selection-switch-pending-on']) {
+      const pending = scope.getByTestId(id);
+      await page.mouse.move(0, 0);
+      const paint = () =>
+        pending.evaluate((node) => {
+          const css = getComputedStyle(node);
+          return { border: css.borderTopColor, background: css.backgroundColor };
+        });
+      const resting = await paint();
+      const checked = await pending.isChecked();
+      await pending.locator('xpath=ancestor::label[1]').hover();
+      assert.deepEqual(
+        await paint(),
+        resting,
+        'A pending switch does not offer actionable hover paint.',
+      );
+      assert.equal(await pending.isChecked(), checked, 'Pending hover keeps the current value.');
+      assert.equal(await pending.getAttribute('aria-busy'), 'true');
+    }
     await page.mouse.move(0, 0);
     const before = await toggle.evaluate((node) => getComputedStyle(node).borderTopColor);
     const disabled = scope.getByTestId('selection-switch-disabled');
@@ -169,7 +255,10 @@ export async function verifySelectionContract(page, scope, hasTouch) {
   assert.equal(await radios.getAttribute('aria-invalid'), 'true');
   const legendText = await firstTextRect(radios.locator('.selection-radio-legend'));
   near(legendText.x, (await firstTextRect(radios.locator('.selection-radio-hint'))).x);
-  near(legendText.x, (await firstTextRect(radios.locator('.selection-radio-error'))).x);
+  const radioError = radios.locator('.selection-radio-error');
+  near(legendText.x, (await radioError.locator('svg').boundingBox()).x);
+  near(legendText.x + 20, (await firstTextRect(radioError)).x);
+  assert.equal(await radioError.locator('svg').getAttribute('aria-hidden'), 'true');
   await first.focus();
   const invalidFocus = await first.evaluate((node) => {
     const style = getComputedStyle(node);
@@ -287,6 +376,7 @@ export async function verifySelectionContract(page, scope, hasTouch) {
     }),
     'Long segmented choices preserve complete text inside their own paper on narrow screens.',
   );
+  await verifyLongRadioSelection(scope);
 }
 
 export async function verifyNativeSelectionFallback(page, scope) {

@@ -7,6 +7,60 @@ import { Pagination } from './Pagination.js';
 afterEach(cleanup);
 
 describe('Pagination', () => {
+  it.each([false, true])(
+    'keeps current-page semantics and navigation when circled appearance changes (links=%s)',
+    async (links) => {
+      const user = userEvent.setup();
+      const onPageChange = vi.fn();
+      const ref = createRef<HTMLElement>();
+      const props = {
+        currentPage: 2,
+        totalPages: 3,
+        onPageChange,
+        getPageHref: links ? (page: number) => `#/archive?page=${page}` : undefined,
+        ref,
+      };
+      const { rerender } = render(<Pagination {...props} />);
+      const nav = ref.current;
+      const current = screen.getByRole(links ? 'link' : 'button', { name: '第 2 页' });
+      expect(nav?.getAttribute('data-appearance')).toBe('default');
+      current.focus();
+      rerender(<Pagination {...props} appearance="circled" />);
+      expect(ref.current).toBe(nav);
+      expect(nav?.getAttribute('data-appearance')).toBe('circled');
+      expect(nav?.hasAttribute('appearance')).toBe(false);
+      expect(document.activeElement).toBe(current);
+      expect(current.getAttribute('aria-current')).toBe('page');
+      await user.keyboard('{Enter}');
+      expect(onPageChange).not.toHaveBeenCalled();
+      await user.click(screen.getByRole(links ? 'link' : 'button', { name: '下一页' }));
+      expect(onPageChange).toHaveBeenCalledExactlyOnceWith(3);
+    },
+  );
+
+  it.each([false, true])(
+    'keeps pages followed by paired directions in native tab order (links=%s)',
+    async (links) => {
+      const user = userEvent.setup();
+      const onPageChange = vi.fn();
+      render(
+        <Pagination
+          currentPage={2}
+          totalPages={3}
+          onPageChange={onPageChange}
+          getPageHref={links ? (page) => `#/archive?page=${page}` : undefined}
+        />,
+      );
+      for (const name of ['第 1 页', '第 2 页', '第 3 页', '上一页', '下一页']) {
+        await user.tab();
+        expect(document.activeElement).toBe(screen.getByRole(links ? 'link' : 'button', { name }));
+      }
+      expect(onPageChange).not.toHaveBeenCalled();
+      await user.keyboard('{Enter}');
+      expect(onPageChange).toHaveBeenCalledExactlyOnceWith(3);
+    },
+  );
+
   it('navigates controlled article pages and prevents moving outside boundaries', async () => {
     const user = userEvent.setup();
     function Example() {

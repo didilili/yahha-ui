@@ -25,17 +25,36 @@ const options = [
 export function SelectionContract({ idPrefix }: { idPrefix: string }) {
   const [radio, setRadio] = useState('');
   const [segment, setSegment] = useState('first');
+  const [longRadio, setLongRadio] = useState('monthly');
   return (
     <div data-selection-contract style={{ display: 'grid', gap: 16, minWidth: 0 }}>
-      <Checkbox label="Selection checkbox" data-testid="selection-checkbox" defaultChecked />
-      <Checkbox label="Mixed selection" data-testid="selection-mixed" indeterminate />
+      <Checkbox
+        label="Selection checkbox"
+        data-testid="selection-checkbox"
+        defaultChecked
+        highlightSelected
+      />
+      <Checkbox
+        label="Mixed selection"
+        data-testid="selection-mixed"
+        indeterminate
+        highlightSelected
+      />
       <Checkbox
         label="Disabled selection"
         data-testid="selection-disabled"
+        highlightSelected
         disabled
         defaultChecked
       />
       <Switch label="Selection switch" data-testid="selection-switch" defaultChecked />
+      <Switch label="Pending switch off" data-testid="selection-switch-pending-off" loading />
+      <Switch
+        label="Pending switch on"
+        data-testid="selection-switch-pending-on"
+        loading
+        defaultChecked
+      />
       <Switch
         label="Disabled switch"
         data-testid="selection-switch-disabled"
@@ -48,6 +67,7 @@ export function SelectionContract({ idPrefix }: { idPrefix: string }) {
       <RadioGroup
         label="Selection radio group"
         data-testid="selection-radio"
+        highlightSelected
         options={options}
         value={radio}
         onValueChange={setRadio}
@@ -63,10 +83,23 @@ export function SelectionContract({ idPrefix }: { idPrefix: string }) {
       <RadioGroup
         label="Locked reading preference"
         data-testid="selection-radio-locked"
+        highlightSelected
         options={options}
         value="locked"
         onValueChange={() => {}}
       />
+      <div style={{ width: 200, maxWidth: '100%' }}>
+        <RadioGroup
+          label="Long reading label"
+          data-testid="selection-radio-long"
+          options={[
+            { value: 'weekend', label: 'Weekend reading notes' },
+            { value: 'monthly', label: 'Monthly notes' },
+          ]}
+          value={longRadio}
+          onValueChange={setLongRadio}
+        />
+      </div>
       <SegmentedControl
         label="Selection segments"
         data-testid="selection-segments"

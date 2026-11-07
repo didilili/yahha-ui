@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, EmptyState, Heading, Select, Text, TextField, ThemeProvider } from 'yahha-ui';
 import 'yahha-ui/style.css';
-import emptyArtwork from './artwork/empty.png';
+import emptyCollectionArtwork from './artwork/little-days-empty-collection.svg?no-inline';
+import emptySearchArtwork from './artwork/little-days-search-empty.svg?no-inline';
 
 const options = [
   { value: 'first', label: '首次没有内容' },
@@ -72,6 +73,7 @@ export default function EmptyScene() {
           </div>
         ) : (
           <EmptyState
+            motif="paper"
             title={
               scene === 'search'
                 ? '未找到相关文章'
@@ -87,13 +89,13 @@ export default function EmptyScene() {
                   : '先写下今天想记住的一件小事。'
             }
             illustration={
-              scene === 'search' ? undefined : (
+              scene === 'first' ? undefined : (
                 <img
                   className="story-empty-art"
-                  src={emptyArtwork}
+                  src={scene === 'saved' ? emptyCollectionArtwork : emptySearchArtwork}
                   alt=""
-                  width="1024"
-                  height="768"
+                  width="240"
+                  height="180"
                   loading="lazy"
                 />
               )

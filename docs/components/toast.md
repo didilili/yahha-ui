@@ -146,6 +146,89 @@ export default function ToastTones() {
 }
 ```
 
+<a id="appearance"></a>
+
+### 普通与回执外观
+
+对比相同内容与操作；回执显式加入印签和浅色操作纸面，撤销只更新本地示例。
+
+[查看示例文件](../../playground/src/examples/feedback/ToastAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/ToastAppearance.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { Button, Text, Toast } from 'yahha-ui';
+
+function AppearanceSample({ appearance }: { appearance: 'default' | 'receipt' }) {
+  const [open, setOpen] = useState(true);
+  const [saved, setSaved] = useState(true);
+  const restore = useRef<HTMLButtonElement>(null);
+  const message = useRef<HTMLDivElement>(null);
+
+  function dismiss() {
+    if (message.current?.contains(document.activeElement)) restore.current?.focus();
+    setOpen(false);
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 12, alignContent: 'start', minWidth: 0 }}>
+      <Text size="sm" tone="muted">
+        {appearance === 'default' ? '普通（默认）' : '回执'}
+      </Text>
+      <div ref={message}>
+        <Toast
+          appearance={appearance}
+          open={open}
+          title="手记已收藏"
+          description="《周末散步》已经加入收藏夹。"
+          onClose={dismiss}
+          action={
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setSaved(false);
+                dismiss();
+              }}
+            >
+              撤销收藏
+            </Button>
+          }
+        />
+      </div>
+      {!saved && <Text size="sm">已撤销本地示例收藏。</Text>}
+      <div>
+        <Button
+          ref={restore}
+          variant="secondary"
+          onClick={() => {
+            setSaved(true);
+            setOpen(true);
+          }}
+        >
+          重新显示提示
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export default function ToastAppearance() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+        gap: 24,
+      }}
+    >
+      <AppearanceSample appearance="default" />
+      <AppearanceSample appearance="receipt" />
+    </div>
+  );
+}
+```
+
 <a id="integration"></a>
 
 ## 进阶用法
@@ -227,6 +310,7 @@ export default function ToastBasic() {
       </div>
       <div ref={message}>
         <Toast
+          appearance="receipt"
           open={open}
           onClose={() => {
             returnFocus.current = message.current?.contains(document.activeElement) ?? false;
@@ -266,7 +350,7 @@ export default function ToastBasic() {
 
 ### 计时关闭与撤销
 
-示例控制 8 秒关闭，可撤销归档；提示关闭后仍可恢复文章。
+8 秒撤销窗口中，进度条表示已用时；悬停、聚焦或页面进入后台时暂停，恢复后继续剩余时间。
 
 [查看示例文件](../../playground/src/examples/feedback/ToastTimer.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -274,17 +358,28 @@ export default function ToastBasic() {
 
 ```tsx
 import { useEffect, useRef, useState } from 'react';
-import { Button, Text, Toast } from 'yahha-ui';
+import { Button, Progress, Text, Toast } from 'yahha-ui';
+
+const undoDuration = 8000;
 
 export default function ToastTimer() {
   const [archived, setArchived] = useState(false);
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [hidden, setHidden] = useState(() => document.hidden);
+  const [elapsed, setElapsed] = useState(0);
+  const remaining = useRef(undoDuration);
   const archiveButton = useRef<HTMLButtonElement>(null);
   const restoreButton = useRef<HTMLButtonElement>(null);
   const message = useRef<HTMLDivElement>(null);
   const pendingFocus = useRef<'archive' | 'restore' | null>(null);
+
+  useEffect(() => {
+    const updateVisibility = () => setHidden(document.hidden);
+    document.addEventListener('visibilitychange', updateVisibility);
+    return () => document.removeEventListener('visibilitychange', updateVisibility);
+  }, []);
 
   useEffect(() => {
     const destination = pendingFocus.current;
@@ -300,16 +395,29 @@ export default function ToastTimer() {
   }, [archived, open]);
 
   useEffect(() => {
-    if (!open || hovered || focused) return;
-    const timer = window.setTimeout(() => setOpen(false), 8000);
-    return () => window.clearTimeout(timer);
-  }, [open, hovered, focused]);
+    if (!open || hovered || focused || hidden) return;
+    const started = performance.now();
+    const previousRemaining = remaining.current;
+    const updateElapsed = () => {
+      setElapsed(undoDuration - Math.max(0, previousRemaining - (performance.now() - started)));
+    };
+    const timer = window.setTimeout(() => setOpen(false), previousRemaining);
+    const display = window.setInterval(updateElapsed, 100);
+    return () => {
+      remaining.current = Math.max(0, previousRemaining - (performance.now() - started));
+      setElapsed(undoDuration - remaining.current);
+      window.clearTimeout(timer);
+      window.clearInterval(display);
+    };
+  }, [open, hovered, focused, hidden]);
 
   function archive() {
     if (document.activeElement === archiveButton.current) pendingFocus.current = 'restore';
     setArchived(true);
     setHovered(false);
     setFocused(false);
+    remaining.current = undoDuration;
+    setElapsed(0);
     setOpen(true);
   }
 
@@ -339,6 +447,7 @@ export default function ToastTimer() {
       </div>
       <div
         ref={message}
+        style={{ display: 'grid', gap: 12, maxWidth: 400 }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onFocusCapture={() => setFocused(true)}
@@ -347,6 +456,7 @@ export default function ToastTimer() {
         }}
       >
         <Toast
+          appearance="receipt"
           open={open}
           onClose={() => {
             if (message.current?.contains(document.activeElement)) pendingFocus.current = 'restore';
@@ -360,6 +470,14 @@ export default function ToastTimer() {
             </Button>
           }
         />
+        {open && (
+          <Progress
+            label="提示显示时间"
+            value={elapsed}
+            max={undoDuration}
+            valueText={`剩余 ${Math.ceil((undoDuration - elapsed) / 1000)} 秒${hovered || focused || hidden ? '（已暂停）' : ''}`}
+          />
+        )}
       </div>
     </div>
   );
@@ -370,7 +488,7 @@ export default function ToastTimer() {
 
 ## 自动关闭与恢复入口
 
-自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；计时与撤销示例等待 8 秒后关闭，悬停或聚焦时暂停，离开后重新计满 8 秒。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
+自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；计时与撤销示例等待 8 秒后关闭，悬停、聚焦或页面进入后台时暂停，恢复后只计剩余时间。示例将 Progress 放在 Toast 的 status 外，避免每次计时更新重复播报提示。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
 
 带操作的提示例保留清单入口；查看操作聚焦常驻清单标题，关闭提示不会丢失已加入的内容。
 
@@ -380,15 +498,16 @@ export default function ToastTimer() {
 
 ### ToastProps
 
-| 属性               | 说明                                                             | 类型                             | 默认值      |
-| ------------------ | ---------------------------------------------------------------- | -------------------------------- | ----------- |
-| `open` **必填**    | 是否显示，false 时返回 null。没有 defaultOpen。                  | `boolean`                        | —           |
-| `onClose` **必填** | 点击内置关闭按钮时调用，调用方应将 open 更新为 false。           | `() => void`                     | —           |
-| `title` **必填**   | 提示标题，渲染在 p 内，适合文字或行内内容。                      | `ReactNode`                      | —           |
-| `description`      | 可选说明，渲染在 p 内；无默认内容。                              | `ReactNode`                      | —           |
-| `tone`             | 反馈视觉类型，决定颜色与状态图标，不改变播报优先级。             | `'success' \| 'info' \| 'error'` | `'success'` |
-| `action`           | 补充操作插槽；行为、关闭与后续状态由调用方实现。                 | `ReactNode`                      | —           |
-| `className`        | 作用于根 status div。当前不透传 ref、style 或其他原生 div 属性。 | `string`                         | —           |
+| 属性               | 说明                                                                         | 类型                             | 默认值      |
+| ------------------ | ---------------------------------------------------------------------------- | -------------------------------- | ----------- |
+| `open` **必填**    | 是否显示，false 时返回 null。没有 defaultOpen。                              | `boolean`                        | —           |
+| `onClose` **必填** | 点击内置关闭按钮时调用，调用方应将 open 更新为 false。                       | `() => void`                     | —           |
+| `title` **必填**   | 提示标题，渲染在 p 内，适合文字或行内内容。                                  | `ReactNode`                      | —           |
+| `description`      | 可选说明，渲染在 p 内；无默认内容。                                          | `ReactNode`                      | —           |
+| `tone`             | 反馈视觉类型，决定颜色与状态图标，不改变播报优先级。                         | `'success' \| 'info' \| 'error'` | `'success'` |
+| `appearance`       | 默认保留状态图标与操作；receipt 额外加入印签边框和带虚线分隔的浅色操作纸面。 | `'default' \| 'receipt'`         | `'default'` |
+| `action`           | 补充操作插槽；行为、关闭与后续状态由调用方实现。                             | `ReactNode`                      | —           |
+| `className`        | 作用于根 status div。当前不透传 ref、style 或其他原生 div 属性。             | `string`                         | —           |
 
 <a id="behavior"></a>
 
@@ -403,6 +522,8 @@ export default function ToastTimer() {
 ## 放置提示
 
 默认在文档流中显示。需要固定在屏幕角落时，由外层容器设置定位、窄屏边距与多条消息的排列，并避免遮挡当前操作；Toast 不创建 Portal 或全局消息队列。
+
+默认使用普通外观，需要回执纸章时显式设置 appearance="receipt"。 两种外观均保留状态图标、文字、操作和关闭入口，并继承外层容器的阅读方向。
 
 <a id="related"></a>
 

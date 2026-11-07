@@ -1,6 +1,12 @@
 import { verifyToastSimple } from './toast-reading-examples.mjs';
+import { verifyToastTimer } from './toast-timer-examples.mjs';
 import assert from 'node:assert/strict';
 import { revealExample } from './reveal-example.mjs';
+import {
+  measureTextButton,
+  verifyTextButtonLoading,
+  verifyTextButtonRestored,
+} from './loading-layout.mjs';
 
 async function choose(page, select, label) {
   await select.click();
@@ -54,18 +60,20 @@ export async function verifyFeedbackExamples(page, baseURL) {
   const checkbox = alert.getByRole('checkbox', { name: '接收每周阅读推荐', exact: true });
   await checkbox.uncheck();
   const save = alert.getByRole('button', { name: '保存订阅偏好', exact: true });
-  const before = await save.boundingBox();
+  const before = await measureTextButton(save);
   await save.click();
   assert.equal(await save.getAttribute('aria-busy'), 'true');
-  const during = await save.boundingBox();
-  assert.equal(before.width, during.width);
-  assert.equal(before.height, during.height);
+  verifyTextButtonLoading(before, await measureTextButton(save));
   await alert.getByText('订阅偏好保存失败', { exact: true }).waitFor();
   assert.equal(await checkbox.isChecked(), false);
   await alert.getByRole('button', { name: '重试保存', exact: true }).click();
   await alert.getByText('订阅偏好已保存', { exact: true }).waitFor();
-  await focused(page, alert.getByRole('button', { name: '修改偏好', exact: true }));
+  const edit = alert.getByRole('button', { name: '修改偏好', exact: true });
+  await focused(page, edit);
   assert.equal(await checkbox.isChecked(), false);
+  // The result changes the action name; compare its original geometry once reset to idle.
+  await edit.click();
+  verifyTextButtonRestored(before, await measureTextButton(save));
 
   await page.goto(`${baseURL}#/components/empty-state`);
   const basicEmpty = page.locator('#basic .example-preview');
@@ -127,32 +135,5 @@ export async function verifyFeedbackExamples(page, baseURL) {
   await focused(page, tones.getByRole('heading', { name: '三种结果说明', exact: true }));
   assert.equal(await tones.getByRole('status').count(), 3);
 
-  const timer = page.locator('#timer-and-action .example-preview');
-  await revealExample(timer);
-  const archive = timer.getByRole('button', { name: '归档文章', exact: true });
-  const restore = timer.getByRole('button', { name: '恢复文章', exact: true });
-  await archive.click();
-  await timer.getByRole('button', { name: '关闭提示', exact: true }).click();
-  await focused(page, restore);
-  await restore.click();
-  await focused(page, archive);
-  await page.clock.install();
-  await archive.click();
-  const undo = timer.getByRole('button', { name: '撤销归档', exact: true });
-  await undo.focus();
-  await page.clock.fastForward(10_000);
-  assert.equal(
-    await timer.getByRole('status').isVisible(),
-    true,
-    'A focused toast must pause its dismissal timer.',
-  );
-  await undo.click();
-  await focused(page, archive);
-  await archive.click();
-  await focused(page, restore);
-  await page.clock.fastForward(8100);
-  await timer.getByRole('status').waitFor({ state: 'hidden' });
-  await focused(page, restore);
-  await restore.click();
-  await page.clock.resume();
+  await verifyToastTimer(page);
 }

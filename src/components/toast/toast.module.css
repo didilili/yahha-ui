@@ -5,8 +5,8 @@
   gap: var(--yahha-space-3, 12px);
   width: 100%;
   max-width: 400px;
-  padding: var(--yahha-space-4, 16px) var(--yahha-space-3, 12px) var(--yahha-space-4, 16px)
-    var(--yahha-space-4, 16px);
+  padding-block: var(--yahha-space-4, 16px);
+  padding-inline: var(--yahha-space-4, 16px) var(--yahha-space-3, 12px);
   border: var(--yahha-control-border-width, 2px) solid var(--yahha-contour, #684150);
   border-radius: var(--yahha-radius-toast, 10px 15px 12px 9px);
   background: var(--yahha-surface, #ffffff);
@@ -24,6 +24,14 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+  width: 21px;
+  height: 21px;
+  margin-block-start: calc(
+    (var(--yahha-font-size-md, 14px) * var(--yahha-leading-label, 1.5) - 21px) / 2
+  );
+  color: var(--yahha-success-ink, #506a3b);
+}
+.toast[data-appearance='receipt'] > .toastIcon {
   width: 30px;
   height: 30px;
   margin-block-start: calc(
@@ -32,18 +40,21 @@
   border: var(--yahha-control-border-width, 2px) solid currentColor;
   border-radius: var(--yahha-radius-stamp, 8px 10px 8px 7px);
   background: var(--yahha-success-surface, #f3f8ed);
-  color: var(--yahha-success-ink, #506a3b);
   box-shadow:
     inset 0 1px 0 var(--yahha-surface, #ffffff),
     inset 0 -2px 0 color-mix(in srgb, currentColor 15%, transparent);
 }
-.toast[data-tone='info'] .toastIcon {
-  background: var(--yahha-info-surface, #f4f9fd);
+.toast[data-tone='info'] > .toastIcon {
   color: var(--yahha-info-ink, #426f90);
 }
-.toast[data-tone='error'] .toastIcon {
-  background: var(--yahha-error-surface, #fff4f5);
+.toast[data-tone='error'] > .toastIcon {
   color: var(--yahha-error, #a33e4f);
+}
+.toast[data-appearance='receipt'][data-tone='info'] > .toastIcon {
+  background: var(--yahha-info-surface, #f4f9fd);
+}
+.toast[data-appearance='receipt'][data-tone='error'] > .toastIcon {
+  background: var(--yahha-error-surface, #fff4f5);
 }
 .toastIcon svg {
   width: 21px;
@@ -67,6 +78,8 @@
 }
 .toastAction {
   margin-top: var(--yahha-space-3, 12px);
+}
+.toast[data-appearance='receipt'] > .toastContent > .toastAction {
   padding: var(--yahha-space-3, 12px) var(--yahha-space-2, 8px) var(--yahha-space-2, 8px);
   border-top: var(--yahha-border-width, 1px) dashed var(--yahha-paper-line, #c9deec);
   border-radius: var(--yahha-radius-option, 8px 12px 9px 7px);

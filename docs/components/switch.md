@@ -282,7 +282,7 @@ export default function SwitchReadingPreference() {
 ## 状态与交互
 
 - checked / onChange 管理受控状态，defaultChecked 设置初始状态；从 event.target.checked 读取结果。
-- loading 显示圆扣内的三墨点并阻止点击、空格切换，保留当前值、焦点和表单值。 请求、完成与失败处理由使用方控制，组件不自动发起保存。
+- loading 显示圆扣内的三墨点并阻止点击、空格切换，保留当前值、焦点和表单值；加载时不显示可操作状态的悬停高亮。 请求、完成与失败处理由使用方控制，组件不自动发起保存。
 - disabled 使用原生禁用行为，退出键盘顺序且不参与表单提交，支持父 fieldset 禁用。 loading 不会自动设置原生 disabled；显式禁用仍按原生规则处理。
 
 <a id="api"></a>

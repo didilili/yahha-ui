@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { componentCatalog } from '../../playground/src/docs/component-catalog.ts';
 import { verifyDocsShell } from './shell-checks.mjs';
 import { verifyHome } from './home-checks.mjs';
 import { verifyArtwork } from './artwork-checks.mjs';
@@ -160,6 +161,11 @@ export async function verifyDocs(browser, baseURL) {
       'spinner',
       'alert',
     ];
+    assert.deepEqual(
+      [...ids].sort(),
+      componentCatalog.map((component) => component.id).sort(),
+      'Documentation acceptance must exercise every registered component page.',
+    );
     let totalExamples = 0;
     for (const id of ids) {
       await page.goto(`${baseURL}#/components/${id}?section=api`);
@@ -302,7 +308,7 @@ export async function verifyDocs(browser, baseURL) {
         );
       }
     }
-    assert.equal(totalExamples, 136, 'The 32 component documents provide 136 focused examples.');
+    assert.equal(totalExamples, 149, 'The 32 component documents provide 149 focused examples.');
 
     // Reorganized chapters retain their existing deep links and keyboard destination.
     await page.goto(`${baseURL}#/components/text`);
@@ -356,7 +362,7 @@ export async function verifyDocs(browser, baseURL) {
       await verifySectionIcons(page, 'guide');
     }
     assert.equal(guideExamples, 12, 'The guides must retain all twelve integration examples.');
-    assert.equal(totalExamples + guideExamples, 148, 'The public site provides 148 examples.');
+    assert.equal(totalExamples + guideExamples, 161, 'The public site provides 161 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
     await waitForGuideReady(page, '开始使用');
     assert.match(await page.locator('main').innerText(), /npm pack/);

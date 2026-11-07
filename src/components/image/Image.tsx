@@ -39,6 +39,10 @@ export function Image({
   const status =
     !src?.trim() && !srcSet?.trim() ? 'error' : image.source === source ? image.status : 'loading';
   const failed = status === 'error';
+  const ratio = String(aspectRatio ?? '')
+    .trim()
+    .toLowerCase();
+  const hasFixedRatio = Boolean(aspectRatio) && ratio !== '' && ratio !== 'auto';
   const hasAlternativeText = alt.trim().length > 0;
   const fallbackRef = useRef<HTMLDivElement>(null);
   const fallbackContentRef = useRef<HTMLSpanElement>(null);
@@ -47,7 +51,7 @@ export function Image({
   useEffect(() => {
     const container = fallbackRef.current;
     const content = fallbackContentRef.current;
-    if (!failed || !aspectRatio || !container || !content) {
+    if (!failed || !hasFixedRatio || !container || !content) {
       setOverflowing(false);
       return;
     }
@@ -61,13 +65,13 @@ export function Image({
     }
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
-  }, [failed, aspectRatio, source, fallback]);
+  }, [failed, hasFixedRatio, aspectRatio, source, fallback]);
 
   return (
     <div
       className={cx(styles.frame, className)}
       data-status={status}
-      data-framed={aspectRatio ? '' : undefined}
+      data-framed={hasFixedRatio ? '' : undefined}
       style={{ aspectRatio }}
       hidden={hidden}
       aria-hidden={props['aria-hidden']}

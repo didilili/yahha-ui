@@ -17,6 +17,8 @@ export interface PaginationProps extends Omit<ComponentPropsWithRef<'nav'>, 'chi
   getPageHref?: (page: number) => string;
   /** Adjacent page numbers on each side. Floored and clamped to 0–2. @default 1 */
   siblingCount?: number;
+  /** Adds an uneven circle around the current page. @default 'default' */
+  appearance?: 'default' | 'circled';
   classNames?: Partial<Record<'list' | 'button' | 'ellipsis', string>>;
 }
 
@@ -26,6 +28,7 @@ export function Pagination({
   onPageChange,
   getPageHref,
   siblingCount = 1,
+  appearance = 'default',
   className,
   classNames,
   'aria-label': label = '文章分页',
@@ -102,9 +105,13 @@ export function Pagination({
     );
   };
   return (
-    <nav {...props} aria-label={label} className={cx(styles.root, className)}>
+    <nav
+      {...props}
+      aria-label={label}
+      className={cx(styles.root, className)}
+      data-appearance={appearance}
+    >
       <ul className={cx(styles.list, classNames?.list)}>
-        <li>{action(page - 1, '上一页', '上一页', page <= 1)}</li>
         {pages.map((number, index) => (
           <li key={number} className={styles.pageGroup}>
             {index > 0 && number - pages[index - 1] > 1 && (
@@ -115,7 +122,10 @@ export function Pagination({
             {action(number, `第 ${number} 页`, number, false, number === page)}
           </li>
         ))}
-        <li>{action(page + 1, '下一页', '下一页', total === 0 || page >= total)}</li>
+        <li className={styles.directions}>
+          {action(page - 1, '上一页', '上一页', page <= 1)}
+          {action(page + 1, '下一页', '下一页', total === 0 || page >= total)}
+        </li>
       </ul>
     </nav>
   );

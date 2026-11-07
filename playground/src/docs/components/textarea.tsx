@@ -46,7 +46,7 @@ export default defineComponentPage('textarea', {
         {
           id: 'controlled',
           title: '受控内容与校验',
-          description: '检查留言，查看输入长度与校验结果。',
+          description: '输入时显示当前长度，检查留言后查看校验结果。',
           component: TextareaControlled,
           source: TextareaControlledSource,
         },
@@ -99,7 +99,8 @@ export default defineComponentPage('textarea', {
             {
               name: 'hint / error',
               type: 'ReactNode',
-              description: '辅助和错误说明，与 aria-describedby 合并；error 设置 aria-invalid。',
+              description:
+                '辅助和错误说明，与 aria-describedby 合并；error 设置 aria-invalid，并在错误文字前显示提醒标记。',
             },
             { name: 'rows', type: 'number', description: '原生可见行数。', defaultValue: '4' },
             {
@@ -164,7 +165,8 @@ export default defineComponentPage('textarea', {
           </li>
           <li>
             placeholder 只提供补充示例，标签应保持可见。自定义校验失败时，用 error
-            说明如何修正，并可通过 ref 聚焦输入区域；错误的设置与清除由调用方处理。
+            说明如何修正，并可通过 ref
+            聚焦输入区域；提醒标记辅助识别错误，不单独播报，错误的设置与清除由调用方处理。
           </li>
         </ul>
       ),

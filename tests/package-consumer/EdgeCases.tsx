@@ -368,6 +368,13 @@ export function EdgeCases() {
             <Avatar name={'e\u0301mile'} data-testid="content-avatar-accent" />
             <Avatar name="🇨🇳库米" data-testid="content-avatar-flag" />
           </div>
+          <div style={{ width: 160, maxWidth: '100%' }} data-testid="content-auto-image">
+            <Image
+              alt="Content auto cover"
+              aspectRatio="auto"
+              fallback={'封面暂不可用，可以继续阅读正文，也可以稍后重新打开这篇手记。'.repeat(3)}
+            />
+          </div>
           <div style={{ width: 160, maxWidth: '100%' }} data-testid="content-long-image">
             <Image
               alt="Content narrow cover"

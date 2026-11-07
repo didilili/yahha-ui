@@ -3,6 +3,8 @@ import TooltipBasic from '../../examples/floating/TooltipBasic';
 import tooltipBasicSource from '../../examples/floating/TooltipBasic.tsx?raw';
 import TooltipOptions from '../../examples/floating/TooltipOptions';
 import tooltipOptionsSource from '../../examples/floating/TooltipOptions.tsx?raw';
+import TooltipAppearance from '../../examples/floating/TooltipAppearance';
+import tooltipAppearanceSource from '../../examples/floating/TooltipAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
 import { stateRows, popupRows } from '../page-helpers';
 
@@ -44,6 +46,14 @@ export default defineComponentPage('tooltip', {
           description: '首次悬停 0.8 秒后在下方显示提示；关闭提示后仍可点击按钮。',
           component: TooltipOptions,
           source: tooltipOptionsSource,
+        },
+        {
+          id: 'arrow',
+          title: '选择是否显示箭头',
+          description:
+            '同样的内容和间距，分别显示默认箭头与无箭头气泡；可聚焦或悬停触发器重新查看。',
+          component: TooltipAppearance,
+          source: tooltipAppearanceSource,
         },
       ],
     },
@@ -99,13 +109,19 @@ export default defineComponentPage('tooltip', {
               description:
                 '首次鼠标悬停等待时间，单位 ms；键盘聚焦立即展示，短时间再次悬停可能立即显示。',
             },
+            {
+              name: 'showArrow',
+              type: 'boolean',
+              defaultValue: 'true',
+              description: '是否显示箭头。false 时省略箭头，不改变内容、打开关闭和定位设置。',
+            },
             ...popupRows('Tooltip', 'top', 'center').map((row) =>
               row.name === 'sideOffset'
                 ? {
                     ...row,
                     defaultValue: '12',
                     description:
-                      '提示外框与触发器的间距，单位 px；默认给尖角和按钮焦点圈留出空间。',
+                      '提示外框与触发器的间距，单位 px；独立于 showArrow，关闭箭头后仍保留设置值。',
                   }
                 : row,
             ),
@@ -137,8 +153,10 @@ export default defineComponentPage('tooltip', {
         <>
           <p>
             默认显示在触发器上方，外框与触发器间距 12px，空间不足时自动避让，距视口边缘保留
-            12px；箭头避开气泡圆角，无法准确指向时隐藏。
-            文字可换行，但提示应保持简短；需要滚动阅读的说明更适合放在页面或 Popover 中。
+            12px；箭头避开气泡圆角，无法准确指向时隐藏。 设置 showArrow=false 可省略箭头，sideOffset
+            仍独立控制外框间距。
+            短文案在气泡内垂直居中，多行文字自然撑开；空间受限时从顶部滚动阅读。
+            提示应保持简短，需要长篇说明时更适合放在页面或 Popover 中。
           </p>
           <p>
             提示跟随触发器自身或最近容器的显式 dir，使文字、逻辑定位和箭头朝向保持一致；未指定时继承

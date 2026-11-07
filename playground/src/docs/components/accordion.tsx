@@ -2,6 +2,8 @@ import AccordionBasic from '../../examples/navigation/AccordionBasic';
 import accordionBasicSource from '../../examples/navigation/AccordionBasic.tsx?raw';
 import AccordionControlled from '../../examples/navigation/AccordionControlled';
 import accordionControlledSource from '../../examples/navigation/AccordionControlled.tsx?raw';
+import AccordionAppearance from '../../examples/navigation/AccordionAppearance';
+import accordionAppearanceSource from '../../examples/navigation/AccordionAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('accordion', {
@@ -28,6 +30,13 @@ export default defineComponentPage('accordion', {
           description: '默认展开一项，展开另一项时收起前一项。',
           component: AccordionBasic,
           source: accordionBasicSource,
+        },
+        {
+          id: 'appearance',
+          title: '普通与柔和纸面',
+          description: '普通外观保留箭头与展开反馈；soft 增加圆形箭头底座与更明显的展开纸面。',
+          component: AccordionAppearance,
+          source: accordionAppearanceSource,
         },
       ],
     },
@@ -81,6 +90,12 @@ export default defineComponentPage('accordion', {
         {
           name: 'AccordionProps',
           rows: [
+            {
+              name: 'appearance',
+              type: "'default' | 'soft'",
+              defaultValue: "'default'",
+              description: '普通箭头或圆形底座与展开纸面；不改变展开状态、标题层级及整行点击区域。',
+            },
             {
               name: 'items',
               type: 'AccordionItem[]',
@@ -173,6 +188,7 @@ export default defineComponentPage('accordion', {
             Tab / Shift+Tab 按顺序聚焦可用标题按钮，Enter / Space
             展开或收起；当前实现不使用方向键切换标题焦点。
           </li>
+          <li>键盘焦点轮廓收进标题行；组合有内容裁切的大圆角容器时，仍需保留适当内间距。</li>
           <li>
             组件管理展开状态与标题、面板之间的语义关联。禁用标题按钮退出 Tab
             顺序，展开或收起不会自动把焦点移入正文。

@@ -62,6 +62,7 @@ export default function ToastBasic() {
       </div>
       <div ref={message}>
         <Toast
+          appearance="receipt"
           open={open}
           onClose={() => {
             returnFocus.current = message.current?.contains(document.activeElement) ?? false;

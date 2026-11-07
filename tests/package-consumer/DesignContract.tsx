@@ -2,14 +2,18 @@ import { useState } from 'react';
 import { SelectionContract } from './SelectionContract.js';
 import {
   Badge,
+  ArrowRightIcon,
+  BookmarkIcon,
   Button,
   IconButton,
+  PlusIcon,
   Select,
   Surface,
   Text,
   TextField,
   Textarea,
   ThemeProvider,
+  TrashIcon,
   type ThemeName,
 } from 'yahha-ui';
 
@@ -42,6 +46,155 @@ function DesignGlyph() {
   );
 }
 
+function ActionAppearances({ loading }: { loading: boolean }) {
+  return (
+    <div data-testid="design-decorated-actions" style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+      {(['default', 'soft'] as const).map((appearance) => (
+        <div key={appearance} style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+          {(['sm', 'md', 'lg'] as const).map((size, index) => (
+            <div key={size} style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              <Button
+                appearance={appearance}
+                size={size}
+                variant={(['primary', 'secondary', 'ghost'] as const)[index]}
+                startIcon={<BookmarkIcon />}
+                data-testid={`design-decorated-button-${appearance}-${size}`}
+              >
+                Save
+              </Button>
+              <IconButton
+                appearance={appearance}
+                size={size}
+                variant={(['primary', 'secondary', 'ghost'] as const)[index]}
+                aria-label="Add note"
+                data-testid={`design-decorated-icon-${appearance}-${size}`}
+              >
+                <PlusIcon />
+              </IconButton>
+            </div>
+          ))}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            <Button
+              appearance={appearance}
+              destructive
+              startIcon={<TrashIcon />}
+              data-testid={`design-decorated-destructive-${appearance}`}
+            >
+              Delete
+            </Button>
+            <Button
+              appearance={appearance}
+              variant="ghost"
+              aria-pressed
+              startIcon={<BookmarkIcon filled />}
+              data-testid={`design-decorated-pressed-${appearance}`}
+            >
+              Bookmark
+            </Button>
+            <Button
+              appearance={appearance}
+              disabled
+              data-testid={`design-decorated-disabled-${appearance}`}
+            >
+              Unavailable
+            </Button>
+            <Button
+              appearance={appearance}
+              loading={loading}
+              loadingVariant="biscuit"
+              startIcon={<BookmarkIcon />}
+              data-testid={`design-decorated-loading-${appearance}`}
+            >
+              Save
+            </Button>
+            <IconButton
+              appearance={appearance}
+              loading={loading}
+              loadingVariant="biscuit"
+              aria-label="Save note"
+              data-testid={`design-decorated-icon-loading-${appearance}`}
+            >
+              <BookmarkIcon />
+            </IconButton>
+          </div>
+          <Button
+            appearance={appearance}
+            startIcon={<BookmarkIcon />}
+            data-testid={`design-decorated-long-${appearance}`}
+          >
+            {'Save every detail of this longer reading note without truncating its label. '.repeat(
+              3,
+            )}
+          </Button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function LoadingActions({ loading }: { loading: boolean }) {
+  return (
+    <div data-testid="design-loading-actions" style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+      {(['ltr', 'rtl'] as const).map((direction) => (
+        <div key={direction} dir={direction} style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+          {(['default', 'soft'] as const).map((appearance) => (
+            <div
+              key={appearance}
+              style={{ display: 'flex', alignItems: 'start', flexWrap: 'wrap', gap: 12 }}
+            >
+              {(['sm', 'md', 'lg'] as const).map((size) => (
+                <div key={size} style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                  <Button
+                    appearance={appearance}
+                    size={size}
+                    loading={loading}
+                    loadingVariant="biscuit"
+                    data-testid={`design-loading-plain-${direction}-${appearance}-${size}`}
+                    data-loading-case="plain"
+                  >
+                    Save draft
+                  </Button>
+                  <Button
+                    appearance={appearance}
+                    size={size}
+                    loading={loading}
+                    loadingVariant="biscuit"
+                    startIcon={<BookmarkIcon />}
+                    data-testid={`design-loading-leading-${direction}-${appearance}-${size}`}
+                    data-loading-case="leading"
+                  >
+                    Save draft
+                  </Button>
+                </div>
+              ))}
+              <Button
+                appearance={appearance}
+                loading={loading}
+                loadingVariant="biscuit"
+                endIcon={<ArrowRightIcon />}
+                data-testid={`design-loading-trailing-${direction}-${appearance}-md`}
+                data-loading-case="trailing"
+              >
+                Save draft
+              </Button>
+              <Button
+                appearance={appearance}
+                loading={loading}
+                loadingVariant="biscuit"
+                style={{ width: 'min(100%, 220px)' }}
+                data-testid={`design-loading-long-${direction}-${appearance}-md`}
+                data-loading-case="long"
+              >
+                Save every detail of this longer reading note without truncating its label.
+              </Button>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function DesignContract() {
   const [loading, setLoading] = useState(true);
   return (
@@ -60,7 +213,11 @@ export function DesignContract() {
               <Button data-testid="design-button-disabled" disabled>
                 Disabled
               </Button>
-              <Button data-testid="design-button-loading" loading={loading}>
+              <Button
+                data-testid="design-button-loading"
+                loading={loading}
+                loadingVariant="biscuit"
+              >
                 Loading
               </Button>
               <Button
@@ -94,6 +251,7 @@ export function DesignContract() {
                 data-testid="design-icon-loading"
                 aria-label="Loading design icon"
                 loading={loading}
+                loadingVariant="biscuit"
               >
                 <DesignGlyph />
               </IconButton>
@@ -122,6 +280,8 @@ export function DesignContract() {
                 {'A longer action keeps its complete label readable. '.repeat(3)}
               </Button>
             </div>
+            <ActionAppearances loading={loading} />
+            <LoadingActions loading={loading} />
             <Surface data-testid="design-surface" style={{ display: 'grid', gap: 12 }}>
               <Text>Paper holds the content; controls hold the actions.</Text>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -129,7 +289,7 @@ export function DesignContract() {
                 <Badge data-testid="design-badge-accent" tone="accent">
                   Current category
                 </Badge>
-                <Badge data-testid="design-badge-success" tone="success">
+                <Badge data-testid="design-badge-success" tone="success" appearance="stamp">
                   Finished reading
                 </Badge>
               </div>

@@ -96,13 +96,13 @@ export default function DialogExternal() {
 
 ## 进阶用法
 
-修改标题后，取消、Escape、关闭按钮和外点共用退出策略：继续编辑或明确放弃。 结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
+修改标题后，取消、Escape、关闭按钮和外点共用退出策略；确认态在同一操作区提供继续编辑、保存标题或明确放弃。 结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
 
 <a id="form"></a>
 
 ### 未保存修改的关闭确认
 
-存在未保存修改时，关闭操作提供继续编辑或放弃修改的选择。
+存在未保存修改时，在同一操作区继续编辑、保存标题或放弃修改。
 
 [查看示例文件](../../playground/src/examples/feedback/DialogForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -191,12 +191,37 @@ export default function DialogForm() {
         initialFocus={inputRef}
         footer={
           <>
-            <Button variant="secondary" onClick={() => changeOpen(false)}>
-              取消
+            <Button
+              ref={continueRef}
+              variant="secondary"
+              onClick={() => {
+                if (confirming) {
+                  cancelPendingFocus();
+                  setConfirming(false);
+                  inputRef.current?.focus();
+                } else changeOpen(false);
+              }}
+            >
+              {confirming ? '继续编辑' : '取消'}
             </Button>
             <Button type="submit" form={formId}>
               保存标题
             </Button>
+            {confirming && (
+              <Button
+                variant="ghost"
+                destructive
+                onClick={() => {
+                  cancelPendingFocus();
+                  setDraft(saved);
+                  setConfirming(false);
+                  setError('');
+                  setOpen(false);
+                }}
+              >
+                放弃修改并关闭
+              </Button>
+            )}
           </>
         }
       >
@@ -223,35 +248,10 @@ export default function DialogForm() {
           />
         </form>
         {confirming && (
-          <div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
+          <div style={{ marginTop: 16 }}>
             <Alert role="alert" tone="warning" title="还有未保存的修改">
               你可以继续编辑或保存，也可以放弃这次修改并关闭。
             </Alert>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              <Button
-                ref={continueRef}
-                variant="secondary"
-                onClick={() => {
-                  cancelPendingFocus();
-                  setConfirming(false);
-                  inputRef.current?.focus();
-                }}
-              >
-                继续编辑
-              </Button>
-              <Button
-                destructive
-                onClick={() => {
-                  cancelPendingFocus();
-                  setDraft(saved);
-                  setConfirming(false);
-                  setError('');
-                  setOpen(false);
-                }}
-              >
-                放弃修改并关闭
-              </Button>
-            </div>
           </div>
         )}
       </Dialog>
@@ -309,6 +309,8 @@ export default function DialogForm() {
 ## 内容布局与 Portal
 
 底部操作区空间不足时，按钮会换行；窄屏改为纵向排列。
+
+插画区为关闭按钮和焦点轮廓保留两侧留白。图片或 SVG 保持居中、完整显示，宽幅插画会按比例缩小；插画区高度仍为 124px。
 
 长标题自动换行，内容超出可用高度时整个弹窗滚动，footer 不固定在底部。复杂表单或长篇正文更适合独立页面，避免把必要操作埋在长滚动区中。
 

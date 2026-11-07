@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import {
+  measureTextButton,
+  verifyTextButtonLoading,
+  verifyTextButtonRestored,
+} from './loading-layout.mjs';
 
 /** Verify that the reference page uses the shipped library, not a local visual fork. */
 export async function verifyDesignBaseline(page, baseURL) {
@@ -79,17 +84,16 @@ export async function verifyDesignBaseline(page, baseURL) {
     },
     'The combined settings form must submit the actual current native field values.',
   );
-  const before = await save.boundingBox();
+  const before = await measureTextButton(save);
   await save.click();
   assert.equal(await save.getAttribute('aria-busy'), 'true');
-  const during = await save.boundingBox();
-  assert.equal(during.width, before.width);
-  assert.equal(during.height, before.height);
+  verifyTextButtonLoading(before, await measureTextButton(save));
   await controls
     .getByRole('status')
     .getByText('已在本页保存「库米」的读书笔记设置。', { exact: true })
     .waitFor();
   assert.notEqual(await save.getAttribute('aria-busy'), 'true');
+  verifyTextButtonRestored(before, await measureTextButton(save));
   await controls.getByRole('button', { name: '收藏示例', exact: true }).click();
   assert.equal(
     await controls

@@ -38,6 +38,8 @@ export interface TabsProps extends Omit<ComponentPropsWithRef<'div'>, 'children'
   activateOnFocus?: boolean;
   /** Retains hidden panels and their local state. @default false */
   keepMounted?: boolean;
+  /** Adds an angled ink marker and active paper fill. @default 'default' */
+  appearance?: 'default' | 'ink';
   classNames?: Partial<Record<'list' | 'tab' | 'panel', string>>;
 }
 
@@ -49,6 +51,7 @@ export function Tabs({
   onValueChange,
   activateOnFocus = false,
   keepMounted = false,
+  appearance = 'default',
   className,
   classNames,
   ...props
@@ -74,6 +77,7 @@ export function Tabs({
         {...props}
         render={<div ref={rootRef} />}
         className={cx(styles.root, className)}
+        data-appearance={appearance}
         value={value}
         defaultValue={initialValue}
         onValueChange={(nextValue: string | null) => onValueChange?.(nextValue)}

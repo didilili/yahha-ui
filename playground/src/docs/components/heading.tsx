@@ -2,6 +2,8 @@ import HeadingExample from '../../examples/content/HeadingExample';
 import headingSource from '../../examples/content/HeadingExample.tsx?raw';
 import HeadingArticle from '../../examples/content/HeadingArticle';
 import headingArticleSource from '../../examples/content/HeadingArticle.tsx?raw';
+import HeadingDecoration from '../../examples/content/HeadingDecoration';
+import headingDecorationSource from '../../examples/content/HeadingDecoration.tsx?raw';
 import { defineComponentPage } from '../page';
 import { nativeRows, example } from '../page-helpers';
 
@@ -24,6 +26,13 @@ export default defineComponentPage('heading', {
           HeadingExample,
           headingSource,
         ),
+        example(
+          'heading-decoration',
+          '普通与短墨线',
+          '同一标题层级可独立选择装饰；默认不绘制短墨线，也不预留装饰空间。',
+          HeadingDecoration,
+          headingDecorationSource,
+        ),
       ],
     },
     {
@@ -45,7 +54,9 @@ export default defineComponentPage('heading', {
       title: '标题间距与长标题',
       content: (
         <p>
-          标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。长标题会自然换行，应保留完整文字；不要仅为缩小字号而改变标题层级。
+          标题默认没有外边距，使用外层布局区分章节之间与标题到正文的间距。默认
+          decoration="none"，不绘制短墨线；显式设置 underline 时，任意层级均增加短墨线及 0.48em
+          底部留白。长标题会自然换行，应保留完整文字；不要仅为缩小字号或改变装饰而调整标题层级。
         </p>
       ),
     },
@@ -63,6 +74,12 @@ export default defineComponentPage('heading', {
               description: '渲染的标题层级，默认字号依次为 32 / 24 / 20 / 18 / 16 / 14px。',
             },
             { name: 'children', type: 'ReactNode', description: '标题内容。' },
+            {
+              name: 'decoration',
+              type: "'none' | 'underline'",
+              defaultValue: "'none'",
+              description: '可选短曲墨线，独立于语义层级；仅 underline 预留装饰所需底部空间。',
+            },
             ...nativeRows('h2', 'h1–h6 标题'),
           ],
         },

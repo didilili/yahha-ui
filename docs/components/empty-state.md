@@ -146,6 +146,199 @@ export default function EmptySearch() {
 }
 ```
 
+<a id="motif"></a>
+
+### 普通与小纸页空态
+
+使用相同标题与说明对比；默认没有插画，小纸页由 motif="paper" 显式启用。
+
+[查看示例文件](../../playground/src/examples/feedback/EmptyAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/EmptyAppearance.tsx -->
+
+```tsx
+import { EmptyState, Text } from 'yahha-ui';
+
+export default function EmptyAppearance() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+        gap: 24,
+      }}
+    >
+      <div>
+        <Text size="sm" tone="muted">
+          普通（默认）
+        </Text>
+        <EmptyState title="还没有手记" description="写下今天想记住的一件小事。" />
+      </div>
+      <div>
+        <Text size="sm" tone="muted">
+          小纸页
+        </Text>
+        <EmptyState motif="paper" title="还没有手记" description="写下今天想记住的一件小事。" />
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="illustrations"></a>
+
+## 按场景选用道具插画
+
+普通空态默认没有插画；可用 motif="paper" 加入小纸页，或通过 illustration 插槽选择空收藏口袋或搜索纸条。插画用于补充情境，原因和下一步仍由文字与操作说明。
+
+<a id="empty-illustrations"></a>
+
+### 纸页、收藏与搜索
+
+切换场景后，可以创建内容、浏览文章或清空搜索；示例状态仅保留在当前页面。
+
+[查看示例文件](../../playground/src/examples/scenes/EmptyScene.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/scenes/EmptyScene.tsx -->
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import { Button, EmptyState, Heading, Select, Text, TextField, ThemeProvider } from 'yahha-ui';
+import 'yahha-ui/style.css';
+import emptyCollectionArtwork from './artwork/little-days-empty-collection.svg?no-inline';
+import emptySearchArtwork from './artwork/little-days-search-empty.svg?no-inline';
+
+const options = [
+  { value: 'first', label: '首次没有内容' },
+  { value: 'saved', label: '暂无收藏' },
+  { value: 'search', label: '搜索无结果' },
+];
+const articles = ['雨天的读书笔记', '周末散步的小发现'];
+
+export default function EmptyScene() {
+  const [scene, setScene] = useState<string | null>('first');
+  const [created, setCreated] = useState(false);
+  const [query, setQuery] = useState('海边');
+  const search = useRef<HTMLInputElement>(null);
+  const resultHeading = useRef<HTMLHeadingElement>(null);
+  const matches =
+    scene === 'search' ? articles.filter((title) => title.includes(query.trim())) : articles;
+  const hasContent = scene === 'search' ? matches.length > 0 : created;
+
+  useEffect(() => {
+    if (created) resultHeading.current?.focus({ preventScroll: true });
+  }, [created]);
+
+  return (
+    <ThemeProvider theme="pink">
+      <style>{`
+        .story-empty { max-width: 660px; margin: auto; }
+        .story-empty-tools { display: flex; align-items: end; flex-wrap: wrap; gap: 16px; }
+        .story-empty-tools > * { flex: 1 1 220px; }
+        .story-empty-art { display: block; width: min(240px, 100%); height: auto; margin: auto; }
+        .story-empty-result { min-height: 200px; padding-block: 32px; }
+        .story-empty-result ul { margin: 16px 0; padding-inline-start: 22px; line-height: 2; }
+        .story-empty-reset { margin-top: 16px; }
+      `}</style>
+      <div className="story-empty">
+        <div className="story-empty-tools">
+          <Select
+            label="空态场景"
+            value={scene}
+            options={options}
+            onValueChange={(value) => {
+              setScene(value);
+              setCreated(false);
+              setQuery('海边');
+            }}
+          />
+          {scene === 'search' && (
+            <TextField
+              ref={search}
+              label="搜索关键词"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+          )}
+        </div>
+        {hasContent ? (
+          <div className="story-empty-result">
+            <Heading level={3} ref={resultHeading} tabIndex={-1}>
+              {scene === 'first' ? '第一篇手记已创建' : '可以读这些文章'}
+            </Heading>
+            <ul>
+              {(scene === 'first' ? ['今天想记住的小事'] : matches).map((title) => (
+                <li key={title}>{title}</li>
+              ))}
+            </ul>
+            <Text size="sm" tone="muted">
+              示例状态仅保留在当前页面，刷新后恢复。
+            </Text>
+          </div>
+        ) : (
+          <EmptyState
+            motif="paper"
+            title={
+              scene === 'search'
+                ? '未找到相关文章'
+                : scene === 'saved'
+                  ? '还没有收藏'
+                  : '还没有手记'
+            }
+            description={
+              scene === 'search'
+                ? `没有找到包含“${query}”的标题，试试其他关键词。`
+                : scene === 'saved'
+                  ? '把想再读的文章收起来，会在这里找到它们。'
+                  : '先写下今天想记住的一件小事。'
+            }
+            illustration={
+              scene === 'first' ? undefined : (
+                <img
+                  className="story-empty-art"
+                  src={scene === 'saved' ? emptyCollectionArtwork : emptySearchArtwork}
+                  alt=""
+                  width="240"
+                  height="180"
+                  loading="lazy"
+                />
+              )
+            }
+            action={
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  if (scene === 'search') {
+                    setQuery('');
+                    search.current?.focus();
+                  } else setCreated(true);
+                }}
+              >
+                {scene === 'search'
+                  ? '清空搜索'
+                  : scene === 'saved'
+                    ? '浏览示例文章'
+                    : '创建示例手记'}
+              </Button>
+            }
+          />
+        )}
+        <Button
+          className="story-empty-reset"
+          variant="ghost"
+          onClick={() => {
+            setCreated(false);
+            setQuery('海边');
+          }}
+        >
+          重置空态示例
+        </Button>
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 说明原因并给出下一步
@@ -158,13 +351,14 @@ export default function EmptySearch() {
 
 ### EmptyStateProps
 
-| 属性             | 说明                                                       | 类型        | 默认值 |
-| ---------------- | ---------------------------------------------------------- | ----------- | ------ |
-| `title` **必填** | 标题，渲染为 h3；说明当前为什么没有内容。                  | `ReactNode` | —      |
-| `description`    | 说明文字，渲染在 p 内，适合文本或行内内容。                | `ReactNode` | —      |
-| `illustration`   | 装饰插画；插槽带 aria-hidden，必要信息仍需写进标题或说明。 | `ReactNode` | —      |
-| `action`         | 可选按钮或链接，组件不为它绑定业务操作。                   | `ReactNode` | —      |
-| `className`      | 作用于根 div。当前不透传 ref、style 或其他原生 div 属性。  | `string`    | —      |
+| 属性             | 说明                                                                                                     | 类型                | 默认值   |
+| ---------------- | -------------------------------------------------------------------------------------------------------- | ------------------- | -------- |
+| `title` **必填** | 标题，渲染为 h3；说明当前为什么没有内容。                                                                | `ReactNode`         | —        |
+| `description`    | 说明文字，渲染在 p 内，适合文本或行内内容。                                                              | `ReactNode`         | —        |
+| `motif`          | 内置装饰。仅 illustration 未提供时，paper 显示小纸页；none 不生成插画区。                                | `'none' \| 'paper'` | `'none'` |
+| `illustration`   | 自定义装饰优先于 motif；null 或 false 明确隐藏全部插画。插槽带 aria-hidden，必要信息仍需写进标题或说明。 | `ReactNode`         | —        |
+| `action`         | 可选按钮或链接，组件不为它绑定业务操作。                                                                 | `ReactNode`         | —        |
+| `className`      | 作用于根 div。当前不透传 ref、style 或其他原生 div 属性。                                                | `string`            | —        |
 
 <a id="accessibility"></a>
 

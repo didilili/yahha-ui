@@ -632,37 +632,102 @@ export async function verifyForcedColors(browser, url) {
             `${id}: spinner size must remain ${expected}px.`,
           );
         }
-        const dots = await loading.evaluate((node, fallback) => {
-          const mark = [...node.querySelectorAll('[aria-hidden="true"]')].find(
-            (child) => child.children.length === 3,
-          );
-          if (!mark) return [];
-          let background = fallback;
-          for (let parent = mark.parentElement; parent; parent = parent.parentElement) {
-            const color = getComputedStyle(parent).backgroundColor;
-            if (!/rgba\([^)]*,\s*0\)$/.test(color)) {
-              background = color;
-              break;
+        const frame = await loading.evaluate((node) => {
+          const mark = node.querySelector('[data-loading-mark]');
+          if (!mark) return null;
+          const bounds = node.getBoundingClientRect();
+          const box = mark.getBoundingClientRect();
+          return {
+            variant: mark.getAttribute('data-loading-mark'),
+            complete:
+              box.width > 0 &&
+              box.height > 0 &&
+              box.left >= bounds.left &&
+              box.right <= bounds.right &&
+              box.top >= bounds.top &&
+              box.bottom <= bounds.bottom,
+            width: box.width,
+            gap: parseFloat(getComputedStyle(node).columnGap),
+          };
+        });
+        check(frame?.complete, `${id}: the chosen loading mark stays visible inside its frame.`);
+        if (id === 'forced-loading-button' && frame)
+          sizes.at(-1).loadingSpace = frame.width + frame.gap;
+        if (frame?.variant === 'dots') {
+          const dots = await loading.evaluate((node, fallback) => {
+            const mark = node.querySelector('[data-loading-mark]');
+            if (!mark) return [];
+            let background = fallback;
+            for (let parent = mark.parentElement; parent; parent = parent.parentElement) {
+              const color = getComputedStyle(parent).backgroundColor;
+              if (!/rgba\([^)]*,\s*0\)$/.test(color)) {
+                background = color;
+                break;
+              }
             }
-          }
-          return [...mark.children].map((dot) => {
-            const style = getComputedStyle(dot);
-            const rect = dot.getBoundingClientRect();
-            return (
-              rect.width > 0 &&
-              rect.height > 0 &&
-              Number(style.opacity) > 0 &&
-              ((parseFloat(style.borderTopWidth) > 0 &&
-                style.borderTopStyle !== 'none' &&
-                style.borderTopColor !== background) ||
-                style.backgroundColor.replace(/rgba\([^)]*,\s*0\)$/, background) !== background)
-            );
-          });
-        }, canvas);
-        check(
-          dots.length === 3 && dots.every(Boolean),
-          `${id}: all three loading dots must be painted against their actual background.`,
-        );
+            return [...mark.children].map((dot) => {
+              const style = getComputedStyle(dot);
+              const rect = dot.getBoundingClientRect();
+              return (
+                rect.width > 0 &&
+                rect.height > 0 &&
+                Number(style.opacity) > 0 &&
+                ((parseFloat(style.borderTopWidth) > 0 &&
+                  style.borderTopStyle !== 'none' &&
+                  style.borderTopColor !== background) ||
+                  style.backgroundColor.replace(/rgba\([^)]*,\s*0\)$/, background) !== background)
+              );
+            });
+          }, canvas);
+          check(
+            dots.length === 3 && dots.every(Boolean),
+            `${id}: all three loading dots must be painted against their actual background.`,
+          );
+        } else {
+          const biscuit = await loading.evaluate((node, fallback) => {
+            const mark = node.querySelector('[data-loading-mark]');
+            if (!mark) return null;
+            const bounds = node.getBoundingClientRect();
+            const frame = mark.getBoundingClientRect();
+            let background = fallback;
+            for (let parent = mark.parentElement; parent; parent = parent.parentElement) {
+              const color = getComputedStyle(parent).backgroundColor;
+              if (!/rgba\([^)]*,\s*0\)$/.test(color)) {
+                background = color;
+                break;
+              }
+            }
+            return {
+              complete:
+                frame.width > 0 &&
+                frame.height > 0 &&
+                frame.left >= bounds.left &&
+                frame.right <= bounds.right &&
+                frame.top >= bounds.top &&
+                frame.bottom <= bounds.bottom,
+              painted: ['shell', 'jam'].every((part) => {
+                const shape = mark.querySelector(`[data-biscuit-${part}]`);
+                if (!shape) return false;
+                const style = getComputedStyle(shape);
+                const paint = part === 'shell' ? style.stroke : style.fill;
+                return (
+                  style.visibility !== 'hidden' &&
+                  style.display !== 'none' &&
+                  Number(style.opacity) > 0 &&
+                  (part !== 'shell' || parseFloat(style.strokeWidth) > 0) &&
+                  paint !== 'none' &&
+                  paint !== background
+                );
+              }),
+              width: frame.width,
+              gap: parseFloat(getComputedStyle(node).columnGap),
+            };
+          }, canvas);
+          check(
+            biscuit?.complete && biscuit.painted,
+            `${id}: the biscuit outline and jam must remain visible against the actual background.`,
+          );
+        }
         check(
           (await loading.evaluate((node) => node.getAnimations({ subtree: true }).length)) === 0,
           `${id}: reduced motion must still stop loading animations.`,
@@ -671,10 +736,14 @@ export async function verifyForcedColors(browser, url) {
       await page.getByRole('button', { name: 'Toggle loading fixtures', exact: true }).click();
       for (const [index, id] of loadingIds.entries()) {
         const current = await page.getByTestId(id).boundingBox();
+        const before = sizes[index];
+        const expectedWidth = before.width - (before.loadingSpace ?? 0);
         check(
-          Math.abs(current.width - sizes[index].width) < 0.1 &&
-            Math.abs(current.height - sizes[index].height) < 0.1,
-          `${id}: loading must preserve the control dimensions.`,
+          Math.abs(current.width - expectedWidth) < 0.1 &&
+            Math.abs(current.height - before.height) < 0.1,
+          id === 'forced-loading-button'
+            ? `${id}: the added loading frame and gap take real space, while the target height stays stable.`
+            : `${id}: loading must preserve an existing icon or spinner frame.`,
         );
       }
       const skeleton = page.getByTestId('forced-skeleton');

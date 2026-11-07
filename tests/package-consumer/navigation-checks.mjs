@@ -8,6 +8,80 @@ async function focused(page, locator) {
   );
 }
 
+async function verifyPairedDirections(page, nav, label) {
+  const original = await nav.evaluate((node) => {
+    const previous = { dir: node.getAttribute('dir'), max: node.style.maxInlineSize };
+    node.style.maxInlineSize = '316px';
+    return previous;
+  });
+  try {
+    for (const direction of ['ltr', 'rtl']) {
+      await nav.evaluate((node, value) => (node.dir = value), direction);
+      const pair = await nav.evaluate((node) => {
+        const box = node.getBoundingClientRect();
+        const targets = [...node.querySelectorAll('button, a, [role="link"]')];
+        const previous = targets.find((target) => target.getAttribute('aria-label') === '上一页');
+        const next = targets.find((target) => target.getAttribute('aria-label') === '下一页');
+        const measure = (target) => {
+          const bounds = target.getBoundingClientRect();
+          return {
+            left: bounds.left,
+            right: bounds.right,
+            top: bounds.top,
+            width: bounds.width,
+            height: bounds.height,
+          };
+        };
+        return {
+          previous: measure(previous),
+          next: measure(next),
+          root: { left: box.left, right: box.right },
+          finalLabels: targets.slice(-2).map((target) => target.getAttribute('aria-label')),
+        };
+      });
+      const text = `${label} ${direction}`;
+      assert.deepEqual(
+        pair.finalLabels,
+        ['上一页', '下一页'],
+        `${text}: visual and DOM order agree.`,
+      );
+      assert(
+        Math.abs(pair.previous.top - pair.next.top) < 0.1,
+        `${text}: previous and next stay together when the page numbers wrap.`,
+      );
+      for (const target of [pair.previous, pair.next]) {
+        assert(
+          target.width >= 44 && target.height >= 44,
+          `${text}: direction targets stay full size.`,
+        );
+        assert(
+          target.left >= pair.root.left - 1 && target.right <= pair.root.right + 1,
+          `${text}: the direction pair stays inside the navigator.`,
+        );
+      }
+      const gap =
+        direction === 'ltr'
+          ? pair.next.left - pair.previous.right
+          : pair.previous.left - pair.next.right;
+      assert(Math.abs(gap - 8) < 0.1, `${text}: paired directions retain their shared gap.`);
+    }
+    await nav
+      .getByRole('button', { name: /^第 \d+ 页$/ })
+      .last()
+      .focus();
+    await page.keyboard.press('Tab');
+    await focused(page, nav.getByRole('button', { name: '上一页', exact: true }));
+    await page.keyboard.press('Tab');
+    await focused(page, nav.getByRole('button', { name: '下一页', exact: true }));
+  } finally {
+    await nav.evaluate((node, previous) => {
+      if (previous.dir == null) node.removeAttribute('dir');
+      else node.setAttribute('dir', previous.dir);
+      node.style.maxInlineSize = previous.max;
+    }, original);
+  }
+}
+
 export async function verifyNavigationAppearance(page, theme) {
   const tabs = page.getByTestId('navigation-tabs');
   const longTab = tabs.getByRole('tab', { name: /^和朋友们一起收集/ });
@@ -112,6 +186,7 @@ export async function verifyNavigationAppearance(page, theme) {
     return { actual: getComputedStyle(node).borderTopColor, expected };
   });
   assert.equal(edge.actual, edge.expected, `${theme}: ordinary pages use a light paper edge.`);
+  await verifyPairedDirections(page, pages, theme);
 
   const fullRange = page.getByTestId('navigation-full-range-pages');
   const fullRangeTargets = await fullRange.getByRole('button').evaluateAll((nodes) =>
@@ -160,7 +235,7 @@ export async function verifyNavigationAppearance(page, theme) {
     };
   });
   assert(alignment.lines > 1, 'The long question exercises a real multiline title.');
-  assert(alignment.offset <= 2, 'The round disclosure aligns with the first question line.');
+  assert(alignment.offset <= 2, 'The disclosure glyph aligns with the first question line.');
   assert.equal(
     await accordion
       .getByRole('button', { name: 'First question', exact: true })
@@ -202,21 +277,39 @@ export async function verifyNavigationAppearance(page, theme) {
   assert.equal(await locked.getAttribute('aria-expanded'), 'true');
   const resting = await locked.locator('svg').evaluate((node) => {
     const probe = document.createElement('span');
-    probe.style.background = 'var(--yahha-disabled-surface)';
+    probe.style.color = 'var(--yahha-muted)';
     node.parentElement.append(probe);
-    const expected = getComputedStyle(probe).backgroundColor;
+    const expected = getComputedStyle(probe).color;
     probe.remove();
     const style = getComputedStyle(node);
     return {
       actual: style.backgroundColor,
+      ink: style.color,
+      border: style.borderTopColor,
+      frame: [node.getBoundingClientRect().width, node.getBoundingClientRect().height],
       pointsUp: new DOMMatrixReadOnly(style.transform).a < 0,
       expected,
     };
   });
   assert.equal(
     resting.actual,
+    'rgba(0, 0, 0, 0)',
+    `${theme}: the ordinary disabled disclosure does not gain a filled knob.`,
+  );
+  assert.equal(
+    resting.border,
+    'rgba(0, 0, 0, 0)',
+    `${theme}: the ordinary glyph has no knob border.`,
+  );
+  assert.equal(
+    resting.ink,
     resting.expected,
-    `${theme}: expanded disabled disclosure stays neutral.`,
+    `${theme}: the disabled disclosure keeps readable muted ink.`,
+  );
+  assert.deepEqual(
+    resting.frame,
+    [28, 28],
+    `${theme}: removing the knob preserves its glyph frame.`,
   );
   assert(resting.pointsUp, 'A disabled expanded panel keeps its open direction.');
   assert(
@@ -297,6 +390,52 @@ export async function verifyNavigationAppearance(page, theme) {
   }
 }
 
+export async function verifyAccordionFocusInCard(page) {
+  const example = page.getByTestId('navigation-clipped-accordion');
+  const first = example.getByRole('button', { name: 'Subscribe to these notes', exact: true });
+  if ((await first.getAttribute('aria-expanded')) !== 'true') await first.click();
+  await example.getByRole('button', { name: 'Before clipped questions', exact: true }).press('Tab');
+  const long = example.getByRole('button', { name: /^如果周末下雨/ });
+  for (const question of [first, long]) {
+    await focused(page, question);
+    const visibleRing = await question.evaluate((node) => {
+      const card = node.closest('[data-testid="question-card"]');
+      const bounds = card.getBoundingClientRect();
+      const cardStyle = getComputedStyle(card);
+      const box = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      const extent = parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset);
+      return {
+        visible: node.matches(':focus-visible') && parseFloat(style.outlineWidth) >= 2,
+        inside:
+          box.left - extent >= bounds.left + parseFloat(cardStyle.borderLeftWidth) - 0.1 &&
+          box.right + extent <= bounds.right - parseFloat(cardStyle.borderRightWidth) + 0.1 &&
+          box.top - extent >= bounds.top + parseFloat(cardStyle.borderTopWidth) - 0.1 &&
+          box.bottom + extent <= bounds.bottom - parseFloat(cardStyle.borderBottomWidth) + 0.1,
+      };
+    });
+    assert.deepEqual(
+      visibleRing,
+      { visible: true, inside: true },
+      "The keyboard focus ring stays within the card's clipping bounds.",
+    );
+    if (question === first) {
+      assert.equal(await first.getAttribute('aria-expanded'), 'true');
+      await page.keyboard.press('Tab');
+      await focused(page, example.getByRole('link', { name: 'Read subscription details' }));
+      await page.keyboard.press('Tab');
+    }
+  }
+  await page.keyboard.press('Enter');
+  assert.equal(await long.getAttribute('aria-expanded'), 'true');
+  assert.equal(await first.getAttribute('aria-expanded'), 'false');
+  await page.keyboard.press('Tab');
+  await focused(
+    page,
+    example.getByRole('button', { name: 'After clipped questions', exact: true }),
+  );
+}
+
 export async function verifyNavigation(browser, url) {
   for (const width of [1280, 390, 320]) {
     const { page, errors } = await createBasicConsumerPage(browser, width);
@@ -305,6 +444,7 @@ export async function verifyNavigation(browser, url) {
       for (const theme of ['pink', 'blue', 'yellow']) {
         await page.getByRole('combobox', { name: 'Basic preview theme' }).selectOption(theme);
         await verifyNavigationAppearance(page, theme);
+        await verifyAccordionFocusInCard(page);
       }
       assert.deepEqual(errors, [], 'Installed navigation consumer emitted browser errors.');
       console.log(

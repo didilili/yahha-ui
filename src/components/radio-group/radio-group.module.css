@@ -81,16 +81,14 @@
   gap: var(--yahha-space-1, 4px);
 }
 .label {
+  font-weight: 600;
   color: var(--yahha-ink, #49313d);
   font-size: var(--yahha-font-size-md, 14px);
   line-height: var(--yahha-leading-option, 22px);
 }
-.option:has(.input:enabled:checked) {
+.group[data-highlight-selected='true'] > .options > .option:has(> .input:enabled:checked) {
   background: var(--yahha-accent-soft, #fff0f6);
   box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--yahha-line, #c58ba1) 25%, transparent);
-}
-.option:has(.input:checked) .label {
-  font-weight: 600;
 }
 .description,
 .hint,
@@ -104,7 +102,17 @@
   margin-top: var(--yahha-space-2, 8px);
   padding-inline: var(--yahha-space-1, 4px);
 }
+.hint + .error {
+  margin-top: var(--yahha-space-1, 4px);
+}
+.errorMark {
+  position: absolute;
+  inset-inline-start: var(--yahha-space-1, 4px);
+  inset-block-start: calc((1em * var(--yahha-leading-caption, 1.6) - 16px) / 2);
+}
 .error {
+  position: relative;
+  padding-inline-start: var(--yahha-space-6, 24px);
   color: var(--yahha-error, #a33e4f);
 }
 .group[aria-invalid='true'] .input:not(:disabled) {
@@ -152,7 +160,7 @@
 }
 @media (forced-colors: active) {
   .option,
-  .option:has(.input:enabled:checked) {
+  .group[data-highlight-selected='true'] > .options > .option:has(> .input:enabled:checked) {
     box-shadow: none;
     transition: none;
   }

@@ -114,6 +114,40 @@ export default function TooltipOptions() {
 }
 ```
 
+<a id="arrow"></a>
+
+### 选择是否显示箭头
+
+同样的内容和间距，分别显示默认箭头与无箭头气泡；可聚焦或悬停触发器重新查看。
+
+[查看示例文件](../../playground/src/examples/floating/TooltipAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/floating/TooltipAppearance.tsx -->
+
+```tsx
+import { Button, Text, Tooltip } from 'yahha-ui';
+
+export default function TooltipAppearance() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32, paddingBlock: 64 }}>
+      {[true, false].map((showArrow) => (
+        <div key={String(showArrow)} style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
+          <Text size="sm" tone="muted">
+            {showArrow ? '有箭头（默认）' : '无箭头'}
+          </Text>
+          <Tooltip
+            defaultOpen
+            showArrow={showArrow}
+            content="补充阅读说明"
+            trigger={<Button variant="secondary">阅读说明</Button>}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 显示与关闭
@@ -139,9 +173,10 @@ export default function TooltipOptions() {
 | `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                           | `(open: boolean) => void`         | —          |
 | `disabled`          | 禁用提示，不改变 trigger 元素本身的 disabled。                                    | `boolean`                         | `false`    |
 | `delay`             | 首次鼠标悬停等待时间，单位 ms；键盘聚焦立即展示，短时间再次悬停可能立即显示。     | `number`                          | `400`      |
+| `showArrow`         | 是否显示箭头。false 时省略箭头，不改变内容、打开关闭和定位设置。                  | `boolean`                         | `true`     |
 | `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。          | `TooltipProps['side']`            | `"top"`    |
 | `align`             | 相对触发器的对齐方向。                                                            | `"start" \| "center" \| "end"`    | `"center"` |
-| `sideOffset`        | 提示外框与触发器的间距，单位 px；默认给尖角和按钮焦点圈留出空间。                 | `number`                          | `12`       |
+| `sideOffset`        | 提示外框与触发器的间距，单位 px；独立于 showArrow，关闭箭头后仍保留设置值。       | `number`                          | `12`       |
 | `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                         | `TooltipProps['portalContainer']` | `body`     |
 | `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。                        | `string / CSSProperties`          | —          |
 | `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                             | `Ref<HTMLDivElement>`             | —          |
@@ -158,7 +193,7 @@ export default function TooltipOptions() {
 
 ## 定位与 Portal
 
-默认显示在触发器上方，外框与触发器间距 12px，空间不足时自动避让，距视口边缘保留 12px；箭头避开气泡圆角，无法准确指向时隐藏。 文字可换行，但提示应保持简短；需要滚动阅读的说明更适合放在页面或 Popover 中。
+默认显示在触发器上方，外框与触发器间距 12px，空间不足时自动避让，距视口边缘保留 12px；箭头避开气泡圆角，无法准确指向时隐藏。 设置 showArrow=false 可省略箭头，sideOffset 仍独立控制外框间距。 短文案在气泡内垂直居中，多行文字自然撑开；空间受限时从顶部滚动阅读。 提示应保持简短，需要长篇说明时更适合放在页面或 Popover 中。
 
 提示跟随触发器自身或最近容器的显式 dir，使文字、逻辑定位和箭头朝向保持一致；未指定时继承 Base UI DirectionProvider。仅设置 CSS direction 或 dir="auto" 时，请在触发器上同时设置明确的 dir。
 

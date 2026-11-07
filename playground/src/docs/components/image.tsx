@@ -70,8 +70,9 @@ export default defineComponentPage('image', {
         <>
           <p>
             封面可以用 aspectRatio 统一比例并预留空间，图片会按 cover
-            裁切。需要完整展示的正文图片可以不设比例，保留自然尺寸。原生 width / height
-            不能为失败回退预留相同比例；加载失败后仍需保持版面时，应显式设置 aspectRatio。
+            裁切。需要完整展示的正文图片可以不设比例，保留自然尺寸；显式设置 aspectRatio="auto"
+            时也使用自然布局，失败说明随内容展开。原生 width / height
+            不能为失败回退预留相同比例；加载失败后仍需保持版面时，应显式设置固定比例。
           </p>
         </>
       ),
@@ -97,7 +98,8 @@ export default defineComponentPage('image', {
             {
               name: 'aspectRatio',
               type: "CSSProperties['aspectRatio']",
-              description: '可选比例，设置在外层容器，在加载、失败和恢复期间保持预留区域。',
+              description:
+                '固定比例设置在外层容器，在加载、失败和恢复期间保持预留区域；auto 使用自然布局。',
             },
             {
               name: 'fallback',

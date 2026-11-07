@@ -28,11 +28,13 @@ h1.heading {
   font-size: var(--yahha-font-size-heading-1, 32px);
 }
 h2.heading {
-  position: relative;
-  padding-block-end: 0.48em;
   font-size: var(--yahha-font-size-heading-2, 24px);
 }
-h2.heading::after {
+.heading[data-decoration='underline'] {
+  position: relative;
+  padding-block-end: 0.48em;
+}
+.heading[data-decoration='underline']::after {
   content: '';
   position: absolute;
   inset-inline-start: 0;

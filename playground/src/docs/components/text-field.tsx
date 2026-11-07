@@ -138,8 +138,9 @@ export default defineComponentPage('text-field', {
             启用浏览器约束，必填要求也应写在可见标签或提示中。
           </li>
           <li>
-            error 只显示错误，不执行校验。本地校验例使用 noValidate
-            跳过浏览器提交校验，由示例检查昵称并设置或清除 error；邮箱例保留浏览器必填与格式校验。
+            error 以文字和装饰性提醒标记呈现错误，不执行校验；标记不另行命名或播报。本地校验例使用
+            noValidate 跳过浏览器提交校验，由示例检查昵称并设置或清除
+            error；邮箱例保留浏览器必填与格式校验。
           </li>
           <li>
             trailing 是可交互的尾部内容槽，与仅作装饰的 leading 分开。适合一个默认 44px 的

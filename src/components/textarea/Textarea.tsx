@@ -1,5 +1,6 @@
 import { useId, useRef, type ComponentPropsWithRef, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.js';
+import { WarningIcon } from '../icon/glyphs/WarningIcon.js';
 import { useAutoSize, type AutoSize } from './useAutoSize.js';
 import styles from './textarea.module.css';
 
@@ -60,6 +61,7 @@ export function Textarea({
       )}
       {hasError && (
         <div id={errorId} className={cx(styles.error, classNames?.error)}>
+          <WarningIcon size={16} className={styles.errorMark} />
           {error}
         </div>
       )}

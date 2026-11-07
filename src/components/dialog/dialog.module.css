@@ -67,6 +67,7 @@
   justify-content: center;
   height: 124px;
   margin: 0 0 var(--yahha-space-4, 16px);
+  padding-inline: calc(var(--yahha-space-8, 32px) + var(--yahha-space-1, 4px));
 }
 .dialogIllustration > img,
 .dialogIllustration > svg {

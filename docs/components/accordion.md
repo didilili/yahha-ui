@@ -63,6 +63,53 @@ export default function AccordionBasic() {
 }
 ```
 
+<a id="appearance"></a>
+
+### 普通与柔和纸面
+
+普通外观保留箭头与展开反馈；soft 增加圆形箭头底座与更明显的展开纸面。
+
+[查看示例文件](../../playground/src/examples/navigation/AccordionAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/AccordionAppearance.tsx -->
+
+```tsx
+import { Accordion, Text } from 'yahha-ui';
+
+const items = [
+  {
+    value: 'rss',
+    title: '如何订阅这个小站？',
+    content: '把本站的 RSS 地址添加到阅读器，有新文章时就能看到更新。',
+  },
+  { value: 'comments', title: '我可以给文章留言吗？', content: '可以在文章下方分享想法。' },
+];
+
+export default function AccordionAppearance() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+        gap: 24,
+      }}
+    >
+      {(['default', 'soft'] as const).map((appearance) => (
+        <div
+          key={appearance}
+          style={{ display: 'grid', alignContent: 'start', gap: 12, minWidth: 0 }}
+        >
+          <Text size="sm" tone="muted">
+            {appearance === 'default' ? '普通（默认）' : '柔和纸面'}
+          </Text>
+          <Accordion appearance={appearance} defaultValue={['rss']} items={items} />
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="integration"></a>
 
 ## 进阶用法
@@ -216,18 +263,19 @@ export default function AccordionControlled() {
 
 ### AccordionProps
 
-| 属性                      | 说明                                                 | 类型                                                                    | 默认值  |
-| ------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------- | ------- |
-| `items` **必填**          | 每项包含唯一 value、title、content 和可选 disabled。 | `AccordionItem[]`                                                       | —       |
-| `value`                   | 受控展开项，不与 defaultValue 同时使用。             | `string[]`                                                              | —       |
-| `defaultValue`            | 非受控初始展开项。                                   | `string[]`                                                              | `[]`    |
-| `onValueChange`           | 展开或关闭后的值数组。                               | `(value: string[]) => void`                                             | —       |
-| `multiple`                | 允许同时展开多项；单项模式只使用传入值数组第一项。   | `boolean`                                                               | `false` |
-| `disabled`                | 禁用整个面板组，不强行关闭已展开内容。               | `boolean`                                                               | `false` |
-| `keepMounted`             | 关闭时保留 DOM 和表单等局部状态。                    | `boolean`                                                               | `false` |
-| `headingLevel`            | 标题的语义层级，按所在页面的标题结构选择。           | `2 \| 3 \| 4 \| 5 \| 6`                                                 | `3`     |
-| `classNames`              | 各部位附加类名，与默认类名合并。                     | `{ item?: string; heading?: string; trigger?: string; panel?: string }` | —       |
-| `ref / className / style` | 作用于最外层 div。                                   | `原生 div 属性`                                                         | —       |
+| 属性                      | 说明                                                                   | 类型                                                                    | 默认值      |
+| ------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------- |
+| `appearance`              | 普通箭头或圆形底座与展开纸面；不改变展开状态、标题层级及整行点击区域。 | `'default' \| 'soft'`                                                   | `'default'` |
+| `items` **必填**          | 每项包含唯一 value、title、content 和可选 disabled。                   | `AccordionItem[]`                                                       | —           |
+| `value`                   | 受控展开项，不与 defaultValue 同时使用。                               | `string[]`                                                              | —           |
+| `defaultValue`            | 非受控初始展开项。                                                     | `string[]`                                                              | `[]`        |
+| `onValueChange`           | 展开或关闭后的值数组。                                                 | `(value: string[]) => void`                                             | —           |
+| `multiple`                | 允许同时展开多项；单项模式只使用传入值数组第一项。                     | `boolean`                                                               | `false`     |
+| `disabled`                | 禁用整个面板组，不强行关闭已展开内容。                                 | `boolean`                                                               | `false`     |
+| `keepMounted`             | 关闭时保留 DOM 和表单等局部状态。                                      | `boolean`                                                               | `false`     |
+| `headingLevel`            | 标题的语义层级，按所在页面的标题结构选择。                             | `2 \| 3 \| 4 \| 5 \| 6`                                                 | `3`         |
+| `classNames`              | 各部位附加类名，与默认类名合并。                                       | `{ item?: string; heading?: string; trigger?: string; panel?: string }` | —           |
+| `ref / className / style` | 作用于最外层 div。                                                     | `原生 div 属性`                                                         | —           |
 
 ### AccordionItem
 
@@ -244,6 +292,7 @@ export default function AccordionControlled() {
 
 - 标题是 heading 中的原生按钮；headingLevel 应匹配所在页面的标题结构。标题内不嵌套链接或其他按钮。
 - Tab / Shift+Tab 按顺序聚焦可用标题按钮，Enter / Space 展开或收起；当前实现不使用方向键切换标题焦点。
+- 键盘焦点轮廓收进标题行；组合有内容裁切的大圆角容器时，仍需保留适当内间距。
 - 组件管理展开状态与标题、面板之间的语义关联。禁用标题按钮退出 Tab 顺序，展开或收起不会自动把焦点移入正文。
 
 <a id="styling"></a>

@@ -2,6 +2,12 @@ import EmptyBasic from '../../examples/feedback/EmptyBasic';
 import emptyBasicSource from '../../examples/feedback/EmptyBasic.tsx?raw';
 import EmptySearch from '../../examples/feedback/EmptySearch';
 import emptySearchSource from '../../examples/feedback/EmptySearch.tsx?raw';
+import EmptyAppearance from '../../examples/feedback/EmptyAppearance';
+import emptyAppearanceSource from '../../examples/feedback/EmptyAppearance.tsx?raw';
+import EmptyScene from '../../examples/scenes/EmptyScene';
+import emptySceneSource from '../../examples/scenes/EmptyScene.tsx?raw';
+import emptyCollectionArtwork from '../../examples/scenes/artwork/little-days-empty-collection.svg?no-inline';
+import emptySearchArtwork from '../../examples/scenes/artwork/little-days-search-empty.svg?no-inline';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('empty-state', {
@@ -34,6 +40,38 @@ export default defineComponentPage('empty-state', {
           component: EmptySearch,
           source: emptySearchSource,
         },
+        {
+          id: 'motif',
+          title: '普通与小纸页空态',
+          description: '使用相同标题与说明对比；默认没有插画，小纸页由 motif="paper" 显式启用。',
+          component: EmptyAppearance,
+          source: emptyAppearanceSource,
+        },
+      ],
+    },
+    {
+      id: 'illustrations',
+      kind: 'integration',
+      title: '按场景选用道具插画',
+      content: (
+        <p>
+          普通空态默认没有插画；可用 motif="paper" 加入小纸页，或通过 illustration
+          插槽选择空收藏口袋或搜索纸条。插画用于补充情境，原因和下一步仍由文字与操作说明。
+        </p>
+      ),
+      examples: [
+        {
+          id: 'empty-illustrations',
+          title: '纸页、收藏与搜索',
+          description: '切换场景后，可以创建内容、浏览文章或清空搜索；示例状态仅保留在当前页面。',
+          component: EmptyScene,
+          source: emptySceneSource,
+          themeScope: 'explicit',
+          assets: [
+            { name: 'little-days-empty-collection.svg', href: emptyCollectionArtwork },
+            { name: 'little-days-search-empty.svg', href: emptySearchArtwork },
+          ],
+        },
       ],
     },
     {
@@ -65,9 +103,17 @@ export default defineComponentPage('empty-state', {
               description: '说明文字，渲染在 p 内，适合文本或行内内容。',
             },
             {
+              name: 'motif',
+              type: "'none' | 'paper'",
+              defaultValue: "'none'",
+              description:
+                '内置装饰。仅 illustration 未提供时，paper 显示小纸页；none 不生成插画区。',
+            },
+            {
               name: 'illustration',
               type: 'ReactNode',
-              description: '装饰插画；插槽带 aria-hidden，必要信息仍需写进标题或说明。',
+              description:
+                '自定义装饰优先于 motif；null 或 false 明确隐藏全部插画。插槽带 aria-hidden，必要信息仍需写进标题或说明。',
             },
             {
               name: 'action',

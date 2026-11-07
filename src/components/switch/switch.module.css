@@ -125,10 +125,10 @@
   color: var(--yahha-muted, #7a5c6d);
 }
 @media (hover: hover) and (pointer: fine) {
-  .label:hover .input:enabled {
+  .label:not(:has(.loading)):hover .input:enabled {
     border-color: var(--yahha-ink, #49313d);
   }
-  .label:hover .input:enabled:checked {
+  .label:not(:has(.loading)):hover .input:enabled:checked {
     background: var(--yahha-accent-hover, #ffb3cf);
   }
 }

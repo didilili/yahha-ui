@@ -14,6 +14,41 @@ const options = [
 ];
 
 describe('Select', () => {
+  it.each([undefined, 'check', 'stamp'] as const)(
+    'keeps %s selected indicators decorative while keyboard selection and form reset remain native',
+    async (selectedIndicator) => {
+      const user = userEvent.setup();
+      render(
+        <form aria-label="文章">
+          <Select
+            label="分类"
+            name="category"
+            options={options}
+            defaultValue="notes"
+            selectedIndicator={selectedIndicator}
+          />
+          <button type="reset">重置分类</button>
+        </form>,
+      );
+      const trigger = screen.getByRole('combobox', { name: '分类' });
+      expect(trigger.hasAttribute('selectedindicator')).toBe(false);
+      await user.click(trigger);
+      const selected = await screen.findByRole('option', { name: '手记', selected: true });
+      const indicator = selected.querySelector('[data-selected-indicator]');
+      expect(indicator?.getAttribute('data-selected-indicator')).toBe(selectedIndicator ?? 'check');
+      expect(indicator?.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+      expect(screen.getByRole('option', { name: '草稿' }).getAttribute('aria-disabled')).toBe(
+        'true',
+      );
+      await user.keyboard('{End}{Enter}');
+      const form = screen.getByRole('form') as HTMLFormElement;
+      await waitFor(() => expect(new FormData(form).get('category')).toBe('photos'));
+      await waitFor(() => expect(document.activeElement).toBe(trigger));
+      await user.click(screen.getByRole('button', { name: '重置分类' }));
+      await waitFor(() => expect(new FormData(form).get('category')).toBe('notes'));
+    },
+  );
+
   it.each<{
     source: string;
     provider?: 'ltr' | 'rtl';

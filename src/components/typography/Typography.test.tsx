@@ -5,6 +5,30 @@ import { Text, Heading, Link, Divider } from './Typography.js';
 
 afterEach(cleanup);
 describe('Typography', () => {
+  it.each([1, 2, 3, 4, 5, 6] as const)(
+    'changes heading decoration without changing level %s, text or native ref',
+    (level) => {
+      const ref = createRef<HTMLHeadingElement>();
+      const { rerender } = render(
+        <Heading level={level} ref={ref} id="chapter">
+          章节标题
+        </Heading>,
+      );
+      const heading = screen.getByRole('heading', { level, name: '章节标题' });
+      expect(heading.getAttribute('data-decoration')).toBe('none');
+      rerender(
+        <Heading level={level} decoration="underline" ref={ref} id="chapter">
+          章节标题
+        </Heading>,
+      );
+      expect(ref.current).toBe(heading);
+      expect(screen.getByRole('heading', { level, name: '章节标题' })).toBe(heading);
+      expect(heading.getAttribute('data-decoration')).toBe('underline');
+      expect(heading.hasAttribute('decoration')).toBe(false);
+      expect(heading.id).toBe('chapter');
+    },
+  );
+
   it('preserves heading hierarchy and native text semantics', () => {
     render(
       <>

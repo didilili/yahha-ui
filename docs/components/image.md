@@ -215,7 +215,7 @@ export default function ImageDetail() {
 
 ## 加载前后保持图片区域
 
-封面可以用 aspectRatio 统一比例并预留空间，图片会按 cover 裁切。需要完整展示的正文图片可以不设比例，保留自然尺寸。原生 width / height 不能为失败回退预留相同比例；加载失败后仍需保持版面时，应显式设置 aspectRatio。
+封面可以用 aspectRatio 统一比例并预留空间，图片会按 cover 裁切。需要完整展示的正文图片可以不设比例，保留自然尺寸；显式设置 aspectRatio="auto" 时也使用自然布局，失败说明随内容展开。原生 width / height 不能为失败回退预留相同比例；加载失败后仍需保持版面时，应显式设置固定比例。
 
 <a id="api"></a>
 
@@ -227,7 +227,7 @@ export default function ImageDetail() {
 | ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------- | ------------------ |
 | `alt` **必填**         | 原生替代文字；失败回退也以此作为名称。                                               | `string`                                    | —                  |
 | `src / srcSet / sizes` | 图片地址与响应式资源选择。                                                           | `原生 img 属性`                             | —                  |
-| `aspectRatio`          | 可选比例，设置在外层容器，在加载、失败和恢复期间保持预留区域。                       | `CSSProperties['aspectRatio']`              | —                  |
+| `aspectRatio`          | 固定比例设置在外层容器，在加载、失败和恢复期间保持预留区域；auto 使用自然布局。      | `CSSProperties['aspectRatio']`              | —                  |
 | `fallback`             | 失败后的装饰内容；可访问名称仍使用 alt。说明宜简短，固定比例内较长的内容可滚动查看。 | `ReactNode`                                 | `图片暂时无法显示` |
 | `loading`              | 原生加载策略；首屏关键图片可设 eager。                                               | `'lazy' \| 'eager'`                         | `'lazy'`           |
 | `className`            | 作用于外层比例容器。                                                                 | `string`                                    | —                  |

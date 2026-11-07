@@ -8,6 +8,41 @@ import { EmptyState } from './EmptyState.js';
 afterEach(cleanup);
 
 describe('EmptyState', () => {
+  it('starts without artwork and only uses the built-in paper when explicitly requested', () => {
+    const view = render(<EmptyState title="还没有记录" />);
+    expect(view.container.querySelector('[aria-hidden="true"]')).toBeNull();
+    view.rerender(<EmptyState title="还没有记录" motif="paper" />);
+    expect(view.container.querySelector('span[aria-hidden="true"]')).not.toBeNull();
+  });
+
+  it.each([null, false, true, ''])(
+    'lets an explicit %s illustration omit all artwork even with the paper motif',
+    (illustration) => {
+      const view = render(
+        <EmptyState title="还没有记录" motif="paper" illustration={illustration} />,
+      );
+      expect(view.container.querySelector('[aria-hidden="true"]')).toBeNull();
+      expect(view.container.firstElementChild?.firstElementChild).toBe(
+        screen.getByRole('heading', { name: '还没有记录' }),
+      );
+    },
+  );
+
+  it('uses supplied artwork instead of the built-in paper and keeps empty optional content absent', () => {
+    const view = render(
+      <EmptyState
+        title="还没有记录"
+        motif="paper"
+        illustration={<svg data-testid="artwork" />}
+        description={false}
+        action=""
+      />,
+    );
+    expect(screen.getByTestId('artwork').parentElement?.getAttribute('aria-hidden')).toBe('true');
+    expect(view.container.querySelector('span[aria-hidden="true"]')).toBeNull();
+    expect(view.container.querySelector('p')).toBeNull();
+  });
+
   it('keeps numeric zero artwork decorative and numeric description in its paragraph', () => {
     render(<EmptyState title="没有记录" description={0} illustration={0} />);
 
