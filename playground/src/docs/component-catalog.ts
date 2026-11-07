@@ -227,6 +227,14 @@ export const componentCatalog: ComponentPageSummary[] = [
     description: '用于列表为空、搜索无结果等情况，提供说明与操作插槽。',
   },
   {
+    id: 'progress',
+    name: 'Progress',
+    chinese: '进度条',
+    group: '反馈',
+    aliases: ['完成比例', '百分比'],
+    description: '显示任务完成比例，支持未知进度和可选的纸签端点。',
+  },
+  {
     id: 'spinner',
     name: 'Spinner',
     chinese: '加载指示',

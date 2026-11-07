@@ -1,3 +1,4 @@
+import { verifyProgressExamples } from './progress-examples.mjs';
 import assert from 'node:assert/strict';
 import { verifyDesignBaseline } from './design-checks.mjs';
 import { verifyCoreComponents } from './core-components.mjs';
@@ -159,14 +160,14 @@ export async function verifyDocsNavigation(browser, baseURL) {
         'The directory keeps eight UI categories and a separate theme configuration group.',
       );
       const componentLinks = sidebar.locator('a[href^="#/components/"]');
-      assert.equal(await componentLinks.count(), 31);
+      assert.equal(await componentLinks.count(), 32);
       assert.equal(
         new Set(
           await componentLinks.evaluateAll((links) =>
             links.map((link) => link.getAttribute('href')),
           ),
         ).size,
-        31,
+        32,
         'Every document URL has exactly one directory entry.',
       );
       const geometry = await sidebar.locator('.nav-group a').evaluateAll((links) =>
@@ -267,6 +268,7 @@ export async function verifyDocsShell(browser, baseURL) {
     await verifyStateScenes(page, baseURL);
     await verifyFeedbackFlow(page, baseURL);
     await verifyFeedbackExamples(page, baseURL);
+    await verifyProgressExamples(page, baseURL);
     await verifyDialogForm(page, baseURL);
     await verifyOverlayExamples(page, baseURL);
     await verifyArticleActions(page, baseURL);

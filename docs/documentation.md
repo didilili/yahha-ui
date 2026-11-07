@@ -98,7 +98,7 @@ npm run sync:docs
 npm run check:docs
 ```
 
-`sync:docs` 读取实际页面模型生成 31 份组件 Markdown；`check:docs` 验证生成文件没有漂移、API 行与章节锚点没有重复、必要信息存在且示例来自真实 TSX。完整检查与 CI 同样运行此检查。
+`sync:docs` 读取实际页面模型生成 32 份组件 Markdown；`check:docs` 验证生成文件没有漂移、API 行与章节锚点没有重复、必要信息存在且示例来自真实 TSX。完整检查与 CI 同样运行此检查。
 
 生成器不会从 TypeScript 类型自动推断运行时默认值或可访问性行为。Props、实现、测试与文档仍需一起核对。原始示例不被 Markdown 格式化器改写；真实安装包验收保留相对目录与素材后编译这些示例，防止源码 alias 掩盖接入问题。
 

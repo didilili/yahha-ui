@@ -132,6 +132,7 @@ export default function SpinnerWaiting() {
 
 ## 相关组件
 
+- [Progress 进度条](progress.md)：显示任务完成比例，支持未知进度和可选的纸签端点。
 - [Skeleton 骨架占位](skeleton.md)：为即将出现的内容预留形状，减少布局跳动。
 - [Button 按钮](button.md)：用于触发操作，支持不同强调程度、禁用、加载和切换状态。
 - [EmptyState 空状态](empty-state.md)：用于列表为空、搜索无结果等情况，提供说明与操作插槽。

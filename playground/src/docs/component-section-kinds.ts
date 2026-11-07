@@ -169,6 +169,11 @@ const componentSections: Readonly<Record<string, Readonly<Record<string, DocSect
     design: 'guidance',
     behavior: 'accessibility',
   },
+  progress: {
+    ...integratedSections,
+    design: 'styling',
+    behavior: 'accessibility',
+  },
   skeleton: {
     ...integratedSections,
     design: 'styling',

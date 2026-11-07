@@ -2,7 +2,7 @@
 
 首次使用请参考[本地安装说明](../README.md#构建与本地安装)，完成安装、样式导入和主题设置。没有现成 React 项目时，可[导出最小项目](../README.md#导出最小项目)。
 
-本文档收录 30 个 UI 组件、ThemeProvider 及其用途、示例与 API。
+本文档收录 31 个 UI 组件、ThemeProvider 及其用途、示例与 API。
 
 在组件库根目录完成 `npm ci` 后运行 `npm run dev`，即可在本地文档站操作示例。下面的链接可直接在 GitHub 阅读，站内组件总览位于 `#/components`。
 
@@ -58,6 +58,7 @@
 - [Alert 提示条](components/alert.md)：页面内持续可见的信息、结果与错误提示。
 - [Toast](components/toast.md)：反馈保存等操作结果，显示与关闭由调用方管理。
 - [EmptyState](components/empty-state.md)：列表为空或搜索无结果时的说明与操作入口。
+- [Progress 进度条](components/progress.md)：显示任务完成比例，支持未知进度与可选纸签端点。
 - [Spinner](components/spinner.md)：带可读状态文字的加载指示。
 - [Skeleton](components/skeleton.md)：按内容形状预留加载空间，不独立播报状态。
 

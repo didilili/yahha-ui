@@ -1,0 +1,155 @@
+.progress {
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--yahha-space-2, 8px);
+  min-inline-size: 0;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  color: var(--yahha-ink, #49313d);
+  font-family: inherit;
+  font-size: var(--yahha-font-size-md, 14px);
+  line-height: var(--yahha-leading-label, 1.5);
+}
+
+.progress[hidden]:not([hidden='until-found']) {
+  display: none;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--yahha-space-2, 8px);
+  min-inline-size: 0;
+}
+
+.label {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.value {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  color: var(--yahha-muted, #7a5c6d);
+  text-align: end;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter {
+  display: flex;
+  position: relative;
+  align-items: center;
+  min-inline-size: 0;
+  block-size: var(--yahha-space-7, 28px);
+}
+
+.track {
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  inline-size: 100%;
+  block-size: var(--yahha-space-3, 12px);
+  border: var(--yahha-border-width, 1px) solid var(--yahha-contour, #684150);
+  border-radius: var(--yahha-radius-pill, 999px);
+  background: var(--yahha-neutral-surface, #f1f8ff);
+}
+
+.fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: var(--progress-value);
+  border-radius: inherit;
+  background: var(--yahha-accent, #ffc3d9);
+  box-shadow: inset 0 0 0 var(--yahha-border-width, 1px) var(--yahha-contour, #684150);
+  transition: inline-size var(--yahha-duration-fast, 150ms)
+    var(--yahha-ease, cubic-bezier(0.2, 0.6, 0.3, 1));
+}
+
+.marker {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: clamp(0px, calc(var(--progress-value) - 12px), calc(100% - 24px));
+  inline-size: var(--yahha-space-6, 24px);
+  max-inline-size: 100%;
+  block-size: var(--yahha-space-7, 28px);
+  color: var(--yahha-contour, #684150);
+  transition: inset-inline-start var(--yahha-duration-fast, 150ms)
+    var(--yahha-ease, cubic-bezier(0.2, 0.6, 0.3, 1));
+}
+
+.paper {
+  fill: var(--yahha-accent-soft, #fff0f6);
+}
+
+.fold {
+  fill: var(--yahha-accent, #ffc3d9);
+}
+
+.progress[data-state='indeterminate'] .fill {
+  inset-inline-start: -32%;
+  inline-size: 32%;
+  animation: passage 1.8s linear infinite;
+}
+
+@keyframes passage {
+  to {
+    inset-inline-start: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .marker {
+    transition: none;
+  }
+
+  .progress[data-state='indeterminate'] .fill {
+    inset-inline-start: 34%;
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .progress {
+    color: CanvasText;
+  }
+
+  .value {
+    color: CanvasText;
+  }
+
+  .track {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  .fill {
+    background: CanvasText;
+    box-shadow: none;
+  }
+
+  .marker {
+    forced-color-adjust: none;
+    color: CanvasText;
+  }
+
+  .paper,
+  .fold {
+    fill: Canvas;
+  }
+
+  .fill,
+  .marker {
+    transition: none;
+  }
+
+  .progress[data-state='indeterminate'] .fill {
+    inset-inline-start: 34%;
+    animation: none;
+  }
+}

@@ -156,6 +156,7 @@ export async function verifyDocs(browser, baseURL) {
       'popover',
       'tooltip',
       'skeleton',
+      'progress',
       'spinner',
       'alert',
     ];
@@ -301,7 +302,7 @@ export async function verifyDocs(browser, baseURL) {
         );
       }
     }
-    assert.equal(totalExamples, 132, 'The 31 component documents provide 132 focused examples.');
+    assert.equal(totalExamples, 136, 'The 32 component documents provide 136 focused examples.');
 
     // Reorganized chapters retain their existing deep links and keyboard destination.
     await page.goto(`${baseURL}#/components/text`);
@@ -355,7 +356,7 @@ export async function verifyDocs(browser, baseURL) {
       await verifySectionIcons(page, 'guide');
     }
     assert.equal(guideExamples, 12, 'The guides must retain all twelve integration examples.');
-    assert.equal(totalExamples + guideExamples, 144, 'The public site provides 144 examples.');
+    assert.equal(totalExamples + guideExamples, 148, 'The public site provides 148 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
     await waitForGuideReady(page, '开始使用');
     assert.match(await page.locator('main').innerText(), /npm pack/);
@@ -371,7 +372,7 @@ export async function verifyDocs(browser, baseURL) {
     await page.locator('.not-found').getByRole('link', { name: '浏览组件', exact: true }).click();
     await page.getByRole('heading', { level: 1, name: '组件总览', exact: true }).waitFor();
     await page.locator('.component-overview-page').waitFor();
-    assert.equal(await page.locator('[data-component-id]').count(), 31);
+    assert.equal(await page.locator('[data-component-id]').count(), 32);
 
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 844 });

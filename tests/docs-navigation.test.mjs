@@ -35,7 +35,8 @@ test('components own the overview and component catalog without guide leakage', 
   assert.equal(items[0].pageId, 'component-overview');
   assert.equal(items[0].href, '#/components');
   assert.equal(pages.find((page) => page.id === 'component-overview').area, 'components');
-  assert.equal(items.length, 32);
+  assert.equal(items.length, 33);
+  assert(items.some((item) => item.pageId === 'progress' && item.href === '#/components/progress'));
   assert(items.every((item) => item.href.startsWith('#/components')));
   assert.equal(items.at(-1).pageId, 'theme-provider');
   assert.deepEqual(

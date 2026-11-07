@@ -19,6 +19,7 @@ import {
   Link,
   Pagination,
   Popover,
+  Progress,
   RadioGroup,
   SegmentedControl,
   Select,
@@ -239,6 +240,8 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
           </Text>
         </div>
       );
+    case 'progress':
+      return <Progress label="阅读进度" value={60} appearance="bookmark" />;
     case 'alert':
       return <Alert title="阅读提示">下雨了，河边散步改到明天。</Alert>;
     case 'tabs':

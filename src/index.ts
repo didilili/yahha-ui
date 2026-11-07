@@ -35,6 +35,7 @@ export { Avatar, type AvatarProps } from './components/avatar/index.js';
 export { Image, type ImageProps } from './components/image/index.js';
 export { Skeleton, type SkeletonProps } from './components/skeleton/index.js';
 export { Spinner, type SpinnerProps } from './components/spinner/index.js';
+export { Progress, type ProgressProps } from './components/progress/index.js';
 export { Alert, type AlertProps } from './components/alert/index.js';
 export { Select, type SelectProps, type SelectOption } from './components/select/index.js';
 export { Textarea, type TextareaProps } from './components/textarea/index.js';

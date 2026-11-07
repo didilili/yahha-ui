@@ -22,6 +22,7 @@ const loaders: Record<string, () => Promise<{ default: DocPage }>> = {
   image: () => import('./components/image'),
   skeleton: () => import('./components/skeleton'),
   spinner: () => import('./components/spinner'),
+  progress: () => import('./components/progress'),
   alert: () => import('./components/alert'),
   tabs: () => import('./components/tabs'),
   pagination: () => import('./components/pagination'),

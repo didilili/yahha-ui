@@ -6,7 +6,7 @@ const expectedEntries = Object.fromEntries(
    theme-provider:ThemeProvider text-field:TextField segmented-control:SegmentedControl
    select:Select textarea:Textarea checkbox:Checkbox radio-group:RadioGroup switch:Switch
    text:Text heading:Heading link:Link divider:Divider avatar:Avatar image:Image
-   skeleton:Skeleton spinner:Spinner alert:Alert tabs:Tabs pagination:Pagination
+   skeleton:Skeleton spinner:Spinner progress:Progress alert:Alert tabs:Tabs pagination:Pagination
    accordion:Accordion dropdown-menu:DropdownMenu popover:Popover tooltip:Tooltip
    dialog:Dialog empty-state:EmptyState toast:Toast`
     .trim()
@@ -40,7 +40,7 @@ async function expectIds(page, expected) {
     .innerText();
   assert.match(
     status.replace(/\s/g, ''),
-    new RegExp(`找到${expected.length}项/共31项`),
+    new RegExp(`找到${expected.length}项/共32项`),
     'Visible result counts agree with rendered cards.',
   );
 }
@@ -255,7 +255,7 @@ async function verifyLegacyCategoryNavigation(page, baseURL) {
     );
   }
   await page.goto(`${baseURL}#/components?${new URLSearchParams({ group: '反馈' })}`);
-  await expectIds(page, ['alert', 'toast', 'empty-state', 'spinner', 'skeleton']);
+  await expectIds(page, ['alert', 'toast', 'empty-state', 'progress', 'spinner', 'skeleton']);
   assert.equal(await category(page, '反馈').isChecked(), true);
   await page.goto(`${baseURL}#/components?${new URLSearchParams({ group: '浮层' })}`);
   await expectIds(page, ['dialog', 'popover', 'tooltip', 'dropdown-menu']);
@@ -345,7 +345,7 @@ async function verifyKeyboardPreviewIsolation(page) {
         card: node?.closest('[data-component-id]')?.getAttribute('data-component-id'),
       };
     });
-    assert.equal(active.preview, false, 'Tab skips all thirty-one visual previews.');
+    assert.equal(active.preview, false, 'Tab skips all thirty-two visual previews.');
     if (!active.inOverview) break;
     if (active.card) visited.push(active.card);
   }
@@ -543,7 +543,7 @@ export async function verifyComponentOverview(browser, baseURL) {
       );
       assert.deepEqual(errors, [], 'Overview has no runtime errors.');
       console.log(
-        `Browser: ${viewport.width}px component overview, thirty-one inert previews/document links, filters, default geometry, navigation and lazy entry passed.`,
+        `Browser: ${viewport.width}px component overview, thirty-two inert previews/document links, filters, default geometry, navigation and lazy entry passed.`,
       );
     } finally {
       await context.close();

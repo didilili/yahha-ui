@@ -44,7 +44,7 @@ Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Sw
 
 组件使用文档描述当前用途、示例、API 和交互约定，不混入“本轮复核”“保留既有”“不计新增”等开发过程表述。设计原则和视觉规则集中在设计语言文档；文档不承诺尚未实现或验证的能力。
 
-当前文档站有 30 个组件入口（29 个 UI 组件与 ThemeProvider）和 97 个同源 TSX 示例，组件 Markdown 为 30 份。[设计语言](docs/design-language.md) 单独说明视觉和使用规则；默认设计规范位于 `#/guides/design-baseline`，示例不得覆盖控件外观与尺寸；共享 token 集中在 `src/theme/theme.module.css`，改设计必须通过 `npm run check:design` 与安装包实际尺寸验证；加载、空态与 404 场景位于 `#/guides/states`，以现有组件组合，不增加公共组件。增加或删除公开组件与示例时，同时更新 README 和文档索引。
+组件目录、同源 TSX 示例与组件 Markdown 以当前页面模型和生成的文档索引为准。[设计语言](docs/design-language.md) 单独说明视觉和使用规则；默认设计规范位于 `#/guides/design-baseline`，示例不得覆盖控件外观与尺寸；共享 token 集中在 `src/theme/theme.module.css`，改设计必须通过 `npm run check:design` 与安装包实际尺寸验证；加载、空态与 404 场景位于 `#/guides/states`，以现有组件组合，不增加公共组件。增加或删除公开组件与示例时，同时更新 README 和文档索引。
 
 组件边界也应随实现核对：Select 当前为单值选择，不包含搜索或多选；Pagination 使用按钮与页码回调，路由与列表更新属于调用方；Tooltip 沿用 Base UI 1.9 的视觉补充约定，触发器必须具备自身可访问名称，重要说明使用可见文字或 Popover。
 

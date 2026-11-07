@@ -32,7 +32,8 @@ const relatedComponents: Record<string, readonly string[]> = {
   alert: ['toast', 'empty-state'],
   toast: ['alert', 'dialog'],
   'empty-state': ['spinner', 'skeleton', 'alert'],
-  spinner: ['skeleton', 'button', 'empty-state'],
+  progress: ['spinner', 'skeleton', 'checkbox'],
+  spinner: ['progress', 'skeleton', 'button', 'empty-state'],
   skeleton: ['spinner', 'image'],
   'theme-provider': ['button', 'surface', 'popover'],
 };

@@ -8,7 +8,7 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 
 [开始使用](#构建与本地安装) · [组件文档](https://github.com/didilili/yahha-ui/blob/main/docs/README.md) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues) · [变更记录](https://github.com/didilili/yahha-ui/blob/main/CHANGELOG.md)
 
-**v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 30 个 UI 组件与 ThemeProvider · 本仓库当前工作版本通过本地安装包试用
+**v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 31 个 UI 组件与 ThemeProvider · 本仓库当前工作版本通过本地安装包试用
 
 ## 把可爱，搭进你的世界
 
