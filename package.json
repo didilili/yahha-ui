@@ -1,6 +1,6 @@
 {
   "name": "yahha-ui",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A manga-journal-inspired React component library for personal sites and stories.",
   "license": "MIT",
   "homepage": "https://github.com/didilili/yahha-ui#readme",
@@ -65,7 +65,7 @@
     "test:fonts": "node scripts/test-fonts.mjs",
     "prepack": "npm run build:lib",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && npm install --package-lock-only --ignore-scripts",
     "release": "changeset publish"
   },
   "dependencies": {
