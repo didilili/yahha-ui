@@ -14,7 +14,7 @@ import { Button } from 'yahha-ui';
 
 ## 何时使用
 
-主要操作使用 primary，次要操作使用 secondary，低强调辅助操作使用 ghost（文字）。页面跳转使用 [Link](link.md)，纯图标使用 [IconButton](icon-button.md)。
+用于触发动作，例如提交表单、保存草稿和切换收藏。页面或地址跳转使用 [Link](link.md)；只有图标的操作使用 [IconButton](icon-button.md)。
 
 <a id="examples"></a>
 
@@ -596,11 +596,13 @@ export default function ButtonForm() {
 
 ## 布局与定制
 
+同一操作区域优先保留一个主要动作，例如“保存草稿”，使用 `primary`； “取消修改”等配合动作使用 `secondary`，低强调的辅助动作使用 `ghost`。这里的 `ghost` 表示文字按钮，不等同于透明描边按钮。
+
 不传 `appearance` 时使用常规外观。`appearance="soft"` 增加饱满轮廓、短高光和按压层次，可与三种强调程度组合。`startIcon` 和 `endIcon` 用于补充动作含义，例如用书签表示收藏；操作名称和结果文字始终保留。
 
 加载默认使用三墨点，设置 `loadingVariant="biscuit"` 可选择小花饼，与 `appearance` 独立。两种加载图形与前置图标使用相同的 16 / 18 / 20px 图框，与文字间隔 8px，两侧内边距保持不变。 已有 `startIcon` 时，加载图形替换原图标槽位，按钮宽度保持稳定；纯文字按钮加载时增加图标槽位和间距，宽度自然增长。
 
-`ghost` 在本库表示文字按钮，不是透明描边按钮。 删除等破坏性动作可设置 `destructive`，并用动作名称明确风险；它与`variant` 分开控制，不自动打开确认弹窗或执行删除。危险色使用既有错误语义色，[ThemeProvider](theme.md) 的 `tokens.error`也会影响危险按钮。
+删除等破坏性动作可设置 `destructive`，并用动作名称明确风险；它与`variant` 分开控制，不自动打开确认弹窗或执行删除。危险色使用既有错误语义色，[ThemeProvider](theme.md) 的 `tokens.error`也会影响危险按钮。
 
 全宽按钮可设置 `style={{ width: '100%' }}`，长名称会换行并撑高按钮。 具体写法见上方[尺寸、全宽与长文案](button.md#button-sizes)。
 

@@ -16,7 +16,7 @@ const page: DocPage = {
           <p>
             组件可组合成文章页、作者介绍和归档列表；组件负责交互与外观，页面布局与业务数据由应用管理。
           </p>
-          <p className="guide-status">本仓库当前工作版本通过本地安装包试用。</p>
+          <p className="guide-status">本仓库当前工作版本通过本地安装包试用；npm 已提供 0.0.1。</p>
           <div className="guide-actions">
             <Link className="guide-primary" href="#/guides/getting-started">
               开始使用 <ArrowUpRight size={16} />
@@ -97,8 +97,9 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            npm 已提供 0.0.1。本指南按本仓库源码说明用法，当前工作版本通过本地打包安装，在 React /
-            React DOM ^19.3.1 的浏览器项目中验证；React 18 与服务端渲染兼容性尚未验证。
+            本指南按本仓库当前工作版本说明用法，其中的新增组件和 API 尚未发布到 npm，
+            请通过本地打包安装。当前在 React / React DOM ^19.3.1 的浏览器项目中验证；React 18
+            与服务端渲染兼容性尚未验证。
           </p>
           <p>
             项目自有内容采用 MIT，第三方内容见{' '}

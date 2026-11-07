@@ -33,8 +33,8 @@ export default defineComponentPage('button', {
       title: '何时使用',
       content: (
         <p>
-          主要操作使用 primary，次要操作使用 secondary，低强调辅助操作使用
-          ghost（文字）。页面跳转使用 <a href="#/components/link">Link</a>，纯图标使用{' '}
+          用于触发动作，例如提交表单、保存草稿和切换收藏。页面或地址跳转使用{' '}
+          <a href="#/components/link">Link</a>；只有图标的操作使用{' '}
           <a href="#/components/icon-button">IconButton</a>。
         </p>
       ),
@@ -147,6 +147,11 @@ export default defineComponentPage('button', {
       content: (
         <>
           <p>
+            同一操作区域优先保留一个主要动作，例如“保存草稿”，使用 <code>primary</code>；
+            “取消修改”等配合动作使用 <code>secondary</code>，低强调的辅助动作使用 <code>ghost</code>
+            。这里的 <code>ghost</code> 表示文字按钮，不等同于透明描边按钮。
+          </p>
+          <p>
             不传 <code>appearance</code> 时使用常规外观。<code>appearance="soft"</code>{' '}
             增加饱满轮廓、短高光和按压层次，可与三种强调程度组合。
             <code>startIcon</code> 和 <code>endIcon</code>{' '}
@@ -159,8 +164,7 @@ export default defineComponentPage('button', {
             时，加载图形替换原图标槽位，按钮宽度保持稳定；纯文字按钮加载时增加图标槽位和间距，宽度自然增长。
           </p>
           <p>
-            <code>ghost</code> 在本库表示文字按钮，不是透明描边按钮。 删除等破坏性动作可设置{' '}
-            <code>destructive</code>，并用动作名称明确风险；它与
+            删除等破坏性动作可设置 <code>destructive</code>，并用动作名称明确风险；它与
             <code>variant</code> 分开控制，不自动打开确认弹窗或执行删除。危险色使用既有错误语义色，
             <a href="#/components/theme-provider">ThemeProvider</a> 的 <code>tokens.error</code>
             也会影响危险按钮。

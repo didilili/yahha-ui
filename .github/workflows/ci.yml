@@ -68,3 +68,12 @@ jobs:
 
       - name: Test documentation site
         run: npm run test:docs
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: check
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    uses: ./.github/workflows/release.yml

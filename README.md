@@ -20,11 +20,17 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 
 ## 构建与本地安装
 
-已有 React 项目时，安装本地组件包，再导入样式和主题。没有项目可直接[导出最小项目](#导出最小项目)。
+已有 React 项目时，安装组件包，再导入样式和主题。没有项目可直接[导出最小项目](#导出最小项目)。
 
 当前要求 React / React DOM `^19.3.1`、Node.js ≥22.22.3，以及支持 CSS 导入的 React 构建工具。
 
-**1. 获取源码并生成安装包**（已有 `.tgz` 时跳到第 2 步）：
+**1. 选择安装版本。** npm 已发布 `0.0.1`，可在自己的 React 项目中安装：
+
+```sh
+npm install yahha-ui
+```
+
+本 README 与组件文档按本仓库当前工作版本编写，其中的新增组件和 API 尚未发布到 npm。要使用当前文档对应的版本，获取源码并生成本地安装包：
 
 ```sh
 git clone https://github.com/didilili/yahha-ui.git
@@ -34,13 +40,13 @@ npm run build:lib
 npm pack
 ```
 
-**2. 切换到自己的 React 项目安装**，替换成刚生成文件的实际位置：
+使用本地安装包时，切换到自己的 React 项目，替换成实际路径：
 
 ```sh
 npm install /absolute/path/yahha-ui-0.0.1.tgz
 ```
 
-**3. 在自己的项目中保存 `App.tsx`**，由现有应用入口渲染：
+**2. 在自己的项目中保存 `App.tsx`**，由现有应用入口渲染：
 
 ```tsx
 import { useState } from 'react';
@@ -119,9 +125,7 @@ npm run dev
 npm run build:demo
 ```
 
-文档站输出至 `demo-dist/`。完整步骤见[部署说明](docs/deployment.md)。
-
-当前尚未提供线上预览地址，可先在本地浏览。
+文档站输出至 `demo-dist/`。构建、本地预览与 GitHub Pages 配置见[部署说明](docs/deployment.md)。
 
 ## 当前能力与边界
 
@@ -147,4 +151,4 @@ tests/           工程脚本、浏览器和真实安装包验收
 
 ## 参与开发
 
-源码目录、文档维护、测试和 Git hooks 见[协作说明](CONTRIBUTING.md)；[AGENTS.md](AGENTS.md)记录仓库协作约定。
+源码目录、文档维护、测试和 Git hooks 见[协作说明](CONTRIBUTING.md)、[版本与发布](docs/releasing.md)；[AGENTS.md](AGENTS.md)记录仓库协作约定。

@@ -49,7 +49,12 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            本指南使用本仓库当前工作版本的本地安装包。在 React 项目根目录执行，
+            npm 已发布 <code>0.0.1</code>，可在自己的 React 项目根目录安装：
+          </p>
+          <CodeBlock language="sh" source={'npm install yahha-ui'} />
+          <p>
+            本指南按本仓库当前工作版本编写，其中的新增组件和 API 尚未发布到 npm。
+            使用当前文档对应的版本时，在 React 项目根目录安装本地组件包，
             将路径替换为安装包的实际位置：
           </p>
           <CodeBlock language="sh" source={'npm install /absolute/path/yahha-ui-0.0.1.tgz'} />
