@@ -202,8 +202,20 @@
 }
 
 .site-home .home-garden {
+  position: relative;
+  isolation: isolate;
   background: var(--site-grass, #edf3df);
   padding: 58px 48px 55px;
+}
+.site-home .home-garden::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url('../examples/scenes/artwork/decorative-elements/patterns/flower-sprout.svg');
+  background-size: 260px;
+  opacity: 0.58;
+  pointer-events: none;
 }
 .site-home .home-section-heading {
   display: flex;
@@ -212,6 +224,9 @@
   gap: 19px;
   margin: 0 auto 16px;
 }
+.site-home .home-section-heading > div {
+  width: min(100%, 340px);
+}
 .site-home .home-section-intro {
   max-width: 66ch;
   margin: 0 auto 30px;
@@ -219,14 +234,10 @@
   font-size: 15px;
   text-align: center;
 }
-.site-home .home-section-heading > svg {
-  width: 54px;
-  height: 54px;
-  transform: rotate(-9deg);
-}
 .site-home .home-section-heading p {
   font-size: 13px;
   margin-bottom: 5px;
+  text-align: center;
 }
 .site-home .home-section-heading h2 {
   margin: 0;
@@ -286,9 +297,26 @@
   font-size: 12px;
   margin-bottom: 15px;
 }
-.site-home .home-article-label svg {
-  width: 28px;
-  height: 28px;
+.site-home .home-friend-sticker {
+  display: block;
+  flex: none;
+  object-fit: contain;
+  pointer-events: none;
+}
+.site-home .home-friend-sticker--chiikawa {
+  transform: rotate(-6deg);
+}
+.site-home .home-story-note {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+.site-home .home-story-note > :first-child {
+  min-width: 0;
+}
+.site-home .home-friend-sticker--usagi {
+  margin-bottom: 4px;
+  transform: rotate(5deg);
 }
 .site-home .home-sample-article h3 {
   font-size: 25px;
@@ -333,6 +361,10 @@
   font-weight: 600;
   margin-bottom: 0;
 }
+.site-home .home-friend-sticker--hachiware {
+  margin-left: auto;
+  transform: rotate(5deg);
+}
 .site-home .home-component-note {
   margin-bottom: 0;
   font-size: 12px;
@@ -344,6 +376,11 @@
   color: #69604c;
   font-size: 12px;
   margin: 17px 0 0;
+}
+.site-home .home-garden-rule {
+  width: min(480px, 85%);
+  margin: 25px auto 0;
+  opacity: 0.8;
 }
 .site-home .home-next-stop {
   display: flex;
@@ -467,11 +504,6 @@
     font-size: 14px;
     margin-bottom: 24px;
   }
-  .site-home .home-section-heading > svg {
-    width: 37px;
-    height: 37px;
-    flex-shrink: 0;
-  }
   .site-home .home-section-heading p {
     font-size: 11px;
   }
@@ -526,8 +558,26 @@
   }
 }
 
+@media (max-width: 480px) {
+  .site-home .home-story-note {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+  .site-home .home-friend-sticker--usagi {
+    align-self: flex-end;
+    margin-bottom: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .site-home .home-primary-link {
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .site-home .home-garden::before {
+    display: none;
   }
 }

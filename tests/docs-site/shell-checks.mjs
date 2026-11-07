@@ -553,13 +553,13 @@ async function verifyCompleteSetup(example, themeScope, assets = []) {
     assert.doesNotMatch(source, /<ThemeProvider/);
     assert.match(await details.innerText(), /自身的主题配置/);
   }
-  for (const { name, contents } of assets) {
+  for (const { name, contents, path = `artwork/${name}` } of assets) {
     const downloads = details.locator('.example-assets');
-    assert.match(await downloads.innerText(), /Example\.tsx.*同级新建.*artwork\//s);
-    assert.match(await downloads.innerText(), /按原名保存/);
+    assert.match(await downloads.innerText(), /路径相对于 Example\.tsx.*按路径新建目录并保存文件/s);
+    assert.match(await downloads.innerText(), /保留源码中的相对导入/);
     const link = downloads.getByRole('link', { name: `下载 ${name}`, exact: true });
     assert.equal(await link.getAttribute('download'), name);
-    assert.equal(await downloads.getByText(`artwork/${name}`, { exact: true }).count(), 1);
+    assert.equal(await downloads.getByText(path, { exact: true }).count(), 1);
     const response = await example
       .page()
       .request.get(new URL(await link.getAttribute('href'), example.page().url()).href);

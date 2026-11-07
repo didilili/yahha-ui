@@ -26,6 +26,15 @@ import { repositoryHref } from '../site/site-links';
 import markerFontNotice from '../assets/OFL-marker.txt?url';
 import wenkaiFontNotice from '../assets/OFL-wenkai.txt?url';
 import styles from './artwork-guide.module.css';
+import DecorativeGallery from './DecorativeGallery';
+import DecorativeArtwork from '../examples/scenes/DecorativeArtwork';
+import decorativeSource from '../examples/scenes/DecorativeArtwork.tsx?raw';
+import flowerPattern from '../examples/scenes/artwork/decorative-elements/patterns/flower-sprout.svg?no-inline';
+import friendsPattern from '../examples/scenes/artwork/decorative-elements/friends/friends-pattern.svg?no-inline';
+import friendsNote from '../examples/scenes/artwork/decorative-elements/friends/friends-note.svg?no-inline';
+import chiikawaSticker from '../examples/scenes/artwork/decorative-elements/friends/chiikawa-sticker.svg?no-inline';
+import hachiwareSticker from '../examples/scenes/artwork/decorative-elements/friends/hachiware-sticker.svg?no-inline';
+import usagiSticker from '../examples/scenes/artwork/decorative-elements/friends/usagi-sticker.svg?no-inline';
 
 type ArtworkFile = { name: string; href: string };
 type Artwork = {
@@ -235,6 +244,64 @@ export const artworkGuide: DocPage = {
           <ArtworkCatalog />
         </>
       ),
+    },
+    {
+      id: 'artwork-decorations',
+      title: '装饰元素与朋友',
+      content: (
+        <>
+          <p>
+            背景纹样、标题底形、分隔线和小贴纸可以按需组合。吉伊、小八与乌萨奇的贴纸和朋友纸签
+            复用当前人物源稿，花芽与星光连接纸面和周围的留白。
+          </p>
+          <p>
+            标题仍是页面文字，人物与纹样只作装饰。阅读面、字段和代码区保持清楚； 下方提供独立 SVG
+            和一份可编辑标题的完整示例。
+          </p>
+          <DecorativeGallery />
+        </>
+      ),
+      examples: [
+        {
+          id: 'friends-decorative-note',
+          title: '朋友纸签与背景',
+          description: '编辑纸签标题，选择无背景、花芽或朋友纹样。贴纸、纸签与背景均可独立使用。',
+          component: DecorativeArtwork,
+          source: decorativeSource,
+          assets: [
+            {
+              name: 'flower-sprout.svg',
+              href: flowerPattern,
+              path: 'artwork/decorative-elements/patterns/flower-sprout.svg',
+            },
+            {
+              name: 'friends-pattern.svg',
+              href: friendsPattern,
+              path: 'artwork/decorative-elements/friends/friends-pattern.svg',
+            },
+            {
+              name: 'friends-note.svg',
+              href: friendsNote,
+              path: 'artwork/decorative-elements/friends/friends-note.svg',
+            },
+            {
+              name: 'chiikawa-sticker.svg',
+              href: chiikawaSticker,
+              path: 'artwork/decorative-elements/friends/chiikawa-sticker.svg',
+            },
+            {
+              name: 'hachiware-sticker.svg',
+              href: hachiwareSticker,
+              path: 'artwork/decorative-elements/friends/hachiware-sticker.svg',
+            },
+            {
+              name: 'usagi-sticker.svg',
+              href: usagiSticker,
+              path: 'artwork/decorative-elements/friends/usagi-sticker.svg',
+            },
+          ],
+        },
+      ],
     },
     {
       id: 'artwork-sources',

@@ -49,8 +49,8 @@ export function ExampleSource({
           {assets.length > 0 && (
             <div className="example-assets">
               <p>
-                此例还需要单独下载图片。在 <code>Example.tsx</code> 同级新建 <code>artwork/</code>
-                目录，将下方文件按原名保存到其中，保留源码中的相对导入路径。
+                此例还需要单独下载图片。以下路径相对于 <code>Example.tsx</code>
+                ，按路径新建目录并保存文件，保留源码中的相对导入。
               </p>
               <ul>
                 {assets.map((asset) => (
@@ -59,7 +59,7 @@ export function ExampleSource({
                       下载 {asset.name}
                     </a>
                     {' → '}
-                    <code>artwork/{asset.name}</code>
+                    <code>{asset.path ?? `artwork/${asset.name}`}</code>
                   </li>
                 ))}
               </ul>

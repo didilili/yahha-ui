@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import {
   Avatar,
   Badge,
@@ -17,6 +17,11 @@ import {
   ThemeProvider,
 } from 'yahha-ui';
 import 'yahha-ui/style.css';
+import flowerLine from './scenes/artwork/decorative-elements/dividers/flower-line.svg?no-inline';
+
+const chapterArtwork = {
+  '--reading-chapter-art': `url(${JSON.stringify(flowerLine)})`,
+} as CSSProperties;
 
 const articles = [
   {
@@ -111,13 +116,16 @@ export default function ReadingExample() {
         .reading-figure { display: grid; gap: 8px; margin: 0 0 28px; }
         .reading-body { display: grid; gap: 24px; margin-block: 0 28px; }
         .reading-body h3 { margin-top: 12px; }
+        .reading-flower-divider { display: block; border: 0; block-size: 48px; margin-block: 0 24px; background: var(--reading-chapter-art) center / 600px 48px no-repeat; }
         .reading-note { display: grid; gap: 12px; margin-block: 0 24px; }
-        .reading-divider { margin-block: 0 24px; }
         .reading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
         .reading-feedback { min-height: 3em; margin-top: 16px; }
         @media (max-width: 480px) {
           .reading-tools { align-items: stretch; }
           .reading-search { flex-basis: 100%; }
+        }
+        @media (forced-colors: active) {
+          .reading-flower-divider { block-size: 0; border-block-start: var(--yahha-border-width, 1px) solid CanvasText; background: none; }
         }
       `}</style>
       <div className="reading-example">
@@ -197,7 +205,11 @@ export default function ReadingExample() {
                 </div>
               ))}
             </nav>
-            <article className="reading-article" aria-labelledby={`${rootId}-article`}>
+            <article
+              className="reading-article"
+              aria-labelledby={`${rootId}-article`}
+              style={chapterArtwork}
+            >
               <header className="reading-article-header">
                 <div className="reading-meta">
                   <Badge tone="accent">{active.category}</Badge>
@@ -205,7 +217,13 @@ export default function ReadingExample() {
                     <time dateTime={active.date}>{active.date}</time> · 库米 · 约 2 分钟
                   </Text>
                 </div>
-                <Heading level={2} id={`${rootId}-article`} ref={articleRef} tabIndex={-1}>
+                <Heading
+                  decoration="underline"
+                  level={2}
+                  id={`${rootId}-article`}
+                  ref={articleRef}
+                  tabIndex={-1}
+                >
                   {active.title}
                 </Heading>
                 <Text size="lg" tone="muted">
@@ -252,7 +270,9 @@ export default function ReadingExample() {
                   。
                 </Text>
               </div>
+              <Divider className="reading-flower-divider" />
               <Surface
+                variant="note"
                 className="reading-note"
                 role="note"
                 ref={noteRef}
@@ -267,7 +287,6 @@ export default function ReadingExample() {
                   写手记时总有人凑过来看。小八检查点心有没有写漏，吉伊添了一幅画，乌萨奇的字挤到了纸边。
                 </Text>
               </Surface>
-              <Divider decorative className="reading-divider" />
               <div className="reading-actions">
                 <Button
                   aria-pressed={isSaved}

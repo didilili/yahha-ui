@@ -4,6 +4,9 @@ import DividerVertical from '../../examples/content/DividerVertical';
 import dividerVerticalSource from '../../examples/content/DividerVertical.tsx?raw';
 import DividerExample from '../../examples/content/DividerExample';
 import dividerSource from '../../examples/content/DividerExample.tsx?raw';
+import DividerChapter from '../../examples/scenes/DividerChapter';
+import dividerChapterSource from '../../examples/scenes/DividerChapter.tsx?raw';
+import flowerLine from '../../examples/scenes/artwork/decorative-elements/dividers/flower-line.svg?no-inline';
 import { defineComponentPage } from '../page';
 import { nativeRows, example } from '../page-helpers';
 
@@ -38,8 +41,22 @@ export default defineComponentPage('divider', {
     {
       id: 'integration',
       title: '进阶用法',
-      disclosure: '查看长元信息组合',
+      disclosure: '查看章节花线与长元信息组合',
       examples: [
+        {
+          id: 'divider-chapter',
+          title: '章节花线',
+          description: '用现有 SVG 定制一处章节转折，保留真实 hr 的分隔语义。',
+          component: DividerChapter,
+          source: dividerChapterSource,
+          assets: [
+            {
+              name: 'flower-line.svg',
+              href: flowerLine,
+              path: 'artwork/decorative-elements/dividers/flower-line.svg',
+            },
+          ],
+        },
         example(
           'divider-directions',
           '响应式内容分隔',

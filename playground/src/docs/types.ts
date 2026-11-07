@@ -7,7 +7,7 @@ export interface DocExample {
   component: ComponentType;
   source: string;
   /** Downloadable files imported by the unchanged source from its artwork directory. */
-  assets?: { name: string; href: string }[];
+  assets?: { name: string; href: string; path?: string }[];
   /** Explicit examples own their provider; other examples use the default theme in full setup. */
   themeScope?: 'inherited' | 'explicit';
   /** Sparse control demonstrations can use a centered canvas; reading/form layouts stay fluid. */

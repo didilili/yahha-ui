@@ -27,6 +27,40 @@ async function healthy(page, example, baseURL) {
   );
 }
 
+async function decorativePatternJourney(page, baseURL) {
+  const example = page.locator('#friends-decorative-note .example-preview');
+  const control = example.getByRole('combobox', { name: '背景图案', exact: true });
+  const pattern = example.locator('.friends-decoration-pattern');
+  await control.waitFor();
+  assert.match(await control.innerText(), /无图案/);
+  assert.equal(await pattern.count(), 0, 'Ordinary mode must omit the background pattern.');
+
+  for (const [label, source] of [
+    ['朋友', /friends-pattern[^/]*\.svg/],
+    ['花草', /flower-sprout[^/]*\.svg/],
+    ['无图案', null],
+  ]) {
+    await control.click();
+    await page.getByRole('option', { name: label, exact: true }).click();
+    await page.waitForFunction(
+      (element) => element.getAttribute('aria-expanded') === 'false',
+      await control.elementHandle(),
+    );
+    assert.match(await control.innerText(), new RegExp(label));
+    if (source) {
+      await pattern.waitFor({ state: 'visible' });
+      assert.match(
+        await pattern.evaluate((element) => getComputedStyle(element).backgroundImage),
+        source,
+      );
+    } else {
+      await pattern.waitFor({ state: 'detached' });
+    }
+    await focused(page, control);
+  }
+  await healthy(page, example, baseURL);
+}
+
 async function verifySVGDocument(context, asset, reducedMotion) {
   const page = await context.newPage();
   page.setDefaultTimeout(6000);
@@ -134,7 +168,7 @@ async function verifySVGDocument(context, asset, reducedMotion) {
 
 async function downloadableAssets(page, context, baseURL) {
   const downloads = await page
-    .locator('#doc-content a[download]')
+    .locator('#little-days-artwork-example a[download], #little-days-states-example a[download]')
     .evaluateAll((links) => links.map((link) => ({ name: link.download, href: link.href })));
   // The welcome scene has dedicated native-SVG/pause tests in welcome-checks.mjs.
   const unique = [...new Map(downloads.map((asset) => [asset.name, asset])).values()].filter(
@@ -384,6 +418,7 @@ export async function verifyArtwork(browser, baseURL) {
       await healthy(page, example, baseURL);
 
       await stateArtworkJourney(page, baseURL);
+      await decorativePatternJourney(page, baseURL);
       if (!assets) assets = await downloadableAssets(page, context, baseURL);
       assert.deepEqual(errors, [], `Artwork browser errors at ${viewport.width}px.`);
     } catch (error) {

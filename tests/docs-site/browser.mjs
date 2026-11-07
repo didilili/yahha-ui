@@ -308,7 +308,7 @@ export async function verifyDocs(browser, baseURL) {
         );
       }
     }
-    assert.equal(totalExamples, 149, 'The 32 component documents provide 149 focused examples.');
+    assert.equal(totalExamples, 150, 'The 32 component documents provide 150 focused examples.');
 
     // Reorganized chapters retain their existing deep links and keyboard destination.
     await page.goto(`${baseURL}#/components/text`);
@@ -361,8 +361,8 @@ export async function verifyDocs(browser, baseURL) {
       await verifyExampleHeadings(page);
       await verifySectionIcons(page, 'guide');
     }
-    assert.equal(guideExamples, 12, 'The guides must retain all twelve integration examples.');
-    assert.equal(totalExamples + guideExamples, 161, 'The public site provides 161 examples.');
+    assert.equal(guideExamples, 13, 'The guides must retain all thirteen integration examples.');
+    assert.equal(totalExamples + guideExamples, 163, 'The public site provides 163 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
     await waitForGuideReady(page, '开始使用');
     assert.match(await page.locator('main').innerText(), /npm pack/);

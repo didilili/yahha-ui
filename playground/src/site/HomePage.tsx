@@ -5,8 +5,12 @@ import Motif from './Motif';
 import BookmarkMark from './BookmarkMark';
 import HomeScenes from './HomeScenes';
 import HomeTheme from './HomeTheme';
+import { DecorativeRule, DecorativeTitle } from './DecorativeElements';
 import FriendsWelcome from '../examples/scenes/FriendsWelcome';
 import peek from '../examples/scenes/artwork/friends-preview/friends-peek.svg';
+import chiikawaSticker from '../examples/scenes/artwork/decorative-elements/friends/chiikawa-sticker.svg?url';
+import hachiwareSticker from '../examples/scenes/artwork/decorative-elements/friends/hachiware-sticker.svg?url';
+import usagiSticker from '../examples/scenes/artwork/decorative-elements/friends/usagi-sticker.svg?url';
 import './home-page.css';
 
 export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingElement> }) {
@@ -86,14 +90,19 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
 
       <section className="home-garden" aria-labelledby="home-little-site">
         <div className="home-section-heading">
-          <Motif name="sprout" />
           <div>
             <p>组件交互示例</p>
             {/* The route moves focus here after section navigation without adding a tab stop. */}
             {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-            <h2 id="home-little-site" tabIndex={-1}>
+            <DecorativeTitle
+              as="h2"
+              id="home-little-site"
+              className="home-garden-title"
+              variant="cloud"
+              tabIndex={-1}
+            >
               标题编辑与收藏
-            </h2>
+            </DecorativeTitle>
           </div>
         </div>
         <p className="home-section-intro">修改手记标题、切换正文与后记，并切换收藏状态。</p>
@@ -110,23 +119,41 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
           <div className="home-site-body">
             <article className="home-sample-article">
               <div className="home-article-label">
-                <Motif name="flower" />
+                <img
+                  className="home-friend-sticker home-friend-sticker--chiikawa"
+                  src={chiikawaSticker}
+                  width="48"
+                  height="48"
+                  alt=""
+                  loading="lazy"
+                />
                 <span>生活手记</span>
               </div>
               <h3>{name.trim() || '未命名手记'}</h3>
               {showDate && <p className="home-date">生活记录 · 示例文章</p>}
               <Tabs
+                appearance="ink"
                 label="手记内容"
                 items={[
                   {
                     value: 'body',
                     label: '正文',
                     content: (
-                      <Text>
-                        最后一块饼干，要留给还没到的朋友。
-                        <br />
-                        乌萨奇把盘子推远了一点，又把椅子往前挪了一点。
-                      </Text>
+                      <div className="home-story-note">
+                        <Text>
+                          最后一块饼干，要留给还没到的朋友。
+                          <br />
+                          乌萨奇把盘子推远了一点，又把椅子往前挪了一点。
+                        </Text>
+                        <img
+                          className="home-friend-sticker home-friend-sticker--usagi"
+                          src={usagiSticker}
+                          width="48"
+                          height="60"
+                          alt=""
+                          loading="lazy"
+                        />
+                      </div>
                     ),
                   },
                   {
@@ -161,6 +188,14 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
               <p className="home-settings-title">
                 <Code2 size={18} aria-hidden="true" />
                 标题与显示设置
+                <img
+                  className="home-friend-sticker home-friend-sticker--hachiware"
+                  src={hachiwareSticker}
+                  width="48"
+                  height="48"
+                  alt=""
+                  loading="lazy"
+                />
               </p>
               <TextField
                 label="手记标题"
@@ -194,6 +229,7 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
             查看组合示例：阅读、归档、编辑与状态反馈 <ArrowRight size={16} aria-hidden="true" />
           </Link>
         </p>
+        <DecorativeRule variant="flower" className="home-garden-rule" />
       </section>
 
       <HomeScenes />

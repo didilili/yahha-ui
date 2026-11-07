@@ -2,6 +2,7 @@ import ReadingExample from '../../examples/ReadingExample';
 import readingSource from '../../examples/ReadingExample.tsx?raw';
 import type { DocPage } from '../types';
 import { guideMetadata } from '../guide-catalog';
+import flowerLine from '../../examples/scenes/artwork/decorative-elements/dividers/flower-line.svg?no-inline';
 
 const page: DocPage = {
   ...guideMetadata('reading'),
@@ -11,7 +12,8 @@ const page: DocPage = {
       title: '文章阅读与收藏',
       content: (
         <p>
-          此示例组合作者信息、正文、配图和收藏操作，支持按标题或内容搜索、查看后记及切换配图显示。不依赖角色图片或文档站字体。
+          此示例组合作者信息、正文、配图和收藏操作，支持搜索、查看后记及切换配图。
+          正文与后记之间使用一处章节花线，后记沿用纸角便笺与普通标题。
         </p>
       ),
       examples: [
@@ -23,6 +25,13 @@ const page: DocPage = {
           component: ReadingExample,
           source: readingSource,
           themeScope: 'explicit',
+          assets: [
+            {
+              name: 'flower-line.svg',
+              href: flowerLine,
+              path: 'scenes/artwork/decorative-elements/dividers/flower-line.svg',
+            },
+          ],
         },
       ],
     },
