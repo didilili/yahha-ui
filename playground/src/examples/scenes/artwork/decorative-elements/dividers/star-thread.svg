@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="48" viewBox="0 0 600 48" fill="none">
+  <path
+    d="M13 25C82 16 117 31 181 24C217 20 247 24 270 24M332 24C382 18 415 29 458 24C503 19 551 27 587 22"
+    stroke="#684150"
+    stroke-width="1.9"
+    stroke-linecap="round"
+    stroke-dasharray="5 8"
+  />
+  <path
+    d="M299 10C300 8 302 9 303 12L307 19L315 20C319 20 319 22 316 24L310 29L311 37C311 40 309 41 306 38L300 34L293 38C290 40 288 39 289 36L291 28L285 23C282 21 283 19 286 19L294 18L299 10Z"
+    fill="#FFE8A4"
+    stroke="#684150"
+    stroke-width="2.1"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path d="M298 17L296 22" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" />
+  <circle cx="79" cy="23" r="3.3" fill="#FFC3D9" stroke="#684150" stroke-width="1.5" />
+  <circle cx="224" cy="23" r="2.5" fill="#DFF2FF" stroke="#684150" stroke-width="1.5" />
+  <circle cx="410" cy="25" r="2.8" fill="#FFC3D9" stroke="#684150" stroke-width="1.5" />
+  <circle cx="544" cy="23" r="3.2" fill="#DFF2FF" stroke="#684150" stroke-width="1.5" />
+</svg>

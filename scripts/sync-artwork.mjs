@@ -8,7 +8,12 @@ assert(
   'Only --check is supported.',
 );
 
-for (const script of ['generate-friends-artwork.mjs', 'sync-little-days-artwork.mjs']) {
+for (const script of [
+  'generate-friends-artwork.mjs',
+  'build-friends-heads.mjs',
+  'sync-little-days-artwork.mjs',
+  'build-friends-decorations.mjs',
+]) {
   const result = spawnSync(
     process.execPath,
     [fileURLToPath(new URL(script, import.meta.url)), ...args],

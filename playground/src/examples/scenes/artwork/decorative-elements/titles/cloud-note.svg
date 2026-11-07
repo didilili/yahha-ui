@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="96" viewBox="0 0 320 96" fill="none">
+  <path
+    d="M48 29C43 15 67 9 80 21C88 7 114 9 123 21C141 9 166 10 177 22C192 8 217 13 223 26C246 11 270 19 269 35C289 29 309 41 302 57C316 74 295 87 277 81C264 94 243 89 236 81C218 92 197 91 183 82C166 92 145 89 137 80C118 92 94 89 88 80C64 89 40 85 35 73C14 76 7 61 19 49C8 34 29 22 48 29Z"
+    fill="#DFF2FF"
+    stroke="#684150"
+    stroke-width="2.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M54 34C52 25 65 21 74 27M91 27C97 18 109 19 116 26M230 33C243 22 257 26 258 36"
+    stroke="#FFFFFF"
+    stroke-width="3.6"
+    stroke-linecap="round"
+  />
+  <path
+    d="M40 55C36 57 37 61 40 63M281 51C285 51 287 54 286 57"
+    stroke="#684150"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M112 78C120 79 127 77 131 74M193 79C205 82 215 80 221 76"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+</svg>

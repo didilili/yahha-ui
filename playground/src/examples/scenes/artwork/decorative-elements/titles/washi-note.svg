@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="96" viewBox="0 0 320 96" fill="none">
+  <path
+    d="M41 26L286 25L291 80L37 86L41 26Z"
+    fill="#FFC3D9"
+    stroke="#684150"
+    stroke-width="2.3"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M32 25L281 20L286 76L30 81L32 25Z"
+    fill="#FFFFFF"
+    stroke="#684150"
+    stroke-width="2.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path d="M33 70L284 65L285 76L31 81L33 70Z" fill="#FFF0F6" />
+  <path
+    d="M32 67L31 81L286 76L285 63"
+    stroke="#684150"
+    stroke-width="2.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M119 11L127 13L133 10L140 12L147 9L154 11L161 9L168 11L175 9L182 11L189 9L197 11L195 30L188 28L181 31L174 29L167 31L160 29L153 32L146 30L139 32L132 30L125 32L118 30L119 11Z"
+    fill="#DFF2FF"
+    fill-opacity=".94"
+    stroke="#684150"
+    stroke-opacity=".65"
+    stroke-width="1.4"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M131 15L126 25M144 14L139 26M157 14L152 26M170 14L165 26M183 14L178 26M194 15L190 24"
+    stroke="#FFFFFF"
+    stroke-width="2.7"
+    stroke-linecap="round"
+  />
+  <path d="M48 70L60 70M266 31L273 31" stroke="#FFC3D9" stroke-width="2.5" stroke-linecap="round" />
+</svg>

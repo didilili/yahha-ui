@@ -1,0 +1,130 @@
+{
+  "motifs": [
+    {
+      "id": "flower",
+      "name": "小朵花",
+      "file": "motifs/small-flower.svg"
+    },
+    {
+      "id": "star",
+      "name": "圆角星光",
+      "file": "motifs/rounded-star.svg"
+    },
+    {
+      "id": "cloud",
+      "name": "小团云",
+      "file": "motifs/little-cloud.svg"
+    },
+    {
+      "id": "sprout",
+      "name": "双叶芽",
+      "file": "motifs/small-sprout.svg"
+    },
+    {
+      "id": "tag",
+      "name": "折角纸签",
+      "file": "motifs/folded-tag.svg"
+    },
+    {
+      "id": "paperclip",
+      "name": "弯弯回形针",
+      "file": "motifs/paperclip.svg"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "ink-dots",
+      "name": "小墨点",
+      "file": "patterns/ink-dots.svg",
+      "note": "128px 透明循环；适合纸面外缘与宽留白。"
+    },
+    {
+      "id": "flower-sprout",
+      "name": "花芽散步",
+      "file": "patterns/flower-sprout.svg",
+      "note": "208px 透明循环；粉花与绿芽交错，适合章节与页尾环境。"
+    },
+    {
+      "id": "star-cloud",
+      "name": "云间星光",
+      "file": "patterns/star-cloud.svg",
+      "note": "224px 透明循环；浅蓝底上的白云与小星光，适合欢迎区。"
+    },
+    {
+      "id": "paper-tags",
+      "name": "纸签散落",
+      "file": "patterns/paper-tags.svg",
+      "note": "208px 透明循环；粉蓝折角小签，适合手账与收藏主题。"
+    },
+    {
+      "id": "short-confetti",
+      "name": "彩色短笔画",
+      "file": "patterns/short-confetti.svg",
+      "note": "176px 透明循环；圆端短曲线分散排列，适合轻量庆祝与空白区。"
+    },
+    {
+      "id": "little-notes",
+      "name": "便笺小集",
+      "file": "patterns/little-notes.svg",
+      "note": "224px 透明循环；白便笺、回形针和小纸片，适合记录主题外层。"
+    }
+  ],
+  "titles": [
+    {
+      "id": "cloud-note",
+      "name": "蓝色云朵框",
+      "file": "titles/cloud-note.svg",
+      "note": "320×96；轻微不对称的蓝色云边，中央约 x65–255、y31–65 可叠放标题。"
+    },
+    {
+      "id": "folded-tag",
+      "name": "折角小纸签",
+      "file": "titles/folded-tag.svg",
+      "note": "320×96；黄色折角纸与粉色垫纸，左侧纸孔留在标题安全区外。"
+    },
+    {
+      "id": "washi-note",
+      "name": "胶带便签",
+      "file": "titles/washi-note.svg",
+      "note": "320×96；白色便签、粉色纸底与顶端蓝色纸胶带，标题适合 y38–64。"
+    },
+    {
+      "id": "soft-ribbon",
+      "name": "柔软小缎带",
+      "file": "titles/soft-ribbon.svg",
+      "note": "320×96；两侧短尾与折叠层次，标题适合中央 x65–255、y35–62。"
+    }
+  ],
+  "dividers": [
+    {
+      "id": "uneven-stroke",
+      "name": "随手一横",
+      "file": "dividers/uneven-stroke.svg",
+      "note": "600×48；略有起伏的暖墨色线条，配极少的粉绿短笔触。"
+    },
+    {
+      "id": "cloud-scallop",
+      "name": "云边小波浪",
+      "file": "dividers/cloud-scallop.svg",
+      "note": "600×48；不等大的浅蓝云边，适合轻松章节之间的装饰分隔。"
+    },
+    {
+      "id": "flower-line",
+      "name": "一朵小花",
+      "file": "dividers/flower-line.svg",
+      "note": "600×48；中央一朵粉色五瓣花，线条两边仅配两片小叶。"
+    },
+    {
+      "id": "star-thread",
+      "name": "星星缝线",
+      "file": "dividers/star-thread.svg",
+      "note": "600×48；稀疏缝线、圆角星星与四颗小点。"
+    },
+    {
+      "id": "tag-garland",
+      "name": "纸签小挂绳",
+      "file": "dividers/tag-garland.svg",
+      "note": "600×60；浅弧挂绳上三枚小纸签，保留挂孔和纸边。"
+    }
+  ]
+}
