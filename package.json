@@ -65,7 +65,7 @@
     "test:fonts": "node scripts/test-fonts.mjs",
     "prepack": "npm run build:lib",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && npm install --package-lock-only --ignore-scripts",
     "release": "changeset publish"
   },
   "dependencies": {
