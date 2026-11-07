@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { version as packageVersion } from '../../package.json';
 import { ChevronLeft, ChevronRight, Menu, Search, X } from 'lucide-react';
 import {
   Alert,
@@ -477,7 +478,7 @@ export default function App() {
         </a>
         <span className="header-divider" />
         <span className="header-caption">
-          {isHome ? 'React 组件库' : areaCaption} <span className="version">0.0.1</span>
+          {isHome ? 'React 组件库' : areaCaption} <span className="version">{packageVersion}</span>
         </span>
         <nav ref={shortcuts} className="header-links" aria-label="快捷导航" inert={menuOpen}>
           <Link href="#/" className="header-link" aria-current={isHome ? 'page' : undefined}>
@@ -967,7 +968,7 @@ export default function App() {
           <footer className="docs-footer">
             <span>Yahha UI · 把可爱，搭进你的世界。</span>
             <span>
-              早期预览 · <Link href="#/guides/getting-started">使用方式</Link>
+              <Link href="#/guides/getting-started">使用方式</Link>
               {' · '}
               <Link href={repositoryHref} external>
                 源码仓库

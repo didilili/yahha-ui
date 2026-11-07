@@ -6,9 +6,9 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 
 提供可交互的组件示例、API 参考与完整页面组合，支持复制示例接入 React 项目。
 
-[开始使用](#构建与本地安装) · [组件文档](https://github.com/didilili/yahha-ui/blob/main/docs/README.md) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues) · [变更记录](https://github.com/didilili/yahha-ui/blob/main/CHANGELOG.md)
+[访问官网](https://yahhaui.com/) · [开始使用](#安装与接入) · [组件文档](https://yahhaui.com/#/components) · [设计语言](https://github.com/didilili/yahha-ui/blob/main/docs/design-language.md) · [问题反馈](https://github.com/didilili/yahha-ui/issues) · [变更记录](https://github.com/didilili/yahha-ui/blob/main/CHANGELOG.md)
 
-**v0.0.1 · 早期预览** · React / React DOM `^19.3.1` · 31 个 UI 组件与 ThemeProvider · 本仓库当前工作版本通过本地安装包试用
+React / React DOM `^19.3.1` · 31 个 UI 组件与 ThemeProvider · [npm 安装](https://www.npmjs.com/package/yahha-ui) / 本地构建
 
 ## 把可爱，搭进你的世界
 
@@ -18,19 +18,21 @@ Yahha UI 是一套漫画手账风 React 组件库，面向博客、个人主页�
 - **每次操作，都好好回应**：组件继承使用方字体，提供清晰的焦点、选中与加载状态；键盘、表单和减少动效的用法见各组件文档。
 - **按需加入小场景**：静态 SVG、状态动效和可暂停的欢迎场景独立提供。基础组件不依赖角色图片，组件安装包不包含网站、字体或场景素材。
 
-## 构建与本地安装
+<a id="构建与本地安装"></a>
+
+## 安装与接入
 
 已有 React 项目时，安装组件包，再导入样式和主题。没有项目可直接[导出最小项目](#导出最小项目)。
 
 当前要求 React / React DOM `^19.3.1`、Node.js ≥22.22.3，以及支持 CSS 导入的 React 构建工具。
 
-**1. 选择安装版本。** npm 已发布 `0.0.1`，可在自己的 React 项目中安装：
+**1. 安装组件包。** 在自己的 React 项目中安装最新已发布版本：
 
 ```sh
 npm install yahha-ui
 ```
 
-本 README 与组件文档按本仓库当前工作版本编写，其中的新增组件和 API 尚未发布到 npm。要使用当前文档对应的版本，获取源码并生成本地安装包：
+文档随仓库源码更新，使用前请确认安装版本支持所需 API。如需使用尚未发布的改动，可获取源码并生成本地安装包：
 
 ```sh
 git clone https://github.com/didilili/yahha-ui.git
@@ -40,10 +42,10 @@ npm run build:lib
 npm pack
 ```
 
-使用本地安装包时，切换到自己的 React 项目，替换成实际路径：
+使用本地安装包时，切换到自己的 React 项目，将下方路径替换为 `npm pack` 输出的实际文件路径：
 
 ```sh
-npm install /absolute/path/yahha-ui-0.0.1.tgz
+npm install /absolute/path/to/yahha-ui.tgz
 ```
 
 **2. 在自己的项目中保存 `App.tsx`**，由现有应用入口渲染：
@@ -91,7 +93,7 @@ npm run dev
 
 组件总览按通用、排版、布局、表单、内容展示、导航、浮层和反馈分类；主题配置单列。进入组件文档后，可操作示例、复制代码并查阅 API。
 
-[查阅组件示例与 API](docs/README.md) · [查看设计规则和尺寸规范](docs/design-language.md)
+[在线体验组件与 API](https://yahhaui.com/#/components) · [查阅仓库文档](docs/README.md) · [查看设计规则和尺寸规范](docs/design-language.md)
 
 ## 让 AI 使用 Yahha UI
 

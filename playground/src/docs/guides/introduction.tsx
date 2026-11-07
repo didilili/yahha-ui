@@ -16,7 +16,7 @@ const page: DocPage = {
           <p>
             组件可组合成文章页、作者介绍和归档列表；组件负责交互与外观，页面布局与业务数据由应用管理。
           </p>
-          <p className="guide-status">本仓库当前工作版本通过本地安装包试用；npm 已提供 0.0.1。</p>
+          <p className="guide-status">支持 npm 安装与本地构建。</p>
           <div className="guide-actions">
             <Link className="guide-primary" href="#/guides/getting-started">
               开始使用 <ArrowUpRight size={16} />
@@ -97,36 +97,13 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            本指南按本仓库当前工作版本说明用法，其中的新增组件和 API 尚未发布到 npm，
-            请通过本地打包安装。当前在 React / React DOM ^19.3.1 的浏览器项目中验证；React 18
+            本指南随仓库源码更新，具体功能以所安装版本为准；尚未发布的改动可通过本地构建试用。
+            当前在 React / React DOM ^19.3.1 的浏览器项目中验证；React 18
             与服务端渲染兼容性尚未验证。
           </p>
           <p>
             项目自有内容采用 MIT，第三方内容见{' '}
             <Link href="#/guides/artwork?section=artwork-sources">来源与分发范围</Link>。
-          </p>
-          <p>
-            文档结构参考{' '}
-            <Link href="https://ant.design/components/button-cn/" target="_blank" rel="noreferrer">
-              Ant Design
-            </Link>
-            、
-            <Link
-              href="https://www.radix-ui.com/themes/docs/components/button"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Radix Themes
-            </Link>{' '}
-            与{' '}
-            <Link
-              href="https://guokaigdg.github.io/animal-island-ui/#/button"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Animal Island UI
-            </Link>
-            ，示例与 API 按 Yahha UI 当前的实际用法编写。
           </p>
         </>
       ),

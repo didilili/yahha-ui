@@ -1,4 +1,5 @@
 import { useState, type Ref } from 'react';
+import { version as packageVersion } from '../../../package.json';
 import { ArrowDown, ArrowRight, Code2 } from 'lucide-react';
 import { Badge, Button, Checkbox, Link, Popover, Surface, Tabs, Text, TextField } from 'yahha-ui';
 import Motif from './Motif';
@@ -51,8 +52,7 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
               </Link>
             </div>
             <p className="home-local-note">
-              v0.0.1 <span aria-hidden="true">·</span> 早期预览
-              <span aria-hidden="true">·</span> 通过本地包试用
+              v{packageVersion} <span aria-hidden="true">·</span> npm 安装 / 本地构建
             </p>
             <Link className="home-introduction-link" href="#/guides/introduction">
               了解项目与当前范围 <ArrowRight size={14} aria-hidden="true" />

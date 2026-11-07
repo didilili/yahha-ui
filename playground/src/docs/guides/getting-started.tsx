@@ -1,4 +1,5 @@
 import { Link } from 'yahha-ui';
+import { version as packageVersion } from '../../../../package.json';
 import { feedbackHref, repositoryHref } from '../../site/site-links';
 import GettingStarted from '../../examples/GettingStarted';
 import gettingStartedSource from '../../examples/GettingStarted.tsx?raw';
@@ -17,7 +18,7 @@ const page: DocPage = {
           <nav className="guide-paths getting-started-paths" aria-label="接入路径">
             <Link href="#/guides/getting-started?section=install">
               <strong>在现有项目中使用组件 →</strong>
-              <span>在现有 React 项目中安装本地组件包、导入样式并配置主题。</span>
+              <span>在现有 React 项目中安装组件包、导入样式并配置主题。</span>
             </Link>
             <Link href="#/guides/getting-started?section=starter-project">
               <strong>运行最小项目 →</strong>
@@ -48,16 +49,16 @@ const page: DocPage = {
       title: '1. 安装组件',
       content: (
         <>
-          <p>
-            npm 已发布 <code>0.0.1</code>，可在自己的 React 项目根目录安装：
-          </p>
+          <p>在自己的 React 项目根目录安装最新已发布版本：</p>
           <CodeBlock language="sh" source={'npm install yahha-ui'} />
           <p>
-            本指南按本仓库当前工作版本编写，其中的新增组件和 API 尚未发布到 npm。
-            使用当前文档对应的版本时，在 React 项目根目录安装本地组件包，
-            将路径替换为安装包的实际位置：
+            本指南随仓库源码更新，使用前请确认安装版本支持所需 API。
+            如需使用尚未发布的改动，可安装本地构建的组件包，将路径替换为实际文件位置：
           </p>
-          <CodeBlock language="sh" source={'npm install /absolute/path/yahha-ui-0.0.1.tgz'} />
+          <CodeBlock
+            language="sh"
+            source={`npm install /absolute/path/yahha-ui-${packageVersion}.tgz`}
+          />
           <p>还没有安装包时，获取本仓库源码，在仓库根目录生成，再回到自己的项目安装：</p>
           <CodeBlock language="sh" source={'npm ci\nnpm run build:lib\nnpm pack'} />
         </>
@@ -105,9 +106,8 @@ const page: DocPage = {
               两个文件放在同一目录。
             </li>
             <li>
-              如果「完整接入」列出了图片，下载对应文件，放入 <code>Example.tsx</code> 同级的{' '}
-              <code>artwork/</code>{' '}
-              目录。保留下载文件名和源码里的相对路径；没有素材清单的示例无需这一步。
+              如果「完整接入」列出了素材，以 <code>Example.tsx</code>{' '}
+              所在目录为起点，按清单标注的相对路径保存下载文件，保留源码中的导入路径；没有素材清单的示例无需这一步。
             </li>
           </ol>
           <p>
@@ -127,8 +127,8 @@ const page: DocPage = {
         <>
           <ul>
             <li>
-              找不到组件包：确认 <code>.tgz</code> 已安装到正在运行的使用方项目，且 React 与 React
-              DOM 符合上面的 peer 范围。
+              找不到组件包：确认已在正在运行的使用方项目根目录执行 <code>npm install yahha-ui</code>
+              ，或安装了本地构建的 <code>.tgz</code>；React 与 React DOM 需符合上面的 peer 范围。
             </li>
             <li>
               只有内容没有样式：确认应用加载了 <code>yahha-ui/style.css</code>，组件位于设置了{' '}
@@ -139,8 +139,8 @@ const page: DocPage = {
               ：检查应用是否支持源码中使用的 Vite 资源导入。
             </li>
             <li>
-              场景缺图：检查「完整接入」的素材清单，以及 <code>artwork/</code> 目录位置和文件名。
-              图片只影响对应场景，不是基础组件的使用前提。
+              场景缺图：对照「完整接入」的素材清单，检查文件相对于 <code>Example.tsx</code>{' '}
+              的保存路径是否与源码导入一致。图片只影响对应场景，不是基础组件的使用前提。
             </li>
             <li>本地修改没有生效：重新构建、打包，再在使用方安装新生成的 tarball。</li>
           </ul>

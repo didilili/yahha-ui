@@ -1,10 +1,10 @@
 # 组件文档
 
-首次使用请参考[本地安装说明](../README.md#构建与本地安装)，完成安装、样式导入和主题设置。没有现成 React 项目时，可[导出最小项目](../README.md#导出最小项目)。
+首次使用请参考[安装与接入](../README.md#安装与接入)，完成安装、样式导入和主题设置。没有现成 React 项目时，可[导出最小项目](../README.md#导出最小项目)。
 
 本文档收录 31 个 UI 组件、ThemeProvider 及其用途、示例与 API。
 
-在组件库根目录完成 `npm ci` 后运行 `npm run dev`，即可在本地文档站操作示例。下面的链接可直接在 GitHub 阅读，站内组件总览位于 `#/components`。
+可直接打开[在线文档](https://yahhaui.com/#/guides/getting-started)与[组件总览](https://yahhaui.com/#/components)操作示例。也可在组件库根目录完成 `npm ci` 后运行 `npm run dev`，启动本地文档站；下面的组件链接可直接在 GitHub 阅读。
 
 ## 通用
 
@@ -72,19 +72,19 @@
 
 组件从 `yahha-ui` 导入，样式在应用入口通过 `yahha-ui/style.css` 加载一次，组件区域使用 `ThemeProvider theme="pink"` 包裹。
 
-复制示例时，在示例下展开“完整接入”，将 `Example.tsx` 与 `App.tsx` 放在同一目录；若列出素材清单，将对应文件保存到同级 `artwork/` 目录，保留文件名和相对路径。
+复制示例时，在示例下展开“完整接入”，将 `Example.tsx` 与 `App.tsx` 放在同一目录；若列出素材清单，以 `Example.tsx` 所在目录为起点，按清单标注的相对路径保存文件，保留源码中的导入路径。
 
 ## 站内指南
 
-启动文档站后，可通过以下路由查阅指南和组合示例。
+可在[在线文档站](https://yahhaui.com/)查阅以下指南和组合示例；本地文档站使用相同路由。
 
-- `#/guides/getting-started`：安装、样式与第一个组件。
-- `#/guides/styling`：使用与定制，包括颜色、布局、插槽、状态管理与键盘约定。
-- `#/guides/recipes`：场景总览，按用途选择组合示例。
-- `#/guides/reading`：阅读与收藏的完整组合。
-- `#/guides/design-baseline`：[设计语言](design-language.md)与默认组件组合。
-- `#/guides/states`：[文章编辑](../playground/src/examples/scenes/ArticleActions.tsx)、[博客归档](../playground/src/examples/scenes/BlogArchive.tsx)、等待与恢复。
-- `#/guides/artwork`：[素材与分发范围](assets-and-distribution.md)。
+- [开始使用](https://yahhaui.com/#/guides/getting-started)：安装、样式与第一个组件。
+- [使用与定制](https://yahhaui.com/#/guides/styling)：颜色、布局、插槽、状态管理与键盘约定。
+- [场景总览](https://yahhaui.com/#/guides/recipes)：按用途选择组合示例。
+- [阅读与收藏](https://yahhaui.com/#/guides/reading)：阅读与收藏的完整组合。
+- [设计语言与基准](https://yahhaui.com/#/guides/design-baseline)：[设计规则](design-language.md)与默认组件组合。
+- [状态与反馈](https://yahhaui.com/#/guides/states)：[文章编辑](../playground/src/examples/scenes/ArticleActions.tsx)、[博客归档](../playground/src/examples/scenes/BlogArchive.tsx)、等待与恢复。
+- [图标与插画](https://yahhaui.com/#/guides/artwork)：[素材与分发范围](assets-and-distribution.md)。
 
 [部署说明](deployment.md)介绍文档站的静态托管。
 
