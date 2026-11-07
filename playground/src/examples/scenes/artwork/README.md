@@ -7,9 +7,11 @@
 
 提示词约束：非官方Chiikawa同人；简单二维深棕圆端墨线、白色/浅蓝/奶黄主体、小粉腮红、稀疏草地；禁止3D、塑料质感、背景纸、字母/标题/数字和水印，要求真正透明背景与空本/空野餐布。
 
-本图是按场景姿态改绘的 PNG，不从 SVG 自动生成，也不由 `npm run sync:artwork` 覆盖。成品作为实际复用的素材保留；提示词记录编辑过程，不承诺逐像素再生。修改后还应检查实际空状态的 176 × 132px 显示，并刷新 `playground/src/assets/recipes/empty.png` 的真实示例截图。
+本图是按场景姿态改绘的 PNG，不从 SVG 自动生成，也不由 `npm run sync:artwork` 覆盖。成品作为已确认的场景原稿保留；提示词记录编辑过程，不承诺逐像素再生。当前文档空态示例使用 `little-days-empty-collection.svg` 和 `little-days-search-empty.svg`，不再引用本图。
 
-这些图在 playground 场景中按需加载，通过示例“完整接入”单独下载；`src/` 不引用，默认 npm 产物不包含它们。项目自有内容采用 [MIT](../../../../../LICENSE)，第三方内容见[第三方说明](../../../../../THIRD_PARTY_NOTICES.md)。
+`playground/src/assets/recipes/empty.png` 是当前组合示例目录使用的页面截图，与本目录的透明场景 PNG 不同。更新页面截图时应以实际运行的空态示例为准。
+
+本图不在当前示例的“完整接入”下载清单中；`src/` 不引用，默认 npm 产物不包含它。项目自有内容采用 [MIT](../../../../../LICENSE)，第三方内容见[第三方说明](../../../../../THIRD_PARTY_NOTICES.md)。
 
 新增的 [小日常 SVG](little-days/README.md) 是独立绘制的生活道具，与上述 AI 角色插图分开记录。
 该目录是原始路径的唯一来源，`little-days-*.svg` 为脚本派生的示例文件；修改后执行

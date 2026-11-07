@@ -1,6 +1,6 @@
 # 素材与分发范围
 
-本文分别记录组件代码、角色展示素材、生活道具、字体与页面截图的来源和分发位置。包名为 `yahha-ui`，当前版本 `0.0.1`，通过 npm 和本地安装包分发。项目自有内容采用 [MIT](../LICENSE)，第三方内容见[第三方说明](../THIRD_PARTY_NOTICES.md)。
+本文分别记录组件代码、角色展示素材、生活道具、字体与页面截图的来源和分发位置。包名为 `yahha-ui`，已发布版本通过 npm 分发，也支持本地构建安装；源码版本以 [package.json](../package.json) 为准。项目自有内容采用 [MIT](../LICENSE)，第三方内容见[第三方说明](../THIRD_PARTY_NOTICES.md)。
 
 ## 组件代码与安装包
 
@@ -10,7 +10,7 @@
 - [package.json](../package.json) 的分发白名单为 `dist/`。本地 `.tgz` 另附包元信息、根 README、`LICENSE` 与 `THIRD_PARTY_NOTICES.md`，不包含文档站、独立角色 SVG、PNG、字体或截图目录。
 - React / React DOM 由使用方提供，`@base-ui/react` 是运行时依赖。
 
-源码仓库 README 中的相对图片和文档链接供仓库阅读，不表示这些文件进入安装包。代码接入见[开始使用与本地安装](../README.md)。
+源码仓库 README 中的相对图片和文档链接供仓库阅读，不表示这些文件进入安装包。代码接入见[安装与接入](../README.md#安装与接入)。
 
 ## 角色 SVG 与生活道具
 
@@ -30,7 +30,9 @@
 
 PNG 不进入组件安装包；实际引用的图片会进入对应网站的静态构建。
 
-- `playground/src/examples/scenes/artwork/empty.png` 最初于 2026-10-24 生成，2026-11-04 经人物校准与透明边缘精修后确认采用。它仍只包含小八与乌萨奇，用于文档空状态示例；[生成说明](../playground/src/examples/scenes/artwork/README.md)及 [sources.json](../playground/src/examples/scenes/artwork/sources.json)保留当前成品、编辑提示词和原版本记录，不依赖本机临时路径。
+- `playground/src/examples/scenes/artwork/empty.png` 最初于 2026-10-24 生成，2026-11-04 经人物校准与透明边缘精修后确认采用，只包含小八与乌萨奇。该 PNG 作为已确认的场景原稿保留在仓库；当前文档空态示例使用小日常 SVG，不再引用该文件。[生成说明](../playground/src/examples/scenes/artwork/README.md)及 [sources.json](../playground/src/examples/scenes/artwork/sources.json)保留成品、编辑提示词和原版本记录，不依赖本机临时路径。
+
+`playground/src/assets/recipes/empty.png` 是组合示例目录使用的页面截图，与上述透明场景原稿是不同文件。
 
 生成说明将该状态图记录为非官方同人样张，具体来源、尺寸与哈希保留在原目录。
 

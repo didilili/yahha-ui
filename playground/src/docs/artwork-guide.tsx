@@ -325,7 +325,8 @@ export const artworkGuide: DocPage = {
               书签、热茶和状态图案由本项目绘制；找路与欢迎场景还组合了既有角色模型。
             </li>
             <li>
-              <strong>PNG 插图：</strong>空态示例的图片保留生成说明。
+              <strong>PNG 插图：</strong>
+              已确认的场景原稿与生成说明保留在仓库；当前空态示例使用小日常 SVG。
             </li>
             <li>
               <strong>站点字体：</strong>文档站使用 LXGW Marker Gothic Regular 和 LXGW WenKai
@@ -451,8 +452,8 @@ export default function SearchEmpty() {
           <details className={styles.setup}>
             <summary>复制完整示例时的文件与构建要求</summary>
             <p>
-              展开对应示例的“完整接入”，保存原样 <code>Example.tsx</code>、<code>App.tsx</code>，
-              并将素材按原名放到 <code>Example.tsx</code> 同级的 <code>artwork/</code> 目录。
+              展开对应示例的“完整接入”，将原样 <code>Example.tsx</code>、<code>App.tsx</code>{' '}
+              保存到同一目录；以此目录为起点，按素材清单标注的相对路径保存文件，保留源码中的导入路径。
             </p>
             <p>
               完整示例按 Vite React 项目验证，源码使用 <code>?no-inline</code> 导入资源 URL；

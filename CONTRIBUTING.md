@@ -22,7 +22,7 @@ macOS 可在安装依赖后双击根目录 `启动组件小屋.command`，它会
 - `src/theme/`：主题、Context 与语义颜色；`src/internal/`：不公开的工具与图标。
 - `playground/src/`：独立展示页，包含演示数据、图片、字体和示例。库源码不得依赖它。
 - `playground/src/assets/fonts/`：文档站字体分片的生成目录；使用 `npm run check:fonts` 核对覆盖和哈希。重新生成执行 `npm run fonts:generate`（需要 uv），日常安装与构建无需 uv，详见[字体维护](docs/assets-and-distribution.md#字体维护)。
-- `playground/src/docs/`：指南与组件页数据、API、站内代码展示工具；`examples/` 放实时示例。每个示例同时作为 TSX 模块和 `?raw` 源码导入。完整接入分别提供原样的 `Example.tsx` 与负责 CSS / ThemeProvider 包裹的 `App.tsx`；含场景素材时同时提供 artwork 文件，保留 `Example.tsx` 同级 `artwork/` 的相对引用。
+- `playground/src/docs/`：指南与组件页数据、API、站内代码展示工具；`examples/` 放实时示例。每个示例同时作为 TSX 模块和 `?raw` 源码导入。完整接入分别提供原样的 `Example.tsx` 与负责 CSS / ThemeProvider 包裹的 `App.tsx`；含场景素材时，按完整接入素材清单列出的相对路径保存文件，保留源码中的导入。
 - `playground/src/examples/scenes/`：加载、空态与 404 页面组合及其 `artwork/` 素材。素材只属于展示示例，不进入 `src/` 或默认组件库产物。
 - `playground/src/docs/component-catalog.ts`：搜索和导航的轻量元信息目录，不导入示例模块；页面 ID、名称、中文名、分组和描述需与页面定义一致。
 - `playground/src/docs/navigation.ts`：文档栏目、侧栏和相邻文档的共同来源。指南用 `area` 声明所属栏目；全站搜索保持跨栏目，页面移动时在此保留旧链接映射。
@@ -40,15 +40,15 @@ Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Sw
 
 库内相对模块路径使用 `.js` 扩展名，使构建后的多文件声明可被 Bundler 与 NodeNext 解析。公开 Props 与实际默认值是 API 契约依据；站内说明、API 与示例组织在 `playground/src/docs/components/` 维护，组件 Markdown 由 `npm run sync:docs` 生成。公共接口变更需核对属性名、类型、必填项、默认值、原生属性及 ref 的作用目标，并检查源码导出和使用方示例。站内预览与展示源码使用同一个 TSX，Markdown 的原始示例也由同一页面生成，两者均由真实安装包验收编译。页面元信息变更时同步 component-catalog。
 
-组件目录与总览按通用、排版、布局、表单、内容展示、导航、浮层、反馈八组组织 29 个 UI 组件，ThemeProvider 单列为主题配置；元信息只在目录维护，文档按组件独立加载。TextField、SegmentedControl、ThemeProvider 的中文名称分别统一为“单行输入”“分段选择”“主题配置”；Popover 使用“弹出面板”，Alert 使用“提示条”，旧称保留为搜索别名。英文导出名和路由保持稳定。
+组件目录与总览按通用、排版、布局、表单、内容展示、导航、浮层、反馈八组组织，ThemeProvider 单列为主题配置；组件清单与元信息以 `component-catalog.ts` 为准，文档按组件独立加载。TextField、SegmentedControl、ThemeProvider 的中文名称分别统一为“单行输入”“分段选择”“主题配置”；Popover 使用“弹出面板”，Alert 使用“提示条”，旧称保留为搜索别名。英文导出名和路由保持稳定。
 
 组件使用文档描述当前用途、示例、API 和交互约定，不混入“本轮复核”“保留既有”“不计新增”等开发过程表述。设计原则和视觉规则集中在设计语言文档；文档不承诺尚未实现或验证的能力。
 
 组件目录、同源 TSX 示例与组件 Markdown 以当前页面模型和生成的文档索引为准。[设计语言](docs/design-language.md) 单独说明视觉和使用规则；默认设计规范位于 `#/guides/design-baseline`，示例不得覆盖控件外观与尺寸；共享 token 集中在 `src/theme/theme.module.css`，改设计必须通过 `npm run check:design` 与安装包实际尺寸验证；加载、空态与 404 场景位于 `#/guides/states`，以现有组件组合，不增加公共组件。增加或删除公开组件与示例时，同时更新 README 和文档索引。
 
-组件边界也应随实现核对：Select 当前为单值选择，不包含搜索或多选；Pagination 使用按钮与页码回调，路由与列表更新属于调用方；Tooltip 沿用 Base UI 1.9 的视觉补充约定，触发器必须具备自身可访问名称，重要说明使用可见文字或 Popover。
+组件边界也应随实现核对：Select 当前为单值选择，不包含搜索或多选；Pagination 默认使用按钮，可通过 `getPageHref` 提供原生链接，URL 与列表更新由使用方处理；Tooltip 沿用 Base UI 1.9 的视觉补充约定，触发器必须具备自身可访问名称，重要说明使用可见文字或 Popover。
 
-文档站本身也是组件的使用方，统一采用奶白、暖墨与轻粉的漫画手账语言。按钮、白底字段、纸签、栏目和浮层保持各自结构，不能只用同一套圆角包住所有内容。强调色预设在 ThemeProvider 文档中展示。搜索、清空、菜单、代码操作和重试等公共交互优先从 `yahha-ui` 公开入口复用已有组件。组件接入处的站点 CSS 只负责布局、排版和公开 `className` / `classNames` 定制，不依赖内部 DOM 覆盖基础交互，也不为适配顶栏而缩小点击区域。导航链接、表格、pre / code 等保留合适的原生语义，页面导航不改成 Tabs。
+文档站本身也是组件的使用方，统一采用天空蓝、白色内容面、暖墨与轻粉的漫画手账语言。按钮、白底字段、纸签、栏目和浮层保持各自结构，不能只用同一套圆角包住所有内容。强调色预设在 ThemeProvider 文档中展示。搜索、清空、菜单、代码操作和重试等公共交互优先从 `yahha-ui` 公开入口复用已有组件。组件接入处的站点 CSS 只负责布局、排版和公开 `className` / `classNames` 定制，不依赖内部 DOM 覆盖基础交互，也不为适配顶栏而缩小点击区域。导航链接、表格、pre / code 等保留合适的原生语义，页面导航不改成 Tabs。
 
 新增组件时，除了同步示例和 API，还需复核官网中适合复用的位置。验收覆盖官网实际的键盘操作、焦点恢复、主题及 Portal 更新、窄屏布局；增加组件数量本身不代表这些使用场景已通过验证。
 
@@ -87,7 +87,8 @@ npx prettier --check README.md CONTRIBUTING.md docs
 - `npm run lint` / `npm run format:check`：代码规则与格式。
 - `npm test`：组件行为测试。
 - `npm run check:scripts`：验收脚本共享静态服务器的真实 HTTP、资源类型、子路径与路径边界检查，以及最小项目导出的参数与覆盖保护检查。
-- `npm run build:lib` / `npm run build:demo`：组件库、类型声明与展示页构建。
+- `npm run build:lib`：构建组件库与类型声明。
+- `npm run build:demo`：检查组件文档同步与字体，再构建文档站；不构建组件库。
 - `npm run lint:package`：对构建后的包运行 publint。
 - `npm run test:package`：将实际安装包放入独立使用方，检查 Markdown 和文档站全部 TSX 示例类型并运行 Chromium 验证；包含 1280、320、390px 的键盘、长文本、表单重置、弹窗焦点及滚动边界，以及 Basics 中的新增组件组合场景。先执行 `npm run build:lib`。
 - `npm run test:docs`：检查文档路由、API 与示例入口、复制降级、搜索、移动导航和弹窗。先执行 `npm run build:demo`。
@@ -95,15 +96,15 @@ npx prettier --check README.md CONTRIBUTING.md docs
 - `npm run test:overlays`：在三引擎复验 Dialog 表单、Popover 重命名、菜单草稿操作、Tooltip 及 ArticleActions 嵌套流程；包含 320×500px 短屏、错误恢复、取消与关闭回焦。先执行 `npm run build:demo`，三引擎安装方法同上文控件验收。
 - `npm run check`：完整本地检查；涉及公共 API、构建或依赖边界时运行。
 
-完整检查先校验字体、构建组件库，再用 `build:demo:site` 构建文档站，避免重复检查字体或再次构建组件库。日常单独构建使用 `build:demo`，保留所需的字体检查与组件库构建。
+`npm run check` 先完成静态检查与组件测试，再构建组件库，并用 `build:demo:site` 构建文档站，之后验证安装包、文档站和浏览器字体渲染。日常只构建文档站时使用 `build:demo`，需要组件库产物时另运行 `build:lib`。
 
 首次运行浏览器测试需要 `npx playwright install chromium`；Linux 可能需要 `npx playwright install --with-deps chromium`。`npm run format` 和 `npm run lint:fix` 会修改文件，只在确认作用范围后使用。
 
-GitHub Actions 对 pull request 与 `main` push 执行完整检查。本地 Husky pre-commit 先对已暂存文件运行 `lint-staged`，通过后再运行 `npm run check:design`；hook 不代表已完成完整验证，也不授权自动暂存或提交。
+GitHub Actions 对 pull request 与 `main` push 执行 `.github/workflows/ci.yml` 中配置的格式、代码、工程脚本、文档、设计、类型、组件测试、构建与安装包和文档站检查。CI 不运行本地 `npm run check` 中的浏览器字体渲染检查 `test:fonts`。本地 Husky pre-commit 先对已暂存文件运行 `lint-staged`，通过后再运行 `npm run check:design`；hook 不代表已完成完整验证，也不授权自动暂存或提交。
 
 ## 素材与许可
 
-项目自有内容采用 [MIT](LICENSE)，第三方内容见[第三方说明](THIRD_PARTY_NOTICES.md)。组件包通过 npm 分发，也保留本地包试用方式；版本管理和自动发布见[版本与发布](docs/releasing.md)。公开源码与 npm 发布分别处理。React 19 浏览器项目为当前验证范围，不扩写未经验证的兼容承诺。
+项目自有内容采用 [MIT](LICENSE)，第三方内容见[第三方说明](THIRD_PARTY_NOTICES.md)。组件包通过 npm 分发，也支持本地构建安装；版本管理和自动发布见[版本与发布](docs/releasing.md)。公开源码与 npm 发布分别处理。React 19 浏览器项目为当前验证范围，不扩写未经验证的兼容承诺。
 
 状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`。修改场景素材时同步来源记录与完整接入下载文件。
 
@@ -112,6 +113,8 @@ GitHub Actions 对 pull request 与 `main` push 执行完整检查。本地 Husk
 ## 工程与设计参考
 
 工具选择参考了 [Radix Primitives 的 Oxlint 配置路线](https://github.com/radix-ui/primitives/blob/main/package.json)，本项目保留 TypeScript 7，格式化使用 Prettier。
+
+文档结构参考 [Ant Design](https://ant.design/components/button-cn/)、[Radix Themes](https://www.radix-ui.com/themes/docs/components/button) 与 [Animal Island UI](https://guokaigdg.github.io/animal-island-ui/#/button) 的组件页面组织方式。示例与 API 按 Yahha UI 的实际用法编写，不沿用参考站点的接口约定。
 
 以下站点作为界面与交互设计参考，不代表官方组件规范：
 
