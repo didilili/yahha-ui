@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react';
-import { Button, Text, Toast } from 'yahha-ui';
+import { Button, Link, Text, Toast } from 'yahha-ui';
 
 function AppearanceSample({ appearance }: { appearance: 'default' | 'receipt' }) {
   const [open, setOpen] = useState(true);
-  const [saved, setSaved] = useState(true);
   const restore = useRef<HTMLButtonElement>(null);
   const message = useRef<HTMLDivElement>(null);
 
@@ -24,29 +23,11 @@ function AppearanceSample({ appearance }: { appearance: 'default' | 'receipt' })
           title="手记已收藏"
           description="《周末散步》已经加入收藏夹。"
           onClose={dismiss}
-          action={
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setSaved(false);
-                dismiss();
-              }}
-            >
-              撤销收藏
-            </Button>
-          }
+          action={<Link href="#/guides/reading">继续阅读</Link>}
         />
       </div>
-      {!saved && <Text size="sm">已撤销本地示例收藏。</Text>}
       <div>
-        <Button
-          ref={restore}
-          variant="secondary"
-          onClick={() => {
-            setSaved(true);
-            setOpen(true);
-          }}
-        >
+        <Button ref={restore} variant="secondary" onClick={() => setOpen(true)}>
           重新显示提示
         </Button>
       </div>

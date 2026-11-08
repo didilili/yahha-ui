@@ -4,6 +4,8 @@ import EmptySearch from '../../examples/feedback/EmptySearch';
 import emptySearchSource from '../../examples/feedback/EmptySearch.tsx?raw';
 import EmptyAppearance from '../../examples/feedback/EmptyAppearance';
 import emptyAppearanceSource from '../../examples/feedback/EmptyAppearance.tsx?raw';
+import EmptyIllustrations from '../../examples/scenes/EmptyIllustrations';
+import emptyIllustrationsSource from '../../examples/scenes/EmptyIllustrations.tsx?raw';
 import EmptyScene from '../../examples/scenes/EmptyScene';
 import emptySceneSource from '../../examples/scenes/EmptyScene.tsx?raw';
 import emptyCollectionArtwork from '../../examples/scenes/artwork/little-days-empty-collection.svg?no-inline';
@@ -43,20 +45,31 @@ export default defineComponentPage('empty-state', {
         {
           id: 'motif',
           title: '普通与小纸页空态',
-          description: '使用相同标题与说明对比；默认没有插画，小纸页由 motif="paper" 显式启用。',
+          description: '使用相同标题与说明，对比默认无插画与 motif="paper" 的小纸页。',
           component: EmptyAppearance,
           source: emptyAppearanceSource,
+        },
+        {
+          id: 'empty-custom-illustration',
+          title: '自定义插画',
+          description: '使用相同标题与说明，对比 illustration 插槽中的两张现有插画。',
+          component: EmptyIllustrations,
+          source: emptyIllustrationsSource,
+          assets: [
+            { name: 'little-days-empty-collection.svg', href: emptyCollectionArtwork },
+            { name: 'little-days-search-empty.svg', href: emptySearchArtwork },
+          ],
         },
       ],
     },
     {
       id: 'illustrations',
       kind: 'integration',
-      title: '按场景选用道具插画',
+      title: '进阶用法',
+      disclosure: '查看纸页、收藏与搜索场景',
       content: (
         <p>
-          普通空态默认没有插画；可用 motif="paper" 加入小纸页，或通过 illustration
-          插槽选择空收藏口袋或搜索纸条。插画用于补充情境，原因和下一步仍由文字与操作说明。
+          完整场景组合保留创建、浏览与清空搜索流程；插画用于补充情境，原因和下一步仍由文字与操作说明。
         </p>
       ),
       examples: [
@@ -66,6 +79,7 @@ export default defineComponentPage('empty-state', {
           description: '切换场景后，可以创建内容、浏览文章或清空搜索；示例状态仅保留在当前页面。',
           component: EmptyScene,
           source: emptySceneSource,
+          toc: false,
           themeScope: 'explicit',
           assets: [
             { name: 'little-days-empty-collection.svg', href: emptyCollectionArtwork },

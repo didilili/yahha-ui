@@ -40,11 +40,50 @@ export default function ProgressBasic() {
 }
 ```
 
+<a id="progress-states"></a>
+
+### 进度状态
+
+使用默认外观对比进行中、未知进度和已完成状态。
+
+[查看示例文件](../../playground/src/examples/content/ProgressStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/ProgressStates.tsx -->
+
+```tsx
+import { Progress, Text } from 'yahha-ui';
+
+export default function ProgressStates() {
+  return (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <div>
+        <Text size="sm" tone="muted">
+          进行中
+        </Text>
+        <Progress label="整理进度" value={40} />
+      </div>
+      <div>
+        <Text size="sm" tone="muted">
+          未知进度
+        </Text>
+        <Progress label="整理进度" value={null} valueText="正在计算" />
+      </div>
+      <div>
+        <Text size="sm" tone="muted">
+          已完成
+        </Text>
+        <Progress label="整理进度" value={100} />
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="progress-appearance"></a>
 
 ### 常规与纸签
 
-切换同一个数值，对比两种外观。
+切换同一个数值，对比纸签端点与完成勾记。
 
 [查看示例文件](../../playground/src/examples/content/ProgressAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -78,45 +117,6 @@ export default function ProgressAppearance() {
           纸签
         </Text>
         <Progress label="阅读进度" value={Number(value)} appearance="bookmark" />
-      </div>
-    </div>
-  );
-}
-```
-
-<a id="progress-states"></a>
-
-### 进度状态
-
-对比进行中、未知进度和已完成状态。
-
-[查看示例文件](../../playground/src/examples/content/ProgressStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/content/ProgressStates.tsx -->
-
-```tsx
-import { Progress, Text } from 'yahha-ui';
-
-export default function ProgressStates() {
-  return (
-    <div style={{ display: 'grid', gap: 24 }}>
-      <div>
-        <Text size="sm" tone="muted">
-          进行中
-        </Text>
-        <Progress label="整理进度" value={40} appearance="bookmark" />
-      </div>
-      <div>
-        <Text size="sm" tone="muted">
-          未知进度
-        </Text>
-        <Progress label="整理进度" value={null} valueText="正在计算" appearance="bookmark" />
-      </div>
-      <div>
-        <Text size="sm" tone="muted">
-          已完成
-        </Text>
-        <Progress label="整理进度" value={100} appearance="bookmark" />
       </div>
     </div>
   );

@@ -20,11 +20,35 @@ import { Avatar } from 'yahha-ui';
 
 ## 代码演示
 
+<a id="avatar-basic"></a>
+
+### 图片头像
+
+通过 src 显示图片，name 提供头像名称。
+
+[查看示例文件](../../playground/src/examples/content/AvatarBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/AvatarBasic.tsx -->
+
+```tsx
+import { Avatar } from 'yahha-ui';
+
+const picture =
+  'data:image/svg+xml,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#d7eaf5"/><text x="40" y="53" text-anchor="middle" font-size="40" fill="#462e31">米</text></svg>',
+  );
+
+export default function AvatarBasic() {
+  return <Avatar name="库米" src={picture} />;
+}
+```
+
 <a id="avatar-fallback"></a>
 
-### 尺寸与姓名回退
+### 姓名与自定义回退
 
-比较三档尺寸、空姓名与自定义回退。
+未提供图片时，查看姓名缩写、空姓名和指定的回退内容。
 
 [查看示例文件](../../playground/src/examples/content/AvatarExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -33,39 +57,62 @@ import { Avatar } from 'yahha-ui';
 ```tsx
 import { Avatar, Text } from 'yahha-ui';
 
-const sizes = [
-  { name: '小八', size: 'sm', description: '小号 sm' },
-  { name: '吉伊', size: 'md', description: '中号 md（默认）' },
-  { name: '乌萨奇', size: 'lg', description: '大号 lg' },
-] as const;
-
 export default function AvatarExample() {
   return (
-    <div style={{ display: 'grid', gap: 24, maxWidth: 480 }}>
-      <div style={{ display: 'flex', alignItems: 'end', flexWrap: 'wrap', gap: 24 }}>
-        {sizes.map(({ name, size, description }) => (
-          <div key={size} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
-            <Avatar name={name} size={size} />
-            <Text size="sm" tone="muted">
-              {description}
-            </Text>
-          </div>
-        ))}
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+      <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+        <Avatar name="库米" />
+        <Text size="sm" tone="muted">
+          姓名缩写
+        </Text>
       </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
-          <Avatar name=" " />
+      <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+        <Avatar name=" " />
+        <Text size="sm" tone="muted">
+          空姓名
+        </Text>
+      </div>
+      <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+        <Avatar name="把散步写成手记的作者库米" fallback="米" />
+        <Text size="sm" tone="muted">
+          自定义回退
+        </Text>
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="avatar-sizes"></a>
+
+### 尺寸
+
+使用同一姓名对比三档尺寸。
+
+[查看示例文件](../../playground/src/examples/content/AvatarSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/AvatarSizes.tsx -->
+
+```tsx
+import { Avatar, Text } from 'yahha-ui';
+
+export default function AvatarSizes() {
+  return (
+    <div style={{ display: 'flex', alignItems: 'end', flexWrap: 'wrap', gap: 24 }}>
+      {(
+        [
+          { size: 'sm', label: '小号 sm' },
+          { size: 'md', label: '中号 md（默认）' },
+          { size: 'lg', label: '大号 lg' },
+        ] as const
+      ).map(({ size, label }) => (
+        <div key={size} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <Avatar name="库米" size={size} />
           <Text size="sm" tone="muted">
-            空姓名
+            {label}
           </Text>
         </div>
-        <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
-          <Avatar name="把散步写成手记的作者库米" fallback="米" />
-          <Text size="sm" tone="muted">
-            自定义回退
-          </Text>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }

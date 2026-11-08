@@ -150,7 +150,7 @@ export default function EmptySearch() {
 
 ### 普通与小纸页空态
 
-使用相同标题与说明对比；默认没有插画，小纸页由 motif="paper" 显式启用。
+使用相同标题与说明，对比默认无插画与 motif="paper" 的小纸页。
 
 [查看示例文件](../../playground/src/examples/feedback/EmptyAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -185,11 +185,68 @@ export default function EmptyAppearance() {
 }
 ```
 
+<a id="empty-custom-illustration"></a>
+
+### 自定义插画
+
+使用相同标题与说明，对比 illustration 插槽中的两张现有插画。
+
+[查看示例文件](../../playground/src/examples/scenes/EmptyIllustrations.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/scenes/EmptyIllustrations.tsx -->
+
+```tsx
+import { EmptyState, Text } from 'yahha-ui';
+import emptyCollectionArtwork from './artwork/little-days-empty-collection.svg?no-inline';
+import emptySearchArtwork from './artwork/little-days-search-empty.svg?no-inline';
+
+export default function EmptyIllustrations() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+        gap: 24,
+      }}
+    >
+      {[
+        { label: '收藏口袋', src: emptyCollectionArtwork },
+        { label: '搜索纸条', src: emptySearchArtwork },
+      ].map(({ label, src }) => (
+        <div key={label}>
+          <Text size="sm" tone="muted">
+            {label}
+          </Text>
+          <EmptyState
+            title="还没有手记"
+            description="写下今天想记住的一件小事。"
+            illustration={
+              <img
+                src={src}
+                alt=""
+                width="240"
+                height="180"
+                style={{
+                  display: 'block',
+                  width: 'min(240px, 100%)',
+                  height: 'auto',
+                  margin: 'auto',
+                }}
+              />
+            }
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="illustrations"></a>
 
-## 按场景选用道具插画
+## 进阶用法
 
-普通空态默认没有插画；可用 motif="paper" 加入小纸页，或通过 illustration 插槽选择空收藏口袋或搜索纸条。插画用于补充情境，原因和下一步仍由文字与操作说明。
+完整场景组合保留创建、浏览与清空搜索流程；插画用于补充情境，原因和下一步仍由文字与操作说明。
 
 <a id="empty-illustrations"></a>
 

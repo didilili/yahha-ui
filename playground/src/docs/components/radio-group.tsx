@@ -1,5 +1,9 @@
 import RadioGroupBasic from '../../examples/new-forms/RadioGroupBasic';
 import RadioGroupBasicSource from '../../examples/new-forms/RadioGroupBasic.tsx?raw';
+import RadioGroupHighlight from '../../examples/new-forms/RadioGroupHighlight';
+import radioGroupHighlightSource from '../../examples/new-forms/RadioGroupHighlight.tsx?raw';
+import RadioGroupLongLabels from '../../examples/new-forms/RadioGroupLongLabels';
+import radioGroupLongLabelsSource from '../../examples/new-forms/RadioGroupLongLabels.tsx?raw';
 import RadioGroupDescriptions from '../../examples/new-forms/RadioGroupDescriptions';
 import RadioGroupDescriptionsSource from '../../examples/new-forms/RadioGroupDescriptions.tsx?raw';
 import RadioGroupStatus from '../../examples/new-forms/RadioGroupStatus';
@@ -36,36 +40,50 @@ export default defineComponentPage('radio-group', {
         {
           id: 'basic',
           title: '基础用法',
-          description: '对比默认圆点与显式整行高亮；两组共用受控值，便于比较同一状态。',
+          description: '通过 value 与 onValueChange 在两个互斥选项间切换。',
           component: RadioGroupBasic,
           source: RadioGroupBasicSource,
         },
         {
           id: 'radio-descriptions',
-          title: '选项说明',
+          title: '选项说明与单项禁用',
           description: '为选项提供补充说明，并说明单项禁用原因。',
           component: RadioGroupDescriptions,
           source: RadioGroupDescriptionsSource,
         },
         {
           id: 'radio-status',
-          title: '错误与禁用',
+          title: '错误与整组禁用',
           description: '选择后清除错误，并对比整组禁用状态。',
           component: RadioGroupStatus,
           source: RadioGroupStatusSource,
+        },
+        {
+          id: 'radio-long-labels',
+          title: '长标签换行',
+          description: '在窄栏中切换选项，查看长标签与说明的换行。',
+          component: RadioGroupLongLabels,
+          source: radioGroupLongLabelsSource,
+        },
+        {
+          id: 'radio-highlight',
+          title: '整行高亮',
+          description: '两组共用选择值，对比相同内容和状态下的默认与整行高亮外观。',
+          component: RadioGroupHighlight,
+          source: radioGroupHighlightSource,
         },
       ],
     },
     {
       id: 'integration',
       title: '进阶用法',
-      disclosure: '查看长标签、表单与联动示例',
+      disclosure: '查看状态组合、表单与联动示例',
       content: <p>选择只影响当前示例；阅读设置与留言均不会保存或发布。</p>,
       examples: [
         {
           id: 'states',
-          title: '长标签与状态组合',
-          description: '对比长标签换行、错误与父 fieldset 禁用。',
+          title: '清空校验与父级禁用',
+          description: '清空选择后恢复错误，并对比父 fieldset 禁用下的保留值。',
           component: RadioGroupStates,
           source: RadioGroupStatesSource,
           toc: false,

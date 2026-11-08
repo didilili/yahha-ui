@@ -22,65 +22,31 @@ import { IconButton } from 'yahha-ui';
 
 ## 代码演示
 
-<a id="icon-button-basic"></a>
+<a id="icon-button-minimal"></a>
 
 ### 基础用法
 
-关闭提示后可重新显示；示例将焦点移到可用按钮。
+用 aria-label 为图标操作命名，点击后更新相邻计数。
 
-[查看示例文件](../../playground/src/examples/foundations/IconButtonBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/IconButtonMinimal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
-<!-- example-source: playground/src/examples/foundations/IconButtonBasic.tsx -->
+<!-- example-source: playground/src/examples/foundations/IconButtonMinimal.tsx -->
 
 ```tsx
-import { useEffect, useRef, useState } from 'react';
-import { Button, IconButton } from 'yahha-ui';
+import { useState } from 'react';
+import { IconButton, PlusIcon, Text } from 'yahha-ui';
 
-export default function IconButtonBasic() {
-  const [visible, setVisible] = useState(true);
-  const closeRef = useRef<HTMLButtonElement>(null);
-  const reopenRef = useRef<HTMLButtonElement>(null);
-  const restoreFocus = useRef(false);
-
-  useEffect(() => {
-    // 只在用户切换后移动焦点，初次展示时不抢走页面焦点。
-    if (!restoreFocus.current) return;
-    restoreFocus.current = false;
-    (visible ? closeRef : reopenRef).current?.focus();
-  }, [visible]);
-
-  const changeVisibility = (nextVisible: boolean) => {
-    restoreFocus.current = true;
-    setVisible(nextVisible);
-  };
+export default function IconButtonMinimal() {
+  const [count, setCount] = useState(0);
 
   return (
-    <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
-      {visible ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span>欢迎来到手记小站。</span>
-          <IconButton
-            ref={closeRef}
-            aria-label="关闭提示"
-            variant="ghost"
-            onClick={() => changeVisibility(false)}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <path d="m6 6 12 12M6 18 18 6" strokeLinecap="round" />
-            </svg>
-          </IconButton>
-        </div>
-      ) : (
-        <Button ref={reopenRef} variant="secondary" onClick={() => changeVisibility(true)}>
-          重新显示提示
-        </Button>
-      )}
+    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+      <IconButton aria-label="添加一页手记" onClick={() => setCount((value) => value + 1)}>
+        <PlusIcon />
+      </IconButton>
+      <Text size="sm" tone="muted" role="status">
+        已添加 {count} 页
+      </Text>
     </div>
   );
 }
@@ -135,83 +101,11 @@ export default function IconButtonVariants() {
 }
 ```
 
-<a id="icon-button-decorations"></a>
-
-### 软团操作与状态
-
-对比常规与软团外观、默认三墨点与显式小花饼；点击书签切换收藏，状态仅保留在当前示例。
-
-[查看示例文件](../../playground/src/examples/foundations/IconButtonSoftActions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/IconButtonSoftActions.tsx -->
-
-```tsx
-import { useState } from 'react';
-import { BookmarkIcon, IconButton, Text } from 'yahha-ui';
-
-export default function IconButtonSoftActions() {
-  const [saved, setSaved] = useState(false);
-
-  return (
-    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>常规</span>
-          <IconButton aria-label="收藏文章">
-            <BookmarkIcon />
-          </IconButton>
-        </div>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>软团</span>
-          <IconButton aria-label="收藏文章" appearance="soft">
-            <BookmarkIcon />
-          </IconButton>
-        </div>
-      </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
-        <IconButton
-          aria-label="收藏这篇文章"
-          appearance="soft"
-          variant="secondary"
-          aria-pressed={saved}
-          onClick={() => setSaved((value) => !value)}
-        >
-          <BookmarkIcon filled={saved} />
-        </IconButton>
-        <Text size="sm" tone="muted" role="status">
-          {saved ? '已收藏' : '尚未收藏'}
-        </Text>
-      </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>禁用</span>
-          <IconButton aria-label="收藏文章" appearance="soft" disabled>
-            <BookmarkIcon />
-          </IconButton>
-        </div>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>默认三墨点</span>
-          <IconButton aria-label="收藏文章" appearance="soft" loading>
-            <BookmarkIcon />
-          </IconButton>
-        </div>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>可选小花饼</span>
-          <IconButton aria-label="收藏文章" appearance="soft" loading loadingVariant="biscuit">
-            <BookmarkIcon />
-          </IconButton>
-        </div>
-      </div>
-    </div>
-  );
-}
-```
-
 <a id="icon-button-sizes"></a>
 
 ### 尺寸
 
-对比 36、44 和 52px 三档尺寸。
+用相同图标对比小号、中号和大号点击区域。
 
 [查看示例文件](../../playground/src/examples/foundations/IconButtonSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -266,32 +160,14 @@ export default function IconButtonSizes() {
 
 ### 禁用与加载
 
-静态对比禁用和加载状态。
+对比禁用和两种加载图形；图形替换图标，可访问名称仍保留。
 
 [查看示例文件](../../playground/src/examples/foundations/IconButtonStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
 <!-- example-source: playground/src/examples/foundations/IconButtonStates.tsx -->
 
 ```tsx
-import { IconButton } from 'yahha-ui';
-
-function Bookmark() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path d="M8 3.25h6.2l4.05 4.1v12.7c0 .6-.5.88-1 .57L12 17.4l-5.3 3.22c-.5.31-.95.02-.95-.57V5.6C5.75 4.15 6.5 3.25 8 3.25Z" />
-      <path d="M14.2 3.5v3c0 .6.35.95.95.95h2.8" fill="none" />
-    </svg>
-  );
-}
+import { BookmarkIcon, IconButton } from 'yahha-ui';
 
 export default function IconButtonStates() {
   return (
@@ -299,15 +175,85 @@ export default function IconButtonStates() {
       <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
         <span>禁用</span>
         <IconButton disabled aria-label="禁用收藏样本">
-          <Bookmark />
+          <BookmarkIcon />
         </IconButton>
       </div>
       <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-        <span>加载</span>
+        <span>加载 · 三墨点</span>
         <IconButton loading aria-label="加载收藏样本">
-          <Bookmark />
+          <BookmarkIcon />
         </IconButton>
       </div>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+        <span>加载 · 小花饼</span>
+        <IconButton loading loadingVariant="biscuit" aria-label="小花饼加载收藏样本">
+          <BookmarkIcon />
+        </IconButton>
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="icon-button-toggle"></a>
+
+### 切换按钮
+
+点击切换收藏状态，按钮名称保持不变。
+
+[查看示例文件](../../playground/src/examples/foundations/IconButtonToggle.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconButtonToggle.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { BookmarkIcon, IconButton, Text } from 'yahha-ui';
+
+export default function IconButtonToggle() {
+  const [saved, setSaved] = useState(false);
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+      <IconButton
+        variant="secondary"
+        aria-label="收藏文章"
+        aria-pressed={saved}
+        onClick={() => setSaved((value) => !value)}
+      >
+        <BookmarkIcon filled={saved} />
+      </IconButton>
+      <Text size="sm" tone="muted" role="status">
+        {saved ? '已收藏' : '尚未收藏'}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="icon-button-decorations"></a>
+
+### 常规与软团外观
+
+保持图标、尺寸和强调程度一致，只比较 appearance。
+
+[查看示例文件](../../playground/src/examples/foundations/IconButtonAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconButtonAppearance.tsx -->
+
+```tsx
+import { BookmarkIcon, IconButton } from 'yahha-ui';
+
+export default function IconButtonAppearance() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+      {(['default', 'soft'] as const).map((appearance) => (
+        <div key={appearance} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>{appearance === 'default' ? '常规（默认）' : '软团'}</span>
+          <IconButton aria-label="收藏文章" appearance={appearance}>
+            <BookmarkIcon />
+          </IconButton>
+        </div>
+      ))}
     </div>
   );
 }
@@ -319,9 +265,65 @@ export default function IconButtonStates() {
 
 收藏状态只保留在当前示例，刷新后恢复。
 
+<a id="icon-button-basic"></a>
+
+### 关闭与重新显示
+
+关闭提示后聚焦重新显示入口，再次显示后回到关闭按钮。
+
+[查看示例文件](../../playground/src/examples/foundations/IconButtonBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconButtonBasic.tsx -->
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import { Button, CloseIcon, IconButton } from 'yahha-ui';
+
+export default function IconButtonBasic() {
+  const [visible, setVisible] = useState(true);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const reopenRef = useRef<HTMLButtonElement>(null);
+  const restoreFocus = useRef(false);
+
+  useEffect(() => {
+    // 只在用户切换后移动焦点，初次展示时不抢走页面焦点。
+    if (!restoreFocus.current) return;
+    restoreFocus.current = false;
+    (visible ? closeRef : reopenRef).current?.focus();
+  }, [visible]);
+
+  const changeVisibility = (nextVisible: boolean) => {
+    restoreFocus.current = true;
+    setVisible(nextVisible);
+  };
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16 }}>
+      {visible ? (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span>欢迎来到手记小站。</span>
+          <IconButton
+            ref={closeRef}
+            aria-label="关闭提示"
+            variant="ghost"
+            onClick={() => changeVisibility(false)}
+          >
+            <CloseIcon />
+          </IconButton>
+        </div>
+      ) : (
+        <Button ref={reopenRef} variant="secondary" onClick={() => changeVisibility(true)}>
+          重新显示提示
+        </Button>
+      )}
+    </div>
+  );
+}
+```
+
 <a id="icon-button-loading"></a>
 
-### 受控加载与选中
+### 异步加载与选中
 
 模拟更新收藏，展示等待与选中状态；不发送请求。
 
@@ -583,7 +585,7 @@ export default function IconButtonReadingList() {
 
 disabled 或 loading 为真时，按钮退出键盘顺序且不能激活。加载会保留可访问名称并设置 aria-busy；请求结束后，由调用方更新 loading，并提供成功或失败的提示。 系统启用减少动效时，按压位移和加载动画停止。
 
-加载结束不会自动恢复焦点，应由调用方按任务安排。关闭提示并卸载按钮时，需把焦点移到可用入口； 基础示例在关闭与重新显示后管理回焦，初次展示不移动焦点。
+加载结束不会自动恢复焦点，应由调用方按任务安排。关闭提示并卸载按钮时，需把焦点移到可用入口； “关闭与重新显示”示例在切换后管理回焦，初次展示不移动焦点。
 
 同一清单有多个收藏入口时，名称包含对应文章标题，切换前后保持不变。在收藏视图取消收藏， 且移除的按钮正持有焦点时，由使用方将焦点移到下一项、上一项或空态入口；取消收藏不等于删除文章。
 

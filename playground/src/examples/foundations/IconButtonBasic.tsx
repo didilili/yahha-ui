@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, IconButton } from 'yahha-ui';
+import { Button, CloseIcon, IconButton } from 'yahha-ui';
 
 export default function IconButtonBasic() {
   const [visible, setVisible] = useState(true);
@@ -30,15 +30,7 @@ export default function IconButtonBasic() {
             variant="ghost"
             onClick={() => changeVisibility(false)}
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <path d="m6 6 12 12M6 18 18 6" strokeLinecap="round" />
-            </svg>
+            <CloseIcon />
           </IconButton>
         </div>
       ) : (

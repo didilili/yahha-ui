@@ -24,7 +24,7 @@ import { Button } from 'yahha-ui';
 
 ### 基础用法
 
-点击按钮更新相邻文字中的问候次数。
+点击按钮更新问候次数。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -52,7 +52,7 @@ export default function ButtonBasic() {
 
 ### 强调程度
 
-三种强调程度的静态外观对照。
+用相同文案对比主要、次要和文字按钮。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -75,158 +75,11 @@ export default function ButtonVariants() {
 }
 ```
 
-<a id="button-appearance"></a>
-
-### 常规与软团外观
-
-对比常规与软团外观，并展示软团外观的三档尺寸。
-
-[查看示例文件](../../playground/src/examples/foundations/ButtonAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/ButtonAppearance.tsx -->
-
-```tsx
-import { Button } from 'yahha-ui';
-
-export default function ButtonAppearance() {
-  return (
-    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>常规</span>
-          <Button>打个招呼</Button>
-        </div>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>软团</span>
-          <Button appearance="soft">打个招呼</Button>
-        </div>
-      </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-        {(
-          [
-            ['sm', '小号'],
-            ['md', '中号'],
-            ['lg', '大号'],
-          ] as const
-        ).map(([size, label]) => (
-          <div key={size} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-            <span>
-              {label} {size}
-            </span>
-            <Button appearance="soft" size={size}>
-              打个招呼
-            </Button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-```
-
-<a id="button-decorations"></a>
-
-### 软团操作与状态
-
-点击书签切换收藏，对比软团外观下的默认三墨点与显式小花饼加载；收藏仅保留在当前示例。
-
-[查看示例文件](../../playground/src/examples/foundations/ButtonSoftActions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/ButtonSoftActions.tsx -->
-
-```tsx
-import { useState } from 'react';
-import { BookmarkIcon, Button, Text } from 'yahha-ui';
-
-export default function ButtonSoftActions() {
-  const [saved, setSaved] = useState(false);
-
-  return (
-    <div style={{ display: 'grid', justifyItems: 'start', gap: 24, width: '100%' }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
-        <Button
-          appearance="soft"
-          variant="secondary"
-          startIcon={<BookmarkIcon filled={saved} />}
-          aria-pressed={saved}
-          onClick={() => setSaved((value) => !value)}
-        >
-          收藏文章
-        </Button>
-        <Text size="sm" tone="muted" role="status">
-          {saved ? '已收藏' : '尚未收藏'}
-        </Text>
-      </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>禁用</span>
-          <Button appearance="soft" disabled>
-            保存草稿
-          </Button>
-        </div>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>默认三墨点</span>
-          <Button appearance="soft" loading>
-            保存草稿
-          </Button>
-        </div>
-        <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>可选小花饼</span>
-          <Button appearance="soft" loading loadingVariant="biscuit">
-            保存草稿
-          </Button>
-        </div>
-      </div>
-      <div style={{ display: 'grid', gap: 8, width: 'min(100%, 240px)' }}>
-        <span>长文案</span>
-        <Button
-          appearance="soft"
-          variant="secondary"
-          startIcon={<BookmarkIcon />}
-          style={{ width: '100%' }}
-        >
-          将这篇周末散步记录加入稍后阅读
-        </Button>
-      </div>
-    </div>
-  );
-}
-```
-
-<a id="button-destructive"></a>
-
-### 危险操作
-
-三种强调程度的危险按钮静态对照。
-
-[查看示例文件](../../playground/src/examples/foundations/ButtonDestructive.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/ButtonDestructive.tsx -->
-
-```tsx
-import { Button } from 'yahha-ui';
-
-export default function ButtonDestructive() {
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-      {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
-        <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>{variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}</span>
-          <Button variant={variant} destructive>
-            删除草稿
-          </Button>
-        </div>
-      ))}
-    </div>
-  );
-}
-```
-
 <a id="button-sizes"></a>
 
-### 尺寸、全宽与长文案
+### 尺寸
 
-三档尺寸、全宽与窄栏长文案的静态对照，长文案可自然换行。
+用相同文案对比三档尺寸，默认使用中号。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -237,54 +90,21 @@ import { Button } from 'yahha-ui';
 
 export default function ButtonSizes() {
   return (
-    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
-        {(
-          [
-            ['sm', '小号'],
-            ['md', '中号'],
-            ['lg', '大号'],
-          ] as const
-        ).map(([size, label]) => (
-          <div key={size} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-            <span>
-              {label} {size}
-            </span>
-            <Button size={size}>保存草稿</Button>
-          </div>
-        ))}
-      </div>
-      <div style={{ display: 'grid', gap: 12, width: 'min(100%, 240px)' }}>
-        <span>全宽与长文案换行 · 240px 窄栏</span>
-        <Button
-          variant="secondary"
-          startIcon={
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <path d="M12 5v14M5 12h14" strokeLinecap="round" />
-            </svg>
-          }
-          endIcon={
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          }
-          style={{ width: '100%' }}
-        >
-          将这篇周末散步记录加入稍后阅读
-        </Button>
-      </div>
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+      {(
+        [
+          ['sm', '小号'],
+          ['md', '中号（默认）'],
+          ['lg', '大号'],
+        ] as const
+      ).map(([size, label]) => (
+        <div key={size} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>
+            {label} {size}
+          </span>
+          <Button size={size}>保存草稿</Button>
+        </div>
+      ))}
     </div>
   );
 }
@@ -294,7 +114,7 @@ export default function ButtonSizes() {
 
 ### 前后图标
 
-前置与后置装饰图标的静态对照。
+在文字前后放置装饰图标，操作名称保持可见。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonIcons.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -331,7 +151,7 @@ export default function ButtonIcons() {
 
 ### 禁用与加载
 
-对比禁用与加载状态，加载时保留按钮名称。
+对比禁用和加载状态；加载图形保留按钮名称。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -343,8 +163,74 @@ import { Button } from 'yahha-ui';
 export default function ButtonStates() {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-      <Button disabled>保存草稿</Button>
-      <Button loading>保存草稿</Button>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+        <span>禁用</span>
+        <Button disabled>保存草稿</Button>
+      </div>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+        <span>加载</span>
+        <Button loading>保存草稿</Button>
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="button-decorations"></a>
+
+### 加载图形
+
+对比默认三墨点与可选小花饼，两种图形均通过 loading 显示。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonLoadingVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonLoadingVariants.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonLoadingVariants() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+        <span>三墨点（默认）</span>
+        <Button loading>保存草稿</Button>
+      </div>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+        <span>小花饼</span>
+        <Button loading loadingVariant="biscuit">
+          保存草稿
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="button-destructive"></a>
+
+### 危险操作
+
+用相同动作对比三种强调程度的危险按钮。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonDestructive.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonDestructive.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonDestructive() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+      {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
+        <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>{variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}</span>
+          <Button variant={variant} destructive>
+            删除草稿
+          </Button>
+        </div>
+      ))}
     </div>
   );
 }
@@ -354,7 +240,7 @@ export default function ButtonStates() {
 
 ### 切换按钮
 
-点击按钮切换收藏状态，通过 aria-pressed 表达是否选中。
+点击切换收藏状态，通过 aria-pressed 表达是否选中。
 
 [查看示例文件](../../playground/src/examples/foundations/ButtonToggle.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -398,6 +284,63 @@ export default function ButtonToggle() {
       <Text size="sm" tone="muted" role="status">
         {saved ? '已加入收藏' : '尚未收藏'}
       </Text>
+    </div>
+  );
+}
+```
+
+<a id="button-appearance"></a>
+
+### 常规与软团外观
+
+保持文案、尺寸和强调程度一致，只比较 appearance。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonAppearance.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonAppearance() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+      {(['default', 'soft'] as const).map((appearance) => (
+        <div key={appearance} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>{appearance === 'default' ? '常规（默认）' : '软团'}</span>
+          <Button appearance={appearance}>打个招呼</Button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+<a id="button-layout"></a>
+
+### 全宽与长文案
+
+在同一窄栏中观察全宽布局和长文案换行。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonLayout.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ButtonLayout.tsx -->
+
+```tsx
+import { ArrowRightIcon, Button, PlusIcon } from 'yahha-ui';
+
+export default function ButtonLayout() {
+  return (
+    <div style={{ display: 'grid', gap: 16, width: 'min(100%, 240px)' }}>
+      <Button style={{ width: '100%' }}>保存草稿</Button>
+      <Button
+        variant="secondary"
+        startIcon={<PlusIcon />}
+        endIcon={<ArrowRightIcon />}
+        style={{ width: '100%' }}
+      >
+        将这篇周末散步记录加入稍后阅读
+      </Button>
     </div>
   );
 }
@@ -604,7 +547,7 @@ export default function ButtonForm() {
 
 删除等破坏性动作可设置 `destructive`，并用动作名称明确风险；它与`variant` 分开控制，不自动打开确认弹窗或执行删除。危险色使用既有错误语义色，[ThemeProvider](theme.md) 的 `tokens.error`也会影响危险按钮。
 
-全宽按钮可设置 `style={{ width: '100%' }}`，长名称会换行并撑高按钮。 具体写法见上方[尺寸、全宽与长文案](button.md#button-sizes)。
+全宽按钮可设置 `style={{ width: '100%' }}`，长名称会换行并撑高按钮。 具体写法见上方[全宽与长文案](button.md#button-layout)。
 
 多个按钮之间的间距和换行放在外层容器中设置，例如 `style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}`。 主次操作的可运行写法见[提交与重置](button.md#button-form)。 需要统一配色时，使用 [ThemeProvider](theme.md) 的主题配置。
 

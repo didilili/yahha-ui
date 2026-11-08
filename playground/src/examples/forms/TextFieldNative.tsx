@@ -8,7 +8,22 @@ export default function TextFieldNative() {
   return (
     <div style={{ display: 'grid', gap: 20 }}>
       <div style={{ display: 'grid', gap: 16 }}>
-        <p style={{ margin: 0 }}>邮箱与密码</p>
+        <Text size="sm" tone="muted">
+          输入类型
+        </Text>
+        <TextField
+          label="示例密码"
+          type="password"
+          autoComplete="new-password"
+          placeholder="输入密码"
+        />
+        <TextField label="记录日期" type="date" name="recordDate" defaultValue="2026-10-28" />
+        <TextField label="记录时间" type="time" name="recordTime" defaultValue="10:30" />
+      </div>
+      <div style={{ display: 'grid', gap: 16 }}>
+        <Text size="sm" tone="muted">
+          邮箱格式检查
+        </Text>
         <form
           style={{ display: 'grid', gap: 16 }}
           onInvalidCapture={() => setResult('')}
@@ -38,17 +53,6 @@ export default function TextFieldNative() {
             {result}
           </Text>
         </form>
-        <TextField
-          label="示例密码"
-          type="password"
-          autoComplete="new-password"
-          placeholder="输入密码"
-        />
-      </div>
-      <div style={{ display: 'grid', gap: 16 }}>
-        <p style={{ margin: 0 }}>日期与时间</p>
-        <TextField label="记录日期" type="date" name="recordDate" defaultValue="2026-10-28" />
-        <TextField label="记录时间" type="time" name="recordTime" defaultValue="10:30" />
       </div>
     </div>
   );

@@ -82,7 +82,7 @@ export default function TextFieldControlled() {
 
 <a id="text-field-slots"></a>
 
-### 前置图标与尾部操作
+### 前置图标与尾部清空
 
 前置图标仅作装饰，示例通过尾部按钮清空内容并回焦。
 
@@ -237,17 +237,11 @@ export default function TextFieldValidation() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-以下示例只在本地操作，不发送或保存表单数据。
-
 <a id="native"></a>
 
 ### 原生输入类型
 
-查看邮箱、密码、日期与时间输入，可检查邮箱格式。
+对照密码、日期和时间输入，再检查邮箱的原生格式约束。
 
 [查看示例文件](../../playground/src/examples/forms/TextFieldNative.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -264,7 +258,22 @@ export default function TextFieldNative() {
   return (
     <div style={{ display: 'grid', gap: 20 }}>
       <div style={{ display: 'grid', gap: 16 }}>
-        <p style={{ margin: 0 }}>邮箱与密码</p>
+        <Text size="sm" tone="muted">
+          输入类型
+        </Text>
+        <TextField
+          label="示例密码"
+          type="password"
+          autoComplete="new-password"
+          placeholder="输入密码"
+        />
+        <TextField label="记录日期" type="date" name="recordDate" defaultValue="2026-10-28" />
+        <TextField label="记录时间" type="time" name="recordTime" defaultValue="10:30" />
+      </div>
+      <div style={{ display: 'grid', gap: 16 }}>
+        <Text size="sm" tone="muted">
+          邮箱格式检查
+        </Text>
         <form
           style={{ display: 'grid', gap: 16 }}
           onInvalidCapture={() => setResult('')}
@@ -294,22 +303,17 @@ export default function TextFieldNative() {
             {result}
           </Text>
         </form>
-        <TextField
-          label="示例密码"
-          type="password"
-          autoComplete="new-password"
-          placeholder="输入密码"
-        />
-      </div>
-      <div style={{ display: 'grid', gap: 16 }}>
-        <p style={{ margin: 0 }}>日期与时间</p>
-        <TextField label="记录日期" type="date" name="recordDate" defaultValue="2026-10-28" />
-        <TextField label="记录时间" type="time" name="recordTime" defaultValue="10:30" />
       </div>
     </div>
   );
 }
 ```
+
+<a id="integration"></a>
+
+## 进阶用法
+
+以下示例只在本地操作，不发送或保存表单数据。
 
 <a id="form"></a>
 
@@ -369,7 +373,7 @@ export default function TextFieldForm() {
 
 <a id="text-field-search"></a>
 
-### 中文输入与尾部清空
+### 中文输入与实时搜索
 
 组合输入时保留当前结果，结束后筛选本地手记；清空后回到输入框。
 

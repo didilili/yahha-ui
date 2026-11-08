@@ -1,11 +1,13 @@
+import ButtonLayout from '../../examples/foundations/ButtonLayout';
+import buttonLayoutSource from '../../examples/foundations/ButtonLayout.tsx?raw';
 import ButtonBasic from '../../examples/foundations/ButtonBasic';
 import buttonBasicSource from '../../examples/foundations/ButtonBasic.tsx?raw';
 import ButtonVariants from '../../examples/foundations/ButtonVariants';
 import buttonVariantsSource from '../../examples/foundations/ButtonVariants.tsx?raw';
 import ButtonAppearance from '../../examples/foundations/ButtonAppearance';
 import buttonAppearanceSource from '../../examples/foundations/ButtonAppearance.tsx?raw';
-import ButtonSoftActions from '../../examples/foundations/ButtonSoftActions';
-import buttonSoftActionsSource from '../../examples/foundations/ButtonSoftActions.tsx?raw';
+import ButtonLoadingVariants from '../../examples/foundations/ButtonLoadingVariants';
+import buttonLoadingVariantsSource from '../../examples/foundations/ButtonLoadingVariants.tsx?raw';
 import ButtonSizes from '../../examples/foundations/ButtonSizes';
 import buttonSizesSource from '../../examples/foundations/ButtonSizes.tsx?raw';
 import ButtonIcons from '../../examples/foundations/ButtonIcons';
@@ -45,68 +47,74 @@ export default defineComponentPage('button', {
       examples: [
         {
           id: 'button-basic',
-          previewAlign: 'center',
           title: '基础用法',
-          description: '点击按钮更新相邻文字中的问候次数。',
+          description: '点击按钮更新问候次数。',
           component: ButtonBasic,
           source: buttonBasicSource,
+          previewAlign: 'center',
         },
         {
           id: 'button-variants',
           title: '强调程度',
-          description: '三种强调程度的静态外观对照。',
+          description: '用相同文案对比主要、次要和文字按钮。',
           component: ButtonVariants,
           source: buttonVariantsSource,
         },
         {
-          id: 'button-appearance',
-          title: '常规与软团外观',
-          description: '对比常规与软团外观，并展示软团外观的三档尺寸。',
-          component: ButtonAppearance,
-          source: buttonAppearanceSource,
-        },
-        {
-          id: 'button-decorations',
-          title: '软团操作与状态',
-          description:
-            '点击书签切换收藏，对比软团外观下的默认三墨点与显式小花饼加载；收藏仅保留在当前示例。',
-          component: ButtonSoftActions,
-          source: buttonSoftActionsSource,
-        },
-        {
-          id: 'button-destructive',
-          title: '危险操作',
-          description: '三种强调程度的危险按钮静态对照。',
-          component: ButtonDestructive,
-          source: buttonDestructiveSource,
-        },
-        {
           id: 'button-sizes',
-          title: '尺寸、全宽与长文案',
-          description: '三档尺寸、全宽与窄栏长文案的静态对照，长文案可自然换行。',
+          title: '尺寸',
+          description: '用相同文案对比三档尺寸，默认使用中号。',
           component: ButtonSizes,
           source: buttonSizesSource,
         },
         {
           id: 'button-icons',
           title: '前后图标',
-          description: '前置与后置装饰图标的静态对照。',
+          description: '在文字前后放置装饰图标，操作名称保持可见。',
           component: ButtonIcons,
           source: buttonIconsSource,
         },
         {
           id: 'button-states',
           title: '禁用与加载',
-          description: '对比禁用与加载状态，加载时保留按钮名称。',
+          description: '对比禁用和加载状态；加载图形保留按钮名称。',
           component: ButtonStates,
           source: buttonStatesSource,
         },
         {
+          id: 'button-decorations',
+          title: '加载图形',
+          description: '对比默认三墨点与可选小花饼，两种图形均通过 loading 显示。',
+          component: ButtonLoadingVariants,
+          source: buttonLoadingVariantsSource,
+        },
+        {
+          id: 'button-destructive',
+          title: '危险操作',
+          description: '用相同动作对比三种强调程度的危险按钮。',
+          component: ButtonDestructive,
+          source: buttonDestructiveSource,
+        },
+        {
           id: 'button-toggle',
           title: '切换按钮',
-          description: '点击按钮切换收藏状态，通过 aria-pressed 表达是否选中。',
+          description: '点击切换收藏状态，通过 aria-pressed 表达是否选中。',
           component: ButtonToggle,
           source: buttonToggleSource,
+        },
+        {
+          id: 'button-appearance',
+          title: '常规与软团外观',
+          description: '保持文案、尺寸和强调程度一致，只比较 appearance。',
+          component: ButtonAppearance,
+          source: buttonAppearanceSource,
+        },
+        {
+          id: 'button-layout',
+          title: '全宽与长文案',
+          description: '在同一窄栏中观察全宽布局和长文案换行。',
+          component: ButtonLayout,
+          source: buttonLayoutSource,
         },
       ],
     },
@@ -171,8 +179,7 @@ export default defineComponentPage('button', {
           </p>
           <p>
             全宽按钮可设置 <code>{"style={{ width: '100%' }}"}</code>，长名称会换行并撑高按钮。
-            具体写法见上方<a href="#/components/button?section=button-sizes">尺寸、全宽与长文案</a>
-            。
+            具体写法见上方<a href="#/components/button?section=button-layout">全宽与长文案</a>。
           </p>
           <p>
             多个按钮之间的间距和换行放在外层容器中设置，例如{' '}

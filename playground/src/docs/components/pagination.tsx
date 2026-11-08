@@ -1,6 +1,8 @@
 import { Link } from 'yahha-ui';
 import PaginationBasic from '../../examples/navigation/PaginationBasic';
 import paginationBasicSource from '../../examples/navigation/PaginationBasic.tsx?raw';
+import PaginationMore from '../../examples/navigation/PaginationMore';
+import paginationMoreSource from '../../examples/navigation/PaginationMore.tsx?raw';
 import PaginationArchive from '../../examples/navigation/PaginationArchive';
 import paginationArchiveSource from '../../examples/navigation/PaginationArchive.tsx?raw';
 import PaginationEmpty from '../../examples/navigation/PaginationEmpty';
@@ -36,18 +38,11 @@ export default defineComponentPage('pagination', {
           source: paginationBasicSource,
         },
         {
-          id: 'appearance',
-          title: '普通与圈选',
-          description: '两组分页同步当前页；普通当前页保留边框与底色，circled 增加不规则圈选。',
-          component: PaginationAppearance,
-          source: paginationAppearanceSource,
-        },
-        {
-          id: 'archive',
-          title: '多页码与翻页焦点',
-          description: '用三条摘要模拟 80 页，翻页后聚焦本页标题。',
-          component: PaginationArchive,
-          source: paginationArchiveSource,
+          id: 'more',
+          title: '多页码与省略',
+          description: '以 80 页总数观察省略页码与当前页窗口，不加载文章数据。',
+          component: PaginationMore,
+          source: paginationMoreSource,
         },
         {
           id: 'empty',
@@ -56,14 +51,29 @@ export default defineComponentPage('pagination', {
           component: PaginationEmpty,
           source: paginationEmptySource,
         },
+        {
+          id: 'appearance',
+          title: '普通与圈选',
+          description: '两组分页同步当前页；普通当前页保留边框与底色，circled 增加不规则圈选。',
+          component: PaginationAppearance,
+          source: paginationAppearanceSource,
+        },
       ],
     },
     {
       id: 'integration',
       title: '进阶用法',
-      disclosure: '查看链接分页与地址同步示例',
-      content: <p>示例使用本地内容，当前页码保留在网址中。</p>,
+      disclosure: '查看翻页焦点与地址同步',
+      content: <p>阅读位置示例重复使用三条本地摘要模拟 80 页；链接示例将当前页码保留在网址中。</p>,
       examples: [
+        {
+          id: 'archive',
+          title: '翻页后的阅读位置',
+          description: '翻页后聚焦本页标题，从更新后的内容继续阅读。',
+          component: PaginationArchive,
+          source: paginationArchiveSource,
+          toc: false,
+        },
         {
           id: 'links',
           title: '链接分页与地址同步',

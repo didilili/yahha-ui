@@ -2,6 +2,8 @@ import AccordionBasic from '../../examples/navigation/AccordionBasic';
 import accordionBasicSource from '../../examples/navigation/AccordionBasic.tsx?raw';
 import AccordionControlled from '../../examples/navigation/AccordionControlled';
 import accordionControlledSource from '../../examples/navigation/AccordionControlled.tsx?raw';
+import AccordionStates from '../../examples/navigation/AccordionStates';
+import accordionStatesSource from '../../examples/navigation/AccordionStates.tsx?raw';
 import AccordionAppearance from '../../examples/navigation/AccordionAppearance';
 import accordionAppearanceSource from '../../examples/navigation/AccordionAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -30,6 +32,13 @@ export default defineComponentPage('accordion', {
           description: '默认展开一项，展开另一项时收起前一项。',
           component: AccordionBasic,
           source: accordionBasicSource,
+        },
+        {
+          id: 'states',
+          title: '多项展开、受控与禁用',
+          description: '分别查看受控多项展开与不可用的条目。',
+          component: AccordionStates,
+          source: accordionStatesSource,
         },
         {
           id: 'appearance',

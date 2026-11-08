@@ -24,7 +24,7 @@ import { Select } from 'yahha-ui';
 
 ### 基础用法
 
-从三个分类中选择一项，对比默认勾与显式纸章装饰。
+从三个分类中选择一项。
 
 [查看示例文件](../../playground/src/examples/new-forms/SelectBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -40,14 +40,8 @@ export default function SelectBasic() {
     { value: 'photos', label: '散步相册' },
   ];
   return (
-    <div style={{ display: 'grid', gap: 24, maxWidth: 340 }}>
+    <div style={{ maxWidth: 340 }}>
       <Select label="文章分类" defaultValue="journal" options={options} />
-      <Select
-        label="文章分类（纸章装饰）"
-        defaultValue="journal"
-        options={options}
-        selectedIndicator="stamp"
-      />
     </div>
   );
 }
@@ -55,7 +49,7 @@ export default function SelectBasic() {
 
 <a id="controlled"></a>
 
-### 受控选择与禁用选项
+### 受控选择、禁用选项与清空
 
 切换或清空当前选择，禁用选项不可选。
 
@@ -203,6 +197,84 @@ export default function SelectCollection() {
 }
 ```
 
+<a id="long-options"></a>
+
+### 长列表与长选项
+
+查看长选项换行与列表滚动。
+
+[查看示例文件](../../playground/src/examples/new-forms/SelectLongOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectLongOptions.tsx -->
+
+```tsx
+import { Select } from 'yahha-ui';
+
+export default function SelectLongOptions() {
+  return (
+    <div style={{ maxWidth: 340 }}>
+      <Select
+        label="浏览归档分类"
+        defaultValue="journal"
+        options={[
+          { value: 'journal', label: '生活手记' },
+          { value: 'reading', label: '读书笔记' },
+          { value: 'walking', label: '那些沿着河边散步时记录下来的小小发现与漫长想法' },
+          { value: 'photos', label: '散步相册' },
+          { value: 'letters', label: '写给朋友的信' },
+          { value: 'recipes', label: '厨房里的小记录' },
+          { value: 'travel', label: '旅途与见闻' },
+          { value: 'favorites', label: '值得再看的收藏' },
+        ]}
+      />
+    </div>
+  );
+}
+```
+
+<a id="select-indicators"></a>
+
+### 普通勾与纸章装饰
+
+两组共用选择值，对比相同内容和状态下的选中标记。
+
+[查看示例文件](../../playground/src/examples/new-forms/SelectIndicators.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/SelectIndicators.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Select } from 'yahha-ui';
+
+export default function SelectIndicators() {
+  const [category, setCategory] = useState<string | null>('journal');
+  const options = [
+    { value: 'journal', label: '生活手记' },
+    { value: 'reading', label: '读书笔记' },
+    { value: 'photos', label: '散步相册' },
+  ];
+
+  return (
+    <div style={{ display: 'grid', gap: 24, maxWidth: 340 }}>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span>普通勾</span>
+        <Select label="文章分类" value={category} onValueChange={setCategory} options={options} />
+      </div>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span>纸章装饰</span>
+        <Select
+          label="文章分类"
+          value={category}
+          onValueChange={setCategory}
+          options={options}
+          selectedIndicator="stamp"
+        />
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="integration"></a>
 
 ## 进阶用法
@@ -273,41 +345,6 @@ export default function SelectForm() {
         {result}
       </Text>
     </form>
-  );
-}
-```
-
-<a id="long-options"></a>
-
-### 长列表与长选项
-
-查看长选项换行与列表滚动。
-
-[查看示例文件](../../playground/src/examples/new-forms/SelectLongOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/new-forms/SelectLongOptions.tsx -->
-
-```tsx
-import { Select } from 'yahha-ui';
-
-export default function SelectLongOptions() {
-  return (
-    <div style={{ maxWidth: 340 }}>
-      <Select
-        label="浏览归档分类"
-        defaultValue="journal"
-        options={[
-          { value: 'journal', label: '生活手记' },
-          { value: 'reading', label: '读书笔记' },
-          { value: 'walking', label: '那些沿着河边散步时记录下来的小小发现与漫长想法' },
-          { value: 'photos', label: '散步相册' },
-          { value: 'letters', label: '写给朋友的信' },
-          { value: 'recipes', label: '厨房里的小记录' },
-          { value: 'travel', label: '旅途与见闻' },
-          { value: 'favorites', label: '值得再看的收藏' },
-        ]}
-      />
-    </div>
   );
 }
 ```

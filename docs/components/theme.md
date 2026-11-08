@@ -72,48 +72,24 @@ export default function ThemeVariants() {
 
 <a id="theme-tokens"></a>
 
-### 定制颜色与 Portal 传播
+### 定制语义颜色
 
-定制主题颜色，打开弹窗查看相同配色。
+通过 tokens 覆盖强调色及其悬停颜色。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeTokens.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
 <!-- example-source: playground/src/examples/foundations/ThemeTokens.tsx -->
 
 ```tsx
-import { useState } from 'react';
-import { Button, Dialog, Surface, TextField, ThemeProvider, type ThemeTokens } from 'yahha-ui';
+import { Button, Surface, ThemeProvider, type ThemeTokens } from 'yahha-ui';
 
-const tokens: ThemeTokens = {
-  ink: '#243b40',
-  muted: '#566b70',
-  accent: '#d7eee5',
-  accentHover: '#c2e1d4',
-  accentSoft: '#f1f9f5',
-  line: '#6e9788',
-  focus: '#326a59',
-  surface: '#fbfefa',
-  fieldBackground: '#ffffff',
-  error: '#9b374c',
-};
+const tokens: ThemeTokens = { accent: '#d7eee5', accentHover: '#c2e1d4' };
 
 export default function ThemeTokensExample() {
-  const [open, setOpen] = useState(false);
-
   return (
     <ThemeProvider theme="pink" tokens={tokens}>
-      <Surface style={{ display: 'grid', gap: 20, maxWidth: 560 }}>
-        <TextField label="订阅邮箱" placeholder="you@example.com" hint="每月一封更新。" />
-        <Dialog
-          open={open}
-          onOpenChange={setOpen}
-          trigger={<Button>查看主题弹窗</Button>}
-          title="同一套主题颜色"
-          description="每月一封阅读推荐，分享文章与书单。"
-          footer={<Button onClick={() => setOpen(false)}>明白了</Button>}
-        >
-          <p>本例只预览订阅界面，不会发送邮件。</p>
-        </Dialog>
+      <Surface>
+        <Button>自定义强调色</Button>
       </Surface>
     </ThemeProvider>
   );
@@ -149,6 +125,56 @@ export default function ThemeNested() {
             <Button>内层按钮外观</Button>
           </Surface>
         </ThemeProvider>
+      </Surface>
+    </ThemeProvider>
+  );
+}
+```
+
+<a id="theme-portal"></a>
+
+### 弹出内容沿用主题
+
+打开弹窗，查看挂载到 Portal 的内容如何沿用 ThemeProvider 配色。
+
+[查看示例文件](../../playground/src/examples/foundations/ThemePortal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/ThemePortal.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Button, Dialog, Surface, TextField, ThemeProvider, type ThemeTokens } from 'yahha-ui';
+
+const tokens: ThemeTokens = {
+  ink: '#243b40',
+  muted: '#566b70',
+  accent: '#d7eee5',
+  accentHover: '#c2e1d4',
+  accentSoft: '#f1f9f5',
+  line: '#6e9788',
+  focus: '#326a59',
+  surface: '#fbfefa',
+  fieldBackground: '#ffffff',
+  error: '#9b374c',
+};
+
+export default function ThemePortal() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <ThemeProvider theme="pink" tokens={tokens}>
+      <Surface style={{ display: 'grid', gap: 20, maxWidth: 560 }}>
+        <TextField label="订阅邮箱" placeholder="you@example.com" hint="每月一封更新。" />
+        <Dialog
+          open={open}
+          onOpenChange={setOpen}
+          trigger={<Button>查看主题弹窗</Button>}
+          title="同一套主题颜色"
+          description="每月一封阅读推荐，分享文章与书单。"
+          footer={<Button onClick={() => setOpen(false)}>明白了</Button>}
+        >
+          <p>本例只预览订阅界面，不会发送邮件。</p>
+        </Dialog>
       </Surface>
     </ThemeProvider>
   );

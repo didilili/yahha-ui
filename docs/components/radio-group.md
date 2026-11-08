@@ -24,7 +24,7 @@ import { RadioGroup } from 'yahha-ui';
 
 ### 基础用法
 
-对比默认圆点与显式整行高亮；两组共用受控值，便于比较同一状态。
+通过 value 与 onValueChange 在两个互斥选项间切换。
 
 [查看示例文件](../../playground/src/examples/new-forms/RadioGroupBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -41,28 +41,14 @@ export default function RadioGroupBasic() {
     { value: 'monthly', label: '每月精选' },
   ];
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-      <RadioGroup
-        label="来信频率"
-        value={frequency}
-        onValueChange={setFrequency}
-        options={options}
-      />
-      <RadioGroup
-        label="来信频率（整行高亮）"
-        value={frequency}
-        onValueChange={setFrequency}
-        options={options}
-        highlightSelected
-      />
-    </div>
+    <RadioGroup label="来信频率" value={frequency} onValueChange={setFrequency} options={options} />
   );
 }
 ```
 
 <a id="radio-descriptions"></a>
 
-### 选项说明
+### 选项说明与单项禁用
 
 为选项提供补充说明，并说明单项禁用原因。
 
@@ -95,7 +81,7 @@ export default function RadioGroupDescriptions() {
 
 <a id="radio-status"></a>
 
-### 错误与禁用
+### 错误与整组禁用
 
 选择后清除错误，并对比整组禁用状态。
 
@@ -136,6 +122,86 @@ export default function RadioGroupStatus() {
 }
 ```
 
+<a id="radio-long-labels"></a>
+
+### 长标签换行
+
+在窄栏中切换选项，查看长标签与说明的换行。
+
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupLongLabels.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/RadioGroupLongLabels.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { RadioGroup } from 'yahha-ui';
+
+export default function RadioGroupLongLabels() {
+  const [visibility, setVisibility] = useState('public');
+
+  return (
+    <div style={{ maxWidth: 340 }}>
+      <RadioGroup
+        label="收藏可见范围"
+        value={visibility}
+        onValueChange={setVisibility}
+        options={[
+          { value: 'public', label: '公开，允许所有访问个人主页的读者查看完整收藏与阅读记录' },
+          { value: 'private', label: '仅自己可见', description: '收藏不会展示在个人主页。' },
+        ]}
+      />
+    </div>
+  );
+}
+```
+
+<a id="radio-highlight"></a>
+
+### 整行高亮
+
+两组共用选择值，对比相同内容和状态下的默认与整行高亮外观。
+
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupHighlight.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/RadioGroupHighlight.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { RadioGroup } from 'yahha-ui';
+
+export default function RadioGroupHighlight() {
+  const [frequency, setFrequency] = useState('weekly');
+  const options = [
+    { value: 'weekly', label: '每周一封' },
+    { value: 'monthly', label: '每月精选' },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span>默认</span>
+        <RadioGroup
+          label="来信频率"
+          value={frequency}
+          onValueChange={setFrequency}
+          options={options}
+        />
+      </div>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span>整行高亮</span>
+        <RadioGroup
+          label="来信频率"
+          value={frequency}
+          onValueChange={setFrequency}
+          options={options}
+          highlightSelected
+        />
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="integration"></a>
 
 ## 进阶用法
@@ -144,9 +210,9 @@ export default function RadioGroupStatus() {
 
 <a id="states"></a>
 
-### 长标签与状态组合
+### 清空校验与父级禁用
 
-对比长标签换行、错误与父 fieldset 禁用。
+清空选择后恢复错误，并对比父 fieldset 禁用下的保留值。
 
 [查看示例文件](../../playground/src/examples/new-forms/RadioGroupStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

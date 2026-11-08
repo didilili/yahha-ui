@@ -24,9 +24,9 @@ import { Spinner } from 'yahha-ui';
 
 <a id="spinner-sizes"></a>
 
-### 样式与尺寸
+### 尺寸
 
-对比默认三墨点与可选小花饼的三档尺寸。
+使用默认三墨点对比小、中、大三档尺寸。
 
 [查看示例文件](../../playground/src/examples/content/SpinnerExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -37,28 +37,48 @@ import { Spinner, Text } from 'yahha-ui';
 
 export default function SpinnerExample() {
   return (
-    <div style={{ display: 'grid', gap: 24 }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'end', gap: 24 }}>
+      {(
+        [
+          { size: 'sm', label: '小号 sm' },
+          { size: 'md', label: '中号 md（默认）' },
+          { size: 'lg', label: '大号 lg' },
+        ] as const
+      ).map(({ size, label }) => (
+        <div key={size} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <Spinner size={size} label={`${label}示例正在加载`} />
+          <Text size="sm" tone="muted">
+            {label}
+          </Text>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+<a id="spinner-variants"></a>
+
+### 加载图形
+
+使用相同尺寸对比默认三墨点与可选小花饼。
+
+[查看示例文件](../../playground/src/examples/content/SpinnerVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/content/SpinnerVariants.tsx -->
+
+```tsx
+import { Spinner, Text } from 'yahha-ui';
+
+export default function SpinnerVariants() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'end', gap: 24 }}>
       {(['dots', 'biscuit'] as const).map((variant) => (
-        <div key={variant} style={{ display: 'grid', gap: 12 }}>
+        <div key={variant} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <Spinner variant={variant} label="示例正在加载" />
           <Text size="sm" tone="muted">
             {variant === 'dots' ? '三墨点（默认）' : '小花饼'}
           </Text>
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'end', gap: 24 }}>
-            {(
-              [
-                { size: 'sm', label: '小号 sm' },
-                { size: 'md', label: '中号 md（默认）' },
-                { size: 'lg', label: '大号 lg' },
-              ] as const
-            ).map(({ size, label }) => (
-              <div key={size} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
-                <Spinner variant={variant} size={size} label={`${label}示例正在加载`} />
-                <Text size="sm" tone="muted">
-                  {label}
-                </Text>
-              </div>
-            ))}
-          </div>
         </div>
       ))}
     </div>

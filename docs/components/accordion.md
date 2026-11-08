@@ -63,6 +63,73 @@ export default function AccordionBasic() {
 }
 ```
 
+<a id="states"></a>
+
+### 多项展开、受控与禁用
+
+分别查看受控多项展开与不可用的条目。
+
+[查看示例文件](../../playground/src/examples/navigation/AccordionStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/AccordionStates.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Accordion, Button, Text } from 'yahha-ui';
+
+export default function AccordionStates() {
+  const [value, setValue] = useState<string[]>(['preparation', 'meeting']);
+
+  return (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <div style={{ display: 'grid', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          多项展开（受控）
+        </Text>
+        <Accordion
+          multiple
+          value={value}
+          onValueChange={setValue}
+          items={[
+            {
+              value: 'preparation',
+              title: '需要带些什么？',
+              content: <p>带一本愿意分享的书，以及记录喜欢段落的小本子。</p>,
+            },
+            {
+              value: 'meeting',
+              title: '在哪里集合？',
+              content: <p>先到书店门口的小桌签到，再一起去窗边的阅读区。</p>,
+            },
+          ]}
+        />
+        <Button variant="secondary" onClick={() => setValue([])}>
+          全部收起
+        </Button>
+        <Text size="sm" tone="muted" role="status">
+          已展开 {value.length} 项
+        </Text>
+      </div>
+      <div style={{ display: 'grid', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          禁用单项
+        </Text>
+        <Accordion
+          items={[
+            {
+              value: 'rain',
+              title: '雨天安排（确认中）',
+              content: <p>确认后会补充当天的集合安排。</p>,
+              disabled: true,
+            },
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="appearance"></a>
 
 ### 普通与柔和纸面

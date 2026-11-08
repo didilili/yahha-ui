@@ -1,3 +1,7 @@
+import AvatarBasic from '../../examples/content/AvatarBasic';
+import avatarBasicSource from '../../examples/content/AvatarBasic.tsx?raw';
+import AvatarSizes from '../../examples/content/AvatarSizes';
+import avatarSizesSource from '../../examples/content/AvatarSizes.tsx?raw';
 import AvatarExample from '../../examples/content/AvatarExample';
 import avatarSource from '../../examples/content/AvatarExample.tsx?raw';
 import AvatarAuthor from '../../examples/content/AvatarAuthor';
@@ -22,11 +26,25 @@ export default defineComponentPage('avatar', {
       title: '代码演示',
       examples: [
         example(
+          'avatar-basic',
+          '图片头像',
+          '通过 src 显示图片，name 提供头像名称。',
+          AvatarBasic,
+          avatarBasicSource,
+        ),
+        example(
           'avatar-fallback',
-          '尺寸与姓名回退',
-          '比较三档尺寸、空姓名与自定义回退。',
+          '姓名与自定义回退',
+          '未提供图片时，查看姓名缩写、空姓名和指定的回退内容。',
           AvatarExample,
           avatarSource,
+        ),
+        example(
+          'avatar-sizes',
+          '尺寸',
+          '使用同一姓名对比三档尺寸。',
+          AvatarSizes,
+          avatarSizesSource,
         ),
         example(
           'avatar-picture',

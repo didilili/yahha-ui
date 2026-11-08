@@ -22,11 +22,29 @@ Icon 是绘制 SVG 的基础容器，统一尺寸、色调与可访问名称。S
 
 ## 代码演示
 
+<a id="icon-basic"></a>
+
+### 基础用法
+
+直接使用命名图标；独立表达含义时通过 aria-label 提供名称。
+
+[查看示例文件](../../playground/src/examples/foundations/IconBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconBasic.tsx -->
+
+```tsx
+import { SearchIcon } from 'yahha-ui';
+
+export default function IconBasic() {
+  return <SearchIcon aria-label="搜索" />;
+}
+```
+
 <a id="icon-gallery"></a>
 
 ### 手绘功能图标
 
-16 种图标的静态样张，文字说明每个图形的用途。
+16 种图标的静态样张，按图形用途查找。
 
 [查看示例文件](../../playground/src/examples/foundations/IconGallery.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -96,11 +114,190 @@ export default function IconGallery() {
 }
 ```
 
+<a id="icon-sizes"></a>
+
+### 尺寸与色调
+
+分别保持图形不变，对比图框尺寸和语义色调。
+
+[查看示例文件](../../playground/src/examples/foundations/IconSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconSizes.tsx -->
+
+```tsx
+import { SearchIcon } from 'yahha-ui';
+
+export default function IconSizes() {
+  return (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        {(['sm', 'md', 'lg'] as const).map((size) => (
+          <div key={size} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+            <span>{size}</span>
+            <SearchIcon size={size} />
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+        {(
+          [
+            ['default', '主要'],
+            ['muted', '次要'],
+            ['accent', '主题色'],
+          ] as const
+        ).map(([tone, label]) => (
+          <div key={tone} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+            <span>{label}</span>
+            <SearchIcon tone={tone} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="icon-accessibility"></a>
+
+### 装饰与可访问名称
+
+对比默认装饰图标与两种可访问命名方式。
+
+[查看示例文件](../../playground/src/examples/foundations/IconAccessibility.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconAccessibility.tsx -->
+
+```tsx
+import { useId } from 'react';
+import { BookmarkIcon, InfoIcon, SuccessIcon, Text } from 'yahha-ui';
+
+export default function IconAccessibility() {
+  const labelId = useId();
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', gap: 32 }}>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          装饰图标
+        </Text>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <BookmarkIcon filled />
+          已收藏
+        </span>
+      </div>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          aria-label
+        </Text>
+        <InfoIcon tone="info" aria-label="阅读提示" />
+      </div>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          aria-labelledby
+        </Text>
+        <span id={labelId} hidden>
+          已同步
+        </span>
+        <SuccessIcon tone="success" aria-labelledby={labelId} />
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="icon-slots"></a>
+
+### 按钮与输入框中的图标
+
+通过 startIcon 和 leading 插槽放入图标，由宿主控件安排图框。
+
+[查看示例文件](../../playground/src/examples/foundations/IconSlots.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconSlots.tsx -->
+
+```tsx
+import { Button, SearchIcon, TextField } from 'yahha-ui';
+
+export default function IconSlots() {
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 16, maxWidth: 360 }}>
+      <Button startIcon={<SearchIcon />}>搜索手记</Button>
+      <TextField label="搜索关键词" leading={<SearchIcon />} defaultValue="散步" />
+    </div>
+  );
+}
+```
+
+<a id="icon-custom"></a>
+
+### 自定义 SVG
+
+分组展示自定义坐标与多色路径，外部尺寸由 size 控制。
+
+[查看示例文件](../../playground/src/examples/foundations/IconCustom.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/IconCustom.tsx -->
+
+```tsx
+import { Icon, Text } from 'yahha-ui';
+
+export default function IconCustom() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', gap: 32 }}>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          自定坐标
+        </Text>
+        <Icon
+          size="lg"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M13.5 2.5c-4-.7-8.2.8-9.2 4.4-.7 2.5.7 4.6 3.2 4.6 3.7 0 6.5-4 6-9Z" />
+          <path d="m2.5 13.5 7.7-7.7" />
+        </Icon>
+      </div>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          多色路径
+        </Text>
+        <Icon size={32}>
+          <path
+            d="m4.5 5.5 15 .3-.2 13-15-.3Z"
+            fill="#def2ff"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <path
+            d="m4.8 5.8 7.1 6 7.3-5.7"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle cx="16.5" cy="17.5" r="3.5" fill="#f8bed2" />
+        </Icon>
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
 <a id="icon-composition"></a>
 
-### 按钮与输入框插槽
+### 搜索与收藏组合
 
-提交关键词筛选本地手记，点击收藏切换状态；图框尺寸跟随所在控件。
+提交关键词筛选本地手记，点击收藏切换状态；清空后回到输入框。
 
 [查看示例文件](../../playground/src/examples/foundations/IconComposition.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -194,115 +391,6 @@ export default function IconComposition() {
           ))}
         </ul>
       )}
-    </div>
-  );
-}
-```
-
-<a id="icon-custom"></a>
-
-### 自定坐标与多色路径
-
-用自己的 SVG 路径，分别设置 viewBox、图框尺寸和局部颜色。
-
-[查看示例文件](../../playground/src/examples/foundations/IconCustom.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/IconCustom.tsx -->
-
-```tsx
-import { Icon, Text } from 'yahha-ui';
-
-export default function IconCustom() {
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', gap: 32 }}>
-      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
-        <Text size="sm" tone="muted">
-          自定坐标
-        </Text>
-        <Icon
-          size="lg"
-          viewBox="0 0 16 16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M13.5 2.5c-4-.7-8.2.8-9.2 4.4-.7 2.5.7 4.6 3.2 4.6 3.7 0 6.5-4 6-9Z" />
-          <path d="m2.5 13.5 7.7-7.7" />
-        </Icon>
-      </div>
-      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
-        <Text size="sm" tone="muted">
-          多色路径
-        </Text>
-        <Icon size={32}>
-          <path
-            d="m4.5 5.5 15 .3-.2 13-15-.3Z"
-            fill="#def2ff"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
-          />
-          <path
-            d="m4.8 5.8 7.1 6 7.3-5.7"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle cx="16.5" cy="17.5" r="3.5" fill="#f8bed2" />
-        </Icon>
-      </div>
-    </div>
-  );
-}
-```
-
-<a id="icon-accessibility"></a>
-
-### 装饰与可访问名称
-
-对比默认装饰图标与两种可访问命名方式。
-
-[查看示例文件](../../playground/src/examples/foundations/IconAccessibility.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/IconAccessibility.tsx -->
-
-```tsx
-import { useId } from 'react';
-import { BookmarkIcon, InfoIcon, SuccessIcon, Text } from 'yahha-ui';
-
-export default function IconAccessibility() {
-  const labelId = useId();
-
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', gap: 32 }}>
-      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
-        <Text size="sm" tone="muted">
-          装饰图标
-        </Text>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-          <BookmarkIcon filled />
-          已收藏
-        </span>
-      </div>
-      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
-        <Text size="sm" tone="muted">
-          aria-label
-        </Text>
-        <InfoIcon tone="info" aria-label="阅读提示" />
-      </div>
-      <div style={{ display: 'grid', justifyItems: 'start', gap: 12 }}>
-        <Text size="sm" tone="muted">
-          aria-labelledby
-        </Text>
-        <span id={labelId} hidden>
-          已同步
-        </span>
-        <SuccessIcon tone="success" aria-labelledby={labelId} />
-      </div>
     </div>
   );
 }

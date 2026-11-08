@@ -64,11 +64,64 @@ export default function TooltipBasic() {
 }
 ```
 
+<a id="arrow"></a>
+
+### 方向与箭头
+
+悬停或聚焦查看四个方向，再对比相同内容与间距的箭头开关。
+
+[查看示例文件](../../playground/src/examples/floating/TooltipAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/floating/TooltipAppearance.tsx -->
+
+```tsx
+import { Button, Text, Tooltip } from 'yahha-ui';
+
+export default function TooltipAppearance() {
+  return (
+    <div style={{ display: 'grid', gap: 32, paddingBlock: 48 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+        {(
+          [
+            { side: 'top', label: '上方（默认）' },
+            { side: 'bottom', label: '下方' },
+            { side: 'left', label: '左侧' },
+            { side: 'right', label: '右侧' },
+          ] as const
+        ).map(({ side, label }) => (
+          <Tooltip
+            key={side}
+            side={side}
+            content="补充阅读说明"
+            trigger={<Button variant="secondary">{label}</Button>}
+          />
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32, paddingBlockStart: 32 }}>
+        {[true, false].map((showArrow) => (
+          <div key={String(showArrow)} style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
+            <Text size="sm" tone="muted">
+              {showArrow ? '有箭头（默认）' : '无箭头'}
+            </Text>
+            <Tooltip
+              defaultOpen
+              showArrow={showArrow}
+              content="补充阅读说明"
+              trigger={<Button variant="secondary">阅读说明</Button>}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="options"></a>
 
-### 延迟、方向与禁用提示
+### 延迟与禁用提示
 
-首次悬停 0.8 秒后在下方显示提示；关闭提示后仍可点击按钮。
+首次悬停等待 0.8 秒；关闭文字提示后，按钮仍可执行操作。
 
 [查看示例文件](../../playground/src/examples/floating/TooltipOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -87,7 +140,6 @@ export default function TooltipOptions() {
         <Tooltip
           disabled={disabled}
           delay={800}
-          side="bottom"
           content="加入稍后阅读"
           trigger={
             <Button variant="secondary" onClick={() => setMessage('已触发“加入稍后阅读”操作。')}>
@@ -109,40 +161,6 @@ export default function TooltipOptions() {
       <Text size="sm" tone="muted">
         当前文字提示：{disabled ? '已关闭' : '已开启'}。
       </Text>
-    </div>
-  );
-}
-```
-
-<a id="arrow"></a>
-
-### 选择是否显示箭头
-
-同样的内容和间距，分别显示默认箭头与无箭头气泡；可聚焦或悬停触发器重新查看。
-
-[查看示例文件](../../playground/src/examples/floating/TooltipAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/floating/TooltipAppearance.tsx -->
-
-```tsx
-import { Button, Text, Tooltip } from 'yahha-ui';
-
-export default function TooltipAppearance() {
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32, paddingBlock: 64 }}>
-      {[true, false].map((showArrow) => (
-        <div key={String(showArrow)} style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
-          <Text size="sm" tone="muted">
-            {showArrow ? '有箭头（默认）' : '无箭头'}
-          </Text>
-          <Tooltip
-            defaultOpen
-            showArrow={showArrow}
-            content="补充阅读说明"
-            trigger={<Button variant="secondary">阅读说明</Button>}
-          />
-        </div>
-      ))}
     </div>
   );
 }

@@ -48,38 +48,11 @@ export default function TextareaBasic() {
 }
 ```
 
-<a id="textarea-auto-size"></a>
-
-### 自动调整高度
-
-内容在二至八行间自动增减高度，超出后在框内滚动。
-
-[查看示例文件](../../playground/src/examples/new-forms/TextareaAutoSize.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/new-forms/TextareaAutoSize.tsx -->
-
-```tsx
-import { Textarea } from 'yahha-ui';
-
-export default function TextareaAutoSize() {
-  return (
-    <div style={{ maxWidth: 480 }}>
-      <Textarea
-        label="文章摘要"
-        name="summary"
-        defaultValue="小八说沿河走一会儿，结果先带大家拐进了面包店。"
-        autoSize={{ minRows: 2, maxRows: 8 }}
-      />
-    </div>
-  );
-}
-```
-
 <a id="controlled"></a>
 
-### 受控内容与校验
+### 受控输入与自定义字数提示
 
-输入时显示当前长度，检查留言后查看校验结果。
+字数由示例代码计算；检查必填内容时，失败会回焦并保留输入。
 
 [查看示例文件](../../playground/src/examples/new-forms/TextareaControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -104,38 +77,69 @@ export default function TextareaControlled() {
         if (!message.trim()) ref.current?.focus();
       }}
     >
-      <Textarea
-        ref={ref}
-        label="留言内容"
-        value={message}
-        onChange={(event) => {
-          setMessage(event.target.value);
-          setSubmitted(false);
-        }}
-        required
-        maxLength={200}
-        hint={
-          <span style={{ display: 'flex', flexWrap: 'wrap', columnGap: 12, rowGap: 4 }}>
-            <span>必填</span>
-            <span
-              style={{
-                marginInlineStart: 'auto',
-                flexShrink: 0,
-                whiteSpace: 'nowrap',
-                fontVariantNumeric: 'tabular-nums',
-              }}
-            >
-              已输入 {message.length} / 200
+      <div style={{ display: 'grid', gap: 8 }}>
+        <Textarea
+          ref={ref}
+          label="留言内容"
+          value={message}
+          onChange={(event) => {
+            setMessage(event.target.value);
+            setSubmitted(false);
+          }}
+          required
+          maxLength={200}
+          hint={
+            <span style={{ display: 'flex', flexWrap: 'wrap', columnGap: 12, rowGap: 4 }}>
+              <span>必填</span>
+              <span
+                style={{
+                  marginInlineStart: 'auto',
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap',
+                  fontVariantNumeric: 'tabular-nums',
+                }}
+              >
+                已输入 {message.length} / 200
+              </span>
             </span>
-          </span>
-        }
-        error={error}
-      />
-      <Button type="submit">检查留言</Button>
-      <Text size="sm" tone="muted" role="status">
-        {submitted && message.trim() ? '检查结果：留言符合要求。' : ''}
-      </Text>
+          }
+          error={error}
+        />
+      </div>
+      <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+        <Button type="submit">检查留言</Button>
+        <Text size="sm" tone="muted" role="status">
+          {submitted && message.trim() ? '检查结果：留言符合要求。' : ''}
+        </Text>
+      </div>
     </form>
+  );
+}
+```
+
+<a id="textarea-auto-size"></a>
+
+### 自动调整高度
+
+内容在二至八行间自动增减高度，超出后在框内滚动。
+
+[查看示例文件](../../playground/src/examples/new-forms/TextareaAutoSize.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/TextareaAutoSize.tsx -->
+
+```tsx
+import { Textarea } from 'yahha-ui';
+
+export default function TextareaAutoSize() {
+  return (
+    <div style={{ maxWidth: 480 }}>
+      <Textarea
+        label="文章摘要"
+        name="summary"
+        defaultValue="小八说沿河走一会儿，结果先带大家拐进了面包店。"
+        autoSize={{ minRows: 2, maxRows: 8 }}
+      />
+    </div>
   );
 }
 ```

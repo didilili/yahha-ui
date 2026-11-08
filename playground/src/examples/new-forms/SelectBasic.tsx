@@ -7,14 +7,8 @@ export default function SelectBasic() {
     { value: 'photos', label: '散步相册' },
   ];
   return (
-    <div style={{ display: 'grid', gap: 24, maxWidth: 340 }}>
+    <div style={{ maxWidth: 340 }}>
       <Select label="文章分类" defaultValue="journal" options={options} />
-      <Select
-        label="文章分类（纸章装饰）"
-        defaultValue="journal"
-        options={options}
-        selectedIndicator="stamp"
-      />
     </div>
   );
 }

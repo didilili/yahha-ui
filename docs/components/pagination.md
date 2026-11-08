@@ -67,6 +67,62 @@ export default function PaginationBasic() {
 }
 ```
 
+<a id="more"></a>
+
+### 多页码与省略
+
+以 80 页总数观察省略页码与当前页窗口，不加载文章数据。
+
+[查看示例文件](../../playground/src/examples/navigation/PaginationMore.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/PaginationMore.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Pagination, Text } from 'yahha-ui';
+
+export default function PaginationMore() {
+  const [page, setPage] = useState(24);
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Pagination
+        aria-label="多页码演示"
+        currentPage={page}
+        totalPages={80}
+        onPageChange={setPage}
+      />
+      <Text size="sm" tone="muted" role="status">
+        第 {page} / 80 页
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="empty"></a>
+
+### 空列表
+
+空列表隐藏数字页码，翻页按钮不可用。
+
+[查看示例文件](../../playground/src/examples/navigation/PaginationEmpty.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/PaginationEmpty.tsx -->
+
+```tsx
+import { Pagination, Text } from 'yahha-ui';
+
+export default function PaginationEmpty() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Text>这个收藏夹还没有文章。</Text>
+      <Pagination aria-label="空列表分页" currentPage={1} totalPages={0} onPageChange={() => {}} />
+    </div>
+  );
+}
+```
+
 <a id="appearance"></a>
 
 ### 普通与圈选
@@ -114,11 +170,17 @@ export default function PaginationAppearance() {
 }
 ```
 
+<a id="integration"></a>
+
+## 进阶用法
+
+阅读位置示例重复使用三条本地摘要模拟 80 页；链接示例将当前页码保留在网址中。
+
 <a id="archive"></a>
 
-### 多页码与翻页焦点
+### 翻页后的阅读位置
 
-用三条摘要模拟 80 页，翻页后聚焦本页标题。
+翻页后聚焦本页标题，从更新后的内容继续阅读。
 
 [查看示例文件](../../playground/src/examples/navigation/PaginationArchive.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -184,35 +246,6 @@ export default function PaginationArchive() {
   );
 }
 ```
-
-<a id="empty"></a>
-
-### 空列表
-
-空列表隐藏数字页码，翻页按钮不可用。
-
-[查看示例文件](../../playground/src/examples/navigation/PaginationEmpty.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/navigation/PaginationEmpty.tsx -->
-
-```tsx
-import { Pagination, Text } from 'yahha-ui';
-
-export default function PaginationEmpty() {
-  return (
-    <div style={{ display: 'grid', gap: 16 }}>
-      <Text>这个收藏夹还没有文章。</Text>
-      <Pagination aria-label="空列表分页" currentPage={1} totalPages={0} onPageChange={() => {}} />
-    </div>
-  );
-}
-```
-
-<a id="integration"></a>
-
-## 进阶用法
-
-示例使用本地内容，当前页码保留在网址中。
 
 <a id="links"></a>
 

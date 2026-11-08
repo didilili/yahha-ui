@@ -55,7 +55,7 @@ export default defineComponentPage('text-field', {
         },
         {
           id: 'text-field-slots',
-          title: '前置图标与尾部操作',
+          title: '前置图标与尾部清空',
           description: '前置图标仅作装饰，示例通过尾部按钮清空内容并回焦。',
           component: TextFieldSlots,
           source: textFieldSlotsSource,
@@ -74,22 +74,21 @@ export default defineComponentPage('text-field', {
           component: TextFieldValidation,
           source: textFieldValidationSource,
         },
+        {
+          id: 'native',
+          title: '原生输入类型',
+          description: '对照密码、日期和时间输入，再检查邮箱的原生格式约束。',
+          component: TextFieldNative,
+          source: textFieldNativeSource,
+        },
       ],
     },
     {
       id: 'integration',
       title: '进阶用法',
-      disclosure: '查看原生类型与表单组合',
+      disclosure: '查看表单、中文输入与复制示例',
       content: <p>以下示例只在本地操作，不发送或保存表单数据。</p>,
       examples: [
-        {
-          id: 'native',
-          title: '原生输入类型',
-          description: '查看邮箱、密码、日期与时间输入，可检查邮箱格式。',
-          component: TextFieldNative,
-          source: textFieldNativeSource,
-          toc: false,
-        },
         {
           id: 'form',
           title: '表单取值与重置',
@@ -100,7 +99,7 @@ export default defineComponentPage('text-field', {
         },
         {
           id: 'text-field-search',
-          title: '中文输入与尾部清空',
+          title: '中文输入与实时搜索',
           description: '组合输入时保留当前结果，结束后筛选本地手记；清空后回到输入框。',
           component: TextFieldSearch,
           source: textFieldSearchSource,

@@ -7,19 +7,19 @@ export default function ProgressStates() {
         <Text size="sm" tone="muted">
           进行中
         </Text>
-        <Progress label="整理进度" value={40} appearance="bookmark" />
+        <Progress label="整理进度" value={40} />
       </div>
       <div>
         <Text size="sm" tone="muted">
           未知进度
         </Text>
-        <Progress label="整理进度" value={null} valueText="正在计算" appearance="bookmark" />
+        <Progress label="整理进度" value={null} valueText="正在计算" />
       </div>
       <div>
         <Text size="sm" tone="muted">
           已完成
         </Text>
-        <Progress label="整理进度" value={100} appearance="bookmark" />
+        <Progress label="整理进度" value={100} />
       </div>
     </div>
   );

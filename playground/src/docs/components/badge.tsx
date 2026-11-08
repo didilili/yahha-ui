@@ -1,5 +1,7 @@
 import BadgeTones from '../../examples/foundations/BadgeTones';
 import badgeTonesSource from '../../examples/foundations/BadgeTones.tsx?raw';
+import BadgeContent from '../../examples/foundations/BadgeContent';
+import badgeContentSource from '../../examples/foundations/BadgeContent.tsx?raw';
 import BadgeStatus from '../../examples/foundations/BadgeStatus';
 import badgeStatusSource from '../../examples/foundations/BadgeStatus.tsx?raw';
 import BadgeAppearance from '../../examples/foundations/BadgeAppearance';
@@ -24,10 +26,17 @@ export default defineComponentPage('badge', {
       examples: [
         {
           id: 'badge-tones',
-          title: '标记类型与组合',
-          description: '对比三种标记、行内组合和长标签换行。',
+          title: '语义颜色',
+          description: '使用相同文字对比普通、强调和成功三种颜色。',
           component: BadgeTones,
           source: badgeTonesSource,
+        },
+        {
+          id: 'badge-content',
+          title: '行内与长文本',
+          description: '分别查看正文中的行内标记，以及中文和连续长词的换行。',
+          component: BadgeContent,
+          source: badgeContentSource,
         },
         {
           id: 'badge-appearance',

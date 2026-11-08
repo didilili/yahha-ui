@@ -1,5 +1,9 @@
 import CheckboxBasic from '../../examples/new-forms/CheckboxBasic';
 import CheckboxBasicSource from '../../examples/new-forms/CheckboxBasic.tsx?raw';
+import CheckboxControlled from '../../examples/new-forms/CheckboxControlled';
+import checkboxControlledSource from '../../examples/new-forms/CheckboxControlled.tsx?raw';
+import CheckboxHighlight from '../../examples/new-forms/CheckboxHighlight';
+import checkboxHighlightSource from '../../examples/new-forms/CheckboxHighlight.tsx?raw';
 import CheckboxDisabled from '../../examples/new-forms/CheckboxDisabled';
 import checkboxDisabledSource from '../../examples/new-forms/CheckboxDisabled.tsx?raw';
 import CheckboxLongLabel from '../../examples/new-forms/CheckboxLongLabel';
@@ -36,7 +40,7 @@ export default defineComponentPage('checkbox', {
         {
           id: 'basic',
           title: '基础用法',
-          description: '对比默认勾选与显式整行高亮，点击或按空格分别切换。',
+          description: '点击标签或按空格切换勾选状态。',
           component: CheckboxBasic,
           source: CheckboxBasicSource,
         },
@@ -48,28 +52,41 @@ export default defineComponentPage('checkbox', {
           source: checkboxDisabledSource,
         },
         {
+          id: 'checkbox-controlled',
+          title: '受控勾选',
+          description: '通过 checked 与 onChange 同步勾选状态和相邻文字。',
+          component: CheckboxControlled,
+          source: checkboxControlledSource,
+        },
+        {
           id: 'mixed',
-          title: '受控选择与半选',
+          title: '全选与半选',
           description: '逐项勾选或全选分类，查看半选状态和已选数量。',
           component: CheckboxMixed,
           source: CheckboxMixedSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看长标签、表单与列表组合',
-      content: <p>兴趣条件记录在当前地址中；清单和表单操作只保留在当前示例。</p>,
-      examples: [
         {
           id: 'checkbox-long-label',
           title: '长标签换行',
           description: '窄栏中保留完整标签。',
           component: CheckboxLongLabel,
           source: checkboxLongLabelSource,
-          toc: false,
         },
+        {
+          id: 'checkbox-highlight',
+          title: '整行高亮',
+          description: '两组共用勾选状态，对比相同内容下的默认与整行高亮外观。',
+          component: CheckboxHighlight,
+          source: checkboxHighlightSource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      title: '进阶用法',
+      disclosure: '查看表单、筛选与批量操作示例',
+      content: <p>兴趣条件记录在当前地址中；清单和表单操作只保留在当前示例。</p>,
+      examples: [
         {
           id: 'form',
           toc: false,

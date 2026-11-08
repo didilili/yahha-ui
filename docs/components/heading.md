@@ -55,7 +55,7 @@ export default function HeadingExample() {
 
 ### 普通与短墨线
 
-同一标题层级可独立选择装饰；默认不绘制短墨线，也不预留装饰空间。
+保持文字与层级相同，对比默认无装饰与可选短墨线。
 
 [查看示例文件](../../playground/src/examples/content/HeadingDecoration.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -87,7 +87,6 @@ export default function HeadingDecoration() {
           <Heading level={3} decoration={decoration}>
             星球上的点心时间
           </Heading>
-          <Text>标题层级决定语义与字号；短墨线只为开启装饰的标题预留底部空间。</Text>
         </section>
       ))}
     </div>

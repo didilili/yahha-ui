@@ -24,7 +24,7 @@ import { Checkbox } from 'yahha-ui';
 
 ### 基础用法
 
-对比默认勾选与显式整行高亮，点击或按空格分别切换。
+点击标签或按空格切换勾选状态。
 
 [查看示例文件](../../playground/src/examples/new-forms/CheckboxBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -34,18 +34,7 @@ import { Checkbox } from 'yahha-ui';
 import { Checkbox } from 'yahha-ui';
 
 export default function CheckboxBasic() {
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-      <div style={{ display: 'grid', gap: 8 }}>
-        <span>默认</span>
-        <Checkbox label="接收每月阅读来信" defaultChecked />
-      </div>
-      <div style={{ display: 'grid', gap: 8 }}>
-        <span>可选整行高亮</span>
-        <Checkbox label="接收每月阅读来信" defaultChecked highlightSelected />
-      </div>
-    </div>
-  );
+  return <Checkbox label="接收每月阅读来信" defaultChecked />;
 }
 ```
 
@@ -72,9 +61,41 @@ export default function CheckboxDisabled() {
 }
 ```
 
+<a id="checkbox-controlled"></a>
+
+### 受控勾选
+
+通过 checked 与 onChange 同步勾选状态和相邻文字。
+
+[查看示例文件](../../playground/src/examples/new-forms/CheckboxControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/CheckboxControlled.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Checkbox, Text } from 'yahha-ui';
+
+export default function CheckboxControlled() {
+  const [subscribed, setSubscribed] = useState(false);
+
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <Checkbox
+        label="订阅每月阅读来信"
+        checked={subscribed}
+        onChange={(event) => setSubscribed(event.target.checked)}
+      />
+      <Text size="sm" tone="muted">
+        {subscribed ? '已订阅' : '未订阅'}
+      </Text>
+    </div>
+  );
+}
+```
+
 <a id="mixed"></a>
 
-### 受控选择与半选
+### 全选与半选
 
 逐项勾选或全选分类，查看半选状态和已选数量。
 
@@ -143,12 +164,6 @@ export default function CheckboxMixed() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-兴趣条件记录在当前地址中；清单和表单操作只保留在当前示例。
-
 <a id="checkbox-long-label"></a>
 
 ### 长标签换行
@@ -170,6 +185,53 @@ export default function CheckboxLongLabel() {
   );
 }
 ```
+
+<a id="checkbox-highlight"></a>
+
+### 整行高亮
+
+两组共用勾选状态，对比相同内容下的默认与整行高亮外观。
+
+[查看示例文件](../../playground/src/examples/new-forms/CheckboxHighlight.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/new-forms/CheckboxHighlight.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Checkbox } from 'yahha-ui';
+
+export default function CheckboxHighlight() {
+  const [checked, setChecked] = useState(true);
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span>默认</span>
+        <Checkbox
+          label="接收每月阅读来信"
+          checked={checked}
+          onChange={(event) => setChecked(event.target.checked)}
+        />
+      </div>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span>整行高亮</span>
+        <Checkbox
+          label="接收每月阅读来信"
+          checked={checked}
+          onChange={(event) => setChecked(event.target.checked)}
+          highlightSelected
+        />
+      </div>
+    </div>
+  );
+}
+```
+
+<a id="integration"></a>
+
+## 进阶用法
+
+兴趣条件记录在当前地址中；清单和表单操作只保留在当前示例。
 
 <a id="form"></a>
 

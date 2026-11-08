@@ -5,6 +5,8 @@ import SegmentedFiltering from '../../examples/forms/SegmentedFiltering';
 import segmentedFilteringSource from '../../examples/forms/SegmentedFiltering.tsx?raw';
 import SegmentedDisabled from '../../examples/forms/SegmentedDisabled';
 import segmentedDisabledSource from '../../examples/forms/SegmentedDisabled.tsx?raw';
+import SegmentedGroupDisabled from '../../examples/forms/SegmentedGroupDisabled';
+import segmentedGroupDisabledSource from '../../examples/forms/SegmentedGroupDisabled.tsx?raw';
 import SegmentedForm from '../../examples/forms/SegmentedForm';
 import segmentedFormSource from '../../examples/forms/SegmentedForm.tsx?raw';
 import SegmentedLongLabels from '../../examples/forms/SegmentedLongLabels';
@@ -39,17 +41,31 @@ export default defineComponentPage('segmented-control', {
         },
         {
           id: 'disabled',
-          title: '禁用选项与整组禁用',
-          description: '对比单项与整组禁用，并切换整组可用状态。',
+          title: '禁用选项',
+          description: '切换可用选项，禁用项保留可见并说明原因。',
           component: SegmentedDisabled,
           source: segmentedDisabledSource,
+        },
+        {
+          id: 'segmented-group-disabled',
+          title: '整组禁用',
+          description: '切换父 fieldset 的禁用状态，保留当前选择。',
+          component: SegmentedGroupDisabled,
+          source: segmentedGroupDisabledSource,
+        },
+        {
+          id: 'long-labels',
+          title: '长标签与窄容器',
+          description: '在窄栏中切换专题，查看选项如何换行排列。',
+          component: SegmentedLongLabels,
+          source: segmentedLongLabelsSource,
         },
       ],
     },
     {
       id: 'integration',
       title: '进阶用法',
-      disclosure: '查看内容筛选、表单与长标签示例',
+      disclosure: '查看内容筛选与表单示例',
       content: <p>示例使用本地状态和文章，不请求接口或保存设置。</p>,
       examples: [
         {
@@ -67,14 +83,6 @@ export default defineComponentPage('segmented-control', {
           toc: false,
           component: SegmentedForm,
           source: segmentedFormSource,
-        },
-        {
-          id: 'long-labels',
-          title: '长标签与窄容器',
-          description: '在窄栏中切换专题，查看选项如何换行排列。',
-          toc: false,
-          component: SegmentedLongLabels,
-          source: segmentedLongLabelsSource,
         },
       ],
     },

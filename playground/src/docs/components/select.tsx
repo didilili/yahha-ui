@@ -1,5 +1,7 @@
 import SelectBasic from '../../examples/new-forms/SelectBasic';
 import SelectBasicSource from '../../examples/new-forms/SelectBasic.tsx?raw';
+import SelectIndicators from '../../examples/new-forms/SelectIndicators';
+import SelectIndicatorsSource from '../../examples/new-forms/SelectIndicators.tsx?raw';
 import SelectControlled from '../../examples/new-forms/SelectControlled';
 import SelectControlledSource from '../../examples/new-forms/SelectControlled.tsx?raw';
 import SelectStates from '../../examples/new-forms/SelectStates';
@@ -39,13 +41,13 @@ export default defineComponentPage('select', {
         {
           id: 'basic',
           title: '基础用法',
-          description: '从三个分类中选择一项，对比默认勾与显式纸章装饰。',
+          description: '从三个分类中选择一项。',
           component: SelectBasic,
           source: SelectBasicSource,
         },
         {
           id: 'controlled',
-          title: '受控选择与禁用选项',
+          title: '受控选择、禁用选项与清空',
           description: '切换或清空当前选择，禁用选项不可选。',
           component: SelectControlled,
           source: SelectControlledSource,
@@ -64,12 +66,26 @@ export default defineComponentPage('select', {
           component: SelectCollection,
           source: SelectCollectionSource,
         },
+        {
+          id: 'long-options',
+          title: '长列表与长选项',
+          description: '查看长选项换行与列表滚动。',
+          component: SelectLongOptions,
+          source: SelectLongOptionsSource,
+        },
+        {
+          id: 'select-indicators',
+          title: '普通勾与纸章装饰',
+          description: '两组共用选择值，对比相同内容和状态下的选中标记。',
+          component: SelectIndicators,
+          source: SelectIndicatorsSource,
+        },
       ],
     },
     {
       id: 'integration',
       title: '进阶用法',
-      disclosure: '查看表单、长选项与动态数据示例',
+      disclosure: '查看表单与动态数据示例',
       content: <p>示例在本地运行，状态只保留在当前示例。</p>,
       examples: [
         {
@@ -79,14 +95,6 @@ export default defineComponentPage('select', {
           toc: false,
           component: SelectForm,
           source: SelectFormSource,
-        },
-        {
-          id: 'long-options',
-          title: '长列表与长选项',
-          description: '查看长选项换行与列表滚动。',
-          toc: false,
-          component: SelectLongOptions,
-          source: SelectLongOptionsSource,
         },
         {
           id: 'select-available-collections',

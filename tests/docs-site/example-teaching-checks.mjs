@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { revealExample } from './reveal-example.mjs';
 import { verifyHeadingShare } from './heading-examples.mjs';
 
 /** Readers should know each example's purpose before reaching its controls. */
@@ -62,6 +63,7 @@ export async function verifyTeachingExamples(page, baseURL) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto(`${baseURL}#/components/icon-button`);
     const example = page.locator('#icon-button-basic');
+    await revealExample(example);
     const close = example.getByRole('button', { name: '关闭提示', exact: true });
     await close.waitFor();
     assert.equal(

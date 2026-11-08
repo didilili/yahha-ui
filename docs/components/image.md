@@ -137,7 +137,7 @@ export default function ImageFallback() {
 
 ### 缩略图与大图预览
 
-通过独立按钮打开同一图片的大图，关闭后返回入口。
+通过独立按钮与 Dialog 组合预览同一图片，关闭后返回入口。
 
 [查看示例文件](../../playground/src/examples/scenes/ImageDetail.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

@@ -29,16 +29,19 @@ async function requireSize(avatar, expected) {
   return geometry;
 }
 
-/** Verify the simple avatar sizes and fallback example independently of author dialogs. */
+/** Verify the separate size and fallback examples independently of author dialogs. */
 export async function verifyAvatarBasics(page, example) {
   const sizes = [];
-  for (const [name, size, expected] of [
-    ['小八', 'sm', 32],
-    ['吉伊', 'md', 44],
-    ['乌萨奇', 'lg', 64],
+  const sizeExample = page.locator('#avatar-sizes .example-preview');
+  for (const [size, expected] of [
+    ['sm', 32],
+    ['md', 44],
+    ['lg', 64],
   ]) {
-    const avatar = example.getByRole('img', { name, exact: true });
+    const avatar = sizeExample.locator(`[role="img"][data-size="${size}"]`);
+    const name = '库米';
     assert.equal(await avatar.count(), 1);
+    assert.equal(await avatar.getAttribute('aria-label'), name);
     assert.equal(await avatar.getAttribute('data-size'), size);
     const geometry = await requireSize(avatar, expected);
     sizes.push({ name, size, width: geometry.width, height: geometry.height });

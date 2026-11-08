@@ -1,3 +1,9 @@
+import IconBasic from '../../examples/foundations/IconBasic';
+import iconBasicSource from '../../examples/foundations/IconBasic.tsx?raw';
+import IconSizes from '../../examples/foundations/IconSizes';
+import iconSizesSource from '../../examples/foundations/IconSizes.tsx?raw';
+import IconSlots from '../../examples/foundations/IconSlots';
+import iconSlotsSource from '../../examples/foundations/IconSlots.tsx?raw';
 import IconGallery from '../../examples/foundations/IconGallery';
 import iconGallerySource from '../../examples/foundations/IconGallery.tsx?raw';
 import IconComposition from '../../examples/foundations/IconComposition';
@@ -36,25 +42,25 @@ export default defineComponentPage('icon', {
       kind: 'examples',
       examples: [
         {
+          id: 'icon-basic',
+          title: '基础用法',
+          description: '直接使用命名图标；独立表达含义时通过 aria-label 提供名称。',
+          component: IconBasic,
+          source: iconBasicSource,
+        },
+        {
           id: 'icon-gallery',
           title: '手绘功能图标',
-          description: '16 种图标的静态样张，文字说明每个图形的用途。',
+          description: '16 种图标的静态样张，按图形用途查找。',
           component: IconGallery,
           source: iconGallerySource,
         },
         {
-          id: 'icon-composition',
-          title: '按钮与输入框插槽',
-          description: '提交关键词筛选本地手记，点击收藏切换状态；图框尺寸跟随所在控件。',
-          component: IconComposition,
-          source: iconCompositionSource,
-        },
-        {
-          id: 'icon-custom',
-          title: '自定坐标与多色路径',
-          description: '用自己的 SVG 路径，分别设置 viewBox、图框尺寸和局部颜色。',
-          component: IconCustom,
-          source: iconCustomSource,
+          id: 'icon-sizes',
+          title: '尺寸与色调',
+          description: '分别保持图形不变，对比图框尺寸和语义色调。',
+          component: IconSizes,
+          source: iconSizesSource,
         },
         {
           id: 'icon-accessibility',
@@ -62,6 +68,36 @@ export default defineComponentPage('icon', {
           description: '对比默认装饰图标与两种可访问命名方式。',
           component: IconAccessibility,
           source: iconAccessibilitySource,
+        },
+        {
+          id: 'icon-slots',
+          title: '按钮与输入框中的图标',
+          description: '通过 startIcon 和 leading 插槽放入图标，由宿主控件安排图框。',
+          component: IconSlots,
+          source: iconSlotsSource,
+        },
+        {
+          id: 'icon-custom',
+          title: '自定义 SVG',
+          description: '分组展示自定义坐标与多色路径，外部尺寸由 size 控制。',
+          component: IconCustom,
+          source: iconCustomSource,
+        },
+      ],
+    },
+    {
+      id: 'integration',
+      kind: 'integration',
+      title: '进阶用法',
+      disclosure: '查看搜索与收藏组合',
+      examples: [
+        {
+          id: 'icon-composition',
+          title: '搜索与收藏组合',
+          description: '提交关键词筛选本地手记，点击收藏切换状态；清空后回到输入框。',
+          component: IconComposition,
+          source: iconCompositionSource,
+          toc: false,
         },
       ],
     },

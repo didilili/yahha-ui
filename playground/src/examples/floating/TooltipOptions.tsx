@@ -10,7 +10,6 @@ export default function TooltipOptions() {
         <Tooltip
           disabled={disabled}
           delay={800}
-          side="bottom"
           content="加入稍后阅读"
           trigger={
             <Button variant="secondary" onClick={() => setMessage('已触发“加入稍后阅读”操作。')}>

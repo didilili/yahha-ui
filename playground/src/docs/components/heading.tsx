@@ -29,7 +29,7 @@ export default defineComponentPage('heading', {
         example(
           'heading-decoration',
           '普通与短墨线',
-          '同一标题层级可独立选择装饰；默认不绘制短墨线，也不预留装饰空间。',
+          '保持文字与层级相同，对比默认无装饰与可选短墨线。',
           HeadingDecoration,
           headingDecorationSource,
         ),

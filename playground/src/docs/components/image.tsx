@@ -55,7 +55,7 @@ export default defineComponentPage('image', {
         {
           id: 'image-detail',
           title: '缩略图与大图预览',
-          description: '通过独立按钮打开同一图片的大图，关闭后返回入口。',
+          description: '通过独立按钮与 Dialog 组合预览同一图片，关闭后返回入口。',
           component: ImageDetail,
           source: imageDetailSource,
           toc: false,

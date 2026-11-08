@@ -37,18 +37,18 @@ export default defineComponentPage('textarea', {
           source: TextareaBasicSource,
         },
         {
+          id: 'controlled',
+          title: '受控输入与自定义字数提示',
+          description: '字数由示例代码计算；检查必填内容时，失败会回焦并保留输入。',
+          component: TextareaControlled,
+          source: TextareaControlledSource,
+        },
+        {
           id: 'textarea-auto-size',
           title: '自动调整高度',
           description: '内容在二至八行间自动增减高度，超出后在框内滚动。',
           component: TextareaAutoSize,
           source: TextareaAutoSizeSource,
-        },
-        {
-          id: 'controlled',
-          title: '受控内容与校验',
-          description: '输入时显示当前长度，检查留言后查看校验结果。',
-          component: TextareaControlled,
-          source: TextareaControlledSource,
         },
         {
           id: 'textarea-states',

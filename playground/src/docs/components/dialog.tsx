@@ -35,14 +35,14 @@ export default defineComponentPage('dialog', {
           id: 'basic',
           previewAlign: 'center',
           title: '基础用法',
-          description: '打开阅读提示，关闭后返回触发按钮。',
+          description: '通过 trigger 打开弹窗，关闭后焦点返回触发按钮。',
           component: DialogBasic,
           source: dialogBasicSource,
         },
         {
           id: 'external',
           title: '外部按钮打开与焦点返回',
-          description: '从外部按钮打开阅读提醒，关闭后返回原按钮。',
+          description: '由外部按钮更新 open，并通过 finalFocus 指定关闭后的焦点。',
           component: DialogExternal,
           source: dialogExternalSource,
         },
@@ -54,7 +54,7 @@ export default defineComponentPage('dialog', {
       disclosure: '查看未保存修改的关闭保护',
       content: (
         <p>
-          修改标题后，取消、Escape、关闭按钮和外点共用退出策略；确认态在同一操作区提供继续编辑、保存标题或明确放弃。
+          关闭保护由调用方实现；修改标题后，取消、Escape、关闭按钮和外点共用退出策略。
           结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
         </p>
       ),
@@ -62,7 +62,7 @@ export default defineComponentPage('dialog', {
         {
           id: 'form',
           title: '未保存修改的关闭确认',
-          description: '存在未保存修改时，在同一操作区继续编辑、保存标题或放弃修改。',
+          description: '修改标题后请求关闭，观察调用方如何保留草稿并确认是否放弃。',
           component: DialogForm,
           source: dialogFormSource,
           toc: false,

@@ -122,7 +122,8 @@ export async function verifySelectionComponents(page, baseURL) {
     await segmented.getByRole('button', { name: '恢复初始值', exact: true }).click();
     assert.equal(await segmented.getByRole('radio', { checked: true }).count(), 0);
     const disabled = page.locator('#disabled');
-    const group = disabled.getByRole('group', { name: '整组文章可见性', exact: true });
+    const groupDisabled = page.locator('#segmented-group-disabled');
+    const group = groupDisabled.getByRole('group', { name: '整组文章可见性', exact: true });
     assert.equal(await group.getByRole('radio').first().isDisabled(), true);
     await disabled
       .getByRole('group', { name: '文章可见性', exact: true })
@@ -133,7 +134,7 @@ export async function verifySelectionComponents(page, baseURL) {
       true,
       'The disabled example keeps its own state.',
     );
-    await disabled.getByRole('button', { name: '解除整组禁用', exact: true }).click();
+    await groupDisabled.getByRole('button', { name: '解除整组禁用', exact: true }).click();
     assert.equal(await group.getByRole('radio').first().isDisabled(), false);
     await verifySource(segmented, 'forms/SegmentedForm.tsx');
   }

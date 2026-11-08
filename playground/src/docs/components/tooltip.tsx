@@ -41,19 +41,18 @@ export default defineComponentPage('tooltip', {
           source: tooltipBasicSource,
         },
         {
-          id: 'options',
-          title: '延迟、方向与禁用提示',
-          description: '首次悬停 0.8 秒后在下方显示提示；关闭提示后仍可点击按钮。',
-          component: TooltipOptions,
-          source: tooltipOptionsSource,
-        },
-        {
           id: 'arrow',
-          title: '选择是否显示箭头',
-          description:
-            '同样的内容和间距，分别显示默认箭头与无箭头气泡；可聚焦或悬停触发器重新查看。',
+          title: '方向与箭头',
+          description: '悬停或聚焦查看四个方向，再对比相同内容与间距的箭头开关。',
           component: TooltipAppearance,
           source: tooltipAppearanceSource,
+        },
+        {
+          id: 'options',
+          title: '延迟与禁用提示',
+          description: '首次悬停等待 0.8 秒；关闭文字提示后，按钮仍可执行操作。',
+          component: TooltipOptions,
+          source: tooltipOptionsSource,
         },
       ],
     },

@@ -4,6 +4,8 @@ import ThemeTokensExample from '../../examples/foundations/ThemeTokens';
 import themeTokensSource from '../../examples/foundations/ThemeTokens.tsx?raw';
 import ThemeNested from '../../examples/foundations/ThemeNested';
 import themeNestedSource from '../../examples/foundations/ThemeNested.tsx?raw';
+import ThemePortal from '../../examples/foundations/ThemePortal';
+import themePortalSource from '../../examples/foundations/ThemePortal.tsx?raw';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('theme-provider', {
@@ -41,8 +43,8 @@ export default defineComponentPage('theme-provider', {
         },
         {
           id: 'theme-tokens',
-          title: '定制颜色与 Portal 传播',
-          description: '定制主题颜色，打开弹窗查看相同配色。',
+          title: '定制语义颜色',
+          description: '通过 tokens 覆盖强调色及其悬停颜色。',
           component: ThemeTokensExample,
           source: themeTokensSource,
           themeScope: 'explicit',
@@ -53,6 +55,14 @@ export default defineComponentPage('theme-provider', {
           description: '对比外层自定义绿色与内层浅黄预设。',
           component: ThemeNested,
           source: themeNestedSource,
+          themeScope: 'explicit',
+        },
+        {
+          id: 'theme-portal',
+          title: '弹出内容沿用主题',
+          description: '打开弹窗，查看挂载到 Portal 的内容如何沿用 ThemeProvider 配色。',
+          component: ThemePortal,
+          source: themePortalSource,
           themeScope: 'explicit',
         },
       ],

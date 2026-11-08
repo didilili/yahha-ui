@@ -8,20 +8,6 @@ export default function RadioGroupBasic() {
     { value: 'monthly', label: '每月精选' },
   ];
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-      <RadioGroup
-        label="来信频率"
-        value={frequency}
-        onValueChange={setFrequency}
-        options={options}
-      />
-      <RadioGroup
-        label="来信频率（整行高亮）"
-        value={frequency}
-        onValueChange={setFrequency}
-        options={options}
-        highlightSelected
-      />
-    </div>
+    <RadioGroup label="来信频率" value={frequency} onValueChange={setFrequency} options={options} />
   );
 }

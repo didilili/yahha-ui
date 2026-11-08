@@ -26,7 +26,7 @@ Dialog 使用受控状态，调用方必须保存 open 并响应 onOpenChange。
 
 ### 基础用法
 
-打开阅读提示，关闭后返回触发按钮。
+通过 trigger 打开弹窗，关闭后焦点返回触发按钮。
 
 [查看示例文件](../../playground/src/examples/feedback/DialogBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -57,7 +57,7 @@ export default function DialogBasic() {
 
 ### 外部按钮打开与焦点返回
 
-从外部按钮打开阅读提醒，关闭后返回原按钮。
+由外部按钮更新 open，并通过 finalFocus 指定关闭后的焦点。
 
 [查看示例文件](../../playground/src/examples/feedback/DialogExternal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -96,13 +96,13 @@ export default function DialogExternal() {
 
 ## 进阶用法
 
-修改标题后，取消、Escape、关闭按钮和外点共用退出策略；确认态在同一操作区提供继续编辑、保存标题或明确放弃。 结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
+关闭保护由调用方实现；修改标题后，取消、Escape、关闭按钮和外点共用退出策略。 结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
 
 <a id="form"></a>
 
 ### 未保存修改的关闭确认
 
-存在未保存修改时，在同一操作区继续编辑、保存标题或放弃修改。
+修改标题后请求关闭，观察调用方如何保留草稿并确认是否放弃。
 
 [查看示例文件](../../playground/src/examples/feedback/DialogForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 

@@ -1,5 +1,7 @@
 import SpinnerExample from '../../examples/content/SpinnerExample';
 import spinnerSource from '../../examples/content/SpinnerExample.tsx?raw';
+import SpinnerVariants from '../../examples/content/SpinnerVariants';
+import spinnerVariantsSource from '../../examples/content/SpinnerVariants.tsx?raw';
 import SpinnerWaiting from '../../examples/content/SpinnerWaiting';
 import spinnerWaitingSource from '../../examples/content/SpinnerWaiting.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -25,10 +27,17 @@ export default defineComponentPage('spinner', {
       examples: [
         example(
           'spinner-sizes',
-          '样式与尺寸',
-          '对比默认三墨点与可选小花饼的三档尺寸。',
+          '尺寸',
+          '使用默认三墨点对比小、中、大三档尺寸。',
           SpinnerExample,
           spinnerSource,
+        ),
+        example(
+          'spinner-variants',
+          '加载图形',
+          '使用相同尺寸对比默认三墨点与可选小花饼。',
+          SpinnerVariants,
+          spinnerVariantsSource,
         ),
         example(
           'spinner-waiting',

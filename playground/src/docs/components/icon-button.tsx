@@ -1,11 +1,15 @@
+import IconButtonMinimal from '../../examples/foundations/IconButtonMinimal';
+import iconButtonMinimalSource from '../../examples/foundations/IconButtonMinimal.tsx?raw';
+import IconButtonToggle from '../../examples/foundations/IconButtonToggle';
+import iconButtonToggleSource from '../../examples/foundations/IconButtonToggle.tsx?raw';
 import IconButtonBasic from '../../examples/foundations/IconButtonBasic';
 import iconButtonBasicSource from '../../examples/foundations/IconButtonBasic.tsx?raw';
 import IconButtonSizes from '../../examples/foundations/IconButtonSizes';
 import iconButtonSizesSource from '../../examples/foundations/IconButtonSizes.tsx?raw';
 import IconButtonVariants from '../../examples/foundations/IconButtonVariants';
 import iconButtonVariantsSource from '../../examples/foundations/IconButtonVariants.tsx?raw';
-import IconButtonSoftActions from '../../examples/foundations/IconButtonSoftActions';
-import iconButtonSoftActionsSource from '../../examples/foundations/IconButtonSoftActions.tsx?raw';
+import IconButtonAppearance from '../../examples/foundations/IconButtonAppearance';
+import iconButtonAppearanceSource from '../../examples/foundations/IconButtonAppearance.tsx?raw';
 import IconButtonStates from '../../examples/foundations/IconButtonStates';
 import iconButtonStatesSource from '../../examples/foundations/IconButtonStates.tsx?raw';
 import IconButtonLoading from '../../examples/foundations/IconButtonLoading';
@@ -40,11 +44,11 @@ export default defineComponentPage('icon-button', {
       title: '代码演示',
       examples: [
         {
-          id: 'icon-button-basic',
+          id: 'icon-button-minimal',
           title: '基础用法',
-          description: '关闭提示后可重新显示；示例将焦点移到可用按钮。',
-          component: IconButtonBasic,
-          source: iconButtonBasicSource,
+          description: '用 aria-label 为图标操作命名，点击后更新相邻计数。',
+          component: IconButtonMinimal,
+          source: iconButtonMinimalSource,
         },
         {
           id: 'icon-button-variants',
@@ -54,38 +58,52 @@ export default defineComponentPage('icon-button', {
           source: iconButtonVariantsSource,
         },
         {
-          id: 'icon-button-decorations',
-          title: '软团操作与状态',
-          description:
-            '对比常规与软团外观、默认三墨点与显式小花饼；点击书签切换收藏，状态仅保留在当前示例。',
-          component: IconButtonSoftActions,
-          source: iconButtonSoftActionsSource,
-        },
-        {
           id: 'icon-button-sizes',
           title: '尺寸',
-          description: '对比 36、44 和 52px 三档尺寸。',
+          description: '用相同图标对比小号、中号和大号点击区域。',
           component: IconButtonSizes,
           source: iconButtonSizesSource,
         },
         {
           id: 'icon-button-states',
           title: '禁用与加载',
-          description: '静态对比禁用和加载状态。',
+          description: '对比禁用和两种加载图形；图形替换图标，可访问名称仍保留。',
           component: IconButtonStates,
           source: iconButtonStatesSource,
+        },
+        {
+          id: 'icon-button-toggle',
+          title: '切换按钮',
+          description: '点击切换收藏状态，按钮名称保持不变。',
+          component: IconButtonToggle,
+          source: iconButtonToggleSource,
+        },
+        {
+          id: 'icon-button-decorations',
+          title: '常规与软团外观',
+          description: '保持图标、尺寸和强调程度一致，只比较 appearance。',
+          component: IconButtonAppearance,
+          source: iconButtonAppearanceSource,
         },
       ],
     },
     {
       id: 'integration',
       title: '进阶用法',
-      disclosure: '查看异步与列表操作',
+      disclosure: '查看关闭、异步与列表操作',
       content: <p>收藏状态只保留在当前示例，刷新后恢复。</p>,
       examples: [
         {
+          id: 'icon-button-basic',
+          title: '关闭与重新显示',
+          description: '关闭提示后聚焦重新显示入口，再次显示后回到关闭按钮。',
+          component: IconButtonBasic,
+          source: iconButtonBasicSource,
+          toc: false,
+        },
+        {
           id: 'icon-button-loading',
-          title: '受控加载与选中',
+          title: '异步加载与选中',
           description: '模拟更新收藏，展示等待与选中状态；不发送请求。',
           component: IconButtonLoading,
           source: iconButtonLoadingSource,
@@ -146,7 +164,7 @@ export default defineComponentPage('icon-button', {
           </p>
           <p>
             加载结束不会自动恢复焦点，应由调用方按任务安排。关闭提示并卸载按钮时，需把焦点移到可用入口；
-            基础示例在关闭与重新显示后管理回焦，初次展示不移动焦点。
+            “关闭与重新显示”示例在切换后管理回焦，初次展示不移动焦点。
           </p>
           <p>
             同一清单有多个收藏入口时，名称包含对应文章标题，切换前后保持不变。在收藏视图取消收藏，

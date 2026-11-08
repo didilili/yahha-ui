@@ -65,6 +65,100 @@ export default function TabsBasic() {
 }
 ```
 
+<a id="controlled-value"></a>
+
+### 受控切换
+
+切换标签，同步显示当前选择。
+
+[查看示例文件](../../playground/src/examples/navigation/TabsValue.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/TabsValue.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Tabs, Text } from 'yahha-ui';
+
+export default function TabsValue() {
+  const [value, setValue] = useState<string | null>('notes');
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Tabs
+        label="小站栏目"
+        value={value}
+        onValueChange={setValue}
+        items={[
+          { value: 'notes', label: '手记', content: <p>今天想记下的一件小事。</p> },
+          { value: 'photos', label: '相册', content: <p>这一周拍下的树影与晚霞。</p> },
+        ]}
+      />
+      <Text size="sm" tone="muted" role="status">
+        当前栏目：{value === 'notes' ? '手记' : '相册'}
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="states"></a>
+
+### 禁用标签与长标签
+
+分别查看不可用的标签，以及窄容器中长标签的换行。
+
+[查看示例文件](../../playground/src/examples/navigation/TabsStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/navigation/TabsStates.tsx -->
+
+```tsx
+import { Tabs, Text } from 'yahha-ui';
+
+export default function TabsStates() {
+  return (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <div style={{ display: 'grid', gap: 12 }}>
+        <Text size="sm" tone="muted">
+          禁用标签
+        </Text>
+        <Tabs
+          label="小站栏目可用状态"
+          items={[
+            { value: 'notes', label: '手记', content: <p>今天想记下的一件小事。</p> },
+            {
+              value: 'archive',
+              label: '旧站归档（整理中）',
+              content: <p>旧文章正在整理。</p>,
+              disabled: true,
+            },
+          ]}
+        />
+      </div>
+      <div style={{ display: 'grid', gap: 12, maxWidth: 360 }}>
+        <Text size="sm" tone="muted">
+          长标签换行
+        </Text>
+        <Tabs
+          label="小站阅读说明"
+          items={[
+            {
+              value: 'about',
+              label: '关于这个小站与慢慢更新的日常记录',
+              content: <p>这里记下散步绕过的路、书里的句子和没忍住多买的点心。</p>,
+            },
+            {
+              value: 'contact',
+              label: '来信方式',
+              content: <p>可以在文章末尾找到作者留下的联系方式。</p>,
+            },
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="appearance"></a>
 
 ### 普通与墨线
@@ -108,82 +202,6 @@ export default function TabsAppearance() {
         </div>
       ))}
     </div>
-  );
-}
-```
-
-<a id="controlled-value"></a>
-
-### 受控切换
-
-切换标签，同步显示当前选择。
-
-[查看示例文件](../../playground/src/examples/navigation/TabsValue.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/navigation/TabsValue.tsx -->
-
-```tsx
-import { useState } from 'react';
-import { Tabs, Text } from 'yahha-ui';
-
-export default function TabsValue() {
-  const [value, setValue] = useState<string | null>('notes');
-
-  return (
-    <div style={{ display: 'grid', gap: 16 }}>
-      <Tabs
-        label="小站栏目"
-        value={value}
-        onValueChange={setValue}
-        items={[
-          { value: 'notes', label: '手记', content: <p>今天想记下的一件小事。</p> },
-          { value: 'photos', label: '相册', content: <p>这一周拍下的树影与晚霞。</p> },
-        ]}
-      />
-      <Text size="sm" tone="muted" role="status">
-        当前栏目：{value === 'notes' ? '手记' : '相册'}
-      </Text>
-    </div>
-  );
-}
-```
-
-<a id="states"></a>
-
-### 长标签与禁用栏目
-
-对比长标签与暂不可用的归档栏目。
-
-[查看示例文件](../../playground/src/examples/navigation/TabsStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/navigation/TabsStates.tsx -->
-
-```tsx
-import { Tabs } from 'yahha-ui';
-
-export default function TabsStates() {
-  return (
-    <Tabs
-      label="小站阅读说明"
-      items={[
-        {
-          value: 'about',
-          label: '关于这个小站与慢慢更新的日常记录',
-          content: <p>这里记下散步绕过的路、书里的句子和没忍住多买的点心。</p>,
-        },
-        {
-          value: 'contact',
-          label: '来信方式',
-          content: <p>可以在文章末尾找到作者留下的联系方式。</p>,
-        },
-        {
-          value: 'archive',
-          label: '旧站归档（整理中）',
-          content: <p>旧文章正在整理。</p>,
-          disabled: true,
-        },
-      ]}
-    />
   );
 }
 ```

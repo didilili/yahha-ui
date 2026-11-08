@@ -2,6 +2,8 @@ import ToastSimple from '../../examples/feedback/ToastSimple';
 import toastSimpleSource from '../../examples/feedback/ToastSimple.tsx?raw';
 import ToastBasic from '../../examples/feedback/ToastBasic';
 import toastBasicSource from '../../examples/feedback/ToastBasic.tsx?raw';
+import ToastAction from '../../examples/feedback/ToastAction';
+import toastActionSource from '../../examples/feedback/ToastAction.tsx?raw';
 import ToastTones from '../../examples/feedback/ToastTones';
 import toastTonesSource from '../../examples/feedback/ToastTones.tsx?raw';
 import ToastTimer from '../../examples/feedback/ToastTimer';
@@ -48,9 +50,16 @@ export default defineComponentPage('toast', {
           source: toastTonesSource,
         },
         {
+          id: 'toast-action',
+          title: '带操作的提示',
+          description: '通过 action 提供后续链接，关闭提示后可重新显示。',
+          component: ToastAction,
+          source: toastActionSource,
+        },
+        {
           id: 'appearance',
           title: '普通与回执外观',
-          description: '对比相同内容与操作；回执显式加入印签和浅色操作纸面，撤销只更新本地示例。',
+          description: '使用相同内容和链接，对比回执增加的印签与浅色操作纸面。',
           component: ToastAppearance,
           source: toastAppearanceSource,
         },
@@ -66,7 +75,7 @@ export default defineComponentPage('toast', {
       examples: [
         {
           id: 'basic',
-          title: '带操作的提示',
+          title: '操作入口与关闭后的焦点',
           description: '点击提示内的操作查看清单，关闭后仍可从常驻入口访问。',
           component: ToastBasic,
           source: toastBasicSource,
@@ -94,9 +103,7 @@ export default defineComponentPage('toast', {
             的 status
             外，避免每次计时更新重复播报提示。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
           </p>
-          <p>
-            带操作的提示例保留清单入口；查看操作聚焦常驻清单标题，关闭提示不会丢失已加入的内容。
-          </p>
+          <p>进阶示例保留常驻清单入口；查看操作聚焦清单标题，关闭提示不会丢失已加入的内容。</p>
         </>
       ),
     },

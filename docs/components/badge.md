@@ -22,9 +22,9 @@ import { Badge } from 'yahha-ui';
 
 <a id="badge-tones"></a>
 
-### 标记类型与组合
+### 语义颜色
 
-对比三种标记、行内组合和长标签换行。
+使用相同文字对比普通、强调和成功三种颜色。
 
 [查看示例文件](../../playground/src/examples/foundations/BadgeTones.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -35,24 +35,42 @@ import { Badge, Text } from 'yahha-ui';
 
 export default function BadgeTones() {
   return (
-    <div style={{ display: 'grid', justifyItems: 'start', gap: 20 }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', gap: 20 }}>
-        {(
-          [
-            { tone: 'neutral', label: '随笔' },
-            { tone: 'accent', label: '阅读中' },
-            { tone: 'success', label: '已读' },
-          ] as const
-        ).map(({ tone, label }) => (
-          <div key={tone} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-            <Text size="sm" tone="muted">
-              {tone === 'neutral' ? '普通' : tone === 'accent' ? '强调' : '成功'}
-              {tone === 'neutral' ? '（默认）' : ''}
-            </Text>
-            <Badge tone={tone}>{label}</Badge>
-          </div>
-        ))}
-      </div>
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', gap: 20 }}>
+      {(
+        [
+          { tone: 'neutral', label: '普通（默认）' },
+          { tone: 'accent', label: '强调' },
+          { tone: 'success', label: '成功' },
+        ] as const
+      ).map(({ tone, label }) => (
+        <div key={tone} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <Text size="sm" tone="muted">
+            {label}
+          </Text>
+          <Badge tone={tone}>已读</Badge>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+<a id="badge-content"></a>
+
+### 行内与长文本
+
+分别查看正文中的行内标记，以及中文和连续长词的换行。
+
+[查看示例文件](../../playground/src/examples/foundations/BadgeContent.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/foundations/BadgeContent.tsx -->
+
+```tsx
+import { Badge, Text } from 'yahha-ui';
+
+export default function BadgeContent() {
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
       <div style={{ display: 'grid', gap: 8 }}>
         <Text size="sm" tone="muted">
           行内组合
@@ -63,7 +81,7 @@ export default function BadgeTones() {
       </div>
       <div style={{ display: 'grid', justifyItems: 'start', gap: 12, maxWidth: 220 }}>
         <Text size="sm" tone="muted">
-          长标签换行
+          长文本换行
         </Text>
         <Badge tone="success">本周已经整理完成、可以慢慢读的散步与阅读记录</Badge>
         <Badge tone="neutral">PersonalJournalWithAVeryLongUnbrokenCategoryName</Badge>

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { revealExample } from './reveal-example.mjs';
 
 export async function verifyIconExamples(page) {
   const gallery = page.locator('#icon-gallery .example-preview');
@@ -9,6 +10,7 @@ export async function verifyIconExamples(page) {
     'Labels already name decorative samples.',
   );
   const composition = page.locator('#icon-composition .example-preview');
+  await revealExample(composition);
   const field = composition.getByRole('textbox', { name: '搜索手记', exact: true });
   const result = composition.getByRole('status');
   const clear = composition.getByRole('button', { name: '清空手记搜索', exact: true });

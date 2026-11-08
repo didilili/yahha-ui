@@ -146,11 +146,54 @@ export default function ToastTones() {
 }
 ```
 
+<a id="toast-action"></a>
+
+### 带操作的提示
+
+通过 action 提供后续链接，关闭提示后可重新显示。
+
+[查看示例文件](../../playground/src/examples/feedback/ToastAction.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/feedback/ToastAction.tsx -->
+
+```tsx
+import { useRef, useState } from 'react';
+import { Button, Link, Toast } from 'yahha-ui';
+
+export default function ToastAction() {
+  const [open, setOpen] = useState(true);
+  const message = useRef<HTMLDivElement>(null);
+  const show = useRef<HTMLButtonElement>(null);
+
+  return (
+    <div style={{ display: 'grid', gap: 16, maxWidth: 480 }}>
+      <div ref={message}>
+        <Toast
+          open={open}
+          title="手记已收藏"
+          description="《周末散步》已经加入收藏夹。"
+          action={<Link href="#/guides/reading">继续阅读</Link>}
+          onClose={() => {
+            if (message.current?.contains(document.activeElement)) show.current?.focus();
+            setOpen(false);
+          }}
+        />
+      </div>
+      <div>
+        <Button ref={show} variant="secondary" onClick={() => setOpen(true)}>
+          重新显示提示
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="appearance"></a>
 
 ### 普通与回执外观
 
-对比相同内容与操作；回执显式加入印签和浅色操作纸面，撤销只更新本地示例。
+使用相同内容和链接，对比回执增加的印签与浅色操作纸面。
 
 [查看示例文件](../../playground/src/examples/feedback/ToastAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -158,11 +201,10 @@ export default function ToastTones() {
 
 ```tsx
 import { useRef, useState } from 'react';
-import { Button, Text, Toast } from 'yahha-ui';
+import { Button, Link, Text, Toast } from 'yahha-ui';
 
 function AppearanceSample({ appearance }: { appearance: 'default' | 'receipt' }) {
   const [open, setOpen] = useState(true);
-  const [saved, setSaved] = useState(true);
   const restore = useRef<HTMLButtonElement>(null);
   const message = useRef<HTMLDivElement>(null);
 
@@ -183,29 +225,11 @@ function AppearanceSample({ appearance }: { appearance: 'default' | 'receipt' })
           title="手记已收藏"
           description="《周末散步》已经加入收藏夹。"
           onClose={dismiss}
-          action={
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setSaved(false);
-                dismiss();
-              }}
-            >
-              撤销收藏
-            </Button>
-          }
+          action={<Link href="#/guides/reading">继续阅读</Link>}
         />
       </div>
-      {!saved && <Text size="sm">已撤销本地示例收藏。</Text>}
       <div>
-        <Button
-          ref={restore}
-          variant="secondary"
-          onClick={() => {
-            setSaved(true);
-            setOpen(true);
-          }}
-        >
+        <Button ref={restore} variant="secondary" onClick={() => setOpen(true)}>
           重新显示提示
         </Button>
       </div>
@@ -237,7 +261,7 @@ export default function ToastAppearance() {
 
 <a id="basic"></a>
 
-### 带操作的提示
+### 操作入口与关闭后的焦点
 
 点击提示内的操作查看清单，关闭后仍可从常驻入口访问。
 
@@ -490,7 +514,7 @@ export default function ToastTimer() {
 
 自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；计时与撤销示例等待 8 秒后关闭，悬停、聚焦或页面进入后台时暂停，恢复后只计剩余时间。示例将 Progress 放在 Toast 的 status 外，避免每次计时更新重复播报提示。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
 
-带操作的提示例保留清单入口；查看操作聚焦常驻清单标题，关闭提示不会丢失已加入的内容。
+进阶示例保留常驻清单入口；查看操作聚焦清单标题，关闭提示不会丢失已加入的内容。
 
 <a id="api"></a>
 

@@ -40,13 +40,6 @@ export default defineComponentPage('tabs', {
           source: tabsBasicSource,
         },
         {
-          id: 'appearance',
-          title: '普通与墨线',
-          description: '普通标签保留直线选中标记；ink 增加倾斜墨线与选中纸面。',
-          component: TabsAppearance,
-          source: tabsAppearanceSource,
-        },
-        {
           id: 'controlled-value',
           title: '受控切换',
           description: '切换标签，同步显示当前选择。',
@@ -55,10 +48,17 @@ export default defineComponentPage('tabs', {
         },
         {
           id: 'states',
-          title: '长标签与禁用栏目',
-          description: '对比长标签与暂不可用的归档栏目。',
+          title: '禁用标签与长标签',
+          description: '分别查看不可用的标签，以及窄容器中长标签的换行。',
           component: TabsStates,
           source: tabsStatesSource,
+        },
+        {
+          id: 'appearance',
+          title: '普通与墨线',
+          description: '普通标签保留直线选中标记；ink 增加倾斜墨线与选中纸面。',
+          component: TabsAppearance,
+          source: tabsAppearanceSource,
         },
       ],
     },

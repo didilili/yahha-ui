@@ -59,9 +59,9 @@ export default function SegmentedBasic() {
 
 <a id="disabled"></a>
 
-### 禁用选项与整组禁用
+### 禁用选项
 
-对比单项与整组禁用，并切换整组可用状态。
+切换可用选项，禁用项保留可见并说明原因。
 
 [查看示例文件](../../playground/src/examples/forms/SegmentedDisabled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
 
@@ -69,55 +69,126 @@ export default function SegmentedBasic() {
 
 ```tsx
 import { useId, useState } from 'react';
-import { Button, SegmentedControl, Text } from 'yahha-ui';
+import { SegmentedControl, Text } from 'yahha-ui';
 
 type Visibility = 'public' | 'private' | 'unlisted';
 
 export default function SegmentedDisabled() {
   const descriptionId = useId();
   const [visibility, setVisibility] = useState<Visibility>('public');
-  const [lockedVisibility, setLockedVisibility] = useState<Visibility>('public');
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+      <Text id={descriptionId} size="sm" tone="muted">
+        暂未开放“仅持链接者可见”。
+      </Text>
+      <SegmentedControl
+        label="文章可见性"
+        aria-describedby={descriptionId}
+        value={visibility}
+        onValueChange={setVisibility}
+        options={[
+          { value: 'public', label: '公开' },
+          { value: 'private', label: '仅自己' },
+          { value: 'unlisted', label: '仅持链接者', disabled: true },
+        ]}
+      />
+    </div>
+  );
+}
+```
+
+<a id="segmented-group-disabled"></a>
+
+### 整组禁用
+
+切换父 fieldset 的禁用状态，保留当前选择。
+
+[查看示例文件](../../playground/src/examples/forms/SegmentedGroupDisabled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/forms/SegmentedGroupDisabled.tsx -->
+
+```tsx
+import { useId, useState } from 'react';
+import { Button, SegmentedControl, Text } from 'yahha-ui';
+
+type Visibility = 'public' | 'private';
+
+export default function SegmentedGroupDisabled() {
+  const descriptionId = useId();
+  const [visibility, setVisibility] = useState<Visibility>('public');
   const [locked, setLocked] = useState(true);
 
   return (
-    <div style={{ display: 'grid', justifyItems: 'start', gap: 24 }}>
-      <div style={{ display: 'grid', gap: 8 }}>
-        <Text size="sm">暂未开放“仅持链接者可见”。</Text>
+    <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+      <Text id={descriptionId} size="sm" tone="muted">
+        {locked ? '整组已禁用，保留当前选择。' : '整组已恢复，可以更改选择。'}
+      </Text>
+      <fieldset
+        aria-label="文章设置"
+        disabled={locked}
+        style={{ margin: 0, padding: 0, border: 0, minWidth: 0 }}
+      >
         <SegmentedControl
-          label="文章可见性"
+          label="整组文章可见性"
+          aria-describedby={descriptionId}
           value={visibility}
           onValueChange={setVisibility}
           options={[
             { value: 'public', label: '公开' },
             { value: 'private', label: '仅自己' },
-            { value: 'unlisted', label: '仅持链接者', disabled: true },
           ]}
         />
-      </div>
-      <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-        <Text id={descriptionId} size="sm">
-          {locked ? '整组已禁用，保留当前选择。' : '整组已恢复，可以更改选择。'}
-        </Text>
-        <fieldset
-          aria-label="文章设置"
-          disabled={locked}
-          style={{ margin: 0, padding: 0, border: 0, minWidth: 0 }}
-        >
-          <SegmentedControl
-            label="整组文章可见性"
-            aria-describedby={descriptionId}
-            value={lockedVisibility}
-            onValueChange={setLockedVisibility}
-            options={[
-              { value: 'public', label: '公开' },
-              { value: 'private', label: '仅自己' },
-            ]}
-          />
-        </fieldset>
-        <Button variant="secondary" onClick={() => setLocked((current) => !current)}>
-          {locked ? '解除整组禁用' : '禁用整组'}
-        </Button>
-      </div>
+      </fieldset>
+      <Button variant="secondary" onClick={() => setLocked((current) => !current)}>
+        {locked ? '解除整组禁用' : '禁用整组'}
+      </Button>
+    </div>
+  );
+}
+```
+
+<a id="long-labels"></a>
+
+### 长标签与窄容器
+
+在窄栏中切换专题，查看选项如何换行排列。
+
+[查看示例文件](../../playground/src/examples/forms/SegmentedLongLabels.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+
+<!-- example-source: playground/src/examples/forms/SegmentedLongLabels.tsx -->
+
+```tsx
+import { useId, useState } from 'react';
+import { SegmentedControl, Text } from 'yahha-ui';
+
+type Topic = 'life' | 'learning' | 'travel';
+
+export default function SegmentedLongLabels() {
+  const descriptionId = useId();
+  const [topic, setTopic] = useState<Topic>('life');
+  const labels = {
+    life: '日常生活里的小小发现',
+    learning: '慢慢积累的学习笔记',
+    travel: '出门走走与旅行记录',
+  };
+
+  return (
+    <div style={{ display: 'grid', gap: 16, width: '100%', maxWidth: 350 }}>
+      <Text id={descriptionId} size="sm" tone="muted">
+        选择一个想浏览的文章专题。
+      </Text>
+      <SegmentedControl
+        label="文章专题"
+        aria-describedby={descriptionId}
+        value={topic}
+        onValueChange={setTopic}
+        options={[
+          { value: 'life', label: labels.life },
+          { value: 'learning', label: labels.learning },
+          { value: 'travel', label: labels.travel },
+        ]}
+      />
     </div>
   );
 }
@@ -342,52 +413,6 @@ export default function SegmentedForm() {
         {result}
       </Text>
     </form>
-  );
-}
-```
-
-<a id="long-labels"></a>
-
-### 长标签与窄容器
-
-在窄栏中切换专题，查看选项如何换行排列。
-
-[查看示例文件](../../playground/src/examples/forms/SegmentedLongLabels.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/forms/SegmentedLongLabels.tsx -->
-
-```tsx
-import { useId, useState } from 'react';
-import { SegmentedControl, Text } from 'yahha-ui';
-
-type Topic = 'life' | 'learning' | 'travel';
-
-export default function SegmentedLongLabels() {
-  const descriptionId = useId();
-  const [topic, setTopic] = useState<Topic>('life');
-  const labels = {
-    life: '日常生活里的小小发现',
-    learning: '慢慢积累的学习笔记',
-    travel: '出门走走与旅行记录',
-  };
-
-  return (
-    <div style={{ display: 'grid', gap: 16, width: '100%', maxWidth: 350 }}>
-      <Text id={descriptionId} size="sm" tone="muted">
-        选择一个想浏览的文章专题。
-      </Text>
-      <SegmentedControl
-        label="文章专题"
-        aria-describedby={descriptionId}
-        value={topic}
-        onValueChange={setTopic}
-        options={[
-          { value: 'life', label: labels.life },
-          { value: 'learning', label: labels.learning },
-          { value: 'travel', label: labels.travel },
-        ]}
-      />
-    </div>
   );
 }
 ```
