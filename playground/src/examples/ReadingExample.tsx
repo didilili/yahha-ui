@@ -13,7 +13,7 @@ import {
   Surface,
   Switch,
   Text,
-  TextField,
+  Input,
   ThemeProvider,
 } from 'yahha-ui';
 import 'yahha-ui/style.css';
@@ -164,7 +164,7 @@ export default function ReadingExample() {
               setNotice('');
             }}
           />
-          <TextField
+          <Input
             ref={searchRef}
             label="搜索手记"
             type="search"

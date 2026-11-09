@@ -1,0 +1,63 @@
+.doc-search-dialog {
+  width: min(680px, calc(100vw - 32px));
+}
+.doc-search-dialog-content {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.doc-search-dialog-input::-webkit-search-cancel-button {
+  display: none;
+}
+.doc-search-dialog-results {
+  min-height: 0;
+  max-height: min(440px, calc(100dvh - 240px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block: 8px;
+}
+.doc-search-dialog-message {
+  margin: 0;
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: 14px;
+}
+.doc-search-dialog-error {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+}
+.doc-search-dialog .doc-search-count {
+  margin: 0 8px 8px;
+  font-size: 14px;
+}
+.doc-search-dialog .doc-search-results {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.doc-search-dialog .doc-search-results a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--yahha-line, #c58ba1);
+  overflow-wrap: anywhere;
+}
+.doc-search-dialog .doc-search-results a:hover,
+.doc-search-dialog .doc-search-results a:focus-visible {
+  background: var(--yahha-accent-soft, #fff0f6);
+}
+.doc-search-dialog .doc-search-results a:focus-visible {
+  outline: var(--yahha-focus-width, 2px) solid var(--yahha-focus, #b04e78);
+  outline-offset: -2px;
+}
+.doc-search-dialog .search-result-page,
+.doc-search-dialog .search-result-meta,
+.doc-search-dialog .search-result-description {
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.doc-search-dialog-results > button {
+  margin-top: 12px;
+}

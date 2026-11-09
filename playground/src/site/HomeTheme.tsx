@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Button, Link, Popover, SegmentedControl, TextField, ThemeProvider } from 'yahha-ui';
+import { Badge, Button, Link, Popover, SegmentedControl, Input, ThemeProvider } from 'yahha-ui';
 import { CodeBlock } from '../docs/CodeBlock';
 import './home-theme.css';
 
@@ -16,7 +16,7 @@ export default function HomeTheme() {
   const label = themeOptions.find((option) => option.value === theme)?.label;
   const source = `<ThemeProvider theme="${theme}">
   <Badge tone="accent">阅读订阅</Badge>
-  <TextField label="订阅邮箱" placeholder="you@example.com" />
+  <Input label="订阅邮箱" placeholder="you@example.com" />
   <Popover
     trigger={<Button>查看配色说明</Button>}
     title="配色说明"
@@ -46,7 +46,7 @@ export default function HomeTheme() {
           <div>
             <Badge tone="accent">阅读订阅</Badge>
           </div>
-          <TextField
+          <Input
             type="email"
             label="订阅邮箱"
             placeholder="you@example.com"

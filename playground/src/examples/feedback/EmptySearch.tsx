@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, EmptyState, Text, TextField } from 'yahha-ui';
+import { Button, EmptyState, Text, Input } from 'yahha-ui';
 
 const articles = ['雨天书单', '周末散步'];
 
@@ -15,7 +15,7 @@ export default function EmptySearch() {
 
   return (
     <div style={{ display: 'grid', gap: 24 }}>
-      <TextField
+      <Input
         ref={inputRef}
         label="搜索文章"
         value={query}

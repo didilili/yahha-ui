@@ -223,6 +223,8 @@ export function searchDocumentation(
     // A page name alone should not flood results with all of that page's sections.
     if (!terms.some((term) => ownText.includes(term))) return [];
     let score = ['component', 'guide', 'overview'].includes(entry.kind) ? 10 : 0;
+    // An exact component name/alias is a destination, ahead of similarly named API subparts.
+    if (entry.kind === 'component' && keywords.includes(normalizedQuery)) score += 40;
     if (keywords.includes(normalizedQuery)) score += 150;
     if (title === normalizedQuery) score += 120;
     for (const term of terms) {

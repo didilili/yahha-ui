@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, Text, TextField } from 'yahha-ui';
+import { Button, Text, Input } from 'yahha-ui';
 
 export default function TextFieldNative() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -11,14 +11,14 @@ export default function TextFieldNative() {
         <Text size="sm" tone="muted">
           输入类型
         </Text>
-        <TextField
+        <Input
           label="示例密码"
           type="password"
           autoComplete="new-password"
           placeholder="输入密码"
         />
-        <TextField label="记录日期" type="date" name="recordDate" defaultValue="2026-10-28" />
-        <TextField label="记录时间" type="time" name="recordTime" defaultValue="10:30" />
+        <Input label="记录日期" type="date" name="recordDate" defaultValue="2026-10-28" />
+        <Input label="记录时间" type="time" name="recordTime" defaultValue="10:30" />
       </div>
       <div style={{ display: 'grid', gap: 16 }}>
         <Text size="sm" tone="muted">
@@ -32,7 +32,7 @@ export default function TextFieldNative() {
             setResult('检查结果：邮箱格式正确。');
           }}
         >
-          <TextField
+          <Input
             ref={inputRef}
             label="联系邮箱"
             type="email"

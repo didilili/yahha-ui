@@ -4,6 +4,8 @@ import AccordionControlled from '../../examples/navigation/AccordionControlled';
 import accordionControlledSource from '../../examples/navigation/AccordionControlled.tsx?raw';
 import AccordionStates from '../../examples/navigation/AccordionStates';
 import accordionStatesSource from '../../examples/navigation/AccordionStates.tsx?raw';
+import AccordionDisabled from '../../examples/navigation/AccordionDisabled';
+import accordionDisabledSource from '../../examples/navigation/AccordionDisabled.tsx?raw';
 import AccordionAppearance from '../../examples/navigation/AccordionAppearance';
 import accordionAppearanceSource from '../../examples/navigation/AccordionAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -35,10 +37,25 @@ export default defineComponentPage('accordion', {
         },
         {
           id: 'states',
-          title: '多项展开、受控与禁用',
-          description: '分别查看受控多项展开与不可用的条目。',
+          title: '多项展开（受控）',
+          description: '同时展开多个条目，由 value 管理展开项；全部收起后保留操作按钮焦点。',
           component: AccordionStates,
           source: accordionStatesSource,
+        },
+        {
+          id: 'disabled',
+          title: '禁用项目',
+          description: '禁用标题不能聚焦或切换展开状态。',
+          component: AccordionDisabled,
+          source: accordionDisabledSource,
+        },
+        {
+          id: 'controlled',
+          title: '筛选与受控展开项同步',
+          description:
+            '由调用方同步筛选后的 items 与受控 value，批量展开当前可用项；状态仅保留在本例。',
+          component: AccordionControlled,
+          source: accordionControlledSource,
         },
         {
           id: 'appearance',
@@ -46,22 +63,6 @@ export default defineComponentPage('accordion', {
           description: '普通外观保留箭头与展开反馈；soft 增加圆形箭头底座与更明显的展开纸面。',
           component: AccordionAppearance,
           source: accordionAppearanceSource,
-        },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看筛选与多项展开示例',
-      content: <p>筛选和展开状态仅保留在当前示例。</p>,
-      examples: [
-        {
-          id: 'controlled',
-          title: '筛选与多项展开',
-          description: '搜索标题并展开当前可用项；筛掉的展开项会收起。',
-          component: AccordionControlled,
-          source: accordionControlledSource,
-          toc: false,
         },
       ],
     },
@@ -89,6 +90,37 @@ export default defineComponentPage('accordion', {
             清空搜索恢复说明列表，不会重新打开已被筛走的项目；批量展开只作用当前可见且可用的说明。
           </li>
         </ul>
+      ),
+    },
+    {
+      id: 'keyboard',
+      title: '可访问性与键盘',
+      content: (
+        <ul>
+          <li>
+            标题是 heading 中的原生按钮；headingLevel
+            应匹配所在页面的标题结构。标题内不嵌套链接或其他按钮。
+          </li>
+          <li>
+            Tab / Shift+Tab 按顺序聚焦可用标题按钮，Enter / Space
+            展开或收起；当前实现不使用方向键切换标题焦点。
+          </li>
+          <li>键盘焦点轮廓收进标题行；组合有内容裁切的大圆角容器时，仍需保留适当内间距。</li>
+          <li>
+            组件管理展开状态与标题、面板之间的语义关联。禁用标题按钮退出 Tab
+            顺序，展开或收起不会自动把焦点移入正文。
+          </li>
+        </ul>
+      ),
+    },
+    {
+      id: 'styling',
+      title: '长标题与正文',
+      content: (
+        <p>
+          标题自动换行，正文不按固定高度截断。为折叠区设置宽度或局部样式时，保留整行标题的点击区域；
+          链接、复制按钮和表单放在正文中，避免嵌入标题按钮。
+        </p>
       ),
     },
     {
@@ -183,37 +215,6 @@ export default defineComponentPage('accordion', {
           ],
         },
       ],
-    },
-    {
-      id: 'keyboard',
-      title: '可访问性与键盘',
-      content: (
-        <ul>
-          <li>
-            标题是 heading 中的原生按钮；headingLevel
-            应匹配所在页面的标题结构。标题内不嵌套链接或其他按钮。
-          </li>
-          <li>
-            Tab / Shift+Tab 按顺序聚焦可用标题按钮，Enter / Space
-            展开或收起；当前实现不使用方向键切换标题焦点。
-          </li>
-          <li>键盘焦点轮廓收进标题行；组合有内容裁切的大圆角容器时，仍需保留适当内间距。</li>
-          <li>
-            组件管理展开状态与标题、面板之间的语义关联。禁用标题按钮退出 Tab
-            顺序，展开或收起不会自动把焦点移入正文。
-          </li>
-        </ul>
-      ),
-    },
-    {
-      id: 'styling',
-      title: '长标题与正文',
-      content: (
-        <p>
-          标题自动换行，正文不按固定高度截断。为折叠区设置宽度或局部样式时，保留整行标题的点击区域；
-          链接、复制按钮和表单放在正文中，避免嵌入标题按钮。
-        </p>
-      ),
     },
   ],
 });

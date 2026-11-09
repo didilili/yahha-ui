@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, Popover, Text, TextField } from 'yahha-ui';
+import { Button, Popover, Text, Input } from 'yahha-ui';
 
 export default function PopoverForm() {
   const [open, setOpen] = useState(false);
@@ -39,7 +39,7 @@ export default function PopoverForm() {
             setOpen(false);
           }}
         >
-          <TextField
+          <Input
             ref={inputRef}
             label="名称"
             name="collection"

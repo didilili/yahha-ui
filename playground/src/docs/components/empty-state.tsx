@@ -1,3 +1,4 @@
+import { Link } from 'yahha-ui';
 import EmptyBasic from '../../examples/feedback/EmptyBasic';
 import emptyBasicSource from '../../examples/feedback/EmptyBasic.tsx?raw';
 import EmptySearch from '../../examples/feedback/EmptySearch';
@@ -6,8 +7,6 @@ import EmptyAppearance from '../../examples/feedback/EmptyAppearance';
 import emptyAppearanceSource from '../../examples/feedback/EmptyAppearance.tsx?raw';
 import EmptyIllustrations from '../../examples/scenes/EmptyIllustrations';
 import emptyIllustrationsSource from '../../examples/scenes/EmptyIllustrations.tsx?raw';
-import EmptyScene from '../../examples/scenes/EmptyScene';
-import emptySceneSource from '../../examples/scenes/EmptyScene.tsx?raw';
 import emptyCollectionArtwork from '../../examples/scenes/artwork/little-days-empty-collection.svg?no-inline';
 import emptySearchArtwork from '../../examples/scenes/artwork/little-days-search-empty.svg?no-inline';
 import { defineComponentPage } from '../page';
@@ -63,38 +62,14 @@ export default defineComponentPage('empty-state', {
       ],
     },
     {
-      id: 'illustrations',
-      kind: 'integration',
-      title: '进阶用法',
-      disclosure: '查看纸页、收藏与搜索场景',
-      content: (
-        <p>
-          完整场景组合保留创建、浏览与清空搜索流程；插画用于补充情境，原因和下一步仍由文字与操作说明。
-        </p>
-      ),
-      examples: [
-        {
-          id: 'empty-illustrations',
-          title: '纸页、收藏与搜索',
-          description: '切换场景后，可以创建内容、浏览文章或清空搜索；示例状态仅保留在当前页面。',
-          component: EmptyScene,
-          source: emptySceneSource,
-          toc: false,
-          themeScope: 'explicit',
-          assets: [
-            { name: 'little-days-empty-collection.svg', href: emptyCollectionArtwork },
-            { name: 'little-days-search-empty.svg', href: emptySearchArtwork },
-          ],
-        },
-      ],
-    },
-    {
       id: 'design',
       title: '说明原因并给出下一步',
       content: (
         <p>
           首次无内容可引导创建，筛选无结果可引导清空或修改条件。用标题说明原因，用 action
-          提供下一步；长文本和多个按钮应能在窄屏换行。
+          提供下一步；长文本和多个按钮应能在窄屏换行。完整的{' '}
+          <Link href="#/guides/states?section=scene-empty">纸页、收藏与搜索</Link>
+          组合保留创建内容、浏览文章和清空搜索，以及对应的插画素材。
         </p>
       ),
     },

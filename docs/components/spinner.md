@@ -4,7 +4,7 @@
 
 表示正在进行的加载或等待，提供可读的状态文字。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Spinner } from 'yahha-ui';
@@ -22,13 +22,49 @@ import { Spinner } from 'yahha-ui';
 
 本页仅演示等待状态，不发起请求。
 
+<a id="spinner-waiting"></a>
+
+### 基础等待与结果
+
+用可见文字说明等待内容，切换完成状态后移除等待图形。
+
+[查看示例文件](../../playground/src/examples/content/SpinnerWaiting.tsx)
+
+<!-- example-source: playground/src/examples/content/SpinnerWaiting.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Button, Spinner, Text } from 'yahha-ui';
+
+export default function SpinnerWaiting() {
+  const [loading, setLoading] = useState(true);
+  return (
+    <div style={{ display: 'grid', gap: 20 }}>
+      <div
+        role="status"
+        aria-label="文章等待状态"
+        style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 36 }}
+      >
+        {loading && <Spinner role="presentation" aria-hidden="true" />}
+        <Text>{loading ? '正在加载文章…' : '文章已准备好，可以继续阅读。'}</Text>
+      </div>
+      <div>
+        <Button variant="secondary" onClick={() => setLoading(!loading)}>
+          {loading ? '显示完成状态' : '重新显示等待'}
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
 <a id="spinner-sizes"></a>
 
 ### 尺寸
 
 使用默认三墨点对比小、中、大三档尺寸。
 
-[查看示例文件](../../playground/src/examples/content/SpinnerExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/SpinnerExample.tsx)
 
 <!-- example-source: playground/src/examples/content/SpinnerExample.tsx -->
 
@@ -63,7 +99,7 @@ export default function SpinnerExample() {
 
 使用相同尺寸对比默认三墨点与可选小花饼。
 
-[查看示例文件](../../playground/src/examples/content/SpinnerVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/SpinnerVariants.tsx)
 
 <!-- example-source: playground/src/examples/content/SpinnerVariants.tsx -->
 
@@ -81,42 +117,6 @@ export default function SpinnerVariants() {
           </Text>
         </div>
       ))}
-    </div>
-  );
-}
-```
-
-<a id="spinner-waiting"></a>
-
-### 区块等待与完成状态
-
-切换等待与完成状态，查看对应说明。
-
-[查看示例文件](../../playground/src/examples/content/SpinnerWaiting.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/content/SpinnerWaiting.tsx -->
-
-```tsx
-import { useState } from 'react';
-import { Button, Spinner, Text } from 'yahha-ui';
-
-export default function SpinnerWaiting() {
-  const [loading, setLoading] = useState(true);
-  return (
-    <div style={{ display: 'grid', gap: 20 }}>
-      <div
-        role="status"
-        aria-label="文章等待状态"
-        style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 36 }}
-      >
-        {loading && <Spinner role="presentation" aria-hidden="true" />}
-        <Text>{loading ? '正在加载文章…' : '文章已准备好，可以继续阅读。'}</Text>
-      </div>
-      <div>
-        <Button variant="secondary" onClick={() => setLoading(!loading)}>
-          {loading ? '显示完成状态' : '重新显示等待'}
-        </Button>
-      </div>
     </div>
   );
 }

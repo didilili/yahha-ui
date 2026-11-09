@@ -230,3 +230,43 @@ export async function verifyToastSimple(
     escapeUnchanged: true,
   };
 }
+
+/** The component-page example keeps a permanent destination and returns focus on close. */
+export async function verifyToastFocus(page, scope = page.locator('#basic .example-preview')) {
+  await revealExample(scope);
+  const trigger = scope.getByRole('button', { name: /^(收藏手记|再次显示提示)$/ });
+  const status = scope.getByRole('status');
+  const heading = scope.getByRole('heading', { name: '周末散步', exact: true });
+  const permanentView = scope.getByRole('button', { name: '查看手记', exact: true }).first();
+  const close = status.getByRole('button', { name: '关闭提示', exact: true });
+  await trigger.focus();
+  await trigger.press('Enter');
+  await status.getByText('手记已收藏', { exact: true }).waitFor();
+  await requireFocus(page, trigger);
+  const originalStatus = await status.elementHandle();
+  try {
+    await trigger.press('Space');
+    assert.equal(await status.count(), 1);
+    assert.equal(
+      await status.evaluate((node, original) => node === original, originalStatus),
+      true,
+    );
+    await close.focus();
+    await close.press('Space');
+    await status.waitFor({ state: 'detached' });
+    await requireFocus(page, trigger);
+    await scope
+      .getByText('已收藏。吉伊收起路线图，小八还在数口袋里的面包屑。', { exact: true })
+      .waitFor();
+    await trigger.press('Enter');
+    await status.getByRole('button', { name: '查看手记', exact: true }).click();
+    await status.waitFor({ state: 'detached' });
+    await requireFocus(page, heading);
+    await permanentView.focus();
+    await permanentView.press('Enter');
+    await requireFocus(page, heading);
+    assert.equal(await scope.locator('[aria-live], [role="alert"]').count(), 0);
+  } finally {
+    await originalStatus.dispose();
+  }
+}

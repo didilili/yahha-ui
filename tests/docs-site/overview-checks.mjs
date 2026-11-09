@@ -3,7 +3,7 @@ import { componentCatalog } from '../../playground/src/docs/component-catalog.ts
 
 const expectedEntries = Object.fromEntries(
   `button:Button icon-button:IconButton icon:Icon badge:Badge surface:Surface
-   theme-provider:ThemeProvider text-field:TextField segmented-control:SegmentedControl
+   theme-provider:ThemeProvider form:Form input:Input segmented-control:SegmentedControl
    select:Select textarea:Textarea checkbox:Checkbox radio-group:RadioGroup switch:Switch
    text:Text heading:Heading link:Link divider:Divider avatar:Avatar image:Image
    skeleton:Skeleton spinner:Spinner progress:Progress alert:Alert tabs:Tabs pagination:Pagination
@@ -40,7 +40,7 @@ async function expectIds(page, expected) {
     .innerText();
   assert.match(
     status.replace(/\s/g, ''),
-    new RegExp(`找到${expected.length}项/共32项`),
+    new RegExp(`找到${expected.length}项/共${expectedIds.length}项`),
     'Visible result counts agree with rendered cards.',
   );
 }
@@ -281,7 +281,7 @@ async function verifyPreviewGeometry(page) {
   for (const [id, selector] of [
     ['button', 'button'],
     ['icon-button', 'button'],
-    ['text-field', 'input'],
+    ['input', 'input'],
     ['select', 'button[role="combobox"]'],
   ]) {
     const preview = page.locator(`[data-component-preview="${id}"]`);
@@ -308,7 +308,7 @@ async function verifyPreviewGeometry(page) {
       `${id}: previews do not shrink controls with a transform.`,
     );
     if (id === 'icon-button') assert(Math.abs(actual.width - 44) < 0.1);
-    if (id === 'text-field') assert.equal(actual.font, page.viewportSize().width <= 480 ? 16 : 14);
+    if (id === 'input') assert.equal(actual.font, page.viewportSize().width <= 480 ? 16 : 14);
     measurements[id] = actual;
   }
   const area = page.locator('[data-component-preview="textarea"] textarea');
@@ -345,7 +345,7 @@ async function verifyKeyboardPreviewIsolation(page) {
         card: node?.closest('[data-component-id]')?.getAttribute('data-component-id'),
       };
     });
-    assert.equal(active.preview, false, 'Tab skips all thirty-two visual previews.');
+    assert.equal(active.preview, false, 'Tab skips all component visual previews.');
     if (!active.inOverview) break;
     if (active.card) visited.push(active.card);
   }
@@ -358,7 +358,7 @@ async function verifyKeyboardPreviewIsolation(page) {
 async function verifyFiltersAndNavigation(page) {
   for (const [query, expected] of [
     ['BUTTON', ['button', 'icon-button']],
-    ['输入框', ['text-field']],
+    ['输入框', ['input']],
     ['分段单选', ['segmented-control']],
     ['预留形状', ['skeleton']],
   ]) {
@@ -378,7 +378,7 @@ async function verifyFiltersAndNavigation(page) {
   assert.equal(await page.locator('.overview-configuration').count(), 1);
   await category(page, '表单').check();
   await search(page).fill('输入');
-  await expectIds(page, ['text-field', 'textarea']);
+  await expectIds(page, ['input', 'textarea']);
   await catalog(page).getByRole('button', { name: '清空组件搜索', exact: true }).click();
   await focus(page, search(page));
   assert.equal(
@@ -399,7 +399,7 @@ async function verifyFiltersAndNavigation(page) {
   await expectIds(page, expectedIds);
   await category(page, '表单').check();
   await search(page).fill('输入');
-  await expectIds(page, ['text-field', 'textarea']);
+  await expectIds(page, ['input', 'textarea']);
   await page.waitForFunction(() => {
     const parameters = new URLSearchParams(location.hash.split('?')[1]);
     return parameters.get('q') === '输入' && parameters.get('group') === '表单';
@@ -407,21 +407,18 @@ async function verifyFiltersAndNavigation(page) {
   const hash = new URLSearchParams(page.url().split('#')[1].split('?')[1]);
   assert.equal(hash.get('q'), '输入');
   assert.equal(hash.get('group'), '表单');
-  await page.locator('[data-component-id="text-field"]').getByRole('link').click();
-  await page.getByRole('heading', { level: 1, name: 'TextField 单行输入', exact: true }).waitFor();
+  await page.locator('[data-component-id="input"]').getByRole('link').click();
+  await page.getByRole('heading', { level: 1, name: 'Input 输入框', exact: true }).waitFor();
   await page.locator('.example-block').first().waitFor();
   await page.locator('#api').waitFor();
-  await focus(
-    page,
-    page.getByRole('heading', { level: 1, name: 'TextField 单行输入', exact: true }),
-  );
+  await focus(page, page.getByRole('heading', { level: 1, name: 'Input 输入框', exact: true }));
   assert((await page.locator('.example-block').count()) > 0);
   assert((await page.locator('.api-table tbody tr').count()) > 0);
   await page.goBack();
   await page.getByRole('heading', { level: 1, name: '组件总览', exact: true }).waitFor();
   assert.equal(await search(page).inputValue(), '输入');
   assert.equal(await category(page, '表单').isChecked(), true);
-  await expectIds(page, ['text-field', 'textarea']);
+  await expectIds(page, ['input', 'textarea']);
   await focus(page, page.getByRole('heading', { level: 1, name: '组件总览', exact: true }));
   await page.locator('.docs-header').getByRole('link', { name: '组件', exact: true }).click();
   await overview(page);
@@ -520,7 +517,7 @@ export async function verifyComponentOverview(browser, baseURL) {
         await verifyLegacyCategoryNavigation(page, baseURL);
       } else {
         await search(page).fill('输入框');
-        await expectIds(page, ['text-field']);
+        await expectIds(page, ['input']);
         await catalog(page).getByRole('button', { name: '清空组件搜索', exact: true }).click();
         await expectIds(page, expectedIds);
         await page.getByRole('button', { name: '打开文档目录', exact: true }).click();
@@ -543,7 +540,7 @@ export async function verifyComponentOverview(browser, baseURL) {
       );
       assert.deepEqual(errors, [], 'Overview has no runtime errors.');
       console.log(
-        `Browser: ${viewport.width}px component overview, thirty-two inert previews/document links, filters, default geometry, navigation and lazy entry passed.`,
+        `Browser: ${viewport.width}px component overview, ${expectedIds.length} inert previews/document links, filters, default geometry, navigation and lazy entry passed.`,
       );
     } finally {
       await context.close();

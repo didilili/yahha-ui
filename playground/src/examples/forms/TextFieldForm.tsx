@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Text, TextField } from 'yahha-ui';
+import { Button, Text, Input } from 'yahha-ui';
 
 export default function TextFieldForm() {
   const [title, setTitle] = useState('周末的散步记录');
@@ -20,7 +20,7 @@ export default function TextFieldForm() {
         setResult('');
       }}
     >
-      <TextField
+      <Input
         label="文章标题"
         name="title"
         value={title}
@@ -28,7 +28,7 @@ export default function TextFieldForm() {
         required
         hint="必填，请填写文章标题。"
       />
-      <TextField label="文章分类" name="category" defaultValue="生活" />
+      <Input label="文章分类" name="category" defaultValue="生活" />
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
         <Button type="submit">读取表单</Button>
         <Button type="reset" variant="secondary">

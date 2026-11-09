@@ -4,7 +4,7 @@
 
 用于列表分页，显示首页、末页和当前页附近的页码。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Pagination } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Pagination } from 'yahha-ui';
 
 通过页码按钮切换列表，每页显示三篇文章。
 
-[查看示例文件](../../playground/src/examples/navigation/PaginationBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/navigation/PaginationBasic.tsx)
 
 <!-- example-source: playground/src/examples/navigation/PaginationBasic.tsx -->
 
@@ -73,7 +73,7 @@ export default function PaginationBasic() {
 
 以 80 页总数观察省略页码与当前页窗口，不加载文章数据。
 
-[查看示例文件](../../playground/src/examples/navigation/PaginationMore.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/navigation/PaginationMore.tsx)
 
 <!-- example-source: playground/src/examples/navigation/PaginationMore.tsx -->
 
@@ -106,7 +106,7 @@ export default function PaginationMore() {
 
 空列表隐藏数字页码，翻页按钮不可用。
 
-[查看示例文件](../../playground/src/examples/navigation/PaginationEmpty.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/navigation/PaginationEmpty.tsx)
 
 <!-- example-source: playground/src/examples/navigation/PaginationEmpty.tsx -->
 
@@ -123,137 +123,13 @@ export default function PaginationEmpty() {
 }
 ```
 
-<a id="appearance"></a>
-
-### 普通与圈选
-
-两组分页同步当前页；普通当前页保留边框与底色，circled 增加不规则圈选。
-
-[查看示例文件](../../playground/src/examples/navigation/PaginationAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/navigation/PaginationAppearance.tsx -->
-
-```tsx
-import { useState } from 'react';
-import { Pagination, Text } from 'yahha-ui';
-
-export default function PaginationAppearance() {
-  const [page, setPage] = useState(2);
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
-        gap: 24,
-      }}
-    >
-      {(['default', 'circled'] as const).map((appearance) => (
-        <div
-          key={appearance}
-          style={{ display: 'grid', alignContent: 'start', gap: 12, minWidth: 0 }}
-        >
-          <Text size="sm" tone="muted">
-            {appearance === 'default' ? '普通（默认）' : '圈选'}
-          </Text>
-          <Pagination
-            appearance={appearance}
-            aria-label={appearance === 'default' ? '普通分页' : '圈选分页'}
-            currentPage={page}
-            totalPages={3}
-            onPageChange={setPage}
-          />
-          <Text size="sm">当前第 {page} 页，共 3 页。</Text>
-        </div>
-      ))}
-    </div>
-  );
-}
-```
-
-<a id="integration"></a>
-
-## 进阶用法
-
-阅读位置示例重复使用三条本地摘要模拟 80 页；链接示例将当前页码保留在网址中。
-
-<a id="archive"></a>
-
-### 翻页后的阅读位置
-
-翻页后聚焦本页标题，从更新后的内容继续阅读。
-
-[查看示例文件](../../playground/src/examples/navigation/PaginationArchive.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/navigation/PaginationArchive.tsx -->
-
-```tsx
-import { useEffect, useRef, useState } from 'react';
-import { Heading, Pagination, Text } from 'yahha-ui';
-
-const entries = [
-  { title: '沿着河边散步', summary: '拐弯去买面包，回家才想起本来是去散步。' },
-  { title: '窗边的一点阅读时间', summary: '窗外的鸟忙着搭窝，我把同一段读了三遍。' },
-  { title: '周末的购物单', summary: '原本只打算买牛奶，回来时却多了一袋刚出炉的红豆包。' },
-];
-
-export default function PaginationArchive() {
-  const [page, setPage] = useState(24);
-  const heading = useRef<HTMLHeadingElement>(null);
-  const continueReading = useRef(false);
-  const first = (page - 1) * entries.length + 1;
-
-  useEffect(() => {
-    if (!continueReading.current) return;
-    heading.current?.focus();
-    continueReading.current = false;
-  }, [page]);
-
-  return (
-    <div style={{ display: 'grid', gap: 20 }}>
-      <Heading level={3} ref={heading} tabIndex={-1}>
-        归档第 {page} 页
-      </Heading>
-      <ol
-        aria-label="本页归档文章"
-        start={first}
-        style={{ display: 'grid', gap: 20, margin: 0, paddingInlineStart: 24 }}
-      >
-        {entries.map((entry, index) => (
-          <li key={`${page}-${index}`}>
-            <article style={{ display: 'grid', gap: 8 }}>
-              <Heading level={4}>
-                手记 {first + index} · {entry.title}
-              </Heading>
-              <Text>{entry.summary}</Text>
-            </article>
-          </li>
-        ))}
-      </ol>
-      <Pagination
-        aria-label="文章归档分页"
-        currentPage={page}
-        totalPages={80}
-        siblingCount={1}
-        onPageChange={(nextPage) => {
-          continueReading.current = true;
-          setPage(nextPage);
-        }}
-      />
-      <Text size="sm" tone="muted">
-        正在查看归档第 {page} 页。
-      </Text>
-    </div>
-  );
-}
-```
-
 <a id="links"></a>
 
 ### 链接分页与地址同步
 
 用真实链接翻页，支持浏览器返回和新标签页打开。
 
-[查看示例文件](../../playground/src/examples/navigation/PaginationLinks.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/navigation/PaginationLinks.tsx)
 
 <!-- example-source: playground/src/examples/navigation/PaginationLinks.tsx -->
 
@@ -372,6 +248,124 @@ export default function PaginationLinks() {
 }
 ```
 
+<a id="archive"></a>
+
+### 翻页后的阅读位置
+
+由调用方在翻页后聚焦新页标题，首次渲染不抢焦点；重复三条本地摘要模拟 80 页。
+
+[查看示例文件](../../playground/src/examples/navigation/PaginationArchive.tsx)
+
+<!-- example-source: playground/src/examples/navigation/PaginationArchive.tsx -->
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import { Heading, Pagination, Text } from 'yahha-ui';
+
+const entries = [
+  { title: '沿着河边散步', summary: '拐弯去买面包，回家才想起本来是去散步。' },
+  { title: '窗边的一点阅读时间', summary: '窗外的鸟忙着搭窝，我把同一段读了三遍。' },
+  { title: '周末的购物单', summary: '原本只打算买牛奶，回来时却多了一袋刚出炉的红豆包。' },
+];
+
+export default function PaginationArchive() {
+  const [page, setPage] = useState(24);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const continueReading = useRef(false);
+  const first = (page - 1) * entries.length + 1;
+
+  useEffect(() => {
+    if (!continueReading.current) return;
+    heading.current?.focus();
+    continueReading.current = false;
+  }, [page]);
+
+  return (
+    <div style={{ display: 'grid', gap: 20 }}>
+      <Heading level={3} ref={heading} tabIndex={-1}>
+        归档第 {page} 页
+      </Heading>
+      <ol
+        aria-label="本页归档文章"
+        start={first}
+        style={{ display: 'grid', gap: 20, margin: 0, paddingInlineStart: 24 }}
+      >
+        {entries.map((entry, index) => (
+          <li key={`${page}-${index}`}>
+            <article style={{ display: 'grid', gap: 8 }}>
+              <Heading level={4}>
+                手记 {first + index} · {entry.title}
+              </Heading>
+              <Text>{entry.summary}</Text>
+            </article>
+          </li>
+        ))}
+      </ol>
+      <Pagination
+        aria-label="文章归档分页"
+        currentPage={page}
+        totalPages={80}
+        siblingCount={1}
+        onPageChange={(nextPage) => {
+          continueReading.current = true;
+          setPage(nextPage);
+        }}
+      />
+      <Text size="sm" tone="muted">
+        正在查看归档第 {page} 页。
+      </Text>
+    </div>
+  );
+}
+```
+
+<a id="appearance"></a>
+
+### 普通与圈选
+
+两组分页同步当前页；普通当前页保留边框与底色，circled 增加不规则圈选。
+
+[查看示例文件](../../playground/src/examples/navigation/PaginationAppearance.tsx)
+
+<!-- example-source: playground/src/examples/navigation/PaginationAppearance.tsx -->
+
+```tsx
+import { useState } from 'react';
+import { Pagination, Text } from 'yahha-ui';
+
+export default function PaginationAppearance() {
+  const [page, setPage] = useState(2);
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+        gap: 24,
+      }}
+    >
+      {(['default', 'circled'] as const).map((appearance) => (
+        <div
+          key={appearance}
+          style={{ display: 'grid', alignContent: 'start', gap: 12, minWidth: 0 }}
+        >
+          <Text size="sm" tone="muted">
+            {appearance === 'default' ? '普通（默认）' : '圈选'}
+          </Text>
+          <Pagination
+            appearance={appearance}
+            aria-label={appearance === 'default' ? '普通分页' : '圈选分页'}
+            currentPage={page}
+            totalPages={3}
+            onPageChange={setPage}
+          />
+          <Text size="sm">当前第 {page} 页，共 3 页。</Text>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 分页状态与阅读位置
@@ -382,6 +376,21 @@ export default function PaginationLinks() {
 - 切页后的 URL、焦点和滚动位置由调用方安排。可把焦点移到新一页的标题，让阅读从更新后的内容开始；实际组合见 [个人博客归档](../README.md#站内指南)。
 - getPageHref 只生成有效页码的地址；普通主键点击与 Enter 会阻止默认跳转，仍由 onPageChange 更新内容及网址。修饰键和中键保留浏览器原生导航，不调用回调。 当前页普通激活不回调；不可用的前后入口不带 href，也不进入 Tab 顺序。
 - 链接例在网址中保存当前页，刷新或返回可恢复，并保留其他参数和片段。
+
+<a id="behavior"></a>
+
+## 可访问性与键盘
+
+- nav 默认命名为“文章分页”，同页多组分页应使用不同的 aria-label。每个页码有“第 N 页”名称，当前页带 aria-current=page。
+- 原生按钮通过 Tab 聚焦、Enter / Space 激活；第一页禁用上一页，末页禁用下一页，禁用按钮退出键盘顺序。
+- 链接通过 Tab 聚焦、Enter 激活，Space 保持浏览器的滚动行为。 Cmd / Ctrl 点击或中键可在新标签打开；是否打开窗口等行为遵循浏览器设置。
+- 各个可见页码按钮都在 Tab 顺序中，不使用方向键切换。省略号不可操作，并对辅助技术隐藏。
+
+<a id="styling"></a>
+
+## 窄屏与长页码
+
+有内容时显示首页、末页和当前页附近的页码，按钮数量不会随总页数线性增加。 页码组在窄屏换行，按钮至少 44×44px，多位数字保持完整并自然增宽；自定义宽度时也应避免挤压或截断页码。
 
 <a id="api"></a>
 
@@ -402,21 +411,6 @@ PaginationProps 支持原生 nav 属性，children 除外。
 | `aria-label`              | nav 的可访问名称；多组分页应区分命名。                                                        | `string`                                                | `文章分页`  |
 | `classNames`              | 列表、所有页码入口（按钮或链接）、省略号的附加类名。                                          | `{ list?: string; button?: string; ellipsis?: string }` | —           |
 | `ref / className / style` | 作用于最外层 nav。                                                                            | `原生 nav 属性`                                         | —           |
-
-<a id="behavior"></a>
-
-## 可访问性与键盘
-
-- nav 默认命名为“文章分页”，同页多组分页应使用不同的 aria-label。每个页码有“第 N 页”名称，当前页带 aria-current=page。
-- 原生按钮通过 Tab 聚焦、Enter / Space 激活；第一页禁用上一页，末页禁用下一页，禁用按钮退出键盘顺序。
-- 链接通过 Tab 聚焦、Enter 激活，Space 保持浏览器的滚动行为。 Cmd / Ctrl 点击或中键可在新标签打开；是否打开窗口等行为遵循浏览器设置。
-- 各个可见页码按钮都在 Tab 顺序中，不使用方向键切换。省略号不可操作，并对辅助技术隐藏。
-
-<a id="styling"></a>
-
-## 窄屏与长页码
-
-有内容时显示首页、末页和当前页附近的页码，按钮数量不会随总页数线性增加。 页码组在窄屏换行，按钮至少 44×44px，多位数字保持完整并自然增宽；自定义宽度时也应避免挤压或截断页码。
 
 <a id="related"></a>
 

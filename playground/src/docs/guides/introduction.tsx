@@ -1,7 +1,6 @@
 import { ArrowUpRight, BookOpen, Layers, MousePointer2 } from 'lucide-react';
 import { Link } from 'yahha-ui';
 import type { DocPage } from '../types';
-import { componentCatalog } from '../component-catalog';
 import { guideMetadata } from '../guide-catalog';
 
 const page: DocPage = {
@@ -74,21 +73,12 @@ const page: DocPage = {
       id: 'components',
       title: '组件文档',
       content: (
-        <div className="component-overview">
+        <nav className="guide-paths" aria-label="组件文档">
           <Link href="#/components">
             <strong>浏览组件 →</strong>
             <span>按分类查看组件用法、示例与 API，支持展开和复制代码。</span>
           </Link>
-          {componentCatalog.map(({ id, name, description }) => (
-            <Link key={id} href={`#/components/${id}`}>
-              <strong>
-                {name}
-                <span aria-hidden="true">↗</span>
-              </strong>
-              <span>{description}</span>
-            </Link>
-          ))}
-        </div>
+        </nav>
       ),
     },
     {

@@ -4,7 +4,7 @@
 
 悬停或聚焦时显示简短的视觉文字提示，不替代触发器的可访问名称。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Tooltip } from 'yahha-ui';
@@ -30,7 +30,7 @@ import { Tooltip } from 'yahha-ui';
 
 悬停或聚焦查看提示，点击切换收藏。
 
-[查看示例文件](../../playground/src/examples/floating/TooltipBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/TooltipBasic.tsx)
 
 <!-- example-source: playground/src/examples/floating/TooltipBasic.tsx -->
 
@@ -70,7 +70,7 @@ export default function TooltipBasic() {
 
 悬停或聚焦查看四个方向，再对比相同内容与间距的箭头开关。
 
-[查看示例文件](../../playground/src/examples/floating/TooltipAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/TooltipAppearance.tsx)
 
 <!-- example-source: playground/src/examples/floating/TooltipAppearance.tsx -->
 
@@ -123,7 +123,7 @@ export default function TooltipAppearance() {
 
 首次悬停等待 0.8 秒；关闭文字提示后，按钮仍可执行操作。
 
-[查看示例文件](../../playground/src/examples/floating/TooltipOptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/TooltipOptions.tsx)
 
 <!-- example-source: playground/src/examples/floating/TooltipOptions.tsx -->
 
@@ -182,22 +182,22 @@ export default function TooltipOptions() {
 
 ### TooltipProps
 
-| 属性                | 说明                                                                              | 类型                              | 默认值     |
-| ------------------- | --------------------------------------------------------------------------------- | --------------------------------- | ---------- |
-| `trigger` **必填**  | 可聚焦按钮。必须有自身可访问名称，通常使用 Button 或带 aria-label 的 IconButton。 | `ReactElement`                    | —          |
-| `content` **必填**  | 简短纯文字，与 trigger 名称一致或紧密对应。不能包含链接、按钮和表单。             | `string`                          | —          |
-| `open`              | 受控展开状态；同时响应 onOpenChange。                                             | `boolean`                         | —          |
-| `defaultOpen`       | 非受控初始状态，与 open 二选一。                                                  | `boolean`                         | `false`    |
-| `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                           | `(open: boolean) => void`         | —          |
-| `disabled`          | 禁用提示，不改变 trigger 元素本身的 disabled。                                    | `boolean`                         | `false`    |
-| `delay`             | 首次鼠标悬停等待时间，单位 ms；键盘聚焦立即展示，短时间再次悬停可能立即显示。     | `number`                          | `400`      |
-| `showArrow`         | 是否显示箭头。false 时省略箭头，不改变内容、打开关闭和定位设置。                  | `boolean`                         | `true`     |
-| `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。          | `TooltipProps['side']`            | `"top"`    |
-| `align`             | 相对触发器的对齐方向。                                                            | `"start" \| "center" \| "end"`    | `"center"` |
-| `sideOffset`        | 提示外框与触发器的间距，单位 px；独立于 showArrow，关闭箭头后仍保留设置值。       | `number`                          | `12`       |
-| `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                         | `TooltipProps['portalContainer']` | `body`     |
-| `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。                        | `string / CSSProperties`          | —          |
-| `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                             | `Ref<HTMLDivElement>`             | —          |
+| 属性                | 说明                                                                              | 类型                                                                                | 默认值     |
+| ------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------- |
+| `trigger` **必填**  | 可聚焦按钮。必须有自身可访问名称，通常使用 Button 或带 aria-label 的 IconButton。 | `ReactElement`                                                                      | —          |
+| `content` **必填**  | 简短纯文字，与 trigger 名称一致或紧密对应。不能包含链接、按钮和表单。             | `string`                                                                            | —          |
+| `open`              | 受控展开状态；同时响应 onOpenChange。                                             | `boolean`                                                                           | —          |
+| `defaultOpen`       | 非受控初始状态，与 open 二选一。                                                  | `boolean`                                                                           | `false`    |
+| `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                           | `(open: boolean) => void`                                                           | —          |
+| `disabled`          | 禁用提示，不改变 trigger 元素本身的 disabled。                                    | `boolean`                                                                           | `false`    |
+| `delay`             | 首次鼠标悬停等待时间，单位 ms；键盘聚焦立即展示，短时间再次悬停可能立即显示。     | `number`                                                                            | `400`      |
+| `showArrow`         | 是否显示箭头。false 时省略箭头，不改变内容、打开关闭和定位设置。                  | `boolean`                                                                           | `true`     |
+| `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。          | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'`          | `"top"`    |
+| `align`             | 相对触发器的对齐方向。                                                            | `"start" \| "center" \| "end"`                                                      | `"center"` |
+| `sideOffset`        | 提示外框与触发器的间距，单位 px；独立于 showArrow，关闭箭头后仍保留设置值。       | `number`                                                                            | `12`       |
+| `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                         | `HTMLElement \| ShadowRoot \| RefObject<HTMLElement \| ShadowRoot \| null> \| null` | `body`     |
+| `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。                        | `string / CSSProperties`                                                            | —          |
+| `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                             | `Ref<HTMLDivElement>`                                                               | —          |
 
 <a id="keyboard"></a>
 

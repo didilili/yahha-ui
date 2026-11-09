@@ -50,9 +50,10 @@ export const componentCatalog: ComponentPageSummary[] = [
   {
     id: 'text',
     name: 'Text',
-    chinese: '正文',
+    chinese: '段落正文',
     group: '排版',
-    description: '用于正文、摘要和辅助说明，统一字号、行高与语义颜色。',
+    aliases: ['正文', 'Paragraph', '段落'],
+    description: '固定使用 p 元素的段落正文，统一字号、行高与语义颜色。',
   },
   {
     id: 'heading',
@@ -83,11 +84,19 @@ export const componentCatalog: ComponentPageSummary[] = [
     description: '用于内容的主题或视觉分隔，支持水平、垂直和装饰模式。',
   },
   {
-    id: 'text-field',
-    name: 'TextField',
-    chinese: '单行输入',
+    id: 'form',
+    name: 'Form',
+    chinese: '表单',
     group: '表单',
-    aliases: ['输入框'],
+    aliases: ['表单管理', 'FormError'],
+    description: '统一管理字段值、校验、提交与重置，并定位需要修正的字段。',
+  },
+  {
+    id: 'input',
+    name: 'Input',
+    chinese: '输入框',
+    group: '表单',
+    aliases: ['TextField', '单行输入', '输入框'],
     description: '带可见标签、辅助说明和错误反馈的单行输入框。',
   },
   {
@@ -138,6 +147,7 @@ export const componentCatalog: ComponentPageSummary[] = [
     name: 'Badge',
     chinese: '状态标记',
     group: '内容展示',
+    aliases: ['标签', 'Tag', 'Chip', '静态标签'],
     description: '用于展示分类、标签或当前状态的静态标记。',
   },
   {
@@ -187,6 +197,7 @@ export const componentCatalog: ComponentPageSummary[] = [
     name: 'Dialog',
     chinese: '弹窗',
     group: '浮层',
+    aliases: ['Modal', '模态框', '对话框'],
     description: '用于模态展示确认、简短表单或补充内容，管理弹窗焦点。',
   },
   {

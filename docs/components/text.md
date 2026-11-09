@@ -1,10 +1,10 @@
 <!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/components/ 中对应页面。 -->
 
-# Text 正文
+# Text 段落正文
 
-用于正文、摘要和辅助说明，统一字号、行高与语义颜色。
+固定使用 p 元素的段落正文，统一字号、行高与语义颜色。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Text } from 'yahha-ui';
@@ -14,7 +14,7 @@ import { Text } from 'yahha-ui';
 
 ## 何时使用
 
-用于正文、摘要和阅读提示。每个 Text 是一个段落，内部可以组合链接、强调和纸签等行内内容。
+用于段落正文、摘要和阅读提示。Text 固定渲染为 `p` 元素，内部可以组合链接、强调和纸签等行内内容。
 
 <a id="examples"></a>
 
@@ -26,7 +26,7 @@ import { Text } from 'yahha-ui';
 
 用相同文字比较三档字号。
 
-[查看示例文件](../../playground/src/examples/content/TextExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/TextExample.tsx)
 
 <!-- example-source: playground/src/examples/content/TextExample.tsx -->
 
@@ -58,7 +58,7 @@ export default function TextExample() {
 
 比较主要文字与次要文字。
 
-[查看示例文件](../../playground/src/examples/content/TextTones.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/TextTones.tsx)
 
 <!-- example-source: playground/src/examples/content/TextTones.tsx -->
 
@@ -87,7 +87,7 @@ export default function TextTones() {
 
 在段落中组合强调、纸签和链接。
 
-[查看示例文件](../../playground/src/examples/content/TextComposition.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/TextComposition.tsx)
 
 <!-- example-source: playground/src/examples/content/TextComposition.tsx -->
 
@@ -115,7 +115,7 @@ export default function TextComposition() {
 
 观察窄栏中的中英文长词和完整地址换行。
 
-[查看示例文件](../../playground/src/examples/content/TextWrapping.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/TextWrapping.tsx)
 
 <!-- example-source: playground/src/examples/content/TextWrapping.tsx -->
 
@@ -142,17 +142,13 @@ export default function TextWrapping() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
 <a id="text-quotation"></a>
 
 ### 引用与出处
 
 组合引用段落、行内标记与出处链接。
 
-[查看示例文件](../../playground/src/examples/content/TextQuotation.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/TextQuotation.tsx)
 
 <!-- example-source: playground/src/examples/content/TextQuotation.tsx -->
 

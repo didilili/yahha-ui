@@ -19,7 +19,8 @@ export default defineComponentPage('text', {
       title: '何时使用',
       content: (
         <p>
-          用于正文、摘要和阅读提示。每个 Text 是一个段落，内部可以组合链接、强调和纸签等行内内容。
+          用于段落正文、摘要和阅读提示。Text 固定渲染为 <code>p</code>{' '}
+          元素，内部可以组合链接、强调和纸签等行内内容。
         </p>
       ),
     },
@@ -43,13 +44,6 @@ export default defineComponentPage('text', {
           TextWrapping,
           textWrappingSource,
         ),
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看引用与出处组合',
-      examples: [
         example(
           'text-quotation',
           '引用与出处',

@@ -6,6 +6,8 @@ import SelectControlled from '../../examples/new-forms/SelectControlled';
 import SelectControlledSource from '../../examples/new-forms/SelectControlled.tsx?raw';
 import SelectStates from '../../examples/new-forms/SelectStates';
 import SelectStatesSource from '../../examples/new-forms/SelectStates.tsx?raw';
+import SelectFeedback from '../../examples/new-forms/SelectFeedback';
+import SelectFeedbackSource from '../../examples/new-forms/SelectFeedback.tsx?raw';
 import SelectForm from '../../examples/new-forms/SelectForm';
 import SelectFormSource from '../../examples/new-forms/SelectForm.tsx?raw';
 import SelectLongOptions from '../../examples/new-forms/SelectLongOptions';
@@ -16,6 +18,7 @@ import SelectAvailableCollections from '../../examples/new-forms/SelectAvailable
 import SelectAvailableCollectionsSource from '../../examples/new-forms/SelectAvailableCollections.tsx?raw';
 import SelectPortalCustomization from '../../examples/customization/SelectPortalCustomization';
 import selectPortalCustomizationSource from '../../examples/customization/SelectPortalCustomization.tsx?raw';
+import { CodeBlock } from '../CodeBlock';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('select', {
@@ -47,17 +50,24 @@ export default defineComponentPage('select', {
         },
         {
           id: 'controlled',
-          title: '受控选择、禁用选项与清空',
-          description: '切换或清空当前选择，禁用选项不可选。',
+          title: '受控选择与清空',
+          description: '通过 value 与 onValueChange 切换选择，设为 null 清空当前值。',
           component: SelectControlled,
           source: SelectControlledSource,
         },
         {
           id: 'states',
-          title: '错误、只读与禁用',
-          description: '选择分类清除预设错误，并对比只读与禁用状态。',
+          title: '只读与禁用',
+          description: '对比禁用单个选项、只读浏览和禁用整个字段。',
           component: SelectStates,
           source: SelectStatesSource,
+        },
+        {
+          id: 'select-feedback',
+          title: '提示与错误',
+          description: '辅助说明与错误关联字段，选择分类后清除预设错误。',
+          component: SelectFeedback,
+          source: SelectFeedbackSource,
         },
         {
           id: 'select-collection',
@@ -74,6 +84,21 @@ export default defineComponentPage('select', {
           source: SelectLongOptionsSource,
         },
         {
+          id: 'select-available-collections',
+          title: '动态选项与空状态',
+          description: '恢复可选项，移除选中项后清空选择；空列表保留恢复入口。',
+          component: SelectAvailableCollections,
+          source: SelectAvailableCollectionsSource,
+        },
+        {
+          id: 'form',
+          title: '原生表单必选与回焦',
+          description:
+            '演示 required 校验、失败时聚焦可见触发按钮，以及原生 reset 恢复未选择状态。',
+          component: SelectForm,
+          source: SelectFormSource,
+        },
+        {
           id: 'select-indicators',
           title: '普通勾与纸章装饰',
           description: '两组共用选择值，对比相同内容和状态下的选中标记。',
@@ -83,32 +108,8 @@ export default defineComponentPage('select', {
       ],
     },
     {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看表单与动态数据示例',
-      content: <p>示例在本地运行，状态只保留在当前示例。</p>,
-      examples: [
-        {
-          id: 'form',
-          title: '必选表单与重置',
-          description: '读取必选分类或重置为未选择。',
-          toc: false,
-          component: SelectForm,
-          source: SelectFormSource,
-        },
-        {
-          id: 'select-available-collections',
-          title: '动态选项与空状态',
-          description: '恢复可选项，移除选中项后清空选择；空列表保留恢复入口。',
-          toc: false,
-          component: SelectAvailableCollections,
-          source: SelectAvailableCollectionsSource,
-        },
-      ],
-    },
-    {
       id: 'design',
-      title: '状态与表单',
+      title: '状态与原生表单',
       content: (
         <ul>
           <li>
@@ -120,17 +121,18 @@ export default defineComponentPage('select', {
             设置非受控初始值。选项值须为唯一的非空字符串。
           </li>
           <li>
-            name 将选中值加入 FormData，form
-            可关联外部表单。非受控选择随表单重置到初始值；受控选择需由调用方在 onReset 中恢复
-            value。
+            name 将选中值加入 FormData，form 可关联外部表单。自行管理原生 form 时，非受控选择随
+            reset 恢复初始值，受控选择需在 onReset 中恢复 React 状态。见{' '}
+            <a href="#/guides/forms?section=reset">原生表单重置</a>。
           </li>
           <li>
             readOnly 允许打开并浏览选项，保留提交值但阻止修改；disabled 阻止交互与提交。单个
             disabled 选项保留在列表中但不可选择。
           </li>
           <li>
-            required 保留原生必选约束。校验规则、error
-            的设置和选择后的错误清除由调用方维护，必选要求还应提供可见说明。
+            required 保留原生必选约束，必选要求同时提供可见说明。本页原生表单例由调用方设置与清除
+            error，失败时通过 ref 聚焦可见触发按钮。见{' '}
+            <a href="#/guides/forms?section=validation">原生表单的校验与焦点</a>。
           </li>
           <li>
             复杂 label 同时用于选项和当前值显示，使用非交互行内内容；textValue
@@ -142,6 +144,36 @@ export default defineComponentPage('select', {
             null，让用户重新选择。
           </li>
         </ul>
+      ),
+    },
+    {
+      id: 'form-integration',
+      title: '与 Form 配合',
+      kind: 'integration',
+      content: (
+        <>
+          <CodeBlock
+            source={`import { Form, Select } from 'yahha-ui';
+
+<Form initialValues={{ category: 'journal' }}>
+  {(form) => (
+    <Select
+      {...form.choice('category')}
+      label="文章分类"
+      required
+      options={[
+        { value: 'journal', label: '生活手记' },
+        { value: 'reading', label: '读书笔记' },
+      ]}
+    />
+  )}
+</Form>`}
+          />
+          <p>
+            字段可用 string | null 类型，以 null 表示未选择。多控件接入见{' '}
+            <a href="#/components/form?section=form-controls">Form 控件绑定示例</a>。
+          </p>
+        </>
       ),
     },
     {

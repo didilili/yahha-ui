@@ -28,7 +28,10 @@ export async function verifyDesignBaseline(page, baseURL) {
   const defaults = await original.evaluate(appearance);
   await page.goto(`${baseURL}#/guides/design-baseline`);
   await page.getByRole('heading', { level: 1, name: '设计规范', exact: true }).waitFor();
-  const formDisclosure = page.locator('#controls').locator('..').locator('.doc-disclosure');
+  const formDisclosure = page
+    .locator('.doc-section')
+    .filter({ has: page.locator('#controls') })
+    .locator('.doc-disclosure');
   assert.equal(await formDisclosure.getAttribute('open'), null);
   await formDisclosure.locator(':scope > summary').focus();
   await page.keyboard.press('Enter');
@@ -120,7 +123,11 @@ export async function verifyDesignBaseline(page, baseURL) {
     'Reset must restore the existing incomplete-email example alongside the new preferences.',
   );
 
-  await page.locator('#reading').locator('..').locator('.doc-disclosure > summary').click();
+  await page
+    .locator('.doc-section')
+    .filter({ has: page.locator('#reading') })
+    .locator('.doc-disclosure > summary')
+    .click();
   const reading = page.getByRole('region', { name: '规范阅读', exact: true });
   const body = reading.getByText(
     '窗台上的葱又长出一截。吉伊搬来椅子，想把它画进手记；刚画好花盆，就发现葱叶少了一段。',

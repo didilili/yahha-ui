@@ -10,6 +10,7 @@ import TextareaStates from '../../examples/new-forms/TextareaStates';
 import TextareaStatesSource from '../../examples/new-forms/TextareaStates.tsx?raw';
 import TextareaCommentDraft from '../../examples/new-forms/TextareaCommentDraft';
 import TextareaCommentDraftSource from '../../examples/new-forms/TextareaCommentDraft.tsx?raw';
+import { CodeBlock } from '../CodeBlock';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('textarea', {
@@ -21,7 +22,7 @@ export default defineComponentPage('textarea', {
       content: (
         <p>
           用于收集留言、文章摘要、反馈等多行纯文本。只需昵称、邮箱等单行内容时使用{' '}
-          <a href="#/components/text-field">TextField</a>。
+          <a href="#/components/input">Input</a>。
         </p>
       ),
     },
@@ -38,8 +39,8 @@ export default defineComponentPage('textarea', {
         },
         {
           id: 'controlled',
-          title: '受控输入与自定义字数提示',
-          description: '字数由示例代码计算；检查必填内容时，失败会回焦并保留输入。',
+          title: '受控输入与字数提示',
+          description: '通过 value 与 onChange 同步内容，按 UTF-16 代码单元显示当前长度。',
           component: TextareaControlled,
           source: TextareaControlledSource,
         },
@@ -57,31 +58,73 @@ export default defineComponentPage('textarea', {
           component: TextareaReadonlyDisabled,
           source: TextareaReadonlyDisabledSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看原生重置与草稿预览',
-      content: <p>以下示例只在本地操作，不发送或保存留言。</p>,
-      examples: [
         {
           id: 'native',
-          title: '原生重置',
-          description: '修改非受控草稿后，通过原生表单重置恢复初始内容。',
+          title: '原生表单重置',
+          description: '修改非受控草稿，再通过原生 reset 恢复 defaultValue 中的初始内容。',
           component: TextareaStates,
           source: TextareaStatesSource,
-          toc: false,
         },
         {
           id: 'textarea-comment-draft',
-          title: '草稿预览与恢复',
-          description: '校验并预览当前草稿，保留原文换行；可恢复初始内容。',
+          title: '原生表单校验与预览',
+          description: '用 FormData 读取非受控草稿，手动检查空白并用 ref 回焦，预览时保留换行。',
           component: TextareaCommentDraft,
           source: TextareaCommentDraftSource,
-          toc: false,
         },
       ],
+    },
+    {
+      id: 'limits',
+      title: '状态与原生表单',
+      content: (
+        <ul>
+          <li>
+            value / onChange 用于受控内容，defaultValue 用于非受控初始内容。自行管理原生 form
+            时，受控值需在 onReset 中恢复，见{' '}
+            <a href="#/guides/forms?section=reset">原生表单的受控与非受控重置</a>。
+          </li>
+          <li>name、form、required 和 maxLength 沿用原生 textarea 属性。长度反馈由调用方维护。</li>
+          <li>
+            error 只呈现错误，本页原生表单的空白校验与失败回焦由示例处理，见{' '}
+            <a href="#/guides/forms?section=validation">原生表单的校验与焦点</a>。输入长度与原生
+            maxLength 均按 UTF-16 代码单元计数，部分表情会占多个单位。
+          </li>
+          <li>
+            readOnly 仍可聚焦、复制并参与提交；disabled
+            不可编辑或聚焦，也不参与提交。必填要求应同时提供可见说明。
+          </li>
+          <li>
+            autoSize 默认关闭。开启后随内容、可用宽度及重置调整高度，达到 maxRows 后内部滚动，
+            不改变文字、原生事件或 Enter 换行。自行管理原生 form
+            时需同步恢复受控内容，取消原生重置时保留当前内容。
+          </li>
+          <li>
+            minRows 未给时采用有效的 rows，未传 rows 则为 4；行数取正有限数，向下取整后至少为 1，
+            非法 minRows 回退 rows，非法 maxRows 视为无上限，maxRows 小于 minRows 时以 minRows
+            为界。
+          </li>
+        </ul>
+      ),
+    },
+    {
+      id: 'form-integration',
+      title: '与 Form 配合',
+      kind: 'integration',
+      content: (
+        <>
+          <CodeBlock
+            source={`import { Form, Textarea } from 'yahha-ui';
+
+<Form initialValues={{ description: '' }}>
+  {(form) => <Textarea {...form.input('description')} label="简短介绍" rows={3} />}
+</Form>`}
+          />
+          <p>
+            统一校验、提交与重置见 <a href="#/components/form">Form 表单</a>。
+          </p>
+        </>
+      ),
     },
     {
       id: 'api',
@@ -167,39 +210,6 @@ export default defineComponentPage('textarea', {
             placeholder 只提供补充示例，标签应保持可见。自定义校验失败时，用 error
             说明如何修正，并可通过 ref
             聚焦输入区域；提醒标记辅助识别错误，不单独播报，错误的设置与清除由调用方处理。
-          </li>
-        </ul>
-      ),
-    },
-    {
-      id: 'limits',
-      title: '状态与表单',
-      content: (
-        <ul>
-          <li>
-            value / onChange 用于受控内容，defaultValue
-            用于非受控初始内容。非受控内容随原生表单重置，受控内容需在 onReset 中恢复 React 状态。
-          </li>
-          <li>
-            name、form、required 和 maxLength 沿用原生 textarea
-            属性。需要长度反馈或自定义校验时，由调用方维护说明和 error。
-          </li>
-          <li>
-            受控例使用 noValidate 跳过浏览器提交校验，由示例检查空白内容；error
-            只呈现错误。输入长度与原生 maxLength 均按 UTF-16 代码单元计数，部分表情会占多个单位。
-          </li>
-          <li>
-            readOnly 仍可聚焦、复制并参与提交；disabled
-            不可编辑或聚焦，也不参与提交。必填要求应同时提供可见说明。
-          </li>
-          <li>
-            autoSize 默认关闭。开启后随内容、可用宽度及重置调整高度，达到 maxRows 后内部滚动，
-            不改变文字、原生事件或 Enter 换行。受控内容仍由调用方恢复，取消原生重置时保留当前内容。
-          </li>
-          <li>
-            minRows 未给时采用有效的 rows，未传 rows 则为 4；行数取正有限数，向下取整后至少为 1，
-            非法 minRows 回退 rows，非法 maxRows 视为无上限，maxRows 小于 minRows 时以 minRows
-            为界。
           </li>
         </ul>
       ),

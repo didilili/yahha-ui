@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { revealExample } from './reveal-example.mjs';
+import { openInteractionExample, revealExample } from './reveal-example.mjs';
+import { verifyMenuTriggerRecovery } from './menu-draft-examples.mjs';
 
 export async function verifyDialogForm(page, baseURL) {
   await page.goto(`${baseURL}#/components/dialog?section=form`);
@@ -149,7 +150,8 @@ export async function verifyOverlayExamples(page, baseURL) {
   await popover.getByRole('status').getByText('当前名称：散步收藏', { exact: true }).waitFor();
 
   await page.goto(`${baseURL}#/components/dropdown-menu?section=controlled`);
-  const menuExample = page.locator('#controlled .example-preview');
+  await verifyMenuTriggerRecovery(page);
+  const menuExample = await openInteractionExample(page, 'controlled');
   await revealExample(menuExample);
   const menu = menuExample.getByRole('button', { name: /^操作草稿：/ });
   await menu.click();

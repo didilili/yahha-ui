@@ -49,7 +49,7 @@ const componentSections: Readonly<Record<string, Readonly<Record<string, DocSect
     design: 'styling',
     behavior: 'accessibility',
   },
-  'text-field': {
+  input: {
     ...integratedSections,
     design: 'behavior',
     keyboard: 'accessibility',

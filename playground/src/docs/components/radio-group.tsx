@@ -10,12 +10,9 @@ import RadioGroupStatus from '../../examples/new-forms/RadioGroupStatus';
 import RadioGroupStatusSource from '../../examples/new-forms/RadioGroupStatus.tsx?raw';
 import RadioGroupForm from '../../examples/new-forms/RadioGroupForm';
 import RadioGroupFormSource from '../../examples/new-forms/RadioGroupForm.tsx?raw';
-import RadioGroupStates from '../../examples/new-forms/RadioGroupStates';
-import RadioGroupStatesSource from '../../examples/new-forms/RadioGroupStates.tsx?raw';
 import RadioGroupReadingLayout from '../../examples/new-forms/RadioGroupReadingLayout';
 import RadioGroupReadingLayoutSource from '../../examples/new-forms/RadioGroupReadingLayout.tsx?raw';
-import RadioGroupCommentSignature from '../../examples/new-forms/RadioGroupCommentSignature';
-import RadioGroupCommentSignatureSource from '../../examples/new-forms/RadioGroupCommentSignature.tsx?raw';
+import { CodeBlock } from '../CodeBlock';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('radio-group', {
@@ -25,12 +22,18 @@ export default defineComponentPage('radio-group', {
       id: 'usage',
       title: '何时使用',
       content: (
-        <p>
-          从少量互斥选项中选择一项，适合需要同时展示标签和补充说明的表单。简短的紧凑筛选使用{' '}
-          <a href="#/components/segmented-control">SegmentedControl</a>；需要收起选项时使用{' '}
-          <a href="#/components/select">Select</a>；切换独立内容面板使用{' '}
-          <a href="#/components/tabs">Tabs</a>。
-        </p>
+        <>
+          <p>
+            从少量互斥选项中选择一项，适合需要同时展示标签和补充说明的表单。简短的紧凑筛选使用{' '}
+            <a href="#/components/segmented-control">SegmentedControl</a>；需要收起选项时使用{' '}
+            <a href="#/components/select">Select</a>；切换独立内容面板使用{' '}
+            <a href="#/components/tabs">Tabs</a>。
+          </p>
+          <p>
+            RadioGroup 只支持受控选择，需传入 value 与 onValueChange。自行管理原生 form
+            时由调用方恢复重置后的 value，使用 Form 绑定时由 Form 统一管理。
+          </p>
+        </>
       ),
     },
     {
@@ -53,8 +56,8 @@ export default defineComponentPage('radio-group', {
         },
         {
           id: 'radio-status',
-          title: '错误与整组禁用',
-          description: '选择后清除错误，并对比整组禁用状态。',
+          title: '错误、清空与禁用',
+          description: '清空后恢复错误，对比直接禁用与父 fieldset 禁用。',
           component: RadioGroupStatus,
           source: RadioGroupStatusSource,
         },
@@ -72,51 +75,25 @@ export default defineComponentPage('radio-group', {
           component: RadioGroupHighlight,
           source: radioGroupHighlightSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看状态组合、表单与联动示例',
-      content: <p>选择只影响当前示例；阅读设置与留言均不会保存或发布。</p>,
-      examples: [
-        {
-          id: 'states',
-          title: '清空校验与父级禁用',
-          description: '清空选择后恢复错误，并对比父 fieldset 禁用下的保留值。',
-          component: RadioGroupStates,
-          source: RadioGroupStatesSource,
-          toc: false,
-        },
         {
           id: 'form',
-          title: '受控表单与重置',
-          description: '读取必选项或重置；改选后清除上次读取结果。',
+          title: '原生表单取值与重置',
+          description: '演示 required 必选、FormData 取值，以及在原生 onReset 中显式恢复受控选择。',
           component: RadioGroupForm,
           source: RadioGroupFormSource,
-          toc: false,
         },
         {
           id: 'radio-reading-layout',
           title: '选项联动预览',
-          description: '切换标准和宽松选项，比较相同内容的行距与段距。',
+          description: '切换标准和宽松选项，比较相同内容的行距与段距；仅当前示例生效。',
           component: RadioGroupReadingLayout,
           source: RadioGroupReadingLayoutSource,
-          toc: false,
-        },
-        {
-          id: 'radio-comment-signature',
-          title: '条件字段与表单值',
-          description: '切换选项控制昵称字段，再按实际表单值预览署名。',
-          component: RadioGroupCommentSignature,
-          source: RadioGroupCommentSignatureSource,
-          toc: false,
         },
       ],
     },
     {
       id: 'design',
-      title: '状态与表单',
+      title: '状态与原生表单',
       content: (
         <ul>
           <li>
@@ -129,13 +106,14 @@ export default defineComponentPage('radio-group', {
             value，选项值须保持唯一。用空字符串表示未选择时，不再将其作为有效选项值。
           </li>
           <li>
-            显式设置 name 后，FormData 可读取已选值；同一表单内的独立组使用不同 name。form 同时关联
-            fieldset 和组内 radio。重置时需在 onReset 中恢复 React 状态。
+            显式 name 提供稳定的提交字段名，独立组使用不同 name；form 同时关联 fieldset 和组内
+            radio。自行管理原生 form 时，需在 onReset 中恢复受控 value，见{' '}
+            <a href="#/guides/forms?section=reset">原生表单重置</a>。
           </li>
           <li>
-            required 将必选约束传给原生 radio；hint 和 error
-            用于组级说明与错误，选择后的错误清除由调用方处理。错误说明带装饰性提醒标记，
-            长文字换行齐文字起点；标记不单独命名或播报。
+            required 将必选约束传给原生 radio，hint 和 error 用于组级说明与错误。 自行管理原生 form
+            时，校验与错误关联见 <a href="#/guides/forms?section=validation">原生表单接入</a>
+            。错误说明带装饰性提醒标记， 长文字换行齐文字起点；标记不单独命名或播报。
           </li>
           <li>
             disabled 禁用整组，options 中的 disabled 禁用单项，也支持父 fieldset
@@ -146,10 +124,42 @@ export default defineComponentPage('radio-group', {
             不跳到正文或状态提示。
           </li>
           <li>
-            署名例在匿名时禁用昵称字段并取消必填，保留草稿供切回；预览读取当时的 FormData，
-            禁用的昵称不参与提交。条件字段与预览放在单选标签之外。
+            跨字段的条件必填、禁用值与草稿恢复见{' '}
+            <a href="#/guides/interactions?section=radio-comment-signature">
+              交互组合：条件字段与表单值
+            </a>
+            。
           </li>
         </ul>
+      ),
+    },
+    {
+      id: 'form-integration',
+      title: '与 Form 配合',
+      kind: 'integration',
+      content: (
+        <>
+          <CodeBlock
+            source={`import { Form, RadioGroup } from 'yahha-ui';
+
+<Form initialValues={{ frequency: 'weekly' }}>
+  {(form) => (
+    <RadioGroup
+      {...form.choice('frequency')}
+      label="来信频率"
+      options={[
+        { value: 'weekly', label: '每周' },
+        { value: 'monthly', label: '每月' },
+      ]}
+    />
+  )}
+</Form>`}
+          />
+          <p>
+            空字符串表示待选择，配合 required 实现必选。多控件接入见{' '}
+            <a href="#/components/form?section=form-controls">Form 控件绑定示例</a>。
+          </p>
+        </>
       ),
     },
     {

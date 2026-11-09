@@ -39,20 +39,12 @@ export default defineComponentPage('surface', {
           component: SurfaceNotes,
           source: surfaceNotesSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看内容组合与贴边封面',
-      examples: [
         {
           id: 'surface-composition',
           title: '内容与操作组合',
           description: '在容器中组合分类、标题、正文与独立操作区。',
           component: SurfaceComposition,
           source: surfaceCompositionSource,
-          toc: false,
         },
         {
           id: 'surface-cover',
@@ -60,7 +52,6 @@ export default defineComponentPage('surface', {
           description: '封面贴齐容器边缘，正文保留内距。',
           component: SurfaceCover,
           source: surfaceCoverSource,
-          toc: false,
         },
       ],
     },

@@ -16,9 +16,8 @@ const page: DocPage = {
             style。局部样式的作用元素以每页 API 说明为准，避免依赖内部 CSS Modules 类名或 DOM 层级。
           </p>
           <p>
-            例如，TextField 的 className 作用于整个字段，style 和 ref 作用于 input；Dialog 的
-            className / style / ref 作用于弹窗面板。Toast、EmptyState、ThemeProvider
-            不接收任意原生属性。
+            例如，Input 的 className 作用于整个字段，style 和 ref 作用于 input；Dialog 的 className
+            / style / ref 作用于弹窗面板。Toast、EmptyState、ThemeProvider 不接收任意原生属性。
           </p>
         </>
       ),
@@ -46,7 +45,7 @@ const page: DocPage = {
         <>
           <ul>
             <li>Button 的 loading 负责禁用和视觉反馈；请求、错误恢复与重试由调用方处理。</li>
-            <li>TextField 的 error 负责呈现错误；校验规则由调用方处理。</li>
+            <li>Input 的 error 负责呈现错误；校验规则由调用方处理。</li>
             <li>SegmentedControl 和 Dialog 使用受控状态；在回调中更新 value 或 open。</li>
             <li>Toast 的计时、位置、队列与去重由调用方处理。它不会自动消失。</li>
           </ul>

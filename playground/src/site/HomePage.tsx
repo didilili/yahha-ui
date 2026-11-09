@@ -1,7 +1,7 @@
 import { useState, type Ref } from 'react';
 import { version as packageVersion } from '../../../package.json';
 import { ArrowDown, ArrowRight, Code2 } from 'lucide-react';
-import { Badge, Button, Checkbox, Link, Popover, Surface, Tabs, Text, TextField } from 'yahha-ui';
+import { Badge, Button, Checkbox, Link, Popover, Surface, Tabs, Text, Input } from 'yahha-ui';
 import Motif from './Motif';
 import BookmarkMark from './BookmarkMark';
 import HomeScenes from './HomeScenes';
@@ -197,7 +197,7 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
                   loading="lazy"
                 />
               </p>
-              <TextField
+              <Input
                 label="手记标题"
                 value={name}
                 maxLength={20}
@@ -211,7 +211,7 @@ export default function HomePage({ headingRef }: { headingRef?: Ref<HTMLHeadingE
               />
               <p className="home-component-note">
                 这个示例使用了 <Link href="#/components/button">Button</Link>、
-                <Link href="#/components/text-field">TextField</Link>、
+                <Link href="#/components/input">Input</Link>、
                 <Link href="#/components/checkbox">Checkbox</Link>、
                 <Link href="#/components/badge">Badge</Link>、
                 <Link href="#/components/tabs">Tabs</Link> 和{' '}

@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, type Ref } from 'react';
 import { ArrowRight, Search, X } from 'lucide-react';
-import { Badge, Button, EmptyState, IconButton, Link, SegmentedControl, TextField } from 'yahha-ui';
+import { Badge, Button, EmptyState, IconButton, Link, SegmentedControl, Input } from 'yahha-ui';
 import { catalogGroups, componentCatalog } from '../docs/component-catalog';
 import type { ComponentCatalogGroup } from '../docs/types';
 import ComponentPreview from './ComponentPreviews';
@@ -69,14 +69,11 @@ const normalize = (value: string) => value.normalize('NFKC').toLocaleLowerCase()
 
 export default function ComponentOverview({
   headingRef,
-  onReady,
 }: {
   headingRef?: Ref<HTMLHeadingElement>;
-  onReady?: () => void;
 }) {
   const [filters, setFilters] = useState(readFilters);
   const searchRef = useRef<HTMLInputElement>(null);
-  const readyCallback = useRef(onReady);
   const overviewId = useId();
   const descriptionId = `${overviewId}-search-hint`;
   const legacyGroup = Object.hasOwn(legacyGroups, filters.group)
@@ -106,10 +103,6 @@ export default function ComponentOverview({
     }))
     .filter(({ components }) => components.length > 0);
   const uiCount = componentCatalog.filter((component) => component.id !== 'theme-provider').length;
-
-  useEffect(() => {
-    readyCallback.current?.();
-  }, []);
 
   useEffect(() => {
     const readLocation = () => {
@@ -166,7 +159,7 @@ export default function ComponentOverview({
         <div className="overview-filterbar">
           <div className="overview-search">
             <div className="overview-search-row">
-              <TextField
+              <Input
                 ref={searchRef}
                 className="overview-search-control"
                 classNames={{ input: 'overview-search-input' }}
@@ -218,7 +211,6 @@ export default function ComponentOverview({
             找到 <strong>{matches.length}</strong> 项 / 共 {componentCatalog.length} 项
             {filters.group !== 'all' && <span> · {legacyGroup?.label ?? filters.group}</span>}
           </p>
-          <p className="overview-preview-note">打开组件文档，查看示例、用法与 API。</p>
         </div>
       </section>
 

@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
+import { closeSearchDialog, openSearchDialog, searchField } from './search-dialog-helpers.mjs';
 
 export async function verifyResponsiveFocus(page, baseURL) {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${baseURL}#/components/button`);
-  const search = page.getByRole('searchbox', { name: '搜索文档', exact: true });
+  const search = page
+    .locator('.docs-sidebar')
+    .getByRole('button', { name: '搜索文档', exact: true });
   await search.focus();
   await page.setViewportSize({ width: 390, height: 844 });
   const menu = page.getByRole('button', { name: '打开文档目录', exact: true });
@@ -58,15 +61,23 @@ export async function verifyTocResponsiveFocus(page, baseURL) {
     await current.elementHandle(),
   );
   await page.setViewportSize({ width: 1280, height: 900 });
-  const search = page.getByRole('searchbox', { name: '搜索文档', exact: true });
-  await search.fill('Button');
+  await openSearchDialog(page);
+  await searchField(page).fill('Button');
+  await closeSearchDialog(page);
   await api.focus();
   await page.setViewportSize({ width: 1100, height: 900 });
   await page.waitForFunction(
     (node) => document.activeElement === node,
-    await search.elementHandle(),
+    await current.elementHandle(),
   );
-  await search.fill('');
+  assert.equal(
+    await current.getAttribute('href'),
+    '#/components/select',
+    'A retained search query does not replace the selected document in the directory.',
+  );
+  await openSearchDialog(page);
+  await searchField(page).fill('');
+  await closeSearchDialog(page);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`${baseURL}#/components/button`);
   await page.locator('.example-block').first().waitFor();

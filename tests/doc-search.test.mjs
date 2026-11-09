@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { test } from 'node:test';
 import { createElement, Fragment } from 'react';
 import { componentCatalog } from '../playground/src/docs/component-catalog.ts';
+import { apiRowAnchor } from '../playground/src/docs/api-anchor.ts';
 import {
   buildDocumentationSearchIndex,
   searchDocumentation,
@@ -18,14 +22,14 @@ async function componentEntries(id, file = id) {
   return markdownSearchEntries(markdown, id);
 }
 
-test('API names find the documented component section, with case-insensitive matching', async () => {
+test('API names find the documented property row, with case-insensitive matching', async () => {
   const index = buildDocumentationSearchIndex(
     componentCatalog,
     await componentEntries('dialog'),
     [],
   );
   const result = searchDocumentation(index, 'INITIALfocus');
-  assert.equal(result[0]?.href, '#/components/dialog?section=api');
+  assert.equal(result[0]?.href, '#/components/dialog?section=api-DialogProps--initialFocus');
   assert.match(result[0].title, /initialFocus/);
   assert.equal(result[0].area, 'components');
   assert.equal(result[0].label, 'API');
@@ -41,22 +45,102 @@ test('portalContainer matches real API text and not code-only identifiers', asyn
   const index = buildDocumentationSearchIndex(componentCatalog, entries, []);
   assert.equal(
     searchDocumentation(index, 'portalContainer')[0]?.href,
-    '#/components/dialog?section=api',
+    '#/components/dialog?section=api-DialogProps--portalContainer',
   );
   assert.deepEqual(searchDocumentation(index, 'codeOnlyCanary'), []);
+});
+
+test('matching properties in separate API tables retain their own destinations and context', () => {
+  const entries = markdownSearchEntries(
+    `# Select 下拉选择器
+
+<a id="api"></a>
+## API
+
+### SelectProps
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| \`value\` | 当前选择 | \`string\` | — |
+
+### SelectOption
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| \`value\` **必填** | 选项的提交值 | \`string\` | — |
+`,
+    'select',
+  );
+  const index = buildDocumentationSearchIndex([], entries, []);
+  const results = searchDocumentationMatches(index, 'value').filter(
+    (entry) => entry.kind === 'api',
+  );
+  assert.deepEqual(
+    results.map((entry) => entry.href),
+    [
+      '#/components/select?section=api-SelectProps--value',
+      '#/components/select?section=api-SelectOption--value',
+    ],
+  );
+  assert.match(results[0].title, /SelectProps/);
+  assert.match(results[1].title, /SelectOption/);
+  assert.equal(searchDocumentation(index, 'SelectOption value')[0]?.href, results[1].href);
+  assert.equal(new Set(results.map((entry) => entry.id)).size, 2);
+  assert(entries.some((entry) => entry.href === '#/components/select?section=api'));
+});
+
+test('API row anchors preserve generic signatures, property punctuation and distinct table names', () => {
+  assert.equal(
+    apiRowAnchor('SegmentedControlProps<T extends string>', 'ref / className'),
+    'api-SegmentedControlProps%3CT%20extends%20string%3E--ref%20%2F%20className',
+  );
+  assert.notEqual(apiRowAnchor('A--B', 'value'), apiRowAnchor('A', 'B--value'));
+  assert.notEqual(apiRowAnchor('Props<T>', 'name_value'), apiRowAnchor('Props', 'namevalue'));
+  const entries = markdownSearchEntries(
+    `# SegmentedControl 分段选择器
+
+<a id="api"></a>
+## API
+### SegmentedControlProps<T extends string>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| \`ref / className\` | 作用于根节点 | \`Ref\` | — |
+
+<a id="keyboard"></a>
+## 可访问性与键盘
+### 普通说明
+| \`notAnApiRow\` | 不属于 API 表格 | — | — |
+`,
+    'segmented-control',
+  );
+  const properties = entries.filter((entry) => entry.kind === 'api');
+  assert.equal(properties.length, 1);
+  assert.equal(
+    new URLSearchParams(properties[0].href.split('?')[1]).get('section'),
+    apiRowAnchor('SegmentedControlProps<T extends string>', 'ref / className'),
+  );
+  assert.match(properties[0].title, /SegmentedControlProps<T extends string>/);
 });
 
 test('Chinese names and existing aliases rank the component page before its sections', async () => {
   const index = buildDocumentationSearchIndex(
     componentCatalog,
-    await componentEntries('text-field'),
+    await componentEntries('input'),
     [],
   );
-  assert.equal(searchDocumentation(index, '输入框')[0]?.href, '#/components/text-field');
+  assert.equal(searchDocumentation(index, '输入框')[0]?.href, '#/components/input');
   assert.equal(searchDocumentation(index, '输入框')[0]?.area, 'components');
   assert.equal(searchDocumentation(index, '输入框')[0]?.label, '组件');
   assert.equal(searchDocumentation(index, 'TextField')[0]?.kind, 'component');
-  assert.equal(searchDocumentation(index, '单行输入')[0]?.pageId, 'text-field');
+  assert.equal(searchDocumentation(index, '单行输入')[0]?.pageId, 'input');
+});
+
+test('common Input and Modal names find component entry points before API subparts', async () => {
+  const index = buildDocumentationSearchIndex(
+    componentCatalog,
+    [...(await componentEntries('input')), ...(await componentEntries('dialog'))],
+    [],
+  );
+  assert.equal(searchDocumentation(index, 'Input')[0]?.href, '#/components/input');
+  assert.equal(searchDocumentation(index, 'Modal')[0]?.href, '#/components/dialog');
 });
 
 test('category words retain the existing route to components in that group', () => {
@@ -300,4 +384,92 @@ test('virtual index derives all component documents including the theme filename
     entries.some((entry) => entry.pageId === 'theme-provider' && entry.href.includes('section=')),
   );
   assert(!source.includes('import '));
+});
+
+test('every generated API result matches one unique row in the current component page model', async () => {
+  const { createServer } = await import('vite');
+  const server = await createServer({
+    configFile: new URL('../vite.config.ts', import.meta.url).pathname,
+    server: { middlewareMode: true, hmr: false, ws: false, watch: null },
+    logLevel: 'error',
+  });
+  try {
+    const { loadComponentPage } = await server.ssrLoadModule('/src/docs/component-pages.ts');
+    for (const { id } of componentCatalog) {
+      const page = await loadComponentPage(id);
+      const expected = page.sections.flatMap((section) =>
+        (section.api ?? []).flatMap((api) =>
+          api.rows.map((row) => ({
+            anchor: apiRowAnchor(api.name, row.name),
+            apiName: api.name,
+            property: row.name,
+          })),
+        ),
+      );
+      const actual = (await componentEntries(id, id === 'theme-provider' ? 'theme' : id)).filter(
+        (entry) => entry.kind === 'api',
+      );
+      const anchors = expected.map((row) => row.anchor);
+      assert.equal(new Set(anchors).size, expected.length, `${id}: API row IDs are unique`);
+      assert.equal(
+        new Set(actual.map((entry) => entry.id)).size,
+        expected.length,
+        `${id}: search entry IDs are unique`,
+      );
+      assert.deepEqual(
+        actual.map((entry) => ({
+          anchor: new URLSearchParams(entry.href.split('?')[1]).get('section'),
+          apiName: entry.keywords[1],
+          property: entry.keywords[0],
+        })),
+        expected,
+        `${id}: generated Markdown and current API row models agree`,
+      );
+      const pageAnchors = page.sections.flatMap((section) => [
+        section.id,
+        ...(section.examples ?? []).map((example) => example.id),
+      ]);
+      assert(
+        anchors.every((anchor) => !pageAnchors.includes(anchor)),
+        `${id}: row anchors do not collide with existing section/example IDs`,
+      );
+    }
+  } finally {
+    await server.close();
+  }
+});
+
+test('Input is canonical for every retained name without adding a component entry', () => {
+  assert.equal(componentCatalog.filter((item) => item.id === 'input').length, 1);
+  assert(!componentCatalog.some((item) => item.id === 'text-field'));
+  const index = buildDocumentationSearchIndex(componentCatalog, [], []);
+  for (const term of ['Input', 'TextField', '单行输入', '输入框']) {
+    const result = searchDocumentation(index, term)[0];
+    assert.equal(result?.href, '#/components/input', term);
+    assert.equal(result?.title, 'Input 输入框', term);
+  }
+  assert(!index.some((entry) => entry.pageId === 'text-field'));
+});
+
+test('virtual search skips the legacy Markdown copy and indexes only canonical Input API rows', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'yahha-input-search-'));
+  try {
+    const markdown =
+      '# Input 输入框\n\n<a id="api"></a>\n## API\n\n### InputProps\n| 属性 | 说明 | 类型 | 默认值 |\n| --- | --- | --- | --- |\n| `value` | 当前值 | `string` | — |\n';
+    await writeFile(join(directory, 'input.md'), markdown);
+    await writeFile(join(directory, 'text-field.md'), markdown.replaceAll('Input', 'TextField'));
+    const plugin = docsSearchIndex(pathToFileURL(`${directory}/`));
+    const id = plugin.resolveId('virtual:yahha-doc-search');
+    const source = await plugin.load.call({ addWatchFile: () => {} }, id);
+    const entries = JSON.parse(source.replace(/^export default /, '').replace(/;$/, ''));
+    assert(entries.length > 0);
+    assert(entries.every((entry) => entry.pageId === 'input'));
+    assert.equal(entries.filter((entry) => entry.kind === 'api').length, 1);
+    assert.equal(
+      entries.find((entry) => entry.kind === 'api').href,
+      '#/components/input?section=api-InputProps--value',
+    );
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });

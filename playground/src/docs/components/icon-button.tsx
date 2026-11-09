@@ -14,8 +14,6 @@ import IconButtonStates from '../../examples/foundations/IconButtonStates';
 import iconButtonStatesSource from '../../examples/foundations/IconButtonStates.tsx?raw';
 import IconButtonLoading from '../../examples/foundations/IconButtonLoading';
 import iconButtonLoadingSource from '../../examples/foundations/IconButtonLoading.tsx?raw';
-import IconButtonReadingList from '../../examples/foundations/IconButtonReadingList';
-import iconButtonReadingListSource from '../../examples/foundations/IconButtonReadingList.tsx?raw';
 import { defineComponentPage } from '../page';
 import { buttonNativeRows, buttonVariantRows } from '../page-helpers';
 
@@ -58,6 +56,13 @@ export default defineComponentPage('icon-button', {
           source: iconButtonVariantsSource,
         },
         {
+          id: 'icon-button-decorations',
+          title: '常规与软团外观',
+          description: '保持图标、尺寸和强调程度一致，只比较 appearance。',
+          component: IconButtonAppearance,
+          source: iconButtonAppearanceSource,
+        },
+        {
           id: 'icon-button-sizes',
           title: '尺寸',
           description: '用相同图标对比小号、中号和大号点击区域。',
@@ -79,45 +84,32 @@ export default defineComponentPage('icon-button', {
           source: iconButtonToggleSource,
         },
         {
-          id: 'icon-button-decorations',
-          title: '常规与软团外观',
-          description: '保持图标、尺寸和强调程度一致，只比较 appearance。',
-          component: IconButtonAppearance,
-          source: iconButtonAppearanceSource,
+          id: 'icon-button-loading',
+          title: '异步加载与选中',
+          description: '模拟更新收藏，展示等待与选中状态；不发送请求。',
+          component: IconButtonLoading,
+          source: iconButtonLoadingSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看关闭、异步与列表操作',
-      content: <p>收藏状态只保留在当前示例，刷新后恢复。</p>,
-      examples: [
         {
           id: 'icon-button-basic',
           title: '关闭与重新显示',
           description: '关闭提示后聚焦重新显示入口，再次显示后回到关闭按钮。',
           component: IconButtonBasic,
           source: iconButtonBasicSource,
-          toc: false,
-        },
-        {
-          id: 'icon-button-loading',
-          title: '异步加载与选中',
-          description: '模拟更新收藏，展示等待与选中状态；不发送请求。',
-          component: IconButtonLoading,
-          source: iconButtonLoadingSource,
-          toc: false,
-        },
-        {
-          id: 'icon-button-reading-list',
-          title: '列表操作与焦点恢复',
-          description: '筛选收藏后移除当前项，焦点移到相邻操作或恢复入口。',
-          component: IconButtonReadingList,
-          source: iconButtonReadingListSource,
-          toc: false,
         },
       ],
+    },
+    {
+      id: 'recipes',
+      title: '相关组合',
+      kind: 'related',
+      content: (
+        <ul>
+          <li>
+            <a href="#/guides/interactions?section=icon-button-reading-list">收藏列表与焦点恢复</a>
+          </li>
+        </ul>
+      ),
     },
     {
       id: 'api',

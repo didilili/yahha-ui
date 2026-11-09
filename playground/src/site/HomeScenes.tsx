@@ -25,8 +25,8 @@ export default function HomeScenes() {
                 <img
                   src={readingPreview}
                   alt=""
-                  width={910}
-                  height={1831}
+                  width={960}
+                  height={600}
                   loading="lazy"
                   decoding="async"
                 />
@@ -44,8 +44,8 @@ export default function HomeScenes() {
                 <img
                   src={archivePreview}
                   alt=""
-                  width={910}
-                  height={1163}
+                  width={960}
+                  height={600}
                   loading="lazy"
                   decoding="async"
                 />
@@ -63,8 +63,8 @@ export default function HomeScenes() {
                 <img
                   src={editingPreview}
                   alt=""
-                  width={910}
-                  height={336}
+                  width={960}
+                  height={600}
                   loading="lazy"
                   decoding="async"
                 />

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { IconButton, Text, TextField } from 'yahha-ui';
+import { IconButton, Text, Input } from 'yahha-ui';
 
 const address = 'https://example.com/notes/feed.xml';
 
@@ -33,7 +33,7 @@ export default function TextFieldCopy() {
 
   return (
     <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
-      <TextField
+      <Input
         ref={inputRef}
         label="示例订阅地址"
         value={address}

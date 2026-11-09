@@ -1,8 +1,8 @@
-import { TextField } from 'yahha-ui';
+import { Input } from 'yahha-ui';
 
 export default function TextFieldBasic() {
   return (
-    <TextField
+    <Input
       label="博客名称"
       name="blogName"
       defaultValue="我的小小记录"

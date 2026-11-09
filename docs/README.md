@@ -2,7 +2,7 @@
 
 首次使用请参考[安装与接入](../README.md#安装与接入)，完成安装、样式导入和主题设置。没有现成 React 项目时，可[导出最小项目](../README.md#导出最小项目)。
 
-本文档收录 31 个 UI 组件、ThemeProvider 及其用途、示例与 API。
+本文档收录 32 个 UI 组件、ThemeProvider 及其用途、示例与 API。
 
 可直接打开[在线文档](https://yahhaui.com/#/guides/getting-started)与[组件总览](https://yahhaui.com/#/components)操作示例。也可在组件库根目录完成 `npm ci` 后运行 `npm run dev`，启动本地文档站；下面的组件链接可直接在 GitHub 阅读。
 
@@ -25,7 +25,10 @@
 
 ## 表单
 
-- [TextField 单行输入](components/text-field.md)：单行输入、标签、辅助说明与错误反馈。
+统一字段管理、校验和提交使用 [Form](components/form.md)。原生表单取值、重置和控件差异见[原生表单接入](guides/forms.md)，各控件页保留自身接入规则。`TextField` / `TextFieldProps` 作为 `Input` / `InputProps` 的兼容别名保留。
+
+- [Form 表单](components/form.md)：统一字段值、初始值、校验、错误回显、提交和重置。
+- [Input 输入框](components/input.md)：单行输入、标签、辅助说明与错误反馈。
 - [Textarea](components/textarea.md)：输入留言、简介等多行文字，保留原生表单行为，可垂直调整高度。
 - [Select](components/select.md)：从固定选项里选一项，支持禁用选项、表单提交与重置，不含输入搜索和多选。
 - [Checkbox](components/checkbox.md)：原生复选、半选与必选约束。
@@ -79,9 +82,11 @@
 可在[在线文档站](https://yahhaui.com/)查阅以下指南和组合示例；本地文档站使用相同路由。
 
 - [开始使用](https://yahhaui.com/#/guides/getting-started)：安装、样式与第一个组件。
+- [原生表单接入](guides/forms.md)：原生取值、校验与焦点、重置和七类控件差异。
 - [使用与定制](https://yahhaui.com/#/guides/styling)：颜色、布局、插槽、状态管理与键盘约定。
 - [场景总览](https://yahhaui.com/#/guides/recipes)：按用途选择组合示例。
 - [阅读与收藏](https://yahhaui.com/#/guides/reading)：阅读与收藏的完整组合。
+- [交互组合](recipes/interactions.md)：删除确认、清单筛选、表单反馈、计时撤销与章节分享的完整流程。
 - [设计语言与基准](https://yahhaui.com/#/guides/design-baseline)：[设计规则](design-language.md)与默认组件组合。
 - [状态与反馈](https://yahhaui.com/#/guides/states)：[文章编辑](../playground/src/examples/scenes/ArticleActions.tsx)、[博客归档](../playground/src/examples/scenes/BlogArchive.tsx)、等待与恢复。
 - [图标与插画](https://yahhaui.com/#/guides/artwork)：[素材与分发范围](assets-and-distribution.md)。

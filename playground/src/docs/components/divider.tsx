@@ -36,27 +36,6 @@ export default defineComponentPage('divider', {
           DividerVertical,
           dividerVerticalSource,
         ),
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看章节花线与长元信息组合',
-      examples: [
-        {
-          id: 'divider-chapter',
-          title: '章节花线',
-          description: '用现有 SVG 定制一处章节转折，保留真实 hr 的分隔语义。',
-          component: DividerChapter,
-          source: dividerChapterSource,
-          assets: [
-            {
-              name: 'flower-line.svg',
-              href: flowerLine,
-              path: 'artwork/decorative-elements/dividers/flower-line.svg',
-            },
-          ],
-        },
         example(
           'divider-directions',
           '响应式内容分隔',
@@ -77,6 +56,22 @@ export default defineComponentPage('divider', {
           。垂直分隔适合短元信息，可通过 style 或 className 调整高度。
         </p>
       ),
+      examples: [
+        {
+          id: 'divider-chapter',
+          title: '自定义章节花线',
+          description: '用现有 SVG 定制一处章节转折，保留真实 hr 的分隔语义。',
+          component: DividerChapter,
+          source: dividerChapterSource,
+          assets: [
+            {
+              name: 'flower-line.svg',
+              href: flowerLine,
+              path: 'artwork/decorative-elements/dividers/flower-line.svg',
+            },
+          ],
+        },
+      ],
     },
     {
       id: 'api',
@@ -122,11 +117,10 @@ export default defineComponentPage('divider', {
           </p>
           <p>
             分隔线默认是静态内容，无需添加 tabIndex。Divider 不接收 children 或
-            dangerouslySetInnerHTML，需要分组标题时单独使用标题元素。 类型检查会拒绝这两种本就无效的
-            hr 用法；有效原生属性与运行时绘制保持。
+            dangerouslySetInnerHTML，需要分组标题时单独使用标题元素。
           </p>
           <p>
-            装饰线与对应元信息成组排列，窄屏由进阶示例的布局隐藏竖线，保留完整文字；不改变 Divider
+            装饰线与对应元信息成组排列，窄屏由元信息示例的布局隐藏竖线，保留完整文字；不改变 Divider
             的方向或语义。
           </p>
         </>

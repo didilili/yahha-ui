@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Dialog, Surface, TextField, ThemeProvider, type ThemeTokens } from 'yahha-ui';
+import { Button, Dialog, Surface, Input, ThemeProvider, type ThemeTokens } from 'yahha-ui';
 
 const tokens: ThemeTokens = {
   ink: '#243b40',
@@ -20,7 +20,7 @@ export default function ThemePortal() {
   return (
     <ThemeProvider theme="pink" tokens={tokens}>
       <Surface style={{ display: 'grid', gap: 20, maxWidth: 560 }}>
-        <TextField label="订阅邮箱" placeholder="you@example.com" hint="每月一封更新。" />
+        <Input label="订阅邮箱" placeholder="you@example.com" hint="每月一封更新。" />
         <Dialog
           open={open}
           onOpenChange={setOpen}

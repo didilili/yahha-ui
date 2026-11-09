@@ -3,8 +3,8 @@ import MenuBasic from '../../examples/floating/MenuBasic';
 import menuBasicSource from '../../examples/floating/MenuBasic.tsx?raw';
 import MenuOpen from '../../examples/floating/MenuOpen';
 import menuOpenSource from '../../examples/floating/MenuOpen.tsx?raw';
-import MenuControlled from '../../examples/floating/MenuControlled';
-import menuControlledSource from '../../examples/floating/MenuControlled.tsx?raw';
+import MenuTriggerRecovery from '../../examples/floating/MenuTriggerRecovery';
+import menuTriggerRecoverySource from '../../examples/floating/MenuTriggerRecovery.tsx?raw';
 import { defineComponentPage } from '../page';
 import { stateRows, popupRows } from '../page-helpers';
 
@@ -52,26 +52,14 @@ export default defineComponentPage('dropdown-menu', {
           component: MenuOpen,
           source: menuOpenSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看草稿编辑与触发器恢复',
-      content: (
-        <p>
-          操作入口随草稿一起移出时，焦点转到仍存在的恢复按钮；恢复后回到新挂载的入口。
-          菜单名称包含已保存标题，未提交的编辑内容在移出和恢复后继续保留。
-        </p>
-      ),
-      examples: [
         {
           id: 'controlled',
           title: '触发器移除后的焦点恢复',
-          description: '移出草稿时转到恢复入口，恢复后返回新菜单按钮。',
-          component: MenuControlled,
-          source: menuControlledSource,
-          toc: false,
+          description:
+            '菜单含禁用发布项与危险移出项；移出手记和菜单入口后回焦恢复按钮，恢复后返回菜单入口。',
+          tocTitle: '焦点恢复、禁用项与危险项',
+          component: MenuTriggerRecovery,
+          source: menuTriggerRecoverySource,
         },
       ],
     },
@@ -86,7 +74,9 @@ export default defineComponentPage('dropdown-menu', {
           </p>
           <p>
             业务确认、异步执行和失败处理由调用方负责，destructive
-            只改变危险动作的文字颜色。结果应留在页面，移出内容等操作可保留恢复入口。组合示例见{' '}
+            只改变危险动作的文字颜色。结果应留在页面，移出内容等操作可保留恢复入口。完整的{' '}
+            <Link href="#/guides/interactions?section=controlled">草稿编辑、移出与恢复</Link>
+            保留未提交的编辑内容；菜单与弹窗的组合见{' '}
             <Link href="#/guides/states?section=article-actions">文章编辑与管理</Link>。
           </p>
         </>
@@ -119,7 +109,7 @@ export default defineComponentPage('dropdown-menu', {
               defaultValue: 'false',
               description: '禁用触发器，阻止用户打开菜单。',
             },
-            ...popupRows('DropdownMenu', 'bottom', 'start'),
+            ...popupRows('bottom', 'start'),
           ],
         },
         {

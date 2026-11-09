@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 
 export async function verifySectionIcons(page, mode = 'component') {
-  const headings = await page.locator('.doc-section > .section-title').evaluateAll((nodes) =>
+  const headings = await page.locator('.doc-section-header > .section-title').evaluateAll((nodes) =>
     nodes.map((heading) => {
       const icon = heading.querySelector('svg');
       return {

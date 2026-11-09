@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, EmptyState, Heading, Select, Text, TextField, ThemeProvider } from 'yahha-ui';
+import { Button, EmptyState, Heading, Select, Text, Input, ThemeProvider } from 'yahha-ui';
 import 'yahha-ui/style.css';
 import emptyCollectionArtwork from './artwork/little-days-empty-collection.svg?no-inline';
 import emptySearchArtwork from './artwork/little-days-search-empty.svg?no-inline';
@@ -49,7 +49,7 @@ export default function EmptyScene() {
             }}
           />
           {scene === 'search' && (
-            <TextField
+            <Input
               ref={search}
               label="搜索关键词"
               value={query}

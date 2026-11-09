@@ -20,6 +20,15 @@ export const guideCatalog = [
     description: '组件安装、样式导入、主题配置与基础用法。',
   },
   {
+    id: 'forms',
+    name: '原生表单接入',
+    chinese: '',
+    group: '开始使用',
+    area: 'getting-started',
+    presentation: 'compact',
+    description: '原生表单取值、校验职责、状态重置与七类控件的接入差异。',
+  },
+  {
     id: 'styling',
     name: '使用与定制',
     chinese: '',
@@ -52,6 +61,14 @@ export const guideCatalog = [
     group: '开始使用',
     area: 'recipes',
     description: '文章归档、编辑、加载、错误和空状态的组合示例。',
+  },
+  {
+    id: 'interactions',
+    name: '交互组合',
+    chinese: '',
+    group: '开始使用',
+    area: 'recipes',
+    description: '删除确认、收藏筛选、表单反馈、撤销和章节分享的完整组件组合。',
   },
   {
     id: 'design-baseline',

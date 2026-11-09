@@ -7,8 +7,8 @@ import TabsStates from '../../examples/navigation/TabsStates';
 import tabsStatesSource from '../../examples/navigation/TabsStates.tsx?raw';
 import TabsControlled from '../../examples/navigation/TabsControlled';
 import tabsControlledSource from '../../examples/navigation/TabsControlled.tsx?raw';
-import TabsCounts from '../../examples/navigation/TabsCounts';
-import tabsCountsSource from '../../examples/navigation/TabsCounts.tsx?raw';
+import TabsLabelCounts from '../../examples/navigation/TabsLabelCounts';
+import tabsLabelCountsSource from '../../examples/navigation/TabsLabelCounts.tsx?raw';
 import TabsAppearance from '../../examples/navigation/TabsAppearance';
 import tabsAppearanceSource from '../../examples/navigation/TabsAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -54,40 +54,27 @@ export default defineComponentPage('tabs', {
           source: tabsStatesSource,
         },
         {
+          id: 'controlled',
+          title: '保留面板状态',
+          description:
+            '通过 keepMounted 保留非受控草稿；切换预览读取最新原文，外部返回操作显式聚焦输入，草稿仅保留在本例。',
+          component: TabsControlled,
+          source: tabsControlledSource,
+        },
+        {
+          id: 'counts',
+          title: '自定义标签与数量同步',
+          description:
+            '标签内使用非交互 Badge；归档或恢复一篇手记，两处数量与面板内容从同份数据同步更新。',
+          component: TabsLabelCounts,
+          source: tabsLabelCountsSource,
+        },
+        {
           id: 'appearance',
           title: '普通与墨线',
           description: '普通标签保留直线选中标记；ink 增加倾斜墨线与选中纸面。',
           component: TabsAppearance,
           source: tabsAppearanceSource,
-        },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看数量标记与面板状态保留',
-      content: (
-        <p>
-          明信片例保持输入非受控，预览展示当前草稿原文；再次修改后切换预览会更新内容。
-          预览正文不重复播报，草稿只在当前示例，不发送或持久保存。
-        </p>
-      ),
-      examples: [
-        {
-          id: 'counts',
-          title: '标签数量与列表同步',
-          description: '归档清单中的手记，数量标记与两个面板同步更新。',
-          component: TabsCounts,
-          source: tabsCountsSource,
-          toc: false,
-        },
-        {
-          id: 'controlled',
-          title: '保留面板状态',
-          description: '切换到预览，再返回编辑；输入内容保持不变。',
-          component: TabsControlled,
-          source: tabsControlledSource,
-          toc: false,
         },
       ],
     },
@@ -109,10 +96,48 @@ export default defineComponentPage('tabs', {
             和草稿等局部状态，隐藏内容不参与键盘顺序。面板中的受控输入仍由调用方维护；保留的字段不会自动禁用，仍可能参与提交和校验。
           </li>
           <li>
-            面板切换不会自动移动焦点到内容中的输入；“继续填写”等操作可由调用方显式聚焦。组合示例见{' '}
-            <Link href="#/guides/states?section=archive">个人博客归档</Link>。
+            面板切换不会自动移动焦点到内容中的输入；“继续填写”等操作可由调用方显式聚焦。完整归档、空列表与移除后焦点处理见{' '}
+            <Link href="#/guides/interactions?section=counts">栏目计数与清单操作</Link>。
           </li>
         </ul>
+      ),
+    },
+    {
+      id: 'keyboard',
+      title: '可访问性与键盘',
+      content: (
+        <ul>
+          <li>
+            Tab 进入标签列表后，左右方向键移动焦点并在首尾循环，Home / End 移到首项或末项。默认
+            Enter / Space 激活，activateOnFocus 开启后随聚焦切换；切换后焦点留在标签上，再按 Tab
+            进入面板。左右方向键遵循当前 LTR / RTL 方向。
+          </li>
+          <li>
+            label 为 tablist 提供可访问名称；组件管理 tab / tabpanel 的角色、ID
+            和相互关联。标签按钮内不嵌套其他交互控件。
+          </li>
+          <li>
+            禁用标签使用
+            aria-disabled，允许方向键聚焦以读取名称，但不可激活。焦点所在标签与当前选中面板可能不同。
+          </li>
+          <li>
+            方向优先读取 Tabs 根节点或最近容器上的显式 dir，包括 Shadow DOM 宿主与 slot
+            所在的容器；未指定时继承上游 DirectionProvider。仅使用 CSS direction 或 dir="auto"
+            时，请同时配置 Tabs 的显式 dir；没有原生 dir 覆盖时，也可同步 Base UI DirectionProvider
+            的 direction，保证视觉顺序与键盘一致。
+          </li>
+        </ul>
+      ),
+    },
+    {
+      id: 'styling',
+      title: '长标签与面板布局',
+      content: (
+        <p>
+          每个标签至少 44px 高，列表四周为焦点轮廓留出空间。
+          长标签与标签列表可以换行。即使列表分成多行，左右方向键仍按标签顺序移动；不要把换行布局当作二维网格。
+          面板中的文章、表单等内容由调用方排版，局部间距可通过 classNames.panel 调整。
+        </p>
       ),
     },
     {
@@ -208,44 +233,6 @@ export default defineComponentPage('tabs', {
           ],
         },
       ],
-    },
-    {
-      id: 'keyboard',
-      title: '可访问性与键盘',
-      content: (
-        <ul>
-          <li>
-            Tab 进入标签列表后，左右方向键移动焦点并在首尾循环，Home / End 移到首项或末项。默认
-            Enter / Space 激活，activateOnFocus 开启后随聚焦切换；切换后焦点留在标签上，再按 Tab
-            进入面板。左右方向键遵循当前 LTR / RTL 方向。
-          </li>
-          <li>
-            label 为 tablist 提供可访问名称；组件管理 tab / tabpanel 的角色、ID
-            和相互关联。标签按钮内不嵌套其他交互控件。
-          </li>
-          <li>
-            禁用标签使用
-            aria-disabled，允许方向键聚焦以读取名称，但不可激活。焦点所在标签与当前选中面板可能不同。
-          </li>
-          <li>
-            方向优先读取 Tabs 根节点或最近容器上的显式 dir，包括 Shadow DOM 宿主与 slot
-            所在的容器；未指定时继承上游 DirectionProvider。仅使用 CSS direction 或 dir="auto"
-            时，请同时配置 Tabs 的显式 dir；没有原生 dir 覆盖时，也可同步 Base UI DirectionProvider
-            的 direction，保证视觉顺序与键盘一致。
-          </li>
-        </ul>
-      ),
-    },
-    {
-      id: 'styling',
-      title: '长标签与面板布局',
-      content: (
-        <p>
-          每个标签至少 44px 高，列表四周为焦点轮廓留出空间。
-          长标签与标签列表可以换行。即使列表分成多行，左右方向键仍按标签顺序移动；不要把换行布局当作二维网格。
-          面板中的文章、表单等内容由调用方排版，局部间距可通过 classNames.panel 调整。
-        </p>
-      ),
     },
   ],
 });

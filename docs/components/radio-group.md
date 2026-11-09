@@ -4,7 +4,7 @@
 
 用于在一组互斥选项中选择单个值，可为选项提供说明。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { RadioGroup } from 'yahha-ui';
@@ -16,6 +16,8 @@ import { RadioGroup } from 'yahha-ui';
 
 从少量互斥选项中选择一项，适合需要同时展示标签和补充说明的表单。简短的紧凑筛选使用 [SegmentedControl](segmented-control.md)；需要收起选项时使用 [Select](select.md)；切换独立内容面板使用 [Tabs](tabs.md)。
 
+RadioGroup 只支持受控选择，需传入 value 与 onValueChange。自行管理原生 form 时由调用方恢复重置后的 value，使用 Form 绑定时由 Form 统一管理。
+
 <a id="examples"></a>
 
 ## 代码演示
@@ -26,7 +28,7 @@ import { RadioGroup } from 'yahha-ui';
 
 通过 value 与 onValueChange 在两个互斥选项间切换。
 
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupBasic.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/RadioGroupBasic.tsx -->
 
@@ -52,7 +54,7 @@ export default function RadioGroupBasic() {
 
 为选项提供补充说明，并说明单项禁用原因。
 
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupDescriptions.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupDescriptions.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/RadioGroupDescriptions.tsx -->
 
@@ -81,17 +83,17 @@ export default function RadioGroupDescriptions() {
 
 <a id="radio-status"></a>
 
-### 错误与整组禁用
+### 错误、清空与禁用
 
-选择后清除错误，并对比整组禁用状态。
+清空后恢复错误，对比直接禁用与父 fieldset 禁用。
 
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupStatus.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupStatus.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/RadioGroupStatus.tsx -->
 
 ```tsx
 import { useState } from 'react';
-import { RadioGroup } from 'yahha-ui';
+import { Button, RadioGroup } from 'yahha-ui';
 
 const options = [
   { value: 'weekly', label: '每周一封' },
@@ -109,6 +111,11 @@ export default function RadioGroupStatus() {
         onValueChange={setFrequency}
         error={frequency ? undefined : '请选择一种来信频率。'}
       />
+      <div>
+        <Button type="button" variant="secondary" onClick={() => setFrequency('')}>
+          清空选择
+        </Button>
+      </div>
       <RadioGroup
         label="来信频率（已禁用）"
         options={options}
@@ -117,6 +124,22 @@ export default function RadioGroupStatus() {
         disabled
         hint="此设置暂不可更改。"
       />
+      <fieldset
+        aria-label="父级禁用状态样本"
+        disabled
+        style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}
+      >
+        <RadioGroup
+          label="收藏可见范围（父级已禁用）"
+          hint="此设置暂不可更改。"
+          options={[
+            { value: 'public', label: '公开' },
+            { value: 'private', label: '仅自己可见', description: '收藏不会展示在个人主页。' },
+          ]}
+          value="private"
+          onValueChange={() => {}}
+        />
+      </fieldset>
     </div>
   );
 }
@@ -128,7 +151,7 @@ export default function RadioGroupStatus() {
 
 在窄栏中切换选项，查看长标签与说明的换行。
 
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupLongLabels.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupLongLabels.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/RadioGroupLongLabels.tsx -->
 
@@ -161,7 +184,7 @@ export default function RadioGroupLongLabels() {
 
 两组共用选择值，对比相同内容和状态下的默认与整行高亮外观。
 
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupHighlight.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupHighlight.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/RadioGroupHighlight.tsx -->
 
@@ -202,71 +225,13 @@ export default function RadioGroupHighlight() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-选择只影响当前示例；阅读设置与留言均不会保存或发布。
-
-<a id="states"></a>
-
-### 清空校验与父级禁用
-
-清空选择后恢复错误，并对比父 fieldset 禁用下的保留值。
-
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/new-forms/RadioGroupStates.tsx -->
-
-```tsx
-import { useState } from 'react';
-import { Button, RadioGroup } from 'yahha-ui';
-
-export default function RadioGroupStates() {
-  const [value, setValue] = useState('');
-  const options = [
-    { value: 'public', label: '公开，允许所有访问个人主页的读者查看完整收藏与阅读记录' },
-    { value: 'private', label: '仅自己可见', description: '收藏不会展示在个人主页。' },
-  ];
-  return (
-    <div style={{ display: 'grid', gap: 24, maxWidth: 340 }}>
-      <RadioGroup
-        label="收藏可见范围"
-        options={options}
-        value={value}
-        onValueChange={setValue}
-        error={value ? undefined : '请选择一种可见范围。'}
-      />
-      <div>
-        <Button variant="secondary" onClick={() => setValue('')}>
-          清空选择
-        </Button>
-      </div>
-      <fieldset
-        aria-label="禁用状态样本"
-        disabled
-        style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}
-      >
-        <RadioGroup
-          label="收藏可见范围（已禁用）"
-          hint="此设置暂不可更改。"
-          options={options}
-          value="private"
-          onValueChange={() => {}}
-        />
-      </fieldset>
-    </div>
-  );
-}
-```
-
 <a id="form"></a>
 
-### 受控表单与重置
+### 原生表单取值与重置
 
-读取必选项或重置；改选后清除上次读取结果。
+演示 required 必选、FormData 取值，以及在原生 onReset 中显式恢复受控选择。
 
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupForm.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/RadioGroupForm.tsx -->
 
@@ -328,9 +293,9 @@ export default function RadioGroupForm() {
 
 ### 选项联动预览
 
-切换标准和宽松选项，比较相同内容的行距与段距。
+切换标准和宽松选项，比较相同内容的行距与段距；仅当前示例生效。
 
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupReadingLayout.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/RadioGroupReadingLayout.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/RadioGroupReadingLayout.tsx -->
 
@@ -398,127 +363,40 @@ export default function RadioGroupReadingLayout() {
 }
 ```
 
-<a id="radio-comment-signature"></a>
-
-### 条件字段与表单值
-
-切换选项控制昵称字段，再按实际表单值预览署名。
-
-[查看示例文件](../../playground/src/examples/new-forms/RadioGroupCommentSignature.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/new-forms/RadioGroupCommentSignature.tsx -->
-
-```tsx
-import { useRef, useState } from 'react';
-import { Button, RadioGroup, Text, TextField } from 'yahha-ui';
-
-type Signature = 'nickname' | 'anonymous';
-const comment = '读到小八在面包店门口站住，我也饿了。那张路线图记得把店名补上。';
-
-export default function RadioGroupCommentSignature() {
-  const [signature, setSignature] = useState<Signature>('nickname');
-  const [nickname, setNickname] = useState('');
-  const [preview, setPreview] = useState<string | null>(null);
-  const [error, setError] = useState('');
-  const nicknameRef = useRef<HTMLInputElement>(null);
-  const anonymous = signature === 'anonymous';
-
-  return (
-    <form
-      noValidate
-      style={{ display: 'grid', gap: 16, minWidth: 0, maxWidth: 520 }}
-      onInput={() => {
-        setPreview(null);
-        setError('');
-      }}
-      onReset={(event) => {
-        event.preventDefault();
-        setSignature('nickname');
-        setNickname('');
-        setPreview(null);
-        setError('');
-      }}
-      onSubmit={(event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        const method = data.get('signature');
-        if (method !== 'nickname' && method !== 'anonymous') return;
-        const author =
-          method === 'anonymous' ? '匿名读者' : String(data.get('nickname') ?? '').trim();
-        if (!author) {
-          setError('请填写昵称，或选择匿名预览。');
-          nicknameRef.current?.focus();
-          return;
-        }
-        setError('');
-        setPreview(author);
-      }}
-    >
-      <div style={{ display: 'grid', gap: 8 }}>
-        <Text size="sm" tone="muted">
-          想留下的话
-        </Text>
-        <Text>{comment}</Text>
-      </div>
-      <RadioGroup<Signature>
-        label="留言署名"
-        name="signature"
-        value={signature}
-        onValueChange={(value) => {
-          setSignature(value);
-          setPreview(null);
-          setError('');
-        }}
-        options={[
-          { value: 'nickname', label: '使用昵称' },
-          { value: 'anonymous', label: '匿名' },
-        ]}
-      />
-      <TextField
-        ref={nicknameRef}
-        label="昵称"
-        name="nickname"
-        autoComplete="nickname"
-        value={nickname}
-        onChange={(event) => setNickname(event.currentTarget.value)}
-        required={!anonymous}
-        disabled={anonymous}
-        hint={anonymous ? '匿名预览不会使用昵称，草稿仍保留。' : '必填，用这个昵称署名预览。'}
-        error={error || undefined}
-      />
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-        <Button type="submit">预览留言</Button>
-        <Button type="reset" variant="secondary">
-          重置示例
-        </Button>
-      </div>
-      <Text role="status" size="sm" tone="muted">
-        {preview === null ? '' : '预览已更新，内容未发布。'}
-      </Text>
-      {preview !== null && (
-        <section aria-label="留言预览" style={{ display: 'grid', gap: 8 }}>
-          <Text>
-            <strong>署名：{preview}</strong>
-          </Text>
-          <Text>{comment}</Text>
-        </section>
-      )}
-    </form>
-  );
-}
-```
-
 <a id="design"></a>
 
-## 状态与表单
+## 状态与原生表单
 
 - 选项标题保持固定字重，避免窄栏中的长标题因选中加粗而重新换行；默认通过圆点和白环表达选中。 显式设置 `highlightSelected` 为可用选中行增加轻纸色与内底缘，不改变行高或表单值。
 - 使用 value / onValueChange 管理受控选择，空字符串可表示待选择；在回调中更新 value，选项值须保持唯一。用空字符串表示未选择时，不再将其作为有效选项值。
-- 显式设置 name 后，FormData 可读取已选值；同一表单内的独立组使用不同 name。form 同时关联 fieldset 和组内 radio。重置时需在 onReset 中恢复 React 状态。
-- required 将必选约束传给原生 radio；hint 和 error 用于组级说明与错误，选择后的错误清除由调用方处理。错误说明带装饰性提醒标记， 长文字换行齐文字起点；标记不单独命名或播报。
+- 显式 name 提供稳定的提交字段名，独立组使用不同 name；form 同时关联 fieldset 和组内 radio。自行管理原生 form 时，需在 onReset 中恢复受控 value，见 [原生表单重置](../guides/forms.md#reset)。
+- required 将必选约束传给原生 radio，hint 和 error 用于组级说明与错误。 自行管理原生 form 时，校验与错误关联见 [原生表单接入](../guides/forms.md#validation)。错误说明带装饰性提醒标记， 长文字换行齐文字起点；标记不单独命名或播报。
 - disabled 禁用整组，options 中的 disabled 禁用单项，也支持父 fieldset 禁用。禁用项不参与切换或提交；锁定选择应使用禁用状态。
 - 阅读版式例只调整下方正文的行距与段落间距，不改变控件尺寸；键盘切换时焦点随原生单选项移动， 不跳到正文或状态提示。
-- 署名例在匿名时禁用昵称字段并取消必填，保留草稿供切回；预览读取当时的 FormData， 禁用的昵称不参与提交。条件字段与预览放在单选标签之外。
+- 跨字段的条件必填、禁用值与草稿恢复见 [交互组合：条件字段与表单值](../recipes/interactions.md#radio-comment-signature)。
+
+<a id="form-integration"></a>
+
+## 与 Form 配合
+
+```tsx
+import { Form, RadioGroup } from 'yahha-ui';
+
+<Form initialValues={{ frequency: 'weekly' }}>
+  {(form) => (
+    <RadioGroup
+      {...form.choice('frequency')}
+      label="来信频率"
+      options={[
+        { value: 'weekly', label: '每周' },
+        { value: 'monthly', label: '每月' },
+      ]}
+    />
+  )}
+</Form>
+```
+
+空字符串表示待选择，配合 required 实现必选。多控件接入见 [Form 控件绑定示例](form.md#form-controls)。
 
 <a id="api"></a>
 
@@ -569,3 +447,4 @@ export default function RadioGroupCommentSignature() {
 - [Select 下拉选择器](select.md)：从文章分类、排序方式等固定选项中选一项。
 - [Checkbox 复选框](checkbox.md)：用于独立选择、多项选择或确认事项，支持半选状态。
 - [SegmentedControl 分段选择](segmented-control.md)：紧凑的受控单选组，适用于分类、排序等简短选项，保留原生 radio 的表单与键盘行为。
+- [Form 表单](form.md)：统一管理字段值、校验、提交与重置，并定位需要修正的字段。

@@ -1,5 +1,5 @@
 .docs-site .docs-layout.is-overview {
-  grid-template-columns: 252px minmax(0, 1fr);
+  grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
 }
 
 .component-overview-page {
@@ -17,7 +17,6 @@
     .overview-search-hint,
     .overview-filter-label,
     .overview-results,
-    .overview-preview-note,
     .overview-group-heading h2,
     .overview-group-heading p,
     .overview-card-copy h3,
@@ -387,12 +386,6 @@
   }
 }
 
-@media (max-width: 1200px) {
-  .docs-site .docs-layout.is-overview {
-    grid-template-columns: 232px minmax(0, 1fr);
-  }
-}
-
 @media (max-width: 760px) {
   .component-overview-page .overview-hero {
     grid-template-columns: minmax(0, 1fr) 200px;
@@ -458,8 +451,7 @@
     margin-top: 4px;
   }
 
-  .component-overview-page .overview-filter-label,
-  .component-overview-page .overview-preview-note {
+  .component-overview-page .overview-filter-label {
     display: none;
   }
 

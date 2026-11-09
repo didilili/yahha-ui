@@ -1,7 +1,7 @@
-import { verifyToastSimple } from './toast-reading-examples.mjs';
+import { verifyToastFocus, verifyToastSimple } from './toast-reading-examples.mjs';
 import { verifyToastTimer } from './toast-timer-examples.mjs';
 import assert from 'node:assert/strict';
-import { revealExample } from './reveal-example.mjs';
+import { openInteractionExample, revealExample } from './reveal-example.mjs';
 import {
   measureTextButton,
   verifyTextButtonLoading,
@@ -54,7 +54,8 @@ async function focused(page, locator) {
 }
 
 export async function verifyFeedbackExamples(page, baseURL) {
-  await page.goto(`${baseURL}#/components/alert`);
+  const originalViewport = page.viewportSize();
+  await page.goto(`${baseURL}#/guides/interactions?section=alert-action`);
   const alert = page.locator('#alert-action .example-preview');
   await revealExample(alert);
   const checkbox = alert.getByRole('checkbox', { name: '接收每周阅读推荐', exact: true });
@@ -107,7 +108,7 @@ export async function verifyFeedbackExamples(page, baseURL) {
     await skeleton.getByRole('button', { name: '显示加载占位', exact: true }).click();
     assert.equal(await region.getAttribute('aria-busy'), 'true');
   }
-  await page.setViewportSize({ width: 1440, height: 900 });
+  if (originalViewport) await page.setViewportSize(originalViewport);
   await page.goto(`${baseURL}#/components/spinner`);
   const spinner = page.locator('#spinner-waiting .example-preview');
   await spinner.getByRole('button', { name: '显示完成状态', exact: true }).click();
@@ -118,15 +119,7 @@ export async function verifyFeedbackExamples(page, baseURL) {
 
   await page.goto(`${baseURL}#/components/toast`);
   await verifyToastSimple(page);
-  const basicToast = page.locator('#basic .example-preview');
-  await revealExample(basicToast);
-  const trigger = basicToast.getByRole('button', { name: /^(加入|移出)稍后阅读$/ });
-  await trigger.click();
-  await focused(page, trigger);
-  await trigger.click();
-  assert.equal(await basicToast.getByRole('status').count(), 1);
-  await basicToast.getByRole('button', { name: '关闭提示', exact: true }).click();
-  await focused(page, trigger);
+  await verifyToastFocus(page);
   const tones = page.locator('#tones .example-preview');
   await tones.getByRole('button', { name: '关闭提示', exact: true }).first().click();
   const restoreTones = tones.getByRole('button', { name: '恢复已关闭的提示', exact: true });
@@ -135,5 +128,15 @@ export async function verifyFeedbackExamples(page, baseURL) {
   await focused(page, tones.getByRole('heading', { name: '三种结果说明', exact: true }));
   assert.equal(await tones.getByRole('status').count(), 3);
 
+  const basicToast = await openInteractionExample(page, 'basic');
+  await revealExample(basicToast);
+  const trigger = basicToast.getByRole('button', { name: /^(加入|移出)稍后阅读$/ });
+  await trigger.click();
+  await focused(page, trigger);
+  await trigger.click();
+  assert.equal(await basicToast.getByRole('status').count(), 1);
+  await basicToast.getByRole('button', { name: '关闭提示', exact: true }).click();
+  await focused(page, trigger);
+  await openInteractionExample(page, 'timer-and-action');
   await verifyToastTimer(page);
 }

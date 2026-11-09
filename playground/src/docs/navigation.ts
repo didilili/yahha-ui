@@ -1,3 +1,4 @@
+import { componentSectionRedirects } from './component-section-redirects.ts';
 import { componentCatalog, componentGroups, configurationGroups } from './component-catalog.ts';
 import type { DocPage, DocumentationArea } from './types.ts';
 
@@ -120,11 +121,13 @@ export function navigationForArea(
           sectionIds: [...new Set([id, example])],
         })),
       );
+    const interactions = areaPages.find((page) => page.id === 'interactions');
+    if (interactions) items.push(itemFor(interactions));
     return items.length ? [{ id: area, name: '组合示例', items }] : [];
   }
   const order =
     area === 'getting-started'
-      ? ['introduction', 'getting-started', 'styling']
+      ? ['introduction', 'getting-started', 'forms', 'styling']
       : ['design-baseline', 'artwork'];
   const ordered = order.flatMap((id) => {
     const page = areaPages.find((candidate) => candidate.id === id);
@@ -139,6 +142,14 @@ export function navigationForArea(
 
 /** Keep old deep links attached to the content after the guide split. */
 export function canonicalRoute(path: string, section = ''): { path: string; section: string } {
+  if (path === '/components/text-field') path = '/components/input';
+  if (path === '/components/input' && section.startsWith('api-TextFieldProps--'))
+    section = section.replace(/^api-TextFieldProps--/, 'api-InputProps--');
+  const sections = Object.hasOwn(componentSectionRedirects, path)
+    ? componentSectionRedirects[path]
+    : undefined;
+  const redirect = sections && Object.hasOwn(sections, section) ? sections[section] : undefined;
+  if (redirect) return redirect;
   if (path === '/guides/styling') {
     if (section === 'language') return { path: '/guides/design-baseline', section };
     if (section === 'reading' || section === 'reading-example')

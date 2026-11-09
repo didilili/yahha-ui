@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
-import { IconButton, TextField } from 'yahha-ui';
+import { IconButton, Input } from 'yahha-ui';
 
 export default function TextFieldSlots() {
   const [keyword, setKeyword] = useState('散步');
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <TextField
+    <Input
       ref={inputRef}
       label="关键词"
       value={keyword}

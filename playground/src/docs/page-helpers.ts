@@ -130,11 +130,24 @@ export const stateRows: ApiRow[] = [
   },
 ];
 
-export function popupRows(name: string, side: string, align: string): ApiRow[] {
+export const portalContainerType =
+  'HTMLElement | ShadowRoot | RefObject<HTMLElement | ShadowRoot | null> | null';
+
+export const popupFocusTypeSource = `import type { RefObject } from 'react';
+
+// 文档中的说明别名，不是 yahha-ui 的公开导出。
+type FocusInteraction = 'mouse' | 'touch' | 'pen' | 'keyboard' | '';
+
+type PopupFocusTarget =
+  | boolean
+  | RefObject<HTMLElement | null>
+  | ((interactionType: FocusInteraction) => boolean | HTMLElement | null | void);`;
+
+export function popupRows(side: string, align: string): ApiRow[] {
   return [
     {
       name: 'side',
-      type: `${name}Props['side']`,
+      type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
       defaultValue: `"${side}"`,
       description: 'top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。',
     },
@@ -152,7 +165,7 @@ export function popupRows(name: string, side: string, align: string): ApiRow[] {
     },
     {
       name: 'portalContainer',
-      type: `${name}Props['portalContainer']`,
+      type: portalContainerType,
       defaultValue: 'body',
       description: 'Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。',
     },

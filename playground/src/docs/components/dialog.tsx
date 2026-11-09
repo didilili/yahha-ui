@@ -6,6 +6,7 @@ import dialogFormSource from '../../examples/feedback/DialogForm.tsx?raw';
 import DialogExternal from '../../examples/feedback/DialogExternal';
 import dialogExternalSource from '../../examples/feedback/DialogExternal.tsx?raw';
 import { defineComponentPage } from '../page';
+import { portalContainerType, popupFocusTypeSource } from '../page-helpers';
 
 export default defineComponentPage('dialog', {
   importCode: "import { Dialog } from 'yahha-ui';",
@@ -46,26 +47,13 @@ export default defineComponentPage('dialog', {
           component: DialogExternal,
           source: dialogExternalSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看未保存修改的关闭保护',
-      content: (
-        <p>
-          关闭保护由调用方实现；修改标题后，取消、Escape、关闭按钮和外点共用退出策略。
-          结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
-        </p>
-      ),
-      examples: [
         {
           id: 'form',
           title: '未保存修改的关闭确认',
-          description: '修改标题后请求关闭，观察调用方如何保留草稿并确认是否放弃。',
+          description:
+            '修改标题后，取消、Escape、关闭按钮与外点共用调用方的关闭保护；保存或放弃后可关闭，重新打开从已保存值开始。',
           component: DialogForm,
           source: dialogFormSource,
-          toc: false,
         },
       ],
     },
@@ -83,12 +71,24 @@ export default defineComponentPage('dialog', {
             <Link href="#/guides/states?section=article-actions">文章编辑与管理</Link>
             ，菜单打开编辑弹窗后通过 finalFocus 返回保留的菜单按钮。
           </p>
+          <p>
+            本页使用原生 form 展示草稿与关闭保护。需要统一管理字段校验、错误和提交时，可在弹窗内使用{' '}
+            <Link href="#/components/form?section=form-submission">Form</Link>。 Form
+            的重置恢复其首次 initialValues。重新打开不同草稿时，可通过 key 重建 Form，
+            由应用继续维护未保存判断、关闭保护与保存后的 open 状态。
+          </p>
         </>
       ),
     },
     {
       id: 'api',
       title: 'API',
+      content: (
+        <p>
+          initialFocus 与 finalFocus 的完整签名见本页的{' '}
+          <Link href="#/components/dialog?section=focus-types">焦点参数类型</Link>。
+        </p>
+      ),
       api: [
         {
           name: 'DialogProps',
@@ -139,21 +139,21 @@ export default defineComponentPage('dialog', {
             },
             {
               name: 'initialFocus',
-              type: "DialogProps['initialFocus']",
+              type: 'PopupFocusTarget',
               defaultValue: '首个可聚焦元素；触摸打开时聚焦弹窗本身',
               description:
                 '可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。',
             },
             {
               name: 'finalFocus',
-              type: "DialogProps['finalFocus']",
+              type: 'PopupFocusTarget',
               defaultValue: '触发器或先前聚焦元素',
               description:
                 '可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。',
             },
             {
               name: 'portalContainer',
-              type: "DialogProps['portalContainer']",
+              type: portalContainerType,
               defaultValue: 'body',
               description:
                 'Portal 挂载位置，支持元素、ShadowRoot、对应 ref 或 null。自定义容器的层叠、裁切环境由调用方负责。',
@@ -183,6 +183,25 @@ export default defineComponentPage('dialog', {
           ],
         },
       ],
+    },
+    {
+      id: 'focus-types',
+      kind: 'api',
+      title: '焦点参数类型',
+      content: (
+        <>
+          <p>
+            initialFocus 和 finalFocus 使用相同的值类型。回调分别接收打开、关闭时的交互方式；
+            RefObject 来自 React。省略属性时使用 API 表中的默认行为。
+          </p>
+          <div className="source-code">
+            {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- Allow keyboard scrolling of the full type signature. */}
+            <pre tabIndex={0} role="region" aria-label="焦点参数的 TypeScript 类型">
+              <code>{popupFocusTypeSource}</code>
+            </pre>
+          </div>
+        </>
+      ),
     },
     {
       id: 'keyboard-and-theme',

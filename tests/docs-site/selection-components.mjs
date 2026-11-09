@@ -80,6 +80,7 @@ export async function verifySelectionComponents(page, baseURL) {
     await radioForm.getByRole('button', { name: '重置', exact: true }).click();
     assert.equal(await radioForm.getByRole('radio', { checked: true }).count(), 0);
     await verifySource(radioForm, 'new-forms/RadioGroupForm.tsx');
+    await verifyRadioStatus(page);
 
     await page.goto(`${baseURL}#/components/switch`);
     const controlled = page.locator('#controlled');
@@ -141,10 +142,38 @@ export async function verifySelectionComponents(page, baseURL) {
   await verifyTextareaExamples(page, baseURL);
 }
 
+/** Merged state samples retain caller-owned clearing and native parent-fieldset disabling. */
+export async function verifyRadioStatus(
+  page,
+  scope = page.locator('#radio-status .example-preview'),
+) {
+  await revealExample(scope);
+  const group = scope.getByRole('group', { name: '来信频率', exact: true });
+  const weekly = group.getByRole('radio', { name: '每周一封', exact: true });
+  assert.equal(await group.getAttribute('aria-invalid'), 'true');
+  await weekly.check();
+  assert.equal(await group.getAttribute('aria-invalid'), null);
+  await scope.getByRole('button', { name: '清空选择', exact: true }).click();
+  assert.equal(await group.getByRole('radio', { checked: true }).count(), 0);
+  assert.equal(await group.getAttribute('aria-invalid'), 'true');
+  const disabled = scope.getByRole('group', { name: '来信频率（已禁用）', exact: true });
+  for (const input of await disabled.getByRole('radio').all())
+    assert.equal(await input.isDisabled(), true);
+  const parent = scope.getByRole('group', { name: '父级禁用状态样本', exact: true });
+  const privateOption = parent.getByRole('radio', { name: '仅自己可见', exact: true });
+  assert.equal(await privateOption.isChecked(), true);
+  for (const input of await parent.getByRole('radio').all())
+    assert.equal(await input.isDisabled(), true);
+  assert.equal(await privateOption.evaluate((node) => node.disabled), false);
+  assert.equal(await privateOption.evaluate((node) => !!node.closest('fieldset[disabled]')), true);
+}
+
 /** Textarea retains native editing, caller-owned validation and form reset. */
 export async function verifyTextareaExamples(page, baseURL) {
   for (const width of [1280, 320]) {
     await page.setViewportSize({ width, height: 844 });
+    // Same-hash navigation retains React state; each viewport checks a fresh initial counter.
+    await page.goto('about:blank');
     await page.goto(`${baseURL}#/components/textarea`);
     const basic = page.locator('#basic');
     const message = basic.getByRole('textbox', { name: '给作者留言', exact: true });
@@ -165,35 +194,27 @@ export async function verifyTextareaExamples(page, baseURL) {
     );
 
     const controlled = page.locator('#controlled');
-    const checkedMessage = controlled.getByRole('textbox', { name: '留言内容', exact: true });
-    const check = controlled.getByRole('button', { name: '检查留言', exact: true });
-    await checkedMessage.fill('');
-    await check.click();
-    assert.equal(await checkedMessage.getAttribute('aria-invalid'), 'true');
-    assert.equal(
-      await checkedMessage.evaluate((node) => document.activeElement === node),
-      true,
-      'A failed message check returns focus to the textarea.',
-    );
-    const descriptions = await checkedMessage.evaluate((node) =>
+    const controlledMessage = controlled.getByRole('textbox', { name: '留言内容', exact: true });
+    await controlled.getByText('已输入 0 / 200', { exact: true }).waitFor();
+    const controlledValue = '谢谢分享。\n😀 这篇手记很温柔。';
+    await controlledMessage.fill(controlledValue);
+    assert.equal(await controlledMessage.inputValue(), controlledValue);
+    assert.equal(await controlledMessage.getAttribute('aria-invalid'), null);
+    const counter = `已输入 ${controlledValue.length} / 200`;
+    await controlled.getByText(counter, { exact: true }).waitFor();
+    const descriptions = await controlledMessage.evaluate((node) =>
       (node.getAttribute('aria-describedby') ?? '')
         .split(/\s+/)
         .map((id) => document.getElementById(id)?.textContent ?? ''),
     );
-    assert(descriptions.some((text) => text.includes('请填写留言后再检查')));
-    await checkedMessage.fill('谢谢分享。\n这篇手记很温柔。');
-    assert.equal(await checkedMessage.getAttribute('aria-invalid'), null);
-    await check.click();
-    await controlled
-      .getByRole('status')
-      .getByText('检查结果：留言符合要求。', { exact: true })
-      .waitFor();
-    await checkedMessage.fill('');
-    await checkedMessage.press('a');
-    await checkedMessage.press('End');
+    assert(descriptions.includes(counter), 'The current UTF-16 length describes the textarea.');
+    await controlledMessage.fill('');
+    await controlled.getByText('已输入 0 / 200', { exact: true }).waitFor();
+    await controlledMessage.press('a');
+    await controlledMessage.press('End');
     await page.keyboard.insertText('文'.repeat(250));
     assert.equal(
-      (await checkedMessage.inputValue()).length,
+      (await controlledMessage.inputValue()).length,
       200,
       'Native maxLength limits typing.',
     );

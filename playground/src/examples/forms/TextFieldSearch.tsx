@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { IconButton, Text, TextField } from 'yahha-ui';
+import { IconButton, Text, Input } from 'yahha-ui';
 
 const articles = ['周末的散步记录', '给小花换一个花盆', 'Weekend reading notes'];
 
@@ -14,7 +14,7 @@ export default function TextFieldSearch() {
 
   return (
     <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
-      <TextField
+      <Input
         ref={inputRef}
         label="搜索本地手记"
         type="text"

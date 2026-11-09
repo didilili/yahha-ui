@@ -4,7 +4,7 @@
 
 用于页面导航和资源跳转，保留原生链接行为、下划线与焦点样式。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Link } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Link } from 'yahha-ui';
 
 通过链接打开入门指南。
 
-[查看示例文件](../../playground/src/examples/content/LinkExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/LinkExample.tsx)
 
 <!-- example-source: playground/src/examples/content/LinkExample.tsx -->
 
@@ -48,7 +48,7 @@ export default function LinkExample() {
 
 用 external 在新标签页打开，组件会补充 noopener noreferrer。
 
-[查看示例文件](../../playground/src/examples/content/LinkExternal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/LinkExternal.tsx)
 
 <!-- example-source: playground/src/examples/content/LinkExternal.tsx -->
 
@@ -70,7 +70,7 @@ export default function LinkExternal() {
 
 在窄栏中保留完整地址与下划线。
 
-[查看示例文件](../../playground/src/examples/content/LinkWrapping.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/LinkWrapping.tsx)
 
 <!-- example-source: playground/src/examples/content/LinkWrapping.tsx -->
 
@@ -96,7 +96,7 @@ export default function LinkWrapping() {
 
 下载 TXT 清单，或在新标签页阅读同一份文本。
 
-[查看示例文件](../../playground/src/examples/content/LinkDownload.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/LinkDownload.tsx)
 
 <!-- example-source: playground/src/examples/content/LinkDownload.tsx -->
 
@@ -196,5 +196,5 @@ export default function LinkDownload() {
 ## 相关组件
 
 - [Button 按钮](button.md)：用于触发操作，支持不同强调程度、禁用、加载和切换状态。
-- [Text 正文](text.md)：用于正文、摘要和辅助说明，统一字号、行高与语义颜色。
+- [Text 段落正文](text.md)：固定使用 p 元素的段落正文，统一字号、行高与语义颜色。
 - [Pagination 分页](pagination.md)：用于列表分页，显示首页、末页和当前页附近的页码。

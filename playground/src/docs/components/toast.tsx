@@ -1,13 +1,12 @@
+import { Link } from 'yahha-ui';
 import ToastSimple from '../../examples/feedback/ToastSimple';
 import toastSimpleSource from '../../examples/feedback/ToastSimple.tsx?raw';
-import ToastBasic from '../../examples/feedback/ToastBasic';
-import toastBasicSource from '../../examples/feedback/ToastBasic.tsx?raw';
+import ToastFocus from '../../examples/feedback/ToastFocus';
+import toastFocusSource from '../../examples/feedback/ToastFocus.tsx?raw';
 import ToastAction from '../../examples/feedback/ToastAction';
 import toastActionSource from '../../examples/feedback/ToastAction.tsx?raw';
 import ToastTones from '../../examples/feedback/ToastTones';
 import toastTonesSource from '../../examples/feedback/ToastTones.tsx?raw';
-import ToastTimer from '../../examples/feedback/ToastTimer';
-import toastTimerSource from '../../examples/feedback/ToastTimer.tsx?raw';
 import ToastAppearance from '../../examples/feedback/ToastAppearance';
 import toastAppearanceSource from '../../examples/feedback/ToastAppearance.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -63,32 +62,13 @@ export default defineComponentPage('toast', {
           component: ToastAppearance,
           source: toastAppearanceSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看提示操作与计时撤销',
-      content: (
-        <p>示例只操作本地清单或文章状态。重要操作保留常驻入口，提示关闭后仍可继续访问或恢复。</p>
-      ),
-      examples: [
         {
           id: 'basic',
-          title: '操作入口与关闭后的焦点',
-          description: '点击提示内的操作查看清单，关闭后仍可从常驻入口访问。',
-          component: ToastBasic,
-          source: toastBasicSource,
-          toc: false,
-        },
-        {
-          id: 'timer-and-action',
-          title: '计时关闭与撤销',
+          title: '关闭提示后的焦点恢复',
           description:
-            '8 秒撤销窗口中，进度条表示已用时；悬停、聚焦或页面进入后台时暂停，恢复后继续剩余时间。',
-          component: ToastTimer,
-          source: toastTimerSource,
-          toc: false,
+            '关闭提示时按需返回触发按钮，查看操作聚焦手记标题；常驻入口在提示关闭后仍可用。',
+          component: ToastFocus,
+          source: toastFocusSource,
         },
       ],
     },
@@ -98,12 +78,15 @@ export default defineComponentPage('toast', {
       content: (
         <>
           <p>
-            自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；计时与撤销示例等待 8
-            秒后关闭，悬停、聚焦或页面进入后台时暂停，恢复后只计剩余时间。示例将 Progress 放在 Toast
-            的 status
-            外，避免每次计时更新重复播报提示。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
+            自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间，并为撤销等重要操作保留持续入口。完整的{' '}
+            <Link href="#/guides/interactions?section=timer-and-action">归档撤销与提示计时</Link>
+            展示 8 秒窗口、悬停与聚焦暂停、后台暂停，以及关闭提示后的恢复操作。
           </p>
-          <p>进阶示例保留常驻清单入口；查看操作聚焦清单标题，关闭提示不会丢失已加入的内容。</p>
+          <p>
+            收藏内容不会随提示关闭而丢失。完整的{' '}
+            <Link href="#/guides/interactions?section=basic">清单操作与提示回焦</Link>
+            保留文章增删、清单结果和常驻查看入口。
+          </p>
         </>
       ),
     },

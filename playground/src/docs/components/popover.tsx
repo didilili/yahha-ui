@@ -6,7 +6,7 @@ import popoverFormSource from '../../examples/floating/PopoverForm.tsx?raw';
 import PopoverCollection from '../../examples/floating/PopoverCollection';
 import popoverCollectionSource from '../../examples/floating/PopoverCollection.tsx?raw';
 import { defineComponentPage } from '../page';
-import { stateRows, popupRows } from '../page-helpers';
+import { stateRows, popupRows, popupFocusTypeSource } from '../page-helpers';
 
 export default defineComponentPage('popover', {
   importCode: "import { Popover } from 'yahha-ui';",
@@ -41,31 +41,18 @@ export default defineComponentPage('popover', {
         },
         {
           id: 'form',
-          title: '内嵌表单',
-          description: '在面板内校验名称，支持保存或取消；修改仅保留在当前示例。',
+          title: '原生表单中的保存与取消',
+          description: '打开时建立名称草稿，确认后更新本地值并关闭，取消后保留已保存值。',
           component: PopoverForm,
           source: popoverFormSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看嵌套选择器与分层关闭',
-      content: (
-        <p>
-          内嵌选择器时，Escape 先收起 Select，再关闭 Popover。
-          确认后才更新当前示例的收藏位置，未确认关闭不会保存选择。
-        </p>
-      ),
-      examples: [
         {
           id: 'popover-collection',
           title: '内嵌选择器与分层关闭',
-          description: '在面板内展开 Select，按 Escape 逐层关闭。',
+          description:
+            '在面板内展开 Select，按 Escape 逐层关闭；确认才更新本例的收藏位置，取消不会保存选择。',
           component: PopoverCollection,
           source: popoverCollectionSource,
-          toc: false,
         },
       ],
     },
@@ -80,8 +67,9 @@ export default defineComponentPage('popover', {
             仍能显示面板。
           </p>
           <p>
-            表单验证、保存和结果反馈由调用方处理，提交不会自动关闭面板。示例在每次打开时从已保存值重建草稿，
-            保存成功后更新页面并关闭；关闭浮层本身不代表保存或取消业务操作。
+            原生表单示例由调用方校验名称和保存草稿，每次打开时从已保存值重建草稿，保存成功后更新页面并关闭。
+            使用 <Link href="#/components/form?section=form-submission">Form 管理校验与提交</Link>
+            时，打开、关闭和草稿保留仍由应用决定，提交成功后再更新 open。
           </p>
         </>
       ),
@@ -89,7 +77,12 @@ export default defineComponentPage('popover', {
     {
       id: 'api',
       title: 'API',
-      content: <p>仅支持下列属性，不透传其余 div 原生属性。</p>,
+      content: (
+        <p>
+          仅支持下列属性，不透传其余 div 原生属性。initialFocus 与 finalFocus 的完整签名见{' '}
+          <Link href="#/components/popover?section=focus-types">焦点参数类型</Link>。
+        </p>
+      ),
       api: [
         {
           name: 'PopoverProps',
@@ -121,14 +114,14 @@ export default defineComponentPage('popover', {
             },
             {
               name: 'initialFocus',
-              type: "PopoverProps['initialFocus']",
+              type: 'PopupFocusTarget',
               defaultValue: '首个可聚焦元素；触摸打开时聚焦面板本身',
               description:
                 '可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。',
             },
             {
               name: 'finalFocus',
-              type: "PopoverProps['finalFocus']",
+              type: 'PopupFocusTarget',
               defaultValue: '触发器或先前聚焦元素',
               description:
                 '可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。',
@@ -139,10 +132,29 @@ export default defineComponentPage('popover', {
               defaultValue: '"关闭浮层"',
               description: '内置关闭按钮的可访问名称。',
             },
-            ...popupRows('Popover', 'bottom', 'start'),
+            ...popupRows('bottom', 'start'),
           ],
         },
       ],
+    },
+    {
+      id: 'focus-types',
+      kind: 'api',
+      title: '焦点参数类型',
+      content: (
+        <>
+          <p>
+            initialFocus 与 finalFocus 共用下列值类型，回调分别接收打开、关闭时的交互方式。
+            RefObject 来自 React。
+          </p>
+          <div className="source-code">
+            {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- Allow keyboard scrolling of the full type signature. */}
+            <pre tabIndex={0} role="region" aria-label="焦点参数的 TypeScript 类型">
+              <code>{popupFocusTypeSource}</code>
+            </pre>
+          </div>
+        </>
+      ),
     },
     {
       id: 'keyboard',

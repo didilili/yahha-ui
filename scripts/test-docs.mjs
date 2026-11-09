@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium, firefox, webkit } from 'playwright';
 import { startStaticServer } from './static-server.mjs';
 import { verifyDocs } from '../tests/docs-site/browser.mjs';
+import { verifyShellConsistency } from '../tests/docs-site/shell-consistency-checks.mjs';
 import { verifyAdoption } from '../tests/docs-site/adoption-checks.mjs';
 import { verifySectionNavigation } from '../tests/docs-site/section-navigation-checks.mjs';
 import { verifySearch } from '../tests/docs-site/search-checks.mjs';
@@ -28,7 +29,11 @@ try {
   // A nested deployment catches absolute asset URLs that would fail on GitHub Pages.
   server = await startStaticServer([{ directory: root, prefix: '/docs-preview/' }]);
   const baseURL = `${server.origin}/docs-preview/`;
-  if (process.argv.includes('--adoption')) {
+  if (process.argv.includes('--shell-consistency')) {
+    browser = await chromium.launch({ headless: true });
+    await verifyShellConsistency(browser, baseURL);
+    console.log('Shared documentation layout passed across all routes and responsive boundaries.');
+  } else if (process.argv.includes('--adoption')) {
     browser = await chromium.launch({ headless: true });
     await verifyGuideLoading(browser, baseURL);
     await verifySearch(browser, baseURL);

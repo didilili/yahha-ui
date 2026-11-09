@@ -11,6 +11,7 @@ import SegmentedForm from '../../examples/forms/SegmentedForm';
 import segmentedFormSource from '../../examples/forms/SegmentedForm.tsx?raw';
 import SegmentedLongLabels from '../../examples/forms/SegmentedLongLabels';
 import segmentedLongLabelsSource from '../../examples/forms/SegmentedLongLabels.tsx?raw';
+import { CodeBlock } from '../CodeBlock';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('segmented-control', {
@@ -60,27 +61,17 @@ export default defineComponentPage('segmented-control', {
           component: SegmentedLongLabels,
           source: segmentedLongLabelsSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看内容筛选与表单示例',
-      content: <p>示例使用本地状态和文章，不请求接口或保存设置。</p>,
-      examples: [
         {
           id: 'filtering',
           title: '筛选与视图切换',
-          description: '按类型筛选同一批文章，再切换列表与卡片。',
-          toc: false,
+          description: '按类型筛选同一批本地文章，再切换列表与卡片；筛选与布局由调用方处理。',
           component: SegmentedFiltering,
           source: segmentedFilteringSource,
         },
         {
           id: 'form',
-          title: '原生表单与显式重置',
-          description: '选择后读取表单值，或重置为未选择；本例不重排文章。',
-          toc: false,
+          title: '原生表单取值与重置',
+          description: '通过 FormData 读取选中值，并在原生 onReset 中显式恢复受控选择。',
           component: SegmentedForm,
           source: segmentedFormSource,
         },
@@ -92,28 +83,65 @@ export default defineComponentPage('segmented-control', {
       content: (
         <ul>
           <li>
-            这是受控单选组：value 指定当前值，onValueChange
-            返回选项值，由调用方更新。选项值须保持唯一；用空字符串表示待选择时，不再将它用作有效选项值。
+            value 指定当前值，onValueChange 返回选项值，受控状态由调用方更新。选项值须保持唯一。
+            用空字符串表示待选择时，将有效选项设置为其他值。
           </li>
           <li>
-            显式 name 提供稳定的 FormData
-            字段名；省略时仍有自动生成的唯一名称。同一表单内的独立组使用不同 name，form
-            可关联外部表单。
+            显式 name 提供稳定的 FormData 字段名；省略时自动生成唯一名称。独立组使用不同 name，form
+            可关联外部表单；取值规则见{' '}
+            <Link href="#/guides/forms?section=native-form">原生表单接入</Link>。
           </li>
-          <li>required 使用原生必选约束。表单重置需在 onReset 中同步恢复 React 状态。</li>
+          <li>
+            required 使用原生必选约束。组件只支持受控选择，使用原生 form 时需在 onReset 中恢复 React
+            状态，见 <Link href="#/guides/forms?section=reset">原生表单重置</Link>。
+          </li>
           <li>
             disabled 禁用整组，单项 disabled 只禁用该项，也支持父 fieldset
             禁用。禁用项不参与操作与提交，已选项被禁用后仍保留选中标记。
           </li>
           <li>
             选择变化后的筛选、正文更新与 URL
-            同步由调用方处理；需要可见的校验错误时，在组旁提供说明，并用 aria-describedby 关联。
+            同步由调用方处理。自行管理校验时，在组旁提供可见的错误说明，并用 aria-describedby 关联。
           </li>
           <li>
             文章例使用两组独立选择：分类决定文章集合，视图只调整同一集合的呈现。
             切换列表与卡片会保留当前分类和文章顺序，不模拟重新加载。
           </li>
         </ul>
+      ),
+    },
+    {
+      id: 'form-integration',
+      title: '与 Form 配合',
+      kind: 'integration',
+      content: (
+        <>
+          <p>空字符串表示待选择。将 errorPlacement 设为 external，并用 FormError 呈现错误。</p>
+          <CodeBlock
+            source={`import { Form, FormError, SegmentedControl } from 'yahha-ui';
+
+<Form initialValues={{ view: '' }}>
+  {(form) => (
+    <>
+      <SegmentedControl
+        {...form.choice('view', { errorPlacement: 'external' })}
+        label="默认视图"
+        required
+        options={[
+          { value: 'list', label: '列表' },
+          { value: 'cards', label: '卡片' },
+        ]}
+      />
+      <FormError name="view" />
+    </>
+  )}
+</Form>`}
+          />
+          <p>
+            保留绑定提供的 aria-invalid 和 aria-describedby 以关联错误。完整用法见{' '}
+            <Link href="#/components/form?section=binding">字段绑定与错误呈现</Link>。
+          </p>
+        </>
       ),
     },
     {

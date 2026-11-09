@@ -4,7 +4,7 @@
 
 用于内容图片和封面，支持替代文字、比例容器与失败回退。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Image } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Image } from 'yahha-ui';
 
 使用 16:9 比例预留图片区域，并搭配图注。
 
-[查看示例文件](../../playground/src/examples/content/ImageExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/ImageExample.tsx)
 
 <!-- example-source: playground/src/examples/content/ImageExample.tsx -->
 
@@ -66,7 +66,7 @@ export default function ImageExample() {
 
 切换图片地址，展示加载失败时的回退与恢复。
 
-[查看示例文件](../../playground/src/examples/content/ImageFallback.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/ImageFallback.tsx)
 
 <!-- example-source: playground/src/examples/content/ImageFallback.tsx -->
 
@@ -127,19 +127,13 @@ export default function ImageFallback() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-使用独立按钮打开 Dialog，缩略图与大图使用同一素材。完整接入提供原样源码和 SVG，保留 artwork 目录及相对导入路径。
-
 <a id="image-detail"></a>
 
 ### 缩略图与大图预览
 
-通过独立按钮与 Dialog 组合预览同一图片，关闭后返回入口。
+由调用方通过独立按钮与 Dialog 预览同一图片，关闭后返回入口；完整接入提供源码和 SVG，保留 artwork 目录及相对导入。
 
-[查看示例文件](../../playground/src/examples/scenes/ImageDetail.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/scenes/ImageDetail.tsx)
 
 <!-- example-source: playground/src/examples/scenes/ImageDetail.tsx -->
 
@@ -217,6 +211,15 @@ export default function ImageDetail() {
 
 封面可以用 aspectRatio 统一比例并预留空间，图片会按 cover 裁切。需要完整展示的正文图片可以不设比例，保留自然尺寸；显式设置 aspectRatio="auto" 时也使用自然布局，失败说明随内容展开。原生 width / height 不能为失败回退预留相同比例；加载失败后仍需保持版面时，应显式设置固定比例。
 
+<a id="behavior"></a>
+
+## 替代文字与失败恢复
+
+- 失败后仍以 alt 作为可访问名称，fallback 是装饰内容。alt="" 的图片及失败回退都保持装饰性，即使 aria-hidden={false} 也不会补出图像名称。
+- 缺少可用地址时直接显示 fallback，不触发 onError；图片加载失败也显示 fallback。更换 src 或 srcSet 会重新进入加载。清空地址后再设置原地址，也会重新加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。
+- 固定比例较小而失败提示过长时，回退区域允许滚动。非装饰图片的溢出回退可通过 Tab 聚焦，再用方向键或 PageDown 查看；短提示及空 alt 的装饰图片不会增加键盘入口。
+- 不要把必要说明或交互元素只放进 fallback，因为整个回退内容用于装饰。需要隐藏图片时，hidden 隐藏图片与回退，aria-hidden 仅将两者从辅助技术中隐藏。
+
 <a id="api"></a>
 
 ## API
@@ -236,15 +239,6 @@ export default function ImageDetail() {
 | `onLoad / onError`     | 监听图片加载成功或失败，可用于更新相邻状态说明。                                     | `原生 img 事件`                             | —                  |
 | `hidden / aria-hidden` | 作用于整个图片呈现，包括失败回退；aria-hidden 不改变可见性。                         | `原生对应属性`                              | —                  |
 | `其他原生图片属性`     | 包括 width、height、decoding 等，传给 img。                                          | `Omit<ComponentPropsWithRef<'img'>, 'alt'>` | —                  |
-
-<a id="behavior"></a>
-
-## 替代文字与失败恢复
-
-- 失败后仍以 alt 作为可访问名称，fallback 是装饰内容。alt="" 的图片及失败回退都保持装饰性，即使 aria-hidden={false} 也不会补出图像名称。
-- 缺少可用地址时直接显示 fallback，不触发 onError；图片加载失败也显示 fallback。更换 src 或 srcSet 会重新进入加载。清空地址后再设置原地址，也会重新加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。
-- 固定比例较小而失败提示过长时，回退区域允许滚动。非装饰图片的溢出回退可通过 Tab 聚焦，再用方向键或 PageDown 查看；短提示及空 alt 的装饰图片不会增加键盘入口。
-- 不要把必要说明或交互元素只放进 fallback，因为整个回退内容用于装饰。需要隐藏图片时，hidden 隐藏图片与回退，aria-hidden 仅将两者从辅助技术中隐藏。
 
 <a id="related"></a>
 

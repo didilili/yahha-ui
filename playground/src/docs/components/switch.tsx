@@ -10,6 +10,7 @@ import SwitchDisabled from '../../examples/new-forms/SwitchDisabled';
 import SwitchDisabledSource from '../../examples/new-forms/SwitchDisabled.tsx?raw';
 import SwitchLoading from '../../examples/new-forms/SwitchLoading';
 import SwitchLoadingSource from '../../examples/new-forms/SwitchLoading.tsx?raw';
+import { CodeBlock } from '../CodeBlock';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('switch', {
@@ -39,6 +40,14 @@ export default defineComponentPage('switch', {
           previewAlign: 'center',
         },
         {
+          id: 'controlled',
+          title: '受控状态',
+          description: '通过 checked 与 onChange 管理状态。',
+          component: SwitchControlled,
+          source: SwitchControlledSource,
+          previewAlign: 'center',
+        },
+        {
           id: 'switch-disabled',
           title: '禁用状态',
           description: '对比关闭与开启时的禁用外观。',
@@ -55,36 +64,19 @@ export default defineComponentPage('switch', {
           previewAlign: 'center',
         },
         {
-          id: 'controlled',
-          title: '受控状态',
-          description: '通过 checked 与 onChange 管理状态。',
-          component: SwitchControlled,
-          source: SwitchControlledSource,
-          previewAlign: 'center',
-        },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看表单与异步示例',
-      content: <p>表单例演示取值与重置；异步例由使用方管理本地模拟保存。</p>,
-      examples: [
-        {
           id: 'form',
-          title: '表单集成',
-          description: '读取开关值，或重置到初始状态。',
+          title: '原生表单取值与重置',
+          description:
+            '通过 FormData 读取开启的封面偏好，关闭后不产生条目，再用原生 reset 恢复初始状态。',
           component: SwitchForm,
           source: SwitchFormSource,
-          toc: false,
         },
         {
           id: 'switch-reading-preference',
           title: '异步切换与失败恢复',
-          description: '模拟保存时显示加载状态，首次失败后回滚，可再次切换重试。',
+          description: '由调用方模拟本地保存，首次失败后回滚，可再次切换重试。',
           component: SwitchReadingPreference,
           source: SwitchReadingPreferenceSource,
-          toc: false,
         },
       ],
     },
@@ -94,8 +86,10 @@ export default defineComponentPage('switch', {
       content: (
         <ul>
           <li>
-            checked / onChange 管理受控状态，defaultChecked 设置初始状态；从 event.target.checked
-            读取结果。
+            checked / onChange 管理受控状态，defaultChecked 设置初始状态。状态读取使用
+            event.target.checked，name 对应的原生提交内容由 value 决定。使用原生 form
+            时，受控状态需在 onReset 中恢复，详见{' '}
+            <a href="#/guides/forms?section=reset">原生表单重置</a>。
           </li>
           <li>
             loading
@@ -107,6 +101,36 @@ export default defineComponentPage('switch', {
             不会自动设置原生 disabled；显式禁用仍按原生规则处理。
           </li>
         </ul>
+      ),
+    },
+    {
+      id: 'form-integration',
+      title: '与 Form 配合',
+      kind: 'integration',
+      content: (
+        <>
+          <p>开关使用布尔字段。将 errorPlacement 设为 external，并用 FormError 呈现错误。</p>
+          <CodeBlock
+            source={`import { Form, FormError, Switch } from 'yahha-ui';
+
+<Form initialValues={{ summary: false }}>
+  {(form) => (
+    <>
+      <Switch
+        {...form.checked('summary', { errorPlacement: 'external' })}
+        label="显示文章摘要"
+        required
+      />
+      <FormError name="summary" />
+    </>
+  )}
+</Form>`}
+          />
+          <p>
+            保留绑定提供的 aria-invalid 和 aria-describedby 以关联错误。完整用法见{' '}
+            <a href="#/components/form?section=binding">字段绑定与错误呈现</a>。
+          </p>
+        </>
       ),
     },
     {

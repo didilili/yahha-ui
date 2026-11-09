@@ -28,24 +28,13 @@ export default defineComponentPage('skeleton', {
           SkeletonShapes,
           skeletonShapesSource,
         ),
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看占位与内容切换示例',
-      content: <p>本例手动切换占位与内容，不发起请求。</p>,
-      examples: [
-        {
-          ...example(
-            'skeleton-content',
-            '从占位到内容',
-            '切换文章摘要的占位与内容，观察预留空间。',
-            SkeletonExample,
-            skeletonSource,
-          ),
-          toc: false,
-        },
+        example(
+          'skeleton-content',
+          '从占位到内容',
+          '手动切换文章摘要的占位与内容，观察预留空间；不发起请求。',
+          SkeletonExample,
+          skeletonSource,
+        ),
       ],
     },
     {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RadioGroup } from 'yahha-ui';
+import { Button, RadioGroup } from 'yahha-ui';
 
 const options = [
   { value: 'weekly', label: '每周一封' },
@@ -17,6 +17,11 @@ export default function RadioGroupStatus() {
         onValueChange={setFrequency}
         error={frequency ? undefined : '请选择一种来信频率。'}
       />
+      <div>
+        <Button type="button" variant="secondary" onClick={() => setFrequency('')}>
+          清空选择
+        </Button>
+      </div>
       <RadioGroup
         label="来信频率（已禁用）"
         options={options}
@@ -25,6 +30,22 @@ export default function RadioGroupStatus() {
         disabled
         hint="此设置暂不可更改。"
       />
+      <fieldset
+        aria-label="父级禁用状态样本"
+        disabled
+        style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}
+      >
+        <RadioGroup
+          label="收藏可见范围（父级已禁用）"
+          hint="此设置暂不可更改。"
+          options={[
+            { value: 'public', label: '公开' },
+            { value: 'private', label: '仅自己可见', description: '收藏不会展示在个人主页。' },
+          ]}
+          value="private"
+          onValueChange={() => {}}
+        />
+      </fieldset>
     </div>
   );
 }

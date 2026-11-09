@@ -4,7 +4,7 @@
 
 用于列表为空、搜索无结果等情况，提供说明与操作插槽。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { EmptyState } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { EmptyState } from 'yahha-ui';
 
 创建示例文章，或恢复初始空态；不实际发布。
 
-[查看示例文件](../../playground/src/examples/feedback/EmptyBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/EmptyBasic.tsx)
 
 <!-- example-source: playground/src/examples/feedback/EmptyBasic.tsx -->
 
@@ -96,13 +96,13 @@ export default function EmptyBasic() {
 
 搜索本地文章，无结果时可清空条件恢复列表。
 
-[查看示例文件](../../playground/src/examples/feedback/EmptySearch.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/EmptySearch.tsx)
 
 <!-- example-source: playground/src/examples/feedback/EmptySearch.tsx -->
 
 ```tsx
 import { useRef, useState } from 'react';
-import { Button, EmptyState, Text, TextField } from 'yahha-ui';
+import { Button, EmptyState, Text, Input } from 'yahha-ui';
 
 const articles = ['雨天书单', '周末散步'];
 
@@ -118,7 +118,7 @@ export default function EmptySearch() {
 
   return (
     <div style={{ display: 'grid', gap: 24 }}>
-      <TextField
+      <Input
         ref={inputRef}
         label="搜索文章"
         value={query}
@@ -152,7 +152,7 @@ export default function EmptySearch() {
 
 使用相同标题与说明，对比默认无插画与 motif="paper" 的小纸页。
 
-[查看示例文件](../../playground/src/examples/feedback/EmptyAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/EmptyAppearance.tsx)
 
 <!-- example-source: playground/src/examples/feedback/EmptyAppearance.tsx -->
 
@@ -191,7 +191,7 @@ export default function EmptyAppearance() {
 
 使用相同标题与说明，对比 illustration 插槽中的两张现有插画。
 
-[查看示例文件](../../playground/src/examples/scenes/EmptyIllustrations.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/scenes/EmptyIllustrations.tsx)
 
 <!-- example-source: playground/src/examples/scenes/EmptyIllustrations.tsx -->
 
@@ -242,165 +242,11 @@ export default function EmptyIllustrations() {
 }
 ```
 
-<a id="illustrations"></a>
-
-## 进阶用法
-
-完整场景组合保留创建、浏览与清空搜索流程；插画用于补充情境，原因和下一步仍由文字与操作说明。
-
-<a id="empty-illustrations"></a>
-
-### 纸页、收藏与搜索
-
-切换场景后，可以创建内容、浏览文章或清空搜索；示例状态仅保留在当前页面。
-
-[查看示例文件](../../playground/src/examples/scenes/EmptyScene.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/scenes/EmptyScene.tsx -->
-
-```tsx
-import { useEffect, useRef, useState } from 'react';
-import { Button, EmptyState, Heading, Select, Text, TextField, ThemeProvider } from 'yahha-ui';
-import 'yahha-ui/style.css';
-import emptyCollectionArtwork from './artwork/little-days-empty-collection.svg?no-inline';
-import emptySearchArtwork from './artwork/little-days-search-empty.svg?no-inline';
-
-const options = [
-  { value: 'first', label: '首次没有内容' },
-  { value: 'saved', label: '暂无收藏' },
-  { value: 'search', label: '搜索无结果' },
-];
-const articles = ['雨天的读书笔记', '周末散步的小发现'];
-
-export default function EmptyScene() {
-  const [scene, setScene] = useState<string | null>('first');
-  const [created, setCreated] = useState(false);
-  const [query, setQuery] = useState('海边');
-  const search = useRef<HTMLInputElement>(null);
-  const resultHeading = useRef<HTMLHeadingElement>(null);
-  const matches =
-    scene === 'search' ? articles.filter((title) => title.includes(query.trim())) : articles;
-  const hasContent = scene === 'search' ? matches.length > 0 : created;
-
-  useEffect(() => {
-    if (created) resultHeading.current?.focus({ preventScroll: true });
-  }, [created]);
-
-  return (
-    <ThemeProvider theme="pink">
-      <style>{`
-        .story-empty { max-width: 660px; margin: auto; }
-        .story-empty-tools { display: flex; align-items: end; flex-wrap: wrap; gap: 16px; }
-        .story-empty-tools > * { flex: 1 1 220px; }
-        .story-empty-art { display: block; width: min(240px, 100%); height: auto; margin: auto; }
-        .story-empty-result { min-height: 200px; padding-block: 32px; }
-        .story-empty-result ul { margin: 16px 0; padding-inline-start: 22px; line-height: 2; }
-        .story-empty-reset { margin-top: 16px; }
-      `}</style>
-      <div className="story-empty">
-        <div className="story-empty-tools">
-          <Select
-            label="空态场景"
-            value={scene}
-            options={options}
-            onValueChange={(value) => {
-              setScene(value);
-              setCreated(false);
-              setQuery('海边');
-            }}
-          />
-          {scene === 'search' && (
-            <TextField
-              ref={search}
-              label="搜索关键词"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-          )}
-        </div>
-        {hasContent ? (
-          <div className="story-empty-result">
-            <Heading level={3} ref={resultHeading} tabIndex={-1}>
-              {scene === 'first' ? '第一篇手记已创建' : '可以读这些文章'}
-            </Heading>
-            <ul>
-              {(scene === 'first' ? ['今天想记住的小事'] : matches).map((title) => (
-                <li key={title}>{title}</li>
-              ))}
-            </ul>
-            <Text size="sm" tone="muted">
-              示例状态仅保留在当前页面，刷新后恢复。
-            </Text>
-          </div>
-        ) : (
-          <EmptyState
-            motif="paper"
-            title={
-              scene === 'search'
-                ? '未找到相关文章'
-                : scene === 'saved'
-                  ? '还没有收藏'
-                  : '还没有手记'
-            }
-            description={
-              scene === 'search'
-                ? `没有找到包含“${query}”的标题，试试其他关键词。`
-                : scene === 'saved'
-                  ? '把想再读的文章收起来，会在这里找到它们。'
-                  : '先写下今天想记住的一件小事。'
-            }
-            illustration={
-              scene === 'first' ? undefined : (
-                <img
-                  className="story-empty-art"
-                  src={scene === 'saved' ? emptyCollectionArtwork : emptySearchArtwork}
-                  alt=""
-                  width="240"
-                  height="180"
-                  loading="lazy"
-                />
-              )
-            }
-            action={
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  if (scene === 'search') {
-                    setQuery('');
-                    search.current?.focus();
-                  } else setCreated(true);
-                }}
-              >
-                {scene === 'search'
-                  ? '清空搜索'
-                  : scene === 'saved'
-                    ? '浏览示例文章'
-                    : '创建示例手记'}
-              </Button>
-            }
-          />
-        )}
-        <Button
-          className="story-empty-reset"
-          variant="ghost"
-          onClick={() => {
-            setCreated(false);
-            setQuery('海边');
-          }}
-        >
-          重置空态示例
-        </Button>
-      </div>
-    </ThemeProvider>
-  );
-}
-```
-
 <a id="design"></a>
 
 ## 说明原因并给出下一步
 
-首次无内容可引导创建，筛选无结果可引导清空或修改条件。用标题说明原因，用 action 提供下一步；长文本和多个按钮应能在窄屏换行。
+首次无内容可引导创建，筛选无结果可引导清空或修改条件。用标题说明原因，用 action 提供下一步；长文本和多个按钮应能在窄屏换行。完整的 [纸页、收藏与搜索](../README.md#站内指南)组合保留创建内容、浏览文章和清空搜索，以及对应的插画素材。
 
 <a id="api"></a>
 

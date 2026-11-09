@@ -1,7 +1,7 @@
+import HeadingStructure from '../../examples/content/HeadingStructure';
+import headingStructureSource from '../../examples/content/HeadingStructure.tsx?raw';
 import HeadingExample from '../../examples/content/HeadingExample';
 import headingSource from '../../examples/content/HeadingExample.tsx?raw';
-import HeadingArticle from '../../examples/content/HeadingArticle';
-import headingArticleSource from '../../examples/content/HeadingArticle.tsx?raw';
 import HeadingDecoration from '../../examples/content/HeadingDecoration';
 import headingDecorationSource from '../../examples/content/HeadingDecoration.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -33,21 +33,25 @@ export default defineComponentPage('heading', {
           HeadingDecoration,
           headingDecorationSource,
         ),
+        example(
+          'heading-reading-layout',
+          '文章标题层级',
+          '在同一段文章结构中接续 h2、h3 和 h4，并保留长标题的完整文字。',
+          HeadingStructure,
+          headingStructureSource,
+        ),
       ],
     },
     {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看文章层级与章节链接',
-      examples: [
-        example(
-          'heading-reading-layout',
-          '文章层级与章节链接',
-          '定位章节、复制章节地址；复制失败时可手动复制。',
-          () => <HeadingArticle hrefPrefix="#/components/heading?section=" />,
-          headingArticleSource,
-        ),
-      ],
+      id: 'recipes',
+      title: '相关组合',
+      kind: 'related',
+      content: (
+        <p>
+          目录定位与章节分享由页面实现。原生章节链接、定位焦点和复制失败回退见
+          <a href="#/guides/interactions?section=heading-reading-layout">章节导航与分享组合</a>。
+        </p>
+      ),
     },
     {
       id: 'design',
@@ -89,22 +93,10 @@ export default defineComponentPage('heading', {
       id: 'behavior',
       title: '接续页面的标题层级',
       content: (
-        <>
-          <p>
-            例如文章标题使用 h1 时，下一级章节使用 h2，小节使用
-            h3；嵌入已有页面时，接续所在页面的结构。
-          </p>
-          <p>
-            目录链接引用标题在页面内唯一的 id。定位后的滚动与焦点由页面处理；上例通过 ref
-            聚焦目标标题，并设置 tabIndex={-1}，使其可被聚焦而不额外加入 Tab 顺序。
-          </p>
-          <p>
-            章节分享属于页面任务。示例复用固定 id 与 hrefPrefix
-            生成永久链接；剪贴板失败时显示可选中的只读地址，
-            仍可用浏览器原生方式复制。接入自己的路由时替换 hrefPrefix，不由 Heading 自动生成地址。
-            页面定位时为固定页头保留滚动留白，接入自己的站点时按路由与页头布局处理。
-          </p>
-        </>
+        <p>
+          文章标题使用 h1 时，下一级章节使用 h2，小节使用
+          h3；嵌入已有页面时，接续所在页面的结构。标题层级表达内容关系，不用于单纯调整字号。
+        </p>
       ),
     },
   ],

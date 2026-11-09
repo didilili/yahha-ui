@@ -22,8 +22,10 @@ async function verifyPendingGuideBodies(browser, baseURL) {
     await page.locator('.home-title').waitFor();
     for (const [id, title, examples] of [
       ['getting-started', '开始使用', 1],
+      ['forms', '原生表单接入', 1],
       ['styling', '使用与定制', 0],
       ['reading', '阅读与收藏', 1],
+      ['interactions', '交互组合', 13],
     ]) {
       const gate = Promise.withResolvers();
       release = gate.resolve;

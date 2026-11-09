@@ -9,7 +9,21 @@ export async function verifyIconExamples(page) {
     0,
     'Labels already name decorative samples.',
   );
-  const composition = page.locator('#icon-composition .example-preview');
+  const custom = page.locator('#icon-custom .example-preview svg');
+  assert.equal(await custom.first().getAttribute('viewBox'), '0 0 16 16');
+  assert.equal((await custom.first().boundingBox()).width, 24);
+  assert.equal((await custom.nth(1).boundingBox()).width, 32);
+  const names = page.locator('#icon-accessibility .example-preview');
+  assert.equal(await names.getByRole('img', { name: '阅读提示', exact: true }).count(), 1);
+  assert.equal(await names.getByRole('img', { name: '已同步', exact: true }).count(), 1);
+  assert.equal(await names.getByRole('img').count(), 2);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+}
+
+export async function verifyIconComposition(
+  page,
+  composition = page.locator('#icon-composition .example-preview'),
+) {
   await revealExample(composition);
   const field = composition.getByRole('textbox', { name: '搜索手记', exact: true });
   const result = composition.getByRole('status');
@@ -33,13 +47,5 @@ export async function verifyIconExamples(page) {
   assert.equal(await field.inputValue(), '');
   assert.equal(await field.evaluate((node) => document.activeElement === node), true);
 
-  const custom = page.locator('#icon-custom .example-preview svg');
-  assert.equal(await custom.first().getAttribute('viewBox'), '0 0 16 16');
-  assert.equal((await custom.first().boundingBox()).width, 24);
-  assert.equal((await custom.nth(1).boundingBox()).width, 32);
-  const names = page.locator('#icon-accessibility .example-preview');
-  assert.equal(await names.getByRole('img', { name: '阅读提示', exact: true }).count(), 1);
-  assert.equal(await names.getByRole('img', { name: '已同步', exact: true }).count(), 1);
-  assert.equal(await names.getByRole('img').count(), 2);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
 }

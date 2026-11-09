@@ -12,10 +12,7 @@ import CheckboxMixed from '../../examples/new-forms/CheckboxMixed';
 import CheckboxMixedSource from '../../examples/new-forms/CheckboxMixed.tsx?raw';
 import CheckboxForm from '../../examples/new-forms/CheckboxForm';
 import CheckboxFormSource from '../../examples/new-forms/CheckboxForm.tsx?raw';
-import CheckboxReadingTopics from '../../examples/new-forms/CheckboxReadingTopics';
-import CheckboxReadingTopicsSource from '../../examples/new-forms/CheckboxReadingTopics.tsx?raw';
-import CheckboxReadingList from '../../examples/new-forms/CheckboxReadingList';
-import CheckboxReadingListSource from '../../examples/new-forms/CheckboxReadingList.tsx?raw';
+import { CodeBlock } from '../CodeBlock';
 import { defineComponentPage } from '../page';
 
 export default defineComponentPage('checkbox', {
@@ -45,13 +42,6 @@ export default defineComponentPage('checkbox', {
           source: CheckboxBasicSource,
         },
         {
-          id: 'checkbox-disabled',
-          title: '禁用状态',
-          description: '对比禁用时未勾选与已勾选的外观。',
-          component: CheckboxDisabled,
-          source: checkboxDisabledSource,
-        },
-        {
           id: 'checkbox-controlled',
           title: '受控勾选',
           description: '通过 checked 与 onChange 同步勾选状态和相邻文字。',
@@ -59,11 +49,11 @@ export default defineComponentPage('checkbox', {
           source: checkboxControlledSource,
         },
         {
-          id: 'mixed',
-          title: '全选与半选',
-          description: '逐项勾选或全选分类，查看半选状态和已选数量。',
-          component: CheckboxMixed,
-          source: CheckboxMixedSource,
+          id: 'checkbox-disabled',
+          title: '禁用状态',
+          description: '对比禁用时未勾选与已勾选的外观。',
+          component: CheckboxDisabled,
+          source: checkboxDisabledSource,
         },
         {
           id: 'checkbox-long-label',
@@ -73,49 +63,32 @@ export default defineComponentPage('checkbox', {
           source: checkboxLongLabelSource,
         },
         {
+          id: 'mixed',
+          title: '全选与半选',
+          description: '逐项勾选或全选分类，查看半选状态和已选数量。',
+          component: CheckboxMixed,
+          source: CheckboxMixedSource,
+        },
+        {
           id: 'checkbox-highlight',
           title: '整行高亮',
           description: '两组共用勾选状态，对比相同内容下的默认与整行高亮外观。',
           component: CheckboxHighlight,
           source: checkboxHighlightSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看表单、筛选与批量操作示例',
-      content: <p>兴趣条件记录在当前地址中；清单和表单操作只保留在当前示例。</p>,
-      examples: [
         {
           id: 'form',
-          toc: false,
-          title: '表单提交、必选与重置',
-          description: '读取已勾选分类或重置；改选后清除上次读取结果。',
+          title: '原生表单多值与必选',
+          description:
+            '用 FormData.getAll 读取同名分类，演示单项 required 与原生 reset 恢复默认勾选。',
           component: CheckboxForm,
           source: CheckboxFormSource,
-        },
-        {
-          id: 'checkbox-reading-topics',
-          toc: false,
-          title: '多选筛选与地址同步',
-          description: '勾选多项筛选内容，通过链接或浏览器返回恢复条件。',
-          component: CheckboxReadingTopics,
-          source: CheckboxReadingTopicsSource,
-        },
-        {
-          id: 'checkbox-reading-list',
-          toc: false,
-          title: '批量选择与失败重试',
-          description: '选择文章后确认移出；本地模拟失败时保留选择，支持重试。',
-          component: CheckboxReadingList,
-          source: CheckboxReadingListSource,
         },
       ],
     },
     {
       id: 'design',
-      title: '状态与表单',
+      title: '状态与原生表单',
       content: (
         <ul>
           <li>
@@ -130,28 +103,42 @@ export default defineComponentPage('checkbox', {
           </li>
           <li>
             设置 name 与 value 后，只有勾选且未禁用的项参与提交；同名多项使用 FormData.getAll
-            读取。非受控勾选随表单重置，受控勾选需在 onReset 中恢复。
+            读取。通用取值规则见 <a href="#/guides/forms?section=native-form">原生表单与取值</a>。
           </li>
           <li>
             indeterminate 表达部分选择，由调用方根据子项计算；它与 checked 独立，实际提交仍由
             checked 决定，重置时也应同步父子状态。
           </li>
           <li>
-            required 逐项要求勾选；一组中“至少选一项”的规则由调用方校验，并维护 error。
-            需要锁定选择时使用 disabled，Checkbox 不提供只读模式。
+            required 逐项要求勾选。一组中“至少选一项”的规则需自定义校验。 自行管理原生 form
+            时，由调用方检查选中值并维护 error。 需要锁定选择时使用 disabled，Checkbox
+            不提供只读模式。
           </li>
           <li>
-            表单例使用 onInput 清除旧读取结果，确认项勾选后清除该项错误；原生重置继续恢复初始勾选。
-          </li>
-          <li>
-            兴趣例按任一所选主题匹配，未选择时显示全部；地址仅使用专属 query
-            键记录条件，保留其他参数和当前路由。 返回、前进与分享链接恢复条件，URL 管理由示例完成。
-          </li>
-          <li>
-            清单例只从稍后阅读移出，文章内容仍保留。确认、首次失败、重试与取消等待均由示例管理，
-            成功后聚焦仍存在的复选项或恢复入口。
+            自行管理原生 form 时，受控状态由 onReset 恢复，非受控状态恢复 defaultChecked。见{' '}
+            <a href="#/guides/forms?section=reset">原生表单重置</a>。
           </li>
         </ul>
+      ),
+    },
+    {
+      id: 'form-integration',
+      title: '与 Form 配合',
+      kind: 'integration',
+      content: (
+        <>
+          <CodeBlock
+            source={`import { Checkbox, Form } from 'yahha-ui';
+
+<Form initialValues={{ newsletter: false }}>
+  {(form) => <Checkbox {...form.checked('newsletter')} label="订阅更新" />}
+</Form>`}
+          />
+          <p>
+            每项偏好使用独立的布尔字段。多控件接入见{' '}
+            <a href="#/components/form?section=form-controls">Form 控件绑定示例</a>。
+          </p>
+        </>
       ),
     },
     {
@@ -248,6 +235,23 @@ export default defineComponentPage('checkbox', {
           classNames.text、classNames.hint
           定制。长标签应允许换行，避免固定行高裁切文字或缩小可点击范围。
         </p>
+      ),
+    },
+    {
+      id: 'recipes',
+      kind: 'related',
+      title: '相关组合',
+      content: (
+        <ul>
+          <li>
+            <a href="#/guides/interactions?section=checkbox-reading-topics">多选筛选与地址同步</a>
+            ：按任一所选主题筛选文章，支持分享、浏览器返回和无结果恢复；URL 与焦点由调用方管理。
+          </li>
+          <li>
+            <a href="#/guides/interactions?section=checkbox-reading-list">批量操作与失败恢复</a>
+            ：选择文章后确认移出稍后阅读，保留失败重试与焦点恢复；文章内容仍保留，流程由调用方管理。
+          </li>
+        </ul>
       ),
     },
   ],

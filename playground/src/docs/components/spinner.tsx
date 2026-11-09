@@ -26,6 +26,13 @@ export default defineComponentPage('spinner', {
       content: <p>本页仅演示等待状态，不发起请求。</p>,
       examples: [
         example(
+          'spinner-waiting',
+          '基础等待与结果',
+          '用可见文字说明等待内容，切换完成状态后移除等待图形。',
+          SpinnerWaiting,
+          spinnerWaitingSource,
+        ),
+        example(
           'spinner-sizes',
           '尺寸',
           '使用默认三墨点对比小、中、大三档尺寸。',
@@ -38,13 +45,6 @@ export default defineComponentPage('spinner', {
           '使用相同尺寸对比默认三墨点与可选小花饼。',
           SpinnerVariants,
           spinnerVariantsSource,
-        ),
-        example(
-          'spinner-waiting',
-          '区块等待与完成状态',
-          '切换等待与完成状态，查看对应说明。',
-          SpinnerWaiting,
-          spinnerWaitingSource,
         ),
       ],
     },

@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { apiRowAnchor } from '../../playground/src/docs/api-anchor.ts';
+import { openSearchDialog, searchField, visibleSearchEntry } from './search-dialog-helpers.mjs';
 
 /** Verify the relationship between global sections, local directories and page content. */
 export async function verifySectionNavigation(browser, baseURL) {
@@ -58,15 +60,17 @@ export async function verifySectionNavigation(browser, baseURL) {
       /states\?section=scene-loading$/,
     );
 
-    const search = sidebar.getByRole('searchbox', { name: '搜索文档', exact: true });
+    const dialog = await openSearchDialog(page);
+    const search = searchField(page);
     await search.fill('组件总览');
-    const overview = sidebar.locator('.doc-search-results a[href="#/components"]');
+    const overview = dialog.locator('.doc-search-results a[href="#/components"]');
     await overview.waitFor();
     assert.equal(
-      await sidebar.locator('.doc-search-results a').first().getAttribute('href'),
+      await dialog.locator('.doc-search-results a').first().getAttribute('href'),
       '#/components',
     );
     await overview.click();
+    await dialog.waitFor({ state: 'hidden' });
     // A hash-link click can finish before React renders the destination and its scoped tree.
     await page.getByRole('heading', { level: 1, name: '组件总览', exact: true }).waitFor();
     await top.locator('a[href="#/components"][aria-current="page"]').waitFor();
@@ -95,7 +99,10 @@ export async function verifySectionNavigation(browser, baseURL) {
 
     await page.goto(`${baseURL}#/guides/design-baseline`);
     await page.getByRole('heading', { level: 1, name: '设计规范', exact: true }).waitFor();
-    const formDisclosure = page.locator('#controls').locator('..').locator('.doc-disclosure');
+    const formDisclosure = page
+      .locator('.doc-section')
+      .filter({ has: page.locator('#controls') })
+      .locator('.doc-disclosure');
     assert.equal(await formDisclosure.getAttribute('open'), null);
     assert.equal(await page.locator('.docs-toc a[href$="section=design-controls"]').count(), 0);
     await page.goto(`${baseURL}#/guides/design-baseline?section=design-controls`);
@@ -110,7 +117,11 @@ export async function verifySectionNavigation(browser, baseURL) {
     await page.goto(`${baseURL}#/guides/design-baseline?section=design-reading`);
     await page.waitForFunction(() => document.activeElement?.id === 'design-reading');
     assert.notEqual(
-      await page.locator('#reading').locator('..').locator('.doc-disclosure').getAttribute('open'),
+      await page
+        .locator('.doc-section')
+        .filter({ has: page.locator('#reading') })
+        .locator('.doc-disclosure')
+        .getAttribute('open'),
       null,
     );
     await page.goto(`${baseURL}#/components/button`);
@@ -127,11 +138,18 @@ export async function verifySectionNavigation(browser, baseURL) {
     );
     await page.getByRole('button', { name: '打开文档目录', exact: true }).click();
     assert.equal(await directory.locator('a[href^="#/components/"]').count(), 0);
+    const directorySearch = await visibleSearchEntry(page, sidebar);
+    await openSearchDialog(page, directorySearch);
     await search.fill('initialFocus');
-    const result = sidebar.locator('a[href="#/components/dialog?section=api"]');
+    const propertyAnchor = apiRowAnchor('DialogProps', 'initialFocus');
+    const propertyHref = `#/components/dialog?section=${encodeURIComponent(propertyAnchor)}`;
+    const result = dialog.locator(`a[href="${propertyHref}"]`);
     await result.focus();
     await page.keyboard.press('Enter');
-    await page.waitForFunction(() => document.activeElement?.id === 'api');
+    await dialog.waitFor({ state: 'hidden' });
+    await page.waitForFunction((id) => document.activeElement?.id === id, propertyAnchor);
+    assert.equal(await page.evaluate(() => document.activeElement?.tagName), 'TR');
+    assert.equal(new URL(page.url()).hash, propertyHref);
     await page.getByRole('button', { name: '打开文档目录', exact: true }).click();
     assert.equal(
       await switcher.locator('a[aria-current="page"]').getAttribute('href'),
@@ -143,7 +161,7 @@ export async function verifySectionNavigation(browser, baseURL) {
       'Section switching stays visible when the component list scrolls to Dialog.',
     );
     assert.ok(
-      (await search.boundingBox()).y >= 64,
+      (await directorySearch.boundingBox()).y >= 64,
       'Global search stays visible above the local scrolling directory.',
     );
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));

@@ -4,7 +4,7 @@
 
 用于反馈操作结果，支持说明与操作插槽，由调用方管理显示状态。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Toast } from 'yahha-ui';
@@ -28,7 +28,7 @@ Toast 是受控展示组件，显示在调用方放置的位置。调用方管�
 
 显示并关闭提示，关闭后可重新显示。
 
-[查看示例文件](../../playground/src/examples/feedback/ToastSimple.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/ToastSimple.tsx)
 
 <!-- example-source: playground/src/examples/feedback/ToastSimple.tsx -->
 
@@ -69,7 +69,7 @@ export default function ToastSimple() {
 
 对比三种反馈类型，支持关闭与恢复提示。
 
-[查看示例文件](../../playground/src/examples/feedback/ToastTones.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/ToastTones.tsx)
 
 <!-- example-source: playground/src/examples/feedback/ToastTones.tsx -->
 
@@ -152,7 +152,7 @@ export default function ToastTones() {
 
 通过 action 提供后续链接，关闭提示后可重新显示。
 
-[查看示例文件](../../playground/src/examples/feedback/ToastAction.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/ToastAction.tsx)
 
 <!-- example-source: playground/src/examples/feedback/ToastAction.tsx -->
 
@@ -195,7 +195,7 @@ export default function ToastAction() {
 
 使用相同内容和链接，对比回执增加的印签与浅色操作纸面。
 
-[查看示例文件](../../playground/src/examples/feedback/ToastAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/ToastAppearance.tsx)
 
 <!-- example-source: playground/src/examples/feedback/ToastAppearance.tsx -->
 
@@ -253,256 +253,73 @@ export default function ToastAppearance() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-示例只操作本地清单或文章状态。重要操作保留常驻入口，提示关闭后仍可继续访问或恢复。
-
 <a id="basic"></a>
 
-### 操作入口与关闭后的焦点
+### 关闭提示后的焦点恢复
 
-点击提示内的操作查看清单，关闭后仍可从常驻入口访问。
+关闭提示时按需返回触发按钮，查看操作聚焦手记标题；常驻入口在提示关闭后仍可用。
 
-[查看示例文件](../../playground/src/examples/feedback/ToastBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/ToastFocus.tsx)
 
-<!-- example-source: playground/src/examples/feedback/ToastBasic.tsx -->
+<!-- example-source: playground/src/examples/feedback/ToastFocus.tsx -->
 
 ```tsx
-import { useEffect, useId, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, Heading, Text, Toast } from 'yahha-ui';
 
-const article = {
-  title: '窗边那半本书，留给周末的一页',
-  summary: '把读到一半的段落留给周末，先将手记收进稍后阅读清单。',
-};
-
-export default function ToastBasic() {
+export default function ToastFocus() {
   const [saved, setSaved] = useState(false);
   const [open, setOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const message = useRef<HTMLDivElement>(null);
-  const listHeading = useRef<HTMLHeadingElement>(null);
-  const returnFocus = useRef(false);
-  const listId = useId();
+  const destination = useRef<HTMLHeadingElement>(null);
 
-  useEffect(() => {
-    if (open || !returnFocus.current) return;
-    returnFocus.current = false;
-    if (document.activeElement === document.body) trigger.current?.focus();
-  }, [open]);
-
-  function viewList() {
-    returnFocus.current = false;
+  function viewNote() {
     setOpen(false);
-    listHeading.current?.focus();
-    listHeading.current?.scrollIntoView({ block: 'nearest' });
+    destination.current?.focus();
+    destination.current?.scrollIntoView({ block: 'nearest' });
   }
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gap: 20,
-        maxWidth: 640,
-        minWidth: 0,
-        overflowWrap: 'anywhere',
-      }}
-    >
-      <article aria-label="示例手记" style={{ display: 'grid', gap: 12, minWidth: 0 }}>
-        <Heading level={3}>{article.title}</Heading>
-        <Text>{article.summary}</Text>
-        <Text size="sm" tone="muted">
-          {saved ? '已在稍后阅读清单中。' : '尚未加入稍后阅读。'}
-        </Text>
-      </article>
+    <div style={{ display: 'grid', gap: 16, maxWidth: 480 }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
         <Button
           ref={trigger}
           onClick={() => {
-            returnFocus.current = false;
-            setSaved((current) => !current);
+            setSaved(true);
             setOpen(true);
           }}
         >
-          {saved ? '移出稍后阅读' : '加入稍后阅读'}
+          {saved ? '再次显示提示' : '收藏手记'}
         </Button>
-        <Button variant="secondary" onClick={viewList}>
-          查看阅读清单
+        <Button variant="secondary" onClick={viewNote}>
+          查看手记
         </Button>
       </div>
       <div ref={message}>
         <Toast
-          appearance="receipt"
           open={open}
+          title="手记已收藏"
+          description="《周末散步》已留在收藏中。"
           onClose={() => {
-            returnFocus.current = message.current?.contains(document.activeElement) ?? false;
+            if (message.current?.contains(document.activeElement)) trigger.current?.focus();
             setOpen(false);
           }}
-          tone={saved ? 'success' : 'info'}
-          title={saved ? '已加入稍后阅读' : '已移出稍后阅读'}
-          description={article.title}
           action={
-            <Button variant="ghost" onClick={viewList}>
-              查看阅读清单
+            <Button variant="ghost" onClick={viewNote}>
+              查看手记
             </Button>
           }
         />
       </div>
-      <section aria-labelledby={listId} style={{ display: 'grid', gap: 12, minWidth: 0 }}>
-        <Heading id={listId} ref={listHeading} level={3} tabIndex={-1}>
-          稍后阅读清单
+      <article style={{ display: 'grid', gap: 8 }}>
+        <Heading ref={destination} level={3} tabIndex={-1}>
+          周末散步
         </Heading>
         <Text size="sm" tone="muted">
-          共 {saved ? 1 : 0} 篇手记。
+          {saved ? '已收藏。' : '尚未收藏。'}吉伊收起路线图，小八还在数口袋里的面包屑。
         </Text>
-        {saved ? (
-          <ul style={{ margin: 0, paddingInlineStart: 24, minWidth: 0 }}>
-            <li>{article.title}</li>
-          </ul>
-        ) : (
-          <Text>还没有稍后阅读的手记。</Text>
-        )}
-      </section>
-    </div>
-  );
-}
-```
-
-<a id="timer-and-action"></a>
-
-### 计时关闭与撤销
-
-8 秒撤销窗口中，进度条表示已用时；悬停、聚焦或页面进入后台时暂停，恢复后继续剩余时间。
-
-[查看示例文件](../../playground/src/examples/feedback/ToastTimer.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/feedback/ToastTimer.tsx -->
-
-```tsx
-import { useEffect, useRef, useState } from 'react';
-import { Button, Progress, Text, Toast } from 'yahha-ui';
-
-const undoDuration = 8000;
-
-export default function ToastTimer() {
-  const [archived, setArchived] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [hidden, setHidden] = useState(() => document.hidden);
-  const [elapsed, setElapsed] = useState(0);
-  const remaining = useRef(undoDuration);
-  const archiveButton = useRef<HTMLButtonElement>(null);
-  const restoreButton = useRef<HTMLButtonElement>(null);
-  const message = useRef<HTMLDivElement>(null);
-  const pendingFocus = useRef<'archive' | 'restore' | null>(null);
-
-  useEffect(() => {
-    const updateVisibility = () => setHidden(document.hidden);
-    document.addEventListener('visibilitychange', updateVisibility);
-    return () => document.removeEventListener('visibilitychange', updateVisibility);
-  }, []);
-
-  useEffect(() => {
-    const destination = pendingFocus.current;
-    if (!destination) return;
-    pendingFocus.current = null;
-    const active = document.activeElement;
-    const unavailableAction =
-      (active === archiveButton.current && archiveButton.current?.disabled) ||
-      (active === restoreButton.current && restoreButton.current?.disabled);
-    if (active === document.body || unavailableAction) {
-      (destination === 'archive' ? archiveButton : restoreButton).current?.focus();
-    }
-  }, [archived, open]);
-
-  useEffect(() => {
-    if (!open || hovered || focused || hidden) return;
-    const started = performance.now();
-    const previousRemaining = remaining.current;
-    const updateElapsed = () => {
-      setElapsed(undoDuration - Math.max(0, previousRemaining - (performance.now() - started)));
-    };
-    const timer = window.setTimeout(() => setOpen(false), previousRemaining);
-    const display = window.setInterval(updateElapsed, 100);
-    return () => {
-      remaining.current = Math.max(0, previousRemaining - (performance.now() - started));
-      setElapsed(undoDuration - remaining.current);
-      window.clearTimeout(timer);
-      window.clearInterval(display);
-    };
-  }, [open, hovered, focused, hidden]);
-
-  function archive() {
-    if (document.activeElement === archiveButton.current) pendingFocus.current = 'restore';
-    setArchived(true);
-    setHovered(false);
-    setFocused(false);
-    remaining.current = undoDuration;
-    setElapsed(0);
-    setOpen(true);
-  }
-
-  function undo() {
-    if (
-      message.current?.contains(document.activeElement) ||
-      document.activeElement === restoreButton.current
-    ) {
-      pendingFocus.current = 'archive';
-    }
-    setArchived(false);
-    setOpen(false);
-  }
-
-  return (
-    <div style={{ display: 'grid', gap: 20 }}>
-      <Text size="sm" tone="muted">
-        {archived ? '《周末散步》已归档。' : '《周末散步》在文章列表中。'}
-      </Text>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-        <Button ref={archiveButton} onClick={archive} disabled={archived}>
-          归档文章
-        </Button>
-        <Button ref={restoreButton} variant="secondary" onClick={undo} disabled={!archived}>
-          恢复文章
-        </Button>
-      </div>
-      <div
-        ref={message}
-        style={{ display: 'grid', gap: 12, maxWidth: 400 }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onFocusCapture={() => setFocused(true)}
-        onBlurCapture={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
-        }}
-      >
-        <Toast
-          appearance="receipt"
-          open={open}
-          onClose={() => {
-            if (message.current?.contains(document.activeElement)) pendingFocus.current = 'restore';
-            setOpen(false);
-          }}
-          title="文章已归档"
-          description="《周末散步》已移入归档，可以随时恢复。"
-          action={
-            <Button size="sm" variant="ghost" onClick={undo}>
-              撤销归档
-            </Button>
-          }
-        />
-        {open && (
-          <Progress
-            label="提示显示时间"
-            value={elapsed}
-            max={undoDuration}
-            valueText={`剩余 ${Math.ceil((undoDuration - elapsed) / 1000)} 秒${hovered || focused || hidden ? '（已暂停）' : ''}`}
-          />
-        )}
-      </div>
+      </article>
     </div>
   );
 }
@@ -512,9 +329,9 @@ export default function ToastTimer() {
 
 ## 自动关闭与恢复入口
 
-自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间；计时与撤销示例等待 8 秒后关闭，悬停、聚焦或页面进入后台时暂停，恢复后只计剩余时间。示例将 Progress 放在 Toast 的 status 外，避免每次计时更新重复播报提示。撤销等重要操作还应在页面中保留持续入口，示例中的“恢复文章”在提示关闭后仍然可用。
+自动关闭由调用方实现，组件本身没有计时器。请留足阅读时间，并为撤销等重要操作保留持续入口。完整的 [归档撤销与提示计时](../recipes/interactions.md#timer-and-action)展示 8 秒窗口、悬停与聚焦暂停、后台暂停，以及关闭提示后的恢复操作。
 
-进阶示例保留常驻清单入口；查看操作聚焦清单标题，关闭提示不会丢失已加入的内容。
+收藏内容不会随提示关闭而丢失。完整的 [清单操作与提示回焦](../recipes/interactions.md#basic)保留文章增删、清单结果和常驻查看入口。
 
 <a id="api"></a>
 

@@ -4,7 +4,7 @@
 
 打开或关闭即时生效的设置，例如显示文章摘要。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Switch } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Switch } from 'yahha-ui';
 
 点击或按空格切换。
 
-[查看示例文件](../../playground/src/examples/new-forms/SwitchBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/SwitchBasic.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/SwitchBasic.tsx -->
 
@@ -38,59 +38,13 @@ export default function SwitchBasic() {
 }
 ```
 
-<a id="switch-disabled"></a>
-
-### 禁用状态
-
-对比关闭与开启时的禁用外观。
-
-[查看示例文件](../../playground/src/examples/new-forms/SwitchDisabled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/new-forms/SwitchDisabled.tsx -->
-
-```tsx
-import { Switch } from 'yahha-ui';
-
-export default function SwitchDisabled() {
-  return (
-    <div style={{ display: 'grid', gap: 12 }}>
-      <Switch label="邮件通知" disabled />
-      <Switch label="站内通知" defaultChecked disabled />
-    </div>
-  );
-}
-```
-
-<a id="switch-loading"></a>
-
-### 加载状态
-
-加载时保持当前状态，不能重复切换。
-
-[查看示例文件](../../playground/src/examples/new-forms/SwitchLoading.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/new-forms/SwitchLoading.tsx -->
-
-```tsx
-import { Switch } from 'yahha-ui';
-
-export default function SwitchLoading() {
-  return (
-    <div style={{ display: 'grid', gap: 12 }}>
-      <Switch label="邮件通知" loading />
-      <Switch label="站内通知" defaultChecked loading />
-    </div>
-  );
-}
-```
-
 <a id="controlled"></a>
 
 ### 受控状态
 
 通过 checked 与 onChange 管理状态。
 
-[查看示例文件](../../playground/src/examples/new-forms/SwitchControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/SwitchControlled.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/SwitchControlled.tsx -->
 
@@ -115,19 +69,59 @@ export default function SwitchControlled() {
 }
 ```
 
-<a id="integration"></a>
+<a id="switch-disabled"></a>
 
-## 进阶用法
+### 禁用状态
 
-表单例演示取值与重置；异步例由使用方管理本地模拟保存。
+对比关闭与开启时的禁用外观。
+
+[查看示例文件](../../playground/src/examples/new-forms/SwitchDisabled.tsx)
+
+<!-- example-source: playground/src/examples/new-forms/SwitchDisabled.tsx -->
+
+```tsx
+import { Switch } from 'yahha-ui';
+
+export default function SwitchDisabled() {
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <Switch label="邮件通知" disabled />
+      <Switch label="站内通知" defaultChecked disabled />
+    </div>
+  );
+}
+```
+
+<a id="switch-loading"></a>
+
+### 加载状态
+
+加载时保持当前状态，不能重复切换。
+
+[查看示例文件](../../playground/src/examples/new-forms/SwitchLoading.tsx)
+
+<!-- example-source: playground/src/examples/new-forms/SwitchLoading.tsx -->
+
+```tsx
+import { Switch } from 'yahha-ui';
+
+export default function SwitchLoading() {
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      <Switch label="邮件通知" loading />
+      <Switch label="站内通知" defaultChecked loading />
+    </div>
+  );
+}
+```
 
 <a id="form"></a>
 
-### 表单集成
+### 原生表单取值与重置
 
-读取开关值，或重置到初始状态。
+通过 FormData 读取开启的封面偏好，关闭后不产生条目，再用原生 reset 恢复初始状态。
 
-[查看示例文件](../../playground/src/examples/new-forms/SwitchForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/SwitchForm.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/SwitchForm.tsx -->
 
@@ -179,9 +173,9 @@ export default function SwitchForm() {
 
 ### 异步切换与失败恢复
 
-模拟保存时显示加载状态，首次失败后回滚，可再次切换重试。
+由调用方模拟本地保存，首次失败后回滚，可再次切换重试。
 
-[查看示例文件](../../playground/src/examples/new-forms/SwitchReadingPreference.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/SwitchReadingPreference.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/SwitchReadingPreference.tsx -->
 
@@ -281,9 +275,34 @@ export default function SwitchReadingPreference() {
 
 ## 状态与交互
 
-- checked / onChange 管理受控状态，defaultChecked 设置初始状态；从 event.target.checked 读取结果。
+- checked / onChange 管理受控状态，defaultChecked 设置初始状态。状态读取使用 event.target.checked，name 对应的原生提交内容由 value 决定。使用原生 form 时，受控状态需在 onReset 中恢复，详见 [原生表单重置](../guides/forms.md#reset)。
 - loading 显示圆扣内的三墨点并阻止点击、空格切换，保留当前值、焦点和表单值；加载时不显示可操作状态的悬停高亮。 请求、完成与失败处理由使用方控制，组件不自动发起保存。
 - disabled 使用原生禁用行为，退出键盘顺序且不参与表单提交，支持父 fieldset 禁用。 loading 不会自动设置原生 disabled；显式禁用仍按原生规则处理。
+
+<a id="form-integration"></a>
+
+## 与 Form 配合
+
+开关使用布尔字段。将 errorPlacement 设为 external，并用 FormError 呈现错误。
+
+```tsx
+import { Form, FormError, Switch } from 'yahha-ui';
+
+<Form initialValues={{ summary: false }}>
+  {(form) => (
+    <>
+      <Switch
+        {...form.checked('summary', { errorPlacement: 'external' })}
+        label="显示文章摘要"
+        required
+      />
+      <FormError name="summary" />
+    </>
+  )}
+</Form>
+```
+
+保留绑定提供的 aria-invalid 和 aria-describedby 以关联错误。完整用法见 [字段绑定与错误呈现](form.md#binding)。
 
 <a id="api"></a>
 
@@ -323,3 +342,4 @@ export default function SwitchReadingPreference() {
 
 - [Checkbox 复选框](checkbox.md)：用于独立选择、多项选择或确认事项，支持半选状态。
 - [RadioGroup 单选组](radio-group.md)：用于在一组互斥选项中选择单个值，可为选项提供说明。
+- [Form 表单](form.md)：统一管理字段值、校验、提交与重置，并定位需要修正的字段。

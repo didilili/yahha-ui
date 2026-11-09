@@ -1,5 +1,16 @@
 import assert from 'node:assert/strict';
 
+/** Keep the current deployment prefix and document query when opening a relocated workflow. */
+export async function openInteractionExample(page, id) {
+  const destination = new URL(page.url());
+  destination.hash = `/guides/interactions?section=${encodeURIComponent(id)}`;
+  await page.goto(destination.href);
+  const example = page.locator(`#${id}`);
+  await revealExample(example);
+  await example.waitFor({ state: 'visible' });
+  return example.locator('.example-preview');
+}
+
 /** Open enclosing documentation disclosures through their native summary controls. */
 export async function revealExample(example) {
   for (;;) {

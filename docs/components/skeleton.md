@@ -4,7 +4,7 @@
 
 为即将出现的内容预留形状，减少布局跳动。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Skeleton } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Skeleton } from 'yahha-ui';
 
 对比文本、矩形与圆形占位。
 
-[查看示例文件](../../playground/src/examples/content/SkeletonShapes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/SkeletonShapes.tsx)
 
 <!-- example-source: playground/src/examples/content/SkeletonShapes.tsx -->
 
@@ -59,19 +59,13 @@ export default function SkeletonShapes() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-本例手动切换占位与内容，不发起请求。
-
 <a id="skeleton-content"></a>
 
 ### 从占位到内容
 
-切换文章摘要的占位与内容，观察预留空间。
+手动切换文章摘要的占位与内容，观察预留空间；不发起请求。
 
-[查看示例文件](../../playground/src/examples/content/SkeletonExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/SkeletonExample.tsx)
 
 <!-- example-source: playground/src/examples/content/SkeletonExample.tsx -->
 

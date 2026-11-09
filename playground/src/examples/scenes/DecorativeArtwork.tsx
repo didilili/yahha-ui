@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Select, TextField } from 'yahha-ui';
+import { Select, Input } from 'yahha-ui';
 import flowerPattern from './artwork/decorative-elements/patterns/flower-sprout.svg?no-inline';
 import friendsPattern from './artwork/decorative-elements/friends/friends-pattern.svg?no-inline';
 import friendsNote from './artwork/decorative-elements/friends/friends-note.svg?no-inline';
@@ -30,7 +30,7 @@ export default function DecorativeArtwork() {
         @media (forced-colors: active) { .friends-decoration-pattern { display: none; } }
       `}</style>
       <div className="friends-decoration-controls">
-        <TextField
+        <Input
           label="纸签标题"
           value={title}
           maxLength={12}

@@ -9,7 +9,7 @@ import {
   Pagination,
   Tabs,
   Text,
-  TextField,
+  Input,
 } from 'yahha-ui';
 
 const articles = [
@@ -186,7 +186,7 @@ export default function BlogArchive() {
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'end', gap: 12 }}>
         <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-          <TextField
+          <Input
             ref={search}
             label="搜索归档"
             type="search"

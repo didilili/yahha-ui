@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
-import { Button, Heading, Link, Text, TextField } from 'yahha-ui';
+import { Button, Heading, Link, Text, Input } from 'yahha-ui';
 
 export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: string }) {
   const replyId = 'heading-article-reply';
@@ -128,7 +128,7 @@ export default function HeadingArticle({ hrefPrefix = '#' }: { hrefPrefix?: stri
           {copyMessage}
         </Text>
         {manualCopy && (
-          <TextField ref={addressRef} label="章节地址" readOnly value={manualCopy.address} />
+          <Input ref={addressRef} label="章节地址" readOnly value={manualCopy.address} />
         )}
       </section>
     </div>

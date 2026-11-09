@@ -25,8 +25,8 @@ export const recipeGuide: DocPage = {
                     <img
                       src={readingPreview}
                       alt=""
-                      width={910}
-                      height={1831}
+                      width={960}
+                      height={600}
                       loading="lazy"
                       decoding="async"
                     />
@@ -49,8 +49,8 @@ export const recipeGuide: DocPage = {
                     <img
                       src={archivePreview}
                       alt=""
-                      width={910}
-                      height={1163}
+                      width={960}
+                      height={600}
                       loading="lazy"
                       decoding="async"
                     />
@@ -64,7 +64,7 @@ export const recipeGuide: DocPage = {
                   演示栏目筛选、搜索与分页；无匹配结果时可清空筛选恢复列表。
                 </p>
                 <p className="recipe-components">
-                  组合组件：TextField、Tabs、Pagination、Accordion、EmptyState。
+                  组合组件：Input、Tabs、Pagination、Accordion、EmptyState。
                 </p>
               </dd>
             </div>
@@ -75,8 +75,8 @@ export const recipeGuide: DocPage = {
                     <img
                       src={editingPreview}
                       alt=""
-                      width={910}
-                      height={336}
+                      width={960}
+                      height={600}
                       loading="lazy"
                       decoding="async"
                     />
@@ -88,7 +88,7 @@ export const recipeGuide: DocPage = {
                 <p className="recipe-purpose">适用于文章编辑、归档与收藏操作区。</p>
                 <p className="recipe-actions">编辑后保存，演示首次保存失败、草稿保留与重试成功。</p>
                 <p className="recipe-components">
-                  组合组件：DropdownMenu、Popover、Dialog、TextField、Alert、Toast 等。
+                  组合组件：DropdownMenu、Popover、Dialog、Input、Alert、Toast 等。
                 </p>
               </dd>
             </div>
@@ -99,8 +99,8 @@ export const recipeGuide: DocPage = {
                     <img
                       src={loadingPreview}
                       alt=""
-                      width={910}
-                      height={653}
+                      width={960}
+                      height={600}
                       loading="lazy"
                       decoding="async"
                     />
@@ -125,8 +125,8 @@ export const recipeGuide: DocPage = {
                     <img
                       src={emptyPreview}
                       alt=""
-                      width={910}
-                      height={555}
+                      width={960}
+                      height={600}
                       loading="lazy"
                       decoding="async"
                     />
@@ -149,8 +149,8 @@ export const recipeGuide: DocPage = {
                     <img
                       src={notFoundPreview}
                       alt=""
-                      width={910}
-                      height={511}
+                      width={960}
+                      height={600}
                       loading="lazy"
                       decoding="async"
                     />
@@ -165,6 +165,63 @@ export const recipeGuide: DocPage = {
               </dd>
             </div>
           </dl>
+        </>
+      ),
+    },
+    {
+      id: 'interactions',
+      title: '交互组合',
+      content: (
+        <>
+          <p>
+            按具体任务查看完整流程，或<a href="#/guides/interactions">浏览全部交互组合</a>。
+          </p>
+          <ul>
+            <li>
+              <Link href="#/guides/interactions?section=button-delete-draft">删除确认与恢复</Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=icon-button-reading-list">
+                收藏列表与焦点恢复
+              </Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=icon-composition">搜索与逐项收藏</Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=checkbox-reading-topics">
+                多选筛选与地址同步
+              </Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=checkbox-reading-list">
+                批量操作与失败恢复
+              </Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=badge-status">表单校验与状态摘要</Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=alert-action">订阅设置与失败重试</Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=timer-and-action">计时提示与撤销</Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=heading-reading-layout">
+                章节导航与分享
+              </Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=counts">栏目计数与清单操作</Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=controlled">菜单触发器移除与恢复</Link>
+            </li>
+            <li>
+              <Link href="#/guides/interactions?section=basic">清单操作与提示回焦</Link>
+            </li>
+          </ul>
         </>
       ),
     },
@@ -202,7 +259,7 @@ export const recipeGuide: DocPage = {
           </p>
           <p>
             需要调整字段或浮层时，可查看
-            <Link href="#/components/text-field?section=text-field-customization">字段定制</Link>与
+            <Link href="#/components/input?section=text-field-customization">字段定制</Link>与
             <Link href="#/components/select?section=select-portal-customization">下拉面板定制</Link>
             。
           </p>

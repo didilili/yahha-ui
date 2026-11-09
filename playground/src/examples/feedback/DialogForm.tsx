@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { Alert, Button, Dialog, Text, TextField } from 'yahha-ui';
+import { Alert, Button, Dialog, Text, Input } from 'yahha-ui';
 
 export default function DialogForm() {
   const [open, setOpen] = useState(false);
@@ -115,7 +115,7 @@ export default function DialogForm() {
         }
       >
         <form id={formId} onSubmit={handleSubmit}>
-          <TextField
+          <Input
             ref={inputRef}
             label="站点标题"
             name="title"

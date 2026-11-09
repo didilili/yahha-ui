@@ -2,6 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import type { Plugin } from 'vite';
+import { apiRowAnchor } from '../playground/src/docs/api-anchor.ts';
 import type { DocumentationSearchEntry } from '../playground/src/docs/search';
 
 function plainText(value: string): string {
@@ -25,6 +26,7 @@ export function markdownSearchEntries(
   let pageTitle = pageId;
   let anchor = '';
   let current: DocumentationSearchEntry | undefined;
+  let apiName = '';
   let fence = '';
   for (const line of lines) {
     const marker = line.match(/^\s*(`{3,}|~{3,})/);
@@ -46,6 +48,7 @@ export function markdownSearchEntries(
     }
     const heading = line.match(/^(#{2,3}) (.+)$/);
     if (heading && anchor) {
+      apiName = '';
       current = {
         id: `component:${pageId}:${anchor}`,
         pageId,
@@ -61,20 +64,28 @@ export function markdownSearchEntries(
       continue;
     }
     if (!current) continue;
+    if (heading?.[1] === '###' && current.href.endsWith('section=api')) {
+      // API names are generated verbatim, including generic signatures such as Props<T>.
+      apiName = heading[2].trim();
+      continue;
+    }
     // The generator writes property names as inline code in the first table column.
-    if (/^\|\s*`/.test(line) && current.href.endsWith('section=api')) {
+    if (apiName && /^\|\s*`/.test(line) && current.href.endsWith('section=api')) {
       const columns = line.split(/(?<!\\)\|/).slice(1, -1);
-      const property = plainText(columns[0]).replace(/\s*必填$/, '');
+      const property = (columns[0].match(/^\s*(`+)(.*?)\1(?:\s|$)/)?.[2] ?? '')
+        .trim()
+        .replace(/\\\|/g, '|');
       const description = plainText(columns[1] ?? '');
+      const rowAnchor = apiRowAnchor(apiName, property);
       entries.push({
-        id: `${current.id}:${property}`,
+        id: `component:${pageId}:${rowAnchor}`,
         pageId,
         pageTitle,
-        title: `API · ${property}`,
+        title: `API · ${apiName} · ${property}`,
         description,
         kind: 'api',
-        href: current.href,
-        keywords: [property],
+        href: `#/components/${pageId}?section=${encodeURIComponent(rowAnchor)}`,
+        keywords: [property, apiName],
       });
       continue;
     }
@@ -106,7 +117,9 @@ export function docsSearchIndex(directory: URL): Plugin {
     },
     async load(id) {
       if (id !== resolvedId) return;
-      const files = (await readdir(directoryPath)).filter((file) => file.endsWith('.md')).sort();
+      const files = (await readdir(directoryPath))
+        .filter((file) => file.endsWith('.md') && file !== 'text-field.md')
+        .sort();
       const entries = await Promise.all(
         files.map(async (file) => {
           const path = resolve(directoryPath, file);

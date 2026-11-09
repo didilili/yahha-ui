@@ -39,26 +39,13 @@ export default defineComponentPage('image', {
           ImageFallback,
           imageFallbackSource,
         ),
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看大图预览与素材接入',
-      content: (
-        <p>
-          使用独立按钮打开 Dialog，缩略图与大图使用同一素材。完整接入提供原样源码和 SVG，保留
-          artwork 目录及相对导入路径。
-        </p>
-      ),
-      examples: [
         {
           id: 'image-detail',
           title: '缩略图与大图预览',
-          description: '通过独立按钮与 Dialog 组合预览同一图片，关闭后返回入口。',
+          description:
+            '由调用方通过独立按钮与 Dialog 预览同一图片，关闭后返回入口；完整接入提供源码和 SVG，保留 artwork 目录及相对导入。',
           component: ImageDetail,
           source: imageDetailSource,
-          toc: false,
           assets: [{ name: 'little-days-tea-cup.svg', href: teaCupAsset }],
         },
       ],
@@ -75,6 +62,22 @@ export default defineComponentPage('image', {
             不能为失败回退预留相同比例；加载失败后仍需保持版面时，应显式设置固定比例。
           </p>
         </>
+      ),
+    },
+    {
+      id: 'behavior',
+      title: '替代文字与失败恢复',
+      content: (
+        <ul>
+          {[
+            '失败后仍以 alt 作为可访问名称，fallback 是装饰内容。alt="" 的图片及失败回退都保持装饰性，即使 aria-hidden={false} 也不会补出图像名称。',
+            '缺少可用地址时直接显示 fallback，不触发 onError；图片加载失败也显示 fallback。更换 src 或 srcSet 会重新进入加载。清空地址后再设置原地址，也会重新加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。',
+            '固定比例较小而失败提示过长时，回退区域允许滚动。非装饰图片的溢出回退可通过 Tab 聚焦，再用方向键或 PageDown 查看；短提示及空 alt 的装饰图片不会增加键盘入口。',
+            '不要把必要说明或交互元素只放进 fallback，因为整个回退内容用于装饰。需要隐藏图片时，hidden 隐藏图片与回退，aria-hidden 仅将两者从辅助技术中隐藏。',
+          ].map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
       ),
     },
     {
@@ -143,22 +146,6 @@ export default defineComponentPage('image', {
           ],
         },
       ],
-    },
-    {
-      id: 'behavior',
-      title: '替代文字与失败恢复',
-      content: (
-        <ul>
-          {[
-            '失败后仍以 alt 作为可访问名称，fallback 是装饰内容。alt="" 的图片及失败回退都保持装饰性，即使 aria-hidden={false} 也不会补出图像名称。',
-            '缺少可用地址时直接显示 fallback，不触发 onError；图片加载失败也显示 fallback。更换 src 或 srcSet 会重新进入加载。清空地址后再设置原地址，也会重新加载。组件不自动重试，重试按钮应放在组件外，由页面更新资源地址。',
-            '固定比例较小而失败提示过长时，回退区域允许滚动。非装饰图片的溢出回退可通过 Tab 聚焦，再用方向键或 PageDown 查看；短提示及空 alt 的装饰图片不会增加键盘入口。',
-            '不要把必要说明或交互元素只放进 fallback，因为整个回退内容用于装饰。需要隐藏图片时，hidden 隐藏图片与回退，aria-hidden 仅将两者从辅助技术中隐藏。',
-          ].map((note) => (
-            <li key={note}>{note}</li>
-          ))}
-        </ul>
-      ),
     },
   ],
 });

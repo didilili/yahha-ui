@@ -8,7 +8,7 @@ import {
   SegmentedControl,
   Select,
   Text,
-  TextField,
+  Input,
   Textarea,
   ThemeProvider,
 } from 'yahha-ui';
@@ -86,7 +86,7 @@ export default function DesignBaseline() {
             gap: 24,
           }}
         >
-          <TextField
+          <Input
             label="主页昵称"
             name="nickname"
             autoComplete="nickname"
@@ -109,7 +109,7 @@ export default function DesignBaseline() {
               setMessage('');
             }}
           />
-          <TextField
+          <Input
             label="联系邮箱"
             name="email"
             type="email"
@@ -123,14 +123,14 @@ export default function DesignBaseline() {
             error={emailError}
             hint="预填的不完整邮箱用于展示错误恢复。"
           />
-          <TextField
+          <Input
             label="站点地址 · 只读"
             name="site"
             value="weekend.example"
             readOnly
             hint="允许聚焦、选择和复制。"
           />
-          <TextField label="自定义域名 · 暂未开放" value="开放后可设置" disabled />
+          <Input label="自定义域名 · 暂未开放" value="开放后可设置" disabled />
           <Textarea
             label="简介"
             name="bio"

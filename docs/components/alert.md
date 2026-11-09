@@ -4,7 +4,7 @@
 
 用于页面内持续显示的信息、结果、警告或错误提示。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Alert } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Alert } from 'yahha-ui';
 
 对比信息、成功、警告和错误四种静态说明。
 
-[查看示例文件](../../playground/src/examples/content/AlertExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/AlertExample.tsx)
 
 <!-- example-source: playground/src/examples/content/AlertExample.tsx -->
 
@@ -65,113 +65,40 @@ export default function AlertExample() {
 }
 ```
 
-<a id="integration"></a>
+<a id="alert-recovery"></a>
 
-## 进阶用法
+### 带恢复操作的错误提示
 
-订阅流程仅在当前示例中模拟，不实际保存；阅读提醒只改变当前页面的显示状态。
+点击恢复按钮切换为成功提示；此处只演示本地状态，不发起请求。
 
-<a id="alert-action"></a>
+[查看示例文件](../../playground/src/examples/content/AlertRecovery.tsx)
 
-### 失败提示与重试
-
-首次模拟订阅失败，重试后成功；保留已选项，不实际订阅。
-
-[查看示例文件](../../playground/src/examples/content/AlertAction.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/content/AlertAction.tsx -->
+<!-- example-source: playground/src/examples/content/AlertRecovery.tsx -->
 
 ```tsx
-import { useEffect, useRef, useState } from 'react';
-import { Alert, Button, Checkbox, Text } from 'yahha-ui';
+import { useState } from 'react';
+import { Alert, Button } from 'yahha-ui';
 
-export default function AlertAction() {
-  const [phase, setPhase] = useState<'idle' | 'pending' | 'error' | 'success'>('idle');
-  const [subscribed, setSubscribed] = useState(true);
-  const [attempt, setAttempt] = useState(0);
-  const action = useRef<HTMLButtonElement>(null);
-  const returnFocus = useRef(false);
-
-  useEffect(() => {
-    if (phase !== 'pending') return;
-    // 首次模拟失败，重试成功；实际项目应根据请求结果更新状态。
-    const timer = window.setTimeout(() => setPhase(attempt === 1 ? 'error' : 'success'), 700);
-    return () => window.clearTimeout(timer);
-  }, [phase, attempt]);
-
-  useEffect(() => {
-    if (phase === 'pending' || !returnFocus.current) return;
-    returnFocus.current = false;
-    if (document.activeElement === document.body || document.activeElement === action.current) {
-      action.current?.focus();
-    }
-  }, [phase]);
-
-  const pending = phase === 'pending';
-  const successful = phase === 'success';
-  const retrying = attempt > 1 || phase === 'error';
+export default function AlertRecovery() {
+  const [recovered, setRecovered] = useState(false);
 
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
-      <Alert
-        tone={phase === 'error' ? 'error' : successful ? 'success' : 'info'}
-        title={
-          phase === 'error'
-            ? '订阅偏好保存失败'
-            : successful
-              ? '订阅偏好已保存'
-              : pending
-                ? '正在保存订阅偏好'
-                : '订阅每周阅读推荐'
-        }
-      >
-        <div style={{ display: 'grid', gap: 12 }}>
-          <Text size="sm">
-            {phase === 'error'
-              ? '选择仍然保留在这里。可以重试，也可以先调整偏好。'
-              : successful
-                ? subscribed
-                  ? '已在本页记录为接收每周阅读推荐。'
-                  : '已在本页记录为不接收每周阅读推荐。'
-                : '由你决定是否接收每周整理的文章与书单。'}
-          </Text>
-          <Checkbox
-            label="接收每周阅读推荐"
-            checked={subscribed}
-            disabled={pending || successful}
-            onChange={(event) => setSubscribed(event.target.checked)}
-          />
-          <div>
-            <Button
-              ref={action}
-              variant="secondary"
-              loading={pending}
-              onClick={() => {
-                if (successful) {
-                  setPhase('idle');
-                  setAttempt(0);
-                } else {
-                  returnFocus.current = document.activeElement === action.current;
-                  setAttempt((value) => value + 1);
-                  setPhase('pending');
-                }
-              }}
-            >
-              {successful ? '修改偏好' : retrying ? '重试保存' : '保存订阅偏好'}
-            </Button>
-          </div>
-        </div>
-      </Alert>
-      <Text role="status" size="sm" tone="muted">
-        {phase === 'error'
-          ? '保存失败，选择已保留。'
-          : successful
-            ? '订阅偏好已更新。'
-            : pending
-              ? '正在保存…'
-              : '尚未保存。'}
-      </Text>
-    </div>
+    <Alert
+      tone={recovered ? 'success' : 'error'}
+      title={recovered ? '手记已重新载入' : '手记暂时无法载入'}
+      role="status"
+    >
+      <div style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
+        <p style={{ margin: 0 }}>
+          {recovered
+            ? '《周末散步》回来了。小八在页角画的面包，一个也没少。'
+            : '《周末散步》的内容仍然保留，可以重新载入。'}
+        </p>
+        <Button variant="secondary" onClick={() => setRecovered(!recovered)}>
+          {recovered ? '再次显示错误' : '重新载入手记'}
+        </Button>
+      </div>
+    </Alert>
   );
 }
 ```
@@ -182,7 +109,7 @@ export default function AlertAction() {
 
 收起提示后，可从保留的外部入口再次展开。
 
-[查看示例文件](../../playground/src/examples/content/AlertReadingNotice.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/AlertReadingNotice.tsx)
 
 <!-- example-source: playground/src/examples/content/AlertReadingNotice.tsx -->
 
@@ -259,7 +186,7 @@ export default function AlertReadingNotice() {
 
 ## 提示内容与恢复操作
 
-保存失败时说明原因，并提供重试或修改入口。保留用户已填写或选择的内容；等待状态和结束后的焦点由调用方管理。
+保存失败时说明原因，并提供重试或修改入口。保留用户已填写或选择的内容；等待状态和结束后的焦点由调用方管理。完整流程见 [订阅偏好保存失败与重试](../recipes/interactions.md#alert-action)。
 
 <a id="api"></a>
 

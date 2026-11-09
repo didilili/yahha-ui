@@ -11,6 +11,36 @@ async function settle(page) {
   );
 }
 
+/** The short component example keeps trigger removal and recovery focus observable. */
+export async function verifyMenuTriggerRecovery(
+  page,
+  scope = page.locator('#controlled .example-preview'),
+) {
+  await revealExample(scope);
+  const trigger = scope.getByRole('button', { name: '操作手记：周末散步', exact: true });
+  await trigger.focus();
+  await trigger.press('Enter');
+  const publish = page.getByRole('menuitem', { name: '发布（等待审核）', exact: true });
+  assert.equal(await publish.getAttribute('aria-disabled'), 'true');
+  await page.keyboard.press('Escape');
+  await requireFocus(page, trigger);
+  await trigger.press('Enter');
+  await page.getByRole('menuitem', { name: '移出手记列表', exact: true }).click();
+  const recover = scope.getByRole('button', { name: '恢复手记', exact: true });
+  await requireFocus(page, recover);
+  assert.equal(await trigger.count(), 0);
+  await scope.getByRole('status').getByText('手记已移出，可以恢复。', { exact: true }).waitFor();
+  await recover.press('Space');
+  await requireFocus(page, trigger);
+  await scope
+    .getByText('《周末散步》：乌萨奇在路线图上，先圈出了三家面包店。', { exact: true })
+    .waitFor();
+  await scope
+    .getByRole('status')
+    .getByText('手记在列表中，内容仍然保留。', { exact: true })
+    .waitFor();
+}
+
 async function requireFocus(page, locator) {
   const node = await locator.elementHandle();
   try {

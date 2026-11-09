@@ -54,7 +54,7 @@
 .site-home .home-scene-preview {
   display: block;
   overflow: hidden;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 16 / 10;
   border: 1px solid var(--site-soft-line);
   border-radius: 13px 17px 14px 15px;
   background: var(--site-paper);
@@ -64,20 +64,12 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top;
+  object-fit: contain;
+  object-position: center;
 }
 
 .site-home .home-scene-reading .home-scene-preview {
   aspect-ratio: 1 / 1;
-}
-
-.site-home .home-scene-editing .home-scene-preview {
-  aspect-ratio: 910 / 336;
-}
-
-.site-home .home-scene-editing img {
-  object-fit: contain;
 }
 
 .site-home .home-scene-link h3 {
@@ -155,11 +147,11 @@
   }
 
   .site-home .home-scene-reading .home-scene-preview {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 10;
   }
 
   .site-home .home-scene-archive .home-scene-preview {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
   }
 
   .site-home .home-scene-link h3 {

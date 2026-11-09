@@ -1,31 +1,60 @@
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
+import { apiRowAnchor } from '../playground/src/docs/api-anchor.ts';
+import { canonicalRoute } from '../playground/src/docs/navigation.ts';
 
 export const markdownFile = (id) => `${id === 'theme-provider' ? 'theme' : id}.md`;
 
-export function documentationLink(href) {
+export function documentationLink(
+  href,
+  { fromGuide = false, fromDirectory = fromGuide ? 'recipes' : 'components' } = {},
+) {
+  const relativeDocument = (directory, filename) =>
+    `${fromDirectory === directory ? '' : `../${directory}/`}${filename}`;
+  const route = /^#(\/components\/[^?]+)(?:\?section=([^&]+))?$/.exec(href);
+  if (route) {
+    const canonical = canonicalRoute(route[1], route[2] ?? '');
+    href = `#${canonical.path}${canonical.section ? `?section=${canonical.section}` : ''}`;
+  }
   const component = /^#\/components\/([^?]+)(?:\?section=([^&]+))?$/.exec(href);
-  if (component) return `${markdownFile(component[1])}${component[2] ? `#${component[2]}` : ''}`;
+  if (component)
+    return `${relativeDocument('components', markdownFile(component[1]))}${component[2] ? `#${component[2]}` : ''}`;
   if (href === '#/components') return '../README.md';
   if (href.startsWith('#/guides/getting-started')) return '../../README.md#构建与本地安装';
   if (href.startsWith('#/guides/design-baseline')) return '../design-language.md';
+  const forms = /^#\/guides\/forms(?:\?section=([^&]+))?$/.exec(href);
+  if (forms) return `${relativeDocument('guides', 'forms.md')}${forms[1] ? `#${forms[1]}` : ''}`;
+  const interactions = /^#\/guides\/interactions(?:\?section=([^&]+))?$/.exec(href);
+  if (interactions) {
+    // Article headings live inside the runnable preview; Markdown exposes its example anchor.
+    const section = ['heading-article-reply', 'heading-article-journal'].includes(interactions[1])
+      ? 'heading-reading-layout'
+      : interactions[1];
+    return `${relativeDocument('recipes', 'interactions.md')}${section ? `#${section}` : ''}`;
+  }
   if (href.startsWith('#/guides/')) return `../README.md#站内指南`;
   return href;
 }
 
 /** Render documentation prose, never rewrite the runnable example source. */
-export function proseToMarkdown(html) {
+export function proseToMarkdown(html, linkOptions) {
   const document = new JSDOM(`<body>${html}</body>`).window.document;
   function convert(node) {
     if (node.nodeType === 3)
       return node.textContent.replace(/\s+/g, ' ').replace(/([*_[\]])/g, '\\$1');
     if (node.nodeType !== 1) return '';
     const inside = () => [...node.childNodes].map(convert).join('');
+    if (node.classList.contains('source-code')) {
+      const code = node.querySelector('pre');
+      if (!code) return '';
+      const language = code.getAttribute('aria-label')?.match(/^(\S+) 代码$/)?.[1] ?? 'text';
+      return sourceFence(code.textContent, language) + '\n\n';
+    }
     switch (node.tagName.toLowerCase()) {
       case 'p':
         return `${inside().trim()}\n\n`;
       case 'a':
-        return `[${inside().trim()}](${documentationLink(node.getAttribute('href') ?? '')})`;
+        return `[${inside().trim()}](${documentationLink(node.getAttribute('href') ?? '', linkOptions)})`;
       case 'code':
         return inlineCode(node.textContent);
       case 'strong':
@@ -50,6 +79,20 @@ export function proseToMarkdown(html) {
       }
       case 'li':
         return inside();
+      case 'table': {
+        const rows = [...node.querySelectorAll('tr')].map((row) =>
+          [...row.children].map((column) => cell(convert(column).trim())),
+        );
+        if (!rows.length) return '';
+        const renderRow = (columns) => `| ${columns.join(' | ')} |`;
+        return (
+          [
+            renderRow(rows[0]),
+            renderRow(rows[0].map(() => '---')),
+            ...rows.slice(1).map(renderRow),
+          ].join('\n') + '\n\n'
+        );
+      }
       case 'pre':
         return sourceFence(node.textContent, 'text') + '\n\n';
       case 'h3':
@@ -84,7 +127,7 @@ export function apiMarkdown(api) {
     '| --- | --- | --- | --- |',
     ...api.rows.map(
       (row) =>
-        `| ${cell(inlineCode(row.name))}${row.required ? ' **必填**' : ''} | ${cell(row.description.replace(/([*_])/g, '\\$1'))} | ${cell(inlineCode(row.type))} | ${cell(row.defaultValue === undefined ? '—' : inlineCode(row.defaultValue))} |`,
+        `| ${cell(inlineCode(row.name))}${row.required ? ' **必填**' : ''}${api.name === 'InputProps' ? ` <a id="${apiRowAnchor('InputProps', row.name)}"></a>` : ''} | ${cell(row.description.replace(/([*_])/g, '\\$1'))} | ${cell(inlineCode(row.type))} | ${cell(row.defaultValue === undefined ? '—' : inlineCode(row.defaultValue))} |`,
     ),
   ].join('\n');
 }

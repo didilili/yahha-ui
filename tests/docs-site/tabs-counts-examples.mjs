@@ -1,12 +1,16 @@
 import assert from 'node:assert/strict';
-import { revealExample } from './reveal-example.mjs';
+import { openInteractionExample, revealExample } from './reveal-example.mjs';
 
 /** Badge counts describe the actual lists and do not replace tab selection or names. */
 export async function verifyTabsCounts(
   page,
   scopeOrBaseURL = page.locator('#counts .example-preview'),
 ) {
-  if (typeof scopeOrBaseURL === 'string') await page.goto(`${scopeOrBaseURL}#/components/tabs`);
+  if (typeof scopeOrBaseURL === 'string') {
+    await page.goto(`${scopeOrBaseURL}#/components/tabs`);
+    await verifyTabsLabelCounts(page);
+    await openInteractionExample(page, 'counts');
+  }
   const scope =
     typeof scopeOrBaseURL === 'string' ? page.locator('#counts .example-preview') : scopeOrBaseURL;
   await revealExample(scope);
@@ -56,4 +60,26 @@ export async function verifyTabsCounts(
   }));
   assert(geometry.document <= geometry.viewport + 1 && geometry.scroll <= geometry.client + 1);
   return geometry;
+}
+
+/** The component page teaches counts in labels with one reversible list change. */
+export async function verifyTabsLabelCounts(
+  page,
+  scope = page.locator('#counts .example-preview'),
+) {
+  await revealExample(scope);
+  const title = '雨天的读书笔记';
+  await scope.getByRole('tab', { name: /^待整理\s*2$/ }).waitFor();
+  await scope.getByRole('tab', { name: /^已归档\s*0$/ }).click();
+  await scope.getByText('暂无手记。', { exact: true }).waitFor();
+  await scope.getByRole('button', { name: `归档《${title}》`, exact: true }).click();
+  await scope.getByRole('tab', { name: /^待整理\s*1$/ }).waitFor();
+  await scope.getByRole('tab', { name: /^已归档\s*1$/ }).waitFor();
+  assert.equal(await scope.getByRole('listitem').count(), 1);
+  await scope.getByRole('listitem').getByText(title, { exact: true }).waitFor();
+  await scope.getByRole('status').getByText(`已归档《${title}》。`, { exact: true }).waitFor();
+  await scope.getByRole('button', { name: `恢复《${title}》`, exact: true }).click();
+  await scope.getByRole('tab', { name: /^待整理\s*2$/ }).click();
+  assert.equal(await scope.getByRole('listitem').count(), 2);
+  assert.equal(await scope.getByRole('tab').locator('button,a,input').count(), 0);
 }

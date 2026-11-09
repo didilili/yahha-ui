@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, Text, TextField } from 'yahha-ui';
+import { Button, Text, Input } from 'yahha-ui';
 
 export default function TextFieldValidation() {
   const [nickname, setNickname] = useState('');
@@ -7,7 +7,7 @@ export default function TextFieldValidation() {
   const [result, setResult] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const valid = nickname.trim().length >= 2 && nickname.trim().length <= 12;
-  const error = submitted && !valid ? '请填写 2～12 个字符的昵称。' : undefined;
+  const error = submitted && !valid ? '昵称长度须为 2～12，部分表情会占多个长度单位。' : undefined;
 
   return (
     <form
@@ -24,7 +24,7 @@ export default function TextFieldValidation() {
         setResult(`检查结果：昵称“${nickname.trim()}”符合要求。`);
       }}
     >
-      <TextField
+      <Input
         ref={inputRef}
         label="你的昵称"
         name="nickname"
@@ -35,7 +35,7 @@ export default function TextFieldValidation() {
           setNickname(event.target.value);
           setResult('');
         }}
-        hint="必填，2～12 个字符。"
+        hint="必填，去除首尾空格后长度为 2～12；部分表情会占多个长度单位。"
         error={error}
       />
       <div>

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { revealExample } from './reveal-example.mjs';
+import { openInteractionExample, revealExample } from './reveal-example.mjs';
 import { readFile } from 'node:fs/promises';
-import { verifyButtonExamples } from './button-examples.mjs';
+import { verifyButtonExamples, verifyButtonDeleteDraft } from './button-examples.mjs';
 import { revealIconButtonExample, verifyIconButtonReadingList } from './icon-button-examples.mjs';
 import { verifyTextFieldSearch, verifyTextFieldCopy } from './text-field-examples.mjs';
 import { verifySelectCollection, verifySelectAvailability } from './select-examples.mjs';
@@ -9,7 +9,7 @@ import { verifySelectCollection, verifySelectAvailability } from './select-examp
 export async function verifyCoreComponents(page, baseURL) {
   for (const width of [1280, 320]) {
     await page.setViewportSize({ width, height: 844 });
-    for (const id of ['button', 'text-field', 'select']) {
+    for (const id of ['button', 'input', 'select']) {
       await page.goto(`${baseURL}#/components/${id}`);
       await page.locator('#design').waitFor();
       assert.equal(
@@ -23,8 +23,9 @@ export async function verifyCoreComponents(page, baseURL) {
     const states = page.locator('#button-states');
     await verifyButtonExamples(page);
     await verifySource(states, 'foundations/ButtonStates.tsx');
+    await verifyButtonDeleteDraft(page);
 
-    await page.goto(`${baseURL}#/components/text-field`);
+    await page.goto(`${baseURL}#/components/input`);
     const validation = page.locator('#validation');
     await validation.waitFor();
     const nickname = validation.getByRole('textbox', { name: '你的昵称', exact: true });
@@ -72,9 +73,9 @@ export async function verifyCoreComponents(page, baseURL) {
       .waitFor();
 
     await page.goto(`${baseURL}#/components/select`);
-    const selectStates = page.locator('#states');
-    await selectStates.waitFor();
-    const category = selectStates.getByRole('combobox', { name: '必选分类', exact: true });
+    const selectFeedback = page.locator('#select-feedback');
+    await selectFeedback.waitFor();
+    const category = selectFeedback.getByRole('combobox', { name: '必选分类', exact: true });
     assert.equal(await category.getAttribute('aria-invalid'), 'true');
     await category.click();
     const categoryList = page.getByRole('listbox');
@@ -82,7 +83,7 @@ export async function verifyCoreComponents(page, baseURL) {
     await page.getByRole('option', { name: '生活手记', exact: true }).click();
     await categoryList.waitFor({ state: 'hidden' });
     assert.equal(await category.getAttribute('aria-invalid'), null);
-    assert.equal(await selectStates.getByText('请先选择文章分类。', { exact: true }).count(), 0);
+    assert.equal(await selectFeedback.getByText('请先选择文章分类。', { exact: true }).count(), 0);
     const form = page.locator('#form');
     await revealExample(form);
     const archive = form.getByRole('combobox', { name: '归档分类', exact: true });
@@ -173,9 +174,12 @@ export async function verifyCoreControlEdges(page, baseURL) {
     assert.equal((await icon.boundingBox()).width, 44);
     assert.equal((await icon.boundingBox()).height, 44);
     await example.getByRole('status').getByText('已收藏', { exact: true }).waitFor();
-    await verifyIconButtonReadingList(page);
+    await verifyIconButtonReadingList(
+      page,
+      await openInteractionExample(page, 'icon-button-reading-list'),
+    );
 
-    await page.goto(`${baseURL}#/components/text-field`);
+    await page.goto(`${baseURL}#/components/input`);
     const native = page.locator('#native');
     await revealExample(native);
     for (const [name, value] of [

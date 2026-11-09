@@ -4,7 +4,7 @@
 
 用于组织文章摘要、作者介绍等内容，提供背景、边框、圆角与内边距。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Surface } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Surface } from 'yahha-ui';
 
 标题与正文的静态组合。
 
-[查看示例文件](../../playground/src/examples/foundations/SurfaceBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/SurfaceBasic.tsx)
 
 <!-- example-source: playground/src/examples/foundations/SurfaceBasic.tsx -->
 
@@ -52,7 +52,7 @@ export default function SurfaceBasic() {
 
 用 note 纸面呈现一段后记。
 
-[查看示例文件](../../playground/src/examples/foundations/SurfaceNotes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/SurfaceNotes.tsx)
 
 <!-- example-source: playground/src/examples/foundations/SurfaceNotes.tsx -->
 
@@ -82,17 +82,13 @@ export default function SurfaceNotes() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
 <a id="surface-composition"></a>
 
 ### 内容与操作组合
 
 在容器中组合分类、标题、正文与独立操作区。
 
-[查看示例文件](../../playground/src/examples/foundations/SurfaceComposition.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/SurfaceComposition.tsx)
 
 <!-- example-source: playground/src/examples/foundations/SurfaceComposition.tsx -->
 
@@ -140,7 +136,7 @@ export default function SurfaceComposition() {
 
 封面贴齐容器边缘，正文保留内距。
 
-[查看示例文件](../../playground/src/examples/foundations/SurfaceCover.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/SurfaceCover.tsx)
 
 <!-- example-source: playground/src/examples/foundations/SurfaceCover.tsx -->
 
@@ -220,5 +216,5 @@ Surface 默认是普通 div。内容确实构成需要单独导航的区域时�
 ## 相关组件
 
 - [Divider 分隔线](divider.md)：用于内容的主题或视觉分隔，支持水平、垂直和装饰模式。
-- [Text 正文](text.md)：用于正文、摘要和辅助说明，统一字号、行高与语义颜色。
+- [Text 段落正文](text.md)：固定使用 p 元素的段落正文，统一字号、行高与语义颜色。
 - [Dialog 弹窗](dialog.md)：用于模态展示确认、简短表单或补充内容，管理弹窗焦点。

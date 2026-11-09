@@ -4,7 +4,7 @@
 
 锚定到触发器的非模态面板，可包含说明、链接或短表单。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Popover } from 'yahha-ui';
@@ -28,7 +28,7 @@ import { Popover } from 'yahha-ui';
 
 打开并关闭补充说明面板。
 
-[查看示例文件](../../playground/src/examples/floating/PopoverBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/PopoverBasic.tsx)
 
 <!-- example-source: playground/src/examples/floating/PopoverBasic.tsx -->
 
@@ -50,17 +50,17 @@ export default function PopoverBasic() {
 
 <a id="form"></a>
 
-### 内嵌表单
+### 原生表单中的保存与取消
 
-在面板内校验名称，支持保存或取消；修改仅保留在当前示例。
+打开时建立名称草稿，确认后更新本地值并关闭，取消后保留已保存值。
 
-[查看示例文件](../../playground/src/examples/floating/PopoverForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/PopoverForm.tsx)
 
 <!-- example-source: playground/src/examples/floating/PopoverForm.tsx -->
 
 ```tsx
 import { useRef, useState } from 'react';
-import { Button, Popover, Text, TextField } from 'yahha-ui';
+import { Button, Popover, Text, Input } from 'yahha-ui';
 
 export default function PopoverForm() {
   const [open, setOpen] = useState(false);
@@ -100,7 +100,7 @@ export default function PopoverForm() {
             setOpen(false);
           }}
         >
-          <TextField
+          <Input
             ref={inputRef}
             label="名称"
             name="collection"
@@ -131,19 +131,13 @@ export default function PopoverForm() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-内嵌选择器时，Escape 先收起 Select，再关闭 Popover。 确认后才更新当前示例的收藏位置，未确认关闭不会保存选择。
-
 <a id="popover-collection"></a>
 
 ### 内嵌选择器与分层关闭
 
-在面板内展开 Select，按 Escape 逐层关闭。
+在面板内展开 Select，按 Escape 逐层关闭；确认才更新本例的收藏位置，取消不会保存选择。
 
-[查看示例文件](../../playground/src/examples/floating/PopoverCollection.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/PopoverCollection.tsx)
 
 <!-- example-source: playground/src/examples/floating/PopoverCollection.tsx -->
 
@@ -251,35 +245,53 @@ export default function PopoverCollection() {
 
 省略 open 时由组件维护展开状态，可通过 defaultOpen 设置初始状态；传入 open 后由调用方响应 onOpenChange。disabled 只禁用触发器，受控 open 或 defaultOpen 仍能显示面板。
 
-表单验证、保存和结果反馈由调用方处理，提交不会自动关闭面板。示例在每次打开时从已保存值重建草稿， 保存成功后更新页面并关闭；关闭浮层本身不代表保存或取消业务操作。
+原生表单示例由调用方校验名称和保存草稿，每次打开时从已保存值重建草稿，保存成功后更新页面并关闭。 使用 [Form 管理校验与提交](form.md#form-submission)时，打开、关闭和草稿保留仍由应用决定，提交成功后再更新 open。
 
 <a id="api"></a>
 
 ## API
 
-仅支持下列属性，不透传其余 div 原生属性。
+仅支持下列属性，不透传其余 div 原生属性。initialFocus 与 finalFocus 的完整签名见 [焦点参数类型](popover.md#focus-types)。
 
 ### PopoverProps
 
-| 属性                | 说明                                                                                                                                                                              | 类型                              | 默认值                                   |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------- |
-| `trigger` **必填**  | 原生 button 或转发 button 属性、事件和 ref 的组件。                                                                                                                               | `ReactElement`                    | —                                        |
-| `title` **必填**    | 可见标题，同时提供 dialog 的可访问名称，应包含文字。                                                                                                                              | `ReactNode`                       | —                                        |
-| `description`       | 标题下的补充说明，关联为 dialog 的可访问描述。                                                                                                                                    | `ReactNode`                       | —                                        |
-| `children`          | 正文，可含表单、按钮和链接。                                                                                                                                                      | `ReactNode`                       | —                                        |
-| `open`              | 受控展开状态；同时响应 onOpenChange。                                                                                                                                             | `boolean`                         | —                                        |
-| `defaultOpen`       | 非受控初始状态，与 open 二选一。                                                                                                                                                  | `boolean`                         | `false`                                  |
-| `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                                                                                                                           | `(open: boolean) => void`         | —                                        |
-| `disabled`          | 禁用触发器；受控 open 或 defaultOpen 仍能显示浮层。                                                                                                                               | `boolean`                         | `false`                                  |
-| `initialFocus`      | 可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。 | `PopoverProps['initialFocus']`    | `首个可聚焦元素；触摸打开时聚焦面板本身` |
-| `finalFocus`        | 可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。                              | `PopoverProps['finalFocus']`      | `触发器或先前聚焦元素`                   |
-| `closeLabel`        | 内置关闭按钮的可访问名称。                                                                                                                                                        | `string`                          | `"关闭浮层"`                             |
-| `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。                                                                                                          | `PopoverProps['side']`            | `"bottom"`                               |
-| `align`             | 相对触发器的对齐方向。                                                                                                                                                            | `"start" \| "center" \| "end"`    | `"start"`                                |
-| `sideOffset`        | 与触发器的间距，单位 px。                                                                                                                                                         | `number`                          | `8`                                      |
-| `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                                                                                                                         | `PopoverProps['portalContainer']` | `body`                                   |
-| `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。                                                                                                                        | `string / CSSProperties`          | —                                        |
-| `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                                                                                                                             | `Ref<HTMLDivElement>`             | —                                        |
+| 属性                | 说明                                                                                                                                                                              | 类型                                                                                | 默认值                                   |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------- |
+| `trigger` **必填**  | 原生 button 或转发 button 属性、事件和 ref 的组件。                                                                                                                               | `ReactElement`                                                                      | —                                        |
+| `title` **必填**    | 可见标题，同时提供 dialog 的可访问名称，应包含文字。                                                                                                                              | `ReactNode`                                                                         | —                                        |
+| `description`       | 标题下的补充说明，关联为 dialog 的可访问描述。                                                                                                                                    | `ReactNode`                                                                         | —                                        |
+| `children`          | 正文，可含表单、按钮和链接。                                                                                                                                                      | `ReactNode`                                                                         | —                                        |
+| `open`              | 受控展开状态；同时响应 onOpenChange。                                                                                                                                             | `boolean`                                                                           | —                                        |
+| `defaultOpen`       | 非受控初始状态，与 open 二选一。                                                                                                                                                  | `boolean`                                                                           | `false`                                  |
+| `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                                                                                                                           | `(open: boolean) => void`                                                           | —                                        |
+| `disabled`          | 禁用触发器；受控 open 或 defaultOpen 仍能显示浮层。                                                                                                                               | `boolean`                                                                           | `false`                                  |
+| `initialFocus`      | 可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。 | `PopupFocusTarget`                                                                  | `首个可聚焦元素；触摸打开时聚焦面板本身` |
+| `finalFocus`        | 可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。                              | `PopupFocusTarget`                                                                  | `触发器或先前聚焦元素`                   |
+| `closeLabel`        | 内置关闭按钮的可访问名称。                                                                                                                                                        | `string`                                                                            | `"关闭浮层"`                             |
+| `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。                                                                                                          | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'`          | `"bottom"`                               |
+| `align`             | 相对触发器的对齐方向。                                                                                                                                                            | `"start" \| "center" \| "end"`                                                      | `"start"`                                |
+| `sideOffset`        | 与触发器的间距，单位 px。                                                                                                                                                         | `number`                                                                            | `8`                                      |
+| `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                                                                                                                         | `HTMLElement \| ShadowRoot \| RefObject<HTMLElement \| ShadowRoot \| null> \| null` | `body`                                   |
+| `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。                                                                                                                        | `string / CSSProperties`                                                            | —                                        |
+| `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                                                                                                                             | `Ref<HTMLDivElement>`                                                               | —                                        |
+
+<a id="focus-types"></a>
+
+## 焦点参数类型
+
+initialFocus 与 finalFocus 共用下列值类型，回调分别接收打开、关闭时的交互方式。 RefObject 来自 React。
+
+```text
+import type { RefObject } from 'react';
+
+// 文档中的说明别名，不是 yahha-ui 的公开导出。
+type FocusInteraction = 'mouse' | 'touch' | 'pen' | 'keyboard' | '';
+
+type PopupFocusTarget =
+  | boolean
+  | RefObject<HTMLElement | null>
+  | ((interactionType: FocusInteraction) => boolean | HTMLElement | null | void);
+```
 
 <a id="keyboard"></a>
 

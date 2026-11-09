@@ -12,14 +12,7 @@ export default function SelectAvailableCollections() {
   const [result, setResult] = useState('');
 
   return (
-    <form
-      style={{ display: 'grid', gap: 16, maxWidth: 480 }}
-      onSubmit={(event) => event.preventDefault()}
-      onReset={() => {
-        setValue(null);
-        setResult('');
-      }}
-    >
+    <div style={{ display: 'grid', gap: 16, maxWidth: 480 }}>
       <Select
         label="可用收藏夹"
         name="collection"
@@ -71,6 +64,6 @@ export default function SelectAvailableCollections() {
       <Text size="sm" tone="muted" role="status">
         {result}
       </Text>
-    </form>
+    </div>
   );
 }

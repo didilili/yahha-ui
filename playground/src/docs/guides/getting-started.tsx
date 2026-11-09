@@ -1,4 +1,5 @@
 import { Link } from 'yahha-ui';
+import { ChevronRight } from 'lucide-react';
 import { version as packageVersion } from '../../../../package.json';
 import { feedbackHref, repositoryHref } from '../../site/site-links';
 import GettingStarted from '../../examples/GettingStarted';
@@ -51,16 +52,28 @@ const page: DocPage = {
         <>
           <p>在自己的 React 项目根目录安装最新已发布版本：</p>
           <CodeBlock language="sh" source={'npm install yahha-ui'} />
-          <p>
-            本指南随仓库源码更新，使用前请确认安装版本支持所需 API。
-            如需使用尚未发布的改动，可安装本地构建的组件包，将路径替换为实际文件位置：
-          </p>
-          <CodeBlock
-            language="sh"
-            source={`npm install /absolute/path/yahha-ui-${packageVersion}.tgz`}
-          />
-          <p>还没有安装包时，获取本仓库源码，在仓库根目录生成，再回到自己的项目安装：</p>
-          <CodeBlock language="sh" source={'npm ci\nnpm run build:lib\nnpm pack'} />
+          <p>本指南随仓库源码更新，使用前请确认安装版本支持所需 API。</p>
+          <details className="doc-disclosure">
+            <summary>
+              可选：安装本地构建的组件包
+              <ChevronRight size={16} aria-hidden="true" />
+            </summary>
+            <div className="doc-disclosure-content">
+              <p>需要使用尚未发布的改动时，可安装本地构建的组件包，将路径替换为实际文件位置：</p>
+              <CodeBlock
+                language="sh"
+                source={`npm install /absolute/path/yahha-ui-${packageVersion}.tgz`}
+              />
+              <p>
+                还没有安装包时，先
+                <Link href={repositoryHref} external>
+                  获取仓库源码
+                </Link>
+                ，在仓库根目录生成，再回到自己的项目安装：
+              </p>
+              <CodeBlock language="sh" source={'npm ci\nnpm run build:lib\nnpm pack'} />
+            </div>
+          </details>
         </>
       ),
     },
@@ -70,11 +83,13 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            在应用入口导入一次 <code>yahha-ui/style.css</code>，用 <code>ThemeProvider</code>{' '}
-            包裹组件区域，并显式设置 <code>theme="pink"</code>。
+            下例已包含 <code>yahha-ui/style.css</code> 样式导入、<code>ThemeProvider</code> 与{' '}
+            <code>theme="pink"</code> 配置。
           </p>
           <p>
-            将下例保存为 <code>App.tsx</code>，然后启动应用。
+            展开下方代码，保存为 <code>Example.tsx</code>
+            ；再展开同一示例的「完整接入」，将入口保存为 <code>App.tsx</code>
+            。两个文件放在同一目录，然后启动应用。
           </p>
         </>
       ),
@@ -201,7 +216,7 @@ const page: DocPage = {
               ：了解默认配色、可选预设与语义颜色定制。
             </li>
             <li>
-              <Link href="#/components/text-field">TextField</Link>：输入、标签与表单验证示例。
+              <Link href="#/components/input">Input</Link>：输入、标签与表单验证示例。
             </li>
             <li>
               <Link href="#/guides/styling">使用与定制</Link>：颜色、布局、插槽与状态管理。

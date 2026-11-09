@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState } from 'react';
+import { useId, useLayoutEffect, useRef, useState, type KeyboardEventHandler } from 'react';
 import { Button } from 'yahha-ui';
 import type { DocumentationSearchResult } from './search';
 
@@ -6,6 +6,7 @@ interface SearchResultsProps {
   query: string;
   results: readonly DocumentationSearchResult[];
   onSelect: (result: DocumentationSearchResult) => void;
+  onResultKeyDown?: KeyboardEventHandler<HTMLAnchorElement>;
 }
 
 /** A new query starts a new batch without changing the global search or route semantics. */
@@ -13,7 +14,11 @@ export function SearchResults({ query, ...props }: SearchResultsProps) {
   return <SearchResultList key={query} {...props} />;
 }
 
-function SearchResultList({ results, onSelect }: Omit<SearchResultsProps, 'query'>) {
+function SearchResultList({
+  results,
+  onSelect,
+  onResultKeyDown,
+}: Omit<SearchResultsProps, 'query'>) {
   const [limit, setLimit] = useState(12);
   const prefix = useId();
   const list = useRef<HTMLOListElement>(null);
@@ -24,9 +29,9 @@ function SearchResultList({ results, onSelect }: Omit<SearchResultsProps, 'query
   useLayoutEffect(() => {
     if (nextFocus.current === undefined) return;
     // Continue from the newly revealed links, including when the last button disappears.
-    list.current?.querySelectorAll<HTMLAnchorElement>('li > a')[nextFocus.current]?.focus({
-      preventScroll: true,
-    });
+    const target = list.current?.querySelectorAll<HTMLAnchorElement>('li > a')[nextFocus.current];
+    target?.focus({ preventScroll: true });
+    target?.scrollIntoView({ block: 'nearest' });
     nextFocus.current = undefined;
   }, [shown]);
 
@@ -45,7 +50,24 @@ function SearchResultList({ results, onSelect }: Omit<SearchResultsProps, 'query
                 href={result.href}
                 aria-label={isPage ? result.title : `${result.pageTitle} · ${result.title}`}
                 aria-describedby={metadataId}
-                onClick={() => onSelect(result)}
+                onKeyDown={onResultKeyDown}
+                onClick={(event) => {
+                  const target =
+                    event.currentTarget.target ||
+                    document.querySelector<HTMLBaseElement>('base[target]')?.target ||
+                    '_self';
+                  if (
+                    event.defaultPrevented ||
+                    event.button !== 0 ||
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey ||
+                    target.toLowerCase() !== '_self'
+                  )
+                    return;
+                  onSelect(result);
+                }}
               >
                 <span className="search-result-meta" id={metadataId}>
                   {result.areaLabel} · {result.label}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Heading, Surface, Tabs, Text, TextField } from 'yahha-ui';
+import { Button, Heading, Surface, Tabs, Text, Input } from 'yahha-ui';
 
 export default function TabsControlled() {
   const [value, setValue] = useState<string | null>('write');
@@ -34,7 +34,7 @@ export default function TabsControlled() {
             value: 'write',
             label: '写一张明信片',
             content: (
-              <TextField ref={draft} label="明信片草稿" placeholder="写下今天想分享的一件小事" />
+              <Input ref={draft} label="明信片草稿" placeholder="写下今天想分享的一件小事" />
             ),
           },
           {

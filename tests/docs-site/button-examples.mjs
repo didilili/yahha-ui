@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
+import { openInteractionExample } from './reveal-example.mjs';
 
 /** Exercise the page's save/retry and native form flows without the other control suites. */
 export async function verifyButtonExamples(page) {
-  await verifyButtonDeleteDraft(page);
   const states = page.locator('#button-states .example-preview');
   await states.waitFor();
   const samples = states.getByRole('button', { name: '保存草稿', exact: true });
@@ -46,7 +46,7 @@ export async function verifyButtonExamples(page) {
 }
 
 export async function verifyButtonDeleteDraft(page) {
-  const example = page.locator('#button-delete-draft .example-preview');
+  const example = await openInteractionExample(page, 'button-delete-draft');
   await reveal(example);
   const action = example.getByRole('button', { name: '删除草稿', exact: true });
   await action.focus();

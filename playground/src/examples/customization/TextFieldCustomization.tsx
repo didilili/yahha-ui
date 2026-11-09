@@ -1,4 +1,4 @@
-import { TextField } from 'yahha-ui';
+import { Input } from 'yahha-ui';
 
 export default function TextFieldCustomization() {
   return (
@@ -15,7 +15,7 @@ export default function TextFieldCustomization() {
           color: #49313d;
         }
       `}</style>
-      <TextField
+      <Input
         label="手记署名"
         defaultValue="库米"
         maxLength={12}

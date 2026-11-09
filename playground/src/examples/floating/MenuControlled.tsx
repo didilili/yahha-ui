@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, DropdownMenu, Heading, Text, TextField } from 'yahha-ui';
+import { Button, DropdownMenu, Heading, Text, Input } from 'yahha-ui';
 
 export default function MenuControlled() {
   const [open, setOpen] = useState(false);
@@ -54,7 +54,7 @@ export default function MenuControlled() {
                 setFocusTarget('trigger');
               }}
             >
-              <TextField
+              <Input
                 ref={editor}
                 label="草稿标题"
                 value={draftTitle}

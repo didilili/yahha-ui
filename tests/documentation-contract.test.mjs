@@ -39,6 +39,28 @@ test('website component links retain their anchors in repository documentation',
   assert.equal(documentationLink('#/components/select?section=api'), 'select.md#api');
   assert.equal(documentationLink('#/components/theme-provider'), 'theme.md');
   assert.equal(
+    documentationLink('#/guides/interactions?section=button-delete-draft'),
+    '../recipes/interactions.md#button-delete-draft',
+  );
+  assert.equal(
+    documentationLink('#/components/button?section=button-delete-draft'),
+    '../recipes/interactions.md#button-delete-draft',
+  );
+  assert.equal(
+    documentationLink('#/components/select?section=api', { fromGuide: true }),
+    '../components/select.md#api',
+  );
+  assert.equal(
+    documentationLink('#/guides/interactions?section=counts', { fromGuide: true }),
+    'interactions.md#counts',
+  );
+  for (const section of ['heading-article-reply', 'heading-article-journal']) {
+    assert.equal(
+      documentationLink(`#/components/heading?section=${section}`),
+      '../recipes/interactions.md#heading-reading-layout',
+    );
+  }
+  assert.equal(
     proseToMarkdown('<p>Use <a href="#/components/select">Select</a>, then <code>form</code>.</p>'),
     'Use [Select](select.md), then `form`.',
   );
@@ -53,6 +75,18 @@ test('source fences preserve imports and nested backticks verbatim', () => {
   assert.deepEqual(
     markdownExamples(`<!-- example-source: playground/src/examples/Sample.tsx -->\n\n${fenced}`),
     [{ sourcePath: 'playground/src/examples/Sample.tsx', source: `${source}\n` }],
+  );
+});
+
+test('prose exports code blocks without toolbar text and preserves following sections', () => {
+  const source = "import { Form } from 'yahha-ui';\n<Form />";
+  const html = `<p>Before.</p><div class="source-code is-expanded"><div class="code-toolbar"><span>tsx</span><button>复制代码</button></div><pre aria-label="tsx 代码"><code>import { Form } from 'yahha-ui';\n&lt;Form /&gt;</code></pre></div><p>After.</p>`;
+  assert.equal(proseToMarkdown(html), `Before.\n\n${sourceFence(source)}\n\nAfter.`);
+  assert.equal(
+    proseToMarkdown(
+      '<div class="source-code"><pre aria-label="焦点参数的 TypeScript 类型"><code>type Focus = false;</code></pre></div>',
+    ),
+    sourceFence('type Focus = false;', 'text'),
   );
 });
 
@@ -82,4 +116,71 @@ test('documentation refuses duplicate anchors and ambiguous API rows', () => {
   const duplicateApi = structuredClone(page);
   duplicateApi.sections[2].api[0].rows.push({ ...duplicateApi.sections[2].api[0].rows[0] });
   assert.throws(() => validateDocumentation([duplicateApi]), /duplicate API property/);
+});
+
+test('Input Markdown links canonicalize legacy routes, examples and API rows', () => {
+  assert.equal(documentationLink('#/components/text-field'), 'input.md');
+  assert.equal(
+    documentationLink('#/components/text-field?section=text-field-states'),
+    'input.md#text-field-states',
+  );
+  assert.equal(documentationLink('#/components/text-field?section=integration'), 'input.md#form');
+  assert.equal(
+    documentationLink('#/components/text-field?section=api-TextFieldProps--value'),
+    'input.md#api-InputProps--value',
+  );
+  assert.equal(
+    documentationLink('#/components/text-field?section=api-TextFieldProps--value', {
+      fromGuide: true,
+    }),
+    '../components/input.md#api-InputProps--value',
+  );
+  assert.equal(
+    documentationLink('#/components/radio-group?section=radio-comment-signature'),
+    '../recipes/interactions.md#radio-comment-signature',
+  );
+});
+
+test('forms and interaction guide links resolve relative to their generated directories', () => {
+  assert.equal(
+    documentationLink('#/guides/forms?section=validation'),
+    '../guides/forms.md#validation',
+  );
+  assert.equal(
+    documentationLink('#/guides/forms?section=reset', { fromGuide: true }),
+    '../guides/forms.md#reset',
+  );
+  assert.equal(
+    documentationLink('#/guides/forms?section=controls', { fromDirectory: 'guides' }),
+    'forms.md#controls',
+  );
+  assert.equal(
+    documentationLink('#/guides/interactions?section=radio-comment-signature', {
+      fromDirectory: 'guides',
+    }),
+    '../recipes/interactions.md#radio-comment-signature',
+  );
+  assert.equal(
+    documentationLink('#/components/input?section=api', { fromDirectory: 'guides' }),
+    '../components/input.md#api',
+  );
+});
+
+test('Input API Markdown provides the canonical property anchor targeted by links', () => {
+  const markdown = apiMarkdown({
+    name: 'InputProps',
+    rows: [{ name: 'value', type: 'string', description: '当前值。' }],
+  });
+  assert(markdown.includes('<a id="api-InputProps--value"></a>'));
+  assert.match(markdown, /### InputProps/);
+});
+
+test('semantic control comparison tables remain readable Markdown tables with linked cells', () => {
+  const markdown = proseToMarkdown(
+    '<table><thead><tr><th>控件</th><th>表单值</th></tr></thead><tbody><tr><td><a href="#/components/input">Input</a></td><td><code>name</code> + 字符串</td></tr><tr><td>Checkbox</td><td>选中时提交 | 关闭时省略</td></tr></tbody></table>',
+  );
+  assert.equal(
+    markdown,
+    '| 控件 | 表单值 |\n| --- | --- |\n| [Input](input.md) | `name` + 字符串 |\n| Checkbox | 选中时提交 \\| 关闭时省略 |',
+  );
 });

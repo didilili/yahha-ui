@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Text, TextField } from 'yahha-ui';
+import { Text, Input } from 'yahha-ui';
 
 export default function TextFieldControlled() {
   const [keyword, setKeyword] = useState('');
 
   return (
     <div style={{ display: 'grid', gap: 12 }}>
-      <TextField
+      <Input
         label="关键词"
         type="search"
         value={keyword}

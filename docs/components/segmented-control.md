@@ -4,7 +4,7 @@
 
 紧凑的受控单选组，适用于分类、排序等简短选项，保留原生 radio 的表单与键盘行为。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { SegmentedControl } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { SegmentedControl } from 'yahha-ui';
 
 切换文章类型。
 
-[查看示例文件](../../playground/src/examples/forms/SegmentedBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/forms/SegmentedBasic.tsx)
 
 <!-- example-source: playground/src/examples/forms/SegmentedBasic.tsx -->
 
@@ -63,7 +63,7 @@ export default function SegmentedBasic() {
 
 切换可用选项，禁用项保留可见并说明原因。
 
-[查看示例文件](../../playground/src/examples/forms/SegmentedDisabled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/forms/SegmentedDisabled.tsx)
 
 <!-- example-source: playground/src/examples/forms/SegmentedDisabled.tsx -->
 
@@ -104,7 +104,7 @@ export default function SegmentedDisabled() {
 
 切换父 fieldset 的禁用状态，保留当前选择。
 
-[查看示例文件](../../playground/src/examples/forms/SegmentedGroupDisabled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/forms/SegmentedGroupDisabled.tsx)
 
 <!-- example-source: playground/src/examples/forms/SegmentedGroupDisabled.tsx -->
 
@@ -154,7 +154,7 @@ export default function SegmentedGroupDisabled() {
 
 在窄栏中切换专题，查看选项如何换行排列。
 
-[查看示例文件](../../playground/src/examples/forms/SegmentedLongLabels.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/forms/SegmentedLongLabels.tsx)
 
 <!-- example-source: playground/src/examples/forms/SegmentedLongLabels.tsx -->
 
@@ -194,19 +194,13 @@ export default function SegmentedLongLabels() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-示例使用本地状态和文章，不请求接口或保存设置。
-
 <a id="filtering"></a>
 
 ### 筛选与视图切换
 
-按类型筛选同一批文章，再切换列表与卡片。
+按类型筛选同一批本地文章，再切换列表与卡片；筛选与布局由调用方处理。
 
-[查看示例文件](../../playground/src/examples/forms/SegmentedFiltering.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/forms/SegmentedFiltering.tsx)
 
 <!-- example-source: playground/src/examples/forms/SegmentedFiltering.tsx -->
 
@@ -337,11 +331,11 @@ export default function SegmentedFiltering() {
 
 <a id="form"></a>
 
-### 原生表单与显式重置
+### 原生表单取值与重置
 
-选择后读取表单值，或重置为未选择；本例不重排文章。
+通过 FormData 读取选中值，并在原生 onReset 中显式恢复受控选择。
 
-[查看示例文件](../../playground/src/examples/forms/SegmentedForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/forms/SegmentedForm.tsx)
 
 <!-- example-source: playground/src/examples/forms/SegmentedForm.tsx -->
 
@@ -421,12 +415,41 @@ export default function SegmentedForm() {
 
 ## 状态与表单
 
-- 这是受控单选组：value 指定当前值，onValueChange 返回选项值，由调用方更新。选项值须保持唯一；用空字符串表示待选择时，不再将它用作有效选项值。
-- 显式 name 提供稳定的 FormData 字段名；省略时仍有自动生成的唯一名称。同一表单内的独立组使用不同 name，form 可关联外部表单。
-- required 使用原生必选约束。表单重置需在 onReset 中同步恢复 React 状态。
+- value 指定当前值，onValueChange 返回选项值，受控状态由调用方更新。选项值须保持唯一。 用空字符串表示待选择时，将有效选项设置为其他值。
+- 显式 name 提供稳定的 FormData 字段名；省略时自动生成唯一名称。独立组使用不同 name，form 可关联外部表单；取值规则见 [原生表单接入](../guides/forms.md#native-form)。
+- required 使用原生必选约束。组件只支持受控选择，使用原生 form 时需在 onReset 中恢复 React 状态，见 [原生表单重置](../guides/forms.md#reset)。
 - disabled 禁用整组，单项 disabled 只禁用该项，也支持父 fieldset 禁用。禁用项不参与操作与提交，已选项被禁用后仍保留选中标记。
-- 选择变化后的筛选、正文更新与 URL 同步由调用方处理；需要可见的校验错误时，在组旁提供说明，并用 aria-describedby 关联。
+- 选择变化后的筛选、正文更新与 URL 同步由调用方处理。自行管理校验时，在组旁提供可见的错误说明，并用 aria-describedby 关联。
 - 文章例使用两组独立选择：分类决定文章集合，视图只调整同一集合的呈现。 切换列表与卡片会保留当前分类和文章顺序，不模拟重新加载。
+
+<a id="form-integration"></a>
+
+## 与 Form 配合
+
+空字符串表示待选择。将 errorPlacement 设为 external，并用 FormError 呈现错误。
+
+```tsx
+import { Form, FormError, SegmentedControl } from 'yahha-ui';
+
+<Form initialValues={{ view: '' }}>
+  {(form) => (
+    <>
+      <SegmentedControl
+        {...form.choice('view', { errorPlacement: 'external' })}
+        label="默认视图"
+        required
+        options={[
+          { value: 'list', label: '列表' },
+          { value: 'cards', label: '卡片' },
+        ]}
+      />
+      <FormError name="view" />
+    </>
+  )}
+</Form>
+```
+
+保留绑定提供的 aria-invalid 和 aria-describedby 以关联错误。完整用法见 [字段绑定与错误呈现](form.md#binding)。
 
 <a id="api"></a>
 
@@ -487,3 +510,4 @@ export default function SegmentedForm() {
 - [RadioGroup 单选组](radio-group.md)：用于在一组互斥选项中选择单个值，可为选项提供说明。
 - [Select 下拉选择器](select.md)：从文章分类、排序方式等固定选项中选一项。
 - [Tabs 标签页](tabs.md)：用于在同一区域切换相关内容面板，建立标签与面板的语义关联。
+- [Form 表单](form.md)：统一管理字段值、校验、提交与重置，并定位需要修正的字段。

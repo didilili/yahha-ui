@@ -4,7 +4,7 @@
 
 显示任务完成比例，支持未知进度和可选的纸签端点。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Progress } from 'yahha-ui';
@@ -28,7 +28,7 @@ import { Progress } from 'yahha-ui';
 
 显示当前完成比例。
 
-[查看示例文件](../../playground/src/examples/content/ProgressBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/ProgressBasic.tsx)
 
 <!-- example-source: playground/src/examples/content/ProgressBasic.tsx -->
 
@@ -46,7 +46,7 @@ export default function ProgressBasic() {
 
 使用默认外观对比进行中、未知进度和已完成状态。
 
-[查看示例文件](../../playground/src/examples/content/ProgressStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/ProgressStates.tsx)
 
 <!-- example-source: playground/src/examples/content/ProgressStates.tsx -->
 
@@ -85,7 +85,7 @@ export default function ProgressStates() {
 
 切换同一个数值，对比纸签端点与完成勾记。
 
-[查看示例文件](../../playground/src/examples/content/ProgressAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/ProgressAppearance.tsx)
 
 <!-- example-source: playground/src/examples/content/ProgressAppearance.tsx -->
 
@@ -123,17 +123,13 @@ export default function ProgressAppearance() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
 <a id="progress-checklist"></a>
 
 ### 由清单计算进度
 
 勾选已读条目，进度根据实际勾选数量更新。
 
-[查看示例文件](../../playground/src/examples/content/ProgressChecklist.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/ProgressChecklist.tsx)
 
 <!-- example-source: playground/src/examples/content/ProgressChecklist.tsx -->
 

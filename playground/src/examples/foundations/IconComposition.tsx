@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { BookmarkIcon, Button, CloseIcon, IconButton, SearchIcon, Text, TextField } from 'yahha-ui';
+import { BookmarkIcon, Button, CloseIcon, IconButton, SearchIcon, Text, Input } from 'yahha-ui';
 
 const articles = ['周末的散步记录', '给小花换一个花盆', '散步路上的面包店'];
 
@@ -19,7 +19,7 @@ export default function IconComposition() {
           setQuery(value);
         }}
       >
-        <TextField
+        <Input
           ref={inputRef}
           label="搜索手记"
           type="text"

@@ -92,10 +92,16 @@ async function openSelect(page, trigger) {
   return controls;
 }
 
-async function choose(page, trigger, title, value) {
+async function choose(
+  page,
+  trigger,
+  title,
+  value,
+  valueProbe = (expected) => requireValue(page, trigger, expected),
+) {
   const controls = await openSelect(page, trigger);
   await page.getByRole('option', { name: new RegExp(`^${title}`) }).click();
-  await requireValue(page, trigger, value);
+  await valueProbe(value);
   await page.locator(`[id=${JSON.stringify(controls)}]`).waitFor({ state: 'hidden' });
   await requireFocus(page, trigger);
 }
@@ -234,11 +240,36 @@ export async function verifySelectAvailability(page, example) {
   let originalError;
   await trigger.waitFor();
 
+  async function requireAvailableValue(value, disabled = false) {
+    const field = example.locator('input[name="collection"]');
+    await field.waitFor({ state: 'attached' });
+    const node = await field.elementHandle();
+    try {
+      // This example has no form: inspect its real control and visible label without
+      // inventing a form association or weakening other examples' FormData assertions.
+      await page.waitForFunction(
+        ({ element, expected, disabled }) =>
+          element.form === null && element.value === expected && element.disabled === disabled,
+        { element: node, expected: value ?? '', disabled },
+      );
+    } finally {
+      await node.dispose();
+    }
+    const text = new Map([
+      [null, '暂无可用收藏夹'],
+      ['', '请选择收藏夹'],
+      ['reading', readingTitle],
+      ['journal', journalTitle],
+    ]).get(value);
+    assert.notEqual(text, undefined, 'Availability expects a known option or empty state.');
+    await requireText(page, trigger, text);
+  }
+
   async function restoreWithKeyboard() {
     await restore.focus();
     await restore.press('Enter');
     await requireDisabled(page, trigger, false);
-    await requireValue(page, trigger, '');
+    await requireAvailableValue('');
     await requireText(page, status, restoredMessage);
     await requireFocus(page, restore);
     assert.equal(await trigger.innerText(), '请选择收藏夹');
@@ -258,7 +289,7 @@ export async function verifySelectAvailability(page, example) {
   }
 
   async function requireRemovedReading() {
-    await requireValue(page, trigger, '');
+    await requireAvailableValue('');
     await requireText(page, status, `已移除「${readingTitle}」，请重新选择。`);
     await requireDisabled(page, trigger, false);
     assert.equal(await trigger.innerText(), '请选择收藏夹');
@@ -268,9 +299,14 @@ export async function verifySelectAvailability(page, example) {
 
   try {
     assert.equal(await status.count(), 1, 'Availability has one result announcement.');
+    assert.equal(
+      await example.locator('form').count(),
+      0,
+      'Dynamic options use a layout container.',
+    );
     assert.equal(await trigger.isDisabled(), true, 'The initial option list is genuinely empty.');
     assert.equal(await trigger.innerText(), '暂无可用收藏夹');
-    await requireValue(page, trigger, null, false);
+    await requireAvailableValue(null, true);
     await requireText(page, status, '');
     assert.equal(await remove.isDisabled(), true);
 
@@ -284,7 +320,7 @@ export async function verifySelectAvailability(page, example) {
       .getByRole('option', { name: readingTitle, exact: true, includeHidden: true })
       .waitFor({ state: 'attached' });
     await trigger.press('r');
-    await requireValue(page, trigger, 'reading');
+    await requireAvailableValue('reading');
     assert.equal(await trigger.getAttribute('aria-expanded'), 'false');
     await requireText(page, status, '');
     await remove.click();
@@ -292,11 +328,11 @@ export async function verifySelectAvailability(page, example) {
     await recordRemovalFocus('fresh empty → recover without focusing trigger → closed typeahead');
 
     stage = 'remove final collection';
-    await choose(page, trigger, journalTitle, 'journal');
+    await choose(page, trigger, journalTitle, 'journal', requireAvailableValue);
     await requireText(page, status, '');
     await remove.click();
     await requireDisabled(page, trigger, true);
-    await requireValue(page, trigger, null, false);
+    await requireAvailableValue(null, true);
     await requireText(page, status, '已移除最后一个选项，可恢复示例选项后再选择。');
     assert.equal(await trigger.innerText(), '暂无可用收藏夹');
     assert.equal(await remove.isDisabled(), true);
@@ -304,7 +340,7 @@ export async function verifySelectAvailability(page, example) {
 
     stage = 'opened-popup selection and removal';
     await restoreWithKeyboard();
-    await choose(page, trigger, readingTitle, 'reading');
+    await choose(page, trigger, readingTitle, 'reading', requireAvailableValue);
     await requireText(page, status, '');
     await remove.click();
     await requireRemovedReading();
@@ -316,17 +352,26 @@ export async function verifySelectAvailability(page, example) {
   } finally {
     try {
       await closeSelect(page, trigger);
-      // Reset does not restore the option array. Drain it through the real controls first.
+      // Exercise removal through the real controls before remounting the document.
+      let removedDuringCleanup = false;
       for (let count = 0; count < 3 && !(await trigger.isDisabled()); count += 1) {
         const controls = await openSelect(page, trigger);
         await page.getByRole('option').first().click();
         await page.locator(`[id=${JSON.stringify(controls)}]`).waitFor({ state: 'hidden' });
         await remove.click();
+        removedDuringCleanup = true;
         await settle(page);
       }
       await requireDisabled(page, trigger, true);
-      await trigger.evaluate((node) => node.form.reset());
-      await requireValue(page, trigger, null, false);
+      await requireAvailableValue(null, true);
+      if (removedDuringCleanup)
+        await requireText(page, status, '已移除最后一个选项，可恢复示例选项后再选择。');
+      // The layout example deliberately has no reset action. Reloading creates its
+      // original empty option state and clears the removal feedback via a real remount.
+      await page.reload();
+      await revealExample(example);
+      await trigger.waitFor();
+      await requireAvailableValue(null, true);
       await requireText(page, status, '');
       assert.equal(await trigger.innerText(), '暂无可用收藏夹');
       assert.equal(await remove.isDisabled(), true);

@@ -1,5 +1,12 @@
+import { componentCatalog } from '../../playground/src/docs/component-catalog.ts';
 import { verifyProgressExamples } from './progress-examples.mjs';
 import assert from 'node:assert/strict';
+import {
+  closeSearchDialog,
+  openSearchDialog,
+  searchField,
+  visibleSearchEntry,
+} from './search-dialog-helpers.mjs';
 import { verifyDesignBaseline } from './design-checks.mjs';
 import { verifyCoreComponents } from './core-components.mjs';
 import { verifySelectionComponents } from './selection-components.mjs';
@@ -122,26 +129,39 @@ async function verifyCodeControls(page) {
 
 async function verifySearchRecovery(page) {
   const sidebar = page.locator('.docs-sidebar');
-  const search = sidebar.getByRole('searchbox', { name: '搜索文档', exact: true });
+  const directoryWasOpen = await sidebar.evaluate((node) => node.classList.contains('is-open'));
+  const directoryLinks = sidebar.locator('.nav-group a');
+  const originalLinks = await directoryLinks.evaluateAll((nodes) =>
+    nodes.map((node) => node.getAttribute('href')),
+  );
+  const dialog = await openSearchDialog(page, await visibleSearchEntry(page, sidebar));
+  const search = searchField(page);
   await search.fill('输入框');
-  await sidebar.getByRole('link', { name: 'TextField 单行输入', exact: true }).waitFor();
-  assert.equal(await sidebar.getByRole('link', { name: 'Button 按钮', exact: true }).count(), 0);
+  await dialog.getByRole('link', { name: 'Input 输入框', exact: true }).waitFor();
+  assert.equal(await dialog.getByRole('link', { name: 'Button 按钮', exact: true }).count(), 0);
   await search.fill('分段单选');
-  await sidebar.getByRole('link', { name: 'SegmentedControl 分段选择', exact: true }).waitFor();
+  await dialog.getByRole('link', { name: 'SegmentedControl 分段选择', exact: true }).waitFor();
   assert.equal(
-    await sidebar.locator('a[href^="#/components/"]').count(),
+    await dialog.locator('a[href^="#/components/"]').count(),
     1,
     'The previous Chinese name remains a usable search alias.',
   );
-  await page.locator('.doc-search').getByRole('button', { name: '清空搜索', exact: true }).click();
+  await dialog.getByRole('button', { name: '清空搜索', exact: true }).click();
   assert.equal(await search.inputValue(), '');
   await requireFocus(search, 'Clearing the search must restore input focus.');
   await search.fill('这条搜索没有任何组件');
-  const empty = sidebar.locator('.search-empty');
-  await empty.getByText('未找到相关文档', { exact: true }).waitFor();
-  await empty.getByRole('button', { name: '返回目录', exact: true }).click();
+  await dialog.getByText('没有匹配的文档，试试其他关键词。', { exact: true }).waitFor();
+  await dialog.getByRole('button', { name: '清空搜索', exact: true }).click();
   assert.equal(await search.inputValue(), '');
   await requireFocus(search, 'Empty-result recovery must restore input focus.');
+  assert.deepEqual(
+    await directoryLinks.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href'))),
+    originalLinks,
+    'Searching and empty-result recovery do not replace the original directory.',
+  );
+  await closeSearchDialog(page);
+  if (directoryWasOpen)
+    await page.getByRole('button', { name: '打开文档目录', exact: true }).click();
   await sidebar.getByRole('link', { name: 'Button 按钮', exact: true }).waitFor();
 }
 
@@ -165,14 +185,14 @@ export async function verifyDocsNavigation(browser, baseURL) {
         'The directory keeps eight UI categories and a separate theme configuration group.',
       );
       const componentLinks = sidebar.locator('a[href^="#/components/"]');
-      assert.equal(await componentLinks.count(), 32);
+      assert.equal(await componentLinks.count(), componentCatalog.length);
       assert.equal(
         new Set(
           await componentLinks.evaluateAll((links) =>
             links.map((link) => link.getAttribute('href')),
           ),
         ).size,
-        32,
+        componentCatalog.length,
         'Every document URL has exactly one directory entry.',
       );
       const geometry = await sidebar.locator('.nav-group a').evaluateAll((links) =>
@@ -218,17 +238,19 @@ export async function verifyDocsNavigation(browser, baseURL) {
       );
       await verifySearchRecovery(page);
       for (const { query, id, title } of [
-        { query: '输入框', id: 'text-field', title: 'TextField 单行输入' },
+        { query: '输入框', id: 'input', title: 'Input 输入框' },
         { query: '分段单选', id: 'segmented-control', title: 'SegmentedControl 分段选择' },
         { query: '主题配置', id: 'theme-provider', title: 'ThemeProvider 主题配置' },
       ]) {
         const menu = page.getByRole('button', { name: /^(打开|关闭)文档目录$/ });
         if (width < 800 && (await menu.getAttribute('aria-expanded')) === 'false')
           await menu.click();
-        await sidebar.getByRole('searchbox', { name: '搜索文档', exact: true }).fill(query);
-        const link = sidebar.getByRole('link', { name: title, exact: true });
+        const dialog = await openSearchDialog(page, await visibleSearchEntry(page, sidebar));
+        await searchField(page).fill(query);
+        const link = dialog.getByRole('link', { name: title, exact: true });
         assert.equal(await link.getAttribute('href'), `#/components/${id}`);
         await link.click();
+        await dialog.waitFor({ state: 'hidden' });
         const heading = page.getByRole('heading', { level: 1, name: title, exact: true });
         await heading.waitFor();
         await requireFocus(heading, 'Following a directory result focuses the new document title.');
@@ -290,7 +312,9 @@ export async function verifyDocsShell(browser, baseURL) {
       await page.reload();
       await page.locator('.example-block').first().waitFor();
       const menu = page.getByRole('button', { name: '打开文档目录', exact: true });
-      const search = page.getByRole('searchbox', { name: '搜索文档', exact: true });
+      const search = page
+        .locator('.docs-sidebar')
+        .getByRole('button', { name: '搜索文档', exact: true });
       await minHeight(menu, 44, `Directory control at ${width}px`);
       const header = await page.locator('.docs-header').evaluate((element) => {
         const bounds = element.getBoundingClientRect();
@@ -430,6 +454,7 @@ export async function verifyDocsRouteIdentity(browser, baseURL) {
     ['/guides/reading', '阅读与收藏', '#/guides/recipes'],
     ['/guides/design-baseline', '设计规范', '#/guides/design-baseline'],
     ['/guides/states', '组合示例', '#/guides/recipes'],
+    ['/guides/interactions', '交互组合', '#/guides/recipes'],
     ['/guides/artwork', '图标与插画', '#/guides/design-baseline'],
     ['/components', '组件总览', '#/components'],
     ['/components/button', 'Button 按钮', '#/components'],
@@ -551,12 +576,12 @@ async function verifyCompleteSetup(example, themeScope, assets = []) {
     assert.match(source, /<ThemeProvider theme="pink">/);
   } else {
     assert.doesNotMatch(source, /<ThemeProvider/);
-    assert.match(await details.innerText(), /自身的主题配置/);
+    assert.match(await details.innerText(), /示例自带 ThemeProvider/);
   }
   for (const { name, contents, path = `artwork/${name}` } of assets) {
     const downloads = details.locator('.example-assets');
-    assert.match(await downloads.innerText(), /路径相对于 Example\.tsx.*按路径新建目录并保存文件/s);
-    assert.match(await downloads.innerText(), /保留源码中的相对导入/);
+    assert.match(await downloads.innerText(), /路径相对于 Example\.tsx/);
+    assert.match(await downloads.innerText(), /保持源码的相对导入/);
     const link = downloads.getByRole('link', { name: `下载 ${name}`, exact: true });
     assert.equal(await link.getAttribute('download'), name);
     assert.equal(await downloads.getByText(path, { exact: true }).count(), 1);
@@ -888,8 +913,10 @@ async function verifyStateSceneExamples(page, baseURL) {
   await status.getByText('文章已准备好', { exact: true }).waitFor();
   await page.emulateMedia({ reducedMotion: 'no-preference' });
 
+  await page.goto(`${baseURL}#/components/empty-state?section=empty-illustrations`);
   const empty = page.locator('#scene-empty .example-preview');
   await empty.getByRole('heading', { name: '还没有手记', exact: true }).waitFor();
+  assert.equal(new URL(page.url()).hash, '#/guides/states?section=scene-empty');
   const create = empty.getByRole('button', { name: '创建示例手记', exact: true });
   await create.focus();
   await create.press('Enter');

@@ -4,7 +4,7 @@
 
 用于可展开和收起的内容面板，支持单项或多项展开。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Accordion } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Accordion } from 'yahha-ui';
 
 默认展开一项，展开另一项时收起前一项。
 
-[查看示例文件](../../playground/src/examples/navigation/AccordionBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/navigation/AccordionBasic.tsx)
 
 <!-- example-source: playground/src/examples/navigation/AccordionBasic.tsx -->
 
@@ -65,11 +65,11 @@ export default function AccordionBasic() {
 
 <a id="states"></a>
 
-### 多项展开、受控与禁用
+### 多项展开（受控）
 
-分别查看受控多项展开与不可用的条目。
+同时展开多个条目，由 value 管理展开项；全部收起后保留操作按钮焦点。
 
-[查看示例文件](../../playground/src/examples/navigation/AccordionStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/navigation/AccordionStates.tsx)
 
 <!-- example-source: playground/src/examples/navigation/AccordionStates.tsx -->
 
@@ -81,121 +81,77 @@ export default function AccordionStates() {
   const [value, setValue] = useState<string[]>(['preparation', 'meeting']);
 
   return (
-    <div style={{ display: 'grid', gap: 24 }}>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <Text size="sm" tone="muted">
-          多项展开（受控）
-        </Text>
-        <Accordion
-          multiple
-          value={value}
-          onValueChange={setValue}
-          items={[
-            {
-              value: 'preparation',
-              title: '需要带些什么？',
-              content: <p>带一本愿意分享的书，以及记录喜欢段落的小本子。</p>,
-            },
-            {
-              value: 'meeting',
-              title: '在哪里集合？',
-              content: <p>先到书店门口的小桌签到，再一起去窗边的阅读区。</p>,
-            },
-          ]}
-        />
-        <Button variant="secondary" onClick={() => setValue([])}>
-          全部收起
-        </Button>
-        <Text size="sm" tone="muted" role="status">
-          已展开 {value.length} 项
-        </Text>
-      </div>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <Text size="sm" tone="muted">
-          禁用单项
-        </Text>
-        <Accordion
-          items={[
-            {
-              value: 'rain',
-              title: '雨天安排（确认中）',
-              content: <p>确认后会补充当天的集合安排。</p>,
-              disabled: true,
-            },
-          ]}
-        />
-      </div>
+    <div style={{ display: 'grid', gap: 12 }}>
+      <Accordion
+        multiple
+        value={value}
+        onValueChange={setValue}
+        items={[
+          {
+            value: 'preparation',
+            title: '需要带些什么？',
+            content: <p>带一本愿意分享的书，以及记录喜欢段落的小本子。</p>,
+          },
+          {
+            value: 'meeting',
+            title: '在哪里集合？',
+            content: <p>先到书店门口的小桌签到，再一起去窗边的阅读区。</p>,
+          },
+        ]}
+      />
+      <Button variant="secondary" onClick={() => setValue([])}>
+        全部收起
+      </Button>
+      <Text size="sm" tone="muted" role="status">
+        已展开 {value.length} 项
+      </Text>
     </div>
   );
 }
 ```
 
-<a id="appearance"></a>
+<a id="disabled"></a>
 
-### 普通与柔和纸面
+### 禁用项目
 
-普通外观保留箭头与展开反馈；soft 增加圆形箭头底座与更明显的展开纸面。
+禁用标题不能聚焦或切换展开状态。
 
-[查看示例文件](../../playground/src/examples/navigation/AccordionAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/navigation/AccordionDisabled.tsx)
 
-<!-- example-source: playground/src/examples/navigation/AccordionAppearance.tsx -->
+<!-- example-source: playground/src/examples/navigation/AccordionDisabled.tsx -->
 
 ```tsx
-import { Accordion, Text } from 'yahha-ui';
+import { Accordion } from 'yahha-ui';
 
-const items = [
-  {
-    value: 'rss',
-    title: '如何订阅这个小站？',
-    content: '把本站的 RSS 地址添加到阅读器，有新文章时就能看到更新。',
-  },
-  { value: 'comments', title: '我可以给文章留言吗？', content: '可以在文章下方分享想法。' },
-];
-
-export default function AccordionAppearance() {
+export default function AccordionDisabled() {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
-        gap: 24,
-      }}
-    >
-      {(['default', 'soft'] as const).map((appearance) => (
-        <div
-          key={appearance}
-          style={{ display: 'grid', alignContent: 'start', gap: 12, minWidth: 0 }}
-        >
-          <Text size="sm" tone="muted">
-            {appearance === 'default' ? '普通（默认）' : '柔和纸面'}
-          </Text>
-          <Accordion appearance={appearance} defaultValue={['rss']} items={items} />
-        </div>
-      ))}
-    </div>
+    <Accordion
+      items={[
+        {
+          value: 'rain',
+          title: '雨天安排（确认中）',
+          content: <p>确认后会补充当天的集合安排。</p>,
+          disabled: true,
+        },
+      ]}
+    />
   );
 }
 ```
-
-<a id="integration"></a>
-
-## 进阶用法
-
-筛选和展开状态仅保留在当前示例。
 
 <a id="controlled"></a>
 
-### 筛选与多项展开
+### 筛选与受控展开项同步
 
-搜索标题并展开当前可用项；筛掉的展开项会收起。
+由调用方同步筛选后的 items 与受控 value，批量展开当前可用项；状态仅保留在本例。
 
-[查看示例文件](../../playground/src/examples/navigation/AccordionControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/navigation/AccordionControlled.tsx)
 
 <!-- example-source: playground/src/examples/navigation/AccordionControlled.tsx -->
 
 ```tsx
 import { useRef, useState } from 'react';
-import { Accordion, Button, EmptyState, Text, TextField } from 'yahha-ui';
+import { Accordion, Button, EmptyState, Text, Input } from 'yahha-ui';
 
 const items = [
   {
@@ -247,7 +203,7 @@ export default function AccordionControlled() {
 
   return (
     <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
-      <TextField
+      <Input
         ref={inputRef}
         label="搜索说明标题"
         type="text"
@@ -312,6 +268,53 @@ export default function AccordionControlled() {
 }
 ```
 
+<a id="appearance"></a>
+
+### 普通与柔和纸面
+
+普通外观保留箭头与展开反馈；soft 增加圆形箭头底座与更明显的展开纸面。
+
+[查看示例文件](../../playground/src/examples/navigation/AccordionAppearance.tsx)
+
+<!-- example-source: playground/src/examples/navigation/AccordionAppearance.tsx -->
+
+```tsx
+import { Accordion, Text } from 'yahha-ui';
+
+const items = [
+  {
+    value: 'rss',
+    title: '如何订阅这个小站？',
+    content: '把本站的 RSS 地址添加到阅读器，有新文章时就能看到更新。',
+  },
+  { value: 'comments', title: '我可以给文章留言吗？', content: '可以在文章下方分享想法。' },
+];
+
+export default function AccordionAppearance() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+        gap: 24,
+      }}
+    >
+      {(['default', 'soft'] as const).map((appearance) => (
+        <div
+          key={appearance}
+          style={{ display: 'grid', alignContent: 'start', gap: 12, minWidth: 0 }}
+        >
+          <Text size="sm" tone="muted">
+            {appearance === 'default' ? '普通（默认）' : '柔和纸面'}
+          </Text>
+          <Accordion appearance={appearance} defaultValue={['rss']} items={items} />
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="design"></a>
 
 ## 展开状态与内容保留
@@ -321,6 +324,21 @@ export default function AccordionControlled() {
 - 默认卸载关闭内容，keepMounted 可保留输入草稿等局部状态，隐藏内容不参与键盘顺序。保留的表单字段不会自动禁用，仍可能参与提交和校验。
 - 可禁用单项或整组，已展开内容仍保持可见。外部“全部展开”等操作保留当前操作位置，需要进入具体内容时再显式移动焦点。
 - 筛选例从同一份数据计算可见条目与可展开值，并清理被隐藏的展开项。 清空搜索恢复说明列表，不会重新打开已被筛走的项目；批量展开只作用当前可见且可用的说明。
+
+<a id="keyboard"></a>
+
+## 可访问性与键盘
+
+- 标题是 heading 中的原生按钮；headingLevel 应匹配所在页面的标题结构。标题内不嵌套链接或其他按钮。
+- Tab / Shift+Tab 按顺序聚焦可用标题按钮，Enter / Space 展开或收起；当前实现不使用方向键切换标题焦点。
+- 键盘焦点轮廓收进标题行；组合有内容裁切的大圆角容器时，仍需保留适当内间距。
+- 组件管理展开状态与标题、面板之间的语义关联。禁用标题按钮退出 Tab 顺序，展开或收起不会自动把焦点移入正文。
+
+<a id="styling"></a>
+
+## 长标题与正文
+
+标题自动换行，正文不按固定高度截断。为折叠区设置宽度或局部样式时，保留整行标题的点击区域； 链接、复制按钮和表单放在正文中，避免嵌入标题按钮。
 
 <a id="api"></a>
 
@@ -352,21 +370,6 @@ export default function AccordionControlled() {
 | `title` **必填**   | 标题按钮内容，不放其他交互元素。 | `ReactNode` | —       |
 | `content` **必填** | 展开后的内容。                   | `ReactNode` | —       |
 | `disabled`         | 禁用本项操作，保留可见标题。     | `boolean`   | `false` |
-
-<a id="keyboard"></a>
-
-## 可访问性与键盘
-
-- 标题是 heading 中的原生按钮；headingLevel 应匹配所在页面的标题结构。标题内不嵌套链接或其他按钮。
-- Tab / Shift+Tab 按顺序聚焦可用标题按钮，Enter / Space 展开或收起；当前实现不使用方向键切换标题焦点。
-- 键盘焦点轮廓收进标题行；组合有内容裁切的大圆角容器时，仍需保留适当内间距。
-- 组件管理展开状态与标题、面板之间的语义关联。禁用标题按钮退出 Tab 顺序，展开或收起不会自动把焦点移入正文。
-
-<a id="styling"></a>
-
-## 长标题与正文
-
-标题自动换行，正文不按固定高度截断。为折叠区设置宽度或局部样式时，保留整行标题的点击区域； 链接、复制按钮和表单放在正文中，避免嵌入标题按钮。
 
 <a id="related"></a>
 

@@ -98,15 +98,6 @@
   object-position: top;
 }
 
-.recipe-preview-reading img {
-  object-position: center 30%;
-}
-
-.recipe-preview-editing img {
-  object-fit: contain;
-  object-position: center;
-}
-
 .recipe-grid a:hover .recipe-preview,
 .recipe-grid a:focus-visible .recipe-preview {
   border-color: var(--site-line);
@@ -200,20 +191,54 @@
 @media (max-width: 1200px) {
   .mobile-doc-toc {
     display: block;
+    position: sticky;
+    top: var(--docs-header-height);
+    z-index: 15;
     margin-bottom: 24px;
     border-block: 1px solid var(--site-soft-line);
+    background: var(--yahha-surface, #ffffff);
   }
 
   .mobile-doc-toc summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     min-height: 44px;
     padding: 8px 4px;
+    list-style: none;
     cursor: pointer;
     font-weight: 700;
   }
 
+  .mobile-doc-toc summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-doc-toc summary > span:first-child {
+    flex-shrink: 0;
+  }
+
+  .mobile-doc-toc-current {
+    margin-inline-start: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--yahha-muted, #7a5c6d);
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .mobile-doc-toc summary > svg {
+    flex-shrink: 0;
+  }
+
+  .mobile-doc-toc[open] summary > svg {
+    transform: rotate(180deg);
+  }
+
   .mobile-doc-toc nav {
     display: grid;
-    max-height: 40dvh;
+    max-height: min(40dvh, calc(100dvh - var(--docs-header-height) - 76px));
     padding-bottom: 8px;
     overflow-y: auto;
   }
@@ -227,6 +252,11 @@
 
   .mobile-doc-toc .toc-nested {
     padding-inline-start: 20px;
+  }
+
+  .mobile-doc-toc a[aria-current='location'] {
+    background: var(--yahha-accent-soft, #fff0f6);
+    font-weight: 700;
   }
 }
 

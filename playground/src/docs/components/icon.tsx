@@ -6,8 +6,6 @@ import IconSlots from '../../examples/foundations/IconSlots';
 import iconSlotsSource from '../../examples/foundations/IconSlots.tsx?raw';
 import IconGallery from '../../examples/foundations/IconGallery';
 import iconGallerySource from '../../examples/foundations/IconGallery.tsx?raw';
-import IconComposition from '../../examples/foundations/IconComposition';
-import iconCompositionSource from '../../examples/foundations/IconComposition.tsx?raw';
 import IconCustom from '../../examples/foundations/IconCustom';
 import iconCustomSource from '../../examples/foundations/IconCustom.tsx?raw';
 import IconAccessibility from '../../examples/foundations/IconAccessibility';
@@ -51,7 +49,7 @@ export default defineComponentPage('icon', {
         {
           id: 'icon-gallery',
           title: '手绘功能图标',
-          description: '16 种图标的静态样张，按图形用途查找。',
+          description: '按中文用途查找 16 种图标，使用样张下方的导出名导入。',
           component: IconGallery,
           source: iconGallerySource,
         },
@@ -86,20 +84,16 @@ export default defineComponentPage('icon', {
       ],
     },
     {
-      id: 'integration',
-      kind: 'integration',
-      title: '进阶用法',
-      disclosure: '查看搜索与收藏组合',
-      examples: [
-        {
-          id: 'icon-composition',
-          title: '搜索与收藏组合',
-          description: '提交关键词筛选本地手记，点击收藏切换状态；清空后回到输入框。',
-          component: IconComposition,
-          source: iconCompositionSource,
-          toc: false,
-        },
-      ],
+      id: 'recipes',
+      title: '相关组合',
+      kind: 'related',
+      content: (
+        <ul>
+          <li>
+            <a href="#/guides/interactions?section=icon-composition">搜索与逐项收藏</a>
+          </li>
+        </ul>
+      ),
     },
     {
       id: 'api',
@@ -217,7 +211,7 @@ export default defineComponentPage('icon', {
       content: (
         <>
           <p>
-            独立图标用 size 控制图框。Button、IconButton 与 TextField
+            独立图标用 size 控制图框。Button、IconButton 与 Input
             已设置自己的插槽尺寸，图标放入后沿用宿主的图框，不会扩大按钮的点击区域。
             命名图标的路径按 24 单位坐标绘制，修改 viewBox 不会重新计算路径；调整显示尺寸使用 size。
           </p>

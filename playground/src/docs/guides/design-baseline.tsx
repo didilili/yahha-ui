@@ -58,7 +58,7 @@ const page: DocPage = {
           </p>
           <DesignTypographyReference />
           <p>
-            以下 Button 只用于比较尺寸。常规单行 Button、IconButton、TextField 和 Select 以 44px
+            以下 Button 只用于比较尺寸。常规单行 Button、IconButton、Input 和 Select 以 44px
             对齐；Button / IconButton 另有紧凑与宽松档，各组件支持的尺寸以其 API 为准。
           </p>
           <DesignControlReference />

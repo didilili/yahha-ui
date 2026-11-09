@@ -1,9 +1,11 @@
 import type { DocPage } from './types';
 import introduction from './guides/introduction';
 import gettingStarted from './guides/getting-started';
+import forms from './guides/forms';
 import styling from './guides/styling';
 import reading from './guides/reading';
 import states from './guides/states';
+import interactions from './guides/interactions';
 import designBaseline from './guides/design-baseline';
 import { artworkGuide } from './artwork-guide';
 import { recipeGuide } from './recipe-guide';
@@ -12,10 +14,12 @@ import { recipeGuide } from './recipe-guide';
 export const guidePages: DocPage[] = [
   introduction,
   gettingStarted,
+  forms,
   styling,
   recipeGuide,
   reading,
   states,
+  interactions,
   designBaseline,
   artworkGuide,
 ];

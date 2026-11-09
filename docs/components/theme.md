@@ -4,7 +4,7 @@
 
 配置配色预设与语义颜色，并向浮层 Portal 传递主题。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
@@ -30,7 +30,7 @@ import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
 
 对比粉色、浅蓝和浅黄三种预设。
 
-[查看示例文件](../../playground/src/examples/foundations/ThemeVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ThemeVariants.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ThemeVariants.tsx -->
 
@@ -76,7 +76,7 @@ export default function ThemeVariants() {
 
 通过 tokens 覆盖强调色及其悬停颜色。
 
-[查看示例文件](../../playground/src/examples/foundations/ThemeTokens.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ThemeTokens.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ThemeTokens.tsx -->
 
@@ -102,7 +102,7 @@ export default function ThemeTokensExample() {
 
 对比外层自定义绿色与内层浅黄预设。
 
-[查看示例文件](../../playground/src/examples/foundations/ThemeNested.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ThemeNested.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ThemeNested.tsx -->
 
@@ -137,13 +137,13 @@ export default function ThemeNested() {
 
 打开弹窗，查看挂载到 Portal 的内容如何沿用 ThemeProvider 配色。
 
-[查看示例文件](../../playground/src/examples/foundations/ThemePortal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ThemePortal.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ThemePortal.tsx -->
 
 ```tsx
 import { useState } from 'react';
-import { Button, Dialog, Surface, TextField, ThemeProvider, type ThemeTokens } from 'yahha-ui';
+import { Button, Dialog, Surface, Input, ThemeProvider, type ThemeTokens } from 'yahha-ui';
 
 const tokens: ThemeTokens = {
   ink: '#243b40',
@@ -164,7 +164,7 @@ export default function ThemePortal() {
   return (
     <ThemeProvider theme="pink" tokens={tokens}>
       <Surface style={{ display: 'grid', gap: 20, maxWidth: 560 }}>
-        <TextField label="订阅邮箱" placeholder="you@example.com" hint="每月一封更新。" />
+        <Input label="订阅邮箱" placeholder="you@example.com" hint="每月一封更新。" />
         <Dialog
           open={open}
           onOpenChange={setOpen}

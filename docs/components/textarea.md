@@ -4,7 +4,7 @@
 
 用于留言、评论、个人简介等多行纯文本输入。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Textarea } from 'yahha-ui';
@@ -14,7 +14,7 @@ import { Textarea } from 'yahha-ui';
 
 ## 何时使用
 
-用于收集留言、文章摘要、反馈等多行纯文本。只需昵称、邮箱等单行内容时使用 [TextField](text-field.md)。
+用于收集留言、文章摘要、反馈等多行纯文本。只需昵称、邮箱等单行内容时使用 [Input](input.md)。
 
 <a id="examples"></a>
 
@@ -26,7 +26,7 @@ import { Textarea } from 'yahha-ui';
 
 输入多行留言。
 
-[查看示例文件](../../playground/src/examples/new-forms/TextareaBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/TextareaBasic.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/TextareaBasic.tsx -->
 
@@ -50,69 +50,31 @@ export default function TextareaBasic() {
 
 <a id="controlled"></a>
 
-### 受控输入与自定义字数提示
+### 受控输入与字数提示
 
-字数由示例代码计算；检查必填内容时，失败会回焦并保留输入。
+通过 value 与 onChange 同步内容，按 UTF-16 代码单元显示当前长度。
 
-[查看示例文件](../../playground/src/examples/new-forms/TextareaControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/TextareaControlled.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/TextareaControlled.tsx -->
 
 ```tsx
-import { useRef, useState } from 'react';
-import { Button, Text, Textarea } from 'yahha-ui';
+import { useState } from 'react';
+import { Textarea } from 'yahha-ui';
 
 export default function TextareaControlled() {
   const [message, setMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const ref = useRef<HTMLTextAreaElement>(null);
-  const error = submitted && !message.trim() ? '请填写留言后再检查。' : undefined;
+
   return (
-    <form
-      noValidate
-      style={{ display: 'grid', gap: 16, maxWidth: 480 }}
-      onSubmit={(event) => {
-        event.preventDefault();
-        setSubmitted(true);
-        if (!message.trim()) ref.current?.focus();
-      }}
-    >
-      <div style={{ display: 'grid', gap: 8 }}>
-        <Textarea
-          ref={ref}
-          label="留言内容"
-          value={message}
-          onChange={(event) => {
-            setMessage(event.target.value);
-            setSubmitted(false);
-          }}
-          required
-          maxLength={200}
-          hint={
-            <span style={{ display: 'flex', flexWrap: 'wrap', columnGap: 12, rowGap: 4 }}>
-              <span>必填</span>
-              <span
-                style={{
-                  marginInlineStart: 'auto',
-                  flexShrink: 0,
-                  whiteSpace: 'nowrap',
-                  fontVariantNumeric: 'tabular-nums',
-                }}
-              >
-                已输入 {message.length} / 200
-              </span>
-            </span>
-          }
-          error={error}
-        />
-      </div>
-      <div style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-        <Button type="submit">检查留言</Button>
-        <Text size="sm" tone="muted" role="status">
-          {submitted && message.trim() ? '检查结果：留言符合要求。' : ''}
-        </Text>
-      </div>
-    </form>
+    <div style={{ maxWidth: 480 }}>
+      <Textarea
+        label="留言内容"
+        value={message}
+        onChange={(event) => setMessage(event.target.value)}
+        maxLength={200}
+        hint={`已输入 ${message.length} / 200`}
+      />
+    </div>
   );
 }
 ```
@@ -123,7 +85,7 @@ export default function TextareaControlled() {
 
 内容在二至八行间自动增减高度，超出后在框内滚动。
 
-[查看示例文件](../../playground/src/examples/new-forms/TextareaAutoSize.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/TextareaAutoSize.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/TextareaAutoSize.tsx -->
 
@@ -150,7 +112,7 @@ export default function TextareaAutoSize() {
 
 对比只读可复制和禁用不可编辑两种状态。
 
-[查看示例文件](../../playground/src/examples/new-forms/TextareaReadonlyDisabled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/TextareaReadonlyDisabled.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/TextareaReadonlyDisabled.tsx -->
 
@@ -174,19 +136,13 @@ export default function TextareaReadonlyDisabled() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-以下示例只在本地操作，不发送或保存留言。
-
 <a id="native"></a>
 
-### 原生重置
+### 原生表单重置
 
-修改非受控草稿后，通过原生表单重置恢复初始内容。
+修改非受控草稿，再通过原生 reset 恢复 defaultValue 中的初始内容。
 
-[查看示例文件](../../playground/src/examples/new-forms/TextareaStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/TextareaStates.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/TextareaStates.tsx -->
 
@@ -213,11 +169,11 @@ export default function TextareaStates() {
 
 <a id="textarea-comment-draft"></a>
 
-### 草稿预览与恢复
+### 原生表单校验与预览
 
-校验并预览当前草稿，保留原文换行；可恢复初始内容。
+用 FormData 读取非受控草稿，手动检查空白并用 ref 回焦，预览时保留换行。
 
-[查看示例文件](../../playground/src/examples/new-forms/TextareaCommentDraft.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/new-forms/TextareaCommentDraft.tsx)
 
 <!-- example-source: playground/src/examples/new-forms/TextareaCommentDraft.tsx -->
 
@@ -285,6 +241,31 @@ export default function TextareaCommentDraft() {
 }
 ```
 
+<a id="limits"></a>
+
+## 状态与原生表单
+
+- value / onChange 用于受控内容，defaultValue 用于非受控初始内容。自行管理原生 form 时，受控值需在 onReset 中恢复，见 [原生表单的受控与非受控重置](../guides/forms.md#reset)。
+- name、form、required 和 maxLength 沿用原生 textarea 属性。长度反馈由调用方维护。
+- error 只呈现错误，本页原生表单的空白校验与失败回焦由示例处理，见 [原生表单的校验与焦点](../guides/forms.md#validation)。输入长度与原生 maxLength 均按 UTF-16 代码单元计数，部分表情会占多个单位。
+- readOnly 仍可聚焦、复制并参与提交；disabled 不可编辑或聚焦，也不参与提交。必填要求应同时提供可见说明。
+- autoSize 默认关闭。开启后随内容、可用宽度及重置调整高度，达到 maxRows 后内部滚动， 不改变文字、原生事件或 Enter 换行。自行管理原生 form 时需同步恢复受控内容，取消原生重置时保留当前内容。
+- minRows 未给时采用有效的 rows，未传 rows 则为 4；行数取正有限数，向下取整后至少为 1， 非法 minRows 回退 rows，非法 maxRows 视为无上限，maxRows 小于 minRows 时以 minRows 为界。
+
+<a id="form-integration"></a>
+
+## 与 Form 配合
+
+```tsx
+import { Form, Textarea } from 'yahha-ui';
+
+<Form initialValues={{ description: '' }}>
+  {(form) => <Textarea {...form.input('description')} label="简短介绍" rows={3} />}
+</Form>
+```
+
+统一校验、提交与重置见 [Form 表单](form.md)。
+
 <a id="api"></a>
 
 ## API
@@ -313,17 +294,6 @@ export default function TextareaCommentDraft() {
 - label 自动关联 textarea，点击标签或按 Tab 聚焦；保留原生的文字选择、复制和多行编辑行为。Enter 插入换行。
 - placeholder 只提供补充示例，标签应保持可见。自定义校验失败时，用 error 说明如何修正，并可通过 ref 聚焦输入区域；提醒标记辅助识别错误，不单独播报，错误的设置与清除由调用方处理。
 
-<a id="limits"></a>
-
-## 状态与表单
-
-- value / onChange 用于受控内容，defaultValue 用于非受控初始内容。非受控内容随原生表单重置，受控内容需在 onReset 中恢复 React 状态。
-- name、form、required 和 maxLength 沿用原生 textarea 属性。需要长度反馈或自定义校验时，由调用方维护说明和 error。
-- 受控例使用 noValidate 跳过浏览器提交校验，由示例检查空白内容；error 只呈现错误。输入长度与原生 maxLength 均按 UTF-16 代码单元计数，部分表情会占多个单位。
-- readOnly 仍可聚焦、复制并参与提交；disabled 不可编辑或聚焦，也不参与提交。必填要求应同时提供可见说明。
-- autoSize 默认关闭。开启后随内容、可用宽度及重置调整高度，达到 maxRows 后内部滚动， 不改变文字、原生事件或 Enter 换行。受控内容仍由调用方恢复，取消原生重置时保留当前内容。
-- minRows 未给时采用有效的 rows，未传 rows 则为 4；行数取正有限数，向下取整后至少为 1， 非法 minRows 回退 rows，非法 maxRows 视为无上限，maxRows 小于 minRows 时以 minRows 为界。
-
 <a id="styling"></a>
 
 ## 样式定制
@@ -334,5 +304,6 @@ export default function TextareaCommentDraft() {
 
 ## 相关组件
 
-- [TextField 单行输入](text-field.md)：带可见标签、辅助说明和错误反馈的单行输入框。
+- [Input 输入框](input.md)：带可见标签、辅助说明和错误反馈的单行输入框。
 - [Button 按钮](button.md)：用于触发操作，支持不同强调程度、禁用、加载和切换状态。
+- [Form 表单](form.md)：统一管理字段值、校验、提交与重置，并定位需要修正的字段。

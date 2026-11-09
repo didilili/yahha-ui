@@ -18,21 +18,28 @@ import TextFieldCopy from '../../examples/forms/TextFieldCopy';
 import textFieldCopySource from '../../examples/forms/TextFieldCopy.tsx?raw';
 import TextFieldCustomization from '../../examples/customization/TextFieldCustomization';
 import textFieldCustomizationSource from '../../examples/customization/TextFieldCustomization.tsx?raw';
+import { CodeBlock } from '../CodeBlock';
 import { defineComponentPage } from '../page';
 
-export default defineComponentPage('text-field', {
-  importCode: "import { TextField } from 'yahha-ui';",
+export default defineComponentPage('input', {
+  importCode: "import { Input } from 'yahha-ui';",
   sections: [
     {
       id: 'usage',
       title: '何时使用',
       content: (
-        <p>
-          收集昵称、邮箱、搜索关键词等单行文字。标签说明要填什么，placeholder
-          补充格式示例；需要填写留言、摘要等多行内容时使用{' '}
-          <a href="#/components/textarea">Textarea</a>。只能从固定选项中选值时使用{' '}
-          <a href="#/components/select">Select</a>。
-        </p>
+        <>
+          <p>
+            Input 将可见标签、单行
+            input、辅助说明和错误提示组合为完整字段，适合收集昵称、邮箱、搜索关键词等单行文字。
+            TextField 是同一组件的公开兼容别名，新接入使用 Input。
+          </p>
+          <p>
+            标签说明要填什么，placeholder 补充格式示例；需要填写留言、摘要等多行内容时使用{' '}
+            <a href="#/components/textarea">Textarea</a>。只能从固定选项中选值时使用{' '}
+            <a href="#/components/select">Select</a>。
+          </p>
+        </>
       ),
     },
     {
@@ -68,42 +75,34 @@ export default defineComponentPage('text-field', {
           source: textFieldStatesSource,
         },
         {
-          id: 'validation',
-          title: '提示与本地校验',
-          description: '检查昵称，校验失败时聚焦字段，保留已输入内容。',
-          component: TextFieldValidation,
-          source: textFieldValidationSource,
-        },
-        {
           id: 'native',
           title: '原生输入类型',
           description: '对照密码、日期和时间输入，再检查邮箱的原生格式约束。',
           component: TextFieldNative,
           source: textFieldNativeSource,
         },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看表单、中文输入与复制示例',
-      content: <p>以下示例只在本地操作，不发送或保存表单数据。</p>,
-      examples: [
+        {
+          id: 'validation',
+          title: '原生表单的手动校验',
+          description:
+            '手动检查昵称并设置 error，失败时用 ref 回焦。去除首尾空白后，长度按 UTF-16 代码单元计算。',
+          component: TextFieldValidation,
+          source: textFieldValidationSource,
+        },
         {
           id: 'form',
-          title: '表单取值与重置',
-          description: '读取本地表单或恢复初始值；编辑后清除上次读取结果。',
+          title: '原生表单取值与重置',
+          description:
+            '用 FormData 读取两个字段，对比受控 value 与非受控 defaultValue 在原生 reset 时的恢复方式。',
           component: TextFieldForm,
           source: textFieldFormSource,
-          toc: false,
         },
         {
           id: 'text-field-search',
           title: '中文输入与实时搜索',
-          description: '组合输入时保留当前结果，结束后筛选本地手记；清空后回到输入框。',
+          description: '由调用方处理组合输入事件，结束后筛选本地手记；清空后回到输入框。',
           component: TextFieldSearch,
           source: textFieldSearchSource,
-          toc: false,
         },
         {
           id: 'text-field-copy',
@@ -111,23 +110,20 @@ export default defineComponentPage('text-field', {
           description: '复制示例地址；浏览器拒绝时可选中文字，使用系统复制。',
           component: TextFieldCopy,
           source: textFieldCopySource,
-          toc: false,
         },
       ],
     },
     {
       id: 'design',
-      title: '状态与表单',
+      title: '状态与原生表单',
       content: (
         <ul>
           <li>
-            value / onChange 管理受控输入；defaultValue
-            设置非受控初始值。保持一种模式，避免同时传入两种值。
+            value / onChange 用于受控输入，defaultValue 用于非受控初始值。自行管理原生 form
+            时，受控值需在 onReset 中恢复，见{' '}
+            <a href="#/guides/forms?section=reset">原生表单的受控与非受控重置</a>。
           </li>
-          <li>
-            设置 name 后可用 FormData 读取内容，form
-            可关联外部表单。非受控输入随原生表单重置；受控输入需在 onReset 中恢复 React 状态。
-          </li>
+          <li>name 提供 FormData 字段名，form 可通过 ID 关联外部表单。</li>
           <li>
             readOnly 保留聚焦、选择、复制和提交能力；disabled
             阻止交互并退出键盘顺序，字段也不参与提交。
@@ -137,9 +133,14 @@ export default defineComponentPage('text-field', {
             启用浏览器约束，必填要求也应写在可见标签或提示中。
           </li>
           <li>
-            error 以文字和装饰性提醒标记呈现错误，不执行校验；标记不另行命名或播报。本地校验例使用
-            noValidate 跳过浏览器提交校验，由示例检查昵称并设置或清除
-            error；邮箱例保留浏览器必填与格式校验。
+            error 以文字和装饰性提醒标记呈现错误，不执行校验。标记不另行命名或播报。
+            本页昵称例由调用方校验并维护 error，邮箱例使用浏览器约束。两种原生接入方式见{' '}
+            <a href="#/guides/forms?section=validation">原生表单的校验与焦点</a>。
+          </li>
+          <li>
+            昵称例使用 <code>nickname.trim().length</code> 检查 2～12 的长度。trim
+            去除首尾空白，length 按 UTF-16 代码单元计数，一个 😀 的长度为
+            2，可能与看到的字符数量不同。
           </li>
           <li>
             trailing 是可交互的尾部内容槽，与仅作装饰的 leading 分开。适合一个默认 44px 的
@@ -159,6 +160,25 @@ export default defineComponentPage('text-field', {
       ),
     },
     {
+      id: 'form-integration',
+      title: '与 Form 配合',
+      kind: 'integration',
+      content: (
+        <>
+          <CodeBlock
+            source={`import { Form, Input } from 'yahha-ui';
+
+<Form initialValues={{ nickname: '' }}>
+  {(form) => <Input {...form.input('nickname')} label="昵称" required />}
+</Form>`}
+          />
+          <p>
+            统一校验、提交与重置见 <a href="#/components/form">Form 表单</a>。
+          </p>
+        </>
+      ),
+    },
+    {
       id: 'api',
       title: 'API',
       content: (
@@ -169,7 +189,7 @@ export default defineComponentPage('text-field', {
       ),
       api: [
         {
-          name: 'TextFieldProps',
+          name: 'InputProps',
           rows: [
             {
               name: 'label',
@@ -207,13 +227,15 @@ export default defineComponentPage('text-field', {
             },
             {
               name: 'value',
-              type: 'TextFieldProps["value"]',
-              description: '受控值，需配合 onChange。不要与 defaultValue 同时使用。',
+              type: 'string | readonly string[] | number',
+              description:
+                '沿用 React input 原生值类型，单行文字通常使用 string。受控值需配合 onChange，不与 defaultValue 同时使用。',
             },
             {
               name: 'defaultValue',
-              type: 'TextFieldProps["defaultValue"]',
-              description: '非受控输入的初始值。不要在生命周期内切换受控模式。',
+              type: 'string | readonly string[] | number',
+              description:
+                '非受控输入的初始值，单行文字通常使用 string。不要在生命周期内切换受控模式。',
             },
             {
               name: 'onChange',
@@ -262,7 +284,7 @@ export default defineComponentPage('text-field', {
             },
             {
               name: 'classNames',
-              type: 'TextFieldProps["classNames"]',
+              type: 'InputProps["classNames"]',
               description: '各部位的附加类名，见下表。与默认类名合并。',
             },
             {
@@ -282,7 +304,7 @@ export default defineComponentPage('text-field', {
             },
             {
               name: 'aria-invalid',
-              type: 'TextFieldProps["aria-invalid"]',
+              type: 'boolean | "false" | "true" | "grammar" | "spelling"',
               description:
                 '无 error 时沿用传入值；有 error 时固定为 true。true 会显示错误边框，但不会自动生成错误说明。',
             },

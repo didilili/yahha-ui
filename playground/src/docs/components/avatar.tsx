@@ -1,3 +1,4 @@
+import { Link } from 'yahha-ui';
 import AvatarBasic from '../../examples/content/AvatarBasic';
 import avatarBasicSource from '../../examples/content/AvatarBasic.tsx?raw';
 import AvatarSizes from '../../examples/content/AvatarSizes';
@@ -53,20 +54,12 @@ export default defineComponentPage('avatar', {
           AvatarPicture,
           avatarPictureSource,
         ),
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看作者身份与弹窗组合',
-      examples: [
         {
           id: 'avatar-author',
-          title: '作者身份与弹窗',
-          description: '通过独立按钮查看介绍，关闭后返回入口。',
+          title: '头像、完整署名与作者介绍',
+          description: '头像旁保留完整署名，通过独立按钮查看介绍，关闭后返回入口。',
           component: AvatarAuthor,
           source: avatarAuthorSource,
-          toc: false,
         },
       ],
     },
@@ -76,8 +69,26 @@ export default defineComponentPage('avatar', {
       content: (
         <p>
           头像内保留简短标记，完整姓名和简介放在旁边。姓名较长时，可用 fallback
-          指定一个更容易辨认的字或缩写；关注、联系等操作放在身份信息之外。
+          指定一个更容易辨认的字或缩写；关注、联系等操作放在身份信息之外。文章中的署名布局见{' '}
+          <Link href="#/guides/reading?section=reading-example">文章阅读与收藏</Link>。
         </p>
+      ),
+    },
+    {
+      id: 'behavior',
+      title: '姓名、图片回退与恢复',
+      content: (
+        <ul>
+          {[
+            'name 为整个头像提供可访问名称，内部图片和回退内容均为装饰。空白姓名的可访问名称为“匿名用户”，默认显示问号。',
+            '作者行已有完整姓名时，可将头像设为 aria-hidden，避免重复表达同一身份；介绍操作使用独立按钮，关闭后返回该入口。',
+            '缺图、加载中和加载失败时保留回退内容；更换 src 后重新加载，新图片就绪后移除回退，透明图片不会透出姓名。头像尺寸在这个过程中保持不变。',
+            '默认按完整字素取姓名的前两项；不支持 Intl.Segmenter 的旧环境按 Unicode 码点降级，需要固定缩写时可显式传入 fallback。',
+            'fallback 只放展示内容，不放链接或按钮。头像不接收 children，也不透传原生 img 属性。',
+          ].map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
       ),
     },
     {
@@ -126,23 +137,6 @@ export default defineComponentPage('avatar', {
           ],
         },
       ],
-    },
-    {
-      id: 'behavior',
-      title: '姓名、图片回退与恢复',
-      content: (
-        <ul>
-          {[
-            'name 为整个头像提供可访问名称，内部图片和回退内容均为装饰。空白姓名的可访问名称为“匿名用户”，默认显示问号。',
-            '作者行已有完整姓名时，可将头像设为 aria-hidden，避免重复表达同一身份；介绍操作使用独立按钮，关闭后返回该入口。',
-            '缺图、加载中和加载失败时保留回退内容；更换 src 后重新加载，新图片就绪后移除回退，透明图片不会透出姓名。头像尺寸在这个过程中保持不变。',
-            '默认按完整字素取姓名的前两项；不支持 Intl.Segmenter 的旧环境按 Unicode 码点降级，需要固定缩写时可显式传入 fallback。',
-            'fallback 只放展示内容，不放链接或按钮。头像不接收 children，也不透传原生 img 属性。',
-          ].map((note) => (
-            <li key={note}>{note}</li>
-          ))}
-        </ul>
-      ),
     },
   ],
 });

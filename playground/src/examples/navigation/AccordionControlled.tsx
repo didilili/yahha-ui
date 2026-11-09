@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Accordion, Button, EmptyState, Text, TextField } from 'yahha-ui';
+import { Accordion, Button, EmptyState, Text, Input } from 'yahha-ui';
 
 const items = [
   {
@@ -51,7 +51,7 @@ export default function AccordionControlled() {
 
   return (
     <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
-      <TextField
+      <Input
         ref={inputRef}
         label="搜索说明标题"
         type="text"

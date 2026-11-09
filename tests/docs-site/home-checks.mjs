@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { basename, extname } from 'node:path';
+import { openSearchDialog, searchField } from './search-dialog-helpers.mjs';
 
 async function requireFocus(locator, message) {
   await locator
@@ -312,13 +313,21 @@ export async function verifyHome(browser, baseURL) {
       await requireFocus(themeTrigger, 'Mobile Popover dismissal must return to its trigger.');
       const open = page.getByRole('button', { name: '打开文档目录', exact: true });
       await open.click();
-      const search = page.getByRole('searchbox', { name: '搜索文档', exact: true });
-      await requireFocus(search, 'Opening the homepage directory must focus document search.');
+      const directorySearch = page
+        .locator('.docs-sidebar')
+        .getByRole('button', { name: '搜索文档', exact: true });
+      await requireFocus(
+        directorySearch,
+        'Opening the homepage directory must focus the search entry.',
+      );
       await page.keyboard.press('Escape');
       assert.equal(await open.getAttribute('aria-expanded'), 'false');
       await requireFocus(open, 'Escape must return focus to the homepage directory trigger.');
       await open.click();
-      await requireFocus(search, 'Reopening the homepage directory must restore search access.');
+      await requireFocus(
+        directorySearch,
+        'Reopening the homepage directory must restore search access.',
+      );
       await page.setViewportSize({ width: 1440, height: 900 });
       await page.locator('.docs-sidebar').waitFor({ state: 'hidden' });
       await requireFocus(
@@ -327,12 +336,13 @@ export async function verifyHome(browser, baseURL) {
       );
       await page.setViewportSize({ width, height: 844 });
       await open.click();
-      await requireFocus(search, 'The directory must reopen after returning to mobile.');
-      await search.fill('Select');
-      await page
-        .locator('.docs-sidebar')
-        .getByRole('link', { name: 'Select 下拉选择器', exact: true })
-        .click();
+      await requireFocus(directorySearch, 'The directory must reopen after returning to mobile.');
+      const search = await openSearchDialog(page, directorySearch);
+      // The modal hides background controls from the accessibility tree.
+      assert.equal(await page.locator('.mobile-menu').getAttribute('aria-expanded'), 'false');
+      await searchField(page).fill('Select');
+      await search.getByRole('link', { name: 'Select 下拉选择器', exact: true }).click();
+      await search.waitFor({ state: 'hidden' });
       const selectHeading = page.getByRole('heading', {
         level: 1,
         name: 'Select 下拉选择器',

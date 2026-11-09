@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-  Button,
-  Checkbox,
-  Heading,
-  Text,
-  TextField,
-  ThemeProvider,
-  type ThemeTokens,
-} from 'yahha-ui';
+import { Button, Checkbox, Heading, Text, Input, ThemeProvider, type ThemeTokens } from 'yahha-ui';
 import styles from './design-reference.module.css';
 
 const colors = [
@@ -156,26 +148,21 @@ export function DesignStateReference() {
           <Text size="sm" role="status">
             {saved ? '已收藏。' : '尚未收藏。'}
           </Text>
-          <TextField label="手记标题" defaultValue="周末的散步" />
+          <Input label="手记标题" defaultValue="周末的散步" />
         </div>
         <div className={styles.state}>
           <h3 className={styles.stateTitle}>选中与禁用</h3>
           <Checkbox label="接收手记更新" defaultChecked />
           <Button disabled>暂不可保存</Button>
-          <TextField label="禁用字段" defaultValue="暂不可编辑" disabled />
+          <Input label="禁用字段" defaultValue="暂不可编辑" disabled />
         </div>
         <div className={styles.state}>
           <h3 className={styles.stateTitle}>只读</h3>
-          <TextField
-            label="作者名称"
-            defaultValue="库米"
-            readOnly
-            hint="可以选择和复制，不能修改。"
-          />
+          <Input label="作者名称" defaultValue="库米" readOnly hint="可以选择和复制，不能修改。" />
         </div>
         <div className={styles.state}>
           <h3 className={styles.stateTitle}>错误与恢复</h3>
-          <TextField
+          <Input
             label="联系邮箱"
             type="email"
             value={email}

@@ -48,13 +48,6 @@ export default defineComponentPage('progress', {
           ProgressAppearance,
           progressAppearanceSource,
         ),
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看清单进度示例',
-      examples: [
         example(
           'progress-checklist',
           '由清单计算进度',

@@ -22,8 +22,6 @@ import ButtonForm from '../../examples/foundations/ButtonForm';
 import buttonFormSource from '../../examples/foundations/ButtonForm.tsx?raw';
 import ButtonDestructive from '../../examples/foundations/ButtonDestructive';
 import buttonDestructiveSource from '../../examples/foundations/ButtonDestructive.tsx?raw';
-import ButtonDeleteDraft from '../../examples/foundations/ButtonDeleteDraft';
-import buttonDeleteDraftSource from '../../examples/foundations/ButtonDeleteDraft.tsx?raw';
 import { defineComponentPage } from '../page';
 import { buttonNativeRows, buttonVariantRows } from '../page-helpers';
 
@@ -61,6 +59,13 @@ export default defineComponentPage('button', {
           source: buttonVariantsSource,
         },
         {
+          id: 'button-appearance',
+          title: '常规与软团外观',
+          description: '保持文案、尺寸和强调程度一致，只比较 appearance。',
+          component: ButtonAppearance,
+          source: buttonAppearanceSource,
+        },
+        {
           id: 'button-sizes',
           title: '尺寸',
           description: '用相同文案对比三档尺寸，默认使用中号。',
@@ -73,6 +78,20 @@ export default defineComponentPage('button', {
           description: '在文字前后放置装饰图标，操作名称保持可见。',
           component: ButtonIcons,
           source: buttonIconsSource,
+        },
+        {
+          id: 'button-layout',
+          title: '全宽与长文案',
+          description: '在同一窄栏中观察全宽布局和长文案换行。',
+          component: ButtonLayout,
+          source: buttonLayoutSource,
+        },
+        {
+          id: 'button-destructive',
+          title: '危险操作',
+          description: '用相同动作对比三种强调程度的危险按钮。',
+          component: ButtonDestructive,
+          source: buttonDestructiveSource,
         },
         {
           id: 'button-states',
@@ -89,13 +108,6 @@ export default defineComponentPage('button', {
           source: buttonLoadingVariantsSource,
         },
         {
-          id: 'button-destructive',
-          title: '危险操作',
-          description: '用相同动作对比三种强调程度的危险按钮。',
-          component: ButtonDestructive,
-          source: buttonDestructiveSource,
-        },
-        {
           id: 'button-toggle',
           title: '切换按钮',
           description: '点击切换收藏状态，通过 aria-pressed 表达是否选中。',
@@ -103,51 +115,44 @@ export default defineComponentPage('button', {
           source: buttonToggleSource,
         },
         {
-          id: 'button-appearance',
-          title: '常规与软团外观',
-          description: '保持文案、尺寸和强调程度一致，只比较 appearance。',
-          component: ButtonAppearance,
-          source: buttonAppearanceSource,
+          id: 'button-form',
+          title: '原生表单提交与重置',
+          description: '用 type="submit" 触发表单提交，用 type="reset" 恢复输入并清理本例结果。',
+          component: ButtonForm,
+          source: buttonFormSource,
         },
-        {
-          id: 'button-layout',
-          title: '全宽与长文案',
-          description: '在同一窄栏中观察全宽布局和长文案换行。',
-          component: ButtonLayout,
-          source: buttonLayoutSource,
-        },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看异步、确认与表单示例',
-      examples: [
         {
           id: 'button-async',
           title: '异步加载与重试',
           description: '模拟首次保存失败与重试成功；状态仅保留在当前示例。',
-          toc: false,
           component: ButtonAsync,
           source: buttonAsyncSource,
         },
-        {
-          id: 'button-delete-draft',
-          toc: false,
-          title: '删除确认与恢复',
-          description: '确认后删除本地草稿，取消时保留，删除后可恢复。',
-          component: ButtonDeleteDraft,
-          source: buttonDeleteDraftSource,
-        },
-        {
-          id: 'button-form',
-          toc: false,
-          title: '提交与重置',
-          description: '填写称呼后提交，或重置输入与结果；不发送请求。',
-          component: ButtonForm,
-          source: buttonFormSource,
-        },
       ],
+    },
+    {
+      id: 'recipes',
+      title: '相关组合',
+      kind: 'related',
+      content: (
+        <ul>
+          <li>
+            <a href="#/guides/interactions?section=button-delete-draft">删除确认与恢复</a>
+          </li>
+        </ul>
+      ),
+    },
+    {
+      id: 'form-integration',
+      title: '与 Form 配合',
+      kind: 'integration',
+      content: (
+        <p>
+          在 Form 中使用 <code>type="submit"</code> 提交或 <code>type="reset"</code> 重置。将{' '}
+          <code>form.isSubmitting</code> 传给 loading 呈现提交状态，见{' '}
+          <a href="#/components/form?section=form-submission">异步提交与字段错误</a>。
+        </p>
+      ),
     },
     {
       id: 'design',

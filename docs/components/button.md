@@ -4,7 +4,7 @@
 
 用于触发操作，支持不同强调程度、禁用、加载和切换状态。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Button } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Button } from 'yahha-ui';
 
 点击按钮更新问候次数。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonBasic.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ButtonBasic.tsx -->
 
@@ -54,7 +54,7 @@ export default function ButtonBasic() {
 
 用相同文案对比主要、次要和文字按钮。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonVariants.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ButtonVariants.tsx -->
 
@@ -75,13 +75,40 @@ export default function ButtonVariants() {
 }
 ```
 
+<a id="button-appearance"></a>
+
+### 常规与软团外观
+
+保持文案、尺寸和强调程度一致，只比较 appearance。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonAppearance.tsx)
+
+<!-- example-source: playground/src/examples/foundations/ButtonAppearance.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonAppearance() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+      {(['default', 'soft'] as const).map((appearance) => (
+        <div key={appearance} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>{appearance === 'default' ? '常规（默认）' : '软团'}</span>
+          <Button appearance={appearance}>打个招呼</Button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="button-sizes"></a>
 
 ### 尺寸
 
 用相同文案对比三档尺寸，默认使用中号。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonSizes.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ButtonSizes.tsx -->
 
@@ -116,7 +143,7 @@ export default function ButtonSizes() {
 
 在文字前后放置装饰图标，操作名称保持可见。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonIcons.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonIcons.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ButtonIcons.tsx -->
 
@@ -147,13 +174,72 @@ export default function ButtonIcons() {
 }
 ```
 
+<a id="button-layout"></a>
+
+### 全宽与长文案
+
+在同一窄栏中观察全宽布局和长文案换行。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonLayout.tsx)
+
+<!-- example-source: playground/src/examples/foundations/ButtonLayout.tsx -->
+
+```tsx
+import { ArrowRightIcon, Button, PlusIcon } from 'yahha-ui';
+
+export default function ButtonLayout() {
+  return (
+    <div style={{ display: 'grid', gap: 16, width: 'min(100%, 240px)' }}>
+      <Button style={{ width: '100%' }}>保存草稿</Button>
+      <Button
+        variant="secondary"
+        startIcon={<PlusIcon />}
+        endIcon={<ArrowRightIcon />}
+        style={{ width: '100%' }}
+      >
+        将这篇周末散步记录加入稍后阅读
+      </Button>
+    </div>
+  );
+}
+```
+
+<a id="button-destructive"></a>
+
+### 危险操作
+
+用相同动作对比三种强调程度的危险按钮。
+
+[查看示例文件](../../playground/src/examples/foundations/ButtonDestructive.tsx)
+
+<!-- example-source: playground/src/examples/foundations/ButtonDestructive.tsx -->
+
+```tsx
+import { Button } from 'yahha-ui';
+
+export default function ButtonDestructive() {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+      {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
+        <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
+          <span>{variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}</span>
+          <Button variant={variant} destructive>
+            删除草稿
+          </Button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
 <a id="button-states"></a>
 
 ### 禁用与加载
 
 对比禁用和加载状态；加载图形保留按钮名称。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonStates.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonStates.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ButtonStates.tsx -->
 
@@ -182,7 +268,7 @@ export default function ButtonStates() {
 
 对比默认三墨点与可选小花饼，两种图形均通过 loading 显示。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonLoadingVariants.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonLoadingVariants.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ButtonLoadingVariants.tsx -->
 
@@ -207,42 +293,13 @@ export default function ButtonLoadingVariants() {
 }
 ```
 
-<a id="button-destructive"></a>
-
-### 危险操作
-
-用相同动作对比三种强调程度的危险按钮。
-
-[查看示例文件](../../playground/src/examples/foundations/ButtonDestructive.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/ButtonDestructive.tsx -->
-
-```tsx
-import { Button } from 'yahha-ui';
-
-export default function ButtonDestructive() {
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-      {(['primary', 'secondary', 'ghost'] as const).map((variant) => (
-        <div key={variant} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>{variant === 'primary' ? '主要' : variant === 'secondary' ? '次要' : '文字'}</span>
-          <Button variant={variant} destructive>
-            删除草稿
-          </Button>
-        </div>
-      ))}
-    </div>
-  );
-}
-```
-
 <a id="button-toggle"></a>
 
 ### 切换按钮
 
 点击切换收藏状态，通过 aria-pressed 表达是否选中。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonToggle.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonToggle.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ButtonToggle.tsx -->
 
@@ -289,66 +346,48 @@ export default function ButtonToggle() {
 }
 ```
 
-<a id="button-appearance"></a>
+<a id="button-form"></a>
 
-### 常规与软团外观
+### 原生表单提交与重置
 
-保持文案、尺寸和强调程度一致，只比较 appearance。
+用 type="submit" 触发表单提交，用 type="reset" 恢复输入并清理本例结果。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonForm.tsx)
 
-<!-- example-source: playground/src/examples/foundations/ButtonAppearance.tsx -->
+<!-- example-source: playground/src/examples/foundations/ButtonForm.tsx -->
 
 ```tsx
-import { Button } from 'yahha-ui';
+import { useState } from 'react';
+import { Button, Text, Input } from 'yahha-ui';
 
-export default function ButtonAppearance() {
+export default function ButtonForm() {
+  const [message, setMessage] = useState('尚未提交');
+
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
-      {(['default', 'soft'] as const).map((appearance) => (
-        <div key={appearance} style={{ display: 'grid', justifyItems: 'start', gap: 8 }}>
-          <span>{appearance === 'default' ? '常规（默认）' : '软团'}</span>
-          <Button appearance={appearance}>打个招呼</Button>
-        </div>
-      ))}
-    </div>
+    <form
+      style={{ display: 'grid', justifyItems: 'start', gap: 16, maxWidth: 400 }}
+      onInput={() => setMessage('尚未提交')}
+      onReset={() => setMessage('尚未提交')}
+      onSubmit={(event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        setMessage(`你好，${String(data.get('nickname'))}！`);
+      }}
+    >
+      <Input label="怎么称呼你" name="nickname" required autoComplete="nickname" />
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+        <Button type="submit">提交表单</Button>
+        <Button type="reset" variant="secondary">
+          重置
+        </Button>
+      </div>
+      <Text size="sm" tone="muted" role="status">
+        {message}
+      </Text>
+    </form>
   );
 }
 ```
-
-<a id="button-layout"></a>
-
-### 全宽与长文案
-
-在同一窄栏中观察全宽布局和长文案换行。
-
-[查看示例文件](../../playground/src/examples/foundations/ButtonLayout.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/ButtonLayout.tsx -->
-
-```tsx
-import { ArrowRightIcon, Button, PlusIcon } from 'yahha-ui';
-
-export default function ButtonLayout() {
-  return (
-    <div style={{ display: 'grid', gap: 16, width: 'min(100%, 240px)' }}>
-      <Button style={{ width: '100%' }}>保存草稿</Button>
-      <Button
-        variant="secondary"
-        startIcon={<PlusIcon />}
-        endIcon={<ArrowRightIcon />}
-        style={{ width: '100%' }}
-      >
-        将这篇周末散步记录加入稍后阅读
-      </Button>
-    </div>
-  );
-}
-```
-
-<a id="integration"></a>
-
-## 进阶用法
 
 <a id="button-async"></a>
 
@@ -356,7 +395,7 @@ export default function ButtonLayout() {
 
 模拟首次保存失败与重试成功；状态仅保留在当前示例。
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonAsync.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/ButtonAsync.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ButtonAsync.tsx -->
 
@@ -408,132 +447,17 @@ export default function ButtonAsync() {
 }
 ```
 
-<a id="button-delete-draft"></a>
+<a id="recipes"></a>
 
-### 删除确认与恢复
+## 相关组合
 
-确认后删除本地草稿，取消时保留，删除后可恢复。
+- [删除确认与恢复](../recipes/interactions.md#button-delete-draft)
 
-[查看示例文件](../../playground/src/examples/foundations/ButtonDeleteDraft.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+<a id="form-integration"></a>
 
-<!-- example-source: playground/src/examples/foundations/ButtonDeleteDraft.tsx -->
+## 与 Form 配合
 
-```tsx
-import { useId, useRef, useState } from 'react';
-import { Button, Dialog, EmptyState, Heading, Text } from 'yahha-ui';
-
-export default function ButtonDeleteDraft() {
-  const [hasDraft, setHasDraft] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const draftTitleId = useId();
-  const actionRef = useRef<HTMLButtonElement>(null);
-  const cancelRef = useRef<HTMLButtonElement>(null);
-
-  return (
-    <div style={{ display: 'grid', gap: 16, maxWidth: 520 }}>
-      {hasDraft ? (
-        <section aria-labelledby={draftTitleId} style={{ display: 'grid', gap: 8 }}>
-          <Heading level={3} id={draftTitleId}>
-            周末散步记录
-          </Heading>
-          <Text>沿河走了一小段，记下树影和路边新开的花。</Text>
-        </section>
-      ) : (
-        <EmptyState title="草稿已删除" description="这份散步记录仍可通过下方按钮恢复。" />
-      )}
-      <div>
-        <Button
-          ref={actionRef}
-          variant="secondary"
-          destructive={hasDraft}
-          onClick={() => {
-            if (hasDraft) {
-              setOpen(true);
-              return;
-            }
-            setHasDraft(true);
-            setMessage('草稿已恢复。');
-          }}
-        >
-          {hasDraft ? '删除草稿' : '恢复草稿'}
-        </Button>
-      </div>
-      <Dialog
-        open={open}
-        onOpenChange={setOpen}
-        title="删除这份草稿？"
-        description="将移除当前演示中的「周末散步记录」，删除后仍可恢复。"
-        initialFocus={cancelRef}
-        finalFocus={actionRef}
-        footer={
-          <>
-            <Button ref={cancelRef} variant="secondary" onClick={() => setOpen(false)}>
-              取消
-            </Button>
-            <Button
-              destructive
-              onClick={() => {
-                setHasDraft(false);
-                setOpen(false);
-                setMessage('草稿已删除，可通过“恢复草稿”按钮恢复。');
-              }}
-            >
-              确认删除
-            </Button>
-          </>
-        }
-      />
-      <Text size="sm" tone="muted" role="status">
-        {message}
-      </Text>
-    </div>
-  );
-}
-```
-
-<a id="button-form"></a>
-
-### 提交与重置
-
-填写称呼后提交，或重置输入与结果；不发送请求。
-
-[查看示例文件](../../playground/src/examples/foundations/ButtonForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/ButtonForm.tsx -->
-
-```tsx
-import { useState } from 'react';
-import { Button, Text, TextField } from 'yahha-ui';
-
-export default function ButtonForm() {
-  const [message, setMessage] = useState('尚未提交');
-
-  return (
-    <form
-      style={{ display: 'grid', justifyItems: 'start', gap: 16, maxWidth: 400 }}
-      onInput={() => setMessage('尚未提交')}
-      onReset={() => setMessage('尚未提交')}
-      onSubmit={(event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        setMessage(`你好，${String(data.get('nickname'))}！`);
-      }}
-    >
-      <TextField label="怎么称呼你" name="nickname" required autoComplete="nickname" />
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-        <Button type="submit">提交表单</Button>
-        <Button type="reset" variant="secondary">
-          重置
-        </Button>
-      </div>
-      <Text size="sm" tone="muted" role="status">
-        {message}
-      </Text>
-    </form>
-  );
-}
-```
+在 Form 中使用 `type="submit"` 提交或 `type="reset"` 重置。将 `form.isSubmitting` 传给 loading 呈现提交状态，见 [异步提交与字段错误](form.md#form-submission)。
 
 <a id="design"></a>
 

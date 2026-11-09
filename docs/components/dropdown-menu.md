@@ -4,7 +4,7 @@
 
 用于展示单层操作菜单，支持键盘导航与禁用项。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { DropdownMenu } from 'yahha-ui';
@@ -30,7 +30,7 @@ import { DropdownMenu } from 'yahha-ui';
 
 选择菜单项后显示当前操作。
 
-[查看示例文件](../../playground/src/examples/floating/MenuBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/MenuBasic.tsx)
 
 <!-- example-source: playground/src/examples/floating/MenuBasic.tsx -->
 
@@ -71,7 +71,7 @@ export default function MenuBasic() {
 
 打开或关闭菜单，查看展开状态。
 
-[查看示例文件](../../playground/src/examples/floating/MenuOpen.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/MenuOpen.tsx)
 
 <!-- example-source: playground/src/examples/floating/MenuOpen.tsx -->
 
@@ -104,160 +104,73 @@ export default function MenuOpen() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-操作入口随草稿一起移出时，焦点转到仍存在的恢复按钮；恢复后回到新挂载的入口。 菜单名称包含已保存标题，未提交的编辑内容在移出和恢复后继续保留。
-
 <a id="controlled"></a>
 
 ### 触发器移除后的焦点恢复
 
-移出草稿时转到恢复入口，恢复后返回新菜单按钮。
+菜单含禁用发布项与危险移出项；移出手记和菜单入口后回焦恢复按钮，恢复后返回菜单入口。
 
-[查看示例文件](../../playground/src/examples/floating/MenuControlled.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/floating/MenuTriggerRecovery.tsx)
 
-<!-- example-source: playground/src/examples/floating/MenuControlled.tsx -->
+<!-- example-source: playground/src/examples/floating/MenuTriggerRecovery.tsx -->
 
 ```tsx
 import { useEffect, useRef, useState } from 'react';
-import { Button, DropdownMenu, Heading, Text, TextField } from 'yahha-ui';
+import { Button, DropdownMenu, Text } from 'yahha-ui';
 
-export default function MenuControlled() {
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('草稿尚未发布');
+export default function MenuTriggerRecovery() {
   const [removed, setRemoved] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState('周末想写的一页');
-  const [draftTitle, setDraftTitle] = useState(title);
   const trigger = useRef<HTMLButtonElement>(null);
-  const editor = useRef<HTMLInputElement>(null);
   const recovery = useRef<HTMLButtonElement>(null);
-  const [focusTarget, setFocusTarget] = useState<'editor' | 'trigger' | 'recovery' | null>(null);
+  const moveFocus = useRef(false);
 
   useEffect(() => {
-    if (!focusTarget) return;
+    if (!moveFocus.current) return;
     const frame = requestAnimationFrame(() => {
-      const target =
-        focusTarget === 'editor'
-          ? editor.current
-          : focusTarget === 'recovery'
-            ? recovery.current
-            : trigger.current;
-      target?.focus();
-      setFocusTarget(null);
+      (removed ? recovery : trigger).current?.focus();
+      moveFocus.current = false;
     });
     return () => cancelAnimationFrame(frame);
-  }, [focusTarget]);
-
-  function restore() {
-    setOpen(false);
-    setRemoved(false);
-    setMessage('草稿已恢复，内容没有丢失');
-    setFocusTarget('trigger');
-  }
+  }, [removed]);
 
   return (
-    <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
-      {!removed && (
-        <article aria-label="示例草稿" style={{ display: 'grid', gap: 16, minWidth: 0 }}>
-          {editing ? (
-            <form
-              style={{ display: 'grid', gap: 12 }}
-              onSubmit={(event) => {
-                event.preventDefault();
-                if (!draftTitle.trim()) {
-                  editor.current?.focus();
-                  return;
-                }
-                setTitle(draftTitle.trim());
-                setEditing(false);
-                setMessage('草稿标题已保存在本页');
-                setFocusTarget('trigger');
-              }}
-            >
-              <TextField
-                ref={editor}
-                label="草稿标题"
-                value={draftTitle}
-                required
-                maxLength={60}
-                hint="1–60 个字符。"
-                onChange={(event) => setDraftTitle(event.target.value)}
-              />
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                <Button type="submit" disabled={!draftTitle.trim()}>
-                  保存草稿
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    setEditing(false);
-                    setMessage('已取消编辑，草稿标题没有改变');
-                    setFocusTarget('trigger');
-                  }}
-                >
-                  取消编辑
-                </Button>
-              </div>
-            </form>
-          ) : (
-            <>
-              <Heading level={3}>{title}</Heading>
-              <Text>散步时拐进面包店，回家才发现路线图一笔也没记。</Text>
-            </>
-          )}
-          <div style={{ justifySelf: 'start' }}>
-            <DropdownMenu
-              trigger={
-                <Button ref={trigger} variant="secondary" aria-label={`操作草稿：${title}`}>
-                  草稿操作
-                </Button>
-              }
-              open={open}
-              onOpenChange={setOpen}
-              align="end"
-              items={[
-                {
-                  id: 'edit',
-                  label: '继续编辑',
-                  onSelect: () => {
-                    if (!editing) setDraftTitle(title);
-                    setEditing(true);
-                    setFocusTarget('editor');
-                    setMessage('正在编辑草稿');
-                  },
-                },
-                {
-                  id: 'publish',
-                  label: '发布（等待审核）',
-                  disabled: true,
-                  onSelect: () => setMessage('已发布'),
-                },
-                {
-                  id: 'remove',
-                  label: '移出草稿列表',
-                  destructive: true,
-                  onSelect: () => {
-                    setOpen(false);
-                    setRemoved(true);
-                    setMessage('已从示例列表中移出，可恢复原草稿');
-                    setFocusTarget('recovery');
-                  },
-                },
-              ]}
-            />
-          </div>
-        </article>
-      )}
-      {removed && (
-        <Button ref={recovery} onClick={restore} style={{ justifySelf: 'start' }}>
-          恢复草稿
+    <div style={{ display: 'grid', gap: 16, justifyItems: 'start' }}>
+      {removed ? (
+        <Button
+          ref={recovery}
+          onClick={() => {
+            moveFocus.current = true;
+            setRemoved(false);
+          }}
+        >
+          恢复手记
         </Button>
+      ) : (
+        <>
+          <Text>《周末散步》：乌萨奇在路线图上，先圈出了三家面包店。</Text>
+          <DropdownMenu
+            trigger={
+              <Button ref={trigger} variant="secondary" aria-label="操作手记：周末散步">
+                手记操作
+              </Button>
+            }
+            items={[
+              { id: 'publish', label: '发布（等待审核）', disabled: true, onSelect: () => {} },
+              {
+                id: 'remove',
+                label: '移出手记列表',
+                destructive: true,
+                onSelect: () => {
+                  moveFocus.current = true;
+                  setRemoved(true);
+                },
+              },
+            ]}
+          />
+        </>
       )}
       <Text size="sm" tone="muted" role="status">
-        {message}
+        {removed ? '手记已移出，可以恢复。' : '手记在列表中，内容仍然保留。'}
       </Text>
     </div>
   );
@@ -270,7 +183,7 @@ export default function MenuControlled() {
 
 每个菜单项使用稳定、唯一的 id 和清楚的文字标签。激活时执行 onSelect 并请求关闭；使用受控 open 时，调用方需要响应 onOpenChange。
 
-业务确认、异步执行和失败处理由调用方负责，destructive 只改变危险动作的文字颜色。结果应留在页面，移出内容等操作可保留恢复入口。组合示例见 [文章编辑与管理](../README.md#站内指南)。
+业务确认、异步执行和失败处理由调用方负责，destructive 只改变危险动作的文字颜色。结果应留在页面，移出内容等操作可保留恢复入口。完整的 [草稿编辑、移出与恢复](../recipes/interactions.md#controlled)保留未提交的编辑内容；菜单与弹窗的组合见 [文章编辑与管理](../README.md#站内指南)。
 
 <a id="api"></a>
 
@@ -280,20 +193,20 @@ export default function MenuControlled() {
 
 ### DropdownMenuProps
 
-| 属性                | 说明                                                                     | 类型                                   | 默认值     |
-| ------------------- | ------------------------------------------------------------------------ | -------------------------------------- | ---------- |
-| `trigger` **必填**  | 原生 button 或转发原生 button 属性、事件及 ref 的组件，例如 Button。     | `ReactElement`                         | —          |
-| `items` **必填**    | 单层动作列表；id 在当前菜单内唯一。                                      | `readonly DropdownMenuItem[]`          | —          |
-| `open`              | 受控展开状态；同时响应 onOpenChange。                                    | `boolean`                              | —          |
-| `defaultOpen`       | 非受控初始状态，与 open 二选一。                                         | `boolean`                              | `false`    |
-| `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                  | `(open: boolean) => void`              | —          |
-| `disabled`          | 禁用触发器，阻止用户打开菜单。                                           | `boolean`                              | `false`    |
-| `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。 | `DropdownMenuProps['side']`            | `"bottom"` |
-| `align`             | 相对触发器的对齐方向。                                                   | `"start" \| "center" \| "end"`         | `"start"`  |
-| `sideOffset`        | 与触发器的间距，单位 px。                                                | `number`                               | `8`        |
-| `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                | `DropdownMenuProps['portalContainer']` | `body`     |
-| `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。               | `string / CSSProperties`               | —          |
-| `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                    | `Ref<HTMLDivElement>`                  | —          |
+| 属性                | 说明                                                                     | 类型                                                                                | 默认值     |
+| ------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- | ---------- |
+| `trigger` **必填**  | 原生 button 或转发原生 button 属性、事件及 ref 的组件，例如 Button。     | `ReactElement`                                                                      | —          |
+| `items` **必填**    | 单层动作列表；id 在当前菜单内唯一。                                      | `readonly DropdownMenuItem[]`                                                       | —          |
+| `open`              | 受控展开状态；同时响应 onOpenChange。                                    | `boolean`                                                                           | —          |
+| `defaultOpen`       | 非受控初始状态，与 open 二选一。                                         | `boolean`                                                                           | `false`    |
+| `onOpenChange`      | 打开或关闭请求。受控模式需要更新 open。                                  | `(open: boolean) => void`                                                           | —          |
+| `disabled`          | 禁用触发器，阻止用户打开菜单。                                           | `boolean`                                                                           | `false`    |
+| `side`              | top、bottom、left、right、inline-start、inline-end；空间不足时自动避让。 | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'`          | `"bottom"` |
+| `align`             | 相对触发器的对齐方向。                                                   | `"start" \| "center" \| "end"`                                                      | `"start"`  |
+| `sideOffset`        | 与触发器的间距，单位 px。                                                | `number`                                                                            | `8`        |
+| `portalContainer`   | Portal 挂载容器，支持元素、ShadowRoot、对应 ref 或 null。                | `HTMLElement \| ShadowRoot \| RefObject<HTMLElement \| ShadowRoot \| null> \| null` | `body`     |
+| `className / style` | 作用于浮层面板 div，不作用于触发器、定位层或 Portal 外层。               | `string / CSSProperties`                                                            | —          |
+| `ref`               | 指向浮层面板 div，关闭卸载后为 null。                                    | `Ref<HTMLDivElement>`                                                               | —          |
 
 ### DropdownMenuItem
 

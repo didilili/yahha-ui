@@ -4,7 +4,7 @@
 
 用于模态展示确认、简短表单或补充内容，管理弹窗焦点。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Dialog } from 'yahha-ui';
@@ -28,7 +28,7 @@ Dialog 使用受控状态，调用方必须保存 open 并响应 onOpenChange。
 
 通过 trigger 打开弹窗，关闭后焦点返回触发按钮。
 
-[查看示例文件](../../playground/src/examples/feedback/DialogBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/DialogBasic.tsx)
 
 <!-- example-source: playground/src/examples/feedback/DialogBasic.tsx -->
 
@@ -59,7 +59,7 @@ export default function DialogBasic() {
 
 由外部按钮更新 open，并通过 finalFocus 指定关闭后的焦点。
 
-[查看示例文件](../../playground/src/examples/feedback/DialogExternal.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/DialogExternal.tsx)
 
 <!-- example-source: playground/src/examples/feedback/DialogExternal.tsx -->
 
@@ -92,25 +92,19 @@ export default function DialogExternal() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-关闭保护由调用方实现；修改标题后，取消、Escape、关闭按钮和外点共用退出策略。 结果仅保留在当前示例；重新打开时从已保存值开始，保存成功或还原为已保存值后可以直接关闭。
-
 <a id="form"></a>
 
 ### 未保存修改的关闭确认
 
-修改标题后请求关闭，观察调用方如何保留草稿并确认是否放弃。
+修改标题后，取消、Escape、关闭按钮与外点共用调用方的关闭保护；保存或放弃后可关闭，重新打开从已保存值开始。
 
-[查看示例文件](../../playground/src/examples/feedback/DialogForm.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/feedback/DialogForm.tsx)
 
 <!-- example-source: playground/src/examples/feedback/DialogForm.tsx -->
 
 ```tsx
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { Alert, Button, Dialog, Text, TextField } from 'yahha-ui';
+import { Alert, Button, Dialog, Text, Input } from 'yahha-ui';
 
 export default function DialogForm() {
   const [open, setOpen] = useState(false);
@@ -226,7 +220,7 @@ export default function DialogForm() {
         }
       >
         <form id={formId} onSubmit={handleSubmit}>
-          <TextField
+          <Input
             ref={inputRef}
             label="站点标题"
             name="title"
@@ -271,29 +265,51 @@ export default function DialogForm() {
 
 编辑时由调用方区分草稿与已保存值，并决定取消、保存成功和失败时如何处理输入。组合示例见 [文章编辑与管理](../README.md#站内指南)，菜单打开编辑弹窗后通过 finalFocus 返回保留的菜单按钮。
 
+本页使用原生 form 展示草稿与关闭保护。需要统一管理字段校验、错误和提交时，可在弹窗内使用 [Form](form.md#form-submission)。 Form 的重置恢复其首次 initialValues。重新打开不同草稿时，可通过 key 重建 Form， 由应用继续维护未保存判断、关闭保护与保存后的 open 状态。
+
 <a id="api"></a>
 
 ## API
 
+initialFocus 与 finalFocus 的完整签名见本页的 [焦点参数类型](dialog.md#focus-types)。
+
 ### DialogProps
 
-| 属性                      | 说明                                                                                                                                                                              | 类型                             | 默认值                                   |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ---------------------------------------- |
-| `open` **必填**           | 是否打开弹窗。组件不提供 defaultOpen 或内部非受控状态。                                                                                                                           | `boolean`                        | —                                        |
-| `onOpenChange` **必填**   | 打开或关闭请求发生时调用；调用方更新 open 才会改变可见状态。                                                                                                                      | `(open: boolean) => void`        | —                                        |
-| `title` **必填**          | 弹窗标题，同时提供弹窗的可访问名称，应包含有意义的文字。                                                                                                                          | `ReactNode`                      | —                                        |
-| `trigger`                 | 可选触发元素。自定义组件需要把 button 原生属性、事件和 ref 传给实际元素；使用 Button 即可。                                                                                       | `ReactElement`                   | —                                        |
-| `description`             | 标题下方的补充说明，会关联到弹窗的可访问描述。                                                                                                                                    | `ReactNode`                      | —                                        |
-| `children`                | 弹窗正文，适合简短内容或表单。                                                                                                                                                    | `ReactNode`                      | —                                        |
-| `footer`                  | 底部操作区。自定义按钮需自行更新状态或提交表单。                                                                                                                                  | `ReactNode`                      | —                                        |
-| `illustration`            | 装饰插画；整个插槽隐藏于辅助技术，不要在其中放必要信息或操作。                                                                                                                    | `ReactNode`                      | —                                        |
-| `initialFocus`            | 可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。 | `DialogProps['initialFocus']`    | `首个可聚焦元素；触摸打开时聚焦弹窗本身` |
-| `finalFocus`              | 可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。                              | `DialogProps['finalFocus']`      | `触发器或先前聚焦元素`                   |
-| `portalContainer`         | Portal 挂载位置，支持元素、ShadowRoot、对应 ref 或 null。自定义容器的层叠、裁切环境由调用方负责。                                                                                 | `DialogProps['portalContainer']` | `body`                                   |
-| `disablePointerDismissal` | 阻止点击弹窗外部关闭；Escape、关闭按钮与受控状态仍有效。                                                                                                                          | `boolean`                        | `false`                                  |
-| `closeLabel`              | 关闭按钮的可访问名称。                                                                                                                                                            | `string`                         | `"关闭弹窗"`                             |
-| `className / style`       | 作用于弹窗面板 div；不透传其余 div 原生属性。                                                                                                                                     | `string / CSSProperties`         | —                                        |
-| `ref`                     | 指向弹窗面板 div。未打开时该元素通常未挂载。                                                                                                                                      | `Ref<HTMLDivElement>`            | —                                        |
+| 属性                      | 说明                                                                                                                                                                              | 类型                                                                                | 默认值                                   |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------- |
+| `open` **必填**           | 是否打开弹窗。组件不提供 defaultOpen 或内部非受控状态。                                                                                                                           | `boolean`                                                                           | —                                        |
+| `onOpenChange` **必填**   | 打开或关闭请求发生时调用；调用方更新 open 才会改变可见状态。                                                                                                                      | `(open: boolean) => void`                                                           | —                                        |
+| `title` **必填**          | 弹窗标题，同时提供弹窗的可访问名称，应包含有意义的文字。                                                                                                                          | `ReactNode`                                                                         | —                                        |
+| `trigger`                 | 可选触发元素。自定义组件需要把 button 原生属性、事件和 ref 传给实际元素；使用 Button 即可。                                                                                       | `ReactElement`                                                                      | —                                        |
+| `description`             | 标题下方的补充说明，会关联到弹窗的可访问描述。                                                                                                                                    | `ReactNode`                                                                         | —                                        |
+| `children`                | 弹窗正文，适合简短内容或表单。                                                                                                                                                    | `ReactNode`                                                                         | —                                        |
+| `footer`                  | 底部操作区。自定义按钮需自行更新状态或提交表单。                                                                                                                                  | `ReactNode`                                                                         | —                                        |
+| `illustration`            | 装饰插画；整个插槽隐藏于辅助技术，不要在其中放必要信息或操作。                                                                                                                    | `ReactNode`                                                                         | —                                        |
+| `initialFocus`            | 可传布尔值、元素 ref 或回调。回调接收打开方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回元素指定目标、true / null 使用默认行为、false / undefined 不移动焦点。 | `PopupFocusTarget`                                                                  | `首个可聚焦元素；触摸打开时聚焦弹窗本身` |
+| `finalFocus`              | 可传布尔值、元素 ref 或回调。回调接收关闭方式（mouse / touch / pen / keyboard；无法识别时为空字符串），返回值约定同 initialFocus；false 不返回焦点。                              | `PopupFocusTarget`                                                                  | `触发器或先前聚焦元素`                   |
+| `portalContainer`         | Portal 挂载位置，支持元素、ShadowRoot、对应 ref 或 null。自定义容器的层叠、裁切环境由调用方负责。                                                                                 | `HTMLElement \| ShadowRoot \| RefObject<HTMLElement \| ShadowRoot \| null> \| null` | `body`                                   |
+| `disablePointerDismissal` | 阻止点击弹窗外部关闭；Escape、关闭按钮与受控状态仍有效。                                                                                                                          | `boolean`                                                                           | `false`                                  |
+| `closeLabel`              | 关闭按钮的可访问名称。                                                                                                                                                            | `string`                                                                            | `"关闭弹窗"`                             |
+| `className / style`       | 作用于弹窗面板 div；不透传其余 div 原生属性。                                                                                                                                     | `string / CSSProperties`                                                            | —                                        |
+| `ref`                     | 指向弹窗面板 div。未打开时该元素通常未挂载。                                                                                                                                      | `Ref<HTMLDivElement>`                                                               | —                                        |
+
+<a id="focus-types"></a>
+
+## 焦点参数类型
+
+initialFocus 和 finalFocus 使用相同的值类型。回调分别接收打开、关闭时的交互方式； RefObject 来自 React。省略属性时使用 API 表中的默认行为。
+
+```text
+import type { RefObject } from 'react';
+
+// 文档中的说明别名，不是 yahha-ui 的公开导出。
+type FocusInteraction = 'mouse' | 'touch' | 'pen' | 'keyboard' | '';
+
+type PopupFocusTarget =
+  | boolean
+  | RefObject<HTMLElement | null>
+  | ((interactionType: FocusInteraction) => boolean | HTMLElement | null | void);
+```
 
 <a id="keyboard-and-theme"></a>
 

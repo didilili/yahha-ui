@@ -17,9 +17,8 @@ export default function SelectControlled() {
         options={[
           { value: 'newest', label: '最近发布' },
           { value: 'oldest', label: '从第一篇开始' },
-          { value: 'popular', label: '最多阅读', disabled: true },
+          { value: 'popular', label: '最多阅读' },
         ]}
-        hint="“最多阅读”暂未开放。"
       />
       <Text size="sm" tone="muted" role="status">
         当前值：{sort === null ? '未选择' : labels[sort]}。

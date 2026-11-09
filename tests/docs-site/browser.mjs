@@ -1,17 +1,19 @@
 import assert from 'node:assert/strict';
 import { componentCatalog } from '../../playground/src/docs/component-catalog.ts';
 import { verifyDocsShell } from './shell-checks.mjs';
+import { verifyShellConsistency } from './shell-consistency-checks.mjs';
 import { verifyHome } from './home-checks.mjs';
 import { verifyArtwork } from './artwork-checks.mjs';
 import { verifyWelcome } from './welcome-checks.mjs';
 import { verifyComponentOverview } from './overview-checks.mjs';
 import { verifyExampleHeadings } from './example-teaching-checks.mjs';
 import { verifySectionIcons } from './section-icon-checks.mjs';
-import { verifyIconExamples } from './icon-examples.mjs';
+import { verifyIconComposition, verifyIconExamples } from './icon-examples.mjs';
 import { verifyBrand } from './brand-checks.mjs';
 import { verifyAdoption } from './adoption-checks.mjs';
 import { verifySectionNavigation } from './section-navigation-checks.mjs';
-import { verifySearch } from './search-checks.mjs';
+import { verifySearch, verifySearchDialogStructure } from './search-checks.mjs';
+import { closeSearchDialog, openSearchDialog, searchField } from './search-dialog-helpers.mjs';
 import { verifyGuideLoading, waitForGuideReady } from './guide-loading-checks.mjs';
 import { verifyTextFieldSearch, verifyTextFieldCopy } from './text-field-examples.mjs';
 import { verifyTextareaDraft } from './textarea-examples.mjs';
@@ -35,11 +37,20 @@ import {
 } from './avatar-author-examples.mjs';
 import { verifyTabsPostcard } from './tabs-postcard-examples.mjs';
 import { verifyPaginationLinks } from './pagination-links-examples.mjs';
-import { verifyMenuDraft } from './menu-draft-examples.mjs';
+import { verifyMenuDraft, verifyMenuTriggerRecovery } from './menu-draft-examples.mjs';
 import { verifyDialogDraft } from './dialog-draft-examples.mjs';
 import { verifyPopoverCollection } from './popover-collection-examples.mjs';
 import { verifyAlertReadingNotice } from './alert-reading-examples.mjs';
-import { verifyToastReadingList } from './toast-reading-examples.mjs';
+import { verifyToastFocus, verifyToastReadingList } from './toast-reading-examples.mjs';
+import { verifyTabsLabelCounts } from './tabs-counts-examples.mjs';
+import { openInteractionExample } from './reveal-example.mjs';
+import { verifyCodeExpansion, verifyCodeExpansionEntry } from './code-expansion-checks.mjs';
+import { verifyDocsUsability } from './docs-usability-checks.mjs';
+import { verifyReadingNavigation } from './reading-navigation-checks.mjs';
+import { verifyQuickstartFlow } from './quickstart-flow-checks.mjs';
+import { verifyFormsGuide } from './forms-guide-checks.mjs';
+import { verifyFormComponent } from './form-component-checks.mjs';
+import { verifyDocsUsabilityInteractions } from './docs-usability-interaction-checks.mjs';
 import { verifyAccordionReading, verifyAccordionBasic } from './accordion-reading-examples.mjs';
 import {
   verifyImageDetail,
@@ -48,8 +59,20 @@ import {
 } from './image-detail-examples.mjs';
 
 export async function verifyDocs(browser, baseURL) {
+  await verifyShellConsistency(browser, baseURL);
+  const interactionChecks = await verifyDocsUsabilityInteractions(browser, baseURL);
+  assert(
+    interactionChecks.every(({ passed }) => passed),
+    JSON.stringify(interactionChecks.filter(({ passed }) => !passed)),
+  );
+  await verifyDocsUsability(browser, baseURL);
+  await verifyReadingNavigation(browser, baseURL);
+  await verifyQuickstartFlow(browser, baseURL);
+  await verifyFormsGuide(browser, baseURL);
+  await verifyFormComponent(browser, baseURL);
   await verifyGuideLoading(browser, baseURL);
   await verifySearch(browser, baseURL);
+  await verifySearchDialogStructure(browser, baseURL);
   await verifySectionNavigation(browser, baseURL);
   await verifyAdoption(browser, baseURL);
   await verifyBrand(browser, baseURL);
@@ -114,18 +137,16 @@ export async function verifyDocs(browser, baseURL) {
       await sourceBlock.locator('pre').innerText(),
     );
 
-    const search = page.getByRole('searchbox', { name: '搜索文档' });
+    const dialog = await openSearchDialog(page);
+    const search = searchField(page);
     await search.fill('输入框');
-    await page
-      .locator('.docs-sidebar')
-      .getByRole('link', { name: 'TextField 单行输入', exact: true })
-      .click();
-    await page
-      .getByRole('heading', { level: 1, name: 'TextField 单行输入', exact: true })
-      .waitFor();
+    await dialog.getByRole('link', { name: 'Input 输入框', exact: true }).click();
+    await page.getByRole('heading', { level: 1, name: 'Input 输入框', exact: true }).waitFor();
+    await openSearchDialog(page);
     await search.fill('不存在的组件');
-    assert.equal(await page.getByText('未找到相关文档').isVisible(), true);
+    await dialog.getByText('没有匹配的文档，试试其他关键词。', { exact: true }).waitFor();
     await search.fill('');
+    await closeSearchDialog(page);
 
     const ids = [
       'button',
@@ -134,7 +155,8 @@ export async function verifyDocs(browser, baseURL) {
       'badge',
       'surface',
       'theme-provider',
-      'text-field',
+      'form',
+      'input',
       'segmented-control',
       'dialog',
       'empty-state',
@@ -166,18 +188,17 @@ export async function verifyDocs(browser, baseURL) {
       componentCatalog.map((component) => component.id).sort(),
       'Documentation acceptance must exercise every registered component page.',
     );
-    let totalExamples = 0;
     for (const id of ids) {
       await page.goto(`${baseURL}#/components/${id}?section=api`);
       await page.locator('#api').waitFor();
       assert.equal((await page.locator('.api-table tbody tr').count()) > 0, true, `${id} API`);
       const examples = await page.locator('.example-block').count();
       assert.equal(examples > 0, true, `${id} examples`);
-      totalExamples += examples;
+      await verifyCodeExpansionEntry(page);
       await verifyExampleHeadings(page);
       await verifySectionIcons(page);
       if (id === 'icon') await verifyIconExamples(page);
-      if (id === 'text-field') {
+      if (id === 'input') {
         await verifyTextFieldSearch(page, page.locator('#text-field-search .example-preview'));
         await verifyTextFieldCopy(page, page.locator('#text-field-copy .example-preview'));
       }
@@ -193,18 +214,12 @@ export async function verifyDocs(browser, baseURL) {
       }
       if (id === 'checkbox') {
         await verifyCheckboxFormReset(page, page.locator('#form .example-preview'));
-        await verifyCheckboxTopics(page);
-        await verifyCheckboxReadingList(
-          page,
-          page.locator('#checkbox-reading-list .example-preview'),
-        );
       }
       if (id === 'radio-group') {
         await verifyRadioReadingLayout(
           page,
           page.locator('#radio-reading-layout .example-preview'),
         );
-        await verifyRadioSignature(page, page.locator('#radio-comment-signature .example-preview'));
       }
       if (id === 'switch') {
         await verifySwitchExamples(page);
@@ -219,9 +234,6 @@ export async function verifyDocs(browser, baseURL) {
       }
       if (id === 'segmented-control') {
         await verifySegmentedContent(page, page.locator('#filtering .example-preview'));
-      }
-      if (id === 'badge') {
-        await verifyBadgeSummary(page, page.locator('#badge-status .example-preview'));
       }
       if (id === 'avatar') {
         await verifyAvatarBasics(page, page.locator('#avatar-fallback .example-preview'));
@@ -239,12 +251,13 @@ export async function verifyDocs(browser, baseURL) {
       }
       if (id === 'tabs') {
         await verifyTabsPostcard(page, page.locator('#controlled .example-preview'));
+        await verifyTabsLabelCounts(page);
       }
       if (id === 'pagination') {
         await verifyPaginationLinks(page, page.locator('#links .example-preview'));
       }
       if (id === 'dropdown-menu') {
-        await verifyMenuDraft(page, page.locator('#controlled .example-preview'));
+        await verifyMenuTriggerRecovery(page);
       }
       if (id === 'dialog') {
         await verifyDialogDraft(page, page.locator('#form .example-preview'));
@@ -253,7 +266,7 @@ export async function verifyDocs(browser, baseURL) {
         await verifyPopoverCollection(page, page.locator('#popover-collection .example-preview'));
       }
       if (id === 'toast') {
-        await verifyToastReadingList(page, page.locator('#basic .example-preview'));
+        await verifyToastFocus(page);
       }
       if (id === 'alert') {
         await verifyAlertReadingNotice(
@@ -278,7 +291,10 @@ export async function verifyDocs(browser, baseURL) {
         true,
         `${id}: usage precedes the examples in reading order.`,
       );
-      const usageDescription = usage.locator('..').locator('.doc-prose');
+      const usageDescription = page
+        .locator('.doc-section')
+        .filter({ has: usage })
+        .locator('.doc-prose');
       assert(
         (await usageDescription.innerText()).trim().length > 0,
         `${id}: usage explains its purpose.`,
@@ -292,8 +308,8 @@ export async function verifyDocs(browser, baseURL) {
         );
       }
       const relatedLinks = await page
-        .locator('#related')
-        .locator('..')
+        .locator('.doc-section')
+        .filter({ has: page.locator('#related') })
         .locator('.doc-prose')
         .getByRole('link')
         .evaluateAll((links) =>
@@ -308,7 +324,20 @@ export async function verifyDocs(browser, baseURL) {
         );
       }
     }
-    assert.equal(totalExamples, 171, 'The 32 component documents provide 171 focused examples.');
+    await verifyCodeExpansion(page, baseURL);
+
+    // Full workflows retain their original assertions at their canonical guide locations.
+    await openInteractionExample(page, 'icon-composition');
+    await verifyIconComposition(page);
+    await verifyCheckboxTopics(page, await openInteractionExample(page, 'checkbox-reading-topics'));
+    await verifyCheckboxReadingList(
+      page,
+      await openInteractionExample(page, 'checkbox-reading-list'),
+    );
+    await verifyBadgeSummary(page, await openInteractionExample(page, 'badge-status'));
+    await verifyRadioSignature(page, await openInteractionExample(page, 'radio-comment-signature'));
+    await verifyMenuDraft(page, await openInteractionExample(page, 'controlled'));
+    await verifyToastReadingList(page, await openInteractionExample(page, 'basic'));
 
     // Reorganized chapters retain their existing deep links and keyboard destination.
     await page.goto(`${baseURL}#/components/text`);
@@ -330,8 +359,8 @@ export async function verifyDocs(browser, baseURL) {
 
     await page.goto(`${baseURL}#/components/select?section=related`);
     await page
-      .locator('#related')
-      .locator('..')
+      .locator('.doc-section')
+      .filter({ has: page.locator('#related') })
       .getByRole('link', { name: 'RadioGroup 单选组', exact: true })
       .click();
     const radioGroupHeading = page.getByRole('heading', {
@@ -346,25 +375,28 @@ export async function verifyDocs(browser, baseURL) {
     );
     assert.equal(new URL(page.url()).hash, '#/components/radio-group');
 
-    let guideExamples = 0;
     for (const [id, title] of [
       ['getting-started', '开始使用'],
+      ['forms', '原生表单接入'],
       ['styling', '使用与定制'],
       ['reading', '阅读与收藏'],
       ['design-baseline', '设计规范'],
       ['states', '组合示例'],
+      ['interactions', '交互组合'],
       ['artwork', '图标与插画'],
     ]) {
       await page.goto(`${baseURL}#/guides/${id}`);
       await waitForGuideReady(page, title);
-      guideExamples += await page.locator('.example-block').count();
       await verifyExampleHeadings(page);
       await verifySectionIcons(page, 'guide');
     }
-    assert.equal(guideExamples, 13, 'The guides must retain all thirteen integration examples.');
-    assert.equal(totalExamples + guideExamples, 184, 'The public site provides 184 examples.');
     await page.goto(`${baseURL}#/guides/getting-started`);
     await waitForGuideReady(page, '开始使用');
+    await page
+      .locator('.doc-section')
+      .filter({ has: page.locator('#install') })
+      .locator('.doc-disclosure > summary')
+      .click();
     assert.match(await page.locator('main').innerText(), /npm pack/);
     assert.match(await page.locator('main').innerText(), /yahha-ui\/style\.css/);
 
@@ -378,7 +410,7 @@ export async function verifyDocs(browser, baseURL) {
     await page.locator('.not-found').getByRole('link', { name: '浏览组件', exact: true }).click();
     await page.getByRole('heading', { level: 1, name: '组件总览', exact: true }).waitFor();
     await page.locator('.component-overview-page').waitFor();
-    assert.equal(await page.locator('[data-component-id]').count(), 32);
+    assert.equal(await page.locator('[data-component-id]').count(), componentCatalog.length);
 
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 844 });
@@ -417,6 +449,8 @@ export async function verifyDocs(browser, baseURL) {
           `${id} overflow at ${width}`,
         );
       }
+      await openInteractionExample(page, 'icon-composition');
+      await verifyIconComposition(page);
     }
     assert.deepEqual(errors, [], 'Documentation has browser runtime errors.');
   } finally {

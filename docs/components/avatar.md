@@ -4,7 +4,7 @@
 
 展示作者头像，支持姓名缩写、自定义回退与图片加载失败处理。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Avatar } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Avatar } from 'yahha-ui';
 
 通过 src 显示图片，name 提供头像名称。
 
-[查看示例文件](../../playground/src/examples/content/AvatarBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/AvatarBasic.tsx)
 
 <!-- example-source: playground/src/examples/content/AvatarBasic.tsx -->
 
@@ -50,7 +50,7 @@ export default function AvatarBasic() {
 
 未提供图片时，查看姓名缩写、空姓名和指定的回退内容。
 
-[查看示例文件](../../playground/src/examples/content/AvatarExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/AvatarExample.tsx)
 
 <!-- example-source: playground/src/examples/content/AvatarExample.tsx -->
 
@@ -89,7 +89,7 @@ export default function AvatarExample() {
 
 使用同一姓名对比三档尺寸。
 
-[查看示例文件](../../playground/src/examples/content/AvatarSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/AvatarSizes.tsx)
 
 <!-- example-source: playground/src/examples/content/AvatarSizes.tsx -->
 
@@ -124,7 +124,7 @@ export default function AvatarSizes() {
 
 模拟图片失效与恢复，展示姓名回退。
 
-[查看示例文件](../../playground/src/examples/content/AvatarPicture.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/AvatarPicture.tsx)
 
 <!-- example-source: playground/src/examples/content/AvatarPicture.tsx -->
 
@@ -156,17 +156,13 @@ export default function AvatarPicture() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
 <a id="avatar-author"></a>
 
-### 作者身份与弹窗
+### 头像、完整署名与作者介绍
 
-通过独立按钮查看介绍，关闭后返回入口。
+头像旁保留完整署名，通过独立按钮查看介绍，关闭后返回入口。
 
-[查看示例文件](../../playground/src/examples/content/AvatarAuthor.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/AvatarAuthor.tsx)
 
 <!-- example-source: playground/src/examples/content/AvatarAuthor.tsx -->
 
@@ -233,7 +229,17 @@ export default function AvatarAuthor() {
 
 ## 头像与完整署名
 
-头像内保留简短标记，完整姓名和简介放在旁边。姓名较长时，可用 fallback 指定一个更容易辨认的字或缩写；关注、联系等操作放在身份信息之外。
+头像内保留简短标记，完整姓名和简介放在旁边。姓名较长时，可用 fallback 指定一个更容易辨认的字或缩写；关注、联系等操作放在身份信息之外。文章中的署名布局见 [文章阅读与收藏](../README.md#站内指南)。
+
+<a id="behavior"></a>
+
+## 姓名、图片回退与恢复
+
+- name 为整个头像提供可访问名称，内部图片和回退内容均为装饰。空白姓名的可访问名称为“匿名用户”，默认显示问号。
+- 作者行已有完整姓名时，可将头像设为 aria-hidden，避免重复表达同一身份；介绍操作使用独立按钮，关闭后返回该入口。
+- 缺图、加载中和加载失败时保留回退内容；更换 src 后重新加载，新图片就绪后移除回退，透明图片不会透出姓名。头像尺寸在这个过程中保持不变。
+- 默认按完整字素取姓名的前两项；不支持 Intl.Segmenter 的旧环境按 Unicode 码点降级，需要固定缩写时可显式传入 fallback。
+- fallback 只放展示内容，不放链接或按钮。头像不接收 children，也不透传原生 img 属性。
 
 <a id="api"></a>
 
@@ -251,19 +257,9 @@ export default function AvatarAuthor() {
 | `ref`                 | 指向根 span。                                                                                           | `Ref<HTMLSpanElement>`                            | —                                 |
 | `其他原生属性 / 事件` | 事件、data-\* 等作用于根 span；固定 role="img"，aria-label 由 name 提供，不能通过同名属性覆盖。         | `Omit<ComponentPropsWithRef<"span">, "children">` | —                                 |
 
-<a id="behavior"></a>
-
-## 姓名、图片回退与恢复
-
-- name 为整个头像提供可访问名称，内部图片和回退内容均为装饰。空白姓名的可访问名称为“匿名用户”，默认显示问号。
-- 作者行已有完整姓名时，可将头像设为 aria-hidden，避免重复表达同一身份；介绍操作使用独立按钮，关闭后返回该入口。
-- 缺图、加载中和加载失败时保留回退内容；更换 src 后重新加载，新图片就绪后移除回退，透明图片不会透出姓名。头像尺寸在这个过程中保持不变。
-- 默认按完整字素取姓名的前两项；不支持 Intl.Segmenter 的旧环境按 Unicode 码点降级，需要固定缩写时可显式传入 fallback。
-- fallback 只放展示内容，不放链接或按钮。头像不接收 children，也不透传原生 img 属性。
-
 <a id="related"></a>
 
 ## 相关组件
 
 - [Image 图片](image.md)：用于内容图片和封面，支持替代文字、比例容器与失败回退。
-- [Text 正文](text.md)：用于正文、摘要和辅助说明，统一字号、行高与语义颜色。
+- [Text 段落正文](text.md)：固定使用 p 元素的段落正文，统一字号、行高与语义颜色。

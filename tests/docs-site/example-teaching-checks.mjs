@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { revealExample } from './reveal-example.mjs';
+import { openInteractionExample, revealExample } from './reveal-example.mjs';
 import { verifyHeadingShare } from './heading-examples.mjs';
 
 /** Readers should know each example's purpose before reaching its controls. */
@@ -85,6 +85,27 @@ export async function verifyTeachingExamples(page, baseURL) {
     );
 
     await page.goto(`${baseURL}#/components/heading`);
+    const structure = page.locator('#heading-reading-layout .example-preview');
+    await revealExample(structure);
+    assert.deepEqual(
+      await structure
+        .getByRole('heading')
+        .evaluateAll((headings) => headings.map((node) => node.tagName)),
+      ['H2', 'H3', 'H4', 'H3'],
+      'The short article example preserves the semantic heading hierarchy.',
+    );
+    await structure
+      .getByRole('heading', {
+        level: 3,
+        name: '把云朵邮局里借来的铅笔、画歪的墨镜和贴到手背上的邮票，写进今天的长手记',
+        exact: true,
+      })
+      .waitFor();
+    assert.equal(
+      await structure.evaluate((node) => node.scrollWidth <= node.clientWidth + 1),
+      true,
+    );
+    await openInteractionExample(page, 'heading-reading-layout');
     const headingExample = page.locator('#heading-reading-layout');
     await verifyHeadingShare(page, headingExample.locator('.example-preview'));
     const contents = headingExample.getByRole('navigation', { name: '手记目录', exact: true });
@@ -121,9 +142,7 @@ export async function verifyTeachingExamples(page, baseURL) {
       const opened = await page.context().newPage();
       try {
         await opened.goto(destination);
-        await opened
-          .getByRole('heading', { level: 1, name: 'Heading 标题', exact: true })
-          .waitFor();
+        await opened.getByRole('heading', { level: 1, name: '交互组合', exact: true }).waitFor();
         const openedTarget = opened.getByRole('heading', { level: 3, name: title, exact: true });
         await opened.waitForFunction(
           (node) => document.activeElement === node,

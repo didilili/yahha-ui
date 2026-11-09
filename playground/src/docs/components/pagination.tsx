@@ -52,35 +52,26 @@ export default defineComponentPage('pagination', {
           source: paginationEmptySource,
         },
         {
+          id: 'links',
+          title: '链接分页与地址同步',
+          description: '用真实链接翻页，支持浏览器返回和新标签页打开。',
+          component: PaginationLinks,
+          source: paginationLinksSource,
+        },
+        {
+          id: 'archive',
+          title: '翻页后的阅读位置',
+          description:
+            '由调用方在翻页后聚焦新页标题，首次渲染不抢焦点；重复三条本地摘要模拟 80 页。',
+          component: PaginationArchive,
+          source: paginationArchiveSource,
+        },
+        {
           id: 'appearance',
           title: '普通与圈选',
           description: '两组分页同步当前页；普通当前页保留边框与底色，circled 增加不规则圈选。',
           component: PaginationAppearance,
           source: paginationAppearanceSource,
-        },
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看翻页焦点与地址同步',
-      content: <p>阅读位置示例重复使用三条本地摘要模拟 80 页；链接示例将当前页码保留在网址中。</p>,
-      examples: [
-        {
-          id: 'archive',
-          title: '翻页后的阅读位置',
-          description: '翻页后聚焦本页标题，从更新后的内容继续阅读。',
-          component: PaginationArchive,
-          source: paginationArchiveSource,
-          toc: false,
-        },
-        {
-          id: 'links',
-          title: '链接分页与地址同步',
-          description: '用真实链接翻页，支持浏览器返回和新标签页打开。',
-          toc: false,
-          component: PaginationLinks,
-          source: paginationLinksSource,
         },
       ],
     },
@@ -113,6 +104,40 @@ export default defineComponentPage('pagination', {
           </li>
           <li>链接例在网址中保存当前页，刷新或返回可恢复，并保留其他参数和片段。</li>
         </ul>
+      ),
+    },
+    {
+      id: 'behavior',
+      title: '可访问性与键盘',
+      content: (
+        <ul>
+          <li>
+            nav 默认命名为“文章分页”，同页多组分页应使用不同的 aria-label。每个页码有“第 N
+            页”名称，当前页带 aria-current=page。
+          </li>
+          <li>
+            原生按钮通过 Tab 聚焦、Enter / Space
+            激活；第一页禁用上一页，末页禁用下一页，禁用按钮退出键盘顺序。
+          </li>
+          <li>
+            链接通过 Tab 聚焦、Enter 激活，Space 保持浏览器的滚动行为。 Cmd / Ctrl
+            点击或中键可在新标签打开；是否打开窗口等行为遵循浏览器设置。
+          </li>
+          <li>
+            各个可见页码按钮都在 Tab 顺序中，不使用方向键切换。省略号不可操作，并对辅助技术隐藏。
+          </li>
+        </ul>
+      ),
+    },
+    {
+      id: 'styling',
+      title: '窄屏与长页码',
+      content: (
+        <p>
+          有内容时显示首页、末页和当前页附近的页码，按钮数量不会随总页数线性增加。
+          页码组在窄屏换行，按钮至少
+          44×44px，多位数字保持完整并自然增宽；自定义宽度时也应避免挤压或截断页码。
+        </p>
       ),
     },
     {
@@ -182,40 +207,6 @@ export default defineComponentPage('pagination', {
           ],
         },
       ],
-    },
-    {
-      id: 'behavior',
-      title: '可访问性与键盘',
-      content: (
-        <ul>
-          <li>
-            nav 默认命名为“文章分页”，同页多组分页应使用不同的 aria-label。每个页码有“第 N
-            页”名称，当前页带 aria-current=page。
-          </li>
-          <li>
-            原生按钮通过 Tab 聚焦、Enter / Space
-            激活；第一页禁用上一页，末页禁用下一页，禁用按钮退出键盘顺序。
-          </li>
-          <li>
-            链接通过 Tab 聚焦、Enter 激活，Space 保持浏览器的滚动行为。 Cmd / Ctrl
-            点击或中键可在新标签打开；是否打开窗口等行为遵循浏览器设置。
-          </li>
-          <li>
-            各个可见页码按钮都在 Tab 顺序中，不使用方向键切换。省略号不可操作，并对辅助技术隐藏。
-          </li>
-        </ul>
-      ),
-    },
-    {
-      id: 'styling',
-      title: '窄屏与长页码',
-      content: (
-        <p>
-          有内容时显示首页、末页和当前页附近的页码，按钮数量不会随总页数线性增加。
-          页码组在窄屏换行，按钮至少
-          44×44px，多位数字保持完整并自然增宽；自定义宽度时也应避免挤压或截断页码。
-        </p>
-      ),
     },
   ],
 });

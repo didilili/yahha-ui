@@ -1,21 +1,20 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { version as packageVersion } from '../../package.json';
-import { ChevronLeft, ChevronRight, Menu, Search, X } from 'lucide-react';
 import {
-  Alert,
-  Button,
-  EmptyState,
-  Heading,
-  IconButton,
-  Link,
-  Spinner,
-  Text,
-  TextField,
-  ThemeProvider,
-} from 'yahha-ui';
+  ArrowUp,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Code2,
+  Menu,
+  Search,
+  X,
+} from 'lucide-react';
+import { Alert, Button, Heading, IconButton, Link, Spinner, Text, ThemeProvider } from 'yahha-ui';
 import { CodeBlock } from './docs/CodeBlock';
 import { ExampleSource } from './docs/ExampleSource';
-import { SearchResults } from './docs/SearchResults';
+import { DocumentationSearchDialog } from './docs/DocumentationSearchDialog';
+import { apiRowAnchor } from './docs/api-anchor';
 import { guideCatalog } from './docs/guide-catalog';
 import { loadGuidePage } from './docs/guide-pages';
 import { loadComponentPage } from './docs/component-pages';
@@ -55,7 +54,7 @@ const areaMotifs: Record<string, 'flower' | 'letter' | 'sprout'> = {
 };
 const legacy: Record<string, string> = {
   buttons: 'button',
-  fields: 'text-field',
+  fields: 'input',
   choices: 'segmented-control',
   dialog: 'dialog',
   empty: 'empty-state',
@@ -95,13 +94,20 @@ function focusSection(id: string) {
   }
   const disclosure = target
     .closest('.doc-section')
-    ?.querySelector<HTMLDetailsElement>('.doc-disclosure');
+    ?.querySelector<HTMLDetailsElement>(':scope > .doc-disclosure');
   if (disclosure) disclosure.open = true;
   target.focus({ preventScroll: true });
-  target.scrollIntoView();
+  target.scrollIntoView({ block: 'start', inline: 'nearest' });
+  const table = target.closest<HTMLElement>('.table-scroll');
+  if (table) table.scrollLeft = 0;
   const headerBottom = document.querySelector('.docs-header')?.getBoundingClientRect().bottom ?? 0;
+  const localToc = document.querySelector<HTMLElement>('.mobile-doc-toc');
+  const tocHeight = localToc?.getClientRects().length
+    ? (localToc.querySelector('summary')?.getBoundingClientRect().height ?? 0)
+    : 0;
   const top = target.getBoundingClientRect().top;
-  if (top < headerBottom + 24) window.scrollBy({ top: top - headerBottom - 24 });
+  if (top < headerBottom + tocHeight + 24)
+    window.scrollBy({ top: top - headerBottom - tocHeight - 24 });
 }
 
 function SectionBody({
@@ -128,6 +134,12 @@ type ComponentPageLoad =
   | { id: string; attempt: number; status: 'error' }
   | { id: string; attempt: number; status: 'ready'; page: DocPage };
 type OverviewPage = (typeof import('./site/ComponentOverview'))['default'];
+type ReadingPosition = {
+  y: number;
+  expanded: string[];
+  details: boolean[];
+  focusId?: string;
+};
 
 export default function App() {
   const [route, setRoute] = useState(currentRoute);
@@ -136,25 +148,40 @@ export default function App() {
   const [searchFailed, setSearchFailed] = useState(false);
   const [searchAttempt, setSearchAttempt] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchRequested, setSearchRequested] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeSection, setActiveSection] = useState({ pageId: '', id: '' });
   const [componentLoad, setComponentLoad] = useState<ComponentPageLoad>();
+  const [expandedExamples, setExpandedExamples] = useState<{ pageId?: string; ids: string[] }>({
+    ids: [],
+  });
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [Overview, setOverview] = useState<OverviewPage>();
   const [failedOverviewAttempt, setFailedOverviewAttempt] = useState<number | null>(null);
   const overviewFailed = failedOverviewAttempt === loadAttempt;
   const menuButton = useRef<HTMLButtonElement>(null);
+  const backToTop = useRef<HTMLButtonElement>(null);
   const sidebar = useRef<HTMLElement>(null);
   const shortcuts = useRef<HTMLElement>(null);
   const tocRef = useRef<HTMLElement>(null);
   const mobileToc = useRef<HTMLDetailsElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const sidebarSearchButton = useRef<HTMLButtonElement>(null);
+  const headerSearchButton = useRef<HTMLButtonElement>(null);
+  const searchReturnFocus = useRef<HTMLElement | null>(null);
+  const searchNavigating = useRef(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
   const allowRouteFocus = useRef(true);
+  const readingPositions = useRef(new Map<string, ReadingPosition>());
+  const readingEntry = useRef({ key: '', hash: '' });
+  const pendingReadingPosition = useRef<ReadingPosition | undefined>(undefined);
   const sidebarPositions = useRef(new Map<DocumentationArea, number>());
   const sidebarArea = useRef<DocumentationArea | undefined>(undefined);
   const isHome = route.path === '/';
   const isOverview = route.path === '/components';
+  const searchShortcutLabel = /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘ K' : 'Ctrl K';
   const pageSummary = pages.find((item) => item.href.slice(1) === route.path);
   const area =
     pageSummary?.area ?? (route.path.startsWith('/components') ? 'components' : 'getting-started');
@@ -182,11 +209,35 @@ export default function App() {
       ? componentLoad
       : undefined;
   const page = currentComponentLoad?.status === 'ready' ? currentComponentLoad.page : undefined;
+  // A new page starts folded; section links within the same page retain reader choices.
+  if (expandedExamples.pageId !== documentationId)
+    setExpandedExamples({ pageId: documentationId, ids: [] });
+  const exampleIds =
+    page?.sections.flatMap((section) => section.examples?.map(({ id }) => id) ?? []) ?? [];
+  const codeControlSection = componentId
+    ? 'examples'
+    : exampleIds.length > 1
+      ? page?.sections.find((section) => section.examples?.length)?.id
+      : undefined;
+  const expandedIds = expandedExamples.pageId === documentationId ? expandedExamples.ids : [];
+  const allCodeExpanded =
+    exampleIds.length > 0 && exampleIds.every((id) => expandedIds.includes(id));
+  function setExampleExpanded(id: string, expanded: boolean) {
+    setExpandedExamples((current) => {
+      // A clipboard request from an unmounted page must not change the current page.
+      if (current.pageId !== documentationId) return current;
+      return {
+        pageId: documentationId,
+        ids: expanded
+          ? [...new Set([...current.ids, id])]
+          : current.ids.filter((entry) => entry !== id),
+      };
+    });
+  }
   const loadFailed = isOverview ? overviewFailed : currentComponentLoad?.status === 'error';
   const contentReady = isOverview
     ? !!Overview || overviewFailed
     : !!page || !pageSummary || loadFailed;
-  const hasQuery = query.trim().length > 0;
   const searchResults = searchIndex ? searchDocumentationMatches(searchIndex, query) : [];
   const toc =
     page?.sections
@@ -203,14 +254,89 @@ export default function App() {
       ]) ?? [];
   const observedSection =
     activeSection.pageId === page?.id ? activeSection.id : page?.sections[0]?.id;
-  const activeTocId = toc.some((item) => item.id === observedSection)
-    ? observedSection
-    : page?.sections.find((section) =>
-        section.examples?.some((example) => example.id === observedSection),
-      )?.id;
+  const activeTocId = observedSection?.startsWith('api-')
+    ? 'api'
+    : toc.some((item) => item.id === observedSection)
+      ? observedSection
+      : page?.sections.find((section) =>
+          section.examples?.some((example) => example.id === observedSection),
+        )?.id;
+
+  const dismissDirectory = useCallback(() => {
+    setMenuOpen(false);
+    requestAnimationFrame(() => {
+      if (isHome && matchMedia('(min-width: 961px)').matches)
+        headingRef.current?.focus({ preventScroll: true });
+      else menuButton.current?.focus({ preventScroll: true });
+    });
+  }, [isHome]);
+
+  const requestSearch = useCallback(
+    (origin?: HTMLElement) => {
+      if (!searchOpen) {
+        searchReturnFocus.current =
+          origin ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+      }
+      searchNavigating.current = false;
+      if (menuOpen) {
+        setMenuOpen(false);
+        setSearchRequested(true);
+      } else {
+        setSearchOpen(true);
+        requestAnimationFrame(() => {
+          searchRef.current?.focus();
+          searchRef.current?.select();
+        });
+      }
+    },
+    [menuOpen, searchOpen],
+  );
 
   useEffect(() => {
-    if (hasQuery || isHome || (!menuOpen && !matchMedia('(min-width: 961px)').matches)) return;
+    if (!searchRequested || menuOpen) return;
+    // Let the directory release its scroll lock before opening the search dialog.
+    const frame = requestAnimationFrame(() => {
+      setSearchRequested(false);
+      setSearchOpen(true);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [searchRequested, menuOpen]);
+
+  useEffect(() => {
+    function openSearch(event: KeyboardEvent) {
+      const activeDialog = document.activeElement?.closest(
+        '[role="dialog"][data-open], [role="alertdialog"][data-open], dialog[open]',
+      );
+      if (activeDialog && !activeDialog.classList.contains('doc-search-dialog')) return;
+      if (
+        event.defaultPrevented ||
+        event.repeat ||
+        event.isComposing ||
+        event.altKey ||
+        !(event.metaKey || event.ctrlKey) ||
+        event.key.toLowerCase() !== 'k'
+      )
+        return;
+      event.preventDefault();
+      requestSearch();
+    }
+    window.addEventListener('keydown', openSearch);
+    return () => window.removeEventListener('keydown', openSearch);
+  }, [requestSearch]);
+  useEffect(() => {
+    function updateBackToTop() {
+      const visible = window.scrollY > 600;
+      if (!visible && document.activeElement === backToTop.current)
+        headingRef.current?.focus({ preventScroll: true });
+      setShowBackToTop(visible);
+    }
+    updateBackToTop();
+    window.addEventListener('scroll', updateBackToTop, { passive: true });
+    return () => window.removeEventListener('scroll', updateBackToTop);
+  }, []);
+
+  useEffect(() => {
+    if (isHome || (!menuOpen && !matchMedia('(min-width: 961px)').matches)) return;
     const frame = requestAnimationFrame(() => {
       const container = sidebar.current?.querySelector<HTMLElement>('.docs-sidebar-scroll');
       if (!container) return;
@@ -227,9 +353,9 @@ export default function App() {
         container.scrollTop += item.bottom - panel.bottom + 8;
     });
     return () => cancelAnimationFrame(frame);
-  }, [area, currentItem?.id, hasQuery, isHome, menuOpen]);
+  }, [area, currentItem?.id, isHome, menuOpen]);
   useEffect(() => {
-    if (!hasQuery || searchIndex || searchFailed) return;
+    if (!searchOpen || searchIndex || searchFailed) return;
     let cancelled = false;
     Promise.all([import('virtual:yahha-doc-search'), import('./docs/guides')]).then(
       ([{ default: sections }, { guidePages }]) => {
@@ -245,18 +371,72 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [hasQuery, searchIndex, searchFailed, searchAttempt]);
+  }, [searchOpen, searchIndex, searchFailed, searchAttempt]);
   useEffect(() => {
     canonicalizeLocation();
-    function onHashChange() {
-      canonicalizeLocation();
-      allowRouteFocus.current = true;
-      setRoute(currentRoute());
-      setMenuOpen(false);
-      setQuery('');
+    const previousRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+    const initialKey = window.history.state?.yahhaReadingKey ?? crypto.randomUUID();
+    window.history.replaceState({ ...window.history.state, yahhaReadingKey: initialKey }, '');
+    readingEntry.current = { key: initialKey, hash: window.location.hash };
+    function rememberPosition() {
+      const active = document.activeElement;
+      readingPositions.current.set(readingEntry.current.key, {
+        y: window.scrollY,
+        expanded: Array.from(document.querySelectorAll<HTMLElement>('.example-block')).flatMap(
+          (example) =>
+            example.querySelector('.component-source button[aria-expanded="true"]')
+              ? [example.id]
+              : [],
+        ),
+        details: Array.from(
+          document.querySelectorAll<HTMLDetailsElement>(
+            'article .doc-disclosure, article .example-setup',
+          ),
+          (details) => details.open,
+        ),
+        focusId:
+          active?.closest('.example-block')?.id ??
+          active?.closest('.doc-section')?.querySelector<HTMLElement>('[data-doc-heading]')?.id,
+      });
     }
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
+    function onNavigation() {
+      canonicalizeLocation();
+      const hash = window.location.hash;
+      const storedKey = window.history.state?.yahhaReadingKey;
+      if (storedKey === readingEntry.current.key && hash === readingEntry.current.hash) return;
+      rememberPosition();
+      // Hash links create fresh entries; existing keys identify Back/Forward visits.
+      const key =
+        storedKey && storedKey !== readingEntry.current.key ? storedKey : crypto.randomUUID();
+      window.history.replaceState({ ...window.history.state, yahhaReadingKey: key }, '');
+      const saved = readingPositions.current.get(key);
+      pendingReadingPosition.current = saved;
+      readingEntry.current = { key, hash };
+      const nextRoute = currentRoute();
+      if (saved) {
+        const summary = pages.find((item) => item.href.slice(1) === nextRoute.path);
+        setExpandedExamples({ pageId: summary?.id, ids: saved.expanded });
+      }
+      allowRouteFocus.current = true;
+      setRoute(nextRoute);
+      setMenuOpen(false);
+      searchNavigating.current = true;
+      setSearchOpen(false);
+      setSearchRequested(false);
+    }
+    function onHistoryVisit(event: PopStateEvent) {
+      // Fresh fragment links can emit popstate during an Enter handler. Handle
+      // those at hashchange, after the input event has finished bubbling.
+      if (readingPositions.current.has(event.state?.yahhaReadingKey)) onNavigation();
+    }
+    window.addEventListener('popstate', onHistoryVisit);
+    window.addEventListener('hashchange', onNavigation);
+    return () => {
+      window.removeEventListener('popstate', onHistoryVisit);
+      window.removeEventListener('hashchange', onNavigation);
+      window.history.scrollRestoration = previousRestoration;
+    };
   }, []);
   useEffect(() => {
     if (!isOverview || Overview || overviewFailed) return;
@@ -302,6 +482,19 @@ export default function App() {
       const wasFirst = firstRender.current;
       firstRender.current = false;
       if (!allowRouteFocus.current) return;
+      const saved = pendingReadingPosition.current;
+      if (saved) {
+        pendingReadingPosition.current = undefined;
+        document
+          .querySelectorAll<HTMLDetailsElement>('article .doc-disclosure, article .example-setup')
+          .forEach((details, index) => {
+            details.open = saved.details[index] ?? false;
+          });
+        window.scrollTo({ top: saved.y, behavior: 'instant' });
+        const target = document.getElementById(saved.focusId ?? '') ?? headingRef.current;
+        target?.focus({ preventScroll: true });
+        return;
+      }
       if (route.section && !loadFailed && document.getElementById(route.section))
         focusSection(route.section);
       else {
@@ -310,31 +503,105 @@ export default function App() {
       }
     });
     return () => cancelAnimationFrame(frame);
-  }, [route.path, route.section, page, contentReady, loadFailed]);
+  }, [route, page, contentReady, loadFailed]);
   useEffect(() => {
     if (!page) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActiveSection({ pageId: page?.id ?? '', id: visible[0].target.id });
-      },
-      { rootMargin: '-80px 0px -65% 0px' },
-    );
-    document.querySelectorAll('[data-doc-heading]').forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
+    let frame = 0;
+    function scheduleUpdate() {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const header = document.querySelector('.docs-header')?.getBoundingClientRect().bottom ?? 0;
+        const local = mobileToc.current;
+        const tocHeight = local?.getClientRects().length
+          ? (local.querySelector('summary')?.getBoundingClientRect().height ?? 0)
+          : 0;
+        const headings = Array.from(
+          document.querySelectorAll<HTMLElement>('article [data-doc-heading]:not([data-api-row])'),
+        ).filter((heading) => heading.getClientRects().length > 0);
+        let id = headings[0]?.id ?? '';
+        for (const heading of headings) {
+          if (heading.getBoundingClientRect().top > header + tocHeight + 40) break;
+          id = heading.id;
+        }
+        setActiveSection((current) =>
+          current.pageId === page?.id && current.id === id
+            ? current
+            : { pageId: page?.id ?? '', id },
+        );
+      });
+    }
+    const observer = new ResizeObserver(scheduleUpdate);
+    const article = document.querySelector('main article');
+    if (article) observer.observe(article);
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+    scheduleUpdate();
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+    };
+  }, [page]);
+  useEffect(() => {
+    let frame = 0;
+    function revealCurrentItem() {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const container = tocRef.current;
+        const selected = container?.querySelector<HTMLElement>('a[aria-current="location"]');
+        if (!container?.getClientRects().length || !selected) return;
+        const panel = container.getBoundingClientRect(),
+          item = selected.getBoundingClientRect();
+        if (item.top < panel.top + 8) container.scrollTop -= panel.top + 8 - item.top;
+        else if (item.bottom > panel.bottom - 8)
+          container.scrollTop += item.bottom - panel.bottom + 8;
+      });
+    }
+    revealCurrentItem();
+    window.addEventListener('resize', revealCurrentItem);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', revealCurrentItem);
+    };
+  }, [activeTocId, page]);
+  useEffect(() => {
+    if ((menuOpen || searchOpen) && mobileToc.current) mobileToc.current.open = false;
+  }, [menuOpen, searchOpen]);
+  useEffect(() => {
+    const details = mobileToc.current;
+    if (!details) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape' && details?.open) {
+        event.preventDefault();
+        details.open = false;
+        details.querySelector('summary')?.focus();
+      }
+    }
+    function onFocusOut(event: FocusEvent) {
+      if (!details?.contains(event.relatedTarget as Node | null)) details!.open = false;
+    }
+    function onPointerDown(event: PointerEvent) {
+      if (!details?.contains(event.target as Node)) details!.open = false;
+    }
+    details.addEventListener('keydown', onKeyDown);
+    details.addEventListener('focusout', onFocusOut);
+    window.addEventListener('pointerdown', onPointerDown);
+    return () => {
+      details.removeEventListener('keydown', onKeyDown);
+      details.removeEventListener('focusout', onFocusOut);
+      window.removeEventListener('pointerdown', onPointerDown);
+    };
   }, [page]);
   useEffect(() => {
     if (!menuOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    searchRef.current?.focus();
+    sidebarSearchButton.current?.focus();
     function handleKey(event: KeyboardEvent) {
       if (event.defaultPrevented) return;
       if (event.key === 'Escape') {
-        setMenuOpen(false);
-        menuButton.current?.focus();
+        dismissDirectory();
       }
       if (event.key === 'Tab') {
         const controls = [
@@ -359,7 +626,7 @@ export default function App() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKey);
     };
-  }, [menuOpen]);
+  }, [menuOpen, dismissDirectory]);
   useEffect(() => {
     const media = matchMedia('(min-width: 961px)');
     const tocDesktop = matchMedia('(min-width: 1201px)');
@@ -418,7 +685,7 @@ export default function App() {
           (menuHadFocus && active === document.body) ||
           lostDirectoryFocus
         )
-          (directoryHidden ? headingRef.current : searchRef.current)?.focus({
+          (directoryHidden ? headingRef.current : sidebarSearchButton.current)?.focus({
             preventScroll: true,
           });
         else if (
@@ -428,7 +695,7 @@ export default function App() {
           const currentLink = sidebar.current?.querySelector<HTMLElement>(
             '.nav-group a[aria-current="page"]',
           );
-          (currentLink ?? searchRef.current)?.focus();
+          (currentLink ?? sidebarSearchButton.current)?.focus();
         }
       } else if (
         inCollapsibleNavigation(active) ||
@@ -496,13 +763,26 @@ export default function App() {
           ))}
         </nav>
         <IconButton
+          ref={headerSearchButton}
+          variant="ghost"
+          className="header-search"
+          aria-label="搜索文档"
+          aria-haspopup="dialog"
+          aria-keyshortcuts="Meta+K Control+K"
+          title={`搜索文档（${searchShortcutLabel}）`}
+          inert={menuOpen}
+          onClick={(event) => requestSearch(event.currentTarget)}
+        >
+          <Search size={20} aria-hidden="true" />
+        </IconButton>
+        <IconButton
           ref={menuButton}
           className="mobile-menu"
           variant="secondary"
           aria-label={menuOpen ? '关闭文档目录' : '打开文档目录'}
           aria-expanded={menuOpen}
           aria-controls="docs-directory"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => (menuOpen ? dismissDirectory() : setMenuOpen(true))}
         >
           {menuOpen ? <X size={21} aria-hidden="true" /> : <Menu size={21} aria-hidden="true" />}
         </IconButton>
@@ -516,10 +796,7 @@ export default function App() {
             className="sidebar-backdrop"
             aria-label="关闭文档目录遮罩"
             tabIndex={-1}
-            onClick={() => {
-              setMenuOpen(false);
-              menuButton.current?.focus();
-            }}
+            onClick={dismissDirectory}
           />
         )}
         <aside
@@ -530,35 +807,21 @@ export default function App() {
         >
           <div className="docs-sidebar-inner">
             <div className="docs-sidebar-tools">
-              <div className={`doc-search${query ? ' has-query' : ''}`}>
-                <TextField
-                  ref={searchRef}
-                  label="搜索文档"
-                  leading={<Search size={17} />}
-                  type="search"
-                  placeholder="搜索全部文档…"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  classNames={{
-                    label: 'sr-only',
-                    inputWrapper: 'doc-search-control',
-                    input: 'doc-search-input',
-                  }}
-                />
-                {query && (
-                  <IconButton
-                    variant="ghost"
-                    className="search-clear"
-                    aria-label="清空搜索"
-                    onClick={() => {
-                      setQuery('');
-                      searchRef.current?.focus();
-                    }}
-                  >
-                    <X size={17} aria-hidden="true" />
-                  </IconButton>
-                )}
-              </div>
+              <Button
+                ref={sidebarSearchButton}
+                variant="secondary"
+                className="doc-search-trigger"
+                aria-label="搜索文档"
+                aria-haspopup="dialog"
+                aria-keyshortcuts="Meta+K Control+K"
+                startIcon={<Search size={17} aria-hidden="true" />}
+                onClick={(event) => requestSearch(event.currentTarget)}
+              >
+                <span>搜索文档…</span>
+                <kbd className="doc-search-shortcut" aria-hidden="true">
+                  {searchShortcutLabel}
+                </kbd>
+              </Button>
               <nav className="mobile-area-links" aria-label="栏目切换">
                 <p>切换栏目</p>
                 {documentationAreas.map((item) => (
@@ -568,7 +831,6 @@ export default function App() {
                     aria-current={!isHome && area === item.id ? 'page' : undefined}
                     onClick={() => {
                       setMenuOpen(false);
-                      setQuery('');
                       if (window.location.hash === item.href)
                         requestAnimationFrame(() => headingRef.current?.focus());
                     }}
@@ -581,103 +843,48 @@ export default function App() {
             <div
               className="docs-sidebar-scroll"
               onScroll={(event) => {
-                if (!hasQuery && !isHome)
-                  sidebarPositions.current.set(area, event.currentTarget.scrollTop);
+                if (!isHome) sidebarPositions.current.set(area, event.currentTarget.scrollTop);
               }}
             >
               <nav aria-label="文档目录">
-                {!hasQuery &&
-                  navigationGroups.map((group) => {
-                    const items = group.items;
-                    const categoryIcon = categoryIconFor(group.name);
-                    return items.length ? (
-                      <div className="nav-group" key={group.id}>
-                        <p>
-                          {categoryIcon ? (
-                            <CategoryIcon name={categoryIcon} size="compact" />
-                          ) : (
-                            <Motif name={areaMotifs[group.name] ?? 'flower'} />
-                          )}
-                          {group.name}
-                        </p>
-                        {items.map((item) => (
-                          <a
-                            key={item.id}
-                            href={item.href}
-                            aria-current={currentItem?.id === item.id ? 'page' : undefined}
-                            onClick={() => {
-                              setMenuOpen(false);
-                              setQuery('');
-                              if (window.location.hash === item.href)
-                                requestAnimationFrame(() => {
-                                  const section = new URLSearchParams(item.href.split('?')[1]).get(
-                                    'section',
-                                  );
-                                  if (section) focusSection(section);
-                                  else headingRef.current?.focus();
-                                });
-                            }}
-                          >
-                            <span>{item.name}</span>
-                            {item.chinese && <span className="nav-chinese">{item.chinese}</span>}
-                          </a>
-                        ))}
-                      </div>
-                    ) : null;
-                  })}
-                {hasQuery && searchIndex && searchResults.length > 0 && (
-                  <SearchResults
-                    query={query}
-                    results={searchResults}
-                    onSelect={(result) => {
-                      setMenuOpen(false);
-                      setQuery('');
-                      if (window.location.hash === result.href) {
-                        const section = new URLSearchParams(result.href.split('?')[1]).get(
-                          'section',
-                        );
-                        requestAnimationFrame(() =>
-                          section ? focusSection(section) : headingRef.current?.focus(),
-                        );
-                      }
-                    }}
-                  />
-                )}
+                {navigationGroups.map((group) => {
+                  const items = group.items;
+                  const categoryIcon = categoryIconFor(group.name);
+                  return items.length ? (
+                    <div className="nav-group" key={group.id}>
+                      <p>
+                        {categoryIcon ? (
+                          <CategoryIcon name={categoryIcon} size="compact" />
+                        ) : (
+                          <Motif name={areaMotifs[group.name] ?? 'flower'} />
+                        )}
+                        {group.name}
+                      </p>
+                      {items.map((item) => (
+                        <a
+                          key={item.id}
+                          href={item.href}
+                          aria-current={currentItem?.id === item.id ? 'page' : undefined}
+                          onClick={() => {
+                            setMenuOpen(false);
+                            if (window.location.hash === item.href)
+                              requestAnimationFrame(() => {
+                                const section = new URLSearchParams(item.href.split('?')[1]).get(
+                                  'section',
+                                );
+                                if (section) focusSection(section);
+                                else headingRef.current?.focus();
+                              });
+                          }}
+                        >
+                          <span>{item.name}</span>
+                          {item.chinese && <span className="nav-chinese">{item.chinese}</span>}
+                        </a>
+                      ))}
+                    </div>
+                  ) : null;
+                })}
               </nav>
-              {hasQuery && !searchIndex && !searchFailed && <p role="status">正在准备搜索…</p>}
-              {hasQuery && searchFailed && (
-                <Alert tone="error" title="搜索暂时不可用">
-                  <p>请重试，或清空搜索浏览目录。</p>
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      setSearchFailed(false);
-                      setSearchAttempt((attempt) => attempt + 1);
-                    }}
-                  >
-                    重新加载搜索
-                  </Button>
-                </Alert>
-              )}
-              {hasQuery && searchIndex && searchResults.length === 0 && (
-                <div role="status" className="search-empty">
-                  <EmptyState
-                    title="未找到相关文档"
-                    description="换个关键词，或清空搜索查看目录。"
-                    action={
-                      <Button
-                        variant="secondary"
-                        onClick={() => {
-                          setQuery('');
-                          searchRef.current?.focus();
-                        }}
-                      >
-                        返回目录
-                      </Button>
-                    }
-                  />
-                </div>
-              )}
             </div>
           </div>
         </aside>
@@ -721,12 +928,19 @@ export default function App() {
               </header>
               {!isGallery && (
                 <details className="mobile-doc-toc" ref={mobileToc}>
-                  <summary>本页内容</summary>
+                  <summary>
+                    <span>本页内容</span>
+                    <span className="mobile-doc-toc-current">
+                      {toc.find((item) => item.id === activeTocId)?.title}
+                    </span>
+                    <ChevronDown size={16} aria-hidden="true" />
+                  </summary>
                   <nav aria-label="本页内容（窄屏）">
                     {toc.map((item) => (
                       <a
                         key={item.id}
                         className={item.nested ? 'toc-nested' : undefined}
+                        aria-current={activeTocId === item.id ? 'location' : undefined}
                         href={`${pathFor(page)}?section=${item.id}`}
                         onClick={() => {
                           if (mobileToc.current) mobileToc.current.open = false;
@@ -742,26 +956,53 @@ export default function App() {
               )}
               {page.sections.map((section) => (
                 <section className="doc-section" key={section.id}>
-                  <Heading
-                    level={2}
-                    className={`section-title${section.kind ? ' has-section-icon' : ''}`}
-                    id={section.id}
-                    data-doc-heading
-                    tabIndex={-1}
-                  >
-                    {section.kind && <SectionIcon name={section.kind} />}
-                    {section.title}
-                    <a
-                      className="heading-anchor"
-                      href={`${pathFor(page)}?section=${section.id}`}
-                      aria-label={`链接到${section.title}`}
-                      onClick={() => {
-                        if (route.section === section.id) focusSection(section.id);
-                      }}
+                  <div className="doc-section-header">
+                    <Heading
+                      level={2}
+                      className={`section-title${section.kind ? ' has-section-icon' : ''}`}
+                      id={section.id}
+                      data-doc-heading
+                      tabIndex={-1}
                     >
-                      #
-                    </a>
-                  </Heading>
+                      {section.kind && <SectionIcon name={section.kind} />}
+                      {section.title}
+                      <a
+                        className="heading-anchor"
+                        href={`${pathFor(page)}?section=${section.id}`}
+                        aria-label={`链接到${section.title}`}
+                        onClick={() => {
+                          if (route.section === section.id) focusSection(section.id);
+                        }}
+                      >
+                        #
+                      </a>
+                    </Heading>
+                    {section.id === codeControlSection && exampleIds.length > 0 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="doc-code-toggle"
+                        startIcon={<Code2 size={16} aria-hidden="true" />}
+                        aria-expanded={allCodeExpanded}
+                        onClick={() => {
+                          if (!allCodeExpanded) {
+                            document
+                              .querySelectorAll<HTMLDetailsElement>('.doc-disclosure')
+                              .forEach((details) => {
+                                if (details.querySelector('.component-source')) details.open = true;
+                              });
+                          }
+                          setExpandedExamples({
+                            pageId: documentationId,
+                            ids: allCodeExpanded ? [] : exampleIds,
+                          });
+                        }}
+                      >
+                        {allCodeExpanded ? '收起全部代码' : '展开全部代码'}
+                      </Button>
+                    )}
+                  </div>
                   <SectionBody disclosure={section.disclosure}>
                     {section.content && <div className="doc-prose">{section.content}</div>}
                     {section.examples?.map(
@@ -809,6 +1050,8 @@ export default function App() {
                               source={source}
                               themeScope={themeScope}
                               assets={assets}
+                              expanded={expandedIds.includes(id)}
+                              onExpandedChange={(expanded) => setExampleExpanded(id, expanded)}
                             />
                           </div>
                         </section>
@@ -839,7 +1082,13 @@ export default function App() {
                             </thead>
                             <tbody>
                               {api.rows.map((row) => (
-                                <tr key={row.name}>
+                                <tr
+                                  key={row.name}
+                                  id={apiRowAnchor(api.name, row.name)}
+                                  data-doc-heading
+                                  data-api-row
+                                  tabIndex={-1}
+                                >
                                   <th scope="row">
                                     <code>{row.name}</code>
                                     {row.required && <span className="required-tag">必填</span>}
@@ -999,6 +1248,54 @@ export default function App() {
           </aside>
         )}
       </div>
+      <DocumentationSearchDialog
+        open={searchOpen}
+        onOpenChange={setSearchOpen}
+        query={query}
+        onQueryChange={setQuery}
+        results={searchResults}
+        loading={!searchIndex && !searchFailed}
+        error={searchFailed}
+        onRetry={() => {
+          setSearchFailed(false);
+          setSearchAttempt((attempt) => attempt + 1);
+        }}
+        inputRef={searchRef}
+        onSelect={(result) => {
+          searchNavigating.current = true;
+          allowRouteFocus.current = true;
+          setSearchOpen(false);
+          if (window.location.hash === result.href) {
+            const section = new URLSearchParams(result.href.split('?')[1]).get('section');
+            requestAnimationFrame(() =>
+              section ? focusSection(section) : headingRef.current?.focus(),
+            );
+          }
+        }}
+        finalFocus={() => {
+          if (searchNavigating.current) return false;
+          const origin = searchReturnFocus.current;
+          if (origin?.isConnected && origin.getClientRects().length && !origin.closest('[inert]'))
+            return origin;
+          if (menuButton.current?.getClientRects().length) return menuButton.current;
+          return headerSearchButton.current ?? headingRef.current ?? false;
+        }}
+      />
+      {!isHome && showBackToTop && !menuOpen && (
+        <IconButton
+          ref={backToTop}
+          variant="secondary"
+          className="docs-back-to-top"
+          aria-label="返回顶部"
+          title="返回顶部"
+          onClick={() => {
+            headingRef.current?.focus({ preventScroll: true });
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          }}
+        >
+          <ArrowUp size={20} aria-hidden="true" />
+        </IconButton>
+      )}
     </ThemeProvider>
   );
 }

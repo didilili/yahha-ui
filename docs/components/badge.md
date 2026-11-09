@@ -4,7 +4,7 @@
 
 用于展示分类、标签或当前状态的静态标记。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Badge } from 'yahha-ui';
@@ -14,7 +14,7 @@ import { Badge } from 'yahha-ui';
 
 ## 何时使用
 
-用简短文字展示分类、标签或当前状态，例如“随笔”“草稿”“已发布”。需要点击筛选或跳转的分类入口，使用按钮或链接。
+Badge 是静态标签与状态标记，用途近似其他组件库的 Tag / Chip，例如“随笔”“草稿”“已发布”。它不提供通知计数或附着角标；需要点击筛选或跳转的分类入口，使用按钮或链接。
 
 <a id="examples"></a>
 
@@ -26,7 +26,7 @@ import { Badge } from 'yahha-ui';
 
 使用相同文字对比普通、强调和成功三种颜色。
 
-[查看示例文件](../../playground/src/examples/foundations/BadgeTones.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/BadgeTones.tsx)
 
 <!-- example-source: playground/src/examples/foundations/BadgeTones.tsx -->
 
@@ -61,7 +61,7 @@ export default function BadgeTones() {
 
 分别查看正文中的行内标记，以及中文和连续长词的换行。
 
-[查看示例文件](../../playground/src/examples/foundations/BadgeContent.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/BadgeContent.tsx)
 
 <!-- example-source: playground/src/examples/foundations/BadgeContent.tsx -->
 
@@ -97,7 +97,7 @@ export default function BadgeContent() {
 
 对比相同语义颜色的普通标记与印章；只有成功色印章附带小勾。
 
-[查看示例文件](../../playground/src/examples/foundations/BadgeAppearance.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/BadgeAppearance.tsx)
 
 <!-- example-source: playground/src/examples/foundations/BadgeAppearance.tsx -->
 
@@ -135,107 +135,17 @@ export default function BadgeAppearance() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-修改摘要后，上一次检查结果会清除；再次检查时，分类与结果分别显示。 本例只检查摘要是否为空，校验和预览由示例管理，不会保存或发布内容。
-
-<a id="badge-status"></a>
-
-### 表单校验状态组合
-
-根据摘要检查结果切换标记。
-
-[查看示例文件](../../playground/src/examples/foundations/BadgeStatus.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/BadgeStatus.tsx -->
-
-```tsx
-import { useRef, useState } from 'react';
-import { Badge, Button, Heading, Surface, Text, TextField } from 'yahha-ui';
-
-type Phase = 'unchecked' | 'editing' | 'missing' | 'checked';
-const labels = {
-  unchecked: '未检查',
-  editing: '待检查',
-  missing: '需补充',
-  checked: '已检查',
-};
-
-export default function BadgeStatus() {
-  const [phase, setPhase] = useState<Phase>('unchecked');
-  const [preview, setPreview] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const tone = phase === 'checked' ? 'success' : phase === 'editing' ? 'accent' : 'neutral';
-
-  return (
-    <Surface style={{ display: 'grid', gap: 24, minWidth: 0, maxWidth: 560 }}>
-      <header style={{ display: 'grid', gap: 12, justifyItems: 'start' }}>
-        <Badge>生活手记</Badge>
-        <Heading level={3}>沿着河边，慢慢走</Heading>
-      </header>
-      <form
-        noValidate
-        style={{ display: 'grid', gap: 16, minWidth: 0 }}
-        onInput={() => {
-          setPhase('editing');
-          setPreview(null);
-        }}
-        onReset={() => {
-          setPhase('unchecked');
-          setPreview(null);
-        }}
-        onSubmit={(event) => {
-          event.preventDefault();
-          const summary = String(new FormData(event.currentTarget).get('summary') ?? '');
-          if (!summary.trim()) {
-            setPhase('missing');
-            setPreview(null);
-            inputRef.current?.focus();
-            return;
-          }
-          setPhase('checked');
-          setPreview(summary);
-        }}
-      >
-        <TextField
-          ref={inputRef}
-          label="手记摘要"
-          name="summary"
-          defaultValue=""
-          required
-          hint="必填，写下一两句手记的内容。"
-          error={phase === 'missing' ? '请先填写摘要。' : undefined}
-        />
-        <div>
-          <Badge tone={tone}>{labels[phase]}</Badge>
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-          <Button type="submit">检查摘要</Button>
-          <Button type="reset" variant="secondary">
-            恢复示例
-          </Button>
-        </div>
-        <Text role="status" size="sm" tone="muted">
-          {phase === 'checked' ? '摘要检查通过，预览已更新；内容未保存或发布。' : ''}
-        </Text>
-        {preview !== null && (
-          <section aria-label="摘要预览" style={{ whiteSpace: 'pre-wrap' }}>
-            <Text>{preview}</Text>
-          </section>
-        )}
-      </form>
-    </Surface>
-  );
-}
-```
-
 <a id="design"></a>
 
 ## 用文字表达分类与状态
 
 用“草稿”“已发布”等明确文案表达状态。默认使用普通实线标记，success 保留绿色语义；appearance="stamp" 增加虚线轮廓，仅 success 印章附带辅助小勾。标记适合短标签；长文案虽然可以换行，详细原因仍适合放在相邻正文中。
+
+<a id="accessibility"></a>
+
+## 更新标记与状态播报
+
+分类和既有状态通常直接显示即可。需要通知检查等操作结果时，由外层 role="status" 承担温和播报；Badge 本身不会自动播报，同一结果只保留一处播报。完整表单流程见[表单校验与状态摘要](../recipes/interactions.md#badge-status)。
 
 <a id="api"></a>
 
@@ -252,15 +162,9 @@ export default function BadgeStatus() {
 | `ref`               | 指向根 span。                                                            | `Ref<HTMLSpanElement>`               | —           |
 | `其余原生属性`      | 透传 span 属性，包括 aria-\*、data-\* 和事件；不会自动增加交互语义。     | `ComponentPropsWithRef<'span'>`      | —           |
 
-<a id="accessibility"></a>
-
-## 更新标记与状态播报
-
-分类和既有状态通常直接显示即可。需要通知检查等操作结果时，可像示例一样由外层 role="status" 承担温和播报；Badge 本身不会自动播报，同一结果只保留一处播报。
-
 <a id="related"></a>
 
 ## 相关组件
 
-- [Text 正文](text.md)：用于正文、摘要和辅助说明，统一字号、行高与语义颜色。
+- [Text 段落正文](text.md)：固定使用 p 元素的段落正文，统一字号、行高与语义颜色。
 - [Alert 提示条](alert.md)：用于页面内持续显示的信息、结果、警告或错误提示。

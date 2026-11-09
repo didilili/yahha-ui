@@ -1,4 +1,11 @@
 import assert from 'node:assert/strict';
+import { apiRowAnchor } from '../../playground/src/docs/api-anchor.ts';
+import {
+  closeSearchDialog,
+  openSearchDialog,
+  searchField,
+  visibleSearchEntry,
+} from './search-dialog-helpers.mjs';
 
 /** Follow the public documentation paths instead of testing a second copy of the UI. */
 export async function verifyAdoption(browser, baseURL) {
@@ -17,33 +24,41 @@ export async function verifyAdoption(browser, baseURL) {
 
     await page.goto(`${baseURL}#/`);
     const note = page.locator('.home-component-note');
-    await note.getByRole('link', { name: 'TextField', exact: true }).click();
-    await page.getByRole('heading', { level: 1, name: 'TextField 单行输入' }).waitFor();
+    await note.getByRole('link', { name: 'Input', exact: true }).click();
+    await page.getByRole('heading', { level: 1, name: 'Input 输入框' }).waitFor();
     await page.goto(`${baseURL}#/`);
     await page.getByRole('link', { name: '查看阅读与收藏示例', exact: true }).click();
     await page.locator('#reading-example').waitFor();
 
     await page.goto(`${baseURL}#/components/button`);
     const sidebar = page.locator('.docs-sidebar');
-    const search = sidebar.getByRole('searchbox', { name: '搜索文档', exact: true });
+    const dialog = await openSearchDialog(page);
+    const search = searchField(page);
     await search.fill('initialFocus');
-    const result = sidebar.locator('a[href="#/components/dialog?section=api"]');
+    const propertyAnchor = apiRowAnchor('DialogProps', 'initialFocus');
+    const propertyHref = `#/components/dialog?section=${encodeURIComponent(propertyAnchor)}`;
+    const result = dialog.locator(`a[href="${propertyHref}"]`);
     await result.waitFor();
     await search.press('Tab');
     // A clear button may precede the first result; use the real link for keyboard activation.
     await result.focus();
     await page.keyboard.press('Enter');
+    await dialog.waitFor({ state: 'hidden' });
     await page.locator('#api').waitFor();
-    await page.waitForFunction(() => document.activeElement?.id === 'api');
-    assert.match(page.url(), /components\/dialog\?section=api/);
+    await page.waitForFunction((id) => document.activeElement?.id === id, propertyAnchor);
+    assert.equal(await page.evaluate(() => document.activeElement?.tagName), 'TR');
+    assert.equal(new URL(page.url()).hash, propertyHref);
+    await openSearchDialog(page);
     await search.fill('portalContainer');
-    assert.ok(await sidebar.locator('a[href*="?section=api"]').count());
+    const portalHref = `#/components/dialog?section=${encodeURIComponent(apiRowAnchor('DialogProps', 'portalContainer'))}`;
+    assert.ok(await dialog.locator(`a[href="${portalHref}"]`).count());
     await search.fill('这条搜索没有对应内容');
-    await sidebar.getByText('未找到相关文档', { exact: true }).waitFor();
-    await sidebar.getByRole('button', { name: '返回目录', exact: true }).click();
+    await dialog.getByText('没有匹配的文档，试试其他关键词。', { exact: true }).waitFor();
+    await dialog.getByRole('button', { name: '清空搜索', exact: true }).click();
     assert.equal(await search.inputValue(), '');
+    await closeSearchDialog(page);
 
-    await page.goto(`${baseURL}#/components/text-field?section=text-field-customization`);
+    await page.goto(`${baseURL}#/components/input?section=text-field-customization`);
     const field = page.locator('#text-field-customization');
     await field.getByRole('textbox', { name: '手记署名', exact: true }).fill('库米');
     assert.ok((await field.locator('.yahha-example-nickname-field').boundingBox()).width <= 360);
@@ -85,9 +100,12 @@ export async function verifyAdoption(browser, baseURL) {
     assert.ok((await page.locator('.doc-title-row').boundingBox()).height < 240);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     await page.getByRole('button', { name: '打开文档目录', exact: true }).click();
+    await openSearchDialog(page, await visibleSearchEntry(page, sidebar));
     await search.fill('initialFocus');
-    await sidebar.locator('a[href="#/components/dialog?section=api"]').click();
-    await page.waitForFunction(() => document.activeElement?.id === 'api');
+    await result.click();
+    await dialog.waitFor({ state: 'hidden' });
+    await page.waitForFunction((id) => document.activeElement?.id === id, propertyAnchor);
+    assert.equal(await page.evaluate(() => document.activeElement?.tagName), 'TR');
     assert.equal(await page.locator('main').getAttribute('inert'), null);
     await page.locator('.mobile-doc-toc summary').focus();
     await page.setViewportSize({ width: 1440, height: 1000 });

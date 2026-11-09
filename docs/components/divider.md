@@ -4,7 +4,7 @@
 
 用于内容的主题或视觉分隔，支持水平、垂直和装饰模式。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Divider } from 'yahha-ui';
@@ -26,7 +26,7 @@ import { Divider } from 'yahha-ui';
 
 在两个内容段落之间标出主题转折。
 
-[查看示例文件](../../playground/src/examples/content/DividerBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/DividerBasic.tsx)
 
 <!-- example-source: playground/src/examples/content/DividerBasic.tsx -->
 
@@ -50,7 +50,7 @@ export default function DividerBasic() {
 
 用装饰性竖线分开并列短文字。
 
-[查看示例文件](../../playground/src/examples/content/DividerVertical.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/DividerVertical.tsx)
 
 <!-- example-source: playground/src/examples/content/DividerVertical.tsx -->
 
@@ -68,60 +68,13 @@ export default function DividerVertical() {
 }
 ```
 
-<a id="integration"></a>
-
-## 进阶用法
-
-<a id="divider-chapter"></a>
-
-### 章节花线
-
-用现有 SVG 定制一处章节转折，保留真实 hr 的分隔语义。
-
-[查看示例文件](../../playground/src/examples/scenes/DividerChapter.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/scenes/DividerChapter.tsx -->
-
-```tsx
-import type { CSSProperties } from 'react';
-import { Divider } from 'yahha-ui';
-import flowerLine from './artwork/decorative-elements/dividers/flower-line.svg?no-inline';
-
-const artworkStyle = {
-  width: '100%',
-  '--chapter-flower-art': `url(${JSON.stringify(flowerLine)})`,
-} as CSSProperties;
-
-export default function DividerChapter() {
-  return (
-    <div style={artworkStyle}>
-      <style>{`
-        .yahha-chapter-divider {
-          border: 0;
-          block-size: 48px;
-          background: var(--chapter-flower-art) center / 600px 48px no-repeat;
-        }
-        @media (forced-colors: active) {
-          .yahha-chapter-divider {
-            block-size: 0;
-            border-block-start: var(--yahha-border-width, 1px) solid CanvasText;
-            background: none;
-          }
-        }
-      `}</style>
-      <Divider className="yahha-chapter-divider" />
-    </div>
-  );
-}
-```
-
 <a id="divider-directions"></a>
 
 ### 响应式内容分隔
 
 窄屏隐藏元信息之间的装饰线，保留完整文字。
 
-[查看示例文件](../../playground/src/examples/content/DividerExample.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/content/DividerExample.tsx)
 
 <!-- example-source: playground/src/examples/content/DividerExample.tsx -->
 
@@ -177,6 +130,49 @@ export default function DividerExample() {
 
 水平线默认上下各留白 20px；放进已有 gap 的布局时，可设置 `style={{ margin: 0 }}`，由外层统一安排间距，见[文章归档组合](../README.md#站内指南)。垂直分隔适合短元信息，可通过 style 或 className 调整高度。
 
+<a id="divider-chapter"></a>
+
+### 自定义章节花线
+
+用现有 SVG 定制一处章节转折，保留真实 hr 的分隔语义。
+
+[查看示例文件](../../playground/src/examples/scenes/DividerChapter.tsx)
+
+<!-- example-source: playground/src/examples/scenes/DividerChapter.tsx -->
+
+```tsx
+import type { CSSProperties } from 'react';
+import { Divider } from 'yahha-ui';
+import flowerLine from './artwork/decorative-elements/dividers/flower-line.svg?no-inline';
+
+const artworkStyle = {
+  width: '100%',
+  '--chapter-flower-art': `url(${JSON.stringify(flowerLine)})`,
+} as CSSProperties;
+
+export default function DividerChapter() {
+  return (
+    <div style={artworkStyle}>
+      <style>{`
+        .yahha-chapter-divider {
+          border: 0;
+          block-size: 48px;
+          background: var(--chapter-flower-art) center / 600px 48px no-repeat;
+        }
+        @media (forced-colors: active) {
+          .yahha-chapter-divider {
+            block-size: 0;
+            border-block-start: var(--yahha-border-width, 1px) solid CanvasText;
+            background: none;
+          }
+        }
+      `}</style>
+      <Divider className="yahha-chapter-divider" />
+    </div>
+  );
+}
+```
+
 <a id="api"></a>
 
 ## API
@@ -197,9 +193,9 @@ export default function DividerExample() {
 
 orientation 只决定方向；垂直线也需要按内容判断是否保留语义。设置 decorative 后，线条仍可见，但其分隔语义隐藏于辅助技术。
 
-分隔线默认是静态内容，无需添加 tabIndex。Divider 不接收 children 或 dangerouslySetInnerHTML，需要分组标题时单独使用标题元素。 类型检查会拒绝这两种本就无效的 hr 用法；有效原生属性与运行时绘制保持。
+分隔线默认是静态内容，无需添加 tabIndex。Divider 不接收 children 或 dangerouslySetInnerHTML，需要分组标题时单独使用标题元素。
 
-装饰线与对应元信息成组排列，窄屏由进阶示例的布局隐藏竖线，保留完整文字；不改变 Divider 的方向或语义。
+装饰线与对应元信息成组排列，窄屏由元信息示例的布局隐藏竖线，保留完整文字；不改变 Divider 的方向或语义。
 
 <a id="related"></a>
 

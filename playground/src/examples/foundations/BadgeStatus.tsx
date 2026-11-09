@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Badge, Button, Heading, Surface, Text, TextField } from 'yahha-ui';
+import { Badge, Button, Heading, Surface, Text, Input } from 'yahha-ui';
 
 type Phase = 'unchecked' | 'editing' | 'missing' | 'checked';
 const labels = {
@@ -45,7 +45,7 @@ export default function BadgeStatus() {
           setPreview(summary);
         }}
       >
-        <TextField
+        <Input
           ref={inputRef}
           label="手记摘要"
           name="summary"

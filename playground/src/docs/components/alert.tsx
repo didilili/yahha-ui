@@ -1,7 +1,8 @@
+import { Link } from 'yahha-ui';
 import AlertExample from '../../examples/content/AlertExample';
 import alertSource from '../../examples/content/AlertExample.tsx?raw';
-import AlertAction from '../../examples/content/AlertAction';
-import alertActionSource from '../../examples/content/AlertAction.tsx?raw';
+import AlertRecovery from '../../examples/content/AlertRecovery';
+import alertRecoverySource from '../../examples/content/AlertRecovery.tsx?raw';
 import AlertReadingNotice from '../../examples/content/AlertReadingNotice';
 import alertReadingNoticeSource from '../../examples/content/AlertReadingNotice.tsx?raw';
 import { defineComponentPage } from '../page';
@@ -26,34 +27,20 @@ export default defineComponentPage('alert', {
           AlertExample,
           alertSource,
         ),
-      ],
-    },
-    {
-      id: 'integration',
-      title: '进阶用法',
-      disclosure: '查看重试与隐藏恢复示例',
-      content: <p>订阅流程仅在当前示例中模拟，不实际保存；阅读提醒只改变当前页面的显示状态。</p>,
-      examples: [
-        {
-          ...example(
-            'alert-action',
-            '失败提示与重试',
-            '首次模拟订阅失败，重试后成功；保留已选项，不实际订阅。',
-            AlertAction,
-            alertActionSource,
-          ),
-          toc: false,
-        },
-        {
-          ...example(
-            'alert-reading-notice',
-            '隐藏与恢复提示',
-            '收起提示后，可从保留的外部入口再次展开。',
-            AlertReadingNotice,
-            alertReadingNoticeSource,
-          ),
-          toc: false,
-        },
+        example(
+          'alert-recovery',
+          '带恢复操作的错误提示',
+          '点击恢复按钮切换为成功提示；此处只演示本地状态，不发起请求。',
+          AlertRecovery,
+          alertRecoverySource,
+        ),
+        example(
+          'alert-reading-notice',
+          '隐藏与恢复提示',
+          '收起提示后，可从保留的外部入口再次展开。',
+          AlertReadingNotice,
+          alertReadingNoticeSource,
+        ),
       ],
     },
     {
@@ -61,7 +48,8 @@ export default defineComponentPage('alert', {
       title: '提示内容与恢复操作',
       content: (
         <p>
-          保存失败时说明原因，并提供重试或修改入口。保留用户已填写或选择的内容；等待状态和结束后的焦点由调用方管理。
+          保存失败时说明原因，并提供重试或修改入口。保留用户已填写或选择的内容；等待状态和结束后的焦点由调用方管理。完整流程见{' '}
+          <Link href="#/guides/interactions?section=alert-action">订阅偏好保存失败与重试</Link>。
         </p>
       ),
     },

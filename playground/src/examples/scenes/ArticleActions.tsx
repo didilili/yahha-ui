@@ -12,7 +12,7 @@ import {
   Select,
   Text,
   Textarea,
-  TextField,
+  Input,
   Toast,
   Tooltip,
 } from 'yahha-ui';
@@ -203,7 +203,7 @@ export default function ArticleActions() {
         }
       >
         <form id={formId} onSubmit={submit} style={{ display: 'grid', gap: 20 }}>
-          <TextField
+          <Input
             ref={titleInput}
             label="文章标题"
             name="title"

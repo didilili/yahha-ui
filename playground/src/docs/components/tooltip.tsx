@@ -114,7 +114,7 @@ export default defineComponentPage('tooltip', {
               defaultValue: 'true',
               description: '是否显示箭头。false 时省略箭头，不改变内容、打开关闭和定位设置。',
             },
-            ...popupRows('Tooltip', 'top', 'center').map((row) =>
+            ...popupRows('top', 'center').map((row) =>
               row.name === 'sideOffset'
                 ? {
                     ...row,

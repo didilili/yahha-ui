@@ -10,6 +10,7 @@ import {
   Divider,
   DropdownMenu,
   EmptyState,
+  Form,
   Heading,
   IconButton,
   SearchIcon,
@@ -30,7 +31,7 @@ import {
   Tabs,
   Text,
   Textarea,
-  TextField,
+  Input,
   ThemeProvider,
   Toast,
   Tooltip,
@@ -66,6 +67,17 @@ function InfoGlyph() {
 /** Visual samples only; the overview owns their inert and aria-hidden boundary. */
 export default function ComponentPreview({ id }: { id: string }): ReactNode {
   switch (id) {
+    case 'form':
+      return (
+        <Form initialValues={{ nickname: '库米' }} style={stack}>
+          {(form) => (
+            <>
+              <Input {...form.input('nickname')} label="昵称" />
+              <Button type="submit">保存设置</Button>
+            </>
+          )}
+        </Form>
+      );
     case 'icon':
       return (
         <div style={row}>
@@ -125,10 +137,8 @@ export default function ComponentPreview({ id }: { id: string }): ReactNode {
           </div>
         </ThemeProvider>
       );
-    case 'text-field':
-      return (
-        <TextField label="手记标题" defaultValue="今天的散步小记" hint="建议用一句话概括内容。" />
-      );
+    case 'input':
+      return <Input label="手记标题" defaultValue="今天的散步小记" hint="建议用一句话概括内容。" />;
     case 'segmented-control':
       return (
         <SegmentedControl

@@ -4,7 +4,7 @@
 
 显示自定义 SVG 或直接使用手绘功能图标，统一尺寸、颜色和可访问名称。
 
-首次接入请完成[样式导入与主题设置](../../README.md#构建与本地安装)。本文与官网使用相同的说明、API 和原始示例源码。
+[安装与接入](../../README.md#安装与接入)
 
 ```tsx
 import { Icon, SearchIcon, BookmarkIcon } from 'yahha-ui';
@@ -28,7 +28,7 @@ Icon 是绘制 SVG 的基础容器，统一尺寸、色调与可访问名称。S
 
 直接使用命名图标；独立表达含义时通过 aria-label 提供名称。
 
-[查看示例文件](../../playground/src/examples/foundations/IconBasic.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/IconBasic.tsx)
 
 <!-- example-source: playground/src/examples/foundations/IconBasic.tsx -->
 
@@ -44,9 +44,9 @@ export default function IconBasic() {
 
 ### 手绘功能图标
 
-16 种图标的静态样张，按图形用途查找。
+按中文用途查找 16 种图标，使用样张下方的导出名导入。
 
-[查看示例文件](../../playground/src/examples/foundations/IconGallery.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/IconGallery.tsx)
 
 <!-- example-source: playground/src/examples/foundations/IconGallery.tsx -->
 
@@ -72,22 +72,22 @@ import {
 } from 'yahha-ui';
 
 const icons = [
-  { component: SearchIcon, label: '搜索' },
-  { component: CloseIcon, label: '关闭' },
-  { component: BookmarkIcon, label: '收藏' },
-  { component: CopyIcon, label: '复制' },
-  { component: CheckIcon, label: '完成' },
-  { component: PlusIcon, label: '新增' },
-  { component: EditIcon, label: '编辑' },
-  { component: TrashIcon, label: '删除' },
-  { component: ArrowLeftIcon, label: '上一页' },
-  { component: ArrowRightIcon, label: '下一页' },
-  { component: ChevronDownIcon, label: '展开' },
-  { component: ExternalLinkIcon, label: '外链' },
-  { component: InfoIcon, label: '信息' },
-  { component: SuccessIcon, label: '成功' },
-  { component: WarningIcon, label: '注意' },
-  { component: ErrorIcon, label: '错误' },
+  { component: SearchIcon, name: 'SearchIcon', label: '搜索' },
+  { component: CloseIcon, name: 'CloseIcon', label: '关闭' },
+  { component: BookmarkIcon, name: 'BookmarkIcon', label: '收藏' },
+  { component: CopyIcon, name: 'CopyIcon', label: '复制' },
+  { component: CheckIcon, name: 'CheckIcon', label: '完成' },
+  { component: PlusIcon, name: 'PlusIcon', label: '新增' },
+  { component: EditIcon, name: 'EditIcon', label: '编辑' },
+  { component: TrashIcon, name: 'TrashIcon', label: '删除' },
+  { component: ArrowLeftIcon, name: 'ArrowLeftIcon', label: '上一页' },
+  { component: ArrowRightIcon, name: 'ArrowRightIcon', label: '下一页' },
+  { component: ChevronDownIcon, name: 'ChevronDownIcon', label: '展开' },
+  { component: ExternalLinkIcon, name: 'ExternalLinkIcon', label: '外链' },
+  { component: InfoIcon, name: 'InfoIcon', label: '信息' },
+  { component: SuccessIcon, name: 'SuccessIcon', label: '成功' },
+  { component: WarningIcon, name: 'WarningIcon', label: '注意' },
+  { component: ErrorIcon, name: 'ErrorIcon', label: '错误' },
 ];
 
 export default function IconGallery() {
@@ -96,17 +96,18 @@ export default function IconGallery() {
       aria-label="手绘功能图标"
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 80px), 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 112px), 1fr))',
         gap: 24,
         padding: 0,
         margin: 0,
         listStyle: 'none',
       }}
     >
-      {icons.map(({ component: Glyph, label }) => (
-        <li key={label} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+      {icons.map(({ component: Glyph, name, label }) => (
+        <li key={name} style={{ display: 'grid', justifyItems: 'center', gap: 8, minWidth: 0 }}>
           <Glyph size="lg" />
           <Text size="sm">{label}</Text>
+          <code style={{ fontSize: 12, overflowWrap: 'anywhere' }}>{name}</code>
         </li>
       ))}
     </ul>
@@ -120,7 +121,7 @@ export default function IconGallery() {
 
 分别保持图形不变，对比图框尺寸和语义色调。
 
-[查看示例文件](../../playground/src/examples/foundations/IconSizes.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/IconSizes.tsx)
 
 <!-- example-source: playground/src/examples/foundations/IconSizes.tsx -->
 
@@ -163,7 +164,7 @@ export default function IconSizes() {
 
 对比默认装饰图标与两种可访问命名方式。
 
-[查看示例文件](../../playground/src/examples/foundations/IconAccessibility.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/IconAccessibility.tsx)
 
 <!-- example-source: playground/src/examples/foundations/IconAccessibility.tsx -->
 
@@ -211,18 +212,18 @@ export default function IconAccessibility() {
 
 通过 startIcon 和 leading 插槽放入图标，由宿主控件安排图框。
 
-[查看示例文件](../../playground/src/examples/foundations/IconSlots.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/IconSlots.tsx)
 
 <!-- example-source: playground/src/examples/foundations/IconSlots.tsx -->
 
 ```tsx
-import { Button, SearchIcon, TextField } from 'yahha-ui';
+import { Button, SearchIcon, Input } from 'yahha-ui';
 
 export default function IconSlots() {
   return (
     <div style={{ display: 'grid', justifyItems: 'start', gap: 16, maxWidth: 360 }}>
       <Button startIcon={<SearchIcon />}>搜索手记</Button>
-      <TextField label="搜索关键词" leading={<SearchIcon />} defaultValue="散步" />
+      <Input label="搜索关键词" leading={<SearchIcon />} defaultValue="散步" />
     </div>
   );
 }
@@ -234,7 +235,7 @@ export default function IconSlots() {
 
 分组展示自定义坐标与多色路径，外部尺寸由 size 控制。
 
-[查看示例文件](../../playground/src/examples/foundations/IconCustom.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
+[查看示例文件](../../playground/src/examples/foundations/IconCustom.tsx)
 
 <!-- example-source: playground/src/examples/foundations/IconCustom.tsx -->
 
@@ -289,112 +290,11 @@ export default function IconCustom() {
 }
 ```
 
-<a id="integration"></a>
+<a id="recipes"></a>
 
-## 进阶用法
+## 相关组合
 
-<a id="icon-composition"></a>
-
-### 搜索与收藏组合
-
-提交关键词筛选本地手记，点击收藏切换状态；清空后回到输入框。
-
-[查看示例文件](../../playground/src/examples/foundations/IconComposition.tsx)。示例保留原始相对导入路径；完整接入与素材下载见官网对应示例。
-
-<!-- example-source: playground/src/examples/foundations/IconComposition.tsx -->
-
-```tsx
-import { useRef, useState } from 'react';
-import { BookmarkIcon, Button, CloseIcon, IconButton, SearchIcon, Text, TextField } from 'yahha-ui';
-
-const articles = ['周末的散步记录', '给小花换一个花盆', '散步路上的面包店'];
-
-export default function IconComposition() {
-  const [value, setValue] = useState('');
-  const [query, setQuery] = useState('');
-  const [saved, setSaved] = useState<string[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const matches = articles.filter((title) => title.includes(query.trim()));
-
-  return (
-    <div style={{ display: 'grid', gap: 16, maxWidth: 480, minWidth: 0 }}>
-      <form
-        style={{ display: 'grid', gap: 12 }}
-        onSubmit={(event) => {
-          event.preventDefault();
-          setQuery(value);
-        }}
-      >
-        <TextField
-          ref={inputRef}
-          label="搜索手记"
-          type="text"
-          inputMode="search"
-          enterKeyHint="search"
-          placeholder="试试“散步”"
-          value={value}
-          onChange={(event) => setValue(event.currentTarget.value)}
-          leading={<SearchIcon />}
-          trailing={
-            <IconButton
-              variant="ghost"
-              aria-label="清空手记搜索"
-              disabled={!value && !query}
-              onClick={() => {
-                setValue('');
-                setQuery('');
-                inputRef.current?.focus();
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-          }
-        />
-        <Button type="submit" startIcon={<SearchIcon />} style={{ justifySelf: 'start' }}>
-          搜索
-        </Button>
-      </form>
-      <Text size="sm" tone="muted" role="status">
-        {matches.length ? `找到 ${matches.length} 篇手记` : '没有匹配的手记，试试其他关键词。'}
-      </Text>
-      {matches.length > 0 && (
-        <ul
-          aria-label="匹配的手记"
-          style={{ display: 'grid', gap: 12, margin: 0, padding: 0, listStyle: 'none' }}
-        >
-          {matches.map((title) => (
-            <li
-              key={title}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 16,
-              }}
-            >
-              <span>{title}</span>
-              <IconButton
-                variant="ghost"
-                aria-label={`收藏《${title}》`}
-                aria-pressed={saved.includes(title)}
-                onClick={() => {
-                  setSaved((current) =>
-                    current.includes(title)
-                      ? current.filter((item) => item !== title)
-                      : [...current, title],
-                  );
-                }}
-              >
-                <BookmarkIcon filled={saved.includes(title)} />
-              </IconButton>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-```
+- [搜索与逐项收藏](../recipes/interactions.md#icon-composition)
 
 <a id="api"></a>
 
@@ -434,7 +334,7 @@ export default function IconComposition() {
 
 ## 尺寸与插槽
 
-独立图标用 size 控制图框。Button、IconButton 与 TextField 已设置自己的插槽尺寸，图标放入后沿用宿主的图框，不会扩大按钮的点击区域。 命名图标的路径按 24 单位坐标绘制，修改 viewBox 不会重新计算路径；调整显示尺寸使用 size。
+独立图标用 size 控制图框。Button、IconButton 与 Input 已设置自己的插槽尺寸，图标放入后沿用宿主的图框，不会扩大按钮的点击区域。 命名图标的路径按 24 单位坐标绘制，修改 viewBox 不会重新计算路径；调整显示尺寸使用 size。
 
 tone="inherit" 随当前文字颜色变化。统一配色使用 [ThemeProvider](theme.md)，局部多色图形在路径上设置 fill 或 stroke。插槽也接受原生 SVG，保留原始 viewBox 即可。
 
@@ -446,4 +346,4 @@ tone="inherit" 随当前文字颜色变化。统一配色使用 [ThemeProvider](
 
 - [IconButton 图标按钮](icon-button.md)：用于仅以图标呈现的操作，提供方形点击区域，并要求明确的可访问名称。
 - [Button 按钮](button.md)：用于触发操作，支持不同强调程度、禁用、加载和切换状态。
-- [TextField 单行输入](text-field.md)：带可见标签、辅助说明和错误反馈的单行输入框。
+- [Input 输入框](input.md)：带可见标签、辅助说明和错误反馈的单行输入框。

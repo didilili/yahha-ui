@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, RadioGroup, Text, TextField } from 'yahha-ui';
+import { Button, RadioGroup, Text, Input } from 'yahha-ui';
 
 type Signature = 'nickname' | 'anonymous';
 const comment = '读到小八在面包店门口站住，我也饿了。那张路线图记得把店名补上。';
@@ -63,7 +63,7 @@ export default function RadioGroupCommentSignature() {
           { value: 'anonymous', label: '匿名' },
         ]}
       />
-      <TextField
+      <Input
         ref={nicknameRef}
         label="昵称"
         name="nickname"

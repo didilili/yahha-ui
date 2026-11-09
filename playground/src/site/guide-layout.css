@@ -1,7 +1,7 @@
 /* Document roles share the brand, while keeping their reading and browsing space distinct. */
 @media (min-width: 961px) {
   .docs-site .docs-layout.is-gallery {
-    grid-template-columns: 252px minmax(0, 1fr);
+    grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
   }
 }
 
@@ -97,10 +97,6 @@
   color: var(--yahha-muted, #7a5c6d);
 }
 
-.docs-site .recipe-preview-reading img {
-  object-position: top;
-}
-
 .docs-site .doc-disclosure {
   border-block: 1px solid var(--site-soft-line);
 }
@@ -136,15 +132,6 @@
 
 .docs-site .doc-disclosure-content {
   padding-block: 12px 24px;
-}
-
-@media (min-width: 961px) {
-  .docs-cartoon .is-design-area .docs-sidebar {
-    border-color: var(--site-soft-line);
-    border-radius: 0;
-    border-width: 0 1px 0 0;
-    background: transparent;
-  }
 }
 
 @media (max-width: 600px) {

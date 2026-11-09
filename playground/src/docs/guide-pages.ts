@@ -3,9 +3,11 @@ import type { DocPage } from './types';
 const loaders: Record<string, () => Promise<DocPage>> = {
   introduction: () => import('./guides/introduction').then((module) => module.default),
   'getting-started': () => import('./guides/getting-started').then((module) => module.default),
+  forms: () => import('./guides/forms').then((module) => module.default),
   styling: () => import('./guides/styling').then((module) => module.default),
   reading: () => import('./guides/reading').then((module) => module.default),
   states: () => import('./guides/states').then((module) => module.default),
+  interactions: () => import('./guides/interactions').then((module) => module.default),
   'design-baseline': () => import('./guides/design-baseline').then((module) => module.default),
   recipes: () => import('./recipe-guide').then((module) => module.recipeGuide),
   artwork: () => import('./artwork-guide').then((module) => module.artworkGuide),
