@@ -263,6 +263,249 @@ function protectedProperty(item) {
   return undefined;
 }
 
+/** Recognize the fixed non-visual props returned by an inline public Form render callback. */
+function formBindingChecker(source, stringValue) {
+  const scopes = new WeakMap();
+  const parents = new WeakMap();
+  const definitions = new WeakSet();
+  const nodes = [];
+  const functions = new Set([
+    'ArrowFunctionExpression',
+    'FunctionExpression',
+    'FunctionDeclaration',
+  ]);
+  const blocks = new Set([
+    'BlockStatement',
+    'CatchClause',
+    'ForStatement',
+    'ForInStatement',
+    'ForOfStatement',
+    'SwitchStatement',
+  ]);
+  const createScope = (parent, isFunction = false) => ({ parent, isFunction, bindings: new Map() });
+  const define = (pattern, scope, binding) => {
+    if (!pattern) return;
+    if (pattern.type === 'Identifier') {
+      definitions.add(pattern);
+      scope.bindings.set(pattern.name, { ...binding, dirty: false });
+    } else if (pattern.type === 'AssignmentPattern') define(pattern.left, scope, binding);
+    else if (pattern.type === 'RestElement') define(pattern.argument, scope, binding);
+    else if (pattern.type === 'ArrayPattern')
+      pattern.elements.forEach((item) => define(item, scope, binding));
+    else if (pattern.type === 'ObjectPattern')
+      pattern.properties.forEach((item) =>
+        define(item.type === 'RestElement' ? item.argument : item.value, scope, binding),
+      );
+  };
+  const walk = (node, scope, parent) => {
+    if (!node || typeof node !== 'object' || !node.type) return;
+    parents.set(node, parent);
+    nodes.push(node);
+    if (node.type === 'FunctionDeclaration') define(node.id, scope, { kind: 'local' });
+    if (node.type === 'ClassDeclaration') define(node.id, scope, { kind: 'local' });
+    if (functions.has(node.type)) {
+      scope = createScope(scope, true);
+      define(node.id, scope, { kind: 'local' });
+      node.params.forEach((parameter) =>
+        define(parameter, scope, { kind: 'parameter', parameter }),
+      );
+    } else if (blocks.has(node.type) || node.type === 'StaticBlock') {
+      scope = createScope(scope);
+      if (node.type === 'CatchClause') define(node.param, scope, { kind: 'local' });
+    } else if (node.type === 'ClassDeclaration' || node.type === 'ClassExpression') {
+      scope = createScope(scope);
+      define(node.id, scope, { kind: 'local' });
+    }
+    scopes.set(node, scope);
+    if (node.type === 'ImportDeclaration') {
+      node.specifiers.forEach((specifier) =>
+        define(specifier.local, scope, {
+          kind: node.importKind === 'type' || specifier.importKind === 'type' ? 'local' : 'import',
+          source: node.source.value,
+          imported:
+            specifier.type === 'ImportSpecifier'
+              ? (specifier.imported.name ?? specifier.imported.value)
+              : undefined,
+          namespace: specifier.type === 'ImportNamespaceSpecifier',
+        }),
+      );
+    }
+    if (node.type === 'VariableDeclarator') {
+      let declarationScope = scope;
+      if (parent.kind === 'var')
+        while (!declarationScope.isFunction && declarationScope.parent)
+          declarationScope = declarationScope.parent;
+      define(node.id, declarationScope, { kind: 'local' });
+    }
+    for (const [key, value] of Object.entries(node)) {
+      if (['loc', 'range', 'tokens', 'comments'].includes(key)) continue;
+      if (Array.isArray(value)) value.forEach((child) => walk(child, scope, node));
+      else if (value && typeof value === 'object') walk(value, scope, node);
+    }
+  };
+  walk(source, createScope(null, true), null);
+  const bindingAt = (node, name) => {
+    for (let scope = scopes.get(node); scope; scope = scope.parent) {
+      if (scope.bindings.has(name)) return scope.bindings.get(name);
+    }
+    return undefined;
+  };
+  const unwrap = (node) => {
+    while (['TSAsExpression', 'TSSatisfiesExpression', 'TSNonNullExpression'].includes(node?.type))
+      node = node.expression;
+    return node;
+  };
+  const mutatedRoot = (node) => {
+    node = unwrap(node);
+    if (node?.type === 'ObjectPattern') {
+      node.properties.forEach((property) =>
+        mutatedRoot(property.type === 'RestElement' ? property.argument : property.value),
+      );
+      return;
+    }
+    if (node?.type === 'ArrayPattern') {
+      node.elements.forEach(mutatedRoot);
+      return;
+    }
+    if (node?.type === 'AssignmentPattern' || node?.type === 'RestElement') {
+      mutatedRoot(node.left ?? node.argument);
+      return;
+    }
+    while (node?.type === 'MemberExpression') node = unwrap(node.object);
+    if (node?.type === 'Identifier') {
+      const binding = bindingAt(node, node.name);
+      if (binding) binding.dirty = true;
+    }
+  };
+  for (const node of nodes) {
+    if (node.type === 'AssignmentExpression') mutatedRoot(node.left);
+    if (
+      node.type === 'UpdateExpression' ||
+      (node.type === 'UnaryExpression' && node.operator === 'delete')
+    )
+      mutatedRoot(node.argument);
+  }
+  const publicForm = (tag) => {
+    if (tag.type === 'JSXIdentifier') {
+      if (/^[a-z]/.test(tag.name)) return false;
+      const binding = bindingAt(tag, tag.name);
+      return (
+        binding?.kind === 'import' &&
+        binding.source === 'yahha-ui' &&
+        binding.imported === 'Form' &&
+        !binding.dirty
+      );
+    }
+    if (
+      tag.type === 'JSXMemberExpression' &&
+      tag.object.type === 'JSXIdentifier' &&
+      tag.property.name === 'Form'
+    ) {
+      const binding = bindingAt(tag.object, tag.object.name);
+      return (
+        binding?.kind === 'import' &&
+        binding.source === 'yahha-ui' &&
+        binding.namespace &&
+        !binding.dirty
+      );
+    }
+    return false;
+  };
+  const renderBindings = new Set();
+  for (const node of nodes) {
+    if (node.type !== 'JSXElement' || !publicForm(node.openingElement.name)) continue;
+    const renders = node.children
+      .filter((child) => child.type === 'JSXExpressionContainer')
+      .map((child) => child.expression);
+    for (const attribute of node.openingElement.attributes) {
+      if (
+        attribute.type === 'JSXAttribute' &&
+        attribute.name.name === 'children' &&
+        attribute.value?.type === 'JSXExpressionContainer'
+      )
+        renders.push(attribute.value.expression);
+    }
+    for (const render of renders) {
+      if (!functions.has(render.type) || render.params[0]?.type !== 'Identifier') continue;
+      renderBindings.add(bindingAt(render, render.params[0].name));
+    }
+  }
+  const stateMembers = new Set([
+    'input',
+    'checked',
+    'choice',
+    'values',
+    'errors',
+    'isSubmitting',
+    'isValidating',
+    'submitError',
+    'setFieldValue',
+    'setErrors',
+    'reset',
+    'validate',
+    'submit',
+  ]);
+  for (const node of nodes) {
+    if (node.type !== 'Identifier' || definitions.has(node)) continue;
+    const binding = bindingAt(node, node.name);
+    if (!renderBindings.has(binding)) continue;
+    const parent = parents.get(node);
+    if (parent?.type === 'MemberExpression' && parent.property === node && !parent.computed)
+      continue;
+    if (parent?.type === 'Property' && parent.key === node && !parent.computed && !parent.shorthand)
+      continue;
+    if (
+      parent?.type === 'MemberExpression' &&
+      parent.object === node &&
+      stateMembers.has(parent.computed ? stringValue(parent.property) : parent.property.name)
+    )
+      continue;
+    // An escaped or reassigned state object could replace the helper implementation.
+    binding.dirty = true;
+  }
+  return (argument) => {
+    const call = unwrap(argument);
+    if (
+      call?.type !== 'CallExpression' ||
+      call.optional ||
+      call.arguments.length < 1 ||
+      call.arguments.length > 2
+    )
+      return false;
+    const member = call.callee;
+    if (
+      member.type !== 'MemberExpression' ||
+      member.computed ||
+      member.optional ||
+      member.object.type !== 'Identifier' ||
+      !['input', 'checked', 'choice'].includes(member.property.name)
+    )
+      return false;
+    const binding = bindingAt(member.object, member.object.name);
+    if (
+      !renderBindings.has(binding) ||
+      binding.dirty ||
+      stringValue(unwrap(call.arguments[0])) === undefined
+    )
+      return false;
+    if (call.arguments.length === 1) return true;
+    const options = unwrap(call.arguments[1]);
+    return (
+      options?.type === 'ObjectExpression' &&
+      options.properties.every(
+        (property) =>
+          property.type === 'Property' &&
+          !property.method &&
+          property.kind === 'init' &&
+          (property.computed
+            ? stringValue(property.key)
+            : (property.key.name ?? property.key.value)) === 'errorPlacement' &&
+          ['control', 'external'].includes(stringValue(unwrap(property.value))),
+      )
+    );
+  };
+}
+
 function checkExample(example, report, validateReferences) {
   let source;
   try {
@@ -438,6 +681,7 @@ function checkExample(example, report, validateReferences) {
         array.elements.map((entry) => resolveNode(entry)),
       );
   });
+  const isFormBinding = formBindingChecker(source, stringValue);
   const checkAttributes = (attributes, component) => {
     const isComponent = Boolean(component);
     for (const attribute of attributes) {
@@ -450,7 +694,8 @@ function checkExample(example, report, validateReferences) {
               checkAttributes(candidate.properties, component);
             else fail(attribute, 'Mapped spread props must resolve to static objects.');
           }
-        else fail(attribute, 'Dynamic spread props cannot be verified in a baseline example.');
+        else if (!isFormBinding(attribute.argument))
+          fail(attribute, 'Dynamic spread props cannot be verified in a baseline example.');
         continue;
       }
       const name = nameOf(attribute.name ?? attribute.key);

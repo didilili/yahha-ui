@@ -1,0 +1,21 @@
+.error {
+  position: relative;
+  min-width: 0;
+  padding-inline-start: var(--yahha-space-6, 24px);
+  color: var(--yahha-error, #a33e4f);
+  font-size: var(--yahha-font-size-sm, 12px);
+  line-height: var(--yahha-leading-caption, 1.6);
+  overflow-wrap: anywhere;
+}
+
+.errorMark {
+  position: absolute;
+  inset-inline-start: var(--yahha-space-1, 4px);
+  inset-block-start: calc((1em * var(--yahha-leading-caption, 1.6) - 16px) / 2);
+}
+
+@media (forced-colors: active) {
+  .error {
+    color: CanvasText;
+  }
+}

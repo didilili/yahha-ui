@@ -2,9 +2,79 @@ import { createRef, useState } from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TextField } from './TextField.js';
+import { Input, TextField } from '../../index.js';
 
 afterEach(cleanup);
+
+describe('Input public API', () => {
+  it('exports the same component reference under the new and compatible names', () => {
+    expect(Input).toBeTypeOf('function');
+    expect(Input).toBe(TextField);
+  });
+
+  it('connects its label, hint and error while forwarding native props and ref', () => {
+    expect(Input).toBeTypeOf('function');
+    const ref = createRef<HTMLInputElement>();
+    render(
+      <>
+        <p id="external-description">仅用于回复</p>
+        <Input
+          ref={ref}
+          id="reply-email"
+          label="回复邮箱"
+          hint="填写常用邮箱"
+          error="请检查邮箱格式"
+          aria-describedby="external-description"
+          type="email"
+          name="replyEmail"
+          form="reply-form"
+          autoComplete="email"
+          required
+        />
+      </>,
+    );
+    const input = screen.getByRole('textbox', { name: '回复邮箱' }) as HTMLInputElement;
+    expect(screen.getByLabelText('回复邮箱')).toBe(input);
+    expect(ref.current).toBe(input);
+    expect(input.id).toBe('reply-email');
+    expect(input.type).toBe('email');
+    expect(input.name).toBe('replyEmail');
+    expect(input.getAttribute('form')).toBe('reply-form');
+    expect(input.autocomplete).toBe('email');
+    expect(input.required).toBe(true);
+    expect(input.getAttribute('aria-invalid')).toBe('true');
+    expect(
+      input
+        .getAttribute('aria-describedby')!
+        .split(' ')
+        .map((id) => document.getElementById(id)?.textContent),
+    ).toEqual(['仅用于回复', '填写常用邮箱', '请检查邮箱格式']);
+  });
+
+  it('preserves the native input, edited value, selection and focus when swapping names', async () => {
+    expect(Input).toBeTypeOf('function');
+    const user = userEvent.setup();
+    const ref = createRef<HTMLInputElement>();
+    const { rerender } = render(<TextField ref={ref} label="昵称" defaultValue="小八" />);
+    const input = screen.getByRole('textbox', { name: '昵称' }) as HTMLInputElement;
+    const field = input.parentElement?.parentElement;
+    const inputId = input.id;
+    await user.clear(input);
+    await user.type(input, '吉伊散步');
+    input.setSelectionRange(1, 3);
+
+    for (const Field of [Input, TextField]) {
+      rerender(<Field ref={ref} label="昵称" defaultValue="小八" />);
+      expect(screen.getByRole('textbox', { name: '昵称' })).toBe(input);
+      expect(ref.current).toBe(input);
+      expect(input.parentElement?.parentElement).toBe(field);
+      expect(input.id).toBe(inputId);
+      expect(input.value).toBe('吉伊散步');
+      expect([input.selectionStart, input.selectionEnd]).toEqual([1, 3]);
+      expect(document.activeElement).toBe(input);
+    }
+  });
+});
 
 describe('TextField', () => {
   it.each([false, true])(

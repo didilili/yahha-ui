@@ -5,6 +5,7 @@ import {
   Badge,
   Dialog,
   IconButton,
+  Input,
   SegmentedControl,
   Skeleton,
   Surface,
@@ -24,6 +25,7 @@ import { ThemeAliases } from './ThemeAliases.js';
 import { Icons } from './Icons.js';
 import { ProgressConsumer } from './Progress.js';
 import { OptionalDecorations } from './OptionalDecorations.js';
+import { FormConsumer } from './FormConsumer.js';
 
 function Consumer() {
   const [theme, setTheme] = useState<ThemeName>('pink');
@@ -65,7 +67,7 @@ function Consumer() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <h1>Standalone package consumer</h1>
+        <h1 data-input-alias-match={String(Input === TextField)}>Standalone package consumer</h1>
         <SegmentedControl
           label="Theme"
           value={theme}
@@ -75,7 +77,14 @@ function Consumer() {
             label: value,
           }))}
         />
-        <TextField ref={inputRef} label="Consumer input" data-testid="ref-input" />
+        <Input
+          ref={inputRef}
+          label="Consumer input"
+          name="consumerInput"
+          hint="Installed input hint"
+          error="Installed input error"
+          data-testid="ref-input"
+        />
         <IconButton
           aria-label="Focus consumer input"
           data-testid="ref-icon"
@@ -176,7 +185,9 @@ function Consumer() {
 }
 
 createRoot(document.getElementById('root')!).render(
-  new URLSearchParams(location.search).has('optional-decorations') ? (
+  new URLSearchParams(location.search).has('form-component') ? (
+    <FormConsumer />
+  ) : new URLSearchParams(location.search).has('optional-decorations') ? (
     <OptionalDecorations />
   ) : new URLSearchParams(location.search).has('progress') ? (
     <ProgressConsumer />

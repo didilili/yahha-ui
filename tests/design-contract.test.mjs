@@ -366,3 +366,99 @@ test('reviewed customization does not bypass unknown tokens or incorrect fallbac
     ),
   );
 });
+
+const formExample = (
+  body,
+  imports = "import { Form, Input, Checkbox, Switch, Select } from 'yahha-ui';",
+) =>
+  `${imports} export default () => <Form initialValues={{ nickname: '', accepted: false }}>{form => (${body})}</Form>;`;
+
+test('accepts only public Form render bindings with static supported helpers and error placement', () => {
+  for (const text of [
+    formExample(
+      `<><Input {...form.input('nickname')} label="昵称" /><Checkbox {...form.checked('accepted')} label="同意" /><Switch {...form.checked('accepted', { errorPlacement: 'external' })} label="通知" /><Select {...form.choice('nickname', { errorPlacement: 'control' })} label="选择" options={[]} /></>`,
+    ),
+    `import { Form as ManagedForm, Input } from 'yahha-ui'; export default () => <ManagedForm initialValues={{ nickname: '' }}>{state => <Input {...state.input('nickname')} label="昵称" />}</ManagedForm>;`,
+    `import * as UI from 'yahha-ui'; export default () => <UI.Form initialValues={{ nickname: '' }}>{state => <UI.Input {...state.input('nickname')} label="昵称" />}</UI.Form>;`,
+    `import { Form, Input } from 'yahha-ui'; export default () => <Form initialValues={{ nickname: '' }} children={state => <Input {...state.input('nickname')} label="昵称" />} />;`,
+    formExample(
+      `<>{[1].map(item => <Input key={item} {...form.input('nickname')} label="昵称" />)}</>`,
+    ),
+  ])
+    assert.deepEqual(example(text), [], text);
+});
+
+test('rejects forged Form objects, wrong imports and non-render callbacks', () => {
+  for (const text of [
+    `import { Input } from 'yahha-ui'; const form = { input: () => ({style:{height:46}}) }; export default () => <Input {...form.input('nickname')} />;`,
+    `import type { Form } from 'yahha-ui'; import { Input } from 'yahha-ui'; export default () => <Form>{form => <Input {...form.input('nickname')} />}</Form>;`,
+    `import { Form as form, Input } from 'yahha-ui'; export default () => <form>{state => <Input {...state.input('nickname')} />}</form>;`,
+    `import { Form } from './fake'; import { Input } from 'yahha-ui'; export default () => <Form>{form => <Input {...form.input('nickname')} />}</Form>;`,
+    `import { Input as Form, Input } from 'yahha-ui'; export default () => <Form>{form => <Input {...form.input('nickname')} />}</Form>;`,
+    `import { Form, Input } from 'yahha-ui'; export default () => <Form onSubmit={form => <Input {...form.input('nickname')} />}>{() => null}</Form>;`,
+    `import { Form, Input } from 'yahha-ui'; const form = {}; export default () => <Form>{() => <Input {...form.input('nickname')} />}</Form>;`,
+  ])
+    assert(hasRule(example(text), 'example-override'), text);
+});
+
+test('rejects unknown Form helper members, arguments and option keys', () => {
+  for (const binding of [
+    `form.style('nickname')`,
+    `form['input']('nickname')`,
+    `form.input(name)`,
+    `form.input('nickname', options)`,
+    `form.input('nickname', { style: { height: 46 } })`,
+    `form.input('nickname', { classNames: { input: 'custom' } })`,
+    `form.input('nickname', { errorPlacement: 'elsewhere' })`,
+    `form.input('nickname', { errorPlacement: placement })`,
+    `form.input('nickname', { ...options })`,
+    `form.input('nickname', { get errorPlacement() { return 'external'; } })`,
+    `form.input('nickname', {}, extra)`,
+  ])
+    assert(hasRule(example(formExample(`<Input {...${binding}} />`)), 'example-override'), binding);
+});
+
+test('resolves Form render parameters lexically and rejects shadowed imports or field state', () => {
+  for (const text of [
+    `import { Form, Input } from 'yahha-ui'; export default (Form) => <Form>{form => <Input {...form.input('nickname')} />}</Form>;`,
+    `import * as UI from 'yahha-ui'; export default (UI) => <UI.Form>{form => <UI.Input {...form.input('nickname')} />}</UI.Form>;`,
+    `import { Form, Input } from 'yahha-ui'; export default class FormContainer { field = class Form { render() { return <Form>{form => <Input {...form.input('nickname')} />}</Form>; } }; }`,
+    formExample(`<>{items.map(form => <Input {...form.input('nickname')} />)}</>`),
+    `import { Form, Input } from 'yahha-ui'; export default () => <Form>{form => { const inner = () => { const form = spoof; return <Input {...form.input('nickname')} />; }; return inner(); }}</Form>;`,
+    `import { Form, Input } from 'yahha-ui'; export default () => <Form>{form => { try { throw 1; } catch (form) { return <Input {...form.input('nickname')} />; } }}</Form>;`,
+    `import { Form, Input } from 'yahha-ui'; export default () => <Form>{form => { for (const form of items) { return <Input {...form.input('nickname')} />; } }}</Form>;`,
+  ])
+    assert(hasRule(example(text), 'example-override'), text);
+});
+
+test('rejects mutated or escaped Form render state even when a helper call looks valid', () => {
+  for (const statement of [
+    `form = spoof;`,
+    `({ input: form.input } = spoof);`,
+    `[form.input] = spoof;`,
+    `form.input = () => ({style:{height:46}});`,
+    `Object.assign(form, spoof);`,
+    `const alias = form; alias.input = spoof;`,
+    `Object.defineProperty(form, 'input', {value: spoof});`,
+  ]) {
+    const text = `import { Form, Input } from 'yahha-ui'; export default () => <Form>{form => { ${statement} return <Input {...form.input('nickname')} />; }}</Form>;`;
+    assert(hasRule(example(text), 'example-override'), statement);
+  }
+});
+
+test('keeps checking explicit style and classes around verified Form binding spreads', () => {
+  for (const attributes of [
+    `{...form.input('nickname')} style={{height:46}}`,
+    `style={{height:46}} {...form.input('nickname')}`,
+    `{...form.input('nickname')} classNames={{input:'custom'}}`,
+  ])
+    assert(
+      hasRule(
+        example(formExample(`<Input ${attributes} />`), [
+          { path: 'example.css', text: '.custom { min-height: 46px; }' },
+        ]),
+        'example-override',
+      ),
+      attributes,
+    );
+});

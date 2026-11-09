@@ -35,6 +35,7 @@ import {
 } from '../tests/package-consumer/overlay-checks.mjs';
 import { verifyDesignContract } from '../tests/package-consumer/design-checks.mjs';
 import { verifyOptionalDecorations } from '../tests/package-consumer/optional-decoration-checks.mjs';
+import { verifyFormComponent } from '../tests/package-consumer/form-component-checks.mjs';
 import { createExampleEntry } from '../playground/src/docs/example-source.ts';
 import { markdownExamples } from './documentation-contract.mjs';
 import { startStaticServer } from './static-server.mjs';
@@ -136,6 +137,33 @@ try {
   const artworkCopies = [];
   const fullExamplesDirectory = join(consumer, 'full-examples');
   await mkdir(fullExamplesDirectory);
+  const exampleSourcesRoot = join(root, 'playground/src/examples');
+  async function copyLocalReexports(sourcePath, setupDirectory, copied = new Set()) {
+    const source = await readFile(sourcePath, 'utf8');
+    for (const [, specifier] of source.matchAll(
+      /^\s*export\s+(?:type\s+)?(?:\{[^}]*\}|\*(?:\s+as\s+[\w$]+)?)\s+from\s+['"](\.\/[^/'"\\]+\.js)['"]/gm,
+    )) {
+      const stem = resolve(dirname(sourcePath), specifier.slice(0, -3));
+      assert(
+        stem.startsWith(`${exampleSourcesRoot}${sep}`),
+        'Re-export dependencies must remain inside the example sources.',
+      );
+      const siblings = await readdir(dirname(stem));
+      const dependency = ['.tsx', '.ts']
+        .map((extension) => `${stem}${extension}`)
+        .find((candidate) => siblings.includes(basename(candidate)));
+      assert(dependency, `${sourcePath}: missing TypeScript re-export ${specifier}.`);
+      if (copied.has(dependency)) continue;
+      const target = resolve(setupDirectory, basename(dependency));
+      assert(
+        target.startsWith(`${setupDirectory}${sep}`),
+        'Re-export dependencies must remain inside the complete example.',
+      );
+      await cp(dependency, target);
+      copied.add(dependency);
+      await copyLocalReexports(dependency, setupDirectory, copied);
+    }
+  }
   async function copySiteExamples(directory, prefix = 'site', relativeDirectory = '') {
     const entries = await readdir(directory, { withFileTypes: true });
     const siteDirectory = join(examplesDirectory, 'site', relativeDirectory);
@@ -164,6 +192,7 @@ try {
         );
         await mkdir(setupDirectory);
         await writeFile(join(setupDirectory, 'Example.tsx'), source);
+        await copyLocalReexports(path, setupDirectory);
         await writeFile(join(setupDirectory, 'App.tsx'), createExampleEntry('inherited'));
         await writeFile(join(setupDirectory, 'ExplicitApp.tsx'), createExampleEntry('explicit'));
         if (hasArtwork) {
@@ -313,7 +342,13 @@ try {
   });
   const { chromium, firefox, webkit } = await import('playwright');
   const url = `${server.origin}/`;
-  if (process.argv.includes('--optional-decorations-only')) {
+  if (process.argv.includes('--form-only')) {
+    browser = await chromium.launch({ headless: true });
+    await verifyFormComponent(browser, url);
+  } else if (process.argv.includes('--input-only')) {
+    browser = await chromium.launch({ headless: true });
+    await verifyConsumer(browser, url, { inputOnly: true });
+  } else if (process.argv.includes('--optional-decorations-only')) {
     browser = await chromium.launch({ headless: true });
     await verifyOptionalDecorations(browser, url);
   } else if (process.argv.includes('--scrollbar-only')) {
@@ -357,6 +392,8 @@ try {
     await verifyOptionalDecorations(browser, url);
   }
   if (
+    !process.argv.includes('--form-only') &&
+    !process.argv.includes('--input-only') &&
     !process.argv.includes('--scrollbar-only') &&
     !process.argv.includes('--feedback-only') &&
     !process.argv.includes('--navigation-only') &&
@@ -369,19 +406,23 @@ try {
     await verifyFloatingScrollbars(browser, url);
   }
   console.log(
-    process.argv.includes('--optional-decorations-only')
-      ? 'Package optional decorations passed: independent install, types, all thirteen APIs, native behavior and computed CSS.'
-      : process.argv.includes('--scrollbar-only')
-        ? 'Package overlay scrollbars passed: independent install and visible native scrollbar interaction.'
-        : process.argv.includes('--feedback-only')
-          ? 'Package feedback passed: independent install, types, docs compilation, all themes and three browser engines.'
-          : process.argv.includes('--navigation-only')
-            ? 'Package navigation passed: independent install, types, docs compilation, all themes and three browser engines.'
-            : process.argv.includes('--overlays-only')
-              ? 'Package overlays passed: independent install, types, docs compilation, all themes and three browser engines.'
-              : process.argv.includes('--design-only')
-                ? 'Package design contract passed: independent install, types, docs compilation, dimensions, and forced colors.'
-                : 'Package consumer passed: independent install, types, docs, CSS, refs, keyboard, and edge cases.',
+    process.argv.includes('--form-only')
+      ? 'Package Form passed: independent install, types, seven bindings, errors, resets, focus and async races.'
+      : process.argv.includes('--input-only')
+        ? 'Package Input passed: independent install, types, Input/TextField identity and native field behavior.'
+        : process.argv.includes('--optional-decorations-only')
+          ? 'Package optional decorations passed: independent install, types, all thirteen APIs, native behavior and computed CSS.'
+          : process.argv.includes('--scrollbar-only')
+            ? 'Package overlay scrollbars passed: independent install and visible native scrollbar interaction.'
+            : process.argv.includes('--feedback-only')
+              ? 'Package feedback passed: independent install, types, docs compilation, all themes and three browser engines.'
+              : process.argv.includes('--navigation-only')
+                ? 'Package navigation passed: independent install, types, docs compilation, all themes and three browser engines.'
+                : process.argv.includes('--overlays-only')
+                  ? 'Package overlays passed: independent install, types, docs compilation, all themes and three browser engines.'
+                  : process.argv.includes('--design-only')
+                    ? 'Package design contract passed: independent install, types, docs compilation, dimensions, and forced colors.'
+                    : 'Package consumer passed: independent install, types, docs, CSS, refs, keyboard, and edge cases.',
   );
 } finally {
   try {

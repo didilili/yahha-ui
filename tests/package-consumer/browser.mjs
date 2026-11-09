@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import { verifyControlMotion } from './motion-checks.mjs';
 import { verifyFieldMotion } from './field-motion-checks.mjs';
 import { verifyOverlayLifecycle } from './overlay-lifecycle-checks.mjs';
+import { verifyFormComponent } from './form-component-checks.mjs';
 
-export async function verifyConsumer(browser, url) {
+export async function verifyConsumer(browser, url, { inputOnly = false } = {}) {
   const page = await browser.newPage({ reducedMotion: 'reduce' });
   page.setDefaultTimeout(10_000);
   const errors = [];
@@ -13,6 +14,43 @@ export async function verifyConsumer(browser, url) {
   });
   await page.goto(url);
   await page.getByRole('heading', { name: 'Standalone package consumer' }).waitFor();
+  assert.equal(
+    await page
+      .getByRole('heading', { name: 'Standalone package consumer' })
+      .getAttribute('data-input-alias-match'),
+    'true',
+    'The installed Input and TextField exports must reference the same component.',
+  );
+  const input = page.getByRole('textbox', { name: 'Consumer input', exact: true });
+  assert.equal(await page.getByLabel('Consumer input', { exact: true }).count(), 1);
+  assert.deepEqual(
+    await input.evaluate((node) => ({
+      tagName: node.tagName,
+      refTagName: node.dataset.refChecked,
+      name: node.name,
+      invalid: node.getAttribute('aria-invalid'),
+      descriptions: node
+        .getAttribute('aria-describedby')
+        ?.split(' ')
+        .map((id) => document.getElementById(id)?.textContent),
+    })),
+    {
+      tagName: 'INPUT',
+      refTagName: 'INPUT',
+      name: 'consumerInput',
+      invalid: 'true',
+      descriptions: ['Installed input hint', 'Installed input error'],
+    },
+    'The installed Input must retain its visible label, hint, error, ref and native name.',
+  );
+  console.log(
+    'Browser: installed Input/TextField identity and Input native field contract passed.',
+  );
+  if (inputOnly) {
+    assert.deepEqual(errors, [], 'Installed Input consumer emitted browser errors.');
+    await page.close();
+    return;
+  }
   for (const [testId, tag] of [
     ['dialog-trigger', 'BUTTON'],
     ['ref-icon', 'BUTTON'],
@@ -208,4 +246,5 @@ export async function verifyConsumer(browser, url) {
   await verifyControlMotion(browser, url);
   await verifyFieldMotion(browser, url);
   await verifyOverlayLifecycle(browser, url);
+  await verifyFormComponent(browser, url);
 }

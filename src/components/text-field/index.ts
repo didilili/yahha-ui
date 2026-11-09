@@ -1,1 +1,1 @@
-export { TextField, type TextFieldProps } from './TextField.js';
+export { Input, type InputProps, TextField, type TextFieldProps } from './TextField.js';
