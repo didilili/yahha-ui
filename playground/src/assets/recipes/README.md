@@ -1,17 +1,20 @@
 # 场景预览截图
 
-这些 PNG 来自当前文档站的真实 `.example-preview`，不是独立插画或可运行示例。
-以 Chromium、1440 × 2400 视口、浅色和减少动态效果设置截图；预览本身宽约 910 像素。场景变更时重新截取，不改截图内的组件布局。
+这些 PNG 来自当前文档站的真实 `.example-preview`，不是独立插画或可运行示例。场景变更后，在开发服务器运行期间执行：
 
-2026-11-02 随状态说明修订刷新 `loading.png`（默认加载成功）与 `not-found.png`，取自相同视口下的实际示例，组件布局与角色素材未改。
+```sh
+node scripts/capture-recipe-previews.mjs
+```
 
-2026-11-04 随四张场景插画正式采用刷新 `empty.png`。沿用上述截图设置，截取默认“首次没有内容”的真实区域，保留示例布局与原生 PNG 编码。
+也可传入文档站地址作为第一个参数。脚本使用独立 Chromium、浅色、减少动效和 1494 × 1600 视口，输出统一的 960 × 600 PNG。仅为截图设置画布和取景，不修改示例源码、组件样式、文字或数据，也不截取文档顶栏与代码操作区。
+
+阅读场景通过公开开关隐藏可选配图，从文章正文起取景；加载场景通过实际操作切换到失败状态，展示恢复入口。短场景在画布中居中，长归档场景展示搜索、分类和文章列表开头。
 
 | 文件 | 文档路由 |
 | --- | --- |
 | reading.png | `#/guides/reading?section=reading-example` |
 | archive.png | `#/guides/states?section=scene-blog-archive` |
 | editing.png | `#/guides/states?section=scene-article-actions` |
-| loading.png | `#/guides/states?section=scene-loading`（默认加载成功） |
+| loading.png | `#/guides/states?section=scene-loading`（加载失败与重试） |
 | empty.png | `#/guides/states?section=scene-empty`（默认首次没有内容） |
 | not-found.png | `#/guides/states?section=scene-not-found` |

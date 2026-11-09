@@ -1,19 +1,61 @@
 # 协作说明
 
-开始修改前阅读 [AGENTS.md](AGENTS.md)。不要自动暂存、提交、推送或发布；已有暂存内容和其他工作区改动需要原样保留。小改动采用针对性验证，流程与影响范围匹配。
+欢迎一起改进 Yahha UI 的组件、文档与示例。发现问题或有建议，可以先[提交 Issue](https://github.com/didilili/yahha-ui/issues)；准备修改代码，可从下面的[本地开发](#本地开发)开始。组件使用方法见[组件文档](docs/README.md)。
+
+## 协作约定
+
+开始修改前阅读 [AGENTS.md](AGENTS.md)，了解目录、API、验证与 Git 约定。保留已有暂存内容和无关改动；使用自动化工具协作时，只有获得明确授权后才能暂存、提交、推送或发布。小改动采用针对性验证，流程与影响范围匹配。
+
+## 从源码构建与安装
+
+需要使用尚未发布的改动或验证本地安装包时，先获取源码。使用 Node.js 22.22.3、npm 10.9.8 与仓库的 `package-lock.json`：
+
+```sh
+git clone https://github.com/didilili/yahha-ui.git
+cd yahha-ui
+npm ci
+```
+
+在组件库仓库根目录生成本地安装包：
+
+```sh
+npm pack
+```
+
+`npm pack` 会通过 `prepack` 自动执行 `npm run build:lib`，构建组件代码、类型声明与样式，再生成 `yahha-ui-<version>.tgz`；实际文件名以终端输出为准。只需构建库产物时，可单独运行 `npm run build:lib`。
+
+切换到自己的 React 项目，将下面的路径替换为刚生成的安装包绝对路径：
+
+```sh
+npm install /absolute/path/to/yahha-ui.tgz
+```
+
+安装后按 README 的[安装与接入](README.md#安装与接入)导入组件、样式与主题。
 
 ## 本地开发
 
-使用 Node.js 22.22.3、npm 10.9.8 与仓库的 `package-lock.json`：
+按上文获取源码并完成 `npm ci` 后，在组件库仓库根目录启动文档站：
 
 ```sh
-npm ci
 npm run dev
 ```
 
-组件文档见 [docs/README.md](docs/README.md)。仓库保持 npm 单包，React 与 React DOM 由使用方提供，当前 peer 范围均为 `^19.3.1`。展示与交互示例放在 `playground/`，不新增 Storybook 依赖。
+打开终端输出的文档站地址，可浏览组件、使用指南与交互示例。仓库保持 npm 单包，React 与 React DOM 由使用方提供，当前 peer 范围均为 `^19.3.1`。文档站与示例放在 `playground/`，不新增 Storybook 依赖。
 
 macOS 可在安装依赖后双击根目录 `启动组件小屋.command`，它会复用已启动的本地文档站或执行 `npm run dev`；这是可选开发入口，其他平台直接使用 npm 命令。
+
+## 文档站构建与部署
+
+在组件库仓库根目录构建并预览文档站：
+
+```sh
+npm run build:demo
+npm run preview
+```
+
+文档站输出至 `demo-dist/`，包含首页、指南、组件示例与 API。将该目录的内容用于静态托管；GitHub Pages、子目录部署及字体声明的保留方式见[部署说明](docs/deployment.md)。
+
+组件库仓库的 `dist/` 用于组件安装包。通过 `create:starter` 导出的使用方项目，按项目自带的 README 构建和部署自己的 `dist/`。
 
 ## 目录与边界
 
@@ -36,23 +78,11 @@ macOS 可在安装依赖后双击根目录 `启动组件小屋.command`，它会
 - `docs/images/`：从实际页面截取的仓库展示图，拍摄路由和视口见目录内 README，不进入安装包。
 - `scripts/`：打包与验收脚本；`starter-template/` 为最小接入项目模板，不是 workspace，生成后的项目独立安装本地 `.tgz`。
 
-Button、IconButton、TextField、Select、Textarea、Checkbox、RadioGroup、Switch 和 SegmentedControl 可单独运行三引擎验收：首次执行 `npx playwright install chromium firefox webkit`，然后执行 `npm run build:demo && npm run test:controls`。它复用构建后的官网，在 Chromium、Firefox 与 WebKit 检查桌面和 320px 下的原生表单、错误恢复、加载几何、图标、键盘选择及多行编辑。Textarea 覆盖换行、长文本、200 字原生输入上限、错误关联与恢复、只读、父 fieldset 禁用、FormData 和重置。WebKit 引擎结果不等同于所有 Safari／iOS 真机环境均已验证。浏览器下载在本机 Playwright 缓存中，不增加组件运行时依赖。
+Button、IconButton、Input、Select、Textarea、Checkbox、RadioGroup、Switch 和 SegmentedControl 可单独运行三引擎验收：首次执行 `npx playwright install chromium firefox webkit`，然后执行 `npm run build:demo && npm run test:controls`。它复用构建后的官网，在 Chromium、Firefox 与 WebKit 检查桌面和 320px 下的原生表单、错误恢复、加载几何、图标、键盘选择及多行编辑。Textarea 覆盖换行、长文本、200 字原生输入上限、错误关联与恢复、只读、父 fieldset 禁用、FormData 和重置。WebKit 引擎结果不等同于所有 Safari／iOS 真机环境均已验证。浏览器下载在本机 Playwright 缓存中，不增加组件运行时依赖。
 
-库内相对模块路径使用 `.js` 扩展名，使构建后的多文件声明可被 Bundler 与 NodeNext 解析。公开 Props 与实际默认值是 API 契约依据；站内说明、API 与示例组织在 `playground/src/docs/components/` 维护，组件 Markdown 由 `npm run sync:docs` 生成。公共接口变更需核对属性名、类型、必填项、默认值、原生属性及 ref 的作用目标，并检查源码导出和使用方示例。站内预览与展示源码使用同一个 TSX，Markdown 的原始示例也由同一页面生成，两者均由真实安装包验收编译。页面元信息变更时同步 component-catalog。
+库内相对模块路径使用 `.js` 扩展名，使构建后的多文件声明可被 Bundler 与 NodeNext 解析。公开 Props、默认值、原生属性及 ref 的作用目标以实现和对应[组件文档](docs/README.md)为准。
 
-组件目录与总览按通用、排版、布局、表单、内容展示、导航、浮层、反馈八组组织，ThemeProvider 单列为主题配置；组件清单与元信息以 `component-catalog.ts` 为准，文档按组件独立加载。TextField、SegmentedControl、ThemeProvider 的中文名称分别统一为“单行输入”“分段选择”“主题配置”；Popover 使用“弹出面板”，Alert 使用“提示条”，旧称保留为搜索别名。英文导出名和路由保持稳定。
-
-组件使用文档描述当前用途、示例、API 和交互约定，不混入“本轮复核”“保留既有”“不计新增”等开发过程表述。设计原则和视觉规则集中在设计语言文档；文档不承诺尚未实现或验证的能力。
-
-组件目录、同源 TSX 示例与组件 Markdown 以当前页面模型和生成的文档索引为准。[设计语言](docs/design-language.md) 单独说明视觉和使用规则；默认设计规范位于 `#/guides/design-baseline`，示例不得覆盖控件外观与尺寸；共享 token 集中在 `src/theme/theme.module.css`，改设计必须通过 `npm run check:design` 与安装包实际尺寸验证；加载、空态与 404 场景位于 `#/guides/states`，以现有组件组合，不增加公共组件。增加或删除公开组件与示例时，同时更新 README 和文档索引。
-
-组件边界也应随实现核对：Select 当前为单值选择，不包含搜索或多选；Pagination 默认使用按钮，可通过 `getPageHref` 提供原生链接，URL 与列表更新由使用方处理；Tooltip 沿用 Base UI 1.9 的视觉补充约定，触发器必须具备自身可访问名称，重要说明使用可见文字或 Popover。
-
-文档站本身也是组件的使用方，统一采用天空蓝、白色内容面、暖墨与轻粉的漫画手账语言。按钮、白底字段、纸签、栏目和浮层保持各自结构，不能只用同一套圆角包住所有内容。强调色预设在 ThemeProvider 文档中展示。搜索、清空、菜单、代码操作和重试等公共交互优先从 `yahha-ui` 公开入口复用已有组件。组件接入处的站点 CSS 只负责布局、排版和公开 `className` / `classNames` 定制，不依赖内部 DOM 覆盖基础交互，也不为适配顶栏而缩小点击区域。导航链接、表格、pre / code 等保留合适的原生语义，页面导航不改成 Tabs。
-
-新增组件时，除了同步示例和 API，还需复核官网中适合复用的位置。验收覆盖官网实际的键盘操作、焦点恢复、主题及 Portal 更新、窄屏布局；增加组件数量本身不代表这些使用场景已通过验证。
-
-设计验收同时查看无插画状态及文章阅读组合：控件、内容和浮层应有各自的层次，表单不抢正文注意力，每个聚焦目标只有一套清楚的键盘提示。使用 `ReadingExample.tsx` 等真实组合检查标题、正文、分类、收藏与辅助操作；加载场景检查文字与图标保留、尺寸稳定、真实请求结束后的恢复，以及 SVG 在减少动效时保留静帧。区块可配场景素材，但可见状态说明和真实恢复入口由 HTML 承担。
+分类命名、示例组织与同源生成遵循[文档规范](docs/documentation.md)。默认外观、token 与设计验收遵循[设计语言](docs/design-language.md)。目录、依赖、官网复用与变更约定见 [AGENTS.md](AGENTS.md)。
 
 ## 导出最小接入项目
 
@@ -74,7 +104,7 @@ npm test -- src/components/text-field/TextField.test.tsx
 npm run typecheck
 ```
 
-组件说明遵循 [文档规范](docs/documentation.md)。编辑组件页后执行 `npm run sync:docs`，提交前以 `npm run check:docs` 核对生成结果；不要直接编辑生成的组件 Markdown。章节搜索从这些 Markdown 生成轻量索引，因此开发时修改正文或 API 后也需要同步；`build:demo` 会先检查同步状态。搜索索引在首次输入查询时加载，不会预先加载所有组件示例。
+组件说明遵循 [文档规范](docs/documentation.md)。编辑组件页后执行 `npm run sync:docs`，提交前以 `npm run check:docs` 核对生成结果；不要直接编辑生成的组件 Markdown。章节搜索从这些 Markdown 生成轻量索引，因此开发时修改正文或 API 后也需要同步；`build:demo` 会先检查同步状态。搜索索引在首次打开搜索弹窗时加载，不会预先加载所有组件示例。
 
 纯文档改动可检查涉及文件的格式：
 

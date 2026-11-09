@@ -7,7 +7,7 @@
 - 源码位于 `src/`，公共入口为 `src/index.ts`。构建生成 `dist/index.js`、类型声明与 `dist/style.css`；加载图形及代码内基础图形随组件实现构建。
 - `Icon` 与十六个命名功能图标属于公开组件能力，随安装包提供，可从 `yahha-ui` 按需导入；不依赖图标字体、远端资源或文档站素材。分类、章节图案和角色场景继续留在站点层。
 - Button / IconButton 的可选软团外观由组件 CSS 绘制轮廓、短高光与按压底边，功能图标通过现有图标属性或子元素传入；小花饼加载图形维护在 `src/internal/BiscuitLoadingGlyph.tsx`，随组件代码进入安装包。角色 SVG 继续作为下文的独立场景素材维护。
-- [package.json](../package.json) 的分发白名单为 `dist/`。本地 `.tgz` 另附包元信息、根 README、`LICENSE` 与 `THIRD_PARTY_NOTICES.md`，不包含文档站、独立角色 SVG、PNG、字体或截图目录。
+- [package.json](../package.json) 的 `files` 分发白名单为 `dist/` 与 `THIRD_PARTY_NOTICES.md`。npm 还会自动包含包元信息、根 README 与 `LICENSE`；发布包和本地 `.tgz` 均不包含文档站、独立角色 SVG、PNG、字体或截图目录。
 - React / React DOM 由使用方提供，`@base-ui/react` 是运行时依赖。
 
 源码仓库 README 中的相对图片和文档链接供仓库阅读，不表示这些文件进入安装包。代码接入见[安装与接入](../README.md#安装与接入)。
