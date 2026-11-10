@@ -137,6 +137,14 @@ export async function verifyFeedbackExamples(page, baseURL) {
   assert.equal(await basicToast.getByRole('status').count(), 1);
   await basicToast.getByRole('button', { name: '关闭提示', exact: true }).click();
   await focused(page, trigger);
-  await openInteractionExample(page, 'timer-and-action');
-  await verifyToastTimer(page);
+  // Playwright's simulated clock belongs to the context and survives resume().
+  const timerContext = await page.context().browser().newContext({ viewport: originalViewport });
+  try {
+    const timerPage = await timerContext.newPage();
+    timerPage.setDefaultTimeout(4000);
+    await timerPage.goto(`${baseURL}#/guides/interactions?section=timer-and-action`);
+    await verifyToastTimer(timerPage);
+  } finally {
+    await timerContext.close();
+  }
 }
