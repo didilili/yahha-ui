@@ -4,7 +4,7 @@ import { WarningIcon } from '../icon/glyphs/WarningIcon.js';
 import styles from './text-field.module.css';
 
 /** Native props, including style and ref, target the input; explicit direction also aligns the slots. */
-export interface InputProps extends Omit<ComponentPropsWithRef<'input'>, 'size'> {
+export interface TextFieldProps extends Omit<ComponentPropsWithRef<'input'>, 'size'> {
   label: ReactNode;
   hint?: ReactNode;
   error?: ReactNode;
@@ -25,8 +25,8 @@ export interface InputProps extends Omit<ComponentPropsWithRef<'input'>, 'size'>
   };
 }
 
-/** Compatible name for InputProps. */
-export type TextFieldProps = InputProps;
+/** Input shares the original TextFieldProps interface, including declaration merging. */
+export type InputProps = TextFieldProps;
 
 export function Input({
   label,
