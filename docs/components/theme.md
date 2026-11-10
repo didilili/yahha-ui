@@ -4,7 +4,7 @@
 
 配置配色预设与语义颜色，并向浮层 Portal 传递主题。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
@@ -29,6 +29,8 @@ import { ThemeProvider, type ThemeName, type ThemeTokens } from 'yahha-ui';
 ### 主题预设
 
 对比粉色、浅蓝和浅黄三种预设。
+
+本例自带 `ThemeProvider`，入口只需导入样式并渲染示例。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeVariants.tsx)
 
@@ -76,6 +78,8 @@ export default function ThemeVariants() {
 
 通过 tokens 覆盖强调色及其悬停颜色。
 
+本例自带 `ThemeProvider`，入口只需导入样式并渲染示例。
+
 [查看示例文件](../../playground/src/examples/foundations/ThemeTokens.tsx)
 
 <!-- example-source: playground/src/examples/foundations/ThemeTokens.tsx -->
@@ -101,6 +105,8 @@ export default function ThemeTokensExample() {
 ### 嵌套主题
 
 对比外层自定义绿色与内层浅黄预设。
+
+本例自带 `ThemeProvider`，入口只需导入样式并渲染示例。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemeNested.tsx)
 
@@ -136,6 +142,8 @@ export default function ThemeNested() {
 ### 弹出内容沿用主题
 
 打开弹窗，查看挂载到 Portal 的内容如何沿用 ThemeProvider 配色。
+
+本例自带 `ThemeProvider`，入口只需导入样式并渲染示例。
 
 [查看示例文件](../../playground/src/examples/foundations/ThemePortal.tsx)
 

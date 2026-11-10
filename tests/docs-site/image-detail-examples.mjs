@@ -286,7 +286,7 @@ export async function verifyImageFallback(page, example) {
 /** Exercise the real documentation download and compare it with the displayed illustration bytes. */
 export async function verifyImageAssetDownload(page, example) {
   await revealExample(example);
-  const details = example.locator('details.example-setup');
+  const details = example.locator('details.example-assets');
   const summary = details.locator('summary');
   const originallyOpen = await details.evaluate((node) => node.open);
   const thumbnail = example

@@ -4,7 +4,7 @@
 
 表示正在进行的加载或等待，提供可读的状态文字。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Spinner } from 'yahha-ui';

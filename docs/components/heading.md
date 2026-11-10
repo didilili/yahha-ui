@@ -4,7 +4,7 @@
 
 通过原生 h1–h6 元素定义页面、文章与章节的标题层级。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Heading } from 'yahha-ui';

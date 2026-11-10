@@ -4,7 +4,7 @@
 
 用于列表为空、搜索无结果等情况，提供说明与操作插槽。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { EmptyState } from 'yahha-ui';
@@ -241,6 +241,15 @@ export default function EmptyIllustrations() {
   );
 }
 ```
+
+素材按下列路径保存，路径相对于 `Example.tsx`，保留源码中的相对导入。
+
+| 原始文件                                                                                                          | 保存路径                                   |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| [little-days-empty-collection.svg](../../playground/src/examples/scenes/artwork/little-days-empty-collection.svg) | `artwork/little-days-empty-collection.svg` |
+| [little-days-search-empty.svg](../../playground/src/examples/scenes/artwork/little-days-search-empty.svg)         | `artwork/little-days-search-empty.svg`     |
+
+源码使用 Vite 的 `?no-inline` 保留独立素材文件，其他工具链需配置对应资源处理。
 
 <a id="design"></a>
 

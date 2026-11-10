@@ -4,7 +4,7 @@
 
 用于反馈操作结果，支持说明与操作插槽，由调用方管理显示状态。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Toast } from 'yahha-ui';

@@ -223,8 +223,8 @@ export async function verifyGuideSourceControls(
     assert.equal(await sourceToggle(page).count(), 1, `${id}: one page-wide source control.`);
     await sourceStates(page, false);
     const count = await page.locator('.component-source').count();
-    const setups = await page
-      .locator('.example-setup')
+    const assets = await page
+      .locator('details.example-assets')
       .evaluateAll((nodes) => nodes.map((node) => node.open));
     const firstExample = page.locator('.example-block').first();
     const firstId = await firstExample.getAttribute('id');
@@ -243,8 +243,10 @@ export async function verifyGuideSourceControls(
     for (const pre of await page.locator('.component-source pre').all())
       assert.equal(await pre.isVisible(), true, `${id}: expanding makes the source visible.`);
     assert.deepEqual(
-      await page.locator('.example-setup').evaluateAll((nodes) => nodes.map((node) => node.open)),
-      setups,
+      await page
+        .locator('details.example-assets')
+        .evaluateAll((nodes) => nodes.map((node) => node.open)),
+      assets,
     );
     await page.goto(`${baseURL}#/guides/${id}?section=${firstId}`);
     await sourceStates(page, true);
@@ -259,8 +261,10 @@ export async function verifyGuideSourceControls(
     await sourceToggle(page).click();
     await sourceStates(page, false);
     assert.deepEqual(
-      await page.locator('.example-setup').evaluateAll((nodes) => nodes.map((node) => node.open)),
-      setups,
+      await page
+        .locator('details.example-assets')
+        .evaluateAll((nodes) => nodes.map((node) => node.open)),
+      assets,
     );
     await sourceToggle(page).click();
     await sourceStates(page, true);
@@ -270,7 +274,8 @@ export async function verifyGuideSourceControls(
       width: page.viewportSize().width,
       sources: count,
       allVisible: true,
-      setupIndependent: true,
+      assetGroups: assets.length,
+      assetsUnchanged: true,
       anchorRetained: true,
       individualSynchronized: true,
     });

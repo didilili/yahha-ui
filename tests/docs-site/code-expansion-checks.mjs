@@ -34,10 +34,6 @@ async function requireSources(page, expected) {
     .waitFor();
 }
 
-async function setupStates(page) {
-  return page.locator('.example-setup').evaluateAll((details) => details.map((node) => node.open));
-}
-
 async function requireFocus(page, locator) {
   await page.waitForFunction(
     (node) => document.activeElement === node,
@@ -76,13 +72,10 @@ export async function verifyCodeExpansionEntry(page) {
     'The page-wide control appears beside the examples heading.',
   );
   await requireSources(page, false);
-  assert(
-    (await setupStates(page)).every((open) => !open),
-    'Full setup starts independently closed.',
-  );
+  assert.equal(await page.locator('.example-setup, .example-block .example-entry').count(), 0);
 }
 
-/** Exercise the shared control through real source, setup, editing, clipboard and route state. */
+/** Exercise the shared control through real source, editing, clipboard and route state. */
 export async function verifyCodeExpansion(page, baseURL, widths = [1440, 320, 390]) {
   const originalViewport = page.viewportSize();
   const results = [];
@@ -103,10 +96,6 @@ export async function verifyCodeExpansion(page, baseURL, widths = [1440, 320, 39
       const originalInput = await input.elementHandle();
       const importCode = page.locator('.doc-heading .source-code pre');
       const importText = await importCode.textContent();
-      const setup = page.locator('#basic .example-setup');
-      const entry = setup.locator('.example-entry pre');
-      const entryText = await entry.textContent();
-      const originalEntry = await entry.elementHandle();
       try {
         await first.getByRole('button', { name: '展开代码', exact: true }).click();
         await requireSources(page, [true, ...Array(count - 1).fill(false)]);
@@ -117,25 +106,10 @@ export async function verifyCodeExpansion(page, baseURL, widths = [1440, 320, 39
         await first.getByRole('button', { name: '收起代码', exact: true }).click();
         await requireSources(page, [false, ...Array(count - 1).fill(true)]);
 
-        await setup.locator(':scope > summary').click();
-        const openSetups = await setupStates(page);
-        assert.equal(openSetups.filter(Boolean).length, 1);
         await allSourceToggle(page).click();
         await requireSources(page, true);
-        assert.deepEqual(await setupStates(page), openSetups);
         await allSourceToggle(page).click();
         await requireSources(page, false);
-        assert.deepEqual(await setupStates(page), openSetups);
-        assert.equal(
-          await entry.isVisible(),
-          true,
-          'Global source collapse leaves the open App entry visible.',
-        );
-        assert.equal(await entry.textContent(), entryText);
-        assert.equal(
-          await entry.evaluate((node, original) => node === original, originalEntry),
-          true,
-        );
         assert.equal(await importCode.isVisible(), true);
         assert.equal(await importCode.textContent(), importText);
         assert.equal(await input.inputValue(), draft);
@@ -144,8 +118,6 @@ export async function verifyCodeExpansion(page, baseURL, widths = [1440, 320, 39
           true,
           'Global expansion changes do not remount an interactive preview.',
         );
-        await setup.locator(':scope > summary').click();
-        const closedSetups = await setupStates(page);
 
         await page.evaluate(() => {
           window.__codeExpansionClipboardDescriptor = Object.getOwnPropertyDescriptor(
@@ -174,7 +146,6 @@ export async function verifyCodeExpansion(page, baseURL, widths = [1440, 320, 39
             [0, source.length],
           );
           await requireSources(page, [true, ...Array(count - 1).fill(false)]);
-          assert.deepEqual(await setupStates(page), closedSetups);
           await page.goto(`${baseURL}#/components/input?section=api`);
           await page.locator('#api').waitFor();
           await requireSources(page, [true, ...Array(count - 1).fill(false)]);
@@ -243,7 +214,6 @@ export async function verifyCodeExpansion(page, baseURL, widths = [1440, 320, 39
           }
           await allSourceToggle(page).click();
           await requireSources(page, false);
-          assert((await setupStates(page)).every((open) => !open));
           await page.goto(`${baseURL}#/components/input`);
           await verifyCodeExpansionEntry(page);
         } finally {
@@ -259,11 +229,13 @@ export async function verifyCodeExpansion(page, baseURL, widths = [1440, 320, 39
           await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
           `Code controls fit the ${width}px page.`,
         );
+        const assetGroups = await verifyAssetCodeIndependence(page, baseURL);
         results.push({
+          assetGroups,
+          assetDisclosureIndependent: true,
           width,
           sourceCount: count,
           mixedState: true,
-          setupIndependent: true,
           draftRetained: true,
           clipboardFallback: true,
           samePageSectionRetained: true,
@@ -273,11 +245,77 @@ export async function verifyCodeExpansion(page, baseURL, widths = [1440, 320, 39
         });
       } finally {
         await originalInput.dispose();
-        await originalEntry.dispose();
       }
     }
     return results;
   } finally {
     if (originalViewport) await page.setViewportSize(originalViewport);
+  }
+}
+
+/** Keep global source changes independent from a real illustration download disclosure. */
+export async function verifyAssetCodeIndependence(page, baseURL) {
+  await page.goto(`${baseURL}#/components/image`);
+  await verifyCodeExpansionEntry(page);
+  const assets = page.locator('details.example-assets');
+  const count = await assets.count();
+  assert(count > 0, 'Image has real downloadable artwork to exercise disclosure state.');
+  const first = assets.first();
+  const download = first.locator('a[download]').first();
+  const originalDownload = await download.elementHandle();
+  try {
+    assert.equal(await first.getAttribute('open'), null);
+    await first.locator(':scope > summary').click();
+    assert.equal(await download.isVisible(), true);
+    const openState = await assets.evaluateAll((nodes) => nodes.map((node) => node.open));
+    for (const expanded of [true, false]) {
+      await allSourceToggle(page).click();
+      await requireSources(page, expanded);
+      assert.deepEqual(
+        await assets.evaluateAll((nodes) => nodes.map((node) => node.open)),
+        openState,
+      );
+      assert.equal(await download.isVisible(), true);
+      assert.equal(
+        await download.evaluate((node, original) => node === original, originalDownload),
+        true,
+      );
+    }
+    await first.locator(':scope > summary').click();
+    for (const expanded of [true, false]) {
+      await allSourceToggle(page).click();
+      await requireSources(page, expanded);
+      assert.equal(await first.getAttribute('open'), null);
+      assert.equal(await download.isVisible(), false);
+    }
+    await first.locator(':scope > summary').click();
+    await page
+      .locator('.component-source')
+      .first()
+      .getByRole('button', { name: '展开代码', exact: true })
+      .click();
+    const restoredSources = [
+      true,
+      ...Array((await page.locator('.component-source').count()) - 1).fill(false),
+    ];
+    await page.locator('.doc-example-help a').click();
+    await page.locator('#copy-example').waitFor();
+    await page.goBack();
+    await page.getByRole('heading', { level: 1, name: 'Image 图片', exact: true }).waitFor();
+    await page.waitForFunction(() => document.querySelector('details.example-assets')?.open);
+    await requireSources(page, restoredSources);
+    assert.equal(
+      await download.isVisible(),
+      true,
+      'Back restores the open artwork and source together.',
+    );
+    await page.goForward();
+    await page.locator('#copy-example').waitFor();
+    await page.goBack();
+    await page.waitForFunction(() => document.querySelector('details.example-assets')?.open);
+    await requireSources(page, restoredSources);
+    return count;
+  } finally {
+    await originalDownload.dispose();
   }
 }

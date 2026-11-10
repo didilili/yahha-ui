@@ -4,7 +4,7 @@
 
 用于展示单层操作菜单，支持键盘导航与禁用项。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { DropdownMenu } from 'yahha-ui';

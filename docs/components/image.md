@@ -4,7 +4,7 @@
 
 用于内容图片和封面，支持替代文字、比例容器与失败回退。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Image } from 'yahha-ui';
@@ -131,7 +131,7 @@ export default function ImageFallback() {
 
 ### 缩略图与大图预览
 
-由调用方通过独立按钮与 Dialog 预览同一图片，关闭后返回入口；完整接入提供源码和 SVG，保留 artwork 目录及相对导入。
+由调用方通过独立按钮与 Dialog 预览同一图片，关闭后返回入口。配套 SVG 在「示例素材」中下载，保留 artwork 目录及相对导入。
 
 [查看示例文件](../../playground/src/examples/scenes/ImageDetail.tsx)
 
@@ -204,6 +204,14 @@ export default function ImageDetail() {
   );
 }
 ```
+
+素材按下列路径保存，路径相对于 `Example.tsx`，保留源码中的相对导入。
+
+| 原始文件                                                                                        | 保存路径                          |
+| ----------------------------------------------------------------------------------------------- | --------------------------------- |
+| [little-days-tea-cup.svg](../../playground/src/examples/scenes/artwork/little-days-tea-cup.svg) | `artwork/little-days-tea-cup.svg` |
+
+源码使用 Vite 的 `?no-inline` 保留独立素材文件，其他工具链需配置对应资源处理。
 
 <a id="design"></a>
 

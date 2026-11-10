@@ -4,7 +4,7 @@
 
 用于页面内持续显示的信息、结果、警告或错误提示。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Alert } from 'yahha-ui';

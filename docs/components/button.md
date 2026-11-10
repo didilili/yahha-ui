@@ -4,7 +4,7 @@
 
 用于触发操作，支持不同强调程度、禁用、加载和切换状态。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Button } from 'yahha-ui';

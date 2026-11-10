@@ -450,10 +450,10 @@ export default function SearchEmpty() {
             <code>alt</code>， 操作名称、状态原因和下一步用图片外的文字说明。
           </p>
           <details className={styles.setup}>
-            <summary>复制完整示例时的文件与构建要求</summary>
+            <summary>示例素材与构建要求</summary>
             <p>
-              展开对应示例的“完整接入”，将原样 <code>Example.tsx</code>、<code>App.tsx</code>{' '}
-              保存到同一目录；以此目录为起点，按素材清单标注的相对路径保存文件，保留源码中的导入路径。
+              在对应示例的「示例素材」中下载配套文件。以 <code>Example.tsx</code>{' '}
+              所在目录为起点，按清单标注的相对路径保存文件，保留源码中的导入路径。
             </p>
             <p>
               完整示例按 Vite React 项目验证，源码使用 <code>?no-inline</code> 导入资源 URL；

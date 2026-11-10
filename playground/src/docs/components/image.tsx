@@ -43,7 +43,7 @@ export default defineComponentPage('image', {
           id: 'image-detail',
           title: '缩略图与大图预览',
           description:
-            '由调用方通过独立按钮与 Dialog 预览同一图片，关闭后返回入口；完整接入提供源码和 SVG，保留 artwork 目录及相对导入。',
+            '由调用方通过独立按钮与 Dialog 预览同一图片，关闭后返回入口。配套 SVG 在「示例素材」中下载，保留 artwork 目录及相对导入。',
           component: ImageDetail,
           source: imageDetailSource,
           assets: [{ name: 'little-days-tea-cup.svg', href: teaCupAsset }],

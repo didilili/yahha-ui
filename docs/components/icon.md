@@ -4,7 +4,7 @@
 
 显示自定义 SVG 或直接使用手绘功能图标，统一尺寸、颜色和可访问名称。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Icon, SearchIcon, BookmarkIcon } from 'yahha-ui';

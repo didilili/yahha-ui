@@ -4,7 +4,7 @@
 
 用于可展开和收起的内容面板，支持单项或多项展开。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Accordion } from 'yahha-ui';

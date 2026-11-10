@@ -7,6 +7,7 @@ import { format, resolveConfig } from 'prettier';
 import { createServer } from 'vite';
 import {
   apiMarkdown,
+  exampleMarkdown,
   markdownFile,
   proseToMarkdown,
   sourceFence,
@@ -45,6 +46,9 @@ try {
     { id: 'forms', directory: 'guides' },
   ];
   const guides = await Promise.all(guideExports.map(({ id }) => loadGuidePage(id)));
+  const gettingStarted = await loadGuidePage('getting-started');
+  const copyExample = gettingStarted.sections.find((section) => section.id === 'copy-example');
+  assert(copyExample?.content, 'Getting started must provide shared example setup instructions.');
   for (const guide of guides) {
     const guideAnchors = guide.sections.flatMap((section) => [
       section.id,
@@ -56,6 +60,7 @@ try {
       `Duplicate ${guide.id} guide anchor.`,
     );
   }
+  const documents = [];
   for (const page of [...pages, ...guides]) {
     const guide = guideExports.find(({ id }) => id === page.id);
     const isGuide = !!guide;
@@ -64,7 +69,7 @@ try {
       `<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/${isGuide ? `guides/${page.id}.tsx` : 'components/ 中对应页面'}。 -->`,
       `# ${[page.name, page.chinese].filter(Boolean).join(' ')}`,
       page.description,
-      '[安装与接入](../../README.md#安装与接入)',
+      `[安装与接入](../../README.md#安装与接入) · [接入示例](${directory === 'guides' ? '' : '../guides/'}examples.md)`,
       ...(page.importCode ? [sourceFence(page.importCode)] : []),
     ];
     for (const section of page.sections) {
@@ -80,20 +85,15 @@ try {
           throw new Error(
             `${page.id}/${example.id}: example source does not match a real TSX file.`,
           );
-        parts.push(
-          `<a id="${example.id}"></a>`,
-          `### ${example.title}`,
-          example.description,
-          `[查看示例文件](../../${sourcePath})`,
-          `<!-- example-source: ${sourcePath} -->\n${sourceFence(example.source)}`,
-        );
+        parts.push(exampleMarkdown(example, sourcePath));
       }
       for (const api of section.api ?? []) parts.push(apiMarkdown(api));
     }
-    const documents = [{ filename: markdownFile(page.id), parts }];
+    documents.push({ directory, filename: markdownFile(page.id), parts });
     if (page.id === 'input') {
       // Keep a short entry for the compatible public name.
       documents.push({
+        directory,
         filename: 'text-field.md',
         parts: [
           parts[0],
@@ -102,34 +102,43 @@ try {
         ],
       });
     }
-    for (const document of documents) {
-      const path = resolve(root, 'docs', directory, document.filename);
-      const expected = await format(document.parts.filter(Boolean).join('\n\n') + '\n', {
-        ...(await resolveConfig(path)),
-        parser: 'markdown',
-        embeddedLanguageFormatting: 'off',
-      });
-      let current;
-      try {
-        current = await readFile(path, 'utf8');
-      } catch (error) {
-        if (error.code !== 'ENOENT') throw error;
-      }
-      if (expected !== current) {
-        if (check) {
-          console.error(`Outdated documentation: ${relative(root, path)}`);
-          stale++;
-        } else {
-          await mkdir(dirname(path), { recursive: true });
-          await writeFile(path, expected);
-        }
+  }
+  documents.push({
+    directory: 'guides',
+    filename: 'examples.md',
+    parts: [
+      '<!-- 此文件由 npm run sync:docs 生成；请修改 playground/src/docs/guides/getting-started.tsx 的 copy-example 章节。 -->',
+      '# 接入示例',
+      proseToMarkdown(renderToStaticMarkup(copyExample.content), { fromDirectory: 'guides' }),
+    ],
+  });
+  for (const document of documents) {
+    const path = resolve(root, 'docs', document.directory, document.filename);
+    const expected = await format(document.parts.filter(Boolean).join('\n\n') + '\n', {
+      ...(await resolveConfig(path)),
+      parser: 'markdown',
+      embeddedLanguageFormatting: 'off',
+    });
+    let current;
+    try {
+      current = await readFile(path, 'utf8');
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+    if (expected !== current) {
+      if (check) {
+        console.error(`Outdated documentation: ${relative(root, path)}`);
+        stale++;
+      } else {
+        await mkdir(dirname(path), { recursive: true });
+        await writeFile(path, expected);
       }
     }
   }
 
   if (stale) throw new Error(`${stale} documents are out of sync. Run npm run sync:docs.`);
   console.log(
-    `${check ? 'Checked' : 'Generated'} ${pages.length} component documents, 1 TextField alias entry and ${guides.length} guides.`,
+    `${check ? 'Checked' : 'Generated'} ${pages.length} component documents, 1 TextField alias entry and ${guides.length + 1} guides.`,
   );
 } finally {
   await server.close();

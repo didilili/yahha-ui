@@ -4,7 +4,7 @@
 
 悬停或聚焦时显示简短的视觉文字提示，不替代触发器的可访问名称。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Tooltip } from 'yahha-ui';

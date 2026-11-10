@@ -5,6 +5,7 @@ import { feedbackHref, repositoryHref } from '../../site/site-links';
 import GettingStarted from '../../examples/GettingStarted';
 import gettingStartedSource from '../../examples/GettingStarted.tsx?raw';
 import { CodeBlock } from '../CodeBlock';
+import { createExampleEntry } from '../example-source';
 import type { DocPage } from '../types';
 import { guideMetadata } from '../guide-catalog';
 
@@ -87,9 +88,7 @@ const page: DocPage = {
             <code>theme="pink"</code> 配置。
           </p>
           <p>
-            展开下方代码，保存为 <code>Example.tsx</code>
-            ；再展开同一示例的「完整接入」，将入口保存为 <code>App.tsx</code>
-            。两个文件放在同一目录，然后启动应用。
+            展开下方代码，保存为 <code>App.tsx</code>，由现有应用入口渲染，然后启动应用。
           </p>
         </>
       ),
@@ -107,24 +106,46 @@ const page: DocPage = {
     },
     {
       id: 'copy-example',
-      title: '复制其他示例',
-      toc: false,
-      disclosure: '查看复制步骤',
+      title: '接入其他示例',
       content: (
         <>
+          <p>
+            首次使用时，先按<Link href="#/guides/getting-started?section=install">安装指南</Link>
+            完成组件安装、样式导入和主题配置。
+          </p>
+          <p>
+            在已经加载 <code>yahha-ui/style.css</code> 并配置 <code>ThemeProvider</code>{' '}
+            的项目中，将示例源码保存为 <code>Example.tsx</code>，在需要的位置导入并渲染{' '}
+            <code>{'<Example />'}</code>。已有主题区域可直接使用示例。
+          </p>
+          <p>需要将某个示例作为独立页面运行时，使用下面的入口。</p>
           <ol>
             <li>
-              在组件页展开代码，将源码保存为 <code>Example.tsx</code>。
+              复制组件页或指南页的示例源码，原样保存为 <code>Example.tsx</code>。
             </li>
             <li>
-              展开同一示例下的「完整接入」，将提供的入口保存为 <code>App.tsx</code>。
-              两个文件放在同一目录。
-            </li>
-            <li>
-              如果「完整接入」列出了素材，以 <code>Example.tsx</code>{' '}
-              所在目录为起点，按清单标注的相对路径保存下载文件，保留源码中的导入路径；没有素材清单的示例无需这一步。
+              根据示例是否自带 <code>ThemeProvider</code> 选择下方入口，保存为同目录的{' '}
+              <code>App.tsx</code>，由现有 React 应用入口渲染。
             </li>
           </ol>
+          <h3>通用示例</h3>
+          <p>入口加载样式，并以粉色主题包裹示例。</p>
+          <div className="example-entry" data-theme-scope="inherited">
+            <CodeBlock source={createExampleEntry('inherited')} />
+          </div>
+          <h3>自带主题的示例</h3>
+          <p>
+            主题配置、阅读组合等示例已经包含 <code>ThemeProvider</code>
+            ，沿用源码中的主题。入口加载样式并渲染示例。
+          </p>
+          <div className="example-entry" data-theme-scope="explicit">
+            <CodeBlock source={createExampleEntry('explicit')} />
+          </div>
+          <h3>示例素材</h3>
+          <p>
+            含素材的示例会列出配套文件。以 <code>Example.tsx</code>{' '}
+            所在目录为起点，按素材清单标注的相对路径保存文件，保留源码中的导入路径。
+          </p>
           <p>
             完整示例在 React 19、Vite 8、TypeScript 7 的浏览器项目中验证。含素材的源码使用 Vite 的{' '}
             <code>?no-inline</code> 或 <code>?raw</code>{' '}
@@ -154,7 +175,7 @@ const page: DocPage = {
               ：检查应用是否支持源码中使用的 Vite 资源导入。
             </li>
             <li>
-              场景缺图：对照「完整接入」的素材清单，检查文件相对于 <code>Example.tsx</code>{' '}
+              场景缺图：对照「示例素材」清单，检查文件相对于 <code>Example.tsx</code>{' '}
               的保存路径是否与源码导入一致。图片只影响对应场景，不是基础组件的使用前提。
             </li>
             <li>本地修改没有生效：重新构建、打包，再在使用方安装新生成的 tarball。</li>
@@ -197,7 +218,7 @@ const page: DocPage = {
           <p>
             <Link href="#/guides/artwork?section=artwork-language">查看素材预览与下载</Link>
             ；需要暂停与重播时，使用
-            <Link href="#/guides/artwork?section=artwork-welcome">欢迎场景的完整接入</Link>。
+            <Link href="#/guides/artwork?section=artwork-welcome">欢迎场景示例</Link>。
           </p>
         </>
       ),

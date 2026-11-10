@@ -4,7 +4,7 @@
 
 用于组织文章摘要、作者介绍等内容，提供背景、边框、圆角与内边距。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Surface } from 'yahha-ui';

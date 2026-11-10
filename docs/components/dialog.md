@@ -4,7 +4,7 @@
 
 用于模态展示确认、简短表单或补充内容，管理弹窗焦点。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Dialog } from 'yahha-ui';

@@ -4,7 +4,7 @@
 
 用于内容的主题或视觉分隔，支持水平、垂直和装饰模式。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Divider } from 'yahha-ui';
@@ -172,6 +172,14 @@ export default function DividerChapter() {
   );
 }
 ```
+
+素材按下列路径保存，路径相对于 `Example.tsx`，保留源码中的相对导入。
+
+| 原始文件                                                                                                     | 保存路径                                               |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| [flower-line.svg](../../playground/src/examples/scenes/artwork/decorative-elements/dividers/flower-line.svg) | `artwork/decorative-elements/dividers/flower-line.svg` |
+
+源码使用 Vite 的 `?no-inline` 保留独立素材文件，其他工具链需配置对应资源处理。
 
 <a id="api"></a>
 

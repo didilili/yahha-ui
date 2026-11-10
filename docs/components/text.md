@@ -4,7 +4,7 @@
 
 固定使用 p 元素的段落正文，统一字号、行高与语义颜色。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Text } from 'yahha-ui';

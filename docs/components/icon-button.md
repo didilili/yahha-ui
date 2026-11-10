@@ -4,7 +4,7 @@
 
 用于仅以图标呈现的操作，提供方形点击区域，并要求明确的可访问名称。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { IconButton } from 'yahha-ui';

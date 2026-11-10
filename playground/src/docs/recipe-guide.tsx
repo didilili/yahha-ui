@@ -16,7 +16,7 @@ export const recipeGuide: DocPage = {
       title: '选择场景',
       content: (
         <>
-          <p>按用途查看组合示例，每个示例均提供交互预览、原始 TSX 和完整接入说明。</p>
+          <p>按用途查看组合示例，每个示例均提供交互预览与原始 TSX，配套素材随对应示例提供。</p>
           <dl className="recipe-list recipe-grid">
             <div>
               <dt>
@@ -231,14 +231,15 @@ export const recipeGuide: DocPage = {
       content: (
         <ol>
           <li>
-            先完成<Link href="#/guides/getting-started">安装、样式导入和主题设置</Link>。
+            按<Link href="#/guides/getting-started?section=copy-example">集中接入说明</Link>
+            配置样式和主题入口，并核对示例工具链要求。
           </li>
           <li>
-            在目标场景展开代码，原样保存为 <code>Example.tsx</code>。
+            在目标场景展开代码，原样保存为 <code>Example.tsx</code>，由项目引入。
           </li>
           <li>
-            打开「完整接入」，将 <code>App.tsx</code> 与 <code>Example.tsx</code>{' '}
-            放在同一目录；有素材清单时，以此目录为起点，按清单标注的相对路径保存文件，保留源码中的导入路径。
+            有「示例素材」时，以 <code>Example.tsx</code>{' '}
+            所在目录为起点，按清单标注的相对路径保存文件，保留源码中的导入路径。
           </li>
           <li>替换示例数据与文字。页面布局在外层容器调整，组件样式使用文档说明的公开入口。</li>
         </ol>
@@ -253,9 +254,8 @@ export const recipeGuide: DocPage = {
             示例演示保存、搜索、分页与计时等交互流程，使用页面内状态，不连接后台，刷新后恢复初始数据。接入时，需由应用配置后台请求和数据持久化。
           </p>
           <p>
-            组件继承项目字体；角色、插画和文档站字体不在组件安装包内。含素材示例使用 Vite
-            资源导入，工具链范围见
-            <Link href="#/guides/getting-started?section=copy-example">示例工具链说明</Link>。
+            组件继承项目字体，角色、插画和文档站字体独立提供。含素材示例使用 Vite
+            资源导入，工具链范围见上方集中接入说明。
           </p>
           <p>
             需要调整字段或浮层时，可查看

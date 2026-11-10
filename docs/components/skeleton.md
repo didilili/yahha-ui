@@ -4,7 +4,7 @@
 
 为即将出现的内容预留形状，减少布局跳动。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Skeleton } from 'yahha-ui';

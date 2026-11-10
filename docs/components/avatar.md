@@ -4,7 +4,7 @@
 
 展示作者头像，支持姓名缩写、自定义回退与图片加载失败处理。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Avatar } from 'yahha-ui';

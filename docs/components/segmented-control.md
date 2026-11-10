@@ -4,7 +4,7 @@
 
 紧凑的受控单选组，适用于分类、排序等简短选项，保留原生 radio 的表单与键盘行为。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { SegmentedControl } from 'yahha-ui';

@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { waitForGuideReady } from './guide-loading-checks.mjs';
 
-/** Follow the same two-file instructions shown beside the first runnable example. */
+/** Run the first component from the directly provided App.tsx source. */
 export async function verifyQuickstartFlow(browser, baseURL) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
@@ -17,9 +18,8 @@ export async function verifyQuickstartFlow(browser, baseURL) {
         .locator('.doc-section')
         .filter({ has: page.locator('#first-component') });
       const instructions = await firstComponent.locator('.doc-prose').innerText();
-      assert.match(instructions, /保存为\s*Example\.tsx/);
-      assert.match(instructions, /完整接入[\s\S]*App\.tsx/);
-      assert.doesNotMatch(instructions, /将下例保存为\s*App\.tsx/);
+      assert.match(instructions, /保存为\s*App\.tsx/);
+      assert.doesNotMatch(instructions, /Example\.tsx|完整接入/);
 
       const install = page.locator('.doc-section').filter({ has: page.locator('#install') });
       const optional = install.locator('details');
@@ -66,19 +66,19 @@ export async function verifyQuickstartFlow(browser, baseURL) {
         await page.evaluate(() => window.__quickstartCopied),
         await source.locator('pre').innerText(),
       );
-      assert.match(await source.locator('pre').innerText(), /ThemeProvider/);
-      const setup = example.locator('.example-setup');
-      await setup.locator('summary').click();
-      const setupText = await setup.innerText();
-      assert.match(setupText, /Example\.tsx · 示例组件/);
-      assert.match(setupText, /App\.tsx · 页面入口/);
-      const entry = setup.locator('.example-entry');
-      await entry.getByRole('button', { name: '复制代码', exact: true }).click();
-      await entry.getByText('已复制', { exact: true }).waitFor();
-      assert.match(
-        await page.evaluate(() => window.__quickstartCopied),
-        /import Example from '\.\/Example';/,
+      const appSource = await source.locator('pre').textContent();
+      assert.equal(
+        appSource,
+        await readFile(
+          new URL('../../playground/src/examples/GettingStarted.tsx', import.meta.url),
+          'utf8',
+        ),
+        'Quickstart copies the unchanged runnable App module.',
       );
+      assert.match(appSource, /export default function App\(/);
+      assert.match(appSource, /import ['"]yahha-ui\/style\.css['"]/);
+      assert.match(appSource, /<ThemeProvider theme="pink">/);
+      assert.equal(await example.locator('.example-entry, .example-setup').count(), 0);
       assert.equal(
         await page
           .getByRole('button', { name: '收藏这篇文章', exact: true })
@@ -95,10 +95,10 @@ export async function verifyQuickstartFlow(browser, baseURL) {
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       report.push({
         width,
-        consistentTwoFiles: true,
+        directAppSource: true,
         optionalInstallClosed: true,
         primaryInstallLink: true,
-        bothCopies: true,
+        appCopy: true,
         runnableExample: true,
       });
     }

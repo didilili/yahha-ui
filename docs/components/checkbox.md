@@ -4,7 +4,7 @@
 
 用于独立选择、多项选择或确认事项，支持半选状态。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Checkbox } from 'yahha-ui';

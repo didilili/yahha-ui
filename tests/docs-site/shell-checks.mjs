@@ -1,6 +1,7 @@
 import { componentCatalog } from '../../playground/src/docs/component-catalog.ts';
 import { verifyProgressExamples } from './progress-examples.mjs';
 import assert from 'node:assert/strict';
+import { verifyExampleAssets } from './example-setup-checks.mjs';
 import {
   closeSearchDialog,
   openSearchDialog,
@@ -124,7 +125,6 @@ async function verifyCodeControls(page) {
     [0, source.length],
     'A failed copy after collapse must select the complete source again.',
   );
-  await verifyCompleteSetup(example, 'inherited');
 }
 
 async function verifySearchRecovery(page) {
@@ -563,74 +563,6 @@ export async function verifyDocsIdentity(browser, baseURL) {
   }
 }
 
-async function verifyCompleteSetup(example, themeScope, assets = []) {
-  const details = example.locator('details.example-setup');
-  await details.locator('summary').click();
-  const entry = details.locator('.example-entry');
-  const code = entry.locator('pre');
-  await code.waitFor();
-  const source = await code.innerText();
-  assert.match(source, /import ['"]yahha-ui\/style\.css['"]/);
-  assert.match(source, /import Example from ['"]\.\/Example['"]/);
-  if (themeScope === 'inherited') {
-    assert.match(source, /<ThemeProvider theme="pink">/);
-  } else {
-    assert.doesNotMatch(source, /<ThemeProvider/);
-    assert.match(await details.innerText(), /示例自带 ThemeProvider/);
-  }
-  for (const { name, contents, path = `artwork/${name}` } of assets) {
-    const downloads = details.locator('.example-assets');
-    assert.match(await downloads.innerText(), /路径相对于 Example\.tsx/);
-    assert.match(await downloads.innerText(), /保持源码的相对导入/);
-    const link = downloads.getByRole('link', { name: `下载 ${name}`, exact: true });
-    assert.equal(await link.getAttribute('download'), name);
-    assert.equal(await downloads.getByText(path, { exact: true }).count(), 1);
-    const response = await example
-      .page()
-      .request.get(new URL(await link.getAttribute('href'), example.page().url()).href);
-    assert.equal(response.ok(), true, `${name} must download successfully from a nested site.`);
-    assert.match(
-      response.headers()['content-type'] ?? '',
-      name.endsWith('.svg') ? /^image\/svg\+xml(?:;|$)/ : /^image\/png(?:;|$)/,
-    );
-    assert.deepEqual(
-      await response.body(),
-      contents,
-      `${name} download must retain the original source bytes.`,
-    );
-  }
-  await example.page().evaluate(() =>
-    Object.defineProperty(navigator, 'clipboard', {
-      configurable: true,
-      value: {
-        writeText: async (value) => {
-          window.setupCopiedSource = value;
-        },
-      },
-    }),
-  );
-  await entry.getByRole('button', { name: '复制代码', exact: true }).click();
-  await entry.getByText('已复制', { exact: true }).waitFor();
-  assert.equal(await example.page().evaluate(() => window.setupCopiedSource), source);
-  await example.page().evaluate(() =>
-    Object.defineProperty(navigator, 'clipboard', {
-      configurable: true,
-      value: { writeText: () => Promise.reject(new Error('Clipboard access denied')) },
-    }),
-  );
-  await entry.getByRole('button', { name: '复制代码', exact: true }).click();
-  const manual = entry.getByRole('textbox', { name: '手动复制代码', exact: true });
-  await manual.waitFor();
-  await requireFocus(manual, 'Full setup fallback must focus its own textarea.');
-  assert.equal(await manual.inputValue(), source);
-  assert.deepEqual(
-    await manual.evaluate((element) => [element.selectionStart, element.selectionEnd]),
-    [0, source.length],
-  );
-  await details.locator('summary').click();
-  assert.equal(await code.isVisible(), false);
-}
-
 async function verifyThemePresets(page, baseURL) {
   await page.goto(`${baseURL}#/components/theme-provider`);
   const example = page.locator('#theme-variants');
@@ -648,7 +580,7 @@ async function verifyThemePresets(page, baseURL) {
     'The three provider presets must retain distinct actual button colors.',
   );
   assert.equal(await page.locator('.docs-app').getAttribute('data-yahha-theme'), 'pink');
-  await verifyCompleteSetup(example, 'explicit');
+  assert.match(await page.locator('.doc-example-help').innerText(), /本页示例已包含 ThemeProvider/);
 }
 
 async function verifySelectFocus(page, baseURL) {
@@ -768,7 +700,7 @@ export async function verifyReadingExample(page, baseURL) {
     );
   }
   await page.setViewportSize({ width: 1440, height: 900 });
-  await verifyCompleteSetup(example, 'explicit');
+  assert.match(await page.locator('.doc-example-help').innerText(), /本页示例已包含 ThemeProvider/);
 }
 
 export async function verifyReadingMediaExamples(page, baseURL) {
@@ -998,9 +930,8 @@ async function verifyStateSceneExamples(page, baseURL) {
           original.includes(`'./artwork/${asset}?no-inline'`),
       );
     await source.getByRole('button', { name: '收起代码', exact: true }).click();
-    await verifyCompleteSetup(
+    await verifyExampleAssets(
       example,
-      'explicit',
       await Promise.all(
         assets.map(async (asset) => ({
           name: asset,

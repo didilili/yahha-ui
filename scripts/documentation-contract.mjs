@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { posix } from 'node:path';
 import { JSDOM } from 'jsdom';
 import { apiRowAnchor } from '../playground/src/docs/api-anchor.ts';
 import { canonicalRoute } from '../playground/src/docs/navigation.ts';
@@ -20,6 +21,8 @@ export function documentationLink(
   if (component)
     return `${relativeDocument('components', markdownFile(component[1]))}${component[2] ? `#${component[2]}` : ''}`;
   if (href === '#/components') return '../README.md';
+  if (href === '#/guides/getting-started?section=copy-example')
+    return relativeDocument('guides', 'examples.md');
   if (href.startsWith('#/guides/getting-started')) return '../../README.md#构建与本地安装';
   if (href.startsWith('#/guides/design-baseline')) return '../design-language.md';
   const forms = /^#\/guides\/forms(?:\?section=([^&]+))?$/.exec(href);
@@ -116,6 +119,43 @@ export function sourceFence(source, language = 'tsx') {
   const longest = Math.max(2, ...(source.match(/`+/g) ?? []).map((run) => run.length));
   const fence = '`'.repeat(longest + 1);
   return `${fence}${language}\n${source}${source.endsWith('\n') ? '' : '\n'}${fence}`;
+}
+
+export function exampleMarkdown(example, sourcePath) {
+  const parts = [
+    `<a id="${example.id}"></a>`,
+    `### ${example.title}`,
+    example.description,
+    example.themeScope === 'explicit' && '本例自带 `ThemeProvider`，入口只需导入样式并渲染示例。',
+    `[查看示例文件](../../${sourcePath})`,
+    `<!-- example-source: ${sourcePath} -->\n${sourceFence(example.source)}`,
+  ];
+  if (example.assets?.length) {
+    const imports = [...example.source.matchAll(/\bfrom\s+(['"])(\.[^'"]+)\1/g)].map(
+      (match) => match[2],
+    );
+    const queries = new Set();
+    const assets = example.assets.map((asset) => {
+      const savePath = asset.path ?? `artwork/${asset.name}`;
+      const imported = imports.find(
+        (path) => posix.normalize(path.split('?')[0]) === posix.normalize(savePath),
+      );
+      assert(imported, `${sourcePath}: asset ${savePath} must match a relative source import.`);
+      const [filePath, query] = imported.split('?');
+      queries.add(query);
+      const originalPath = posix.join(posix.dirname(sourcePath), filePath);
+      return `| [${asset.name}](../../${originalPath}) | ${inlineCode(savePath)} |`;
+    });
+    parts.push(
+      '素材按下列路径保存，路径相对于 `Example.tsx`，保留源码中的相对导入。',
+      ['| 原始文件 | 保存路径 |', '| --- | --- |', ...assets].join('\n'),
+      queries.has('no-inline') &&
+        '源码使用 Vite 的 `?no-inline` 保留独立素材文件，其他工具链需配置对应资源处理。',
+      queries.has('raw') &&
+        '源码使用 Vite 的 `?raw` 将文件内容作为字符串导入，其他工具链需配置对应资源处理。',
+    );
+  }
+  return parts.filter(Boolean).join('\n\n');
 }
 
 const cell = (value) => value.replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');

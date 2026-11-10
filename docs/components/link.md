@@ -4,7 +4,7 @@
 
 用于页面导航和资源跳转，保留原生链接行为、下划线与焦点样式。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Link } from 'yahha-ui';

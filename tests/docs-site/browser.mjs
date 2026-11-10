@@ -48,6 +48,7 @@ import { verifyCodeExpansion, verifyCodeExpansionEntry } from './code-expansion-
 import { verifyDocsUsability } from './docs-usability-checks.mjs';
 import { verifyReadingNavigation } from './reading-navigation-checks.mjs';
 import { verifyQuickstartFlow } from './quickstart-flow-checks.mjs';
+import { verifySharedExampleSetup } from './example-setup-checks.mjs';
 import { verifyFormsGuide } from './forms-guide-checks.mjs';
 import { verifyFormComponent } from './form-component-checks.mjs';
 import { verifyDocsUsabilityInteractions } from './docs-usability-interaction-checks.mjs';
@@ -68,6 +69,7 @@ export async function verifyDocs(browser, baseURL) {
   await verifyDocsUsability(browser, baseURL);
   await verifyReadingNavigation(browser, baseURL);
   await verifyQuickstartFlow(browser, baseURL);
+  await verifySharedExampleSetup(browser, baseURL);
   await verifyFormsGuide(browser, baseURL);
   await verifyFormComponent(browser, baseURL);
   await verifyGuideLoading(browser, baseURL);

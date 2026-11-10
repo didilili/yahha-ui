@@ -4,7 +4,7 @@
 
 锚定到触发器的非模态面板，可包含说明、链接或短表单。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Popover } from 'yahha-ui';

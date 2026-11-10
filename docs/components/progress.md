@@ -4,7 +4,7 @@
 
 显示任务完成比例，支持未知进度和可选的纸签端点。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Progress } from 'yahha-ui';

@@ -4,7 +4,7 @@
 
 用于留言、评论、个人简介等多行纯文本输入。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Textarea } from 'yahha-ui';

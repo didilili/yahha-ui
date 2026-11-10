@@ -343,7 +343,7 @@ h3:hover .heading-anchor,
   text-underline-offset: 4px;
 }
 .doc-prose code,
-.example-setup code {
+.example-assets code {
   background: var(--docs-muted-surface, #f3eee8);
   padding: 2px 5px;
   border-radius: 4px;
@@ -487,62 +487,47 @@ h3:hover .heading-anchor,
 .source-code.is-compact .code-action {
   flex: 0 0 auto;
 }
-.example-setup {
+.doc-example-help {
+  margin: 12px 0 0;
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: var(--yahha-font-size-body-sm, 14px);
+  overflow-wrap: anywhere;
+}
+.example-theme-note {
+  margin: 0;
+  padding: 12px 24px;
+  color: var(--yahha-muted, #7a5c6d);
+  font-size: var(--yahha-font-size-body-sm, 14px);
+}
+.example-assets {
   border-top: 1px solid var(--docs-line, #e4d9d3);
   background: var(--yahha-surface, #ffffff);
   font-size: var(--yahha-font-size-body-sm, 14px);
 }
-.example-setup summary {
+.example-assets summary {
   min-height: 44px;
   padding: 10px 24px;
   color: var(--yahha-muted, #7a5c6d);
   cursor: pointer;
 }
-.example-setup[open] summary {
+.example-assets[open] summary {
   color: var(--yahha-ink, #49313d);
 }
-.example-setup-label {
+.example-assets-label {
   margin-inline-start: 12px;
   color: var(--yahha-muted, #7a5c6d);
   font-size: var(--yahha-font-size-sm, 12px);
   white-space: nowrap;
 }
-.example-setup-steps {
-  display: grid;
-  gap: 20px;
-  margin: 16px 0;
-  padding-inline-start: 20px;
-}
-.example-setup-steps > li {
-  min-width: 0;
-}
-.example-file-label {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--yahha-ink, #49313d);
-  font-weight: 600;
-}
-.example-setup-content {
+.example-assets-content {
   padding: 0 24px 16px;
   line-height: var(--yahha-leading-body, 1.8);
 }
-.example-setup-content p {
+.example-assets-content p {
   margin: 0 0 8px;
 }
-.example-setup-content > a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-.example-assets {
-  margin-block: 12px;
-  padding-block: 12px;
-  border-block: 1px solid var(--docs-line, #e4d9d3);
-}
 .example-assets ul {
-  margin: 0;
+  margin: 12px 0;
   padding-inline-start: 20px;
 }
 .example-assets a {
@@ -928,10 +913,11 @@ h3:hover .heading-anchor,
     font-size: 13px;
     padding: 15px;
   }
-  .example-setup summary {
+  .example-assets summary {
     padding-inline: 16px;
   }
-  .example-setup-content {
+  .example-assets-content,
+  .example-theme-note {
     padding-inline: 16px;
   }
   .doc-prose {

@@ -74,9 +74,8 @@ const page: DocPage = {
       content: (
         <>
           <p>
-            接入示例时，展开代码并保存为 Example.tsx；再打开「完整接入」，保存
-            App.tsx。两个文件放在同一目录，入口已包含样式导入与默认主题配置。预览与代码来自同一份
-            TSX；示例自身已配置主题时，入口不会再次包裹 Provider。
+            示例预览与展示代码来自同一份 TSX。复制方式、样式导入和主题入口见
+            <Link href="#/guides/getting-started?section=copy-example">集中接入说明</Link>。
           </p>
           <p>
             API 中「—」表示组件不设置该值。原生元素继承的全部属性不逐项罗列，请以对应 React

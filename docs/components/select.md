@@ -4,7 +4,7 @@
 
 从文章分类、排序方式等固定选项中选一项。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Select } from 'yahha-ui';

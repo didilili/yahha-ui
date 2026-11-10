@@ -171,12 +171,11 @@ export async function verifyDesignBaseline(page, baseURL) {
       ),
       'The reference must expose its unchanged executable example.',
     );
-    const setup = example.locator('details.example-setup');
-    await setup.locator('summary').click();
-    const entry = await setup.locator('.example-entry pre').innerText();
-    assert.match(entry, /import Example from ['"]\.\/Example['"]/);
-    assert.doesNotMatch(entry, /<ThemeProvider/);
-    await setup.locator('summary').click();
+    assert.match(
+      await page.locator('.doc-example-help').innerText(),
+      /本页示例已包含 ThemeProvider/,
+    );
+    assert.equal(await example.locator('.example-entry, .example-setup').count(), 0);
     await source.getByRole('button', { name: '收起代码', exact: true }).click();
   }
   for (const width of [390, 320]) {

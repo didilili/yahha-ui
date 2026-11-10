@@ -4,7 +4,7 @@
 
 用于在一组互斥选项中选择单个值，可为选项提供说明。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { RadioGroup } from 'yahha-ui';

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import * as documentationContract from '../scripts/documentation-contract.mjs';
 import {
   apiMarkdown,
   documentationLink,
@@ -164,6 +165,86 @@ test('forms and interaction guide links resolve relative to their generated dire
     documentationLink('#/components/input?section=api', { fromDirectory: 'guides' }),
     '../components/input.md#api',
   );
+});
+
+test('copy-example links open the shared setup guide without changing installation links', () => {
+  assert.equal(
+    documentationLink('#/guides/getting-started?section=copy-example'),
+    '../guides/examples.md',
+  );
+  assert.equal(
+    documentationLink('#/guides/getting-started?section=copy-example', {
+      fromDirectory: 'guides',
+    }),
+    'examples.md',
+  );
+  assert.equal(
+    documentationLink('#/guides/getting-started?section=install'),
+    '../../README.md#构建与本地安装',
+  );
+  assert.equal(documentationLink('#/guides/getting-started'), '../../README.md#构建与本地安装');
+});
+
+test('example Markdown marks owned themes and retains the original source', () => {
+  const source =
+    'import { ThemeProvider } from \'yahha-ui\';\nexport default function Owned() {\n  return <ThemeProvider theme="blue">内容</ThemeProvider>;\n}\n';
+  const example = {
+    id: 'owned',
+    title: '主题示例',
+    description: '查看蓝色主题。',
+    themeScope: 'explicit',
+    source,
+  };
+  const markdown = documentationContract.exampleMarkdown(
+    example,
+    'playground/src/examples/theme/Owned.tsx',
+  );
+  assert.match(markdown, /本例自带 `ThemeProvider`/);
+  assert(markdown.includes(sourceFence(source)));
+  assert.deepEqual(markdownExamples(markdown), [
+    { sourcePath: 'playground/src/examples/theme/Owned.tsx', source },
+  ]);
+  const inherited = documentationContract.exampleMarkdown(
+    { ...example, themeScope: 'inherited' },
+    'playground/src/examples/theme/Owned.tsx',
+  );
+  assert.doesNotMatch(inherited, /本例自带|素材|App\.tsx/);
+});
+
+test('example asset Markdown links original files and explains only the imported query modes', () => {
+  const source =
+    "import picture from './artwork/illustrations/picture.svg?no-inline';\nimport scene from './artwork/scene.svg?raw';\nexport default function Example() { return <img src={picture} alt={scene} />; }\n";
+  const markdown = documentationContract.exampleMarkdown(
+    {
+      id: 'artwork',
+      title: '素材示例',
+      description: '保留相对导入。',
+      source,
+      assets: [
+        {
+          name: 'picture.svg',
+          href: 'data:image/svg+xml;base64,ignored',
+          path: 'artwork/illustrations/picture.svg',
+        },
+        { name: 'scene.svg', href: '/transformed-scene.svg' },
+      ],
+    },
+    'playground/src/examples/scenes/Artwork.tsx',
+  );
+  assert.match(
+    markdown,
+    /\[picture\.svg\]\(\.\.\/\.\.\/playground\/src\/examples\/scenes\/artwork\/illustrations\/picture\.svg\)/,
+  );
+  assert.match(markdown, /`artwork\/illustrations\/picture\.svg`/);
+  assert.match(
+    markdown,
+    /\[scene\.svg\]\(\.\.\/\.\.\/playground\/src\/examples\/scenes\/artwork\/scene\.svg\)/,
+  );
+  assert.match(markdown, /`artwork\/scene\.svg`/);
+  assert.match(markdown, /`\?no-inline`/);
+  assert.match(markdown, /`\?raw`/);
+  assert.doesNotMatch(markdown, /base64|transformed-scene/);
+  assert(markdown.includes(sourceFence(source)));
 });
 
 test('Input API Markdown provides the canonical property anchor targeted by links', () => {

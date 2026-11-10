@@ -4,7 +4,7 @@
 
 用于在同一区域切换相关内容面板，建立标签与面板的语义关联。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Tabs } from 'yahha-ui';

@@ -212,8 +212,10 @@ export default function App() {
   // A new page starts folded; section links within the same page retain reader choices.
   if (expandedExamples.pageId !== documentationId)
     setExpandedExamples({ pageId: documentationId, ids: [] });
-  const exampleIds =
-    page?.sections.flatMap((section) => section.examples?.map(({ id }) => id) ?? []) ?? [];
+  const pageExamples = page?.sections.flatMap((section) => section.examples ?? []) ?? [];
+  const exampleIds = pageExamples.map(({ id }) => id);
+  const allExamplesHaveExplicitTheme =
+    pageExamples.length > 0 && pageExamples.every(({ themeScope }) => themeScope === 'explicit');
   const codeControlSection = componentId
     ? 'examples'
     : exampleIds.length > 1
@@ -391,7 +393,7 @@ export default function App() {
         ),
         details: Array.from(
           document.querySelectorAll<HTMLDetailsElement>(
-            'article .doc-disclosure, article .example-setup',
+            'article .doc-disclosure, article .example-assets',
           ),
           (details) => details.open,
         ),
@@ -486,7 +488,7 @@ export default function App() {
       if (saved) {
         pendingReadingPosition.current = undefined;
         document
-          .querySelectorAll<HTMLDetailsElement>('article .doc-disclosure, article .example-setup')
+          .querySelectorAll<HTMLDetailsElement>('article .doc-disclosure, article .example-assets')
           .forEach((details, index) => {
             details.open = saved.details[index] ?? false;
           });
@@ -925,6 +927,17 @@ export default function App() {
                   )}
                 </div>
                 {page.importCode && <CodeBlock source={page.importCode} compact />}
+                {exampleIds.length > 0 && page.id !== 'getting-started' && (
+                  <p className="doc-example-help">
+                    首次使用？
+                    <Link href="#/guides/getting-started?section=copy-example">
+                      查看安装与示例接入
+                    </Link>
+                    。
+                    {allExamplesHaveExplicitTheme &&
+                      '本页示例已包含 ThemeProvider，沿用源码中的主题设置。'}
+                  </p>
+                )}
               </header>
               {!isGallery && (
                 <details className="mobile-doc-toc" ref={mobileToc}>
@@ -1048,7 +1061,7 @@ export default function App() {
                             </div>
                             <ExampleSource
                               source={source}
-                              themeScope={themeScope}
+                              themeHint={themeScope === 'explicit' && !allExamplesHaveExplicitTheme}
                               assets={assets}
                               expanded={expandedIds.includes(id)}
                               onExpandedChange={(expanded) => setExampleExpanded(id, expanded)}

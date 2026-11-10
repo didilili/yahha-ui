@@ -4,7 +4,7 @@
 
 打开或关闭即时生效的设置，例如显示文章摘要。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Switch } from 'yahha-ui';

@@ -4,7 +4,7 @@
 
 用于列表分页，显示首页、末页和当前页附近的页码。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Pagination } from 'yahha-ui';

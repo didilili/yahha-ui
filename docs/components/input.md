@@ -4,7 +4,7 @@
 
 带可见标签、辅助说明和错误反馈的单行输入框。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Input } from 'yahha-ui';

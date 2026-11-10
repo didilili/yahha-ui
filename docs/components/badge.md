@@ -4,7 +4,7 @@
 
 用于展示分类、标签或当前状态的静态标记。
 
-[安装与接入](../../README.md#安装与接入)
+[安装与接入](../../README.md#安装与接入) · [接入示例](../guides/examples.md)
 
 ```tsx
 import { Badge } from 'yahha-ui';
