@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { openInteractionExample, revealExample } from './reveal-example.mjs';
 import { verifyMenuTriggerRecovery } from './menu-draft-examples.mjs';
 
@@ -78,9 +79,85 @@ export async function verifyArticleActions(page, baseURL) {
   assert.equal(await title.inputValue(), '沿着河边，慢慢走');
   await title.fill('散步以后，记下一点小事');
   const save = dialog.getByRole('button', { name: '保存手记', exact: true });
-  await save.click();
-  await dialog.getByRole('alert').getByText('保存失败', { exact: true }).waitFor();
-  await page.waitForFunction((node) => document.activeElement === node, await save.elementHandle());
+  const saveFocus = await dialog.evaluateHandle((popup) => {
+    const events = [];
+    const describe = (node) =>
+      node instanceof Element
+        ? {
+            tag: node.tagName,
+            role: node.getAttribute('role'),
+            id: node.id,
+            name: node.getAttribute('name'),
+            text: (node.getAttribute('aria-label') || node.textContent || '').slice(0, 100),
+            disabled: node.disabled,
+          }
+        : null;
+    const record = (type, target, details = {}) => {
+      events.push({
+        type,
+        time: performance.now(),
+        target: describe(target),
+        active: describe(document.activeElement),
+        ...details,
+      });
+      if (events.length > 60) events.shift();
+    };
+    const onFocus = (event) =>
+      record(event.type, event.target, { relatedTarget: describe(event.relatedTarget) });
+    document.addEventListener('focusin', onFocus, true);
+    document.addEventListener('focusout', onFocus, true);
+    const observer = new MutationObserver((records) => {
+      for (const mutation of records) {
+        record('disabled-change', mutation.target, { oldValue: mutation.oldValue });
+      }
+    });
+    observer.observe(popup, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['disabled'],
+      attributeOldValue: true,
+    });
+    record('before-save', popup);
+    return {
+      snapshot: () => ({
+        events,
+        active: describe(document.activeElement),
+        activeHtml: document.activeElement?.outerHTML.slice(0, 1000),
+        saveHtml: popup.querySelector('button[type="submit"]')?.outerHTML,
+        popupFocused: document.activeElement === popup,
+        popupConnected: popup.isConnected,
+        popupInert: popup.inert,
+        documentFocused: document.hasFocus(),
+        viewport: { width: innerWidth, height: innerHeight },
+      }),
+      stop() {
+        document.removeEventListener('focusin', onFocus, true);
+        document.removeEventListener('focusout', onFocus, true);
+        observer.disconnect();
+      },
+    };
+  });
+  try {
+    await save.click();
+    await dialog.getByRole('alert').getByText('保存失败', { exact: true }).waitFor();
+    await page.waitForFunction(
+      (node) => document.activeElement === node,
+      await save.elementHandle(),
+    );
+  } catch (error) {
+    const diagnostic = await saveFocus.evaluate((probe) => probe.snapshot());
+    console.error('ArticleActions save focus failure:', JSON.stringify(diagnostic));
+    await mkdir('test-results', { recursive: true });
+    await writeFile(
+      'test-results/article-actions-save-focus.json',
+      JSON.stringify(diagnostic, null, 2),
+    );
+    await page.screenshot({ path: 'test-results/article-actions-save-focus.png' });
+    throw error;
+  } finally {
+    await saveFocus.evaluate((probe) => probe.stop());
+    await saveFocus.dispose();
+  }
   const saveBounds = await save.boundingBox();
   const popupBounds = await dialog.boundingBox();
   assert.ok(
