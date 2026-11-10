@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { verifyNavigationAppearance } from './navigation-checks.mjs';
 import {
   verifyOverlayAppearance,
@@ -415,20 +416,88 @@ export async function verifyBasics(browser, url) {
       await focused(page, menuTrigger);
 
       const popoverTrigger = page.getByRole('button', { name: 'Open basic popover', exact: true });
+      const popoverEvents = await page.evaluateHandle(() => {
+        const events = [];
+        const describe = (node) =>
+          node instanceof Element
+            ? {
+                tag: node.tagName,
+                role: node.getAttribute('role'),
+                text: node.textContent?.slice(0, 100),
+              }
+            : null;
+        for (const type of ['pointerdown', 'pointerup', 'click', 'focusin', 'focusout', 'scroll']) {
+          document.addEventListener(
+            type,
+            (event) => {
+              events.push({
+                type,
+                time: performance.now(),
+                target: describe(event.target),
+                relatedTarget: describe(event.relatedTarget),
+                x: event.clientX,
+                y: event.clientY,
+                scrollY,
+                anchorHidden: Boolean(document.querySelector('[data-anchor-hidden]')),
+              });
+              if (events.length > 80) events.shift();
+            },
+            true,
+          );
+        }
+        return events;
+      });
       await popoverTrigger.click();
       const popover = page.getByRole('dialog', { name: /^Basic popover:/ });
       await popover.waitFor();
       await focused(page, popover.getByRole('textbox', { name: 'Popover note' }));
-      await choose(
-        page,
-        popover.getByRole('combobox', { name: 'Popover category' }),
-        '.nested-select-popup',
-        'Reading notes',
-      );
-      assert.match(
-        await popover.getByRole('combobox', { name: 'Popover category' }).innerText(),
-        /Reading notes/,
-      );
+      try {
+        await choose(
+          page,
+          popover.getByRole('combobox', { name: 'Popover category' }),
+          '.nested-select-popup',
+          'Reading notes',
+        );
+        assert.match(
+          await popover.getByRole('combobox', { name: 'Popover category' }).innerText(),
+          /Reading notes/,
+        );
+      } catch (error) {
+        const diagnostic = await popoverEvents.evaluate((events) => {
+          const describe = (node) =>
+            node && {
+              html: node.outerHTML,
+              box: node.getBoundingClientRect().toJSON(),
+              visibility: getComputedStyle(node).visibility,
+              display: getComputedStyle(node).display,
+              scrollTop: node.scrollTop,
+            };
+          const trigger = [...document.querySelectorAll('button')].find(
+            (node) => node.textContent === 'Open basic popover',
+          );
+          const popup = [...document.querySelectorAll('[role="dialog"]')].find((node) =>
+            node.textContent.includes('Basic popover:'),
+          );
+          return {
+            events,
+            scrollY,
+            active: describe(document.activeElement),
+            trigger: describe(trigger),
+            popover: describe(popup),
+            positioner: describe(popup?.parentElement),
+            select: describe(popup?.querySelector('[role="combobox"]')),
+            options: describe(document.querySelector('.nested-select-popup')),
+          };
+        });
+        console.error('Nested package Select failure:', JSON.stringify(diagnostic));
+        await mkdir('test-results', { recursive: true });
+        await writeFile(
+          `test-results/package-popover-${width}.json`,
+          JSON.stringify(diagnostic, null, 2),
+        );
+        await page.screenshot({ path: `test-results/package-popover-${width}.png` });
+        throw error;
+      }
       await popover.getByRole('button', { name: '关闭浮层', exact: true }).click();
       await popover.waitFor({ state: 'hidden' });
       await focused(page, popoverTrigger);
