@@ -142,7 +142,7 @@ ReadingExample 的外层阅读栏采用 68ch 上限，手机随容器自然收�
 
 [加载、空态与 404 场景源码](../playground/src/examples/scenes/)区分行内等待、区块等待、暂无内容与未找到页面。行内加载使用共享墨点；区块加载示例使用 `little-days-page-wait-motion.svg`，减少动效时保留静止画面。1.8 秒计时器只用于模拟请求，实际等待由调用方管理。空态提供创建、浏览或清空筛选等操作。404 在实际未知路由渲染 h1，在指南内渲染 h3，共用同一份场景源码；它是页面组合，没有新增公共 NotFound 组件。素材为装饰，加载说明、空态原因和导航链接由 HTML 提供。
 
-场景素材集中在 `playground/src/examples/scenes/artwork/`：小日常 SVG 提供加载、空态、成功、失败、找路与欢迎等图案；`empty.png` 作为已确认的场景原稿保留；`friends-preview/` 保存人物造型源、群像和探头 SVG。示例按需引用，素材不进入 `src/` 或默认组件安装包。完整接入按素材清单列出的相对路径保存文件，保留源码中的导入。[素材来源说明](../playground/src/examples/scenes/artwork/README.md)、`sources.json` 与 [SVG 绘制说明](../playground/src/examples/scenes/artwork/friends-preview/README.md)分别记录来源和维护方式。字体与素材都不构成使用基础组件的前提。
+场景素材集中在 `playground/src/examples/scenes/artwork/`。小日常 SVG 提供加载、空态、成功、失败、找路与欢迎等图案。`empty.png` 作为已确认的场景原稿保留，`friends-preview/` 保存人物造型源、群像和探头 SVG。示例按需引用，素材不进入 `src/` 或默认组件安装包。复制示例时，按「示例素材」清单列出的相对路径保存文件，保留源码中的导入。[素材来源说明](../playground/src/examples/scenes/artwork/README.md)、`sources.json` 与 [SVG 绘制说明](../playground/src/examples/scenes/artwork/friends-preview/README.md)分别记录来源和维护方式。字体与素材都不构成使用基础组件的前提。
 
 本页描述 Yahha UI 自身的视觉与交互规则。项目自有内容采用 [MIT 许可证](../LICENSE)，第三方内容见[第三方说明](../THIRD_PARTY_NOTICES.md)。来源、派生关系与分发位置见[素材与分发范围](assets-and-distribution.md)。
 

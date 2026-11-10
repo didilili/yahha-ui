@@ -72,6 +72,8 @@ export default function App() {
 
 启动应用后，点击或按 Space 即可切换收藏状态。样式在应用入口导入一次；`ThemeProvider` 的 `theme` 必填，可选 `pink`、`blue`、`yellow`。[完整入门指南](https://yahhaui.com/#/guides/getting-started) · [主题配置](docs/components/theme.md)
 
+继续复制组件或组合示例时，按[接入示例](docs/README.md#接入示例)中的步骤引入现有页面，或使用对应的独立入口。
+
 <a id="当前能力与边界"></a>
 
 ### 环境与版本
@@ -91,7 +93,7 @@ export default function App() {
 - [Form 表单](docs/components/form.md)：集中管理字段值、校验、错误、提交和重置。
 - [原生表单接入](docs/guides/forms.md)：原生取值、校验与焦点、重置及七类控件的接入差异。
 - [主题与定制](https://yahhaui.com/#/guides/styling)：配色、布局、插槽与公开样式入口。
-- [组合示例](https://yahhaui.com/#/guides/recipes)：阅读、归档、编辑与状态反馈。展开示例的“完整接入”可复制代码；含素材时按清单保留相对路径。
+- [组合示例](https://yahhaui.com/#/guides/recipes)：阅读、归档、编辑与状态反馈。展开代码后按[接入示例](docs/README.md#接入示例)使用，含素材时按清单保留相对路径。
 
 ### 导出最小项目
 

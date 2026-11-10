@@ -6,6 +6,6 @@
 
 `foundations/`、`content/`、`navigation/`、`feedback/`、`floating/` 按用途组织；`scenes/` 放跨组件组合，`design/` 展示默认设计规则，`customization/` 说明公开定制能力。
 
-完整接入以文档提供的原样 `Example.tsx` 和独立 `App.tsx` 为准：入口加载 `yahha-ui/style.css`；显式主题示例保留自己的 `ThemeProvider`，其他例由入口包裹。含素材时按清单下载到 `artwork/`，保留原名和相对导入。
+复制方式见[集中接入说明](https://yahhaui.com/#/guides/getting-started?section=copy-example)。入门首例直接保存为 `App.tsx`，其他示例原样保存为 `Example.tsx`，由项目引入或使用指南中的入口。入口加载 `yahha-ui/style.css`，并按示例是否自带 `ThemeProvider` 选择对应模板。含素材时按「示例素材」清单标注的相对路径保存文件，保留原名和相对导入。
 
 示例与 API 修改遵循[组件文档规范](../../../docs/documentation.md)；默认设计约束见 [design 说明](./design/README.md)，素材来源见 [artwork 说明](./scenes/artwork/README.md)。生成的 `docs/components/` Markdown 由同一页面模型同步，不另写一份。
