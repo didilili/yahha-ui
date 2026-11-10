@@ -338,6 +338,24 @@
   }
 }
 
+@media (min-width: 1201px) {
+  .docs-cartoon .doc-heading:has(> .source-code) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) fit-content(40%);
+    column-gap: 16px;
+    align-items: center;
+  }
+
+  .docs-cartoon .doc-heading:has(> .source-code) > .doc-title-row {
+    grid-column: 1 / -1;
+  }
+
+  .docs-cartoon .doc-heading > .source-code,
+  .docs-cartoon .doc-heading:has(> .source-code) > .doc-example-help {
+    margin: 0;
+  }
+}
+
 @media (max-width: 1200px) and (min-width: 601px) {
   .docs-cartoon .doc-title-row {
     flex-wrap: wrap;
