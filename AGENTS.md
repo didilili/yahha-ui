@@ -33,7 +33,7 @@
 - 文档站的公共交互优先从 `yahha-ui` 公开入口复用已有组件，包括搜索、清空、菜单及代码操作。站点 CSS 负责布局和公开 `className` / `classNames` 定制，不通过内部 DOM 重写基础交互或缩小点击区域。
 - 组件总览位于 `#/components`，入口与分组复用 `component-catalog.ts` 的 `componentCatalog` / `componentGroups`。首页、顶栏、侧栏和 404 的目录入口统一到总览，具体组件引用可直达文档；总览按需加载，不导入文档组完整示例与源码。
 - 总览小样只使用公开组件及属性，不改内部样式、尺寸或交互；预览区使用 inert 与 aria-hidden，独立的卡片标题承载链接，避免嵌套交互。q/group 使用 replaceState 记录筛选，输入不触发路由聚焦或增加历史；返回恢复筛选，清空保留可用焦点。小样不计为新增公共组件或完整使用示例。
-- 文档完整接入提供原样 `Example.tsx` 和独立 CSS / ThemeProvider 入口 `App.tsx`，预览与展示源码同源，不另写一份近似示例。含素材时同时提供对应 artwork 文件，保留相对路径。
+- 文档预览与展示源码引用同一份 TSX。入门首例直接保存为 `App.tsx`，其他示例原样保存为 `Example.tsx`。接入步骤与入口代码集中在 `#/guides/getting-started?section=copy-example`，`createExampleEntry` 保留 inherited / explicit 两种模板，`themeScope` 声明示例是否自带 ThemeProvider。有示例的其他页面只提供一次集中指南入口，示例下保留原始代码，有素材时通过独立的「示例素材」清单显示数量、下载与相对路径。显式主题页面集中说明已有 Provider，混合页面在对应示例旁注明。
 - 场景素材只放在 `playground/src/examples/scenes/artwork/`，不进入 `src/` 或默认组件库产物。加载图形共用内部 LoadingMark：Button / IconButton 默认使用三墨点，通过 loadingVariant="biscuit" 显式选择小花饼；小花饼图形维护在 `src/internal/BiscuitLoadingGlyph.tsx`，Spinner / Switch 默认使用三墨点；环境动效不得拖慢操作反馈，减少动效时使用静帧。
 - 小日常道具原稿仅维护在 `playground/src/examples/scenes/artwork/little-days/`；`npm run sync:artwork` 派生静态 / 动效文件，`npm run check:artwork` 防止分叉。下载资源使用 `?no-inline` 保留独立 SVG，真实等待结束即停止，不制造加载延迟。
 - 欢迎场景由 `scripts/build-friends-welcome.mjs` 从当前已确认的人物源派生，仅分离前爪动作，脸、身体比例和原模型保持。`FriendsWelcome.tsx` 使用原生 SVG 与真实暂停 / 继续。离屏、后台和系统减少动效时停止；重播只重建前爪，不重置环境时间线。

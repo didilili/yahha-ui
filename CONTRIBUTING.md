@@ -64,7 +64,7 @@ npm run preview
 - `src/theme/`：主题、Context 与语义颜色；`src/internal/`：不公开的工具与图标。
 - `playground/src/`：独立展示页，包含演示数据、图片、字体和示例。库源码不得依赖它。
 - `playground/src/assets/fonts/`：文档站字体分片的生成目录；使用 `npm run check:fonts` 核对覆盖和哈希。重新生成执行 `npm run fonts:generate`（需要 uv），日常安装与构建无需 uv，详见[字体维护](docs/assets-and-distribution.md#字体维护)。
-- `playground/src/docs/`：指南与组件页数据、API、站内代码展示工具；`examples/` 放实时示例。每个示例同时作为 TSX 模块和 `?raw` 源码导入。完整接入分别提供原样的 `Example.tsx` 与负责 CSS / ThemeProvider 包裹的 `App.tsx`；含场景素材时，按完整接入素材清单列出的相对路径保存文件，保留源码中的导入。
+- `playground/src/docs/` 保存指南与组件页数据、API、站内代码展示工具，`examples/` 放实时示例。每个示例同时作为 TSX 模块和 `?raw` 源码导入。入门首例直接保存为 `App.tsx`，其他示例原样保存为 `Example.tsx`，通过项目引入或使用[集中接入说明](https://yahhaui.com/#/guides/getting-started?section=copy-example)中的入口。含场景素材时，按对应「示例素材」清单列出的相对路径保存文件，保留源码中的导入。
 - `playground/src/examples/scenes/`：加载、空态与 404 页面组合及其 `artwork/` 素材。素材只属于展示示例，不进入 `src/` 或默认组件库产物。
 - `playground/src/docs/component-catalog.ts`：搜索和导航的轻量元信息目录，不导入示例模块；页面 ID、名称、中文名、分组和描述需与页面定义一致。
 - `playground/src/docs/navigation.ts`：文档栏目、侧栏和相邻文档的共同来源。指南用 `area` 声明所属栏目；全站搜索保持跨栏目，页面移动时在此保留旧链接映射。
@@ -136,7 +136,7 @@ GitHub Actions 对 pull request 与 `main` push 执行 `.github/workflows/ci.yml
 
 项目自有内容采用 [MIT](LICENSE)，第三方内容见[第三方说明](THIRD_PARTY_NOTICES.md)。组件包通过 npm 分发，也支持本地构建安装；版本管理和自动发布见[版本与发布](docs/releasing.md)。公开源码与 npm 发布分别处理。React 19 浏览器项目为当前验证范围，不扩写未经验证的兼容承诺。
 
-状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`。修改场景素材时同步来源记录与完整接入下载文件。
+状态场景的透明 PNG 为非官方 AI 生成同人素材，来源、尺寸与哈希见 [artwork 说明](playground/src/examples/scenes/artwork/README.md) 和同目录 `sources.json`。修改场景素材时同步来源记录与对应示例的素材下载文件。
 
 静态文档站的输出、自动携带的字体声明和本地预览见[部署说明](docs/deployment.md)；代码、字体与素材的实际分发范围见[素材清单](docs/assets-and-distribution.md)。部署时保留构建中使用字体的现有声明，不把整个源码仓库作为静态站点根目录。
 
