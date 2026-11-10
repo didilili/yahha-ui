@@ -20,35 +20,8 @@ async function choose(page, trigger, popupClass, label) {
   const option = popup.getByRole('option', { name: label, exact: true });
   if (popupClass === '.nested-select-popup') {
     // Playwright/CDP's automatic ancestor scrolling can hide the parent popover's anchor.
-    // This already-visible nested option must accept a real pointer without that extra scroll.
-    const point = await option.evaluate((node) => {
-      const box = node.getBoundingClientRect();
-      const x = box.x + box.width / 2;
-      const y = box.y + box.height / 2;
-      const list = node.closest('[role="listbox"]');
-      const bounds = list.getBoundingClientRect();
-      return {
-        x,
-        y,
-        visible:
-          box.width > 0 &&
-          box.height > 0 &&
-          x > 0 &&
-          y > 0 &&
-          x < innerWidth &&
-          y < innerHeight &&
-          x >= bounds.left + list.clientLeft &&
-          x < bounds.left + list.clientLeft + list.clientWidth &&
-          y >= bounds.top + list.clientTop &&
-          y < bounds.top + list.clientTop + list.clientHeight &&
-          node.contains(document.elementFromPoint(x, y)),
-      };
-    });
-    assert(
-      point.visible,
-      'The nested option is visible inside its scrollbox and receives the pointer.',
-    );
-    await page.mouse.click(point.x, point.y);
+    // Keep normal stability and hit-target checks without scrolling this visible option.
+    await option.click({ scroll: 'none' });
   } else await option.click();
   await popup.waitFor({ state: 'hidden' });
 }
